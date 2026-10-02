@@ -610,7 +610,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         segmentControl.selectedSegmentTintColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: 0x636366) : .white }
         let segmentFont = UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
         let segmentTextAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.textColorPrimary,
+            .foregroundColor: UIColor.label,
             .font: segmentFont
         ]
         segmentControl.setTitleTextAttributes(segmentTextAttributes, for: .normal)

@@ -56,14 +56,14 @@ final class GetElevationDataViewController: UIViewController {
 
         titleLabel.text = localizedString("get_elevation_data")
         titleLabel.font = .preferredFont(forTextStyle: .headline)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.textAlignment = .center
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(titleLabel)
 
         descriptionLabel.text = localizedString("get_elevation_data_description")
         descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
-        descriptionLabel.textColor = .textColorSecondary
+        descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 0
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -140,12 +140,12 @@ final class GetElevationDataViewController: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = .preferredFont(forTextStyle: .body)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
 
         let subtitleLabel = UILabel()
         subtitleLabel.text = subtitle
         subtitleLabel.font = .preferredFont(forTextStyle: .subheadline)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
 
         let textStack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
         textStack.axis = .vertical

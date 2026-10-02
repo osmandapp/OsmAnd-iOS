@@ -332,7 +332,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.heightConstraint.constant = 60
             cell.chartView.extraBottomOffset = 24
             cell.backgroundColor = .secondarySystemGroupedBackground
-            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .textColorSecondary)
+            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .secondaryLabel)
             if let paletteItem = selectedPaletteColorItem {
                 let fileType = paletteItem.properties.fileType
                 let colorPalette = paletteItem.isFixed() ? GradientFormatter.getAdjustedPalette(originalPalette: paletteItem.getColorPalette(), analysis: nil, fileType: fileType) : paletteItem.getColorPalette()
@@ -417,7 +417,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             let arrayValue = item.obj(forKey: Self.widthArrayValue) as? [String] ?? []
             cell.topLeftLabel.text = item.title
             cell.topRightLabel.text = (item.key == RowKey.customSplitIntervalRowKey.rawValue) ? (item.obj(forKey: Self.customStringValue) as? String ?? "") : ""
-            cell.topRightLabel.textColor = .textColorSecondary
+            cell.topRightLabel.textColor = .secondaryLabel
             cell.topRightLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
             cell.bottomLeftLabel.text = arrayValue.first
             cell.bottomRightLabel.text = arrayValue.last
@@ -436,7 +436,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.textView.text = item.title
             cell.textView.textAlignment = .center
             cell.textView.font = UIFont.preferredFont(forTextStyle: .body)
-            cell.textView.textColor = isEnabled ? .textColorActive : .textColorSecondary
+            cell.textView.textColor = isEnabled ? .textColorActive : .secondaryLabel
             return cell
         }
         

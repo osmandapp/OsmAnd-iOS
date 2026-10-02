@@ -422,7 +422,7 @@ static const NSInteger panoImageFilterSection = 2;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateVal];
             NSString *dateStr = isNotSet ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
             cell.valueLabel.text = dateStr;
-            cell.valueLabel.textColor = isNotSet ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.valueLabel.textColor = isNotSet ? UIColor.secondaryLabelColor : [UIColor colorNamed:ACColorNameTextColorActive];
         }
         outCell = cell;
     }
@@ -544,7 +544,7 @@ static const NSInteger panoImageFilterSection = 2;
     if (section == dateFilterSection)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        header.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 

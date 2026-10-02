@@ -275,10 +275,10 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
             }
         } else {
             let actionsButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: makeActionsMenu())
-            actionsButton.tintColor = .textColorPrimary
+            actionsButton.tintColor = .label
             actionsButton.accessibilityLabel = localizedString("shared_string_actions")
             let searchIcon = UIImage(systemName: "magnifyingglass",
-                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
             let searchButton = UIBarButtonItem(image: searchIcon,
                                                style: .plain,
                                                target: self,
@@ -415,7 +415,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
                 myPlacesDelegate?.updateTitle(title, hideSubtitle: hideSubtitle)
             }
         } else {
-            navigationItem.setStackViewWithTitle(title, titleColor: .textColorPrimary, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .textColorSecondary, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
+            navigationItem.setStackViewWithTitle(title, titleColor: .label, titleFont: .scaledSystemFont(ofSize: Self.navigationTitleFontSize, weight: .semibold, maximumSize: Self.navigationTitleMaximumSize), subtitle: hideSubtitle ? "" : subtitle, subtitleColor: .secondaryLabel, subtitleFont: .scaledSystemFont(ofSize: Self.navigationSubtitleFontSize, maximumSize: Self.navigationSubtitleMaximumSize))
         }
     }
 

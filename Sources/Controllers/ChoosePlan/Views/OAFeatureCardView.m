@@ -121,7 +121,7 @@
     NSString *secondaryDesc = [NSString stringWithFormat:patternPlan, [selectedFeature getListTitle], availablePlans];
 
     NSMutableAttributedString *productIncludedText = [[NSMutableAttributedString alloc] initWithString:secondaryDesc];
-    [productIncludedText addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(0, secondaryDesc.length)];
+    [productIncludedText addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:mapsPlus]];

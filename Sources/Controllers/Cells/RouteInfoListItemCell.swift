@@ -82,7 +82,7 @@ final class RouteInfoListItemCell: UITableViewCell {
     
     func setLeftImageView(image: UIImage?) {
         leftImageView.image = image
-        leftImageView.tintColor = .textColorPrimary
+        leftImageView.tintColor = .label
     }
     
     func setLeftTurnIconDrawable(drawable: OATurnDrawable) {

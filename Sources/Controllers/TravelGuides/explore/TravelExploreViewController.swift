@@ -400,8 +400,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 cell = nib?.first as? OARightIconTableViewCell
                 cell?.selectionStyle = .none
                 cell?.leftIconVisibility(false)
-                cell?.titleLabel.textColor = UIColor.textColorPrimary
-                cell?.descriptionLabel.textColor = UIColor.textColorSecondary
+                cell?.titleLabel.textColor = UIColor.label
+                cell?.descriptionLabel.textColor = UIColor.secondaryLabel
             }
             if let cell {
                 if let title = item.title {
@@ -698,12 +698,12 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
-        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("travel_guides_search_placeholder"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
+        searchController.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("travel_guides_search_placeholder"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel])
         if isFiltered {
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorPrimary
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.label
         } else {
-            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.textColorSecondary
-            searchController.searchBar.searchTextField.tintColor = UIColor.textColorSecondary
+            searchController.searchBar.searchTextField.leftView?.tintColor = UIColor.secondaryLabel
+            searchController.searchBar.searchTextField.tintColor = UIColor.secondaryLabel
         }
     }
     

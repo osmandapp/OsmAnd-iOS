@@ -78,7 +78,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
-    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    textField.textColor = UIColor.labelColor;
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -96,12 +96,12 @@ static const NSInteger _contactInfoSectionCount = 5;
         _floatingTextFieldControllers = [NSMutableArray new];
     
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-    fieldController.inlinePlaceholderColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    fieldController.inlinePlaceholderColor = UIColor.secondaryLabelColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     if (isFloating)
     {
         fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
-        [fieldController setFloatingPlaceholderNormalColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+        [fieldController setFloatingPlaceholderNormalColor:UIColor.secondaryLabelColor];
         fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
         fieldController.textInput.hidesPlaceholderOnInput = NO;
         [_floatingTextFieldControllers addObject:fieldController];

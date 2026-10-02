@@ -29,7 +29,7 @@
     [self.leftIconView setImage:[UIImage imageNamed:ACImageNameIcCustomAttachTrack]];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:UIColor.secondaryLabelColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.tableHeaderView .backgroundColor = UIColor.systemGroupedBackgroundColor;
 }
 

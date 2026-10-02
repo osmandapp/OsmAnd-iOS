@@ -459,7 +459,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
         }
         return cell;
     }
@@ -534,7 +534,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             BOOL isReadMore = [item.key isEqualToString:@"readMore"];
             [cell leftIconVisibility:!isReadMore];
             [cell descriptionVisibility:!isReadMore];
-            cell.titleLabel.textColor = [UIColor colorNamed: isReadMore ? ACColorNameTextColorActive : ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = isReadMore ? [UIColor colorNamed:ACColorNameTextColorActive] : UIColor.labelColor;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
             cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.titleLabel.text = item.title;

@@ -422,7 +422,7 @@ extension WidgetsListViewController {
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
                 cell.selectionStyle = !tableView.isEditing && isPageCell ? .none : .default
-                cell.titleLabel.textColor = isPageCell ? .textColorSecondary : .textColorPrimary
+                cell.titleLabel.textColor = isPageCell ? .secondaryLabel : .label
                 if !isPageCell, item.obj(forKey: kIsLastWidgetInSection) as? Bool == true {
                     cell.setCustomLeftSeparatorInset(true)
                     cell.separatorInset = .zero

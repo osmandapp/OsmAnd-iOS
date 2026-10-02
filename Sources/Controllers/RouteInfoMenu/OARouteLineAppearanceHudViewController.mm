@@ -844,10 +844,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.applyButton.userInteractionEnabled = isAvailable;
-    [self.applyButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]
+    [self.applyButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.secondaryLabelColor
                            forState:UIControlStateNormal];
     self.applyNavBarButton.userInteractionEnabled = isAvailable;
-    [self.applyNavBarButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]
+    [self.applyNavBarButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.secondaryLabelColor
                            forState:UIControlStateNormal];
 }
 
@@ -1495,7 +1495,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OATextLineViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OATextLineViewCell.reuseIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-        cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        cell.textView.textColor = UIColor.secondaryLabelColor;
         [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
         cell.textView.text = cellData.title;
         cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
@@ -1653,7 +1653,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
         cell.separatorInset = UIEdgeInsetsMake(0., isPaletteName ? 0. : self.tableView.frame.size.width, 0., 0.);
         cell.titleLabel.text = cellData.title;
-        cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.titleLabel.textColor = cellData.tintColor ?: UIColor.labelColor;
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         return cell;
     }
@@ -1669,7 +1669,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
-                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+                                     labelsColor:UIColor.secondaryLabelColor];
 
         OASColorPalette *colorPalette = [_selectedPaletteColorItem getColorPalette];
         if (!colorPalette)
@@ -1739,7 +1739,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
+            NSForegroundColorAttributeName: UIColor.secondaryLabelColor
     }];
     vw.label.attributedText = textStr;
     return vw;

@@ -373,7 +373,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     if (section == EOAMapSettingsRoutesSectionValues && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        header.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 

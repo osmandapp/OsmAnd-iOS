@@ -778,8 +778,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.secondaryLabelColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.labelColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -796,8 +796,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.secondaryLabelColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.labelColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -1587,12 +1587,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     cell.descriptionLabel.attributedText = nil;
                     cell.descriptionLabel.text = item[@"title"];
                     cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                    cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                    cell.descriptionLabel.textColor = UIColor.labelColor;
                 }
                 cell.titleLabel.attributedText = nil;
                 cell.titleLabel.text = item[@"descr"];
                 cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.titleLabel.textColor = UIColor.secondaryLabelColor;
             }
             else if (indexPath == _routingInfoIndexPath)
             {
@@ -1608,7 +1608,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 {
                     NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
                     [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
-                    [attrDescription setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:emission];
+                    [attrDescription setColor:UIColor.secondaryLabelColor forString:emission];
                 }
                 cell.descriptionLabel.text = nil;
                 cell.descriptionLabel.font = nil;
@@ -2032,7 +2032,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSString *mainText = OALocalizedString(@"public_transport_empty_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_try_change_settings");
     NSString *settingName = OALocalizedString(@"avoid_transport_type");
-    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] };
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.secondaryLabelColor };
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@\n%@", mainText, additionalText, settingName] attributes:attributes];
     
@@ -2051,7 +2051,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     NSString *mainText = OALocalizedString(@"public_transport_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_warning_descr_blog");
-    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] };
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.secondaryLabelColor };
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     

@@ -204,7 +204,7 @@ final class CoordinatesFormatViewController: OABaseSettingsViewController {
         config.titleTextAttributesTransformer = .init { attributes in
             var attributes = attributes
             attributes.font = .preferredFont(forTextStyle: .body)
-            attributes.foregroundColor = .textColorPrimary
+            attributes.foregroundColor = .label
             return attributes
         }
         

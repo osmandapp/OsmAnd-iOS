@@ -48,7 +48,7 @@
     else
     {
         _contentContainer.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
-        _fileName.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        _fileName.textColor = UIColor.labelColor;
         [_rightIconImageVIew setTintColor: [UIColor colorNamed:ACColorNameIconColorActive]];
     }
 }

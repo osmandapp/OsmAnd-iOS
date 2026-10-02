@@ -96,7 +96,7 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
             if item.obj(forKey: "sourceLinkKey") != nil {
                 cell.valueLabel.textColor = .textColorActive
             } else {
-                cell.valueLabel.textColor = .textColorSecondary
+                cell.valueLabel.textColor = .secondaryLabel
             }
             cell.valueLabel.font = cell.titleLabel.font
             cell.accessibilityLabel = item.title
@@ -156,7 +156,7 @@ final class ExpandableTextViewTableCell: UITableViewCell {
     private lazy var notesTextView: ExpandableTextView = {
         let v = ExpandableTextView()
         v.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        v.textColor = .textColorPrimary
+        v.textColor = .label
         v.backgroundColor = .clear
         v.moreText = localizedString("show_more")
         v.lessText = localizedString("shared_string_show_less")

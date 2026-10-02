@@ -167,7 +167,7 @@
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textView.textColor = UIColor.labelColor;
         }
         if (cell)
         {

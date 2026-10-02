@@ -27,7 +27,7 @@
         _label = [[OALabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _label.font = font;
-        _label.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        _label.textColor = UIColor.labelColor;
         _label.numberOfLines = 0;
         [_label setUserInteractionEnabled:YES];
         [_label bringSubviewToFront:self];

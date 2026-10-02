@@ -69,7 +69,7 @@
     _viewLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _viewLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     _viewLabel.adjustsFontForContentSizeCategory = YES;
-    _viewLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _viewLabel.textColor = UIColor.secondaryLabelColor;
     _viewLabel.backgroundColor = [UIColor clearColor];
     _viewLabel.text = OALocalizedString(@"coordinates_copy_descr");
     
@@ -86,7 +86,7 @@
             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:full];
             NSRange prefixRange = NSMakeRange(0, item.prefix.length + 2);
             [attr addAttribute:NSForegroundColorAttributeName
-                         value:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                         value:UIColor.secondaryLabelColor
                          range:prefixRange];
             [btn setAttributedTitle:attr forState:UIControlStateNormal];
         }

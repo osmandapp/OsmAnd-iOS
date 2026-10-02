@@ -395,7 +395,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             kCellKeyKey: @"coordinatesGridColor",
             kCellTypeKey: OASimpleTableViewCell.reuseIdentifier,
             kCellTitleKey: OALocalizedString(@"shared_string_color"),
-            @"tintTitle": [UIColor colorNamed:ACColorNameTextColorPrimary]
+            @"tintTitle": UIColor.labelColor
         }];
         [topSection addRowFromDictionary:@{
             kCellKeyKey: @"color_day_night",
@@ -983,7 +983,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell reuseIdentifier]];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
-        cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.valueLabel.textColor = UIColor.labelColor;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.titleLabel.text = item.title;
         cell.valueLabel.text = [item stringForKey:@"value"];

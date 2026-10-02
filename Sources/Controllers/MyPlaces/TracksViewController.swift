@@ -979,7 +979,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let menu = UIMenu(title: "", image: nil, children: menuActions)
         if !isSearchActive, !tableView.isEditing {
             let searchIcon = UIImage(systemName: "magnifyingglass",
-                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
             let searchBarButton = UIBarButtonItem(image: searchIcon,
                                                   style: .plain,
                                                   target: self,
@@ -989,12 +989,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 searchBarButton.tintColor = .clear
             }
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            actionsBarButton.tintColor = .textColorPrimary
+            actionsBarButton.tintColor = .label
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
         } else {
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            actionsBarButton.tintColor = .textColorPrimary
+            actionsBarButton.tintColor = .label
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton], animated: false)
         }
@@ -1096,7 +1096,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             return
         }
         
-        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
+        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .secondaryLabel, isBigTitle: false, parentViewWidth: view.frame.width)
         footer.backgroundColor = .clear
         for subview in footer.subviews {
             if let label = subview as? UILabel {
@@ -2567,8 +2567,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 cell.backgroundView?.backgroundColor = .secondarySystemGroupedBackground
                 cell.selectedBackgroundView = UIView()
                 cell.selectedBackgroundView?.backgroundColor = .secondarySystemGroupedBackground
-                cell.titleLabel.textColor = .textColorPrimary
-                cell.descriptionLabel.textColor = .textColorSecondary
+                cell.titleLabel.textColor = .label
+                cell.descriptionLabel.textColor = .secondaryLabel
                 cell.titleLabel.text = item.title
                 if item.key == trackKey {
                     cell.descriptionLabel.text = nil

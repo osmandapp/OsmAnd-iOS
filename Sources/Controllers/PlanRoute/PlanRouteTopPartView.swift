@@ -147,8 +147,8 @@ final class PlanRouteTopPartView: UIView {
                                arrivalTime: String) -> NSAttributedString {
         let bodyFont = UIFont.preferredFont(forTextStyle: .body)
         let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
-        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
-        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
+        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.label]
+        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.secondaryLabel]
 
         let result = NSMutableAttributedString()
         let distanceParts = totalDistance.components(separatedBy: " ")
@@ -173,7 +173,7 @@ final class PlanRouteTopPartView: UIView {
                                 bearing: String) -> NSAttributedString {
         let subheadFont = UIFont.preferredFont(forTextStyle: .subheadline)
         let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: subheadFont.pointSize, weight: .regular)
-        let attributes: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
+        let attributes: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.secondaryLabel]
 
         let result = NSMutableAttributedString()
         result.append(symbolAttachment("arrow.up.right", font: subheadFont))
@@ -188,7 +188,7 @@ final class PlanRouteTopPartView: UIView {
     private func symbolAttachment(_ name: String, font: UIFont) -> NSAttributedString {
         let attachment = NSTextAttachment()
         let configuration = UIImage.SymbolConfiguration(font: font)
-        attachment.image = UIImage(systemName: name, withConfiguration: configuration)?.withTintColor(.textColorSecondary, renderingMode: .alwaysOriginal)
+        attachment.image = UIImage(systemName: name, withConfiguration: configuration)?.withTintColor(.secondaryLabel, renderingMode: .alwaysOriginal)
         return NSAttributedString(attachment: attachment)
     }
 
@@ -199,8 +199,8 @@ final class PlanRouteTopPartView: UIView {
     private func formattedDuration(_ duration: TimeInterval) -> NSAttributedString {
         let bodyFont = UIFont.preferredFont(forTextStyle: .body)
         let monospacedDigitFont = UIFont.monospacedDigitSystemFont(ofSize: bodyFont.pointSize, weight: .regular)
-        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorPrimary]
-        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.textColorSecondary]
+        let primary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.label]
+        let secondary: [NSAttributedString.Key: Any] = [.font: monospacedDigitFont, .foregroundColor: UIColor.secondaryLabel]
         let durationText = OAOsmAndFormatter.getFormattedDuration(duration) ?? ""
         let result = NSMutableAttributedString(string: durationText, attributes: secondary)
         guard let durationNumberRegex = Constants.durationNumberRegex else { return result }

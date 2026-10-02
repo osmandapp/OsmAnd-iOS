@@ -48,7 +48,7 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ehx-lv-Pfd">
                             <rect key="frame" x="0.0" y="0.0" width="366" height="44"/>
-                            <color key="backgroundColor" name="textColorSecondary"/>
+                            <color key="backgroundColor" systemColor="secondaryLabelColor"/>
                         </view>
                     </subviews>
                     <constraints>
@@ -62,7 +62,7 @@
                 </scrollView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Gax-nF-ZOE"/>
-            <color key="backgroundColor" name="textColorSecondary"/>
+            <color key="backgroundColor" systemColor="secondaryLabelColor"/>
             <constraints>
                 <constraint firstItem="zdJ-8f-Xym" firstAttribute="top" secondItem="Iuh-L6-uWd" secondAttribute="top" id="1fi-wO-Oj4"/>
                 <constraint firstAttribute="bottom" secondItem="zdJ-8f-Xym" secondAttribute="bottom" id="Ar9-LQ-bUx"/>
@@ -80,9 +80,9 @@
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textColorSecondary">
-            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

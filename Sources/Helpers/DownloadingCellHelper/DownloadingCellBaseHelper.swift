@@ -148,14 +148,14 @@ class DownloadingCellBaseHelper: NSObject {
             cell.titleLabel.textColor = .textColorActive
         } else {
             cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-            cell.titleLabel.textColor = .textColorPrimary
+            cell.titleLabel.textColor = .label
         }
         
         if let desc, !desc.isEmpty {
             cell.descriptionVisibility(true)
             cell.descriptionLabel.text = desc
             cell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
-            cell.descriptionLabel.textColor = .textColorSecondary
+            cell.descriptionLabel.textColor = .secondaryLabel
         } else {
             cell.descriptionVisibility(false)
         }

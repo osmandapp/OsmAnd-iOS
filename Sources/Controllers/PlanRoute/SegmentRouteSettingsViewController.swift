@@ -92,7 +92,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
                                               style: .plain,
                                               target: self,
                                               action: #selector(onCloseTapped))
-            closeButton.tintColor = .textColorPrimary
+            closeButton.tintColor = .label
             navigationItem.leftBarButtonItem = closeButton
         }
 

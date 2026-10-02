@@ -68,7 +68,7 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
             cell.leftIconView.tintColor = isDisabled ? .iconColorDisabled : (selected ? .iconColorActive : .iconColorDefault)
             cell.titleLabel.text = item.title
-            cell.titleLabel.textColor = isDisabled ? .textColorSecondary : .textColorPrimary
+            cell.titleLabel.textColor = isDisabled ? .secondaryLabel : .label
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue
             

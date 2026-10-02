@@ -11,7 +11,7 @@ extension FavoriteListViewController {
         CellRegistration<FavoriteFolderSection> { cell, _, section in
             var content = cell.defaultContentConfiguration()
             content.text = section.title
-            content.textProperties.color = .textColorPrimary
+            content.textProperties.color = .label
             content.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
             cell.contentConfiguration = content
             let disclosureOptions = UICellAccessory.OutlineDisclosureOptions(style: .header)
@@ -43,7 +43,7 @@ extension FavoriteListViewController {
             content.textProperties.font = folder.titleFont
             content.textProperties.numberOfLines = 2
             content.secondaryText = folder.subtitle
-            content.secondaryTextProperties.color = .textColorSecondary
+            content.secondaryTextProperties.color = .secondaryLabel
             cell.contentConfiguration = content
             cell.backgroundConfiguration = self?.listCellBackgroundConfiguration()
             cell.accessories = [.multiselect(), .disclosureIndicator(displayed: .whenNotEditing)]

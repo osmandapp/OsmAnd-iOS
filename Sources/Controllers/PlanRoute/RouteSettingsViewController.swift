@@ -344,7 +344,7 @@ extension PlanRouteShowAlongSettingsViewController: UITableViewDataSource {
         var content = cell.defaultContentConfiguration()
         content.text = item.title
         content.textProperties.font = .scaledSystemFont(ofSize: 17)
-        content.textProperties.color = .textColorPrimary
+        content.textProperties.color = .label
         cell.contentConfiguration = content
         cell.backgroundColor = .secondarySystemGroupedBackground
         cell.selectionStyle = .none

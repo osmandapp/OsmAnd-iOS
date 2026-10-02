@@ -259,10 +259,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 
         navigationItem.title = nil
         navigationItem.setStackViewWithTitle(title,
-                                             titleColor: .textColorPrimary,
+                                             titleColor: .label,
                                              titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
                                              subtitle: hideSubtitle ? "" : subtitle,
-                                             subtitleColor: .textColorSecondary,
+                                             subtitleColor: .secondaryLabel,
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
     

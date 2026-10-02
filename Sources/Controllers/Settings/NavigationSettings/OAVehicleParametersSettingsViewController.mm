@@ -204,7 +204,7 @@
         style.minimumLineHeight = 17.;
         label.attributedText = [[NSAttributedString alloc] initWithString:text
                                                                attributes:@{ NSParagraphStyleAttributeName : style,
-                                                                             NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary],
+                                                                             NSForegroundColorAttributeName : UIColor.secondaryLabelColor,
                                                                              NSFontAttributeName : kHeaderDescriptionFontSmall,
                                                                              NSBackgroundColorAttributeName : UIColor.clearColor }];
         label.numberOfLines = 0;

@@ -147,7 +147,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
                     switch cellDataItem {
                     case .title:
                         cell.titleLabel.attributedText = getEmptyDescriptionAttributedString()
-                        cell.titleLabel.textColor = .textColorPrimary
+                        cell.titleLabel.textColor = .label
                         cell.selectionStyle = .none
                     case .learnMore:
                         cell.titleLabel.textColor = .textColorActive
@@ -190,7 +190,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         headerView?.contentView.backgroundColor = .systemGroupedBackground
         headerView?.label.text = title
         headerView?.label.font = headerFont
-        headerView?.label.textColor = .textColorSecondary
+        headerView?.label.textColor = .secondaryLabel
         headerView?.setYOffset(8)
         return headerView
     }

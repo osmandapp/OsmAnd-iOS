@@ -632,7 +632,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        v.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 
@@ -641,7 +641,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        v.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 

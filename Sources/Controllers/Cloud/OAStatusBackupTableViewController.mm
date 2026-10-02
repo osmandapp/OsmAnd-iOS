@@ -451,7 +451,7 @@
                                       NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] }
                              range:[attributedDescr.string rangeOfString:conflictStr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
-                                      NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
+                                      NSForegroundColorAttributeName : UIColor.secondaryLabelColor }
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
     [rowData setObj:attributedDescr forKey:@"descrAttr"];
     [rowData setObj:@"ic_custom_alert" forKey:@"secondaryIconConflict"];
@@ -745,7 +745,7 @@
             paragraphStyle.lineSpacing = 4;
             paragraphStyle.alignment = NSTextAlignmentCenter;
             [str addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-            [str addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:range];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:range];
             [str addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:range];
             cell.descriptionLabel.attributedText = str;
             [cell.cellImageView setImage:[UIImage rtlImageNamed:item.iconName]];

@@ -360,7 +360,7 @@
         }
         if ([item[@"regular_text"] boolValue])
         {
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = UIColor.labelColor;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else

@@ -31,9 +31,9 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         if model.isDestructive {
             titleColor = .textColorDisruptive
         } else if model.isEnabled {
-            titleColor = .textColorPrimary
+            titleColor = .label
         } else {
-            titleColor = .textColorSecondary
+            titleColor = .secondaryLabel
         }
         titleLabel.text = model.title
         titleLabel.textColor = titleColor
@@ -66,7 +66,7 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         titleLabel.numberOfLines = 1
 
         subtitleLabel.font = .scaledSystemFont(ofSize: 13)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.numberOfLines = 1
 
         iconView.contentMode = .scaleAspectFit

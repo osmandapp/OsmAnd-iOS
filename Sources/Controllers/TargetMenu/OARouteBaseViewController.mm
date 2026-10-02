@@ -107,7 +107,7 @@
 + (NSAttributedString *) getFormattedElevationString:(OASGpxTrackAnalysis *)analysis
 {
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary] };
+    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColor.secondaryLabelColor };
     if (analysis)
     {
         NSMutableAttributedString *res = [NSMutableAttributedString new];
@@ -160,8 +160,8 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
-    NSDictionary *alphabeticAttributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] };
+    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.labelColor};
+    NSDictionary *alphabeticAttributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3], NSForegroundColorAttributeName : UIColor.secondaryLabelColor };
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:[routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
     NSAttributedString *time = [self getFormattedTimeInterval:[routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];

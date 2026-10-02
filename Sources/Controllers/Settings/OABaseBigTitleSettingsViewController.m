@@ -57,7 +57,7 @@
     {
         _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
                                                                           font:kHeaderBigTitleFont
-                                                                     textColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                                                     textColor:UIColor.secondaryLabelColor
                                                                     isBigTitle:YES
                                                                parentViewWidth:self.view.frame.size.width];
     }

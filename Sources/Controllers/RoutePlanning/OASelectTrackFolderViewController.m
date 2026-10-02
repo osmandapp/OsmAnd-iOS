@@ -199,7 +199,7 @@
     NSString *title = [self tableView:self.tableView titleForHeaderInSection:section];
     OATableViewCustomHeaderView *vw = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = [title upperCase];
-    vw.label.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    vw.label.textColor = UIColor.secondaryLabelColor;
     return vw;
 }
 

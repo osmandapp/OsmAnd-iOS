@@ -69,7 +69,7 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
         iconView.isAccessibilityElement = false
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorSecondary
+        titleLabel.textColor = .secondaryLabel
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping

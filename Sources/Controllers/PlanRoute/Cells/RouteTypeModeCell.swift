@@ -53,7 +53,7 @@ final class RouteTypeModeCell: UITableViewCell {
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
 
         [checkmarkView, iconView, titleLabel].forEach {

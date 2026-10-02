@@ -14,13 +14,13 @@ final class TwoLineTitleView: UIView {
         let titleLabel = UILabel()
         titleLabel.text = title
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.textAlignment = .center
 
         let subtitleLabel = UILabel()
         subtitleLabel.text = subtitle
         subtitleLabel.font = .scaledSystemFont(ofSize: 12)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.textAlignment = .center
 
         let stack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])

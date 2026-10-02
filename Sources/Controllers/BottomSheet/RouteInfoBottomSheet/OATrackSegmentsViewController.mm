@@ -80,7 +80,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     self.cancelButton.hidden = NO;
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getLocalizedDescription font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorPrimary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getLocalizedDescription font:kHeaderDescriptionFont textColor:UIColor.labelColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.tableHeaderView = _tableHeaderView;
     self.tableView.tableHeaderView.backgroundColor = UIColor.systemGroupedBackgroundColor;
 }

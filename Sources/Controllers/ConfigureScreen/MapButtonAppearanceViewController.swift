@@ -216,7 +216,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
                 cell.descriptionLabel.attributedText = NSAttributedString(string: localizedString("background_opacity_description"), attributes: [.paragraphStyle: paragraphStyle])
             } else {
                 cell.topRightLabel.text = NumberFormatter.percentFormatter.string(from: value as NSNumber)
-                cell.topRightLabel.textColor = .textColorSecondary
+                cell.topRightLabel.textColor = .secondaryLabel
                 cell.topRightLabelVisibility(true)
                 cell.topRightButtonVisibility(false)
                 cell.sliderValuesVisibility(true)
@@ -224,9 +224,9 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
             }
             
             cell.bottomLeftLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.minimumValue as NSNumber)
-            cell.bottomLeftLabel.textColor = .textColorSecondary
+            cell.bottomLeftLabel.textColor = .secondaryLabel
             cell.bottomRightLabel.text = NumberFormatter.percentFormatter.string(from: cell.slider.maximumValue as NSNumber)
-            cell.bottomRightLabel.textColor = .textColorSecondary
+            cell.bottomRightLabel.textColor = .secondaryLabel
             return cell
         } else if item.cellType == OAIconsPaletteCell.reuseIdentifier {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OAIconsPaletteCell.reuseIdentifier) as? OAIconsPaletteCell else {
@@ -236,7 +236,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
             cell.forceScrollOnStart = true
             cell.disableAnimationsOnStart = true
             cell.topLabel.font = .preferredFont(forTextStyle: .body)
-            cell.topLabel.textColor = .textColorPrimary
+            cell.topLabel.textColor = .label
             cell.hostVC = self
             cell.descriptionLabel.text = localizedString("dynamic_icon_type_summary")
             iconCollectionHandler?.setCollectionView(cell.collectionView)

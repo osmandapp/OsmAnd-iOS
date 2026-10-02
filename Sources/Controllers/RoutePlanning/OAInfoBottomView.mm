@@ -104,7 +104,7 @@
 - (void)setHeaderViewText:(NSString *)headerViewText
 {
     _headerViewText = headerViewText;
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorPrimary] isBigTitle:NO parentViewWidth:self.frame.size.width];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:kHeaderDescriptionFont textColor:UIColor.labelColor isBigTitle:NO parentViewWidth:self.frame.size.width];
     _tableView.tableHeaderView = _tableHeaderView;
     _tableView.tableHeaderView.backgroundColor = UIColor.systemGroupedBackgroundColor;
 }
@@ -151,7 +151,7 @@
             
             cell.textColorNormal = nil;
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-            cell.titleView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleView.textColor = UIColor.labelColor;
             cell.separatorView.hidden = indexPath.row == _data.count - 1;
         }
         return cell;

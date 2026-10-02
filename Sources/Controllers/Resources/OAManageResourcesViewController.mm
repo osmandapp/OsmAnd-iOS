@@ -504,16 +504,16 @@ static BOOL _repositoryUpdated = NO;
     {
         if (isFiltered)
         {
-            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"res_search_world") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
+            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"res_search_world") attributes:@{NSForegroundColorAttributeName:UIColor.tertiaryLabelColor}];
             _searchController.searchBar.searchTextField.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
-            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+            _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.tertiaryLabelColor;
         }
         else
         {
             _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"res_search_world") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
             _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
             _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-            _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+            _searchController.searchBar.searchTextField.tintColor = UIColor.tertiaryLabelColor;
         }
     }
 }
@@ -2816,7 +2816,7 @@ static BOOL _repositoryUpdated = NO;
                                           reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.detailTextLabel.textColor = UIColor.secondaryLabelColor;
 
             UIImage *iconImage = [UIImage imageNamed:ACImageNameIcCustomDownload];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -2856,7 +2856,7 @@ static BOOL _repositoryUpdated = NO;
             cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.detailTextLabel.textColor = UIColor.secondaryLabelColor;
             BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
             BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
             if (addInfoAccessory)
@@ -2888,7 +2888,7 @@ static BOOL _repositoryUpdated = NO;
     {
         if (!disabled)
         {
-            cell.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textLabel.textColor = UIColor.labelColor;
             BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
             BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
             if (addInfoAccessory)
@@ -3047,7 +3047,7 @@ static BOOL _repositoryUpdated = NO;
         OATextMultilineTableViewCell *textViewCell = (OATextMultilineTableViewCell *) cell;
         [textViewCell leftIconVisibility:NO];
         [textViewCell clearButtonVisibility:NO];
-        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17 textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+        textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.labelColor];
         textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive]};
         [textViewCell.textView sizeToFit];
     }

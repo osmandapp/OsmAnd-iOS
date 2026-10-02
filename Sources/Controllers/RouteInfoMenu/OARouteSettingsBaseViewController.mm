@@ -98,7 +98,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
     appearance.shadowColor = [SeparatorAppearance color];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName : UIColor.labelColor
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
@@ -555,7 +555,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [vw.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 #pragma mark - OANavigationSettingsDelegate

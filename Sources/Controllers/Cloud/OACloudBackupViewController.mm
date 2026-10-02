@@ -657,7 +657,7 @@
             cell.selectionStyle = isWarningCell ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             if (isWarningCell)
             {
-                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                cell.titleLabel.textColor = UIColor.labelColor;
                 NSInteger color = item.iconTint;
                 if (color != -1)
                 {
@@ -674,7 +674,7 @@
                 BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
                 cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
                 cell.rightIconView.tintColor = actionButtonDisabled ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorActive];
-                cell.titleLabel.textColor = actionButtonDisabled ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorActive];
+                cell.titleLabel.textColor = actionButtonDisabled ? UIColor.secondaryLabelColor : [UIColor colorNamed:ACColorNameTextColorActive];
             }
         }
         return cell;

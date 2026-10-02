@@ -169,7 +169,7 @@
     appearance.shadowColor = [SeparatorAppearance color];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName : UIColor.labelColor
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     
@@ -376,7 +376,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = UIColor.labelColor;
             cell.valueLabel.text = item[@"value"];
         }
         return cell;
@@ -429,7 +429,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        headerView.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 
@@ -437,7 +437,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : UIColor.secondaryLabelColor;
     }
 }
 
@@ -533,7 +533,7 @@
     
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+    footer.textLabel.textColor = _inputFieldError != nil ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : UIColor.secondaryLabelColor;
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];

@@ -94,7 +94,7 @@ import UIKit
         case .importTracks:
             addButtonPosition = .beginning
             iconDefaultColor = .iconColorSelected
-            folderTitleSelectedDefaultColor = .textColorPrimary
+            folderTitleSelectedDefaultColor = .label
         }
     }
 
@@ -292,7 +292,7 @@ import UIKit
         
         let titleColor: UIColor
         if item.hidden {
-            titleColor = .textColorSecondary
+            titleColor = .secondaryLabel
         } else if selected {
             titleColor = folderTitleSelectedDefaultColor
         } else {

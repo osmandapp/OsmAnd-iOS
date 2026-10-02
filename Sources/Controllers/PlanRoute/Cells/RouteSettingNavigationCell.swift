@@ -50,13 +50,13 @@ final class RouteSettingNavigationCell: UITableViewCell {
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.setContentCompressionResistancePriority(.defaultHigh + 1, for: .horizontal)
 
         valueLabel.font = .scaledSystemFont(ofSize: 17)
-        valueLabel.textColor = .textColorSecondary
+        valueLabel.textColor = .secondaryLabel
         valueLabel.numberOfLines = 0
         valueLabel.lineBreakMode = .byWordWrapping
         valueLabel.textAlignment = .right

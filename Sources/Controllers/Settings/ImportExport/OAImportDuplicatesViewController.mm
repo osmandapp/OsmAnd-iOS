@@ -145,7 +145,7 @@
     [buttonTitle setColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forString:title];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.] forString:title];
     [buttonTitle setMinLineHeight:18. alignment:NSTextAlignmentCenter forString:title];
-    [buttonTitle setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:subtitle];
+    [buttonTitle setColor:UIColor.secondaryLabelColor forString:subtitle];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.] forString:subtitle];
     [buttonTitle setMinLineHeight:17. alignment:NSTextAlignmentCenter forString:subtitle];
     return buttonTitle;

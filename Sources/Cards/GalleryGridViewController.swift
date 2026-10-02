@@ -350,7 +350,7 @@ final private class TitleHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        titleLabel.textColor = .textColorSecondary
+        titleLabel.textColor = .secondaryLabel
         titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

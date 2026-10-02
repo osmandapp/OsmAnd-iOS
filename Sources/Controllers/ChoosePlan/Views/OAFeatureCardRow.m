@@ -172,7 +172,7 @@
                                   value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                                   range:NSMakeRange(0, attributedDescription.length)];
     [attributedDescription addAttribute:NSForegroundColorAttributeName
-                                  value:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                  value:UIColor.secondaryLabelColor
                                   range:NSMakeRange(0, attributedDescription.length)];
     self.labelDescription.attributedText = attributedDescription;
 

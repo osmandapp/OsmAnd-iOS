@@ -116,7 +116,7 @@
             self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            self.labelDescription.textColor = UIColor.labelColor;
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
             self.labelDescription.textAlignment = NSTextAlignmentLeft;
             break;
@@ -198,8 +198,8 @@
             self.imageViewLeftIcon.image = icon;
             self.imageViewRightIcon.image = nil;
             self.backgroundColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonBgColorTertiary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
-            self.labelTitle.textColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
-            self.labelDescription.textColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+            self.labelTitle.textColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : UIColor.secondaryLabelColor;
+            self.labelDescription.textColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : UIColor.secondaryLabelColor;
             self.userInteractionEnabled = available && !isPurchased;
             self.layer.borderWidth = 0.;
             break;
@@ -260,7 +260,7 @@
             
             self.imageViewLeftIcon.image = nil;
             self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            self.labelDescription.textColor = UIColor.labelColor;
             [self updateSelected:selected];
             self.userInteractionEnabled = YES;
             break;

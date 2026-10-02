@@ -33,7 +33,7 @@ final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
             let cell = super.setupCell(resourceId: resourceId, title: title, isTitleBold: false, desc: subtitle, leftIconName: getLeftIconName(resourceId), rightIconName: getRightIconName(resourceId), isDownloading: isDownloading)
             
             if isDisabled(resourceId) {
-                cell?.titleLabel.textColor = .textColorSecondary
+                cell?.titleLabel.textColor = .secondaryLabel
                 cell?.rightIconVisibility(false)
             }
             cell?.selectionStyle = .none

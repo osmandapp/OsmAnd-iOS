@@ -138,7 +138,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             cell.leftIconVisibility(false)
             cell.selectionStyle = .none
             cell.titleLabel.text = item.title
-            cell.titleLabel.textColor = .textColorSecondary
+            cell.titleLabel.textColor = .secondaryLabel
             cell.titleLabel.font = .systemFont(ofSize: Self.descriptionFontSize)
             cell.setCustomLeftSeparatorInset(true)
             cell.separatorInset = .zero

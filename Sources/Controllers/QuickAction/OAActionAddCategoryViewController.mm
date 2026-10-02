@@ -107,7 +107,7 @@
         if (isFiltered)
         {
             _searchController.searchBar.searchTextField.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
-            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+            _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.tertiaryLabelColor;
         }
         else
         {

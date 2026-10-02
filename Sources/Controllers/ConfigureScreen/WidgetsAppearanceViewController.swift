@@ -1611,7 +1611,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         isAccessibilityElement = false
         previewContainer.isHidden = false
         valueButton.isHidden = false
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         selectionStyle = .none
         accessibilityLabel = nil
         accessibilityValue = nil
@@ -1635,7 +1635,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     func configure(title: String, preview: Preview, value: String, menu: UIMenu) {
         selectionStyle = .none
         titleLabel.text = title
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLeadingToContentConstraint.isActive = false
         titleLeadingToPreviewConstraint.isActive = true
         configurePreview(preview)
@@ -1703,7 +1703,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.isAccessibilityElement = false
 
         valueButton.translatesAutoresizingMaskIntoConstraints = false

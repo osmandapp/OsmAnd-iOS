@@ -150,7 +150,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
         headerView?.contentView.backgroundColor = .systemGroupedBackground
         headerView?.label.text = title
         headerView?.label.font = headerFont
-        headerView?.label.textColor = .textColorSecondary
+        headerView?.label.textColor = .secondaryLabel
         headerView?.setYOffset(8)
         return headerView
     }

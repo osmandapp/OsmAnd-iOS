@@ -261,11 +261,11 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             BOOL enabled = [item boolForKey:@"enabled"];
             cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.titleLabel.textColor = enabled ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.titleLabel.textColor = enabled ? [UIColor colorNamed:ACColorNameTextColorActive] : UIColor.secondaryLabelColor;
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
-            cell.rightIconView.tintColor = enabled ? item.iconTintColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.rightIconView.tintColor = enabled ? item.iconTintColor : UIColor.secondaryLabelColor;
         }
         return cell;
     }

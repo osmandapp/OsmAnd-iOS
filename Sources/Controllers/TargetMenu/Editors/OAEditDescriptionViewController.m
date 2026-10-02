@@ -124,7 +124,7 @@
     appearance.backgroundColor = _isEditing ? self.tableView.backgroundColor : [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : _isEditing ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
+        NSForegroundColorAttributeName : _isEditing ? UIColor.labelColor : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 

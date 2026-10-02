@@ -161,7 +161,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.valueLabel.textColor = UIColor.labelColor;
         }
         if (cell)
         {
@@ -218,7 +218,7 @@
     footerDescription.numberOfLines = 0;
     footerDescription.lineBreakMode = NSLineBreakByWordWrapping;
     footerDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    footerDescription.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    footerDescription.textColor = UIColor.secondaryLabelColor;
     [vw addSubview:footerDescription];
     return vw;
 }

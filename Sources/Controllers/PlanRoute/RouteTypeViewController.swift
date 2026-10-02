@@ -173,7 +173,7 @@ extension RouteTypeViewController: UITableViewDelegate {
         var config = header.defaultContentConfiguration()
         config.text = context.recalculateSubtitle
         config.textProperties.font = .scaledSystemFont(ofSize: 13)
-        config.textProperties.color = .textColorSecondary
+        config.textProperties.color = .secondaryLabel
         config.textProperties.numberOfLines = 0
         header.contentConfiguration = config
         return header

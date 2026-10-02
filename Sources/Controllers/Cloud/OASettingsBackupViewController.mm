@@ -356,7 +356,7 @@
             cell.descriptionLabel.text = item[@"description"];
 
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : UIColor.labelColor;
         }
         return cell;
     }

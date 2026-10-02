@@ -159,7 +159,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameIconColorTertiary]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.tertiaryLabelColor;
     }
 }
 
@@ -338,7 +338,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             
             cell.descriptionLabel.text = item.descr;
             cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.descriptionLabel.textColor = UIColor.labelColor;
             
             if (item.icon)
                 cell.leftIconView.image = item.icon;

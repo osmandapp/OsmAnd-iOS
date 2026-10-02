@@ -132,8 +132,8 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     NSDictionary *item = _data[indexPath.row];
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-        cell.descrLabel.textColor  = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        cell.titleLabel.textColor = UIColor.labelColor;
+        cell.descrLabel.textColor  = UIColor.secondaryLabelColor;
         cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         cell.imageView.tintColor = item[@"color"];
     }];

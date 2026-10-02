@@ -234,7 +234,7 @@
     {
         case EOABaseButtonColorSchemeBlank:
         case EOABaseButtonColorSchemeInactive:
-            return [UIColor colorNamed:ACColorNameTextColorSecondary];
+            return UIColor.secondaryLabelColor;
         case EOABaseButtonColorSchemeGrayAttn:
             return [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         case EOABaseButtonColorSchemePurple:

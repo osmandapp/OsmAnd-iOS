@@ -28,7 +28,7 @@ final class PlanRouteActionCell: UITableViewCell {
         if isDestructive {
             titleLabel.textColor = .textColorDisruptive
         } else {
-            titleLabel.textColor = showsDisclosure ? .textColorPrimary : .iconColorActive
+            titleLabel.textColor = showsDisclosure ? .label : .iconColorActive
         }
         accessoryType = showsDisclosure ? .disclosureIndicator : .none
         editingAccessoryType = accessoryType

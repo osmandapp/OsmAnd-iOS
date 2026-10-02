@@ -46,7 +46,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="MRV-K1-omo"/>
                         </constraints>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <color key="textColor" name="textColorPrimary"/>
+                        <color key="textColor" systemColor="labelColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -72,9 +72,9 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

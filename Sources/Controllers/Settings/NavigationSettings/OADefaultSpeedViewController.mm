@@ -153,7 +153,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.valueLabel.textColor = UIColor.labelColor;
         }
         if (cell)
         {

@@ -179,7 +179,7 @@
             self.regionIconView.image = [UIImage templateImageNamed:ACImageNameIcSmallMapPoint];
             self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
             [self.regionTextView setText:nearestCity];
-            self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            self.regionTextView.textColor = UIColor.secondaryLabelColor;
         }
         else
         {
@@ -269,7 +269,7 @@
     {
         self.gpxActivityIconView.image = [UIImage routeActivityIcon:activity.iconName fallback:[UIImage imageNamed:ACImageNameIcCustomInfoOutlined]];
         self.gpxActivityIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-        self.gpxActivityTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        self.gpxActivityTextView.textColor = UIColor.secondaryLabelColor;
     }
     
     if ([self needsUpdateConstraints])

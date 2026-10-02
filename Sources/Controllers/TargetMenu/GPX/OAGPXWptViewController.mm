@@ -212,7 +212,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     }
     
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                           NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
+                                           NSForegroundColorAttributeName : UIColor.secondaryLabelColor }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;
 }

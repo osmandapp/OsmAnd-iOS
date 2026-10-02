@@ -223,7 +223,7 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             colorTypeRow.key = RowKey.buildings3DColorType.rawValue
             colorTypeRow.cellType = OAButtonTableViewCell.reuseIdentifier
             colorTypeRow.title = localizedString("shared_string_color")
-            colorTypeRow.setObj(UIColor.textColorPrimary, forKey: ItemKey.tintTitle.rawValue)
+            colorTypeRow.setObj(UIColor.label, forKey: ItemKey.tintTitle.rawValue)
             let isPurchased = isBuildings3DColorPurchased()
             let shouldHideSeparator = currentBuildings3DColorStyle == Buildings3DColorType.custom.rawValue && isPurchased
             colorTypeRow.setObj(shouldHideSeparator, forKey: ItemKey.hideSeparator.rawValue)
@@ -559,7 +559,7 @@ extension MapSettingsBuildings3DParametersViewController: UITableViewDataSource 
             cell.separatorInset = UIEdgeInsets(top: 0.0, left: .greatestFiniteMagnitude, bottom: 0.0, right: 0.0)
             cell.selectionStyle = isMapStyleDescriptionRow ? .none : .default
             cell.titleLabel.text = isMapStyleDescriptionRow ? nil : item.title
-            cell.titleLabel.textColor = item.obj(forKey: ItemKey.tintTitle.rawValue) as? UIColor ?? .textColorSecondary
+            cell.titleLabel.textColor = item.obj(forKey: ItemKey.tintTitle.rawValue) as? UIColor ?? .secondaryLabel
             cell.titleLabel.font = .preferredFont(forTextStyle: .body)
             cell.descriptionLabel.text = isMapStyleDescriptionRow ? item.title : nil
             return cell

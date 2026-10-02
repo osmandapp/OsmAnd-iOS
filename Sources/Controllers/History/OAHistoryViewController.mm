@@ -434,7 +434,7 @@
         cell.leftIcon.image = [dataItem.item icon];
         
         [cell.descLabel setText:dataItem.distance];
-        cell.descLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        cell.descLabel.textColor = UIColor.secondaryLabelColor;
         cell.descIcon.transform = CGAffineTransformMakeRotation(dataItem.direction);
     }
     

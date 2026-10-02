@@ -1605,12 +1605,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         {
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
             cell.textView.text = info.textPrefix;
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
         }
         else
         {
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textView.textColor = UIColor.labelColor;
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
@@ -1636,7 +1636,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             label = [NSString stringWithFormat:@"%@\n\n%@", label, info.textPrefix];
             
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textView.textColor = UIColor.labelColor;
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];

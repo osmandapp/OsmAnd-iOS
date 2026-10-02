@@ -173,7 +173,7 @@ extension UINavigationController {
 
 extension UINavigationController {
     
-    func setDefaultNavigationBarAppearance(foregroundColor: UIColor = .textColorPrimary) {
+    func setDefaultNavigationBarAppearance(foregroundColor: UIColor = .label) {
         let appearance = UINavigationBarAppearance()
         if #unavailable(iOS 26) {
             appearance.configureWithOpaqueBackground()

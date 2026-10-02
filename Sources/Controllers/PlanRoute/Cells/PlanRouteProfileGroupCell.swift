@@ -59,7 +59,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.lineBreakMode = .byWordWrapping
@@ -67,7 +67,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         distanceLabel.font = .scaledSystemFont(ofSize: 17)
-        distanceLabel.textColor = .textColorSecondary
+        distanceLabel.textColor = .secondaryLabel
         distanceLabel.numberOfLines = 0
         distanceLabel.adjustsFontForContentSizeCategory = true
         distanceLabel.lineBreakMode = .byWordWrapping

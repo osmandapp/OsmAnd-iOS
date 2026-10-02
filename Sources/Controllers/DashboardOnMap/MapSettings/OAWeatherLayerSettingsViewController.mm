@@ -655,7 +655,7 @@
             cell = (OATextLineViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.textAlignment = NSTextAlignmentCenter;
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
             cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)
@@ -706,7 +706,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.valueLabel.textColor = UIColor.secondaryLabelColor;
         }
         if (cell)
         {

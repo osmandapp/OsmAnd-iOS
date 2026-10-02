@@ -552,7 +552,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
-        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
+        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColor.secondaryLabelColor}];
         [vw sizeToFit];
         return vw;
     }

@@ -108,7 +108,7 @@
                                                              image:[tab getTabIcon]
                                                                tag:[tab getTabMode]];
     [tabBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary],
+            NSForegroundColorAttributeName: UIColor.secondaryLabelColor,
             NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]
     } forState:UIControlStateNormal];
 

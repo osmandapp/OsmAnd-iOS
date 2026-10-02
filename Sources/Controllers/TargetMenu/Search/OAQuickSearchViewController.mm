@@ -1212,7 +1212,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             NSString *inCityName = [NSString stringWithFormat:OALocalizedString(@"shared_string_in_name"), lastCityName];
             NSMutableAttributedString *selectStreetsInCityAttr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ %@", selectStreets, inCityName]];
             [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorActive] range:NSMakeRange(0, selectStreets.length)];
-            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
+            [selectStreetsInCityAttr addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:NSMakeRange(selectStreets.length + 1, inCityName.length)];
 
             [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcActionStreetName] attributedText:selectStreetsInCityAttr onClickFunction:^(id sender) {
                 if (!lastCity)

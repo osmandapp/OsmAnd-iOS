@@ -372,7 +372,7 @@ private extension ImportTracksViewController {
             let label = [item.title, item.descr].compactMap { $0 }.joined(separator: ", ")
             let isSelected = selection.selectedItems.contains(trackItem)
             cell.titleLabel.text = item.title
-            cell.titleLabel.textColor = .textColorPrimary
+            cell.titleLabel.textColor = .label
             cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
             cell.descriptionLabel.text = item.descr
             cell.configureAccessibility(withTitle: label, selected: isSelected)
@@ -504,7 +504,7 @@ private extension ImportTracksViewController {
         view.addSubview(progressStackView)
 
         progressLabel.font = .preferredFont(forTextStyle: .subheadline)
-        progressLabel.textColor = .textColorSecondary
+        progressLabel.textColor = .secondaryLabel
         progressLabel.textAlignment = .center
         progressLabel.numberOfLines = 0
         progressLabel.adjustsFontForContentSizeCategory = true
@@ -578,7 +578,7 @@ private extension ImportTracksViewController {
             string: text,
             attributes: [
                 .font: UIFont.preferredFont(forTextStyle: .body),
-                .foregroundColor: UIColor.textColorPrimary
+                .foregroundColor: UIColor.label
             ]
         )
 

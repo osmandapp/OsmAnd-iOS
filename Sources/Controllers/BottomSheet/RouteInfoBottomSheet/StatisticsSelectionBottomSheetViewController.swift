@@ -305,8 +305,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     private func yAxisColors(isSelected: Bool, canSelect: Bool) -> (UIColor, UIColor) {
-        guard !isSelected else { return (.iconColorActive, .textColorPrimary) }
-        return canSelect ? (.iconColorDefault, .textColorPrimary) : (.iconColorDisabled, .textColorTertiary)
+        guard !isSelected else { return (.iconColorActive, .label) }
+        return canSelect ? (.iconColorDefault, .label) : (.iconColorDisabled, .tertiaryLabel)
     }
     
     private func applyYAxisColors(to cell: OASimpleTableViewCell, item: OATableRowData) {

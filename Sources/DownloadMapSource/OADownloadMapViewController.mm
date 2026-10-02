@@ -538,7 +538,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             if (![item[@"title"] isEqualToString:OALocalizedString(@"map_settings_type")])
-                cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? UIColor.labelColor : UIColor.secondaryLabelColor;
             if (indexPath.row == kMaxZoomRow && !_maxZoomPickerIsShown)
                 cell.separatorInset = UIEdgeInsetsZero;
             else
@@ -605,13 +605,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [vw.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [vw.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 - (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

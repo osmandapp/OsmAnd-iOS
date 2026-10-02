@@ -71,7 +71,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
             target: self,
             action: #selector(onCloseTapped)
         )
-        navigationItem.leftBarButtonItem?.tintColor = .textColorPrimary
+        navigationItem.leftBarButtonItem?.tintColor = .label
     }
 
     private func setupTableView() {

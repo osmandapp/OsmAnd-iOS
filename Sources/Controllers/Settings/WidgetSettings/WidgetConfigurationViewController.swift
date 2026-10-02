@@ -90,7 +90,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             let hasIcon = item.iconName != nil
             cell.descriptionVisibility(hasDescr)
             cell.leftIconVisibility(hasIcon)
-            cell.titleLabel.textColor = hasIcon ? .textColorPrimary : .buttonBgColorDisruptive
+            cell.titleLabel.textColor = hasIcon ? .label : .buttonBgColorDisruptive
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage(named: item.iconName ?? "")
             outCell = cell
@@ -522,7 +522,7 @@ extension WidgetConfigurationViewController {
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
+        attrStr.addAttribute(.foregroundColor, value: UIColor.secondaryLabel, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
 

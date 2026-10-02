@@ -372,7 +372,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         cell.accessibilityTraits &= ~(UIAccessibilityTraitLink | UIAccessibilityTraitNotEnabled);
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.titleLabel.textColor = UIColor.labelColor;
         [cell descriptionVisibility:description && description.length > 0];
         cell.titleLabel.text = item.title;
         cell.descriptionLabel.text = description;
@@ -400,7 +400,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         }
         else if (isCrashLogsRow && !hasCrashReports)
         {
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.titleLabel.textColor = UIColor.secondaryLabelColor;
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.accessibilityTraits |= UIAccessibilityTraitNotEnabled;

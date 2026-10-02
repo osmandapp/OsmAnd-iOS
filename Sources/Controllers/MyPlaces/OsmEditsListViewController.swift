@@ -102,7 +102,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     private let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Header> { (cell, _, headerItem) in
         var content = cell.defaultContentConfiguration()
         content.text = headerItem.title
-        content.textProperties.color = .textColorPrimary
+        content.textProperties.color = .label
         content.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
         cell.contentConfiguration = content
         
@@ -411,11 +411,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
                                        style: .plain,
                                        target: self,
                                        action: #selector(selectButtonPressed(_:)))
-        selectButton?.tintColor = .textColorPrimary
+        selectButton?.tintColor = .label
         selectButton?.accessibilityLabel = localizedString("shared_string_select")
 
         let searchIcon = UIImage(systemName: "magnifyingglass",
-                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
         searchButton = UIBarButtonItem(image: searchIcon,
                                        style: .plain,
                                        target: self,

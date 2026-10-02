@@ -146,7 +146,7 @@ static const NSUInteger kRecentTracksLimit = 5;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = UIColor.labelColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)

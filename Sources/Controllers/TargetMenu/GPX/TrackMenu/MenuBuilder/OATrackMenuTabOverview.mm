@@ -362,7 +362,7 @@
     return [OAUtilities createAttributedString:
                     [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
                                           font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
-                                         color:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                                         color:UIColor.labelColor
                                    strokeColor:nil
                                    strokeWidth:0
                                      alignment:NSTextAlignmentNatural];

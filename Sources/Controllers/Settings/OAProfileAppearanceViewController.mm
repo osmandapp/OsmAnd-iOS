@@ -779,7 +779,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
                 [cell setCollectionHandler:_profileIconCollectionHandler];
                 [_profileIconCollectionHandler updateTopButtonName];
                 cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                cell.topLabel.textColor = UIColor.labelColor;
                 [cell topButtonVisibility:YES];
             }
             else if ([item.key isEqualToString:kPositionIconCellKey])
@@ -792,7 +792,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
                 NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
                 [_positionIconCollectionHandler setSelectedIndexPath:selectedIndexPath];
                 cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-                cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.topLabel.textColor = UIColor.secondaryLabelColor;
             }
             else if ([item.key isEqualToString:kLocationIconCellKey])
             {
@@ -804,7 +804,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
                 NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
                 [_locationIconCollectionHandler setSelectedIndexPath:selectedIndexPath];
                 cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-                cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.topLabel.textColor = UIColor.secondaryLabelColor;
             }
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
@@ -865,7 +865,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        headerView.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 

@@ -412,7 +412,7 @@ private extension SelectPointsViewController {
 
         let result = NSMutableAttributedString(
             string: text,
-            attributes: [.font: baseFont, .foregroundColor: UIColor.textColorPrimary]
+            attributes: [.font: baseFont, .foregroundColor: UIColor.label]
         )
 
         let fileRange = (text as NSString).range(of: track.name)

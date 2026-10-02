@@ -22,7 +22,7 @@
                         <segment title="text"/>
                         <segment title="text"/>
                     </segments>
-                    <color key="tintColor" name="textColorPrimary"/>
+                    <color key="tintColor" systemColor="labelColor"/>
                     <connections>
                         <action selector="segmentedControlButtonClickAction:" destination="74O-7e-JGO" eventType="valueChanged" id="23I-s0-Tvq"/>
                     </connections>
@@ -45,9 +45,9 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

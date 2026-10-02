@@ -277,8 +277,8 @@
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
-            [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:fullRange];
-            [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:coloredRange];
+            [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.labelColor range:fullRange];
+            [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:coloredRange];
             cell.textLabel.attributedText = attributedString;
         }
         else

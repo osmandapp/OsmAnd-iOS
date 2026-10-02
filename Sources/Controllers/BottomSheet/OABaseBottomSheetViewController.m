@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     
     _sliderView.layer.cornerRadius = 2.;
     
-    [self.bottomSheetView.layer setShadowColor:[UIColor colorNamed:ACColorNameTextColorPrimary].CGColor];
+    [self.bottomSheetView.layer setShadowColor:UIColor.labelColor.CGColor];
     [self.bottomSheetView.layer setShadowOpacity:0.3];
     [self.bottomSheetView.layer setShadowRadius:3.0];
     [self.bottomSheetView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (UIColor *)getBackgroundColor
 {
-    return [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.2];
+    return [UIColor.labelColor colorWithAlphaComponent:0.2];
 }
 
 - (void) show:(BOOL)animated

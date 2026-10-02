@@ -1869,7 +1869,7 @@ static const NSInteger kColorsSection = 1;
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
         }
         outCell = cell;
     }
@@ -2001,7 +2001,7 @@ static const NSInteger kColorsSection = 1;
             cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             cell.separatorInset = UIEdgeInsetsMake(0., isPaletteName ? 0. : self.tableView.frame.size.width, 0., 0.);
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.labelColor;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         }
         return cell;
@@ -2086,7 +2086,7 @@ static const NSInteger kColorsSection = 1;
         [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
-                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+                                     labelsColor:UIColor.secondaryLabelColor];
 
         OASColorPalette *colorPalette = [_selectedPaletteColorItem getColorPalette];
         if (!colorPalette)
@@ -2155,7 +2155,7 @@ static const NSInteger kColorsSection = 1;
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
+            NSForegroundColorAttributeName: UIColor.secondaryLabelColor
     }];
     vw.label.attributedText = textStr;
     return vw;

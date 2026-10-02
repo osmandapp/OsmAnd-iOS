@@ -159,8 +159,8 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
                                         OALocalizedString(@"approximate_file_size"),
                                         [NSByteCountFormatter stringFromByteCount:itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
     NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:[exportSelectDescr stringByAppendingString:approximateFileSize]];
-    [descriptionAttr setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:exportSelectDescr];
-    [descriptionAttr setColor:itemsSize > 0 ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forString:approximateFileSize];
+    [descriptionAttr setColor:UIColor.secondaryLabelColor forString:exportSelectDescr];
+    [descriptionAttr setColor:itemsSize > 0 ? UIColor.labelColor : UIColor.secondaryLabelColor forString:approximateFileSize];
     [descriptionAttr setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] forString:descriptionAttr.string];
     [descriptionAttr setMinLineHeight:18. alignment:NSTextAlignmentNatural forString:descriptionAttr.string];
     return descriptionAttr;

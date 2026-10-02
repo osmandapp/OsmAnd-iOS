@@ -203,7 +203,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     appearance.shadowColor = nil;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName : UIColor.labelColor
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.shadowColor = nil;
@@ -1112,7 +1112,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.inputField.returnKeyType = UIReturnKeyDone;
             cell.inputField.enablesReturnKeyAutomatically = YES;
-            cell.inputField.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.inputField.textColor = UIColor.secondaryLabelColor;
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
 
@@ -1152,7 +1152,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell.directionIcon.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
             cell.distanceLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
-            cell.coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.coordinateLabel.textColor = UIColor.secondaryLabelColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -1362,7 +1362,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
     self.scrollView.backgroundColor = UIColor.systemGroupedBackgroundColor;
-    _toolbarView.backgroundColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _toolbarView.backgroundColor = UIColor.secondaryLabelColor;
     
     if (!_shouldHideHintBar)
     {

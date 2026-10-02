@@ -235,7 +235,7 @@
     
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
-    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    textField.textColor = UIColor.labelColor;
     textField.underline.hidden = YES;
     textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -311,7 +311,7 @@
         text = [text stringByAppendingString:@"\n"];
         NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                     attributes:@{NSFontAttributeName : textFont,
-                                                                                                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
+                                                                                                 NSForegroundColorAttributeName : UIColor.secondaryLabelColor}];
         [textStr appendAttributedString:str];
         vw.label.text = nil;
         vw.label.attributedText = textStr;
@@ -455,7 +455,7 @@
             }
             
             cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.valueLabel.textColor = UIColor.secondaryLabelColor;
         }
         return cell;
     }
@@ -578,7 +578,7 @@
         if (cell)
         {
             MDCMultilineTextField *textField = cell.inputField;
-            textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            textField.textColor = UIColor.labelColor;
             textField.underline.hidden = YES;
             textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
             textField.placeholder = item[@"hint"];

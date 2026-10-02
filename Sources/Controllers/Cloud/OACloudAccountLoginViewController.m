@@ -138,7 +138,7 @@
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_continue"),
                 @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
-                @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+                @"textColor" : UIColor.secondaryLabelColor,
                 @"action": @"continueButtonPressed",
                 @"inteactive" : @NO,
                 @"topMargin" : !_hasValidSub ? @0 : @20
@@ -150,7 +150,7 @@
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_get"),
                 @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorPrimary],
-                @"textColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],
+                @"textColor" : UIColor.labelColor,
                 @"action" : @"getButtonPressed",
                 @"inteactive" : @YES,
             }];
@@ -179,7 +179,7 @@
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
             @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
-            @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+            @"textColor" : UIColor.secondaryLabelColor,
             @"action": @"continueButtonPressed",
             @"inteactive" : @NO,
         }];

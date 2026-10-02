@@ -173,7 +173,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
         
         OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
         [self prepareCell:cell uiFilter:filter];
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.titleLabel.textColor = UIColor.labelColor;
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         return cell;
     }

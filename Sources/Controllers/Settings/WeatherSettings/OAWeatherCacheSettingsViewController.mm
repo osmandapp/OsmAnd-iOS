@@ -260,7 +260,7 @@
             BOOL isClear = [item[@"key"] isEqualToString:@"clear"];
             cell.selectionStyle = isClear && _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isClear ? _clearButtonActive ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = isClear ? _clearButtonActive ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : UIColor.secondaryLabelColor : UIColor.labelColor;
             cell.textStackView.alignment = isClear && _type == EOAWeatherOnlineData ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
         }
         return cell;

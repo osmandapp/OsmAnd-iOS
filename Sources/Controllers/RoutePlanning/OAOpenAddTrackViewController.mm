@@ -325,9 +325,9 @@ static const NSInteger kSegmentRow = 0;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
-            cell.distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            cell.timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            cell.wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.distanceImageView.tintColor = UIColor.secondaryLabelColor;
+            cell.timeImageView.tintColor = UIColor.secondaryLabelColor;
+            cell.wptImageView.tintColor = UIColor.secondaryLabelColor;
         }
         if (cell)
         {

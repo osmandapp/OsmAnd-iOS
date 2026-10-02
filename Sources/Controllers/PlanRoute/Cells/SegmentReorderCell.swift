@@ -30,10 +30,10 @@ final class SegmentReorderCell: UITableViewCell {
 
     private func setupView() {
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .regular)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
 
         subtitleLabel.font = .scaledSystemFont(ofSize: 13)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
 
         let stack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
         stack.axis = .vertical

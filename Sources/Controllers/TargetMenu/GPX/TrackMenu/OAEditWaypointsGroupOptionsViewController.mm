@@ -329,7 +329,7 @@
         {
             cell.titleLabel.text = cellData.title;
             cell.valueLabel.text = cellData.desc;
-            cell.valueLabel.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.valueLabel.tintColor = UIColor.secondaryLabelColor;
             cell.currentColor = [arrayValue indexOfObject:cellData.values[@"int_value"]];
 
             [cell.collectionView reloadData];

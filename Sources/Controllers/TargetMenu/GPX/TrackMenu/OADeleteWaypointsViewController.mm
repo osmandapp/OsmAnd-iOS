@@ -108,7 +108,7 @@
 
     NSString *textShow = OALocalizedString(@"shared_string_delete");
     UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-    UIColor *colorShow = hasSelection ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+    UIColor *colorShow = hasSelection ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : UIColor.secondaryLabelColor;
     NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
     NSInteger selectedGroupsCount = 0;
@@ -132,7 +132,7 @@
                                 selectedWaypointsCount];
     
     UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-    UIColor *colorCategories = hasSelection ? UIColor.whiteColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
+    UIColor *colorCategories = hasSelection ? UIColor.whiteColor : UIColor.secondaryLabelColor;
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
     [attrShow appendAttributedString:attrCategories];

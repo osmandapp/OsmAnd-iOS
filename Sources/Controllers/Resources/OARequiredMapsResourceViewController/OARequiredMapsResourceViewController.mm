@@ -268,7 +268,7 @@
             OAProgressTitleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:item.cellType];
             cell.titleLabel.text = item.title;
             [cell.titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]];
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.titleLabel.textColor = UIColor.secondaryLabelColor;
             [cell.activityIndicator startAnimating];
             return cell;
         }

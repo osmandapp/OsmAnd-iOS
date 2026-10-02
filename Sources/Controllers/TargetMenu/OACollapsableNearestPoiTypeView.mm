@@ -82,7 +82,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
         OAButton *btn = [self createButton:_textRow];
         btn.tag = _textRowButtonIndex;
         [btn setBackgroundImage:nil forState:UIControlStateNormal];
-        btn.tintColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        btn.tintColor = UIColor.labelColor;
         btn.titleLabel.numberOfLines = 0;
         [self addSubview:btn];
         [buttons addObject:btn];

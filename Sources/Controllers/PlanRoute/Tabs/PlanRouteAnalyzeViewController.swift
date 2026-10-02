@@ -892,7 +892,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let nameLabel = UILabel()
         nameLabel.text = item.label
         nameLabel.font = .preferredFont(forTextStyle: .caption2)
-        nameLabel.textColor = .textColorSecondary
+        nameLabel.textColor = .secondaryLabel
 
         let stack = UIStackView(arrangedSubviews: [valueLabel, nameLabel])
         stack.axis = .vertical
@@ -1055,7 +1055,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let label = UILabel()
         label.text = title
         label.font = .preferredFont(forTextStyle: .footnote)
-        label.textColor = .textColorPrimary
+        label.textColor = .label
         label.numberOfLines = 1
 
         let stack = UIStackView(arrangedSubviews: [dot, label])

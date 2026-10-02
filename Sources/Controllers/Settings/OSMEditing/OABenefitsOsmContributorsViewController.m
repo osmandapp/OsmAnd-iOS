@@ -80,7 +80,7 @@
                                   value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSForegroundColorAttributeName
-                                  value:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                  value:UIColor.secondaryLabelColor
                                   range:NSMakeRange(0, signInAttributed.length)];
     [descriptionAttributed appendAttributedString:signInAttributed];
 
@@ -136,7 +136,7 @@
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"sign_in_with_open_street_map"),
                     @"background_color": [UIColor colorNamed:ACColorNameButtonBgColorDisabled],
-                    @"tint_color": [UIColor colorNamed:ACColorNameTextColorTertiary],
+                    @"tint_color": UIColor.tertiaryLabelColor,
                     @"icon" : ACImageNameIcActionOpenstreetmapLogo,
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)

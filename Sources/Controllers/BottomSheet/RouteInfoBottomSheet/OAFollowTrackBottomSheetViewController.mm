@@ -338,9 +338,9 @@
             [cell.editButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.editButton addTarget:self action:@selector(openPlanRoute) forControlEvents:UIControlEventTouchUpInside];
             cell.editButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            cell.timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            cell.wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.distanceImageView.tintColor = UIColor.secondaryLabelColor;
+            cell.timeImageView.tintColor = UIColor.secondaryLabelColor;
+            cell.wptImageView.tintColor = UIColor.secondaryLabelColor;
         }
         if (cell)
         {

@@ -132,7 +132,7 @@ struct FavoriteFolderRow: Hashable, FavoriteSortableFolder {
     }
 
     var titleColor: UIColor {
-        isVisible ? .textColorPrimary : .textColorSecondary
+        isVisible ? .label : .secondaryLabel
     }
 
     var titleFont: UIFont {

@@ -144,12 +144,12 @@
         
         NSString *textShow = OALocalizedString(@"recording_context_menu_show");
         UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
+        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColor.secondaryLabelColor;
         NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
         NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"search_categories"), _countShowCategories];
         UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColor.secondaryLabelColor;
         NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
         [attrShow appendAttributedString:attrCategories];
@@ -270,7 +270,7 @@
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
             [cell descriptionVisibility:YES];
             cell.descriptionLabel.text = descText;
-            cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.descriptionLabel.textColor = UIColor.secondaryLabelColor;
         }
         else
         {

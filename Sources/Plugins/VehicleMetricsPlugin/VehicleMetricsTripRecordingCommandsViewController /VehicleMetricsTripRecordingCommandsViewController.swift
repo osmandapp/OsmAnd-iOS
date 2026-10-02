@@ -134,7 +134,7 @@ extension VehicleMetricsTripRecordingCommandsViewController {
         let attrStr = NSMutableAttributedString(string: localizedString("vehicle_metrics_recording_description"))
         let font = UIFont.systemFont(ofSize: 17)
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
-        attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
+        attrStr.addAttribute(.foregroundColor, value: UIColor.secondaryLabel, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
     

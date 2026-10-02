@@ -50,7 +50,7 @@
                 <view contentMode="scaleToFill" id="T7R-0x-m15" userLabel="Header Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="191.5" width="414" height="0.5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="customSeparator"/>
+                    <color key="backgroundColor" systemColor="separatorColor"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rYO-B2-xQM">
                     <rect key="frame" x="0.0" y="192" width="414" height="200"/>
@@ -65,7 +65,7 @@
                 <view contentMode="scaleToFill" id="Ikl-Su-SFp" userLabel="Bottom Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="556.5" width="414" height="0.5"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="customSeparator"/>
+                    <color key="backgroundColor" systemColor="separatorColor"/>
                 </view>
             </subviews>
             <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
@@ -88,9 +88,6 @@
     </objects>
     <resources>
         <image name="ic_custom_pro_features_colored_big" width="48" height="48"/>
-        <namedColor name="customSeparator">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -99,6 +96,9 @@
         </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

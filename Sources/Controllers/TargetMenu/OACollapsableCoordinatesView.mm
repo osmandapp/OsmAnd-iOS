@@ -101,7 +101,7 @@
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        btn.layer.borderColor = UIColor.separatorColor.CGColor;
         btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         btn.tag = i++;
         [btn setBackgroundImage:[OAUtilities imageWithColor:[UIColor colorNamed:ACColorNameIconColorActive]] forState:UIControlStateHighlighted];
@@ -119,7 +119,7 @@
     {
         for (OAButton *btn in _buttons)
         {
-            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+            btn.layer.borderColor = UIColor.separatorColor.CGColor;
         }
     }
 }
@@ -191,7 +191,7 @@
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+                button.layer.borderColor = UIColor.separatorColor.CGColor;
                 button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             }];
         }];

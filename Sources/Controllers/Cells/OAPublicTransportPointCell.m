@@ -33,7 +33,7 @@
 - (void) showOutiline:(BOOL)show
 {
     if (show)
-        _iconView.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        _iconView.layer.borderColor = UIColor.separatorColor.CGColor;
     else
         _iconView.layer.borderColor = UIColor.clearColor.CGColor;
 }

@@ -1783,14 +1783,14 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         case let .text(textColor, backgroundColor):
             configureColorPreview(backgroundColor)
             previewContainer.layer.borderWidth = 1
-            previewContainer.layer.borderColor = UIColor.customSeparator.cgColor
+            previewContainer.layer.borderColor = UIColor.separator.cgColor
             previewImageView.isHidden = false
             previewImageView.image = .icCustomTextPreview
             previewImageView.tintColor = textColor
         case let .color(color):
             configureColorPreview(color)
             previewContainer.layer.borderWidth = 1
-            previewContainer.layer.borderColor = UIColor.customSeparator.cgColor
+            previewContainer.layer.borderColor = UIColor.separator.cgColor
         }
     }
 

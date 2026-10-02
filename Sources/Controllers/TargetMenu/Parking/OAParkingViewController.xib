@@ -90,7 +90,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <color key="tintColor" name="iconColorActive"/>
-                            <color key="separatorColor" name="customSeparator"/>
+                            <color key="separatorColor" systemColor="separatorColor"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="NSf-JB-qzR"/>
                                 <outlet property="delegate" destination="-1" id="pXl-T3-gid"/>
@@ -107,9 +107,6 @@
     <resources>
         <image name="bg_title" width="320" height="64"/>
         <image name="menu_icon_back" width="10.5" height="20.5"/>
-        <namedColor name="customSeparator">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -121,6 +118,9 @@
         </namedColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

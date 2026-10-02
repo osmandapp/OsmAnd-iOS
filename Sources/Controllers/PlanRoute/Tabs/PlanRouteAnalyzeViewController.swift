@@ -1043,7 +1043,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let dot = UIView()
         dot.backgroundColor = color
         dot.layer.cornerRadius = Self.compactLegendMarkerSize / 2
-        dot.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
+        dot.layer.borderColor = UIColor.opaqueSeparator.resolvedColor(with: traitCollection).cgColor
         let contrastRatio = contrastRatio(foreground: color, background: .secondarySystemGroupedBackground)
         dot.layer.borderWidth = contrastRatio < Self.compactLegendMinimumContrastRatio
             ? Self.compactLegendBorderWidth

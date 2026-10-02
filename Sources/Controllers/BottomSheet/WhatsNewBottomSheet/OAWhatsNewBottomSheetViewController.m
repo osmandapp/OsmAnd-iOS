@@ -28,6 +28,18 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
++ (NSString *) releaseNotesKey
+{
+    return [NSString stringWithFormat:@"ios_release_%@", [OAAppVersion getVersionWithSeparator:@"_"]];
+}
+
++ (BOOL) hasReleaseNotes
+{
+    NSString *key = [self releaseNotesKey];
+    NSString *text = OALocalizedString(key);
+    return text.length > 0 && ![text isEqualToString:key];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.delegate = self;
@@ -66,7 +78,7 @@
 - (NSMutableAttributedString *)getAttributedContentText
 {
     NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), OAAppVersion.getVersion];
-    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersion getVersionWithSeparator:@"_"]]);
+    NSString *description = OALocalizedString([self.class releaseNotesKey]);
     
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
     NSRange boldRange = NSMakeRange(0, title.length);

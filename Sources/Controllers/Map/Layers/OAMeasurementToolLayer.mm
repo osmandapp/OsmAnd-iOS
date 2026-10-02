@@ -479,9 +479,6 @@
 
 - (void) drawBeforeAfterPath
 {
-    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
-    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
-
     OsmAnd::PointI center;
     if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
     {
@@ -494,6 +491,21 @@
         auto centerPixel = self.mapViewController.mapView.getCenterPixel;
         [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
     }
+    [self drawBeforeAfterPath:center];
+}
+
+- (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center
+{
+    if (_editingCtx.inApproximationMode)
+    {
+        _lastLineCollection->removeAllLines();
+        _selectedMarkerCollection->removeAllMarkers();
+        _cachedCenter = OsmAnd::PointI(-1, -1);
+        return;
+    }
+
+    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
+    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
     if (center == _cachedCenter)
         return;
 
@@ -551,6 +563,13 @@
 - (void)prepareRouteLinesForTesting
 {
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _lastLineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+}
+
+- (NSUInteger)centerLineCountForTesting
+{
+    return _lastLineCollection ? _lastLineCollection->getLines().size() : 0;
 }
 
 - (NSUInteger)routeLineCountForTesting

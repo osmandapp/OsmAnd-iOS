@@ -136,7 +136,7 @@ extension AstroGalleryLoader: GetAstroImagesTask.GetImageCardsListener {
     }
 }
 
-private final class AstroGalleryNetworkResponseListener: NSObject, WikiCoreHelperNetworkResponseListener {
+final class AstroGalleryNetworkResponseListener: NSObject, WikiCoreHelperNetworkResponseListener {
     private let onRawResponse: (String) -> Void
 
     init(onRawResponse: @escaping (String) -> Void) {
@@ -148,7 +148,7 @@ private final class AstroGalleryNetworkResponseListener: NSObject, WikiCoreHelpe
     }
 }
 
-private final class AstroPhotoListCache {
+final class AstroPhotoListCache {
     private static let cacheDirectoryName = "online_photos_list_cache"
     private static let maxCacheItems = 100
 

@@ -11,7 +11,7 @@ struct SafariPresenter {
         let urlString: String?
 
         if let wikiCard = card as? WikiImageCard {
-            urlString = wikiCard.urlWithCommonAttributions
+            urlString = wikiCard.urlWithCommonAttributions.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         } else if let imageCard = card as? UrlImageCard {
             urlString = imageCard.imageUrl
         } else {

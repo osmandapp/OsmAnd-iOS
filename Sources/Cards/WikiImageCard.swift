@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import OsmAndShared
 
 let WIKIMEDIA_COMMONS_URL = "https://commons.wikimedia.org/wiki/"
 let WIKIMEDIA_FILE = "File:"
@@ -29,67 +30,35 @@ final class WikiImage: NSObject {
         super.init()
     }
     
+    convenience init(_ image: OsmAndShared.WikiImage) {
+        self.init(wikiMediaTag: image.wikiMediaTag,
+                  imageName: image.imageName,
+                  imageStubUrl: image.imageStubUrl,
+                  imageHiResUrl: image.imageHiResUrl)
+        mediaId = Int(image.getMediaId())
+        metadata = Metadata(date: Self.nonEmpty(image.metadata.date),
+                            author: Self.nonEmpty(image.metadata.author),
+                            license: Self.nonEmpty(image.metadata.license),
+                            description: Self.localizedDescription(image.metadata.descriptions))
+    }
+
+    private static func nonEmpty(_ value: String?) -> String? {
+        value?.isEmpty == false ? value : nil
+    }
+
+    private static func localizedDescription(_ descriptions: [String: String]) -> String? {
+        var languages = Locale.preferredLanguageCodes
+        let mapLang: String? = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
+        if let mapLang, !mapLang.isEmpty {
+            languages.insert(mapLang, at: 0)
+        }
+        let description = languages.lazy.compactMap { descriptions[$0] }.first { !$0.isEmpty }
+            ?? descriptions.values.first { !$0.isEmpty }
+        return description?.replacingOccurrences(of: "\n", with: "")
+    }
+
     func getUrlWithCommonAttributions() -> String {
         "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(wikiMediaTag)"
-    }
-    
-    func parseMetaData(with dic: [String: Any]) {
-        self.metadata = Metadata()
-        
-        if let date = dic["date"] as? String, !date.isEmpty {
-            metadata?.date = date
-        }
-        if let author = dic["author"] as? String, !author.isEmpty {
-            metadata?.author = author
-        }
-        if let license = dic["license"] as? String, !license.isEmpty {
-            metadata?.license = license
-        }
-        if let mediaId = dic["mediaId"] as? Int {
-            self.mediaId = mediaId
-        }
-        
-        applyDescription(from: dic)
-    }
-    
-    func applyDescription(from dic: [String: Any]) {
-        guard
-            let jsonString = dic["description"] as? String,
-            let data = jsonString.data(using: .utf8),
-            let descriptions = try? JSONSerialization.jsonObject(with: data) as? [String: String],
-            !descriptions.isEmpty
-        else {
-            return
-        }
-
-        let mapLang = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
-        var description: String?
-
-        // Try direct mapLang
-        if let value = descriptions[mapLang], !value.isEmpty {
-            description = value
-        } else {
-            // Try user preferred languages
-            for lang in Locale.preferredLanguageCodes {
-                if let value = descriptions[lang], !value.isEmpty {
-                    description = value
-                    break
-                }
-            }
-            
-            // first non-empty value
-            if description == nil {
-                description = descriptions.values.first(where: { !$0.isEmpty })
-            }
-        }
-
-        if let description {
-            metadata?.description = description.replacingOccurrences(of: "\n", with: "")
-        }
-    }
-    
-    private func isEmpty(_ string: String?) -> Bool {
-        string == nil || string?.isEmpty ?? true || string == "Unknown"
     }
 }
 

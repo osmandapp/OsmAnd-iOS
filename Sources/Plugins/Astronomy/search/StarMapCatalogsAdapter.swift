@@ -131,7 +131,7 @@ private final class StarMapCatalogCell: UITableViewCell {
     private func setup() {
         selectionStyle = .default
         accessoryType = .disclosureIndicator
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 68).isActive = true
 
         rowIconView.contentMode = .scaleAspectFit
@@ -140,12 +140,12 @@ private final class StarMapCatalogCell: UITableViewCell {
         rowIconView.setContentHuggingPriority(.required, for: .horizontal)
         rowIconView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 1
 
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         subtitleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.numberOfLines = 2

@@ -828,7 +828,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func updateCrosshairImage() {
         let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
         crosshairView.image = .mapRulerCenter
-        crosshairView.tintColor = nightMode ? .iconColorBlack.dark : .iconColorBlack.light
+        crosshairView.tintColor = nightMode ? .label.dark : .label.light
         crosshairView.isAccessibilityElement = false
     }
 

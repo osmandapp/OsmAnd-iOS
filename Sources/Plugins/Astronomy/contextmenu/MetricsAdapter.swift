@@ -104,9 +104,9 @@ private final class MetricView: UIView {
         
         titleLabel.textAlignment = .natural
         titleLabel.font = .preferredFont(forTextStyle: .footnote)
-        titleLabel.textColor = .textColorSecondary
+        titleLabel.textColor = .secondaryLabel
 
-        divider.backgroundColor = .customSeparatorSolid
+        divider.backgroundColor = .opaqueSeparator
         divider.translatesAutoresizingMaskIntoConstraints = false
 
         addSubview(stack)

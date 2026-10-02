@@ -870,7 +870,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
     else
     {
         blurView = [[UIView alloc] init];
-        UIColor *color = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+        UIColor *color = UIColor.tertiarySystemGroupedBackgroundColor;
         blurView.backgroundColor = light ? color.light : color.dark;
     }
     blurView.tag = kBlurViewTag;

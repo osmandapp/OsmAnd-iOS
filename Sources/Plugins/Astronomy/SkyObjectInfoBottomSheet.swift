@@ -285,7 +285,7 @@ final class AstroContextMenuViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         
         sheetHeaderBlurView.translatesAutoresizingMaskIntoConstraints = false
         sheetHeaderBlurView.clipsToBounds = true
@@ -297,7 +297,7 @@ final class AstroContextMenuViewController: UIViewController {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: .systemFont(ofSize: 34, weight: .bold))
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.numberOfLines = 1
         titleLabel.accessibilityTraits = .header
@@ -318,7 +318,7 @@ final class AstroContextMenuViewController: UIViewController {
         
         closeButton.configuration = closeButtonConfig
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.tintColor = .textColorPrimary
+        closeButton.tintColor = .label
         closeButton.accessibilityLabel = localizedString("shared_string_close")
         closeButton.addAction(UIAction { [weak self] _ in
             self?.dependencies.onClose()
@@ -436,10 +436,10 @@ final class AstroContextMenuViewController: UIViewController {
     }
 
     private func applyTheme() {
-        view.backgroundColor = .viewBg
-        titleLabel.textColor = .textColorPrimary
-        closeButton.tintColor = .textColorPrimary
-        headerType.textColor = .textColorSecondary
+        view.backgroundColor = .systemGroupedBackground
+        titleLabel.textColor = .label
+        closeButton.tintColor = .label
+        headerType.textColor = .secondaryLabel
         metricsContainer.backgroundColor = .clear
         configureTabBarAppearance()
         configureNavigationBar()
@@ -462,7 +462,7 @@ final class AstroContextMenuViewController: UIViewController {
 
     private func configureTabBarAppearance() {
         tabBar.tintColor = .iconColorActive
-        tabBar.unselectedItemTintColor = .iconColorBlack
+        tabBar.unselectedItemTintColor = .label
     }
 
     private func makeTabBarItem(title: String, iconName: String, tag: Int) -> UITabBarItem {

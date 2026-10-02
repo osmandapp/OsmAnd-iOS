@@ -932,7 +932,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.axisLineColor = .chartAxisGridLine
         rightAxis.drawGridLinesEnabled = true
         rightAxis.gridColor = .chartAxisGridLine
-        rightAxis.labelTextColor = .textColorSecondary
+        rightAxis.labelTextColor = .secondaryLabel
         bindChartDelegate(barChart)
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)

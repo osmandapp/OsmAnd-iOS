@@ -269,7 +269,7 @@ final class RouteInfoWidget: OASimpleWidget {
         let size = widgetSizeStyle
         let data = prepareDisplayData(info: destinationInfo)
         let textColorSecondary = resolvedSecondaryTextColor
-            ?? (isNightMode() ? UIColor.textColorSecondary.dark : UIColor.textColorSecondary.light)
+            ?? (isNightMode() ? UIColor.secondaryLabel.dark : UIColor.secondaryLabel.light)
         let hasEnoughWidth = hasEnoughWidth
         let valueTextColor = valueTextColor
         let isSmallSize = isSmallSize

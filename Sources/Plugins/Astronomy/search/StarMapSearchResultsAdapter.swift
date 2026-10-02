@@ -183,16 +183,16 @@ private final class StarMapSearchObjectCell: UITableViewCell {
     
     private func setup() {
         selectionStyle = .default
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 68).isActive = true
 
-        nameLabel.textColor = .textColorPrimary
+        nameLabel.textColor = .label
         nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
         nameLabel.adjustsFontForContentSizeCategory = true
         nameLabel.numberOfLines = 1
 
-        infoLabel.textColor = .textColorSecondary
+        infoLabel.textColor = .secondaryLabel
         infoLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         infoLabel.adjustsFontForContentSizeCategory = true
         infoLabel.numberOfLines = 2
@@ -237,7 +237,7 @@ private extension NSAttributedString {
         let result = NSMutableAttributedString(attributedString: self)
         
         result.addAttributes([
-            .foregroundColor: UIColor.textColorSecondary,
+            .foregroundColor: UIColor.secondaryLabel,
             .font: UIFont.preferredFont(forTextStyle: .subheadline)
         ], range: NSRange(location: 0, length: result.length))
 

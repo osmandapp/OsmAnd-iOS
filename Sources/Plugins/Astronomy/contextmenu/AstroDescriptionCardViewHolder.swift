@@ -13,13 +13,13 @@ enum AstroDescriptionCardViewHolder {
                          onReadClick: @escaping (AstroDescriptionCardItem) -> Void) -> UIView {
 
         let card = WikipediaContextMenuView()
-        card.backgroundColor = .groupBg
+        card.backgroundColor = .secondarySystemGroupedBackground
         card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
         
         let showButton = item.linkType != nil && (item.readMoreUri != nil || item.hasOfflineArticle)
         let buttonText: String
-        var icon: UIImage? = .templateImageNamed("ic_custom_wikipedia")?.withTintColor(.iconColorDefault)
+        var icon: UIImage? = .templateImageNamed("ic_custom_wikipedia")?.withTintColor(.secondaryLabel)
         
         if showButton, let linkType = item.linkType {
             buttonText = makeReadButtonText(linkType: linkType, hasOfflineArticle: item.hasOfflineArticle)

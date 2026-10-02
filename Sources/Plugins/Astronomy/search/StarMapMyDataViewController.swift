@@ -150,7 +150,7 @@ final class StarMapMyDataViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         definesPresentationContext = true
         
         // On iPad the search panel is inset from the screen edge.
@@ -283,11 +283,11 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     private func styleMyDataSegmentedControl() {
-        myDataSegmentedControl.selectedSegmentTintColor = .groupBg
+        myDataSegmentedControl.selectedSegmentTintColor = .secondarySystemGroupedBackground
         myDataSegmentedControl.backgroundColor = .tertiarySystemFill.withAlphaComponent(0.12)
         let font = UIFont.scaledSystemFont(ofSize: 15, weight: .medium, maximumSize: 17)
         let titleAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.textColorPrimary,
+            .foregroundColor: UIColor.label,
             .font: font
         ]
         myDataSegmentedControl.setTitleTextAttributes(titleAttributes, for: .normal)
@@ -345,7 +345,7 @@ final class StarMapMyDataViewController: UIViewController {
     }
 
     private func setupSearchRecycler() {
-        searchRecycler.backgroundColor = .viewBg
+        searchRecycler.backgroundColor = .systemGroupedBackground
         searchRecycler.dataSource = searchAdapter
         searchRecycler.delegate = searchAdapter
         searchRecycler.contentInsetAdjustmentBehavior = .never

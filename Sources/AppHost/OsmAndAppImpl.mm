@@ -29,6 +29,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OAReverseGeocoder.h"
 #import "OADiscountHelper.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -1308,6 +1309,8 @@
 
 - (void) shutdown
 {
+    [[OAReverseGeocoder instance] invalidateAndCancel];
+
     if (_initialized)
     {
         [OAQuickSearchHelper.instance cancelSearch:YES];

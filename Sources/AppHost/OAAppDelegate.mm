@@ -41,7 +41,6 @@
 #import "StartupLogging.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMemoryLog.h"
-#import "OAReverseGeocoder.h"
 
 #include <QDir>
 #include <QFile>
@@ -425,15 +424,11 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     NSLog(@"OAAppDelegate applicationWillTerminate");
-    BOOL geocoderStopped = [[OAReverseGeocoder instance] shutdown];
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];
     // Release OsmAnd core
-    if (geocoderStopped)
-        OsmAnd::ReleaseCore();
-    else
-        NSLog(@"OAAppDelegate applicationWillTerminate: reverse geocoder lookups still running, skip ReleaseCore");
+    OsmAnd::ReleaseCore();
 
     // Deconfigure device
     UIDevice* device = [UIDevice currentDevice];

@@ -26,8 +26,6 @@
 
 #include <atomic>
 
-static const NSTimeInterval kShutdownTimeout = 2.0;
-
 @interface OAReverseGeocoder ()
 
 @property (nonatomic, strong) NSCache<NSString *, NSString *> *addressCache;
@@ -38,8 +36,7 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
 
 @implementation OAReverseGeocoder
 {
-    std::atomic<bool> _terminating;
-    dispatch_group_t _activeLookups;
+    std::atomic<bool> _invalidated;
 }
 
 + (OAReverseGeocoder *)instance
@@ -60,8 +57,7 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
         _addressCache = [[NSCache alloc] init];
         _addressCache.countLimit = 100;
         _pendingLookups = [NSMutableDictionary dictionary];
-        _terminating = false;
-        _activeLookups = dispatch_group_create();
+        _invalidated = false;
 
         _lookupQueue = [[NSOperationQueue alloc] init];
         _lookupQueue.name = @"net.osmand.reverse-geocoder";
@@ -181,11 +177,10 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
     }];
 }
 
-- (BOOL)shutdown
+- (void)invalidateAndCancel
 {
-    _terminating = true;
+    _invalidated = true;
     [_lookupQueue cancelAllOperations];
-    return dispatch_group_wait(_activeLookups, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kShutdownTimeout * NSEC_PER_SEC))) == 0;
 }
 
 - (NSString *)performLookupAddressAtLat:(double)lat
@@ -197,9 +192,7 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
     if (cachedAddress)
         return cachedAddress;
 
-    dispatch_group_enter(_activeLookups);
-    NSString *address = _terminating ? @"" : [self geocodeAddressAtLat:lat lon:lon];
-    dispatch_group_leave(_activeLookups);
+    NSString *address = _invalidated ? @"" : [self geocodeAddressAtLat:lat lon:lon];
 
     [self cacheAddress:address forKey:cacheKey];
 
@@ -224,7 +217,7 @@ static const NSTimeInterval kShutdownTimeout = 2.0;
         [self]
         (const OsmAnd::FunctorQueryController* const) -> bool
         {
-            return self->_terminating;
+            return self->_invalidated;
         });
     std::shared_ptr<const OsmAnd::ReverseGeocoder::ResultEntry> object;
     geocoder->performSearch(*geoCriteria,

@@ -474,14 +474,17 @@
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0)
+        _selectedIconName = selectedGroup.iconName;
+
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
         else if (!_selectedIconName || _selectedIconName.length == 0)
             _selectedIconName = DEFAULT_ICON_NAME_KEY;
     }
+
     [_poiIconCollectionHandler setIconName:_selectedIconName];
-    
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
 

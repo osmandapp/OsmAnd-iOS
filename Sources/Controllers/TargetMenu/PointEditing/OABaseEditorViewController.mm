@@ -572,8 +572,20 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];
     return !groupExist
             || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-            || ![self.editIconName isEqualToString:groupExist.iconName ?: @""]
+            || [self isIconNameChanged:groupExist.iconName]
             || ![self.editColor isEqual:groupExist.color];
+}
+
+- (BOOL)isIconNameChanged:(NSString *)iconName
+{
+    NSString *selectedIcon = self.editIconName ?: @"";
+    NSString *originalIcon = iconName ?: @"";
+    if ([selectedIcon hasPrefix:@"mx_"])
+        selectedIcon = [selectedIcon substringFromIndex:3];
+    if ([originalIcon hasPrefix:@"mx_"])
+        originalIcon = [originalIcon substringFromIndex:3];
+    
+    return ![selectedIcon isEqualToString:originalIcon];
 }
 
 - (void)changeSaveButtonAvailabilityWithGroup

@@ -166,6 +166,12 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
+        reconfigureHiddenFavoriteCells()
+    }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {

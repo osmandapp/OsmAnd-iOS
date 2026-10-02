@@ -18,6 +18,7 @@ protocol FavoriteSortableFolder {
 
 protocol FavoriteSortablePoint {
     var title: String { get }
+    var isVisible: Bool { get }
     var distance: CLLocationDistance? { get }
     var lastModified: Date? { get }
 }
@@ -113,6 +114,10 @@ enum FavoriteSortMode: String, CaseIterable {
     }
 
     private static func compareFavoritePoints<Point: FavoriteSortablePoint>(_ lhs: Point, _ rhs: Point, mode: FavoriteSortMode) -> ComparisonResult {
+        if lhs.isVisible != rhs.isVisible {
+            return lhs.isVisible ? .orderedAscending : .orderedDescending
+        }
+
         switch mode {
         case .nameAZ:
             return compareTitles(lhs.title, rhs.title)

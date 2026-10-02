@@ -160,6 +160,8 @@ struct FavoritePointRow: Hashable, FavoriteSortablePoint {
 
     var title: String { bridgeItem.title }
 
+    var isVisible: Bool { bridgeItem.isVisible }
+
     var distance: CLLocationDistance? { bridgeItem.distance?.doubleValue }
 
     var lastModified: Date? { bridgeItem.timestampDate }

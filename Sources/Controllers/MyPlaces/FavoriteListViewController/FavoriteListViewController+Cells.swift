@@ -112,8 +112,25 @@ extension FavoriteListViewController {
         }
     }
 
+    func reconfigureHiddenFavoriteCells() {
+        if isContextMenuVisible {
+            shouldReloadCollectionView = true
+            return
+        }
+
+        var snapshot = dataSource.snapshot()
+        let hiddenFavorites = snapshot.itemIdentifiers.filter { item in
+            guard case .favorite(let favorite) = item else { return false }
+            return !favorite.isVisible
+        }
+        guard !hiddenFavorites.isEmpty else { return }
+        snapshot.reconfigureItems(hiddenFavorites)
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
     private func favoriteContentConfiguration(for favorite: FavoritePointRow) -> PointContentConfiguration {
-        PointContentConfiguration(icon: favorite.bridgeItem.icon(), title: favorite.title, isVisible: favorite.bridgeItem.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
+        let icon = favorite.isVisible ? favorite.bridgeItem.icon() : favorite.bridgeItem.icon(with: .iconColorSecondary)
+        return PointContentConfiguration(icon: icon, title: favorite.title, isVisible: favorite.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
     }
 
     private func favoriteSecondaryContent(for favorite: FavoritePointRow) -> PointSecondaryContent {

@@ -145,7 +145,7 @@
         }
         else
         {
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
@@ -182,7 +182,7 @@
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
+            NSForegroundColorAttributeName: UIColor.secondaryLabelColor
     }];
     vw.label.attributedText = textStr;
     return vw;

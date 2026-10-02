@@ -230,7 +230,7 @@ final class StarMapSearchExploreAdapter: NSObject, UITableViewDataSource, UITabl
 
         let label = UILabel()
         label.text = text
-        label.textColor = .textColorSecondary
+        label.textColor = .secondaryLabel
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(label)
@@ -276,11 +276,11 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         let hasRightArrow: Bool
         let separatorInset: UIEdgeInsets
         
-        static let watchNow = Config(iconColor: .iconColorActive, titleColor: .textColorPrimary, hasRightArrow: false, separatorInset: .init(top: 0, left: 0, bottom: 0, right: 0))
-        static let category = Config(iconColor: .iconColorActive, titleColor: .textColorPrimary, hasRightArrow: true, separatorInset: .init(top: 0, left: 62, bottom: 0, right: 16))
-        static let catalog = Config(iconColor: .iconColorDefault, titleColor: .textColorPrimary, hasRightArrow: false, separatorInset: .init(top: 0, left: 62, bottom: 0, right: 16))
-        static let catalogLast = Config(iconColor: .iconColorDefault, titleColor: .textColorPrimary, hasRightArrow: false, separatorInset: .init(top: 0, left: 16, bottom: 0, right: 16))
-        static let button = Config(iconColor: .iconColorDefault, titleColor: .textColorActive, hasRightArrow: false, separatorInset: .init(top: 0, left: 0, bottom: 0, right: 0))
+        static let watchNow = Config(iconColor: .iconColorActive, titleColor: .label, hasRightArrow: false, separatorInset: .init(top: 0, left: 0, bottom: 0, right: 0))
+        static let category = Config(iconColor: .iconColorActive, titleColor: .label, hasRightArrow: true, separatorInset: .init(top: 0, left: 62, bottom: 0, right: 16))
+        static let catalog = Config(iconColor: .secondaryLabel, titleColor: .label, hasRightArrow: false, separatorInset: .init(top: 0, left: 62, bottom: 0, right: 16))
+        static let catalogLast = Config(iconColor: .secondaryLabel, titleColor: .label, hasRightArrow: false, separatorInset: .init(top: 0, left: 16, bottom: 0, right: 16))
+        static let button = Config(iconColor: .secondaryLabel, titleColor: .textColorActive, hasRightArrow: false, separatorInset: .init(top: 0, left: 0, bottom: 0, right: 0))
     }
     
     private let rowIconView = UIImageView()
@@ -352,7 +352,7 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 1
 
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         subtitleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.numberOfLines = 2
@@ -364,7 +364,7 @@ private final class StarMapExploreMenuCell: UITableViewCell {
         textStack.addArrangedSubview(titleLabel)
         textStack.addArrangedSubview(subtitleLabel)
 
-        trailingLabel.textColor = .textColorSecondary
+        trailingLabel.textColor = .secondaryLabel
         trailingLabel.font = UIFont.preferredFont(forTextStyle: .body)
         trailingLabel.adjustsFontForContentSizeCategory = true
         trailingLabel.setContentHuggingPriority(.required, for: .horizontal)

@@ -57,7 +57,7 @@ final class WikipediaContextMenuView: UIView {
             outgoing.font = UIFont.preferredFont(forTextStyle: .subheadline)
             return outgoing
         }
-        config.imageColorTransformer = .init { _ in .iconColorDefault }
+        config.imageColorTransformer = .init { _ in .secondaryLabel }
         
         button.configuration = config
 
@@ -177,7 +177,7 @@ final class WikipediaContextMenuView: UIView {
                 string: text,
                 attributes: [
                     .font: UIFont.preferredFont(forTextStyle: .callout),
-                    .foregroundColor: UIColor.textColorPrimary
+                    .foregroundColor: UIColor.label
                 ]
             )
         }
@@ -188,7 +188,7 @@ final class WikipediaContextMenuView: UIView {
             string: truncatedText,
             attributes: [
                 .font: UIFont.preferredFont(forTextStyle: .callout),
-                .foregroundColor: UIColor.textColorPrimary
+                .foregroundColor: UIColor.label
             ]
         )
 

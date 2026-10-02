@@ -63,7 +63,7 @@ final class TravelGuidesSettingsViewController: OABaseNavbarViewController {
         if item.cellType == OAValueTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as? OAValueTableViewCell {
             cell.accessoryType = .disclosureIndicator
             cell.descriptionVisibility(false)
-            cell.leftIconView.tintColor = UIColor.iconColorSecondary
+            cell.leftIconView.tintColor = UIColor.secondaryLabel
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
             if let iconName = item.iconName {
@@ -73,7 +73,7 @@ final class TravelGuidesSettingsViewController: OABaseNavbarViewController {
         } else if item.cellType == OAButtonTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier, for: indexPath) as? OAButtonTableViewCell {
             cell.descriptionVisibility(false)
             cell.buttonVisibility(true)
-            cell.leftIconView.tintColor = UIColor.iconColorSecondary
+            cell.leftIconView.tintColor = UIColor.secondaryLabel
             cell.titleLabel.text = item.title
             if let iconName = item.iconName {
                 cell.leftIconView.image = UIImage(named: iconName)

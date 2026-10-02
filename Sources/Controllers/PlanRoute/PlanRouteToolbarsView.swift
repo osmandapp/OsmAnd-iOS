@@ -75,7 +75,7 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     }
 
     func updateMapTheme() {
-        titleLabel.textColor = showsGradient ? .white : .textColorPrimary
+        titleLabel.textColor = showsGradient ? .white : .label
         closeButton.updateColors(forPressedState: false)
         optionsButton.updateColors(forPressedState: false)
         saveButton.updateColors(forPressedState: false)
@@ -146,7 +146,7 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         let isCompactLayout = traitCollection.verticalSizeClass == .compact
         let isBackgroundHidden = isCompactLayout || !showsGradient
         backgroundContainerView.isHidden = isBackgroundHidden
-        titleLabel.textColor = showsGradient ? .white : .textColorPrimary
+        titleLabel.textColor = showsGradient ? .white : .label
 
         guard !isBackgroundHidden else { return }
         backgroundMaskLayer.frame = backgroundContainerView.bounds

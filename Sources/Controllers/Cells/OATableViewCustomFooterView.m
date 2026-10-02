@@ -56,7 +56,7 @@
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;
     _label.selectable = YES;
-    _label.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _label.textColor = UIColor.secondaryLabelColor;
     _label.dataDetectorTypes = UIDataDetectorTypeLink;
     _label.textContainerInset = UIEdgeInsetsZero;
     _label.textContainer.lineFragmentPadding = 0;

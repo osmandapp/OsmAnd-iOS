@@ -92,8 +92,8 @@
     
     self.rightButton.userInteractionEnabled = _sourceAppMode;
     self.rightButton.backgroundColor = _sourceAppMode ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorDisabled];
-    [self.rightButton setTintColor:_sourceAppMode ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary]];
-    [self.rightButton setTitleColor:_sourceAppMode ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateNormal];
+    [self.rightButton setTintColor:_sourceAppMode ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : UIColor.secondaryLabelColor];
+    [self.rightButton setTitleColor:_sourceAppMode ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : UIColor.secondaryLabelColor forState:UIControlStateNormal];
 }
 
 - (void) onRightButtonPressed
@@ -273,7 +273,7 @@
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
     description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_from_other_profile_descr") boldString:_targetAppMode.toHumanString lineSpacing:4.];
     description.adjustsFontForContentSizeCategory = YES;
-    description.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    description.textColor = UIColor.secondaryLabelColor;
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;

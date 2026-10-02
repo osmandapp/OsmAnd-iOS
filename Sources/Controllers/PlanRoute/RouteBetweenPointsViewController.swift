@@ -83,13 +83,13 @@ final class RouteBetweenPointsViewController: UIViewController {
                                           style: .plain,
                                           target: self,
                                           action: #selector(onCloseTapped))
-        closeButton.tintColor = .textColorPrimary
+        closeButton.tintColor = .label
         navigationItem.leftBarButtonItem = closeButton
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.sectionHeaderTopPadding = 0
@@ -110,7 +110,7 @@ final class RouteBetweenPointsViewController: UIViewController {
         let label = UILabel()
         label.text = localizedString("plan_route_select_segment_hint")
         label.font = .scaledSystemFont(ofSize: 15)
-        label.textColor = .textColorSecondary
+        label.textColor = .secondaryLabel
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
 
@@ -284,7 +284,7 @@ extension RouteBetweenPointsViewController: UITableViewDelegate {
         var config = header.defaultContentConfiguration()
         config.text = title
         config.textProperties.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
-        config.textProperties.color = .textColorSecondary
+        config.textProperties.color = .secondaryLabel
         header.contentConfiguration = config
         return header
     }

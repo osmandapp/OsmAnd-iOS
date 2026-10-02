@@ -119,8 +119,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (_needRestart)
         importComplete = [NSString stringWithFormat:@"%@\n\n%@", importComplete, OALocalizedString(@"app_restart_required")];
     NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:importComplete];
-    [descriptionAttr setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:importComplete];
-    [descriptionAttr setColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forString:_fileName];
+    [descriptionAttr setColor:UIColor.secondaryLabelColor forString:importComplete];
+    [descriptionAttr setColor:UIColor.labelColor forString:_fileName];
     [descriptionAttr setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] forString:descriptionAttr.string];
     [descriptionAttr setMinLineHeight:18. alignment:NSTextAlignmentNatural forString:descriptionAttr.string];
     return descriptionAttr;

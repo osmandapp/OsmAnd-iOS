@@ -174,7 +174,7 @@ final class AisObjectViewController: OATargetInfoViewController {
         cell.setupValueLabelFlexible()
         cell.selectionStyle = .none
         cell.titleLabel.text = row.textPrefix
-        cell.titleLabel.textColor = .textColorPrimary
+        cell.titleLabel.textColor = .label
         cell.titleLabel.font = .preferredFont(forTextStyle: .body)
         cell.titleLabel.numberOfLines = 0
         cell.valueLabel.text = row.text
@@ -192,7 +192,7 @@ final class AisObjectViewController: OATargetInfoViewController {
                                    icon: nil,
                                    textPrefix: prefix,
                                    text: text,
-                                   textColor: .textColorPrimary,
+                                   textColor: .label,
                                    isText: true,
                                    needLinks: false,
                                    order: order,

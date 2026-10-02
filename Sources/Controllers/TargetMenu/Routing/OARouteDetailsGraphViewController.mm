@@ -229,7 +229,7 @@
     [self generateData];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    _tableView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;

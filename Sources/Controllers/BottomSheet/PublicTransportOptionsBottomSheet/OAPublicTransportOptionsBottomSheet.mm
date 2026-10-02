@@ -169,7 +169,7 @@
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
             }
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

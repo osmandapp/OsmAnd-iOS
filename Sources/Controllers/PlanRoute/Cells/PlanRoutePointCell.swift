@@ -63,7 +63,7 @@ final class PlanRoutePointCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
         showsReorderControl = true
 
@@ -84,13 +84,13 @@ final class PlanRoutePointCell: UITableViewCell {
         numberContainer.addSubview(numberLabel)
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         subtitleLabel.font = .scaledSystemFont(ofSize: 15)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.numberOfLines = 0
         subtitleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.lineBreakMode = .byWordWrapping

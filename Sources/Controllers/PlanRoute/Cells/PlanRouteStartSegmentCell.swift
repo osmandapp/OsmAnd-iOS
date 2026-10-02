@@ -23,7 +23,7 @@ final class PlanRouteStartSegmentCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .default
 
         titleLabel.text = localizedString("gpx_start_new_segment")

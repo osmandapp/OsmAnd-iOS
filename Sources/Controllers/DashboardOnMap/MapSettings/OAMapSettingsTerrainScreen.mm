@@ -118,7 +118,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(isTerrainEbabled ? @"shared_string_enabled" : @"rendering_value_disabled_name"),
         kCellIconNameKey : isTerrainEbabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide,
-        kCellIconTintColor : [UIColor colorNamed:isTerrainEbabled ? ACColorNameIconColorSelected : ACColorNameIconColorDisabled],
+        kCellIconTintColor : isTerrainEbabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor,
         @"value" : @(isTerrainEbabled)
     }];
 
@@ -188,7 +188,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : ACImageNameIcCustomVisibility,
-            kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
+            kCellIconTintColor : UIColor.secondaryLabelColor,
             @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
         }];
         if (!isTerrainShadows)
@@ -198,7 +198,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
                 kCellIconNameKey : ACImageNameIcCustomOverlayMap,
-                kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
+                kCellIconTintColor : UIColor.secondaryLabelColor,
                 @"value" : [NSString stringWithFormat:@"%ld-%ld", _minZoom, _maxZoom]
             }];
         }
@@ -216,7 +216,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : typeKey,
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : ACImageNameIcCustom3DRelief,
-            kCellIconTintColor : !isTerrainShadows && (![_plugin.enable3dMapsPref get] || !isRelief3D) ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
+            kCellIconTintColor : !isTerrainShadows && (![_plugin.enable3dMapsPref get] || !isRelief3D) ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellSecondaryIconName : ACImageNameIcPaymentLabelPro,
             @"value" : isTerrainShadows ? OALocalizedString(@"shared_string_on") : @([_plugin.enable3dMapsPref get]),
             @"purchased" : @(isTerrainShadows || isRelief3D)
@@ -234,7 +234,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 kCellTypeKey : isTerrainShadows && !isRelief3D ? [OAButtonTableViewCell reuseIdentifier] : [OAValueTableViewCell reuseIdentifier],
                 kCellTitleKey : OALocalizedString(@"vertical_exaggeration"),
                 kCellIconNameKey : ACImageNameIcCustomTerrainScale,
-                kCellIconTintColor : [UIColor colorNamed:scaleValue > 1 && isRelief3D ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                kCellIconTintColor : scaleValue > 1 && isRelief3D ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.secondaryLabelColor,
                 kCellSecondaryIconName : ACImageNameIcPaymentLabelPro,
                 @"value" : alphaValueString,
                 @"purchased" : @(isRelief3D)
@@ -459,7 +459,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
         }
         return cell;
     }
@@ -525,7 +525,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
@@ -534,7 +534,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             BOOL isReadMore = [item.key isEqualToString:@"readMore"];
             [cell leftIconVisibility:!isReadMore];
             [cell descriptionVisibility:!isReadMore];
-            cell.titleLabel.textColor = [UIColor colorNamed: isReadMore ? ACColorNameTextColorActive : ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = isReadMore ? [UIColor colorNamed:ACColorNameTextColorActive] : UIColor.labelColor;
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
             cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.titleLabel.text = item.title;

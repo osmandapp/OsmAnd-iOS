@@ -70,7 +70,7 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         switchRow.key = RowKey.wikipediaSwitchRowKey.rawValue
         switchRow.title = localizedString(isWikipediaEnabled ? "shared_string_enabled" : "rendering_value_disabled_name")
         switchRow.icon = isWikipediaEnabled ? .icCustomShow : .icCustomHide
-        switchRow.iconTintColor = isWikipediaEnabled ? .iconColorSelected : .iconColorDisabled
+        switchRow.iconTintColor = isWikipediaEnabled ? .iconColorSelected : .tertiaryLabel
         switchRow.setObj(isWikipediaEnabled, forKey: ObjKey.isEnabled)
         guard isWikipediaEnabled else { return }
         
@@ -92,14 +92,14 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         sourceRow.key = RowKey.dataSourceRowKey.rawValue
         sourceRow.title = localizedString("poi_source")
         sourceRow.icon = (isOffline ? DataSourceType.offline : .online).icon?.withRenderingMode(.alwaysTemplate)
-        sourceRow.iconTintColor = isOffline ? UIColor.iconColorDisabled : UIColor.iconColorSelected
+        sourceRow.iconTintColor = isOffline ? UIColor.tertiaryLabel : UIColor.iconColorSelected
         sourceRow.setObj(isOffline, forKey: ObjKey.isOffline)
         let previewsRow = previewSection.createNewRow()
         previewsRow.cellType = OASwitchTableViewCell.reuseIdentifier
         previewsRow.key = RowKey.showImagePreviewsRowKey.rawValue
         previewsRow.title = localizedString("show_image_previews")
         previewsRow.icon = UIImage.templateImageNamed(previewsEnabled ? "ic_custom_photo" : "ic_custom_photo_disable")
-        previewsRow.iconTintColor = previewsEnabled ? .iconColorSelected : .iconColorDisabled
+        previewsRow.iconTintColor = previewsEnabled ? .iconColorSelected : .tertiaryLabel
         previewsRow.setObj(previewsEnabled, forKey: ObjKey.isEnabled)
         
         if !mapItems.isEmpty {
@@ -232,7 +232,7 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
             guard let self else { return }
             self.settings.wikiDataSourceType.set(.offline)
             cell?.leftIconView.image = DataSourceType.offline.icon?.withRenderingMode(.alwaysTemplate)
-            cell?.leftIconView.tintColor = .iconColorDisabled
+            cell?.leftIconView.tintColor = .tertiaryLabel
             self.refreshPOI()
         }
         

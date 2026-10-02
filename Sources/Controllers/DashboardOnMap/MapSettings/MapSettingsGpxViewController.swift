@@ -204,7 +204,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 noVisibleTracksRow.title = localizedString("no_tracks_on_map")
                 noVisibleTracksRow.descr = localizedString("select_tracks_to_display")
                 noVisibleTracksRow.iconName = "ic_custom_trip_hide"
-                noVisibleTracksRow.iconTintColor = UIColor.iconColorDefault
+                noVisibleTracksRow.iconTintColor = UIColor.secondaryLabel
                 noVisibleTracksRow.setObj(localizedString("show_all_tracks"), forKey: "buttonTitle")
             } else {
                 let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
@@ -214,7 +214,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                     gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
-                    gpxRow.iconTintColor = settings?.isGpxVisible(gpx.gpxFilePath) == true ? .iconColorActive : .iconColorDisabled
+                    gpxRow.iconTintColor = settings?.isGpxVisible(gpx.gpxFilePath) == true ? .iconColorActive : .tertiaryLabel
                 }
             }
             if isShowingVisibleTracks && !recentlyVisibleGpxList.isEmpty && !isSearchActive {
@@ -226,7 +226,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                     gpxRow.title = gpx.gpxFileNameWithoutExtension
                     gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
-                    gpxRow.iconTintColor = .iconColorDisabled
+                    gpxRow.iconTintColor = .tertiaryLabel
                 }
             }
         } else {
@@ -237,7 +237,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             noTracksRow.title = localizedString("no_track_files")
             noTracksRow.descr = localizedString("import_create_track_files")
             noTracksRow.iconName = "ic_custom_folder_open"
-            noTracksRow.iconTintColor = .iconColorDefault
+            noTracksRow.iconTintColor = .secondaryLabel
             noTracksRow.setObj(localizedString("shared_string_import"), forKey: "buttonTitle")
         }
     }
@@ -248,7 +248,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
             cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.selectedBackgroundView?.backgroundColor = UIColor.secondarySystemGroupedBackground
             cell.titleLabel.text = item.title
             if let gpx = item.obj(forKey: "gpx") as? GpxDataItem {
                 cell.descriptionLabel.attributedText = TracksSortModeHelper.getTrackDescription(track: gpx, sortMode: currentSortMode, includeFolderInfo: true)

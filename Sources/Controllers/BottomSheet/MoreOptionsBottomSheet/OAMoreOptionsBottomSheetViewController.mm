@@ -256,7 +256,7 @@
             NSString *desc = item[@"description"];
             cell.descriptionLabel.text = desc;
             [cell descriptionVisibility:desc.length != 0];
-            [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+            [cell.leftIconView setTintColor:UIColor.secondaryLabelColor];
             cell.leftIconView.image = img;
         }
         

@@ -82,7 +82,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
         OAButton *btn = [self createButton:_textRow];
         btn.tag = _textRowButtonIndex;
         [btn setBackgroundImage:nil forState:UIControlStateNormal];
-        btn.tintColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        btn.tintColor = UIColor.labelColor;
         btn.titleLabel.numberOfLines = 0;
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -106,7 +106,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    btn.layer.borderColor = UIColor.separatorColor.CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.clearColor] forState:UIControlStateNormal];
     btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     btn.delegate = self;
@@ -155,7 +155,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     {
         for (OAButton *btn in _buttons)
         {
-            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+            btn.layer.borderColor = UIColor.separatorColor.CGColor;
         }
     }
 }

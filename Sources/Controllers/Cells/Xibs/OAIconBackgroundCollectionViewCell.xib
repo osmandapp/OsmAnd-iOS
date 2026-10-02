@@ -32,7 +32,7 @@
                                         </constraints>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" name="groupBgColorSecondary"/>
+                                <color key="backgroundColor" systemColor="tertiarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="1sE-m9-u9t" firstAttribute="centerY" secondItem="195-GW-O2Z" secondAttribute="centerY" id="JdZ-oy-2eB"/>
                                     <constraint firstItem="1sE-m9-u9t" firstAttribute="centerX" secondItem="195-GW-O2Z" secondAttribute="centerX" id="vcV-5W-MHi"/>
@@ -67,8 +67,8 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColorSecondary">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="tertiarySystemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

@@ -12,9 +12,9 @@ import UIKit
 final class SeparatorAppearance: NSObject {
     static var color: UIColor {
         if #available(iOS 26.0, *) {
-            return .customSeparatorSolid
+            return .opaqueSeparator
         }
-        return .customSeparator
+        return .separator
     }
 
     static var thickness: CGFloat {

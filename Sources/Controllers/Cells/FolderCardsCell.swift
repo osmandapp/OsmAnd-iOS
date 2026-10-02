@@ -60,7 +60,7 @@ import UIKit
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .groupBg
+        collectionView.backgroundColor = .secondarySystemGroupedBackground
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
@@ -94,7 +94,7 @@ import UIKit
         case .importTracks:
             addButtonPosition = .beginning
             iconDefaultColor = .iconColorSelected
-            folderTitleSelectedDefaultColor = .textColorPrimary
+            folderTitleSelectedDefaultColor = .label
         }
     }
 
@@ -135,7 +135,7 @@ import UIKit
             let visible = !isHidden
             let imageName = visible ? "ic_custom_folder" : "ic_custom_folder_hidden_outlined"
             if !visible {
-                color = .iconColorSecondary
+                color = .secondaryLabel
             }
             
             return Item(title: title,
@@ -206,8 +206,8 @@ import UIKit
     
     private func setupUI() {
         selectionStyle = .none
-        backgroundColor = .groupBg
-        contentView.backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
+        contentView.backgroundColor = .secondarySystemGroupedBackground
 
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -292,7 +292,7 @@ import UIKit
         
         let titleColor: UIColor
         if item.hidden {
-            titleColor = .textColorSecondary
+            titleColor = .secondaryLabel
         } else if selected {
             titleColor = folderTitleSelectedDefaultColor
         } else {
@@ -304,7 +304,7 @@ import UIKit
         cell.descLabel.text = item.size
         cell.imageView.tintColor = item.color
         cell.imageView.image = .templateImageNamed(item.imageName)
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.titleLabel.textColor = titleColor
         cell.titleLabel.font = item.hidden ? italicGroupFont : originalGroupFont
 

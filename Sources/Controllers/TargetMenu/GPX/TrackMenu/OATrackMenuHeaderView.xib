@@ -16,7 +16,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="19G-L5-8Rc" userLabel="Slider View">
                     <rect key="frame" x="197.5" y="6" width="19" height="2"/>
-                    <color key="backgroundColor" name="customSeparator"/>
+                    <color key="backgroundColor" systemColor="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="19" id="GUT-Aj-Jqi"/>
                         <constraint firstAttribute="height" constant="2" id="O1u-4G-sNQ"/>
@@ -30,13 +30,13 @@
                             <rect key="frame" x="0.0" y="0.0" width="328" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                            <color key="textColor" name="textColorPrimary"/>
+                            <color key="textColor" systemColor="labelColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_trip" translatesAutoresizingMaskIntoConstraints="NO" id="fzz-Q2-eTx">
                             <rect key="frame" x="344" y="0.0" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="tintColor" name="iconColorSecondary"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                         </imageView>
                     </subviews>
                 </view>
@@ -44,13 +44,13 @@
                     <rect key="frame" x="20" y="44" width="374" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                    <color key="textColor" name="textColorSecondary"/>
+                    <color key="textColor" systemColor="secondaryLabelColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" id="Uvg-4A-Ywj">
                     <rect key="frame" x="0.0" y="64" width="414" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="12" id="LoU-9Z-Tan">
                         <size key="itemSize" width="120" height="40"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -80,11 +80,11 @@
                                         <constraint firstAttribute="height" constant="17" id="qi6-BE-fPX"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                    <color key="textColor" name="textColorPrimary"/>
+                                    <color key="textColor" systemColor="labelColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" name="groupBg"/>
+                            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="snd-9X-hbz" secondAttribute="trailing" id="3J0-AF-iQb"/>
                                 <constraint firstAttribute="bottom" secondItem="snd-9X-hbz" secondAttribute="bottom" constant="3.5" id="5Mb-RW-T70"/>
@@ -103,7 +103,7 @@
                                 <constraint firstAttribute="height" constant="20" id="bO7-9A-DCL"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                            <color key="textColor" name="customSeparator"/>
+                            <color key="textColor" systemColor="separatorColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hg9-IY-pWs" userLabel="GPX Activity Container">
@@ -122,11 +122,11 @@
                                         <constraint firstAttribute="height" constant="17" id="HkT-4L-1Mv"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                    <color key="textColor" name="textColorPrimary"/>
+                                    <color key="textColor" systemColor="labelColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" name="groupBg"/>
+                            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                             <constraints>
                                 <constraint firstItem="bj1-gU-XfX" firstAttribute="leading" secondItem="jWM-lc-ITM" secondAttribute="trailing" constant="3" id="20B-iu-iFT"/>
                                 <constraint firstItem="jWM-lc-ITM" firstAttribute="leading" secondItem="Hg9-IY-pWs" secondAttribute="leading" id="D6m-EA-Swi"/>
@@ -145,7 +145,7 @@
                                 <constraint firstAttribute="height" constant="20" id="Pqb-b5-3Sh"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                            <color key="textColor" name="customSeparator"/>
+                            <color key="textColor" systemColor="separatorColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-uC-2EY" userLabel="Region Container">
@@ -164,11 +164,11 @@
                                         <constraint firstAttribute="height" constant="17" id="eI4-pG-aJN"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                    <color key="textColor" name="textColorPrimary"/>
+                                    <color key="textColor" systemColor="labelColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" name="groupBg"/>
+                            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="XVR-ZX-2dk" secondAttribute="bottom" constant="2" id="7mv-F5-EqT"/>
                                 <constraint firstAttribute="bottom" secondItem="wVj-5r-123" secondAttribute="bottom" constant="3.5" id="dCu-An-sqU"/>
@@ -181,7 +181,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WEo-uC-2EY" secondAttribute="trailing" id="3vB-s8-MLK"/>
                         <constraint firstItem="Iio-8u-at5" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" id="DZ9-XE-uD7"/>
@@ -289,7 +289,7 @@
                             </userDefinedRuntimeAttributes>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 </stackView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" id="8XG-hO-pN3" customClass="OAFoldersCollectionView">
                     <rect key="frame" x="16" y="68" width="382" height="48"/>
@@ -304,7 +304,7 @@
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77c-3b-9tk" userLabel="Bottom Divider View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="230.5" width="414" height="0.5"/>
-                    <color key="backgroundColor" name="customSeparator"/>
+                    <color key="backgroundColor" systemColor="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="jDd-9D-qD8"/>
                     </constraints>
@@ -313,7 +313,7 @@
                     </connections>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="77c-3b-9tk" secondAttribute="trailing" id="17g-lT-Ouu"/>
                 <constraint firstItem="77c-3b-9tk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8PT-lJ-hr0"/>
@@ -371,26 +371,23 @@
         <namedColor name="contextMenuButtonBg">
             <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="customSeparator">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="iconColorSecondary">
-            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorSecondary">
-            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

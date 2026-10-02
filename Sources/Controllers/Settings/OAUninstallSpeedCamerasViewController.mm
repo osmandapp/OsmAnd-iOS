@@ -119,7 +119,7 @@
     NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text
                                                                                  attributes:@{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-        NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName: UIColor.labelColor
     }];
     [attrText addAttribute:NSFontAttributeName
                      value:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]

@@ -135,7 +135,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = collectionType == .colorItems ? .groupBg : .viewBg
+        tableView.backgroundColor = collectionType == .colorItems ? .secondarySystemGroupedBackground : .systemGroupedBackground
         tableView.keyboardDismissMode = .onDrag
         if collectionType != .colorizationPaletteItems && collectionType != .terrainPaletteItems {
             tableView.separatorStyle = .none
@@ -306,7 +306,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                     }
                 }
                 
-                cell.contentView.backgroundColor = .groupBg
+                cell.contentView.backgroundColor = .secondarySystemGroupedBackground
                 cell.contentView.layer.cornerRadius = 32
                 cell.contentView.layer.masksToBounds = true
                 cell.backgroundColor = .clear
@@ -333,8 +333,8 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             }
         } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
             if let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
-                cell.titleLabel.textColor = .textColorPrimary
-                cell.descriptionLabel.textColor = .textColorSecondary
+                cell.titleLabel.textColor = .label
+                cell.descriptionLabel.textColor = .secondaryLabel
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
                 cell.leftIconView.tintColor = .iconColorSelected
@@ -651,12 +651,12 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {
         guard let searchTextField = searchController?.searchBar.searchTextField else { return }
         
-        searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.textColorSecondary])
+        searchTextField.attributedPlaceholder = NSAttributedString(string: localizedString("shared_string_search"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel])
         if isFiltered {
-            searchTextField.leftView?.tintColor = UIColor.textColorPrimary
+            searchTextField.leftView?.tintColor = UIColor.label
         } else {
-            searchTextField.leftView?.tintColor = UIColor.textColorSecondary
-            searchTextField.tintColor = UIColor.textColorSecondary
+            searchTextField.leftView?.tintColor = UIColor.secondaryLabel
+            searchTextField.tintColor = UIColor.secondaryLabel
         }
     }
     

@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    btn.layer.borderColor = UIColor.separatorColor.CGColor;
     btn.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
     btn.tag = tag;
     [btn setBackgroundImage:[OAUtilities imageWithColor:[UIColor colorNamed:ACColorNameIconColorActive]] forState:UIControlStateHighlighted];
@@ -130,7 +130,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         if ([_data[i] isEqual:_currentWpt] || [_data[i] isEqual:_favorite])
         {
-            btn.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            btn.tintColor = UIColor.secondaryLabelColor;
             btn.userInteractionEnabled = NO;
         }
         [self addSubview:btn];
@@ -190,7 +190,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     {
         for (OAButton *btn in _buttons)
         {
-            btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+            btn.layer.borderColor = UIColor.separatorColor.CGColor;
         }
     }
 }
@@ -257,7 +257,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
+                button.layer.borderColor = UIColor.secondaryLabelColor.CGColor;
                 button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 if (_data.count > tag)
                 {

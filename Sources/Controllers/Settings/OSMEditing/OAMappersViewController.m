@@ -96,7 +96,7 @@
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-                                                                                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+                                                                                 NSForegroundColorAttributeName : UIColor.labelColor
                                                                          }],
                     @"description" : availableDescription,
                     @"description_font" : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
@@ -142,10 +142,10 @@
                                    value:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
                                    range:NSMakeRange(0, dateAttributed.length)];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
-                                   value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                                   value:UIColor.labelColor
                                    range:[dateAttributed.string rangeOfString:[formatterMonth stringFromDate:date].capitalizedString]];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
-                                   value:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                                   value:UIColor.secondaryLabelColor
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
@@ -168,7 +168,7 @@
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-                                                                         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+                                                                         NSForegroundColorAttributeName : UIColor.labelColor
                                                                  }],
             @"value": [NSString stringWithFormat:@"%li", [self getChangesSize]],
             @"description": [self getMonthPeriod]
@@ -261,7 +261,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.valueLabel.textColor = UIColor.labelColor;
             [cell leftIconVisibility:NO];
         }
         if (cell)

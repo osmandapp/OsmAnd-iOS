@@ -49,7 +49,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
         separatorInset = UIEdgeInsets(top: 0,
                                       left: Self.titleLeadingInset,
@@ -59,7 +59,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.lineBreakMode = .byWordWrapping
@@ -67,7 +67,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         distanceLabel.font = .scaledSystemFont(ofSize: 17)
-        distanceLabel.textColor = .textColorSecondary
+        distanceLabel.textColor = .secondaryLabel
         distanceLabel.numberOfLines = 0
         distanceLabel.adjustsFontForContentSizeCategory = true
         distanceLabel.lineBreakMode = .byWordWrapping
@@ -82,7 +82,7 @@ final class PlanRouteProfileGroupCell: UITableViewCell {
 
         var configuration = UIButton.Configuration.plain()
         configuration.image = .icCustomOverflowMenuStroke
-        configuration.baseForegroundColor = .iconColorDefault
+        configuration.baseForegroundColor = .secondaryLabel
         configuration.background.backgroundColor = .clear
         configuration.contentInsets = .zero
         optionsButton.configuration = configuration

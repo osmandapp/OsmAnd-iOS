@@ -237,7 +237,7 @@
                 kCellKeyKey : @"search_history",
                 kCellTitleKey : OALocalizedString(@"shared_string_search_history"),
                 kCellIconNameKey : ACImageNameIcCustomSearch,
-                kCellIconTint : (searchHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDefault]),
+                kCellIconTint : (searchHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.secondaryLabelColor),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : searchHistory
                 ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes]]
@@ -248,7 +248,7 @@
                 kCellKeyKey : @"navigation_history",
                 kCellTitleKey : OALocalizedString(@"navigation_history"),
                 kCellIconNameKey : ACImageNameIcCustomNavigation,
-                kCellIconTint : (navigationHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDefault]),
+                kCellIconTint : (navigationHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.secondaryLabelColor),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
                 @"value" : navigationHistory
@@ -259,7 +259,7 @@
                 kCellKeyKey : @"map_markers_history",
                 kCellTitleKey : OALocalizedString(@"map_markers_history"),
                 kCellIconNameKey : ACImageNameIcCustomMarker,
-                kCellIconTint : (mapMarkersHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDefault]),
+                kCellIconTint : (mapMarkersHistory ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.secondaryLabelColor),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : mapMarkersHistory
                     ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.destinationTypes]]

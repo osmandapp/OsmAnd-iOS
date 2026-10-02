@@ -180,7 +180,7 @@ static BOOL _purchasesUpdated;
                 [noPurchasesSection addRowFromDictionary:@{
                     kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
                     kCellIconNameKey : ACImageNameIcCustomShopBag48,
-                    kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
+                    kCellIconTintColor : UIColor.secondaryLabelColor,
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
                 }];
@@ -344,7 +344,7 @@ static BOOL _purchasesUpdated;
         kCellKeyKey : @"contact_support_description",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
-        kCellIconTintColor : [UIColor colorNamed:ACColorNameTextColorSecondary],
+        kCellIconTintColor : UIColor.secondaryLabelColor,
     }];
 
     [helpSection addRowFromDictionary:@{
@@ -482,7 +482,7 @@ static BOOL _purchasesUpdated;
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] range:NSMakeRange(0, attributedString.length)];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionLabel.text = nil;
                 cell.descriptionLabel.attributedText = attributedString;
             }
@@ -492,7 +492,7 @@ static BOOL _purchasesUpdated;
                 cell.leftIconView.image = [UIImage imageNamed:item.iconName];
                 cell.descriptionLabel.attributedText = nil;
                 cell.descriptionLabel.text = item.descr;
-                cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.descriptionLabel.textColor = UIColor.secondaryLabelColor;
                 cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
             }
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -622,7 +622,7 @@ static BOOL _purchasesUpdated;
         UILabel *loadingLabel = [[UILabel alloc] init];
         loadingLabel.translatesAutoresizingMaskIntoConstraints = NO;
         loadingLabel.text = OALocalizedString(@"loading_purchase_information");
-        loadingLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        loadingLabel.textColor = UIColor.secondaryLabelColor;
         loadingLabel.font = labelFont;
         loadingLabel.adjustsFontForContentSizeCategory = YES;
         [loadingContainerView addSubview:loadingLabel];

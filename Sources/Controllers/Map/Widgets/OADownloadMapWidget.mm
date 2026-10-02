@@ -262,9 +262,9 @@
 
 - (void) updateColors
 {
-    self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-    self.titleView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-    self.descrView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    self.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
+    self.titleView.textColor = UIColor.labelColor;
+    self.descrView.textColor = UIColor.secondaryLabelColor;
     self.closeButton.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
     [self.closeButton setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
     self.downloadButton.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];

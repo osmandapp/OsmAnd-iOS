@@ -378,7 +378,7 @@
         OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell reuseIdentifier]];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.titleLabel.textColor = UIColor.labelColor;
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular];
         cell.titleLabel.text = item.title;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -390,7 +390,7 @@
         OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell reuseIdentifier]];
         [cell leftIconVisibility:NO];
         [cell descriptionVisibility:NO];
-        cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.valueLabel.textColor = UIColor.labelColor;
         BOOL isManageSubscription = [item.key isEqualToString:@"manage_subscription"];
         cell.selectionStyle = isManageSubscription ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
         
@@ -408,7 +408,7 @@
             }
         }
         
-        UIColor *tintColor = [UIColor colorNamed:isManageSubscription ? ACColorNameTextColorActive : ACColorNameTextColorSecondary];
+        UIColor *tintColor = isManageSubscription ? [UIColor colorNamed:ACColorNameTextColorActive] : UIColor.secondaryLabelColor;
         cell.titleLabel.text = item.title;
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
         cell.titleLabel.textColor = tintColor;

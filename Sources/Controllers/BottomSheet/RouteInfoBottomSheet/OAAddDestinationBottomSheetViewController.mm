@@ -632,8 +632,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
-    self.buttonsView.subviews.firstObject.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.tableBackgroundView.backgroundColor = UIColor.systemGroupedBackgroundColor;
+    self.buttonsView.subviews.firstObject.backgroundColor = UIColor.systemGroupedBackgroundColor;
     [self hideDoneButton];
 }
 

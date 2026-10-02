@@ -178,7 +178,7 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             let manageSubscriptions = localizedString("manage_subscriptions")
             let manageSubscriptionsTitle = NSMutableAttributedString(string: String(format: "%@ %@", localizedString("osmand_cloud_deletion_subscriptions_warning"), manageSubscriptions),
                                                                      attributes: [.font: UIFont.preferredFont(forTextStyle: .subheadline),
-                                                                                  .foregroundColor: UIColor.textColorSecondary])
+                                                                                  .foregroundColor: UIColor.secondaryLabel])
             manageSubscriptionsTitle.addAttribute(.foregroundColor,
                                                   value: UIColor.textColorActive,
                                                   range: manageSubscriptionsTitle.mutableString.range(of: manageSubscriptions))
@@ -221,7 +221,7 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             if let iconTintColor = item.iconTintColor {
                 cell.leftIconView.tintColor = iconTintColor
             } else {
-                cell.leftIconView.tintColor = .iconColorDefault
+                cell.leftIconView.tintColor = .secondaryLabel
             }
             return cell
         } else if item.cellType == OADividerCell.reuseIdentifier {

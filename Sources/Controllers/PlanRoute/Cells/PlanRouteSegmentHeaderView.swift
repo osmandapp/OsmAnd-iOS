@@ -39,14 +39,14 @@ final class PlanRouteSegmentHeaderView: UITableViewHeaderFooterView {
 
     private func setupView() {
         titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         subtitleLabel.font = .scaledSystemFont(ofSize: 15)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.numberOfLines = 0
         subtitleLabel.adjustsFontForContentSizeCategory = true
         subtitleLabel.lineBreakMode = .byWordWrapping

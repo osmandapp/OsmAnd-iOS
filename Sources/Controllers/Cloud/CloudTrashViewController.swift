@@ -104,7 +104,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             emptyRow.key = "empty"
             emptyRow.title = localizedString("trash_is_empty")
             emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), "\(Self.daysForTrashClearing)")
-            emptyRow.iconTintColor = UIColor.iconColorDefault
+            emptyRow.iconTintColor = UIColor.secondaryLabel
         } else {
             let orderedNames = groups.keys.sorted {
                 return groups[$0]?.getItems().first?.time ?? 0 > groups[$1]?.getItems().first?.time ?? 0
@@ -177,7 +177,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
                 if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
                     iconColor = profileItem.appMode.getProfileColor()
                 } else {
-                    iconColor = UIColor.iconColorDefault
+                    iconColor = UIColor.secondaryLabel
                 }
                 cell.leftIconView.tintColor = iconColor
 

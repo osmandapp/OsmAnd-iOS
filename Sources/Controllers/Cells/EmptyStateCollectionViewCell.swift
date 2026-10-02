@@ -16,7 +16,7 @@ final class EmptyStateCollectionViewCell: UICollectionViewCell {
     
     func configure(image: UIImage, title: String, description: String) {
         cellImageView.image = image
-        cellImageView.tintColor = .iconColorDefault
+        cellImageView.tintColor = .secondaryLabel
         titleLabel.text = title
         descriptionLabel.attributedText = attributedDescription(description)
     }

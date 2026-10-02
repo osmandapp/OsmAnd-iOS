@@ -71,7 +71,7 @@
         kCellTitle: OALocalizedString(@"nautical_depth"),
         kCellIconNameKey: ACImageNameIcCustomNauticalDepthColored,
         kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
-        @"iconTintDisabled" : [UIColor colorNamed:ACColorNameIconColorDisabled]
+        @"iconTintDisabled" : UIColor.tertiaryLabelColor
     }];
     [_data addSection:switchSection];
 

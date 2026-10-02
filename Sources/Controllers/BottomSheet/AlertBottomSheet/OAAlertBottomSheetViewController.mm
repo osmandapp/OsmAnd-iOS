@@ -244,7 +244,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = UIColor.labelColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -283,7 +283,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+            [cell.textView setTextColor:UIColor.labelColor];
             [cell.textView setText:item[@"title"]];
         }
         return cell;

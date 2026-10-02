@@ -174,7 +174,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+            [cell.textView setTextColor:UIColor.secondaryLabelColor];
             [cell.textView setText:item[@"title"]];
         }
         return cell;

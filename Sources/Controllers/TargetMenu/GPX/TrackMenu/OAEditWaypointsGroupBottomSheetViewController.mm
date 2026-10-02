@@ -207,7 +207,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     if (_mode == EOAEditTrackScreenWaypointsMode)
     {
         UIImage *leftIcon = [UIImage templateImageNamed:_isShown ? ACImageNameIcCustomFolder : ACImageNameIcCustomFolderHidden];
-        UIColor *tintColor = _isShown ? _groupColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        UIColor *tintColor = _isShown ? _groupColor : UIColor.tertiaryLabelColor;
         self.leftIconView.image = leftIcon;
         self.leftIconView.tintColor = tintColor;
     }
@@ -476,7 +476,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         if (cell)
         {
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = cellData.tintColor ?: UIColor.labelColor;
 
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -503,7 +503,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell = (OATitleSwitchRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = UIColor.labelColor;
         }
         if (cell)
         {

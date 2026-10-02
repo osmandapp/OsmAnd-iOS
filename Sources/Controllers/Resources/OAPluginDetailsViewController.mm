@@ -257,7 +257,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin || _screenType == EOAPluginScreenTypeOnlinePlugin)
     {
-        attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17 textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+        attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17 textColor:UIColor.labelColor];
     }
 
     [self applyLocalization];

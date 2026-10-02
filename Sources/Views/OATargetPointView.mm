@@ -234,7 +234,7 @@ static const NSInteger _buttonsCount = 4;
     _horizontalRouteLine.backgroundColor = [[SeparatorAppearance color] CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
-    _nearbyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    _nearbyLabel.textColor = UIColor.labelColor;
     _descriptionLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
     _buttonShadow.titleLabel.font = [UIFont scaledSystemFontOfSize:18.];
     _buttonRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
@@ -859,11 +859,11 @@ static const NSInteger _buttonsCount = 4;
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
-        self.topView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+        self.topView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     }
     else
     {
-        self.topView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        self.topView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
@@ -1712,7 +1712,7 @@ static const NSInteger _buttonsCount = 4;
         {
             [_coordinateLabel setAttributedText:attributedTypeStr];
             if (_targetPoint.type != OATargetRouteDetails)
-                [_coordinateLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+                [_coordinateLabel setTextColor:UIColor.secondaryLabelColor];
             return;
         }
         else
@@ -1746,7 +1746,7 @@ static const NSInteger _buttonsCount = 4;
             }
             self.addressStr = [attributedStr string];
             _coordinateLabel.attributedText = attributedStr;
-            _coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            _coordinateLabel.textColor = UIColor.secondaryLabelColor;
             [self setNeedsLayout];
             return;
         }
@@ -1757,7 +1757,7 @@ static const NSInteger _buttonsCount = 4;
     }
         
     [_coordinateLabel setText:self.addressStr];
-    [_coordinateLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [_coordinateLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 - (void) updateDescriptionLabel
@@ -1916,7 +1916,7 @@ static const NSInteger _buttonsCount = 4;
     _customController = customController;
     self.customController.delegate = self;
     self.customController.navController = self.navController;
-    [self.customController setContentBackgroundColor:[UIColor colorNamed:ACColorNameGroupBg]];
+    [self.customController setContentBackgroundColor:UIColor.secondarySystemGroupedBackgroundColor];
     self.customController.location = self.targetPoint.location;
     
     self.customController.view.frame = self.frame;

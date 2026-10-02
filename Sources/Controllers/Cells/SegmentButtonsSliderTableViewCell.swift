@@ -36,9 +36,9 @@ final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     func setupButtonsEnabling() {
         let isPlusButtonEnabled = sliderView.selectingMark < (sliderView.getMarksCount() - 1)
         let isMinusButtonEnabled = sliderView.selectingMark > 0
-        plusButton.tintColor = isPlusButtonEnabled ? .iconColorActive : .iconColorDisabled
+        plusButton.tintColor = isPlusButtonEnabled ? .iconColorActive : .tertiaryLabel
         plusButton.isEnabled = isPlusButtonEnabled
-        minusButton.tintColor = isMinusButtonEnabled ? .iconColorActive : .iconColorDisabled
+        minusButton.tintColor = isMinusButtonEnabled ? .iconColorActive : .tertiaryLabel
         minusButton.isEnabled = isMinusButtonEnabled
     }
     

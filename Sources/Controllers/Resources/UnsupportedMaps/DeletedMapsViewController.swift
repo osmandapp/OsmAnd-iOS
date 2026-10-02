@@ -12,7 +12,7 @@ final class DeletedMapsViewController: OABaseButtonsViewController {
     
     private let emptyStateHeaderView: IconEmptyStateView = {
         let emptyStateHeaderView: IconEmptyStateView = .init()
-        emptyStateHeaderView.configure(image: .icCustomUpdateDisabled.withRenderingMode(.alwaysTemplate), tintColor: .iconColorDefault, description: localizedString("deleted_maps_prompt"))
+        emptyStateHeaderView.configure(image: .icCustomUpdateDisabled.withRenderingMode(.alwaysTemplate), tintColor: .secondaryLabel, description: localizedString("deleted_maps_prompt"))
         return emptyStateHeaderView
     }()
     

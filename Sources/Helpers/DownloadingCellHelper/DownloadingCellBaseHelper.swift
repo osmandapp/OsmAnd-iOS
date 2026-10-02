@@ -136,7 +136,7 @@ class DownloadingCellBaseHelper: NSObject {
         guard let cell else { return nil }
         
         cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-        cell.leftIconView.tintColor = .iconColorDefault
+        cell.leftIconView.tintColor = .secondaryLabel
         cell.rightIconView.tintColor = getRightIconColor()
         cell.rightIconView.image = UIImage.templateImageNamed(getRightIconName(resourceId))
         
@@ -148,14 +148,14 @@ class DownloadingCellBaseHelper: NSObject {
             cell.titleLabel.textColor = .textColorActive
         } else {
             cell.titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-            cell.titleLabel.textColor = .textColorPrimary
+            cell.titleLabel.textColor = .label
         }
         
         if let desc, !desc.isEmpty {
             cell.descriptionVisibility(true)
             cell.descriptionLabel.text = desc
             cell.descriptionLabel.font = UIFont.monospacedFont(at: 12, withTextStyle: .body)
-            cell.descriptionLabel.textColor = .textColorSecondary
+            cell.descriptionLabel.textColor = .secondaryLabel
         } else {
             cell.descriptionVisibility(false)
         }
@@ -177,7 +177,7 @@ class DownloadingCellBaseHelper: NSObject {
             if isFinished(resourceId) && isDownloadedLeftIconRecolored {
                 cell.leftIconView.tintColor = leftIconColor != nil ? leftIconColor : .iconColorActive
             } else {
-                cell.leftIconView.tintColor = .iconColorDefault
+                cell.leftIconView.tintColor = .secondaryLabel
             }
         } else {
             cell.leftIconVisibility(false)

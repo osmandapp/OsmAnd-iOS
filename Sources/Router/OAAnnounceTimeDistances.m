@@ -262,11 +262,11 @@ const static int LANES_MAX_METERS_SPOKEN_TURN = 1200;
     paragraphStyle.minimumLineHeight = colorize ? 18 : 22.;
     paragraphStyle.lineSpacing = colorize ? 19. : 25;
     [builder addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:[builder.string rangeOfString:str]];
-    [builder addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:[builder.string rangeOfString:str]];
-    [builder addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
+    [builder addAttribute:NSForegroundColorAttributeName value:UIColor.labelColor range:[builder.string rangeOfString:str]];
+    [builder addAttribute:NSForegroundColorAttributeName value:UIColor.labelColor range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
 
     if (colorize)
-        [builder addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
+        [builder addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
 }
 
 - (NSAttributedString *)getIntervalsDescription
@@ -293,7 +293,7 @@ const static int LANES_MAX_METERS_SPOKEN_TURN = 1200;
     // Turn
     [builder addString:turn fontWeight:UIFontWeightRegular size:17.];
     [builder addAttribute:NSForegroundColorAttributeName 
-                    value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                    value:UIColor.labelColor
                     range:[builder.string rangeOfString:turn]];
     [builder addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle
@@ -315,7 +315,7 @@ const static int LANES_MAX_METERS_SPOKEN_TURN = 1200;
     // Traffic warnings
     [builder addString:traffic fontWeight:UIFontWeightRegular size:17.];
     [builder addAttribute:NSForegroundColorAttributeName 
-                    value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                    value:UIColor.labelColor
                     range:[builder.string rangeOfString:traffic]];
     [builder addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle
@@ -326,7 +326,7 @@ const static int LANES_MAX_METERS_SPOKEN_TURN = 1200;
     // Waypoint / Favorite / POI
     [builder addString:point fontWeight:UIFontWeightRegular size:17.];
     [builder addAttribute:NSForegroundColorAttributeName 
-                    value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                    value:UIColor.labelColor
                     range:[builder.string rangeOfString:point]];
     [builder addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle

@@ -125,7 +125,7 @@
             cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
             cell.titleLabel.text = settingsType.title;
             cell.leftIconView.image = settingsType.icon;
-            cell.leftIconView.tintColor = cell.switchView.on ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = cell.switchView.on ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -208,7 +208,7 @@
             cell.button.configuration = [ButtonConfigurationHelper proBannerButtonConfigurationWithImageName:ACImageNameIcPaymentLabelPro];
             [cell.button setTitle:@"" forState:UIControlStateNormal];
             cell.button.imageView.tintColor = [UIColor clearColor];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
             [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
         }
         cell.titleLabel.text = settingsType.title;
@@ -277,7 +277,7 @@
         if ([view isKindOfClass:UISwitch.class])
         {
             OASwitchTableViewCell *cell = (OASwitchTableViewCell *) [self.tableView cellForRowAtIndexPath:_selectedIndexPath];
-            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
         }
         else
         {

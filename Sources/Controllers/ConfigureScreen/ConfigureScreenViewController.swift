@@ -108,7 +108,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         }
         let menu = UIMenu.composedMenu(from: [[screenElementsAction], [copyAction, resetAction]])
         let menuButton = UIBarButtonItem(image: UIImage(systemName: "ellipsis.circle"), menu: menu)
-        menuButton.tintColor = .iconColorBlack
+        menuButton.tintColor = .label
         menuButton.accessibilityLabel = localizedString("shared_string_options")
 
         var buttons = [menuButton]
@@ -175,7 +175,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
                 row.title = panel.title
                 row.icon = panel.icon(for: screenLayoutMode)
                 row.setObj(panel, forKey: "panel")
-                row.iconTintColor = widgetsCount == 0 ? .iconColorDefault : appMode?.getProfileColor()
+                row.iconTintColor = widgetsCount == 0 ? .secondaryLabel : appMode?.getProfileColor()
                 row.descr = String(widgetsCount)
                 row.accessibilityLabel = panel.title
                 row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
@@ -218,7 +218,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         customButtonsRow.key = RawKey.customButtons.rawValue
         customButtonsRow.title = localizedString("custom_buttons")
         customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
-        customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? appMode.getProfileColor() : .iconColorDefault
+        customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? appMode.getProfileColor() : .secondaryLabel
         customButtonsRow.icon = .icCustomQuickAction
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title
@@ -230,7 +230,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
         defaultButtonsRow.key = RawKey.defaultButtons.rawValue
         defaultButtonsRow.title = localizedString("default_buttons")
         defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
-        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
+        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .secondaryLabel
         defaultButtonsRow.icon = .icCustomButtonDefault
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
@@ -271,7 +271,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
             speedomenterRow.iconTintColor = nil
         } else {
             speedomenterRow.icon = .icCustomSpeedometerOutlined
-            speedomenterRow.iconTintColor = .iconColorDefault
+            speedomenterRow.iconTintColor = .secondaryLabel
         }
     }
 
@@ -431,7 +431,7 @@ extension ConfigureScreenViewController {
                 cell.leftIconView.image = item.icon?.withRenderingMode(.alwaysTemplate) ?? UIImage.templateImageNamed(item.iconName)
                 if item.key == RawKey.distanceByTap.rawValue {
                     let selected = item.bool(forKey: selectedKey)
-                    cell.leftIconView.tintColor = selected ? iconTintColor : .iconColorDefault
+                    cell.leftIconView.tintColor = selected ? iconTintColor : .secondaryLabel
                 } else {
                     cell.leftIconView.tintColor = iconTintColor
                 }
@@ -450,7 +450,7 @@ extension ConfigureScreenViewController {
             }
 
             let selected = item.bool(forKey: selectedKey)
-            cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
+            cell.leftIconView.tintColor = selected ? item.iconTintColor : .secondaryLabel
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.isOn = selected
@@ -472,7 +472,7 @@ extension ConfigureScreenViewController {
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? self.settings.applicationMode.get().getProfileColor() : .iconColorDefault
+                cell.leftIconView.tintColor = sw.isOn ? self.settings.applicationMode.get().getProfileColor() : .secondaryLabel
             }
         }
         

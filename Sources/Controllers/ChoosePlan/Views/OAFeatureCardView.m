@@ -121,7 +121,7 @@
     NSString *secondaryDesc = [NSString stringWithFormat:patternPlan, [selectedFeature getListTitle], availablePlans];
 
     NSMutableAttributedString *productIncludedText = [[NSMutableAttributedString alloc] initWithString:secondaryDesc];
-    [productIncludedText addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(0, secondaryDesc.length)];
+    [productIncludedText addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:mapsPlus]];
@@ -294,7 +294,7 @@
             _stateCanceled = YES;
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[tag];
-                row.backgroundColor = tag == _selectedFeatureIndex ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : [UIColor colorNamed:ACColorNameGroupBg];
+                row.backgroundColor = tag == _selectedFeatureIndex ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : UIColor.secondarySystemGroupedBackgroundColor;
             }                completion:nil];
         }
         else if (state == UIGestureRecognizerStateEnded)
@@ -307,7 +307,7 @@
 
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
-                row.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+                row.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
                 _selectedFeatureIndex = tag;
                 row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
                 row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];

@@ -183,7 +183,7 @@
                 UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
                 conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
                 cell.leftEditButton.configuration = conf;
-                cell.leftEditButton.layer.shadowColor = [UIColor colorNamed:ACColorNameIconColorDisabled].CGColor;
+                cell.leftEditButton.layer.shadowColor = UIColor.tertiaryLabelColor.CGColor;
                 cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
                 cell.leftEditButton.layer.shadowOpacity = 1.;
                 cell.leftEditButton.layer.shadowRadius = 1.;
@@ -270,7 +270,7 @@
                         selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
                     }
                     
-                    UIColor *color = selectedAmount == 0 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : item[@"color"];
+                    UIColor *color = selectedAmount == 0 ? UIColor.tertiaryLabelColor : item[@"color"];
                     cell.leftIconView.tintColor = color;
                     cell.descriptionLabel.text = selectedStr;
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -280,7 +280,7 @@
                     [cell descriptionVisibility:NO];
                     cell.titleLabel.text = item[@"title"];
                     cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColor.tertiaryLabelColor;
                     cell.descriptionLabel.text = nil;
                     cell.accessoryType = UITableViewCellAccessoryNone;
                 }

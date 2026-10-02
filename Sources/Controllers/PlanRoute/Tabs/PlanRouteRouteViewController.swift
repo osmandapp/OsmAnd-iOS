@@ -85,7 +85,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private func setupTableView() {
         let horizontalInset = Self.sectionHorizontalInset
         view.backgroundColor = .clear
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.isEditing = true

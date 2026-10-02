@@ -55,7 +55,7 @@ private final class IndexingProgressRingView: UIView {
     }
 
     private func applyColors() {
-        trackLayer.strokeColor = UIColor.iconColorDisabled.cgColor
+        trackLayer.strokeColor = UIColor.tertiaryLabel.cgColor
         progressLayer.strokeColor = UIColor.iconColorActive.cgColor
     }
 }
@@ -346,7 +346,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         setupNavbar()
         updateNavigationBarTitle()
         tableView.tableHeaderView = setupHeaderView()
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         filterButton.isHidden = true
         if shouldReload {
             updateAllFoldersVCData(forceLoad: true)
@@ -582,7 +582,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                     emptyFilterBannerRow.title = localizedString("no_matched_tracks")
                     emptyFilterBannerRow.descr = localizedString("no_matched_tracks_descr")
                     emptyFilterBannerRow.iconName = "ic_custom_search"
-                    emptyFilterBannerRow.iconTintColor = .iconColorSecondary
+                    emptyFilterBannerRow.iconTintColor = .secondaryLabel
                 } else {
                     let sortedTracks = TracksSortModeHelper.sortTracksWithMode(allTracks, mode: isEditFilterActive ? sortMode : sortModeForSearch)
                     sortedTracks.forEach { createRowFor(trackItem: $0, section: mainSection) }
@@ -607,7 +607,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                             let isVisible = settings.mapSettingShowRecordingTrack.get()
                             currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
                             currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
-                            currentRecordingTrackRow.iconTintColor = isVisible ? .iconColorActive : .iconColorDefault
+                            currentRecordingTrackRow.iconTintColor = isVisible ? .iconColorActive : .secondaryLabel
                             currentRecordingTrackRow.setObj(localizedString("ic_custom_stop"), forKey: buttonIconKey)
                             currentRecordingTrackRow.setObj(ButtonActionNumberTag.pause.rawValue, forKey: buttonActionNumberTagKey)
                             currentRecordingTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
@@ -624,7 +624,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                                 let isVisible = settings.mapSettingShowRecordingTrack.get()
                                 currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
                                 currentPausedTrackRow.iconName = "ic_custom_track_recordable"
-                                currentPausedTrackRow.iconTintColor = isVisible ? .iconColorActive : .iconColorDefault
+                                currentPausedTrackRow.iconTintColor = isVisible ? .iconColorActive : .secondaryLabel
                                 currentPausedTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
                                 currentPausedTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
                                 currentPausedTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
@@ -636,13 +636,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                                 recordNewTrackRow.title = localizedString("new_track")
                                 recordNewTrackRow.descr = localizedString("not_recorded")
                                 recordNewTrackRow.iconName = "ic_custom_trip"
-                                recordNewTrackRow.iconTintColor = .iconColorDefault
+                                recordNewTrackRow.iconTintColor = .secondaryLabel
                                 recordNewTrackRow.setObj(localizedString("start_recording"), forKey: buttonTitleKey)
                                 recordNewTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
                                 recordNewTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
                                 let isVisible = settings.mapSettingShowRecordingTrack.get()
                                 recordNewTrackRow.setObj(isVisible, forKey: isVisibleKey)
-                                recordNewTrackRow.setObj(isVisible ? .iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
+                                recordNewTrackRow.setObj(isVisible ? .iconColorActive : UIColor.secondaryLabel, forKey: colorKey)
                             }
                         }
                     }
@@ -656,7 +656,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 emptyFolderBannerRow.title = localizedString(isRootFolder ? "my_places_no_tracks_title_root" : "my_places_no_tracks_title")
                 emptyFolderBannerRow.descr = localizedString(isRootFolder ? "my_places_no_tracks_descr_root" : "my_places_no_tracks_descr_root")
                 emptyFolderBannerRow.iconName = "ic_custom_folder_open"
-                emptyFolderBannerRow.iconTintColor = .iconColorSecondary
+                emptyFolderBannerRow.iconTintColor = .secondaryLabel
                 emptyFolderBannerRow.setObj(localizedString("shared_string_import"), forKey: buttonTitleKey)
             } else {
                 if isRootFolder && !isEditing {
@@ -702,7 +702,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                                 emptySmartFolderBannerRow.title = localizedString("empty_smart_folder_title")
                                 emptySmartFolderBannerRow.descr = localizedString("empty_smart_folder_descr")
                                 emptySmartFolderBannerRow.iconName = "ic_custom_folder_open"
-                                emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
+                                emptySmartFolderBannerRow.iconTintColor = .secondaryLabel
                                 emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
                             } else {
                                 TracksSortModeHelper.sortTracksWithMode(smartTrackItems, mode: sortMode).forEach { createRowFor(trackItem: $0, section: mainSection) }
@@ -722,7 +722,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                             emptySmartFolderBannerRow.title = localizedString("empty_smart_folder_title")
                             emptySmartFolderBannerRow.descr = localizedString("empty_smart_folder_descr")
                             emptySmartFolderBannerRow.iconName = "ic_custom_folder_open"
-                            emptySmartFolderBannerRow.iconTintColor = .iconColorSecondary
+                            emptySmartFolderBannerRow.iconTintColor = .secondaryLabel
                             emptySmartFolderBannerRow.setObj(localizedString("edit_filter"), forKey: buttonTitleKey)
                         } else {
                             TracksSortModeHelper.sortTracksWithMode(smartTrackItems, mode: sortMode).forEach { createRowFor(trackItem: $0, section: mainSection) }
@@ -822,7 +822,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
            selectedTracks.contains(where: { $0.gpxFilePath == dataItem.gpxFilePath }) {
             return .iconColorActive
         } else {
-            return isVisible ? .iconColorActive : .iconColorDefault
+            return isVisible ? .iconColorActive : .secondaryLabel
         }
     }
 
@@ -979,7 +979,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let menu = UIMenu(title: "", image: nil, children: menuActions)
         if !isSearchActive, !tableView.isEditing {
             let searchIcon = UIImage(systemName: "magnifyingglass",
-                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+                                     withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
             let searchBarButton = UIBarButtonItem(image: searchIcon,
                                                   style: .plain,
                                                   target: self,
@@ -989,12 +989,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 searchBarButton.tintColor = .clear
             }
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            actionsBarButton.tintColor = .textColorPrimary
+            actionsBarButton.tintColor = .label
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton, searchBarButton], animated: false)
         } else {
             let actionsBarButton = UIBarButtonItem(image: .init(systemName: "ellipsis.circle"), menu: menu)
-            actionsBarButton.tintColor = .textColorPrimary
+            actionsBarButton.tintColor = .label
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([actionsBarButton], animated: false)
             navigationItem.setRightBarButtonItems([actionsBarButton], animated: false)
         }
@@ -1096,7 +1096,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             return
         }
         
-        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .textColorSecondary, isBigTitle: false, parentViewWidth: view.frame.width)
+        let footer = OAUtilities.setupTableHeaderView(withText: getTotalTracksStatistics(), font: .preferredFont(forTextStyle: .footnote), textColor: .secondaryLabel, isBigTitle: false, parentViewWidth: view.frame.width)
         footer.backgroundColor = .clear
         for subview in footer.subviews {
             if let label = subview as? UILabel {
@@ -2497,7 +2497,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                 cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage(named: iconName)
-                    cell.leftIconView.tintColor = .iconColorDefault
+                    cell.leftIconView.tintColor = .secondaryLabel
                 }
                 
                 cell.button.layer.cornerRadius = 9
@@ -2564,11 +2564,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if let cell {
                 updateEditingAppearance(cell, item: item, isEditing: tableView.isEditing)
                 cell.backgroundView = UIView()
-                cell.backgroundView?.backgroundColor = .groupBg
+                cell.backgroundView?.backgroundColor = .secondarySystemGroupedBackground
                 cell.selectedBackgroundView = UIView()
-                cell.selectedBackgroundView?.backgroundColor = .groupBg
-                cell.titleLabel.textColor = .textColorPrimary
-                cell.descriptionLabel.textColor = .textColorSecondary
+                cell.selectedBackgroundView?.backgroundColor = .secondarySystemGroupedBackground
+                cell.titleLabel.textColor = .label
+                cell.descriptionLabel.textColor = .secondaryLabel
                 cell.titleLabel.text = item.title
                 if item.key == trackKey {
                     cell.descriptionLabel.text = nil

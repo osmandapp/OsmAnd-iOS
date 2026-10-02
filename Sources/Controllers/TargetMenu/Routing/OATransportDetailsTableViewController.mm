@@ -421,8 +421,8 @@
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.secondaryLabelColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.labelColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -439,8 +439,8 @@
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.secondaryLabelColor};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.labelColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -543,7 +543,7 @@
                     UIImage *img = [[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     img = smallIcon ? [[OAUtilities resizeImage:img newSize:CGSizeMake(16., 16.)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : img;
                     [cell.iconView setImage:img];
-                    cell.iconView.tintColor = [UIColor colorNamed:smallIcon ? ACColorNameIconColorSecondary : ACColorNameIconColorSelected];
+                    cell.iconView.tintColor = smallIcon ? UIColor.secondaryLabelColor : [UIColor colorNamed:ACColorNameIconColorSelected];
                     [cell showOutiline:YES];
                     cell.iconView.contentMode = UIViewContentModeCenter;
                 }
@@ -645,7 +645,7 @@
         }
         if (cell)
         {
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerColor = [SeparatorAppearance color];
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;

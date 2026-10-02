@@ -80,7 +80,7 @@ final class DownloadingListViewController: OABaseNavbarViewController, Downloadi
                     cell?.rightIconView.image = UIImage.templateImageNamed(downloadingCellResourceHelper.rightIconName)
                     cell?.rightIconVisibility(true)
                 } else {
-                    cell?.leftIconView.tintColor = .iconColorDefault
+                    cell?.leftIconView.tintColor = .secondaryLabel
                     cell?.rightIconView.image = nil
                     cell?.rightIconVisibility(false)
                 }

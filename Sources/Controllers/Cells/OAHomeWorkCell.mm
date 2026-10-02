@@ -147,7 +147,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:[UIColor colorNamed:ACColorNameViewBg]];
+        [cell setBackgroundColor:UIColor.systemGroupedBackgroundColor];
     }
                      completion:nil];
 }
@@ -158,7 +158,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:[UIColor colorNamed:ACColorNameGroupBg]];
+        [cell setBackgroundColor:UIColor.secondarySystemGroupedBackgroundColor];
     }
                      completion:nil];
 }

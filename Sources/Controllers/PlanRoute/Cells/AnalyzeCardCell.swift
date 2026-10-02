@@ -40,7 +40,7 @@ final class AnalyzeCardCell: UITableViewCell {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
 
-        cardView.backgroundColor = .groupBg
+        cardView.backgroundColor = .secondarySystemGroupedBackground
         cardView.layer.cornerRadius = Layout.cornerRadius
         cardView.clipsToBounds = true
         cardView.translatesAutoresizingMaskIntoConstraints = false

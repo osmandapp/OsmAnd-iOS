@@ -514,7 +514,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSheet() {
-        sheetView.backgroundColor = .viewBg
+        sheetView.backgroundColor = .systemGroupedBackground
         sheetView.layer.cornerRadius = Self.sheetCornerRadius
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sheetView.clipsToBounds = true
@@ -540,7 +540,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetBottomConstraint = bottomConstraint
         sidePanelConstraints = [leftConstraint, topConstraint, bottomConstraint, widthConstraint]
 
-        grabberView.backgroundColor = .iconColorTertiary
+        grabberView.backgroundColor = .secondaryLabel
         grabberView.layer.cornerRadius = 2.5
         grabberView.translatesAutoresizingMaskIntoConstraints = false
         sheetView.addSubview(grabberView)
@@ -606,11 +606,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             segmentControl.insertSegment(withTitle: tab.title, at: index, animated: false)
         }
         segmentControl.selectedSegmentIndex = tabs.firstIndex(of: selectedTab) ?? 0
-        segmentControl.backgroundColor = .groupBgColorSecondary
+        segmentControl.backgroundColor = .tertiarySystemGroupedBackground
         segmentControl.selectedSegmentTintColor = UIColor { $0.userInterfaceStyle == .dark ? UIColor(rgb: 0x636366) : .white }
         let segmentFont = UIFont.scaledSystemFont(ofSize: 13, weight: .medium)
         let segmentTextAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.textColorPrimary,
+            .foregroundColor: UIColor.label,
             .font: segmentFont
         ]
         segmentControl.setTitleTextAttributes(segmentTextAttributes, for: .normal)
@@ -828,7 +828,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func updateCrosshairImage() {
         let nightMode = OAAppSettings.sharedManager().isAppMapNightMode
         crosshairView.image = .mapRulerCenter
-        crosshairView.tintColor = nightMode ? .iconColorBlack.dark : .iconColorBlack.light
+        crosshairView.tintColor = nightMode ? .label.dark : .label.light
         crosshairView.isAccessibilityElement = false
     }
 

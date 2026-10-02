@@ -41,12 +41,12 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="MiH-Ug-q1h">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" name="viewBg"/>
-                    <color key="separatorColor" name="customSeparator"/>
+                    <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
+                    <color key="separatorColor" systemColor="separatorColor"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPB-MS-llO" userLabel="Separator Bottom View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="745" width="414" height="1"/>
-                    <color key="backgroundColor" name="customSeparator"/>
+                    <color key="backgroundColor" systemColor="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="7Tr-g1-3oq"/>
                     </constraints>
@@ -159,7 +159,7 @@
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="MEk-kg-hIM"/>
-            <color key="backgroundColor" name="viewBg"/>
+            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstItem="uPB-MS-llO" firstAttribute="leading" secondItem="hLM-mY-zOx" secondAttribute="leading" id="1bc-Og-QlJ"/>
                 <constraint firstAttribute="trailing" secondItem="MiH-Ug-q1h" secondAttribute="trailing" id="2qN-yb-V0d"/>
@@ -180,14 +180,14 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="customSeparator">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

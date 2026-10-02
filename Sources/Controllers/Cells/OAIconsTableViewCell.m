@@ -51,7 +51,7 @@
 
     NSString *imgName = _dataArray[indexPath.row];
     cell.iconImageView.image = [UIImage templateImageNamed:imgName];
-    cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    cell.iconImageView.tintColor = UIColor.secondaryLabelColor;
     
     if (indexPath.row == _currentIcon)
     {

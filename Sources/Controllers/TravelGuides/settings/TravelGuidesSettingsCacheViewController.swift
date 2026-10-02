@@ -43,7 +43,7 @@ final class TravelGuidesSettingsCacheViewController: OABaseNavbarViewController 
         if item.cellType == OAValueTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as? OAValueTableViewCell {
             cell.accessoryType = .disclosureIndicator
             cell.descriptionVisibility(false)
-            cell.leftIconView.tintColor = UIColor.iconColorSecondary
+            cell.leftIconView.tintColor = UIColor.secondaryLabel
             cell.titleLabel.text = item.title
             cell.valueLabel.text = item.descr
             if let iconName = item.iconName {

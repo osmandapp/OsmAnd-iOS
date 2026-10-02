@@ -92,7 +92,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         let text = localizedString("set_step_size_summary")
         return NSAttributedString(string: text, attributes: [
             .font: UIFont.preferredFont(forTextStyle: .body),
-            .foregroundColor: UIColor.textColorSecondary
+            .foregroundColor: UIColor.secondaryLabel
         ])
     }
 
@@ -141,7 +141,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         cell.topLeftLabel.text = item.title
         cell.topLeftLabel.font = .preferredFont(forTextStyle: .body)
         cell.topRightLabel.text = "\(Int(value)) \(unitSymbol)"
-        cell.topRightLabel.textColor = .textColorSecondary
+        cell.topRightLabel.textColor = .secondaryLabel
 
         cell.slider.minimumValue = minVal
         cell.slider.maximumValue = maxVal
@@ -154,9 +154,9 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
         cell.slider.addTarget(self, action: #selector(onSliderChanged(_:)), for: .valueChanged)
 
         cell.bottomLeftLabel.text = "\(Int(minVal)) \(unitSymbol)"
-        cell.bottomLeftLabel.textColor = .textColorSecondary
+        cell.bottomLeftLabel.textColor = .secondaryLabel
         cell.bottomRightLabel.text = "\(Int(maxVal)) \(unitSymbol)"
-        cell.bottomRightLabel.textColor = .textColorSecondary
+        cell.bottomRightLabel.textColor = .secondaryLabel
 
         return cell
     }

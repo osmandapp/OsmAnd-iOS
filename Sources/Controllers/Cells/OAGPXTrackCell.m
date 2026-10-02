@@ -23,9 +23,9 @@
     _wptImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallWaypoints];
     
     _leftIconImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
-    _distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    _timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    _wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _distanceImageView.tintColor = UIColor.secondaryLabelColor;
+    _timeImageView.tintColor = UIColor.secondaryLabelColor;
+    _wptImageView.tintColor = UIColor.secondaryLabelColor;
     
     [self setRightButtonVisibility:NO];
 }

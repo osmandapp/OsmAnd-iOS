@@ -64,12 +64,12 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
         updateBorderColor()
 
         iconView.image = .icCustomSegmentsGap
-        iconView.tintColor = .iconColorDefault
+        iconView.tintColor = .secondaryLabel
         iconView.contentMode = .scaleAspectFit
         iconView.isAccessibilityElement = false
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorSecondary
+        titleLabel.textColor = .secondaryLabel
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
@@ -104,6 +104,6 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
     }
 
     private func updateBorderColor() {
-        borderView.layer.borderColor = UIColor.customSeparatorSolid.cgColor
+        borderView.layer.borderColor = UIColor.opaqueSeparator.cgColor
     }
 }

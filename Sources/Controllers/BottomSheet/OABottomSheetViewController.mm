@@ -242,9 +242,9 @@
     _tableView.contentInset = UIEdgeInsetsZero;
     
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    _tableBackgroundView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     UIView *buttonsView = [[UIView alloc] init];
-    buttonsView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    buttonsView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     buttonsView.frame = _buttonsView.bounds;
     buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_buttonsView insertSubview:buttonsView atIndex:0];

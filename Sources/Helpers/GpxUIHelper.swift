@@ -332,7 +332,7 @@ class GpxUIHelper: NSObject {
                 }
                 
                 if let xAxisString, !xAxisString.isEmpty {
-                    res.append(NSAttributedString(string: (res.length > 0 ? ", " : "") + xAxisString, attributes: [.foregroundColor: UIColor.textColorPrimary]))
+                    res.append(NSAttributedString(string: (res.length > 0 ? ", " : "") + xAxisString, attributes: [.foregroundColor: UIColor.label]))
                 }
             }
             
@@ -604,7 +604,7 @@ class GpxUIHelper: NSObject {
                                 topOffset: topOffset,
                                 bottomOffset: bottomOffset,
                                 xAxisGridColor: axisGridColor,
-                                labelsColor: UIColor.textColorSecondary,
+                                labelsColor: UIColor.secondaryLabel,
                                 yAxisGridColor: axisGridColor,
                                 useGesturesAndScale: useGesturesAndScale)
     }
@@ -663,7 +663,7 @@ class GpxUIHelper: NSObject {
 
         let barDataSet = LineChartDataSet(entries: entries, label: "")
         barDataSet.colors = colors
-        barDataSet.highlightColor = .textColorSecondary
+        barDataSet.highlightColor = .secondaryLabel
         barDataSet.fillAlpha = 1.0
         barDataSet.drawFilledEnabled = true
     

@@ -106,7 +106,7 @@
         return;
     }
 
-    self.descriptionView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    self.descriptionView.textColor = UIColor.secondaryLabelColor;
 
     if (targetPoint.ctrlAttrTypeStr)
     {

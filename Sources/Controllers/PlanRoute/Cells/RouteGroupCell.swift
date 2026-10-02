@@ -52,17 +52,17 @@ final class RouteGroupCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         accessoryType = .disclosureIndicator
         selectionStyle = .default
 
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
 
         distanceLabel.font = .scaledSystemFont(ofSize: 17)
-        distanceLabel.textColor = .textColorSecondary
+        distanceLabel.textColor = .secondaryLabel
         distanceLabel.setContentHuggingPriority(.required, for: .horizontal)
 
         [iconView, titleLabel, distanceLabel].forEach {

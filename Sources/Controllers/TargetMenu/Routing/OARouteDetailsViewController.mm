@@ -204,8 +204,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     SegmentTableHeaderView *headerView = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"SegmentTableHeaderView"];
     UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
-    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
-    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.labelColor, NSFontAttributeName : font} forState:UIControlStateSelected];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.labelColor, NSFontAttributeName : font} forState:UIControlStateNormal];
     [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
     [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
     [headerView.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
@@ -270,7 +270,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
                        turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
     turnDrawable.frame = CGRectMake(0, 0, size, size);
-    [turnDrawable setClr:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+    [turnDrawable setClr:UIColor.labelColor];
     [turnDrawable setNeedsDisplay];
     [cell setLeftTurnIconDrawable:turnDrawable];
     [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
@@ -583,7 +583,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     {
         NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
         [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
-        [attrDescription setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:emission];
+        [attrDescription setColor:UIColor.secondaryLabelColor forString:emission];
     }
     return attrDescription;
 }

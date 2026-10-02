@@ -93,7 +93,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
         content.text = item.title
         content.secondaryText = item.descr
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
-        backgroundConfig.backgroundColor = .groupBg
+        backgroundConfig.backgroundColor = .secondarySystemGroupedBackground
         cell.backgroundConfiguration = backgroundConfig
         cell.contentConfiguration = content
         cell.accessories = [.multiselect()]
@@ -102,7 +102,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     private let headerCellRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Header> { (cell, _, headerItem) in
         var content = cell.defaultContentConfiguration()
         content.text = headerItem.title
-        content.textProperties.color = .textColorPrimary
+        content.textProperties.color = .label
         content.textProperties.font = .systemFont(ofSize: 20, weight: .semibold)
         cell.contentConfiguration = content
         
@@ -191,7 +191,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
     // MARK: - Generate Data
     private func configureCollectionView() {
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: createLayout())
-        collectionView.backgroundColor = .viewBg
+        collectionView.backgroundColor = .systemGroupedBackground
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
@@ -411,11 +411,11 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
                                        style: .plain,
                                        target: self,
                                        action: #selector(selectButtonPressed(_:)))
-        selectButton?.tintColor = .textColorPrimary
+        selectButton?.tintColor = .label
         selectButton?.accessibilityLabel = localizedString("shared_string_select")
 
         let searchIcon = UIImage(systemName: "magnifyingglass",
-                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
         searchButton = UIBarButtonItem(image: searchIcon,
                                        style: .plain,
                                        target: self,

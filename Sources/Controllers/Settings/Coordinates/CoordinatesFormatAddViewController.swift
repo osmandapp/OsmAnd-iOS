@@ -130,14 +130,14 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
             cell.rightIconVisibility(true)
             cell.descriptionVisibility(true)
             cell.titleLabel.font = .preferredFont(forTextStyle: .body)
-            cell.titleLabel.textColor = .textColorPrimary
+            cell.titleLabel.textColor = .label
             cell.titleLabel.text = item.title
             cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
-            cell.descriptionLabel.textColor = .textColorSecondary
+            cell.descriptionLabel.textColor = .secondaryLabel
             cell.descriptionLabel.numberOfLines = 0
             cell.descriptionLabel.text = item.descr
             cell.rightIconView.image = item.icon
-            cell.rightIconView.tintColor = .iconColorDefault
+            cell.rightIconView.tintColor = .secondaryLabel
             cell.anchorContent(.topStyle)
             cell.textIndentsStyle(.increasedTopCenterIndentStyle)
             cell.isAccessibilityElement = true
@@ -158,7 +158,7 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         cell.leftIconVisibility(false)
         cell.descriptionVisibility(!(item.descr ?? "").isEmpty)
         cell.titleLabel.text = item.title
-        cell.titleLabel.textColor = .textColorPrimary
+        cell.titleLabel.textColor = .label
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
 

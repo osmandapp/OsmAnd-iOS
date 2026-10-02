@@ -72,7 +72,7 @@ final class MainExternalInputDeviceViewController: OABaseSettingsViewController 
             noExternalDeviceRow.key = Self.emptyStateRowKey
             noExternalDeviceRow.title = externalInputDeviceId == NoneDeviceProfile.deviceId ? nil : localizedString("no_assigned_keys")
             noExternalDeviceRow.iconName = externalInputDeviceId == NoneDeviceProfile.deviceId ? "ic_custom_keyboard" : "ic_custom_keyboard_disabled"
-            noExternalDeviceRow.iconTintColor = .iconColorDefault
+            noExternalDeviceRow.iconTintColor = .secondaryLabel
             noExternalDeviceRow.descr = localizedString(externalInputDeviceId == NoneDeviceProfile.deviceId ? "select_to_use_an_external_input_device" : "no_assigned_keys_desc")
             noExternalDeviceRow.setObj(externalInputDeviceId == NoneDeviceProfile.deviceId, forKey: Self.noExternalDeviceKey)
             if externalInputDeviceId != NoneDeviceProfile.deviceId {

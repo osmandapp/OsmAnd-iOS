@@ -196,11 +196,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 if sectionKey == SectionKey.information.rawValue || sectionKey == SectionKey.receivedData.rawValue {
                     cell.selectionStyle = .none
                     cell.accessoryType = .none
-                    cell.titleLabel.textColor = UIColor.textColorPrimary
+                    cell.titleLabel.textColor = UIColor.label
                 } else if sectionKey == SectionKey.settings.rawValue {
                     cell.selectionStyle = .gray
                     cell.accessoryType = .disclosureIndicator
-                    cell.titleLabel.textColor = UIColor.textColorPrimary
+                    cell.titleLabel.textColor = UIColor.label
                 } else if sectionKey == SectionKey.forgetSensor.rawValue {
                     cell.selectionStyle = .gray
                     cell.accessoryType = .none

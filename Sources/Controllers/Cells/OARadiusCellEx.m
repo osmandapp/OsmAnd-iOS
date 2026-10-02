@@ -64,7 +64,7 @@
 {
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, description]];
     
-    [str addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:NSMakeRange(0, title.length)];
+    [str addAttribute:NSForegroundColorAttributeName value:UIColor.labelColor range:NSMakeRange(0, title.length)];
     [str addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameIconColorActive] range:NSMakeRange(title.length + 1, description.length)];
     [str addAttribute:NSFontAttributeName value:_fontRegular range:NSMakeRange(0, title.length)];
     [str addAttribute:NSFontAttributeName value:_fontBold range:NSMakeRange(title.length + 1, description.length)];

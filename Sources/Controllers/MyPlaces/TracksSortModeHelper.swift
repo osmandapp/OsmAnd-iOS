@@ -101,7 +101,7 @@ protocol SortableFolder {
         let category = UITraitCollection.current.preferredContentSizeCategory
         if footnoteAttributesCategory != category {
             footnoteAttributesCache = [.font: UIFont.preferredFont(forTextStyle: .footnote),
-                                       .foregroundColor: UIColor.textColorSecondary]
+                                       .foregroundColor: UIColor.secondaryLabel]
             footnoteAttributesCategory = category
         }
         return footnoteAttributesCache
@@ -374,7 +374,7 @@ protocol SortableFolder {
         }
         
         attributedString.append(NSAttributedString(string: " | ", attributes: defaultAttributes))
-        if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: .textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
+        if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: .secondaryLabel, defaultAttributes: defaultAttributes, rotate: false) {
             attributedString.append(folderAttributedString)
             attributedString.append(NSAttributedString(string: " \(folderName)", attributes: defaultAttributes))
         } else {

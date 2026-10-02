@@ -122,7 +122,7 @@ enum PlanRouteButtonFactory {
         configuration.imagePadding = imagePadding
         configuration.titleLineBreakMode = .byTruncatingTail
         configuration.contentInsets = contentInsets
-        configuration.baseForegroundColor = .textColorPrimary
+        configuration.baseForegroundColor = .label
         configuration.background.backgroundColor = style == .map ? .mapButtonBgColorDefault : .clear
         configuration.background.cornerRadius = height / 2
         configuration.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
@@ -176,7 +176,7 @@ enum PlanRouteButtonFactory {
         button.configurationUpdateHandler = { button in
             var updated = button.configuration
             updated?.background.backgroundColor = .clear
-            updated?.baseForegroundColor = .textColorPrimary
+            updated?.baseForegroundColor = .label
             button.configuration = updated
             button.alpha = button.isEnabled ? 1 : Self.glassButtonDisabledAlpha
             if let glassView = button.viewWithTag(Self.glassEffectTag) {

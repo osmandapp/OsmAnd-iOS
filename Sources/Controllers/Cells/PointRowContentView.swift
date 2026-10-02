@@ -31,7 +31,7 @@ struct PointSecondaryContent {
         let font = UIFont.scaledSystemFont(ofSize: PointContentConfiguration.secondaryTextSize)
         let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: directionColor ?? UIColor.textColorDirectionActive]
         let directionIconColor = directionColor ?? UIColor.iconColorDirectionActive
-        let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorSecondary]
+        let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.secondaryLabel]
         let result = NSMutableAttributedString()
         if isDateFirst {
             append(date, to: result, attributes: secondaryAttributes)
@@ -102,7 +102,7 @@ struct PointContentConfiguration: UIContentConfiguration {
 
     static func backgroundConfiguration() -> UIBackgroundConfiguration {
         var configuration = UIBackgroundConfiguration.listGroupedCell()
-        configuration.backgroundColor = .groupBg
+        configuration.backgroundColor = .secondarySystemGroupedBackground
         return configuration
     }
 
@@ -179,11 +179,11 @@ private final class PointRowContentView: UIView, UIContentView {
         var content = UIListContentConfiguration.cell()
         content.image = configuration.icon.flatMap { OAUtilities.resize($0, newSize: CGSize(width: PointContentConfiguration.iconSize, height: PointContentConfiguration.iconSize)) }
         content.text = configuration.title
-        content.textProperties.color = configuration.isVisible ? .textColorPrimary : .textColorSecondary
+        content.textProperties.color = configuration.isVisible ? .label : .secondaryLabel
         content.textProperties.font = titleFont(isVisible: configuration.isVisible)
         content.textProperties.numberOfLines = 2
         content.secondaryAttributedText = configuration.secondaryContent?.attributedText()
-        content.secondaryTextProperties.color = .textColorSecondary
+        content.secondaryTextProperties.color = .secondaryLabel
         content.secondaryTextProperties.numberOfLines = 1
         rowContentView.configuration = content
     }

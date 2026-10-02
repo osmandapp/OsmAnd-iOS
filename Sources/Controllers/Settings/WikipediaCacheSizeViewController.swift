@@ -57,7 +57,7 @@ final class WikipediaCacheSizeViewController : OABaseNavbarViewController {
                 cell = nib?.first as? OAValueTableViewCell
                 cell?.accessoryType = .disclosureIndicator
                 cell?.descriptionVisibility(false)
-                cell?.leftIconView.tintColor = UIColor.iconColorSecondary
+                cell?.leftIconView.tintColor = UIColor.secondaryLabel
             }
             if let cell {
                 cell.titleLabel.text = item.title

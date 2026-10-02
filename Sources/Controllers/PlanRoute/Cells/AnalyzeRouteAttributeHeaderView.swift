@@ -48,7 +48,7 @@ final class AnalyzeRouteAttributeHeaderView: UITableViewHeaderFooterView {
         backgroundView?.backgroundColor = .clear
 
         titleLabel.font = .scaledSystemFont(ofSize: 20, weight: .semibold)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         chevronImageView.contentMode = .scaleAspectFit

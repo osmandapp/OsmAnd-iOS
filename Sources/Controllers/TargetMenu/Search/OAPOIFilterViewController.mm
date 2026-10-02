@@ -853,7 +853,7 @@ typedef enum
             cell.inputField.textAlignment = NSTextAlignmentNatural;
             cell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
             cell.leftIconView.image = [UIImage templateImageNamed:ACImageNameSearchIcon];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         if (cell)
@@ -879,7 +879,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
                 [cell descriptionVisibility:NO];
             }
             
@@ -899,7 +899,7 @@ typedef enum
                 if (item.expandable)
                 {
                     cell.rightIconView.image = [UIImage imageNamed:!item.expanded ? ACImageNameIcArrowOpen : ACImageNameIcArrowClose];
-                    cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                    cell.rightIconView.tintColor = UIColor.secondaryLabelColor;
                     [cell rightIconVisibility:YES];
                 }
                 else
@@ -917,7 +917,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASwitchTableViewCell *) nib[0];
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
                 [cell descriptionVisibility:NO];
             }
             if (cell)
@@ -952,7 +952,7 @@ typedef enum
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
                 [cell descriptionVisibility:NO];
             }
             if (cell)

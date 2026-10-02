@@ -47,7 +47,7 @@
 
     self.webView.navigationDelegate = self;
     self.webView.scrollView.delegate = self;
-    self.webView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.webView.backgroundColor = UIColor.systemGroupedBackgroundColor;
 
     self.webView.hidden = YES;
     [self.webView.scrollView setContentInsetAdjustmentBehavior: UIScrollViewContentInsetAdjustmentNever];

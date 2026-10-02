@@ -48,23 +48,23 @@
     switch ([self getNavbarColorScheme])
     {
         case EOABaseNavbarColorSchemeGray:
-            container.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            container.backgroundColor = UIColor.systemGroupedBackgroundColor;
             break;
         case EOABaseNavbarColorSchemeOrange:
             container.backgroundColor = [[UIColor colorNamed:ACColorNameNavBarBgColorPrimary] colorWithAlphaComponent:1.0];
             break;
         case EOABaseNavbarColorSchemeWhite:
-            container.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            container.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             break;
         default:
-            container.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            container.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             break;
     }
 }
 
 - (UIColor *)blurAppearanceBackgroundColor
 {
-    return [UIColor colorNamed:ACColorNameViewBg];
+    return UIColor.systemGroupedBackgroundColor;
 }
 
 - (BOOL)shouldBlurAppearanceNavBar

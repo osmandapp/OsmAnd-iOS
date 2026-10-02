@@ -42,7 +42,7 @@ final class RouteSettingNavigationCell: UITableViewCell {
         let iconSize = Self.iconSize
         let minimumHeight = Self.minimumHeight
         let verticalPadding = Self.verticalPadding
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         accessoryType = .disclosureIndicator
         selectionStyle = .default
         separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
@@ -50,13 +50,13 @@ final class RouteSettingNavigationCell: UITableViewCell {
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.setContentCompressionResistancePriority(.defaultHigh + 1, for: .horizontal)
 
         valueLabel.font = .scaledSystemFont(ofSize: 17)
-        valueLabel.textColor = .textColorSecondary
+        valueLabel.textColor = .secondaryLabel
         valueLabel.numberOfLines = 0
         valueLabel.lineBreakMode = .byWordWrapping
         valueLabel.textAlignment = .right

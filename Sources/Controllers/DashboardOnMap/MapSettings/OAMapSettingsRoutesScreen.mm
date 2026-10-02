@@ -295,7 +295,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
             
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
 
             [cell.switchView setOn:enabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -373,7 +373,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     if (section == EOAMapSettingsRoutesSectionValues && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        header.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 

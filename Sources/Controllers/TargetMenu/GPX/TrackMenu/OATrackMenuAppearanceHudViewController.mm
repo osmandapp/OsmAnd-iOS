@@ -612,7 +612,7 @@ static const NSInteger kColorsSection = 1;
 - (void)setupView
 {
     self.titleIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomAppearance];
-    self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    self.titleIconView.tintColor = UIColor.secondaryLabelColor;
 
     [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
     [self.doneButton setAttributedTitle:
@@ -1240,7 +1240,7 @@ static const NSInteger kColorsSection = 1;
                         kCellType:[OAValueTableViewCell getCellIdentifier],
                         kCellTitle:OALocalizedString(@"vertical_exaggeration"),
                         kCellIconNameKey:ACImageNameIcCustomTerrainScale,
-                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kCellIconTintColor:scaleValue > 1 ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.secondaryLabelColor,
                         kTableValues:@{
                             @"string_value":alphaValueString,
                             @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
@@ -1257,7 +1257,7 @@ static const NSInteger kColorsSection = 1;
                         kCellType:[OAValueTableViewCell getCellIdentifier],
                         kCellTitle:OALocalizedString(@"wall_height"),
                         kCellIconNameKey:ACImageNameIcCustomTerrainScale,
-                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kCellIconTintColor:scaleValue > 1 ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.secondaryLabelColor,
                         kTableValues:@{
                             @"string_value":elevationMetersValueString,
                             @"accessibility_label":OALocalizedString(@"wall_height"),
@@ -1542,7 +1542,7 @@ static const NSInteger kColorsSection = 1;
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.doneButton.userInteractionEnabled = isAvailable;
-    [self.doneButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
+    [self.doneButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor
                            forState:UIControlStateNormal];
 }
 
@@ -1869,7 +1869,7 @@ static const NSInteger kColorsSection = 1;
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
         }
         outCell = cell;
     }
@@ -1884,7 +1884,7 @@ static const NSInteger kColorsSection = 1;
             cell = (OASegmentedControlCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.segmentedControl.backgroundColor = [[UIColor colorNamed:ACColorNameButtonBgColorPrimary] colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
 
@@ -1944,8 +1944,8 @@ static const NSInteger kColorsSection = 1;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
+            cell.dividerColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
             cell.dividerHight = 0.;
@@ -2001,7 +2001,7 @@ static const NSInteger kColorsSection = 1;
             cell.selectionStyle = isPaletteName ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             cell.separatorInset = UIEdgeInsetsMake(0., isPaletteName ? 0. : self.tableView.frame.size.width, 0., 0.);
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.labelColor;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:isPaletteName ? UIFontTextStyleFootnote : UIFontTextStyleBody];
         }
         return cell;
@@ -2057,7 +2057,7 @@ static const NSInteger kColorsSection = 1;
                                               description:OALocalizedString(@"track_3d_empty_view_description")
                                               buttonTitle:OALocalizedString(@"shared_string_get")
                                                 leftImage:[UIImage imageNamed:ACImageNameIcCustom3DtrackColored]
-                                       leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+                                       leftImageTintColor:UIColor.secondaryLabelColor];
             }
             
             [cell.contentView addSubview:_trackView3DEmptyView];
@@ -2086,7 +2086,7 @@ static const NSInteger kColorsSection = 1;
         [GpxUIHelper setupGradientChartWithChart:cell.chartView
                              useGesturesAndScale:NO
                                   xAxisGridColor:[UIColor colorNamed:ACColorNameChartAxisGridLine]
-                                     labelsColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+                                     labelsColor:UIColor.secondaryLabelColor];
 
         OASColorPalette *colorPalette = [_selectedPaletteColorItem getColorPalette];
         if (!colorPalette)
@@ -2155,7 +2155,7 @@ static const NSInteger kColorsSection = 1;
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
+            NSForegroundColorAttributeName: UIColor.secondaryLabelColor
     }];
     vw.label.attributedText = textStr;
     return vw;

@@ -144,12 +144,12 @@
         
         NSString *textShow = OALocalizedString(@"recording_context_menu_show");
         UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
+        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColor.secondaryLabelColor;
         NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
         NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"search_categories"), _countShowCategories];
         UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColor.secondaryLabelColor;
         NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
         [attrShow appendAttributedString:attrCategories];
@@ -260,7 +260,7 @@
             
             UIImage *categoryIcon = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.image = categoryIcon;
-            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             
             NSString *descText;
@@ -270,7 +270,7 @@
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
             [cell descriptionVisibility:YES];
             cell.descriptionLabel.text = descText;
-            cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.descriptionLabel.textColor = UIColor.secondaryLabelColor;
         }
         else
         {
@@ -280,7 +280,7 @@
             
             cell.titleLabel.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             
-            UIColor *selectedColor = accepted ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            UIColor *selectedColor = accepted ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
             cell.leftIconView.image = [self getPoiIcon:poiType];
             cell.leftIconView.tintColor = selectedColor;
             if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)

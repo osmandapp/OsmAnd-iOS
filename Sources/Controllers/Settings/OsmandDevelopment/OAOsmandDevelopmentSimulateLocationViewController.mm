@@ -70,7 +70,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     [super viewDidLoad];
 
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColor.secondaryLabelColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -116,11 +116,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kTrackSelectKey,
         @"titleText" : OALocalizedString(@"shared_string_gpx_track"),
-        @"titleColor" : isRouteAnimating ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorPrimary],
+        @"titleColor" : isRouteAnimating ? UIColor.secondaryLabelColor : UIColor.labelColor,
         @"descText" : trackNameText,
-        @"descColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+        @"descColor" : UIColor.secondaryLabelColor,
         @"icon" : ACImageNameIcCustomTrip,
-        @"iconColor" : isRouteAnimating ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorActive],
+        @"iconColor" : isRouteAnimating ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorActive],
         @"actionBlock" : (^void(){ [self openGpxTrackSelector]; }),
         @"isActionEnabled" : @(!isRouteAnimating),
         @"headerTitle" : @" ",
@@ -132,11 +132,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kMovementSpeedKey,
         @"titleText" : OALocalizedString(@"simulate_location_movement_speed"),
-        @"titleColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary],
+        @"titleColor" : isMovementSpeedButtonActive ? UIColor.labelColor : UIColor.secondaryLabelColor,
         @"descText" : [OASimulateNavigationSpeed toTitle:_selectedSpeedMode],
-        @"descColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+        @"descColor" : UIColor.secondaryLabelColor,
         @"icon" : ACImageNameIcActionMaxSpeed,
-        @"iconColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
+        @"iconColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor,
         @"actionBlock" : (^void(){ [self openMovementSpeedSelector]; }),
         @"isActionEnabled" : @(isMovementSpeedButtonActive),
     }];
@@ -153,7 +153,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"key" : kStartStopButtonKey,
         @"titleText" : isRouteAnimating ? OALocalizedString(@"shared_string_control_stop") : OALocalizedString(@"shared_string_control_start"),
         @"icon" : isRouteAnimating ? @"ic_custom_stop" : ACImageNameIcCustomPlay,
-        @"color" : isGpxTrackSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
+        @"color" : isGpxTrackSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor,
         @"actionBlock" : (^void(){ [self setTrackAnimationEnabled:!isRouteAnimating]; }),
         @"isActionEnabled" : @(isGpxTrackSelected),
         @"headerTitle" : @" ",
@@ -260,7 +260,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 
 - (void)onRotation
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColor.secondaryLabelColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 

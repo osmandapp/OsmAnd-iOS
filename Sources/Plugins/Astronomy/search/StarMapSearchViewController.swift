@@ -221,7 +221,7 @@ final class StarMapSearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         definesPresentationContext = true
         
         // On iPad the search panel is inset from the screen edge.
@@ -482,7 +482,7 @@ final class StarMapSearchViewController: UIViewController {
     // MARK: - Table
 
     private func setupSearchRecycler() {
-        searchRecycler.backgroundColor = .viewBg
+        searchRecycler.backgroundColor = .systemGroupedBackground
         updateTableAdapter()
     }
 

@@ -673,7 +673,7 @@
                     if (cell)
                     {
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                        [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+                        [cell.titleLabel setTextColor:UIColor.labelColor];
                         [cell.titleLabel setText:[item getName]];
                         cell.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomTrip];
                         
@@ -681,7 +681,7 @@
                     cell.descriptionLabel.text = nil;
                     cell.descriptionLabel.attributedText = [TracksSortModeHelper getTrackDescriptionWithTrack:dataItem sortMode:TracksSortModeLastModified includeFolderInfo:YES];
                     BOOL isVisible = [[OAAppSettings sharedManager] isGpxVisible:dataItem.gpxFilePath];
-                    cell.leftIconView.tintColor = [UIColor colorNamed:isVisible ? ACColorNameIconColorActive : ACColorNameIconColorDefault];
+                    cell.leftIconView.tintColor = isVisible ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.secondaryLabelColor;
                     return cell;
                 }
                 else
@@ -885,7 +885,7 @@
                     if (cell)
                     {
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-                        [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+                        [cell.titleLabel setTextColor:UIColor.labelColor];
                         [cell.titleLabel setText:[item getName]];
                         [cell.leftIconView setImage:[((OAPOICategory *)res.object) icon]];
                         [cell setCustomLeftSeparatorInset:isLast];
@@ -1002,7 +1002,7 @@
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
                 cell.titleLabel.attributedText = nil;
-                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                cell.titleLabel.textColor = UIColor.labelColor;
                 [cell.titleLabel setText:[item getName]];
             }
             return cell;

@@ -273,7 +273,7 @@ final private class GalleryCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .viewBg
+        imageView.backgroundColor = .systemGroupedBackground
         contentView.addSubview(imageView)
         
         offlineCacheImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -350,7 +350,7 @@ final private class TitleHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        titleLabel.textColor = .textColorSecondary
+        titleLabel.textColor = .secondaryLabel
         titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false

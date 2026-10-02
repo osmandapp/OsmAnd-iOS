@@ -116,7 +116,7 @@ class AstroCardContainerView: UIView {
 
     private func setup(title: String?, iconName: String?) {
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         layer.cornerRadius = 26
         layer.masksToBounds = true
 
@@ -141,7 +141,7 @@ class AstroCardContainerView: UIView {
             if let title {
                 let label = UILabel()
                 label.text = title
-                label.textColor = .textColorPrimary
+                label.textColor = .label
                 label.font = .systemFont(ofSize: 16, weight: .bold)
                 label.numberOfLines = 0
                 row.addArrangedSubview(label)
@@ -160,7 +160,7 @@ class AstroCardContainerView: UIView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if previousTraitCollection?.hasDifferentColorAppearance(comparedTo: traitCollection) == true {
-            backgroundColor = .groupBg
+            backgroundColor = .secondarySystemGroupedBackground
         }
     }
 }

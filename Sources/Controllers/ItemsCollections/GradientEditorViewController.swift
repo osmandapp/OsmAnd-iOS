@@ -174,7 +174,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             cell.heightConstraint.constant = 80
             cell.chartView.extraTopOffset = 20
             cell.chartView.extraBottomOffset = 24
-            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .textColorSecondary)
+            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .secondaryLabel)
             cell.chartView.data = GpxUIHelper.buildGradientChart(chart: cell.chartView, colorPalette: previewColorPalette(), valueFormatter: GradientFormatter.getAxisFormatter(fileType: fileType, analysis: nil))
             cell.chartView.highlightXAxis(value: selectedPoint.map { Double($0.value) }, backgroundColor: .iconColorActive, textColor: .white)
             cell.chartView.notifyDataSetChanged()
@@ -183,8 +183,8 @@ final class GradientEditorViewController: OABaseNavbarViewController {
         } else if item.cellType == OAFoldersCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAFoldersCell.reuseIdentifier, for: indexPath) as! OAFoldersCell
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
-            cell.collectionView.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
+            cell.collectionView.backgroundColor = .secondarySystemGroupedBackground
             cell.collectionView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 77)
             cell.collectionView.foldersDelegate = self
             cell.collectionView.setValues(stepValues(), withSelectedIndex: dataState.selectedIndex)
@@ -249,7 +249,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
                 cell.descriptionVisibility(true)
                 cell.textStackView.isHidden = false
                 cell.descriptionLabel.text = item.descr
-                cell.descriptionLabel.textColor = .textColorPrimary
+                cell.descriptionLabel.textColor = .label
             } else {
                 cell.descriptionVisibility(false)
                 cell.titleVisibility(true)
@@ -261,7 +261,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
                     cell.titleLabel.textColor = .textColorActive
                 } else {
                     cell.selectionStyle = .none
-                    cell.titleLabel.textColor = .textColorPrimary
+                    cell.titleLabel.textColor = .label
                 }
             }
             return cell

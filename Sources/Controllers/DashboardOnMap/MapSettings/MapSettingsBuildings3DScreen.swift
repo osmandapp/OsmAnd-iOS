@@ -61,7 +61,7 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         showHide3dObjectsRow.key = RowKey.showHide3dObjects.rawValue
         showHide3dObjectsRow.title = localizedString(is3DObjectsEnabled ? "shared_string_enabled" : "rendering_value_disabled_name")
         showHide3dObjectsRow.icon = is3DObjectsEnabled ? .icCustomShow : .icCustomHide
-        showHide3dObjectsRow.iconTintColor = is3DObjectsEnabled ? .iconColorSelected : .iconColorDisabled
+        showHide3dObjectsRow.iconTintColor = is3DObjectsEnabled ? .iconColorSelected : .tertiaryLabel
         showHide3dObjectsRow.setObj(is3DObjectsEnabled, forKey: RowKey.enabled.rawValue)
         
         guard is3DObjectsEnabled, let srtmPlugin else { return }
@@ -72,14 +72,14 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         colorRow.key = RowKey.color.rawValue
         colorRow.title = localizedString("shared_string_color")
         colorRow.icon = .icCustomAppearanceOutlined
-        colorRow.iconTintColor = .iconColorDefault
+        colorRow.iconTintColor = .secondaryLabel
         colorRow.descr = localizedString(Buildings3DColorType.getById(Int(srtmPlugin.buildings3dColorStylePref.get())).labelId)
         let visibilityRow = appearanceSection.createNewRow()
         visibilityRow.cellType = OAValueTableViewCell.reuseIdentifier
         visibilityRow.key = RowKey.visibility.rawValue
         visibilityRow.title = localizedString("visibility")
         visibilityRow.icon = .icCustomVisibility
-        visibilityRow.iconTintColor = .iconColorDefault
+        visibilityRow.iconTintColor = .secondaryLabel
         visibilityRow.descr = NumberFormatter.percentFormatter.string(from: srtmPlugin.buildings3dAlphaPref.get() as NSNumber)
         
         let performanceSection = data.createNewSection()

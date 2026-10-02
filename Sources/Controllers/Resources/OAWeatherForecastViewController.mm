@@ -314,7 +314,7 @@
             emptyData[@"title"] = OALocalizedString(@"weather_miss_forecasts");
             emptyData[@"description"] = OALocalizedString(@"weather_miss_forecasts_description");
             emptyData[@"icon"] = @"ic_custom_umbrella";
-            emptyData[@"icon_color"] = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            emptyData[@"icon_color"] = UIColor.tertiaryLabelColor;
             emptyData[@"button_title"] = OALocalizedString(@"shared_string_select");
             [emptyCells addObject:emptyData];
 
@@ -367,7 +367,7 @@
                             ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_download_update")
                                                               attributes:@{
                                                                       NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
-                                                                      NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
+                                                                      NSForegroundColorAttributeName: UIColor.secondaryLabelColor
                                                               }]
                             : [OAWeatherHelper getStatusInfoDescription:regionId];
                     OAResourceItem *resourceItem = [self getResourceByRegion:region];
@@ -611,16 +611,16 @@
     {
         if (isFiltered)
         {
-            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
-            _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
-            _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+            _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:UIColor.tertiaryLabelColor}];
+            _searchController.searchBar.searchTextField.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
+            _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.tertiaryLabelColor;
         }
         else
         {
             _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
             _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
             _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-            _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+            _searchController.searchBar.searchTextField.tintColor = UIColor.tertiaryLabelColor;
         }
     }
 }
@@ -962,7 +962,7 @@
             cell.selectionStyle = _editMode ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
 
             cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? [OAWeatherHelper checkAndGetRegionName:region] : item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.labelColor;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             
             BOOL hasDescription = [item.allKeys containsObject:@"description"];

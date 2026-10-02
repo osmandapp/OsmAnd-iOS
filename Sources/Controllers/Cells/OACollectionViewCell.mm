@@ -120,10 +120,10 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameGroupBg];
-        cell.descrLabel.textColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.titleLabel.textColor = UIColor.secondarySystemGroupedBackgroundColor;
+        cell.descrLabel.textColor = UIColor.secondarySystemGroupedBackgroundColor;
         cell.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        cell.imageView.tintColor =[UIColor colorNamed:ACColorNameGroupBg];
+        cell.imageView.tintColor =UIColor.secondarySystemGroupedBackgroundColor;
     }];
 }
 
@@ -132,9 +132,9 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     NSDictionary *item = _data[indexPath.row];
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-        cell.descrLabel.textColor  = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.titleLabel.textColor = UIColor.labelColor;
+        cell.descrLabel.textColor  = UIColor.secondaryLabelColor;
+        cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         cell.imageView.tintColor = item[@"color"];
     }];
 }

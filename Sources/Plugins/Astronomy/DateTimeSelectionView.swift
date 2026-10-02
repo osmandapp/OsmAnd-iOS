@@ -48,7 +48,7 @@ final class DateTimeSelectionView: UIView {
     private func applyColors() {
         backgroundColor = StarMapControlTheme.defaultBackground(nightMode: nightMode, alpha: StarMapControlTheme.defaultBackgroundAlpha)
         layer.borderWidth = nightMode ? 2 : 0
-        let color: UIColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
+        let color: UIColor = nightMode ? .label.dark : .label.light
         labels.forEach {
             $1.textColor = color
         }
@@ -111,7 +111,7 @@ final class DateTimeSelectionView: UIView {
         column.addArrangedSubview(up)
 
         let label = UILabel()
-        label.textColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
+        label.textColor = nightMode ? .label.dark : .label.light
         label.font = UIFont.monospacedDigitSystemFont(ofSize: 18, weight: .bold)
         label.textAlignment = .center
         label.widthAnchor.constraint(greaterThanOrEqualToConstant: field == .year ? 52 : 32).isActive = true
@@ -129,7 +129,7 @@ final class DateTimeSelectionView: UIView {
 
     private func makeStepButton(icon: UIImage) -> UIButton {
         let button = UIButton(type: .system)
-        button.tintColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
+        button.tintColor = nightMode ? .label.dark : .label.light
         button.setImage(icon, for: .normal)
         button.widthAnchor.constraint(equalToConstant: 40).isActive = true
         button.heightAnchor.constraint(equalToConstant: 40).isActive = true

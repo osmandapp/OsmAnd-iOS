@@ -63,9 +63,9 @@ final class KeyTableViewCell: UITableViewCell {
     
     private func setupKeyViewColors(for key: UIKeyboardHIDUsage?, showDisableIfNeeded: Bool) {
         if key == nil {
-            keyView.setKeyColor(borderColor: .keyBindStroke, backgroundColor: .keyBindBg, textColor: .textColorSecondary)
+            keyView.setKeyColor(borderColor: .keyBindStroke, backgroundColor: .keyBindBg, textColor: .secondaryLabel)
         } else if showDisableIfNeeded {
-            keyView.setKeyColor(borderColor: .keyBindStrokeColorDisruptive, backgroundColor: .keyBindBgColorDisruptive, textColor: .textColorPrimary)
+            keyView.setKeyColor(borderColor: .keyBindStrokeColorDisruptive, backgroundColor: .keyBindBgColorDisruptive, textColor: .label)
         } else {
             keyView.setKeyColor(borderColor: .keyBindStrokeActive, backgroundColor: .keyBindBgActive, textColor: .textColorActive)
         }

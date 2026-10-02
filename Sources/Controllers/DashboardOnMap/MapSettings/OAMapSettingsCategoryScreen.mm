@@ -235,7 +235,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected]: UIColor.tertiaryLabelColor;
             }
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

@@ -60,9 +60,9 @@
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:UIColor.secondaryLabelColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.tableHeaderView = _tableHeaderView;
-    self.tableView.tableHeaderView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.tableView.tableHeaderView.backgroundColor = UIColor.systemGroupedBackgroundColor;
     
     [self.rightButton removeFromSuperview];
     self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
@@ -289,7 +289,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
-            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = UIColor.labelColor;
         }
         if (cell)
         {

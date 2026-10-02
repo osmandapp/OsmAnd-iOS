@@ -71,8 +71,8 @@
         [resultCell leftIconVisibility:NO];
         resultCell.userInteractionEnabled = NO;
         resultCell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        resultCell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-        resultCell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        resultCell.titleLabel.textColor = UIColor.secondaryLabelColor;
+        resultCell.descriptionLabel.textColor = UIColor.labelColor;
         resultCell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
     if (resultCell)
@@ -108,7 +108,7 @@
     
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
-    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    textField.textColor = UIColor.labelColor;
     textField.underline.hidden = YES;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
     textField.placeholder = @"";
@@ -119,7 +119,7 @@
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor =  [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor =  UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
     

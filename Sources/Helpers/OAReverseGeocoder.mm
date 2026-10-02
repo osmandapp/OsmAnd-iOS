@@ -36,7 +36,7 @@
 
 @implementation OAReverseGeocoder
 {
-    std::atomic<bool> _invalidated;
+    std::atomic<bool> _stopping;
 }
 
 + (OAReverseGeocoder *)instance
@@ -57,7 +57,7 @@
         _addressCache = [[NSCache alloc] init];
         _addressCache.countLimit = 100;
         _pendingLookups = [NSMutableDictionary dictionary];
-        _invalidated = false;
+        _stopping = false;
 
         _lookupQueue = [[NSOperationQueue alloc] init];
         _lookupQueue.name = @"net.osmand.reverse-geocoder";
@@ -177,9 +177,9 @@
     }];
 }
 
-- (void)invalidateAndCancel
+- (void)stop
 {
-    _invalidated = true;
+    _stopping = true;
     [_lookupQueue cancelAllOperations];
 }
 
@@ -192,7 +192,7 @@
     if (cachedAddress)
         return cachedAddress;
 
-    NSString *address = _invalidated ? @"" : [self geocodeAddressAtLat:lat lon:lon];
+    NSString *address = _stopping ? @"" : [self geocodeAddressAtLat:lat lon:lon];
 
     [self cacheAddress:address forKey:cacheKey];
 
@@ -217,7 +217,7 @@
         [self]
         (const OsmAnd::FunctorQueryController* const) -> bool
         {
-            return self->_invalidated;
+            return self->_stopping;
         });
     std::shared_ptr<const OsmAnd::ReverseGeocoder::ResultEntry> object;
     geocoder->performSearch(*geoCriteria,

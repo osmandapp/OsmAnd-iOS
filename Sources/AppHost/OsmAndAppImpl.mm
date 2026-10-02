@@ -1309,7 +1309,7 @@
 
 - (void) shutdown
 {
-    [[OAReverseGeocoder instance] invalidateAndCancel];
+    [[OAReverseGeocoder instance] stop];
 
     if (_initialized)
     {

@@ -116,6 +116,7 @@ class MetadataTest < Minitest::Test
     records = AppStoreMetadata.parse(sample)
     resolved = AppStoreMetadata.validate(records, expected_locales: ['en-US'], version: '5.4.0')
     assert_includes resolved['en-US']["What's New"], 'Terrain shadows'
+    refute_includes resolved['en-US']["What's New"], "\n\n"
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'stale.txt'), 'old')
       AppStoreMetadata.generate(resolved, dir)

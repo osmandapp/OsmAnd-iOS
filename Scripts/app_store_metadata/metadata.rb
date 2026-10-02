@@ -103,7 +103,7 @@ module AppStoreMetadata
         strings = strings_for(app_locale)
         notes = strings[key]
         raise Error, "#{locale}: missing or empty #{key} in #{app_locale}.lproj" if notes.to_s.strip.empty?
-        values["What's New"] = notes.gsub(/\r\n?/, "\n").sub(/\n+\z/, '')
+        values["What's New"] = notes.gsub(/\r\n?/, "\n").gsub(/\n[ \t]*\n+/, "\n").sub(/\n+\z/, '')
       end
       values.each do |name, value|
         raise Error, "#{locale}: #{name} contains TODO placeholder" if value.match?(/\b(?:TODO|TBD)\b|<placeholder>/)

@@ -132,6 +132,9 @@ namespace
 @implementation OAGPXLayer
 {
     std::shared_ptr<OAWaypointsMapLayerProvider> _waypointsMapProvider;
+    NSArray<OASWptPt *> *_displayedWaypoints;
+    NSDictionary<NSString *, NSNumber *> *_displayedPointsModifiedTimes;
+    BOOL _waypointsNightMode;
     std::shared_ptr<OsmAnd::GpxAdditionalIconsProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
@@ -195,6 +198,9 @@ namespace
 
     [self cancelSplitLabels];
     [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
+    _waypointsMapProvider = nullptr;
+    _displayedWaypoints = nil;
+    _displayedPointsModifiedTimes = nil;
     [self removeStartFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
@@ -709,7 +715,7 @@ namespace
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
     [self setVectorLineProvider:_linesCollection sync:YES];
-    [self refreshGpxWaypoints];
+    [self refreshGpxWaypointsIfChanged];
     [self refreshStartFinishPoints];
 }
 
@@ -1641,39 +1647,75 @@ colorizationScheme:(int)colorizationScheme
 
 - (void) refreshGpxWaypoints
 {
+    [self refreshGpxWaypoints:[self collectVisibleWaypoints]];
+}
+
+- (void)refreshGpxWaypointsIfChanged
+{
+    NSArray<OASWptPt *> *points = [self collectVisibleWaypoints];
+    if (_waypointsMapProvider
+        && _waypointsNightMode == self.nightMode
+        && [_displayedPointsModifiedTimes isEqualToDictionary:[self collectPointsModifiedTimes]]
+        && [self isDisplayingSameWaypoints:points])
+        return;
+
+    [self refreshGpxWaypoints:points];
+}
+
+- (BOOL)isDisplayingSameWaypoints:(NSArray<OASWptPt *> *)points
+{
+    if (points.count != _displayedWaypoints.count)
+        return NO;
+
+    for (NSUInteger i = 0; i < points.count; i++)
+    {
+        if (points[i] != _displayedWaypoints[i])
+            return NO;
+    }
+    return YES;
+}
+
+- (NSArray<OASWptPt *> *)collectVisibleWaypoints
+{
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
+    for (NSString *key in _gpxFiles)
+    {
+        OASGpxFile *value = _gpxFiles[key];
+        NSArray<OASWptPt *> *waypoints = value.getPointsList;
+        if (waypoints.count == 0)
+            continue;
+
+        OASGpxFile *gpx = _cachedTracks[key][@"gpxFile"] ?: value;
+        for (OASWptPt *waypoint in waypoints)
+        {
+            OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category ?: @""];
+            if (!group || !group.hidden)
+                [points addObject:waypoint];
+        }
+    }
+    return points;
+}
+
+- (NSDictionary<NSString *, NSNumber *> *)collectPointsModifiedTimes
+{
+    NSMutableDictionary<NSString *, NSNumber *> *times = [NSMutableDictionary dictionary];
+    for (NSString *key in _gpxFiles)
+        times[key] = @(_gpxFiles[key].pointsModifiedTime);
+    return times;
+}
+
+- (void)refreshGpxWaypoints:(NSArray<OASWptPt *> *)points
+{
     if (_waypointsMapProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_waypointsMapProvider];
         _waypointsMapProvider = nullptr;
     }
+    _displayedWaypoints = nil;
+    _displayedPointsModifiedTimes = nil;
 
     if (_gpxFiles.allKeys.count > 0)
     {
-        NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
-        
-        for (NSString *key in _gpxFiles.allKeys) {
-            OASGpxFile *value = [_gpxFiles objectForKey:key];
-            if (!value)
-                continue;
-
-            if (value.getPointsList.count > 0)
-            {
-                NSString *filePath = key;
-                OASGpxFile *gpx = [_cachedTracks.allKeys containsObject:filePath]
-                        ? _cachedTracks[filePath][@"gpxFile"]
-                        : key == nil
-                			? OASavingTrackHelper.sharedInstance.currentTrack
-                			: [self getGpxItem:QString::fromNSString(key)];
-
-                for (OASWptPt *waypoint in value.getPointsList)
-                {
-                    OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category ?: @""];
-                    if (!group || !group.hidden)
-                        [points addObject:waypoint];
-                }
-            }
-        }
-        
         const auto rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
         QList<OsmAnd::PointI> hiddenPoints;
         if (_hiddenPointPos31 != OsmAnd::PointI())
@@ -1682,6 +1724,9 @@ colorizationScheme:(int)colorizationScheme
         _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.pointsOrder - (int)points.count - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
+        _displayedWaypoints = [points copy];
+        _displayedPointsModifiedTimes = [self collectPointsModifiedTimes];
+        _waypointsNightMode = self.nightMode;
     }
 }
 

@@ -77,6 +77,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
     private var isDismissingConfigureSheet = false
     private var searchViewController: StarMapSearchViewController?
     private var searchNavigationController: UINavigationController?
+    private var sheetObstructionDisplayLink: CADisplayLink?
     private var regularMapHeightConstraint: NSLayoutConstraint?
     private var mapLocationObserver: OAAutoObserverProxy?
     private var dayNightModeObserver: OAAutoObserverProxy?
@@ -164,6 +165,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        stopSheetObstructionTracking()
         stopAutoTimeUpdate()
         saveStarMapSettings()
         arModeHelper.onPause()
@@ -178,6 +180,7 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
         updateRegularMapLayout()
         layoutRegularMapRenderer()
         cameraHelper.layoutPreview()
+        updateStarViewObstructedInsets()
         
         if OAUtilities.isWindowed() {
             mapControlsContainerTopConstraint?.constant = view.safeAreaInsets.top + Layout.contentPadding * 2
@@ -1234,6 +1237,52 @@ final class StarMapViewController: UIViewController, StarViewDelegate {
             }
         }
         updateMapControlsVisibility()
+    }
+
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+        startSheetObstructionTracking()
+    }
+
+    /// Tells the star view which part of it is covered by the iPad left panel or a presented sheet,
+    /// so direction arrows are drawn in the part that stays visible.
+    private func updateStarViewObstructedInsets() {
+        var insets = UIEdgeInsets.zero
+        if OAUtilities.isIPad(), let panelView = embeddedLeftPanelNavigationController?.view {
+            let panelFrame = panelView.convert(panelView.bounds, to: starView)
+            insets.left = max(0, panelFrame.maxX - starView.bounds.minX)
+        }
+        if presentedViewController?.modalPresentationStyle == .pageSheet,
+           let sheetView = presentedViewController?.viewIfLoaded,
+           sheetView.window != nil {
+            let sheetFrame = sheetView.convert(sheetView.bounds, to: starView)
+            insets.bottom = max(0, starView.bounds.maxY - sheetFrame.minY)
+        }
+        starView.obstructedInsets = insets
+    }
+
+    /// Follows the presented sheet on every frame, including while it is dragged between detents,
+    /// until it is dismissed.
+    private func startSheetObstructionTracking() {
+        guard sheetObstructionDisplayLink == nil,
+              presentedViewController?.modalPresentationStyle == .pageSheet else {
+            return
+        }
+        let link = CADisplayLink(target: self, selector: #selector(handleSheetObstructionFrame))
+        sheetObstructionDisplayLink = link
+        link.add(to: .main, forMode: .common)
+    }
+
+    private func stopSheetObstructionTracking() {
+        sheetObstructionDisplayLink?.invalidate()
+        sheetObstructionDisplayLink = nil
+    }
+
+    @objc private func handleSheetObstructionFrame() {
+        if presentedViewController == nil {
+            stopSheetObstructionTracking()
+        }
+        updateStarViewObstructedInsets()
     }
 
     private func visibleStarMapTargetPoint() -> CGPoint {

@@ -230,7 +230,8 @@
             uint32_t nameId = rdo->namesIds[i].first;
             
             NSString *tag = nil;
-            if (rdo->region)
+            // a route from a GPX can reference names beyond its own types list
+            if (rdo->region && nameId < rdo->region->routeEncodingRules.size())
             {
                 std::string localTagStr = rdo->region->quickGetEncodingRule(nameId).getTag();
                 tag = OAStringFromUTF8Nullable(localTagStr.c_str());

@@ -279,7 +279,7 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-// Listeners are called outside the lock: some wait for the main thread, which may be waiting here in addListener
+// A copy, so that a listener can add or remove listeners from its callback
 - (NSArray<id<OARouteInformationListener>> *) currentListeners
 {
     @synchronized (_listeners)
@@ -358,7 +358,7 @@ static BOOL _isDeviatedFromRoute = false;
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         for (id<OARouteInformationListener> l in [self currentListeners])
         {
             if ([l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
@@ -369,7 +369,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) newRouteCalculated:(BOOL)newRoute
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         for (id<OARouteInformationListener> l in [self currentListeners])
             [l newRouteIsCalculated:newRoute];
     });
@@ -554,7 +554,7 @@ static BOOL _isDeviatedFromRoute = false;
             if (updateAndNotify)
             {
                 [_route updateCurrentRoute:newCurrentRoute + 1];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
                     for (id<OARouteInformationListener> l in [self currentListeners])
                         [l routeWasUpdated];
                 });
@@ -955,7 +955,7 @@ static BOOL _isDeviatedFromRoute = false;
 
         [[OAWaypointHelper sharedInstance] setNewRoute:_route];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             for (id<OARouteInformationListener> l in [self currentListeners])
                 [l routeWasCancelled];
         });
@@ -982,7 +982,7 @@ static BOOL _isDeviatedFromRoute = false;
 {
     @synchronized (self)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             for (id<OARouteInformationListener> l in [self currentListeners])
                 [l routeWasFinished];
         });

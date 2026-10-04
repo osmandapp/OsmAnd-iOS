@@ -21,6 +21,10 @@
     double _freeVal;
 
     unsigned long long _localResourcesSize;
+    unsigned long long _deviceMemoryCapacity;
+    unsigned long long _deviceMemoryAvailable;
+    unsigned long long _documentsSize;
+    NSUInteger _updateGeneration;
 
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _localResourcesChangedObserver;
@@ -55,6 +59,9 @@
     _sysVal = 0;
     _appVal = 0;
     _freeVal = 0;
+    _deviceMemoryCapacity = 1;
+    _deviceMemoryAvailable = 0;
+    _documentsSize = 0;
     
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
@@ -95,47 +102,72 @@
 
 - (void) update
 {
-    NSError *error = nil;
+    // The free space query and the walk over the whole Documents folder (maps, tiles, tracks) can take
+    // seconds on a full device, so both run off the main thread and the bar is redrawn when they are known
+    NSUInteger generation = ++_updateGeneration;
+    unsigned long long localResourcesSize = _localResourcesSize;
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        NSError *error = nil;
 
-    unsigned long long deviceMemoryCapacity = 1;
-    unsigned long long deviceMemoryAvailable = 0;
-    
-    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
-    if (dictionary && !error)
-    {
-        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
-        deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
-        if (deviceMemoryCapacity <= 0)
+        unsigned long long deviceMemoryCapacity = 1;
+        unsigned long long deviceMemoryAvailable = 0;
+
+        NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
+        if (dictionary && !error)
         {
-            NSLog(@"Error obtaining dvice memory capacity");
-            deviceMemoryCapacity = 1;
-        }
-        
-        NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
-        NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
-        if (results)
-            deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
+            NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+            deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
+            if (deviceMemoryCapacity <= 0)
+            {
+                NSLog(@"Error obtaining dvice memory capacity");
+                deviceMemoryCapacity = 1;
+            }
 
-        if (deviceMemoryAvailable == 0)
+            NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
+            NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
+            if (results)
+                deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
+
+            if (deviceMemoryAvailable == 0)
+            {
+                NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
+                deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
+            }
+        }
+        else
         {
-            NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
-            deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
+            NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
         }
-    }
-    else
-    {
-        NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
-    }
 
-    unsigned long long docSize = [OAUtilities folderSize:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
-    docSize += _localResourcesSize;
-    unsigned long long usedBySystem = deviceMemoryCapacity - (docSize + deviceMemoryAvailable);
-    
-    unsigned long long capValue = deviceMemoryCapacity;
-    unsigned long long systemValue = usedBySystem;
-    unsigned long long availValue = deviceMemoryAvailable;
-    unsigned long long docValue = docSize;
-    
+        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + localResourcesSize;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || strongSelf->_updateGeneration != generation)
+                return;
+
+            strongSelf->_deviceMemoryCapacity = deviceMemoryCapacity;
+            strongSelf->_deviceMemoryAvailable = deviceMemoryAvailable;
+            strongSelf->_documentsSize = docSize;
+            [strongSelf applyValues];
+
+            NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
+            strongSelf->_freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+            [strongSelf->_freeMemLabel sizeToFit];
+            [strongSelf setNeedsLayout];
+            [strongSelf setNeedsDisplay];
+        });
+    });
+}
+
+- (void) applyValues
+{
+    unsigned long long capValue = _deviceMemoryCapacity;
+    unsigned long long availValue = _deviceMemoryAvailable;
+    unsigned long long docValue = _documentsSize;
+    unsigned long long systemValue = capValue - (docValue + availValue);
+
     _sysVal = (double) systemValue / capValue;
     _appVal = (double) docValue / capValue;
     _freeVal = (double) availValue / capValue;
@@ -147,9 +179,6 @@
         _appVal = 0;
         _freeVal = 1;
     }
-    NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
-    _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
-    [_freeMemLabel sizeToFit];
 }
 
 - (void) drawRect:(CGRect)rect

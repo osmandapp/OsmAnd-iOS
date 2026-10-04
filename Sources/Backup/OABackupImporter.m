@@ -286,13 +286,18 @@
             BOOL error = errorStr.length > 0;
             if (!error)
             {
-                [reader readFromFile:tempFilePath error:nil];
-                if (forceReadData)
+                // Downloads run in parallel, but items are read and applied one at a time:
+                // several threads writing NSUserDefaults at once starve the main thread's reads
+                @synchronized (OABackupImporter.class)
                 {
-                    if ([item isKindOfClass:OACollectionSettingsItem.class])
-                        [((OACollectionSettingsItem *) item) processDuplicateItems];
-                    
-                    [item apply];
+                    [reader readFromFile:tempFilePath error:nil];
+                    if (forceReadData)
+                    {
+                        if ([item isKindOfClass:OACollectionSettingsItem.class])
+                            [((OACollectionSettingsItem *) item) processDuplicateItems];
+
+                        [item apply];
+                    }
                 }
 
                 [self updateFileMd5Digest:remoteFile item:item];

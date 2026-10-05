@@ -20,7 +20,6 @@
     double _appVal;
     double _freeVal;
 
-    unsigned long long _localResourcesSize;
     unsigned long long _deviceMemoryCapacity;
     unsigned long long _deviceMemoryAvailable;
     unsigned long long _documentsSize;
@@ -30,14 +29,11 @@
     OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize
+- (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
-    {
-        _localResourcesSize = localResourcesSize;
         [self commonInit];
-    }
     return self;
 }
 
@@ -95,18 +91,13 @@
     }
 }
 
-- (void) setLocalResourcesSize:(unsigned long long)size
-{
-    _localResourcesSize = size;
-}
-
 - (void) update
 {
     // The free space query and the walk over the whole Documents folder (maps, tiles, tracks) can take
     // seconds on a full device, so both run off the main thread and the bar is redrawn when they are known
     NSUInteger generation = ++_updateGeneration;
-    unsigned long long localResourcesSize = _localResourcesSize;
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *hiddenMapsPath = [OsmAndApp instance].hiddenMapsPath;
     __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
         NSError *error = nil;
@@ -141,7 +132,8 @@
             NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
         }
 
-        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + localResourcesSize;
+        // Installed maps are in Documents/Resources, hidden maps are in Library/Hidden
+        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + [OAUtilities folderSize:hiddenMapsPath];
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || strongSelf->_updateGeneration != generation)

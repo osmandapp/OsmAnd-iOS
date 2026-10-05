@@ -639,8 +639,15 @@ static const NSInteger _buttonsCount = 4;
 {
     if (!_hiding)
     {
-        // Recompute the offsets for the new size and restore the selected menu mode.
-        [self doLayoutSubviews];
+        // Keep the reading position instead of snapping to the menu mode's anchor.
+        CGPoint offset = self.contentOffset;
+        [self doLayoutSubviews:NO];
+        UIEdgeInsets inset = self.adjustedContentInset;
+        CGFloat minY = -inset.top;
+        CGFloat maxY = MAX(minY, self.contentSize.height - self.bounds.size.height + inset.bottom);
+        offset.y = MIN(MAX(offset.y, minY), maxY);
+        offset.x = 0;
+        [self setContentOffset:offset animated:NO];
         [self setNeedsLayout];
     }
 }

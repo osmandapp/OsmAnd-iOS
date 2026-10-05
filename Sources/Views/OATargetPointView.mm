@@ -669,31 +669,6 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
         }
         // Recompute geometry without snapping the current scroll position to a mode anchor.
         [self doLayoutSubviews:NO];
-        if (![self isLandscape])
-        {
-            // Landscape scrolling can change the visible expansion independently of the saved mode.
-            // Use the same anchor selection as dragging, without applying its snap offset.
-            CGFloat offsetY = self.contentOffset.y;
-            CGFloat headerDist = ABS(offsetY - _headerOffset);
-            CGFloat expandedDist = ABS(offsetY - _fullOffset);
-            CGFloat fullScreenDist = ABS(offsetY - _fullScreenOffset);
-            BOOL supportFull = !self.customController || [self.customController supportFullMenu];
-            BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
-            if (headerDist < expandedDist && headerDist < fullScreenDist)
-            {
-                if (_showFull || _showFullScreen)
-                    [self requestHeaderOnlyMode:NO];
-            }
-            else if (expandedDist < headerDist && expandedDist < fullScreenDist && supportFull)
-            {
-                if (!_showFull || _showFullScreen)
-                    [self requestFullMode:NO];
-            }
-            else if (supportFullScreen && (!_showFull || !_showFullScreen))
-            {
-                [self requestFullScreenMode:NO];
-            }
-        }
         [self setNeedsLayout];
     }
     _rotationInProgress = NO;

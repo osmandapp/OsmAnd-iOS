@@ -139,7 +139,6 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     BOOL _otherCardsReady;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
-    BOOL _detailsButtonHeightUpdatePending;
 }
 
 - (instancetype)init
@@ -1556,50 +1555,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     [hostView addSubview:progressHUD];
     [hostView bringSubviewToFront:progressHUD];
     return progressHUD;
-}
-
-#pragma mark - Menu mode
-
-- (void)goHeaderOnly
-{
-    [super goHeaderOnly];
-    [self scheduleDetailsButtonHeightUpdate];
-}
-
-- (void)goFull
-{
-    [super goFull];
-    [self scheduleDetailsButtonHeightUpdate];
-}
-
-- (void)goFullScreen
-{
-    [super goFullScreen];
-    [self scheduleDetailsButtonHeightUpdate];
-}
-
-- (void)scheduleDetailsButtonHeightUpdate
-{
-    if (_detailsButtonHeightUpdatePending || !self.isViewLoaded || ![self showDetailsButton])
-        return;
-
-    _detailsButtonHeightUpdatePending = YES;
-    __weak __typeof(self) weakSelf = self;
-    // Re-evaluate the mode-dependent row height after the current layout/drag callback.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        if (!strongSelf)
-            return;
-        strongSelf->_detailsButtonHeightUpdatePending = NO;
-        if (strongSelf->_rows.count == 0 || ![strongSelf->_rows.firstObject.typeName isEqualToString:kCollapseDetailsRowType])
-            return;
-
-        [UIView performWithoutAnimation:^{
-            [strongSelf.tableView beginUpdates];
-            [strongSelf.tableView endUpdates];
-        }];
-        [strongSelf updateDetailsButtonTitle];
-    });
 }
 
 #pragma mark - UITableViewDataSource

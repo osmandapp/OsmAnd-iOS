@@ -621,11 +621,47 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+    [self cancelScrollingForRotation];
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
         [self showTopToolbarWithAnimation:NO forceToShowIfTypeFloating:NO];
         [self showBottomToolbar:NO];
     }
+}
+
+- (void)cancelScrollingForRotation
+{
+    NSAssert(NSThread.isMainThread, @"Context menu gestures must be cancelled on the main thread");
+    [self cancelScrollingInView:self];
+}
+
+- (void)finishRotation
+{
+    if (!_hiding)
+    {
+        // Recompute the offsets for the new size and restore the selected menu mode.
+        [self doLayoutSubviews];
+        [self setNeedsLayout];
+    }
+}
+
+- (void)cancelScrollingInView:(UIView *)view
+{
+    if ([view isKindOfClass:UIScrollView.class])
+    {
+        UIScrollView *scrollView = (UIScrollView *)view;
+        // Cancel the current touch sequence before the menu changes geometry.
+        // Keep disabled recognizers disabled (e.g. non-scrolling details tables).
+        UIPanGestureRecognizer *pan = scrollView.panGestureRecognizer;
+        if (pan.enabled)
+        {
+            pan.enabled = NO;
+            pan.enabled = YES;
+        }
+        [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+    }
+    for (UIView *subview in view.subviews)
+        [self cancelScrollingInView:subview];
 }
 
 - (void) clearCustomControllerIfNeeded

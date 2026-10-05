@@ -1134,6 +1134,7 @@ static const NSInteger _buttonsCount = 4;
     {
         _showFull = NO;
         _showFullScreen = NO;
+        [self onMenuStateChanged];
     }
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
     BOOL hasVisibleBottomBar = self.customController && [self.customController hasBottomToolbar] && !self.customController.bottomToolBarView.hidden;

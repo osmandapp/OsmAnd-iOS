@@ -1047,7 +1047,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             fileName = existingFileName
             folder = dataProvider.editTrackFolder
         }
-        dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true) { [weak self] success, filePath in
+        dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true, simplified: false) { [weak self] success, filePath in
             self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
     }
@@ -1122,7 +1122,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         isPendingSaveAsCopy = saveAsCopy
         pendingSegmentPointIndexes = nil
         let fileName = saveAsCopy ? uniqueCopyFileName(for: suggestedFileName) : suggestedFileName
-        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: false, duplicate: false) else { return }
+        guard let vc = OASaveTrackViewController(fileName: fileName, filePath: suggestedFilePath, showOnMap: true, simplifiedTrack: true, duplicate: false) else { return }
         vc.delegate = self
         present(UINavigationController(rootViewController: vc), animated: true)
     }
@@ -1338,9 +1338,9 @@ extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
             pendingSegmentPointIndexes = nil
             dataProvider.saveSegment(pointIndexes: pointIndexes, fileName: fileName, showOnMap: showOnMap, onComplete: onComplete)
         } else if isPendingSaveAsCopy {
-            dataProvider.saveAsCopy(fileName: fileName, folder: nil, showOnMap: showOnMap, onComplete: onComplete)
+            dataProvider.saveAsCopy(fileName: fileName, folder: nil, showOnMap: showOnMap, simplified: simplifiedTrack, onComplete: onComplete)
         } else {
-            dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap, onComplete: onComplete)
+            dataProvider.saveAs(fileName: fileName, folder: nil, showOnMap: showOnMap, simplified: simplifiedTrack, onComplete: onComplete)
         }
     }
 }

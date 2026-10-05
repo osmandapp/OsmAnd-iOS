@@ -1977,6 +1977,7 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
         if (self.mapInfoController.bottomPanelController)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
+        [_mapHudLayout updateButtons];
     };
 
     void (^completionBlock)(BOOL) = ^(BOOL finished) {

@@ -24,6 +24,7 @@
     unsigned long long _deviceMemoryCapacity;
     unsigned long long _deviceMemoryAvailable;
     unsigned long long _documentsSize;
+    BOOL _hasValues;
     NSUInteger _updateGeneration;
 
     OsmAndAppInstance _app;
@@ -108,7 +109,7 @@
     unsigned long long localResourcesSize = _localResourcesSize;
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSError *error = nil;
 
         unsigned long long deviceMemoryCapacity = 1;
@@ -150,6 +151,7 @@
             strongSelf->_deviceMemoryCapacity = deviceMemoryCapacity;
             strongSelf->_deviceMemoryAvailable = deviceMemoryAvailable;
             strongSelf->_documentsSize = docSize;
+            strongSelf->_hasValues = YES;
             [strongSelf applyValues];
 
             NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
@@ -183,12 +185,19 @@
 
 - (void) drawRect:(CGRect)rect
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
-    
     double radius = 3.0f;
     CGRect frame = CGRectMake(15, 35, DeviceScreenWidth - 30, 20);
-    
+
+    if (!_hasValues)
+    {
+        [[UIColor colorNamed:ACColorNameFreeSpaceBgColor] setFill];
+        [[UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:radius] fill];
+        return;
+    }
+
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
+
     /*
     CGFloat compShadow[4] = { 0.2, 0.2, 0.2, 0.9 };
     CGColorRef shadowColor = CGColorCreate(rgbColorspace, compShadow);

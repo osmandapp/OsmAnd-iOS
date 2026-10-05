@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
 {
     OAPortraitRotationModeNone = 0,
     OAPortraitRotationModeHeader,
-    OAPortraitRotationModeFull,
+    OAPortraitRotationModeExpanded,
     OAPortraitRotationModeFullScreen
 };
 
@@ -649,7 +649,7 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
         if (_showFullScreen)
             _portraitRotationMode = OAPortraitRotationModeFullScreen;
         else if (_showFull)
-            _portraitRotationMode = OAPortraitRotationModeFull;
+            _portraitRotationMode = OAPortraitRotationModeExpanded;
         else
             _portraitRotationMode = OAPortraitRotationModeHeader;
     }
@@ -663,7 +663,7 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
     {
         if (![self isLandscape] && _portraitRotationMode != OAPortraitRotationModeNone)
         {
-            _showFull = _portraitRotationMode == OAPortraitRotationModeFull || _portraitRotationMode == OAPortraitRotationModeFullScreen;
+            _showFull = _portraitRotationMode == OAPortraitRotationModeExpanded || _portraitRotationMode == OAPortraitRotationModeFullScreen;
             _showFullScreen = _portraitRotationMode == OAPortraitRotationModeFullScreen;
             [self onMenuStateChanged];
         }

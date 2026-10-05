@@ -45,6 +45,7 @@ static NSString *kGroupRowType = @"kGroupRowType";
 - (void) buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
+- (void) updateDetailsButtonTitle;
 - (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) appendInfoRow:(OAAmenityInfoRow *)row;
 - (void) buildNearestWikiRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;

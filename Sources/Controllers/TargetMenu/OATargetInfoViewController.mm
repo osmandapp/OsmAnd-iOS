@@ -1559,6 +1559,30 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 #pragma mark - UITableViewDataSource
 
+- (void)updateDetailsButtonTitleForCell:(OASimpleTableViewCell *)cell
+{
+    cell.titleLabel.text = OALocalizedString(self.delegate.isInFullMode ? @"shared_string_collapse" : @"shared_string_details").upperCase;
+}
+
+- (void)updateDetailsButtonTitle
+{
+    NSAssert(NSThread.isMainThread, @"Context menu cells must be updated on the main thread");
+    if (_rows.count == 0 || ![_rows.firstObject.typeName isEqualToString:kCollapseDetailsRowType])
+        return;
+
+    // Layout can run while the table is updating. Do not create or reload cells here.
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if ([cell isKindOfClass:OASimpleTableViewCell.class])
+        [self updateDetailsButtonTitleForCell:(OASimpleTableViewCell *)cell];
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < _rows.count && [_rows[indexPath.row].typeName isEqualToString:kCollapseDetailsRowType]
+        && [cell isKindOfClass:OASimpleTableViewCell.class])
+        [self updateDetailsButtonTitleForCell:(OASimpleTableViewCell *)cell];
+}
+
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rows.count;
@@ -1583,10 +1607,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
             [cell anchorContent:EOATableViewCellContentTopStyle];
         }
-        if (self.delegate.isInFullMode)
-            cell.titleLabel.text = OALocalizedString(@"shared_string_collapse").upperCase;
-        else
-            cell.titleLabel.text = OALocalizedString(@"shared_string_details").upperCase;
+        [self updateDetailsButtonTitleForCell:cell];
         return cell;
     }
     else if ([info.typeName isEqualToString:kDescriptionRowType])

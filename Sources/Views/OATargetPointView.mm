@@ -120,6 +120,14 @@ static const CGFloat kTopViewCornerRadius = 10.0;
 
 static const NSInteger _buttonsCount = 4;
 
+typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
+{
+    OAPortraitRotationModeNone = 0,
+    OAPortraitRotationModeHeader,
+    OAPortraitRotationModeExpanded,
+    OAPortraitRotationModeFullScreen
+};
+
 @implementation OATargetPointView
 {
     OAAutoObserverProxy *_locationUpdateObserver;
@@ -134,6 +142,9 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _headerOffset;
     CGFloat _fullOffset;
     CGFloat _fullScreenOffset;
+
+    BOOL _rotationInProgress;
+    OAPortraitRotationMode _portraitRotationMode;
 
     BOOL _hideButtons;
     BOOL _hiding;
@@ -621,6 +632,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+    [self cancelScrollingForRotation];
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
         [self showTopToolbarWithAnimation:NO forceToShowIfTypeFloating:NO];
@@ -628,8 +640,63 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (void)cancelScrollingForRotation
+{
+    NSAssert(NSThread.isMainThread, @"Context menu gestures must be cancelled on the main thread");
+    // Both rotation callbacks may run. Capture the portrait mode only once.
+    if (!_rotationInProgress && ![self isLandscape])
+    {
+        if (_showFullScreen)
+            _portraitRotationMode = OAPortraitRotationModeFullScreen;
+        else if (_showFull)
+            _portraitRotationMode = OAPortraitRotationModeExpanded;
+        else
+            _portraitRotationMode = OAPortraitRotationModeHeader;
+    }
+    _rotationInProgress = YES;
+    [self cancelScrollingInView:self];
+}
+
+- (void)finishRotation
+{
+    if (!_hiding)
+    {
+        if (![self isLandscape] && _portraitRotationMode != OAPortraitRotationModeNone)
+        {
+            _showFull = _portraitRotationMode == OAPortraitRotationModeExpanded || _portraitRotationMode == OAPortraitRotationModeFullScreen;
+            _showFullScreen = _portraitRotationMode == OAPortraitRotationModeFullScreen;
+            [self onMenuStateChanged];
+        }
+        // Recompute geometry without snapping the current scroll position to a mode anchor.
+        [self doLayoutSubviews:NO];
+        [self setNeedsLayout];
+    }
+    _rotationInProgress = NO;
+}
+
+- (void)cancelScrollingInView:(UIView *)view
+{
+    if ([view isKindOfClass:UIScrollView.class])
+    {
+        UIScrollView *scrollView = (UIScrollView *)view;
+        // Cancel the current touch sequence before the menu changes geometry.
+        // Keep disabled recognizers disabled (e.g. non-scrolling details tables).
+        UIPanGestureRecognizer *pan = scrollView.panGestureRecognizer;
+        if (pan.enabled)
+        {
+            pan.enabled = NO;
+            pan.enabled = YES;
+        }
+        [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+    }
+    for (UIView *subview in view.subviews)
+        [self cancelScrollingInView:subview];
+}
+
 - (void) clearCustomControllerIfNeeded
 {
+    _rotationInProgress = NO;
+    _portraitRotationMode = OAPortraitRotationModeNone;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;
@@ -1076,12 +1143,6 @@ static const NSInteger _buttonsCount = 4;
     if (![self isSliding] && !_hiding)
     {
         [self doLayoutSubviews:NO];
-
-        if ([_customController showDetailsButton])
-        {
-            NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-            [((OATargetInfoViewController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
     }
 }
 
@@ -1098,6 +1159,7 @@ static const NSInteger _buttonsCount = 4;
     {
         _showFull = NO;
         _showFullScreen = NO;
+        [self onMenuStateChanged];
     }
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
     BOOL hasVisibleBottomBar = self.customController && [self.customController hasBottomToolbar] && !self.customController.bottomToolBarView.hidden;
@@ -1303,7 +1365,9 @@ static const NSInteger _buttonsCount = 4;
     else
         _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
-    CGFloat contentHeight = _headerY + _fullScreenHeight;
+    // The details row belongs to the content view, whose origin excludes this height.
+    // Match its actual bottom so scrolling cannot expose the map below the card.
+    CGFloat contentHeight = _headerY + _fullScreenHeight - detailsButtonHeight;
     
     if (landscape)
     {
@@ -1464,6 +1528,9 @@ static const NSInteger _buttonsCount = 4;
         [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
     
+    if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
+        [((OATargetInfoViewController *)_customController) updateDetailsButtonTitle];
+
     return newOffset;
 }
 

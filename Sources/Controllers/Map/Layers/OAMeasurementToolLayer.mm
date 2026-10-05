@@ -496,7 +496,7 @@
 
 - (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center
 {
-    if (_editingCtx.inApproximationMode)
+    if (_editingCtx.approximationSessionActive)
     {
         _lastLineCollection->removeAllLines();
         _selectedMarkerCollection->removeAllMarkers();

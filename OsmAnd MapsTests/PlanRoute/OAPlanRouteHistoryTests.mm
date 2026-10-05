@@ -368,7 +368,7 @@
     [self assertFinishedPoints:[self latitudes:self.original]];
 }
 
-- (void)assertApproximationBlocksPointInput
+- (void)assertApproximationBlocksMapTaps
 {
     NSArray *expected = [self latitudes:self.context.getAllPoints];
     BOOL canUndo = self.context.commandManager.canUndo;
@@ -384,12 +384,6 @@
         [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
         [self.bridge onTouch:CLLocationCoordinate2DMake(50, 20) longPress:NO];
         [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:YES];
-        [self.bridge addCenterPoint];
-        [self.bridge addPointAtCoordinate:CLLocationCoordinate2DMake(51, 21)];
-        [self.bridge addPointBeforeIndex:2];
-        [self.bridge addPointAfterIndex:2];
-        [self.bridge addAnotherPoint];
-        [self.bridge applyPointEdit];
     }
     self.bridge.onChange = nil;
     XCTAssertEqualObjects([self latitudes:self.context.getAllPoints], expected);
@@ -403,26 +397,35 @@
     XCTAssertNil(self.layer.pressPointLocation);
 }
 
-- (void)testApproximationWarningBlocksPointInputAndPreservesRedo
+- (void)testApproximationSessionRequiresRoutePoints
+{
+    [self.context clearSegments];
+    XCTAssertNil([self.bridge beginApproximationSession]);
+    XCTAssertFalse(self.context.approximationSessionActive);
+    [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
+    XCTAssertEqual(self.context.getPointsCount, 1);
+}
+
+- (void)testApproximationWarningBlocksMapTapsAndPreservesRedo
 {
     [self addPointNumber:0];
     [self.bridge undo];
     XCTAssertTrue(self.context.commandManager.canRedo);
-    XCTAssertNotNil(self.bridge.approximationWarningViewController);
-    [self assertApproximationBlocksPointInput];
+    XCTAssertNotNil([self.bridge beginApproximationSession]);
+    [self assertApproximationBlocksMapTaps];
     [self.bridge onCancelSnapApproximation:NO];
     [self.bridge onPopupDismissed];
     [self.bridge redo];
     XCTAssertEqual(self.context.getPointsCount, 9);
 }
 
-- (void)testApproximationCalculationAndPreviewBlockPointInput
+- (void)testApproximationCalculationAndPreviewBlockMapTaps
 {
-    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    XCTAssertNotNil([self.bridge beginApproximationSession]);
     [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
-    [self assertApproximationBlocksPointInput];
+    [self assertApproximationBlocksMapTaps];
     self.context.approximationMode = YES;
-    [self assertApproximationBlocksPointInput];
+    [self assertApproximationBlocksMapTaps];
     [self.bridge onApplyGpxApproximation];
     [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
     XCTAssertEqual(self.context.getPointsCount, 9);
@@ -434,37 +437,16 @@
 - (void)testApproximationCancelBeforePreviewPreservesPreviousEditAndAllowsAdding
 {
     [self addPointNumber:0];
-    XCTAssertNotNil(self.bridge.approximationWarningViewController);
+    XCTAssertNotNil([self.bridge beginApproximationSession]);
     [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
     [self.bridge onCancelSnapApproximation:NO];
     [self.bridge onPopupDismissed];
     XCTAssertEqual(self.context.getPointsCount, 9);
-    [self.bridge addPointAtCoordinate:CLLocationCoordinate2DMake(52, 22)];
+    [self.bridge onTouch:CLLocationCoordinate2DMake(52, 22) longPress:NO];
     XCTAssertEqual(self.context.getPointsCount, 10);
     [self.bridge undo];
     [self.bridge undo];
     [self assertFinishedPoints:[self latitudes:self.original]];
-}
-
-- (void)testApproximationBlocksPendingInsertion
-{
-    [self.bridge addPointAfterIndex:2];
-    XCTAssertNotNil(self.bridge.approximationWarningViewController);
-    [self assertApproximationBlocksPointInput];
-    [self.bridge onCancelSnapApproximation:NO];
-    [self.bridge onPopupDismissed];
-    [self.bridge cancelPointEdit];
-    [self assertFinishedPoints:[self latitudes:self.original]];
-}
-
-- (void)testDismissClearsApproximationInputBlockForNextRoute
-{
-    XCTAssertNotNil(self.bridge.approximationWarningViewController);
-    [self.bridge dismiss];
-    XCTAssertFalse(self.context.inApproximationMode);
-    self.layer.editingCtx = self.context;
-    [self.bridge addPointAtCoordinate:CLLocationCoordinate2DMake(51, 21)];
-    XCTAssertEqual(self.context.getPointsCount, 9);
 }
 
 - (void)testApproximationHidesCenterLineAndRestoresItWithoutMapMovement
@@ -481,8 +463,8 @@
 
     for (NSInteger cycle = 0; cycle < 3; cycle++)
     {
-        XCTAssertNotNil(self.bridge.approximationWarningViewController);
-        XCTAssertTrue(self.context.inApproximationMode);
+        XCTAssertNotNil([self.bridge beginApproximationSession]);
+        XCTAssertTrue(self.context.approximationSessionActive);
         [renderLayer drawBeforeAfterPath:center];
         XCTAssertEqual(renderLayer.centerLineCountForTesting, 0);
         [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
@@ -499,7 +481,7 @@
         }
         else
             [self.bridge onPopupDismissed];
-        XCTAssertFalse(self.context.inApproximationMode);
+        XCTAssertFalse(self.context.approximationSessionActive);
         [renderLayer drawBeforeAfterPath:center];
         XCTAssertEqual(renderLayer.centerLineCountForTesting, 1);
         XCTAssertEqual(renderLayer.routeLineCountForTesting, routeLineCount);

@@ -146,7 +146,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAPlanningPopupBaseViewController *_approximationPopupController;
 }
 
-- (BOOL)isApproximationPopupVisible;
 - (void)finishPointEditCancelled:(BOOL)cancelled;
 - (BOOL)beginRouteCalculationIfNeededForContext:(nullable OAMeasurementEditingContext *)ctx
                                            mode:(OAApplicationMode *)mode
@@ -265,12 +264,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx != nil && [ctx shouldCheckApproximation] && [ctx isApproximationNeeded] && [ctx hasTimestamps];
 }
 
-- (BOOL)isApproximationPopupVisible
-{
-    return _approximationPopupController != nil;
-}
-
-- (UIViewController *)approximationWarningViewController
+- (UIViewController *)beginApproximationSession
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.getPointsCount == 0)
@@ -278,7 +272,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
     warningController.delegate = self;
     _approximationPopupController = warningController;
-    ctx.inApproximationMode = YES;
+    ctx.approximationSessionActive = YES;
     return warningController;
 }
 
@@ -336,8 +330,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)addCenterPoint
 {
-    if ([self isApproximationPopupVisible])
-        return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
@@ -370,8 +362,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)dismiss
 {
-    [self editingContext].inApproximationMode = NO;
-    _approximationPopupController = nil;
     [self invalidateElevationCalculationShouldNotify:NO];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx != nil && [ctx hasChanges] && _initialPoiStateSnapshot != nil)
@@ -414,8 +404,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate
 {
-    if ([self isApproximationPopupVisible])
-        return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (layer == nil || ctx == nil)
@@ -1281,8 +1269,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)addPointBeforeIndex:(NSInteger)index
 {
-    if ([self isApproximationPopupVisible])
-        return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
@@ -1301,8 +1287,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)addPointAfterIndex:(NSInteger)index
 {
-    if ([self isApproximationPopupVisible])
-        return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
@@ -1351,8 +1335,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)applyPointEdit
 {
-    if ([self isApproximationPopupVisible])
-        return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
@@ -1383,8 +1365,6 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)addAnotherPoint
 {
-    if ([self isApproximationPopupVisible])
-        return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || !ctx.isInAddPointMode)
@@ -2255,13 +2235,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress
 {
-    if ([self isApproximationPopupVisible])
-        return;
     if (longPress)
         return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || ctx.approximationSessionActive)
         return;
     if (ctx.originalPointToMove != nil || ctx.isInAddPointMode)
         return;
@@ -2724,7 +2702,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onPopupDismissed
 {
-    [self editingContext].inApproximationMode = NO;
+    [self editingContext].approximationSessionActive = NO;
     UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
     _approximationPopupController = nil;
     if (controller.presentingViewController != nil)
@@ -2736,7 +2714,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    ctx.inApproximationMode = NO;
+    ctx.approximationSessionActive = NO;
     if (hasApproximationStarted)
         [ctx.commandManager undo];
     [[self layer] updateLayer];
@@ -2748,12 +2726,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController
 {
     _approximationPopupController = approximationController;
-    [self editingContext].inApproximationMode = YES;
 }
 
 - (void)onApplyGpxApproximation
 {
-    [self editingContext].inApproximationMode = NO;
+    [self editingContext].approximationSessionActive = NO;
     _approximationPopupController = nil;
     [[self layer] updateLayer];
     [self invalidateTerrainElevationGpx];

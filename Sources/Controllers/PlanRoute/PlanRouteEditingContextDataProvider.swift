@@ -151,10 +151,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.shouldShowApproximationWarning
     }
 
-    var approximationWarningViewController: UIViewController? {
-        bridge.approximationWarningViewController
-    }
-
     var canStartNewSegment: Bool {
         bridge.isAddNewSegmentAllowed
     }
@@ -241,6 +237,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                 bridge.addPoint(at: initialPoint)
             }
         }
+    }
+
+    func beginApproximationSession() -> UIViewController? {
+        bridge.beginApproximationSession()
     }
 
     func startElevationCalculation(useNearbyRoads: Bool) {

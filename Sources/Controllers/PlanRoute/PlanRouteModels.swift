@@ -299,10 +299,10 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var isApproximationNeeded: Bool { get }
     var shouldRequestApproximationBeforeNavigation: Bool { get }
     var shouldShowApproximationWarning: Bool { get }
-    var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 
+    func beginApproximationSession() -> UIViewController?
     func addRoutePoint()
     func undo()
     func redo()

@@ -120,6 +120,14 @@ static const CGFloat kTopViewCornerRadius = 10.0;
 
 static const NSInteger _buttonsCount = 4;
 
+typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
+{
+    OAPortraitRotationModeNone = 0,
+    OAPortraitRotationModeHeader,
+    OAPortraitRotationModeFull,
+    OAPortraitRotationModeFullScreen
+};
+
 @implementation OATargetPointView
 {
     OAAutoObserverProxy *_locationUpdateObserver;
@@ -136,9 +144,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _fullScreenOffset;
 
     BOOL _rotationInProgress;
-    BOOL _hasPortraitRotationMode;
-    BOOL _portraitRotationShowFull;
-    BOOL _portraitRotationShowFullScreen;
+    OAPortraitRotationMode _portraitRotationMode;
 
     BOOL _hideButtons;
     BOOL _hiding;
@@ -640,9 +646,12 @@ static const NSInteger _buttonsCount = 4;
     // Both rotation callbacks may run. Capture the portrait mode only once.
     if (!_rotationInProgress && ![self isLandscape])
     {
-        _hasPortraitRotationMode = YES;
-        _portraitRotationShowFull = _showFull;
-        _portraitRotationShowFullScreen = _showFullScreen;
+        if (_showFullScreen)
+            _portraitRotationMode = OAPortraitRotationModeFullScreen;
+        else if (_showFull)
+            _portraitRotationMode = OAPortraitRotationModeFull;
+        else
+            _portraitRotationMode = OAPortraitRotationModeHeader;
     }
     _rotationInProgress = YES;
     [self cancelScrollingInView:self];
@@ -652,10 +661,10 @@ static const NSInteger _buttonsCount = 4;
 {
     if (!_hiding)
     {
-        if (![self isLandscape] && _hasPortraitRotationMode)
+        if (![self isLandscape] && _portraitRotationMode != OAPortraitRotationModeNone)
         {
-            _showFull = _portraitRotationShowFull;
-            _showFullScreen = _portraitRotationShowFullScreen;
+            _showFull = _portraitRotationMode == OAPortraitRotationModeFull || _portraitRotationMode == OAPortraitRotationModeFullScreen;
+            _showFullScreen = _portraitRotationMode == OAPortraitRotationModeFullScreen;
             [self onMenuStateChanged];
         }
         // Recompute geometry without snapping the current scroll position to a mode anchor.
@@ -687,7 +696,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) clearCustomControllerIfNeeded
 {
     _rotationInProgress = NO;
-    _hasPortraitRotationMode = NO;
+    _portraitRotationMode = OAPortraitRotationModeNone;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;

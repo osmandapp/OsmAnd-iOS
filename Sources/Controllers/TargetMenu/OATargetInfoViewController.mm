@@ -139,6 +139,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     BOOL _otherCardsReady;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
+    BOOL _detailsButtonHeightUpdatePending;
 }
 
 - (instancetype)init
@@ -1557,6 +1558,50 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     return progressHUD;
 }
 
+#pragma mark - Menu mode
+
+- (void)goHeaderOnly
+{
+    [super goHeaderOnly];
+    [self scheduleDetailsButtonHeightUpdate];
+}
+
+- (void)goFull
+{
+    [super goFull];
+    [self scheduleDetailsButtonHeightUpdate];
+}
+
+- (void)goFullScreen
+{
+    [super goFullScreen];
+    [self scheduleDetailsButtonHeightUpdate];
+}
+
+- (void)scheduleDetailsButtonHeightUpdate
+{
+    if (_detailsButtonHeightUpdatePending || !self.isViewLoaded || ![self showDetailsButton])
+        return;
+
+    _detailsButtonHeightUpdatePending = YES;
+    __weak OATargetInfoViewController *weakSelf = self;
+    // Re-evaluate the mode-dependent row height after the current layout/drag callback.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OATargetInfoViewController *strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        strongSelf->_detailsButtonHeightUpdatePending = NO;
+        if (strongSelf->_rows.count == 0 || ![strongSelf->_rows.firstObject.typeName isEqualToString:kCollapseDetailsRowType])
+            return;
+
+        [UIView performWithoutAnimation:^{
+            [strongSelf.tableView beginUpdates];
+            [strongSelf.tableView endUpdates];
+        }];
+        [strongSelf updateDetailsButtonTitle];
+    });
+}
+
 #pragma mark - UITableViewDataSource
 
 - (void)updateDetailsButtonTitle
@@ -1568,7 +1613,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     // Layout can run while the table is updating. Do not create or reload cells here.
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     if ([cell isKindOfClass:OASimpleTableViewCell.class])
-        ((OASimpleTableViewCell *)cell).titleLabel.text = OALocalizedString(self.delegate.isInFullMode ? @"shared_string_collapse" : @"shared_string_details").uppercaseString;
+        ((OASimpleTableViewCell *)cell).titleLabel.text = OALocalizedString(self.delegate.isInFullMode ? @"shared_string_collapse" : @"shared_string_details").upperCase;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

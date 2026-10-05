@@ -169,12 +169,6 @@ static const NSInteger kOrderRegionPopulationRow = 3;
     return YES;
 }
 
-- (CGFloat)getToolBarHeight
-{
-    // This card has no bottom toolbar; do not reserve its height below the rows.
-    return 0.;
-}
-
 - (BOOL) shouldShowToolbar
 {
     return YES;

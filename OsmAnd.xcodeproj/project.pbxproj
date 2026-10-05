@@ -3450,6 +3450,8 @@
 		FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */; };
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */; };
+		FA4713E22E0E937500DC518F /* PhotoListCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713E12E0E937500DC518F /* PhotoListCache.swift */; };
+		FA4713E62E0E937500DC518F /* WikiNetworkResponseListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713E52E0E937500DC518F /* WikiNetworkResponseListener.swift */; };
 		FA4713E42E0E937500DC518F /* WikiImagesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713E32E0E937500DC518F /* WikiImagesLoader.swift */; };
 		FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */; };
 		FA4768B52A67B86400D533E8 /* FreeBackupBanner.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */; };
@@ -8490,6 +8492,8 @@
 		FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxLoadOperation.swift; sourceTree = "<group>"; };
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionConfigProvider.swift; sourceTree = "<group>"; };
+		FA4713E12E0E937500DC518F /* PhotoListCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCache.swift; sourceTree = "<group>"; };
+		FA4713E52E0E937500DC518F /* WikiNetworkResponseListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiNetworkResponseListener.swift; sourceTree = "<group>"; };
 		FA4713E32E0E937500DC518F /* WikiImagesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImagesLoader.swift; sourceTree = "<group>"; };
 		FA4768B22A66E73000D533E8 /* FreeBackupBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBanner.swift; sourceTree = "<group>"; };
 		FA4768B42A67B86400D533E8 /* FreeBackupBanner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FreeBackupBanner.xib; sourceTree = "<group>"; };
@@ -14564,6 +14568,8 @@
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */,
 				FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */,
+				FA4713E12E0E937500DC518F /* PhotoListCache.swift */,
+				FA4713E52E0E937500DC518F /* WikiNetworkResponseListener.swift */,
 				FA4713E32E0E937500DC518F /* WikiImagesLoader.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
@@ -18775,6 +18781,8 @@
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,
 				CEDB71E52FD993C3009DAA0D /* TrackStatsTableCell.swift in Sources */,
 				FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */,
+				FA4713E22E0E937500DC518F /* PhotoListCache.swift in Sources */,
+				FA4713E62E0E937500DC518F /* WikiNetworkResponseListener.swift in Sources */,
 				FA4713E42E0E937500DC518F /* WikiImagesLoader.swift in Sources */,
 				FAC166262B21BEF900D63755 /* SBError.swift in Sources */,
 				DA5A825226C563A700F274C7 /* OANavigationTypeViewController.mm in Sources */,

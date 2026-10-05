@@ -11,14 +11,14 @@ import OsmAndShared
 
 @objcMembers
 final class WikiImagesLoader: NSObject {
-    private let cache = AstroPhotoListCache()
+    private let cache = PhotoListCache()
     private var activeToken: UUID?
 
     private static func requestImages(tags: [String: String],
-                                      cache: AstroPhotoListCache,
+                                      cache: PhotoListCache,
                                       rawKey: String) -> [OsmAndShared.WikiImage]? {
         var rawResponse: String?
-        let listener = AstroGalleryNetworkResponseListener { rawResponse = $0 }
+        let listener = WikiNetworkResponseListener { rawResponse = $0 }
         let images = WikiCoreHelper.shared.getWikiImageList(tags: tags, listener: listener)
         guard let rawResponse else {
             return nil
@@ -27,7 +27,7 @@ final class WikiImagesLoader: NSObject {
         return images
     }
 
-    private static func cachedImages(cache: AstroPhotoListCache,
+    private static func cachedImages(cache: PhotoListCache,
                                      rawKey: String,
                                      wikiTagData: WikiHelper.WikiTagData) -> [OsmAndShared.WikiImage] {
         guard let json = cache.load(rawKey: rawKey), !json.isEmpty else {

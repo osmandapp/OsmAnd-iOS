@@ -1559,6 +1559,18 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 #pragma mark - UITableViewDataSource
 
+- (void)updateDetailsButtonTitle
+{
+    NSAssert(NSThread.isMainThread, @"Context menu cells must be updated on the main thread");
+    if (_rows.count == 0 || ![_rows.firstObject.typeName isEqualToString:kCollapseDetailsRowType])
+        return;
+
+    // Layout can run while the table is updating. Do not create or reload cells here.
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if ([cell isKindOfClass:OASimpleTableViewCell.class])
+        ((OASimpleTableViewCell *)cell).titleLabel.text = OALocalizedString(self.delegate.isInFullMode ? @"shared_string_collapse" : @"shared_string_details").uppercaseString;
+}
+
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rows.count;

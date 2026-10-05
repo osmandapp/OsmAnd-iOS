@@ -1077,10 +1077,9 @@ static const NSInteger _buttonsCount = 4;
     {
         [self doLayoutSubviews:NO];
 
-        if ([_customController showDetailsButton])
+        if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
         {
-            NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-            [((OATargetInfoViewController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [((OATargetInfoViewController *)_customController) updateDetailsButtonTitle];
         }
     }
 }

@@ -2094,7 +2094,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     [_wikiImagesLoader loadWithTags:[self additionalCardParams] onComplete:^(NSArray<AbstractCard *> *cards) {
         weakSelf.wikiCardsReady = YES;
         [weakSelf sendNearbyOtherImagesRequest:[cards mutableCopy] onFailureNoCache:onFailureNoCache];
-    } onFailureNoCache:onFailureNoCache];
+    }];
 }
 
 - (NSURLSession *)onlineAndMapillarySession

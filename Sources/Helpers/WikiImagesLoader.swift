@@ -14,13 +14,30 @@ final class WikiImagesLoader: NSObject {
     private let cache = AstroPhotoListCache()
     private var activeToken: UUID?
 
-    private static func cachedImages(_ cache: AstroPhotoListCache,
+    private static func requestImages(tags: [String: String],
+                                      cache: AstroPhotoListCache,
+                                      rawKey: String) -> [OsmAndShared.WikiImage]? {
+        var rawResponse: String?
+        let listener = AstroGalleryNetworkResponseListener { rawResponse = $0 }
+        let images = WikiCoreHelper.shared.getWikiImageList(tags: tags, listener: listener)
+        guard let rawResponse else {
+            return nil
+        }
+        cache.save(rawKey: rawKey, json: rawResponse)
+        return images
+    }
+
+    private static func cachedImages(cache: AstroPhotoListCache,
                                      rawKey: String,
                                      wikiTagData: WikiHelper.WikiTagData) -> [OsmAndShared.WikiImage] {
         guard let json = cache.load(rawKey: rawKey), !json.isEmpty else {
             return []
         }
         return WikiCoreHelper.shared.getImagesFromJson(json: json, wikiImages: wikiTagData.wikiImages)
+    }
+
+    private static func tagImages(_ wikiTagData: WikiHelper.WikiTagData) -> [OsmAndShared.WikiImage] {
+        wikiTagData.wikiImages.compactMap { $0 as? OsmAndShared.WikiImage }
     }
 
     private static func buildRawKey(_ wikiTagData: WikiHelper.WikiTagData) -> String {
@@ -34,7 +51,7 @@ final class WikiImagesLoader: NSObject {
         if let wikiTitle = wikiTagData.wikiTitle, !wikiTitle.isEmpty {
             params.append("wiki=\(wikiTitle)")
         }
-        if let file = (wikiTagData.wikiImages.firstObject as? OsmAndShared.WikiImage)?.wikiMediaTag {
+        if let file = tagImages(wikiTagData).first?.wikiMediaTag {
             params.append("file=\(file)")
         }
         return params.joined(separator: "&")
@@ -44,9 +61,7 @@ final class WikiImagesLoader: NSObject {
         images.map { WikiImageCard(wikiImage: WikiImage($0), type: "wikimedia-photo") }
     }
 
-    func load(tags: [String: String],
-              onComplete: @escaping ([AbstractCard]) -> Void,
-              onFailureNoCache: @escaping () -> Void) {
+    func load(tags: [String: String], onComplete: @escaping ([AbstractCard]) -> Void) {
         cancel()
         let wikiTagData = WikiHelper.shared.extractWikiTagData(tags: tags)
         let rawKey = Self.buildRawKey(wikiTagData)
@@ -56,40 +71,21 @@ final class WikiImagesLoader: NSObject {
             }
             return
         }
-        guard AFNetworkReachabilityManagerWrapper.isReachable() else {
-            loadFromCache(rawKey: rawKey, wikiTagData: wikiTagData, onComplete: onComplete, onFailureNoCache: onFailureNoCache)
-            return
-        }
 
+        let isReachable = AFNetworkReachabilityManagerWrapper.isReachable()
         run({ [cache] in
-            var rawResponse: String?
-            let listener = AstroGalleryNetworkResponseListener { rawResponse = $0 }
-            let images = WikiCoreHelper.shared.getWikiImageList(tags: tags, listener: listener)
-            guard let rawResponse else {
-                return cache.exists(rawKey: rawKey) ? Self.cachedImages(cache, rawKey: rawKey, wikiTagData: wikiTagData) : images
+            if isReachable, let images = Self.requestImages(tags: tags, cache: cache, rawKey: rawKey) {
+                return images
             }
-            cache.save(rawKey: rawKey, json: rawResponse)
-            return images
+            if cache.exists(rawKey: rawKey) {
+                return Self.cachedImages(cache: cache, rawKey: rawKey, wikiTagData: wikiTagData)
+            }
+            return Self.tagImages(wikiTagData)
         }, onComplete: onComplete)
     }
 
     func cancel() {
         activeToken = nil
-    }
-
-    private func loadFromCache(rawKey: String,
-                               wikiTagData: WikiHelper.WikiTagData,
-                               onComplete: @escaping ([AbstractCard]) -> Void,
-                               onFailureNoCache: @escaping () -> Void) {
-        guard cache.exists(rawKey: rawKey) else {
-            DispatchQueue.main.async {
-                onFailureNoCache()
-            }
-            return
-        }
-        run({ [cache] in
-            Self.cachedImages(cache, rawKey: rawKey, wikiTagData: wikiTagData)
-        }, onComplete: onComplete)
     }
 
     private func run(_ work: @escaping () -> [OsmAndShared.WikiImage],

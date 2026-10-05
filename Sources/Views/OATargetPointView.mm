@@ -1302,7 +1302,9 @@ static const NSInteger _buttonsCount = 4;
     else
         _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
-    CGFloat contentHeight = _headerY + _fullScreenHeight;
+    // The details row belongs to the content view, whose origin excludes this height.
+    // Match its actual bottom so scrolling cannot expose the map below the card.
+    CGFloat contentHeight = _headerY + _fullScreenHeight - detailsButtonHeight;
     
     if (landscape)
     {

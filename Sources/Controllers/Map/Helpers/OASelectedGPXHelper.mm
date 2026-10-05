@@ -199,6 +199,11 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 
 - (OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt
 {
+    OASGpxFile *identicalGpxFile = nil;
+    NSString *path = nil;
+    if ([self findGpxFile:&identicalGpxFile path:&path containingWaypoint:gpxWpt])
+        return identicalGpxFile;
+
     for (OASGpxFile *gpxFile in _activeGpx.allValues) {
         if ([[gpxFile getPointsList] containsObject:gpxWpt] || [[gpxFile getRoutePoints] containsObject:gpxWpt])
             return gpxFile;
@@ -209,6 +214,35 @@ static NSString *kBackupSuffix = @"_osmand_backup";
         return currentTrack;
     
     return nil;
+}
+
+- (BOOL)findGpxFile:(OASGpxFile * _Nullable *)gpxFile path:(NSString * _Nullable *)path containingWaypoint:(OASWptPt *)gpxWpt
+{
+    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+    if ([self gpxFile:currentTrack containsIdenticalWaypoint:gpxWpt])
+    {
+        *gpxFile = currentTrack;
+        *path = nil;
+        return YES;
+    }
+
+    for (NSString *activePath in _activeGpx.allKeys)
+    {
+        OASGpxFile *activeGpxFile = _activeGpx[activePath];
+        if ([self gpxFile:activeGpxFile containsIdenticalWaypoint:gpxWpt])
+        {
+            *gpxFile = activeGpxFile;
+            *path = activePath;
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)gpxFile:(OASGpxFile *)gpxFile containsIdenticalWaypoint:(OASWptPt *)gpxWpt
+{
+    return gpxFile && ([[gpxFile getPointsList] indexOfObjectIdenticalTo:gpxWpt] != NSNotFound
+                       || [[gpxFile getRoutePoints] indexOfObjectIdenticalTo:gpxWpt] != NSNotFound);
 }
 
 - (BOOL)isShowingAnyGpxFiles

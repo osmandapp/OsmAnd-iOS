@@ -135,6 +135,11 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _fullOffset;
     CGFloat _fullScreenOffset;
 
+    BOOL _rotationInProgress;
+    BOOL _hasPortraitRotationMode;
+    BOOL _portraitRotationShowFull;
+    BOOL _portraitRotationShowFullScreen;
+
     BOOL _hideButtons;
     BOOL _hiding;
     BOOL _toolbarAnimating;
@@ -632,6 +637,14 @@ static const NSInteger _buttonsCount = 4;
 - (void)cancelScrollingForRotation
 {
     NSAssert(NSThread.isMainThread, @"Context menu gestures must be cancelled on the main thread");
+    // Both rotation callbacks may run. Capture the portrait mode only once.
+    if (!_rotationInProgress && ![self isLandscape])
+    {
+        _hasPortraitRotationMode = YES;
+        _portraitRotationShowFull = _showFull;
+        _portraitRotationShowFullScreen = _showFullScreen;
+    }
+    _rotationInProgress = YES;
     [self cancelScrollingInView:self];
 }
 
@@ -639,10 +652,17 @@ static const NSInteger _buttonsCount = 4;
 {
     if (!_hiding)
     {
-        // Recompute the offsets for the new size and restore the selected menu mode.
-        [self doLayoutSubviews];
+        if (![self isLandscape] && _hasPortraitRotationMode)
+        {
+            _showFull = _portraitRotationShowFull;
+            _showFullScreen = _portraitRotationShowFullScreen;
+            [self onMenuStateChanged];
+        }
+        // Recompute geometry without snapping the current scroll position to a mode anchor.
+        [self doLayoutSubviews:NO];
         [self setNeedsLayout];
     }
+    _rotationInProgress = NO;
 }
 
 - (void)cancelScrollingInView:(UIView *)view
@@ -666,6 +686,8 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) clearCustomControllerIfNeeded
 {
+    _rotationInProgress = NO;
+    _hasPortraitRotationMode = NO;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;

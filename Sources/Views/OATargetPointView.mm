@@ -1112,11 +1112,6 @@ static const NSInteger _buttonsCount = 4;
     if (![self isSliding] && !_hiding)
     {
         [self doLayoutSubviews:NO];
-
-        if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
-        {
-            [((OATargetInfoViewController *)_customController) updateDetailsButtonTitle];
-        }
     }
 }
 
@@ -1501,6 +1496,9 @@ static const NSInteger _buttonsCount = 4;
         [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
     
+    if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
+        [((OATargetInfoViewController *)_customController) updateDetailsButtonTitle];
+
     return newOffset;
 }
 

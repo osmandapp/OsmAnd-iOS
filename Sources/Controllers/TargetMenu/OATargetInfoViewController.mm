@@ -1584,10 +1584,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         return;
 
     _detailsButtonHeightUpdatePending = YES;
-    __weak OATargetInfoViewController *weakSelf = self;
+    __weak __typeof(self) weakSelf = self;
     // Re-evaluate the mode-dependent row height after the current layout/drag callback.
     dispatch_async(dispatch_get_main_queue(), ^{
-        OATargetInfoViewController *strongSelf = weakSelf;
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
             return;
         strongSelf->_detailsButtonHeightUpdatePending = NO;

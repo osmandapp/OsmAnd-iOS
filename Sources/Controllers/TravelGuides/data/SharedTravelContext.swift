@@ -153,8 +153,8 @@ enum SharedTravelArticles {
         shared.content = article.content
         shared.isPartOf = article.isPartOf
         shared.isParentOf = article.isParentOf ?? ""
-        shared.lat_ = article.lat
-        shared.lon_ = article.lon
+        shared.lat = article.lat
+        shared.lon = article.lon
         shared.imageTitle = article.imageTitle
         shared.routeId = article.routeId
         shared.ref = article.ref

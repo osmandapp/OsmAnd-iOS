@@ -120,14 +120,6 @@ static const CGFloat kTopViewCornerRadius = 10.0;
 
 static const NSInteger _buttonsCount = 4;
 
-typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
-{
-    OAPortraitRotationModeNone = 0,
-    OAPortraitRotationModeHeader,
-    OAPortraitRotationModeExpanded,
-    OAPortraitRotationModeFullScreen
-};
-
 @implementation OATargetPointView
 {
     OAAutoObserverProxy *_locationUpdateObserver;
@@ -144,7 +136,6 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
     CGFloat _fullScreenOffset;
 
     BOOL _rotationInProgress;
-    OAPortraitRotationMode _portraitRotationMode;
 
     BOOL _hideButtons;
     BOOL _hiding;
@@ -643,16 +634,9 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
 - (void)cancelScrollingForRotation
 {
     NSAssert(NSThread.isMainThread, @"Context menu gestures must be cancelled on the main thread");
-    // Both rotation callbacks may run. Capture the portrait mode only once.
-    if (!_rotationInProgress && ![self isLandscape])
-    {
-        if (_showFullScreen)
-            _portraitRotationMode = OAPortraitRotationModeFullScreen;
-        else if (_showFull)
-            _portraitRotationMode = OAPortraitRotationModeExpanded;
-        else
-            _portraitRotationMode = OAPortraitRotationModeHeader;
-    }
+    // Both rotation callbacks may run. Cancel the gesture only once per transition.
+    if (_rotationInProgress)
+        return;
     _rotationInProgress = YES;
     [self cancelScrollingInView:self];
 }
@@ -661,17 +645,41 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
 {
     if (!_hiding)
     {
-        if (![self isLandscape] && _portraitRotationMode != OAPortraitRotationModeNone)
-        {
-            _showFull = _portraitRotationMode == OAPortraitRotationModeExpanded || _portraitRotationMode == OAPortraitRotationModeFullScreen;
-            _showFullScreen = _portraitRotationMode == OAPortraitRotationModeFullScreen;
-            [self onMenuStateChanged];
-        }
         // Recompute geometry without snapping the current scroll position to a mode anchor.
         [self doLayoutSubviews:NO];
+        if (![self isLandscape])
+            [self updateModeAfterRotation];
         [self setNeedsLayout];
     }
     _rotationInProgress = NO;
+}
+
+- (void)updateModeAfterRotation
+{
+    // Match normal drag mode selection, but keep the current reading position.
+    CGFloat offsetY = self.contentOffset.y;
+    CGFloat headerDist = ABS(offsetY - _headerOffset);
+    CGFloat expandedDist = ABS(offsetY - _fullOffset);
+    CGFloat fullScreenDist = ABS(offsetY - _fullScreenOffset);
+    BOOL supportFull = !self.customController || [self.customController supportFullMenu];
+    BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
+
+    if (headerDist < expandedDist && headerDist < fullScreenDist)
+    {
+        [self requestHeaderOnlyMode:NO];
+    }
+    else if (expandedDist < headerDist && expandedDist < fullScreenDist && supportFull)
+    {
+        [self requestFullMode:NO];
+    }
+    else if (supportFullScreen)
+    {
+        [self requestFullScreenMode:NO];
+    }
+    else
+    {
+        [self requestHeaderOnlyMode:NO];
+    }
 }
 
 - (void)cancelScrollingInView:(UIView *)view
@@ -696,7 +704,6 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
 - (void) clearCustomControllerIfNeeded
 {
     _rotationInProgress = NO;
-    _portraitRotationMode = OAPortraitRotationModeNone;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;
@@ -1143,6 +1150,12 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
     if (![self isSliding] && !_hiding)
     {
         [self doLayoutSubviews:NO];
+
+        if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
+        {
+            NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
+            [((OATargetInfoViewController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
 }
 
@@ -1528,9 +1541,6 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
         [OAUtilities setMaskTo:self.containerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
     }
     
-    if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
-        [((OATargetInfoViewController *)_customController) updateDetailsButtonTitle];
-
     return newOffset;
 }
 
@@ -2683,6 +2693,8 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
     if (copysign(1.0, newOffset.y - targetContentOffset->y) != copysign(1.0, velocity.y))
     {
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (_rotationInProgress)
+                return;
             [self setContentOffset:newOffset animated:YES];
         });
     }
@@ -2694,6 +2706,12 @@ typedef NS_ENUM(NSInteger, OAPortraitRotationMode)
 
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    // Cancelling the pan during rotation must not select a mode or dismiss the menu.
+    if (_rotationInProgress)
+    {
+        *targetContentOffset = scrollView.contentOffset;
+        return;
+    }
     //BOOL slidingUp = velocity.y > 0;
     BOOL slidingDown = velocity.y < -0.3;
     

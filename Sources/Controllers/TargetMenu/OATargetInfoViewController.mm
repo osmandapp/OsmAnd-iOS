@@ -835,9 +835,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     if (_calculatedWidth != width)
     {
         [self calculateRowsHeight:width];
-        [self calculateContentHeight];
         _calculatedWidth = width;
     }
+    // Cell configuration can update row heights without changing the width.
+    [self calculateContentHeight];
     return _contentHeight;
 }
 
@@ -845,9 +846,18 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     CGFloat h = 0;
     for (OAAmenityInfoRow *row in _rows)
-        h += row.height;
+        h += [self heightForInfoRow:row];
 
     _contentHeight = h;
+}
+
+- (CGFloat)heightForInfoRow:(OAAmenityInfoRow *)info
+{
+    if ([info.typeName isEqualToString:kGroupRowType])
+        return info.height + 16;
+    if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
+        return info.height + OAUtilities.getBottomMargin;
+    return info.height;
 }
 
 - (void)cancelPressed
@@ -891,9 +901,16 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     __weak __typeof(self) weakSelf = self;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakSelf.tableView reloadData];
-    } completion:nil];
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        // Reload at the final width, then update the outer scroll extent using the laid-out rows.
+        [strongSelf contentHeight:strongSelf.tableView.bounds.size.width];
+        [strongSelf.tableView reloadData];
+        [strongSelf.tableView layoutIfNeeded];
+        [strongSelf.delegate contentHeightChanged];
+    }];
 }
 
 - (void)updateNavBarSubviewsLayout
@@ -1559,30 +1576,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 #pragma mark - UITableViewDataSource
 
-- (void)updateDetailsButtonTitleForCell:(OASimpleTableViewCell *)cell
-{
-    cell.titleLabel.text = OALocalizedString(self.delegate.isInFullMode ? @"shared_string_collapse" : @"shared_string_details").upperCase;
-}
-
-- (void)updateDetailsButtonTitle
-{
-    NSAssert(NSThread.isMainThread, @"Context menu cells must be updated on the main thread");
-    if (_rows.count == 0 || ![_rows.firstObject.typeName isEqualToString:kCollapseDetailsRowType])
-        return;
-
-    // Layout can run while the table is updating. Do not create or reload cells here.
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    if ([cell isKindOfClass:OASimpleTableViewCell.class])
-        [self updateDetailsButtonTitleForCell:(OASimpleTableViewCell *)cell];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row < _rows.count && [_rows[indexPath.row].typeName isEqualToString:kCollapseDetailsRowType]
-        && [cell isKindOfClass:OASimpleTableViewCell.class])
-        [self updateDetailsButtonTitleForCell:(OASimpleTableViewCell *)cell];
-}
-
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rows.count;
@@ -1607,7 +1600,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
             [cell anchorContent:EOATableViewCellContentTopStyle];
         }
-        [self updateDetailsButtonTitleForCell:cell];
+        if (self.delegate.isInFullMode)
+            cell.titleLabel.text = OALocalizedString(@"shared_string_collapse").upperCase;
+        else
+            cell.titleLabel.text = OALocalizedString(@"shared_string_details").upperCase;
         return cell;
     }
     else if ([info.typeName isEqualToString:kDescriptionRowType])
@@ -1861,14 +1857,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
-    if ([info.typeName isEqualToString:kGroupRowType])
-        return info.height + 16;
-    if ([info.typeName isEqualToString:kDescriptionRowType])
-        return info.height;
-    else if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
-        return info.height + OAUtilities.getBottomMargin;
-    else
-        return info.height;
+    return [self heightForInfoRow:info];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath

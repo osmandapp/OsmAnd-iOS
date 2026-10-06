@@ -2507,8 +2507,11 @@ static const NSInteger _buttonsCount = 4;
         newOffset = _customController.needsLayoutOnModeChange ? [self doLayoutSubviews:NO] : [self calculateNewOffset];
         if (!_showFullScreen)
         {
+            // Rotation keeps the reading position; a normal drag snaps to the mode anchor.
+            BOOL useCurrentOffset = _rotationInProgress;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
+                CGFloat height = useCurrentOffset ? [self getVisibleHeight] : [self getVisibleHeightWithOffset:newOffset];
+                [self.menuViewDelegate targetViewHeightChanged:height animated:YES];
             });
         }
     }

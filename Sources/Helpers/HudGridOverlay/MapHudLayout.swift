@@ -217,6 +217,12 @@ final class MapHudLayout: NSObject {
         refresh()
     }
     
+    func isOnRightSide(_ frame: CGRect) -> Bool {
+        let leftGap = frame.minX - leftInset - externalLeftOverlayPx
+        let rightGap = containerView.bounds.width - frame.maxX - rightInset
+        return leftGap > rightGap
+    }
+
     func onContainerSizeChanged() {
         let safeAreaIns = containerView.safeAreaInsets
         let insetChanged = topInset != safeAreaIns.top || bottomInset != safeAreaIns.bottom || leftInset != safeAreaIns.left || rightInset != safeAreaIns.right

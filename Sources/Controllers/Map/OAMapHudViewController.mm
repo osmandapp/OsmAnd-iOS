@@ -1745,15 +1745,27 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     // Only reserve horizontal space for views that actually overlap its row.
     UIView *leftPanelView = [_mapInfoController.leftPanelController hasWidgets] ? _mapInfoController.leftPanelController.viewIfLoaded : nil;
     UIView *rightPanelView = [_mapInfoController.rightPanelController hasWidgets] ? _mapInfoController.rightPanelController.viewIfLoaded : nil;
-    UIView *viewsToAvoid[] = {leftPanelView, rightPanelView, self.mapSettingsButton, self.searchButton, self.compassButton};
-    for (UIView *view : viewsToAvoid)
+    NSMutableArray<UIView *> *viewsToAvoid = [NSMutableArray array];
+    if (leftPanelView)
+        [viewsToAvoid addObject:leftPanelView];
+    if (rightPanelView)
+        [viewsToAvoid addObject:rightPanelView];
+    
+    for (UIView *subview in self.view.subviews)
+    {
+        if ([subview isKindOfClass:OAHudButton.class])
+            [viewsToAvoid addObject:subview];
+    }
+    
+    for (UIView *view in viewsToAvoid)
     {
         if (!view.superview || view.hidden || view.alpha <= 0)
             continue;
         CGRect viewFrame = [view convertRect:view.bounds toView:self.view];
         if (!CGRectIntersectsRect(frame, viewFrame))
             continue;
-        if (view == rightPanelView)
+        BOOL isOnRightSide = view == rightPanelView || (view != leftPanelView && [self.mapHudLayout isOnRightSide:viewFrame]);
+        if (isOnRightSide)
             rightMargin = MAX(rightMargin, availableWidth - CGRectGetMinX(viewFrame) + kButtonOffset);
         else
             leftMargin = MAX(leftMargin, CGRectGetMaxX(viewFrame) + kButtonOffset);
@@ -1813,7 +1825,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         if (!_downloadView)
         {
             self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
-            _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
             _downloadView.layer.cornerRadius = 5.0;
             [_downloadView.layer setShadowColor:[UIColor blackColor].CGColor];

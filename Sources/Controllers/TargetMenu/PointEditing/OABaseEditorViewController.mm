@@ -624,7 +624,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         }
         else
         {
-            NSArray *data = [_colorCollectionHandler getData];
+            NSArray<NSArray *> *data = [_colorCollectionHandler getData];
             if (indexPath.section >= data.count || indexPath.row >= [data[indexPath.section] count])
                 return;
 

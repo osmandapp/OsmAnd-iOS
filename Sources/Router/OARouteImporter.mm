@@ -144,17 +144,20 @@
     std::vector<std::shared_ptr<RouteSegmentResult>> route;
     for (OASGpxUtilitiesRouteSegment *routeSegment in segment.routeSegments)
     {
-        auto object = std::make_shared<RouteDataObject>(region);
-        auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
-        auto bundle = std::make_shared<RouteDataBundle>(resources, [self routeSegmentToStringBundle:routeSegment]);
-        try
+        @autoreleasepool
         {
-            segmentResult->readFromBundle(bundle);
-            route.push_back(segmentResult);
-        }
-        catch (const std::exception &ex)
-        {
-            NSLog(@"%s", ex.what());
+            auto object = std::make_shared<RouteDataObject>(region);
+            auto segmentResult = std::make_shared<RouteSegmentResult>(object, _leftSide);
+            auto bundle = std::make_shared<RouteDataBundle>(resources, [self routeSegmentToStringBundle:routeSegment]);
+            try
+            {
+                segmentResult->readFromBundle(bundle);
+                route.push_back(segmentResult);
+            }
+            catch (const std::exception &ex)
+            {
+                NSLog(@"%s", ex.what());
+            }
         }
     }
     return route;

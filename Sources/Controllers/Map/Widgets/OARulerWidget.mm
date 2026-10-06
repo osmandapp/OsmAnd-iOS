@@ -46,9 +46,7 @@
 
 static const double kProjectedStepSlack = 4.0;
 static const double kMinProjectedStep = 24.0;
-static const double kGlobeVisibilityTolerance = 0.1;
-static const double kGlobeVisibilityMinTolerance = 4.0;
-static const double kGlobeVisibleRadiusMargin = 0.9;
+static const double kReverseProjectionTolerance = 4.0;
 
 static double maxGlobeDistance()
 {
@@ -98,7 +96,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     BOOL _cachedMapMode;
     BOOL _sphericalMap;
     BOOL _cachedSphericalMap;
-    double _globeVisibleRadius;
+    BOOL _hasGlobeHorizon;
+    OsmAnd::LatLon _globeCameraNadir;
+    double _globeHorizonCos;
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     CGPoint circleCenterPoint = [self getCenterPoint];
     _imageView.center = circleCenterPoint;
     _sphericalMap = [_settings.sphericalMap get];
-    _globeVisibleRadius = _sphericalMap ? [self calculateGlobeVisibleRadius] : 0;
+    [self updateGlobeHorizon];
     if ([self rulerModeOn])
     {
         [self updateStyles];
@@ -889,29 +889,31 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return projected && [self isVisibleOnGlobe:latLon screenPoint:*screenPoint];
 }
 
-- (double)calculateGlobeVisibleRadius
+- (void)updateGlobeHorizon
 {
+    _hasGlobeHorizon = NO;
+    if (!_sphericalMap)
+        return;
+
     OAMapRendererView *mapView = _mapViewController.mapView;
-    double cameraHeight = [mapView getCameraHeightInMeters];
-    double targetDistance = [mapView getTargetDistanceInMeters];
-    if (cameraHeight <= 0 || targetDistance <= 0)
-        return 0;
+    double elevation = qDegreesToRadians(mapView.elevationAngle);
+    double cameraHeightAboveTargetPlane = [mapView getCameraHeightInMeters];
+    if (elevation <= 0 || cameraHeightAboveTargetPlane <= 0)
+        return;
 
     double earthRadius = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI);
-    double cameraRadius = earthRadius + cameraHeight;
-    double horizonAngle = acos(earthRadius / cameraRadius);
-    double targetAngleCos = (cameraRadius * cameraRadius + earthRadius * earthRadius - targetDistance * targetDistance) / (2 * earthRadius * cameraRadius);
-    double targetAngle = acos(qBound(-1.0, targetAngleCos, 1.0));
-    double centerOffset = OsmAnd::Utilities::distance(OsmAnd::Utilities::convert31ToLatLon(mapView.target31), [self getCenterLatLon]);
-    double visibleRadius = earthRadius * (horizonAngle - targetAngle) - centerOffset;
-    return MAX(0, visibleRadius * kGlobeVisibleRadiusMargin);
+    double cameraUp = earthRadius + cameraHeightAboveTargetPlane;
+    double cameraAside = cameraHeightAboveTargetPlane / tan(elevation);
+    auto targetLatLon = OsmAnd::Utilities::convert31ToLatLon(mapView.renderer->getState().target31);
+    _globeCameraNadir = [self calculateDestinationPoint:targetLatLon distance:atan2(cameraAside, cameraUp) * earthRadius bearing:mapView.azimuth + 180];
+    _globeHorizonCos = earthRadius / hypot(cameraUp, cameraAside);
+    _hasGlobeHorizon = YES;
 }
 
 - (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon screenPoint:(CGPoint)screenPoint
 {
-    double distanceFromCenter = OsmAnd::Utilities::distance(_cachedCenterLatLon, latLon);
-    if (distanceFromCenter < _globeVisibleRadius)
-        return YES;
+    if (_hasGlobeHorizon)
+        return [self.class centralAngleCosFrom:_globeCameraNadir to:latLon] > _globeHorizonCos;
 
     CGFloat scale = [[UIScreen mainScreen] scale];
     OsmAnd::PointI frontPos31;
@@ -920,9 +922,16 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     OsmAnd::LatLon boundedLatLon(qBound(-MAX_LATITUDE_KEY, latLon.latitude, MAX_LATITUDE_KEY), latLon.longitude);
     auto frontLatLon = OsmAnd::Utilities::convert31ToLatLon(frontPos31);
-    double minTolerance = kGlobeVisibilityMinTolerance * _cachedMapDensity * scale;
-    double tolerance = MAX(distanceFromCenter * kGlobeVisibilityTolerance, minTolerance);
+    double tolerance = kReverseProjectionTolerance * _cachedMapDensity * scale;
     return OsmAnd::Utilities::distance(frontLatLon, boundedLatLon) <= tolerance;
+}
+
++ (double)centralAngleCosFrom:(OsmAnd::LatLon)from to:(OsmAnd::LatLon)to
+{
+    double fromLatitude = qDegreesToRadians(from.latitude);
+    double toLatitude = qDegreesToRadians(to.latitude);
+    double longitudeDelta = qDegreesToRadians(to.longitude - from.longitude);
+    return sin(fromLatitude) * sin(toLatitude) + cos(fromLatitude) * cos(toLatitude) * cos(longitudeDelta);
 }
 
 - (BOOL) isProjectionDiscontinuity:(CGPoint)previousPoint currentPoint:(CGPoint)currentPoint pixelRadius:(double)pixelRadius

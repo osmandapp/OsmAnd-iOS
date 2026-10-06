@@ -901,7 +901,6 @@
 		D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */; };
 		D1C573520000000000000001 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
 		D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
-		D5785208C3E344EE8C53E308 /* OpeningHoursCollapsableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB4E4F4B7664A728523837B /* OpeningHoursCollapsableView.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
@@ -5461,7 +5460,6 @@
 		DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = routes.addon.render.xml; path = ../resources/rendering_styles/routes.addon.render.xml; sourceTree = "<group>"; };
 		DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = osmassistant.addon.render.xml; path = ../resources/rendering_styles/osmassistant.addon.render.xml; sourceTree = "<group>"; };
 		DB870AB9B77E62AC5C88F332 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = el; path = el.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		DDB4E4F4B7664A728523837B /* OpeningHoursCollapsableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursCollapsableView.swift; sourceTree = "<group>"; };
 		DEBFFB06486D4FFCC20ED564 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverterTest.mm; sourceTree = "<group>"; };
 		E4B9BFA0723413BD0A7B76AC /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -9062,7 +9060,6 @@
 				325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */,
 				325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */,
 				AB3AAA61984F4B7C9FA437CD /* OpeningHoursCheckDateFormatter.swift */,
-				DDB4E4F4B7664A728523837B /* OpeningHoursCollapsableView.swift */,
 				329E790C2E8FF69900B4BC6D /* MergeLocalizedTagsAlgorithm.swift */,
 				DA5A7E5126C563A400F274C7 /* OAPOIViewController.xib */,
 				DA5A7E5226C563A400F274C7 /* OAPOIViewController.h */,
@@ -13384,7 +13381,6 @@
 				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
 				321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */,
 				71F505F37FC24CB6A9E23D81 /* OpeningHoursCheckDateFormatter.swift in Sources */,
-				D5785208C3E344EE8C53E308 /* OpeningHoursCollapsableView.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
 				D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,

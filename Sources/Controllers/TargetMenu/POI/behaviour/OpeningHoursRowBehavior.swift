@@ -12,11 +12,14 @@ final class OpeningHoursRowBehavior: DefaultPoiAdditionalRowBehaviour {
         super.applyCustomRules(params: params)
         
         var value = params.value
-        let formattedValue = value.replacingOccurrences(of: "; ", with: "\n").replacingOccurrences(of: ",", with: ", ")
+        let formattedValue = value.replacingOccurrences(of: ",", with: ", ")
 
         if let checkDate = OpeningHoursCheckDateFormatter.format(params.openingHoursCheckDate) {
             let caption = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("check_date"), checkDate)
-            params.builder.collapsableView = OpeningHoursCollapsableView(checkDate: caption, collapsed: true)
+            let collapsableView = OACollapsableLabelView(text: caption, collapsed: true)
+            collapsableView.label.font = .preferredFont(forTextStyle: .footnote)
+            collapsableView.label.textColor = .textColorSecondary
+            params.builder.collapsableView = collapsableView
         } else {
             params.builder.collapsableView = OACollapsableLabelView(text: formattedValue, collapsed: true)
         }

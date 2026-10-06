@@ -209,37 +209,37 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             OATableRowData *configureMapRow = [section createNewRow];
             configureMapRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             configureMapRow.title = OALocalizedString(@"configure_map");
-            configureMapRow.iconName = @"ic_custom_overlay_map";
+            configureMapRow.iconName = ACImageNameIcCustomOverlayMap;
             configureMapRow.key = [OAMapButtonsHelper TYPE_CONFIGURE_MAP].name;
             
             OATableRowData *interfaceRow = [section createNewRow];
             interfaceRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             interfaceRow.title = OALocalizedString(@"shared_string_interface");
-            interfaceRow.iconName = @"ic_custom_ui_customization";
+            interfaceRow.iconName = ACImageNameIcCustomUiCustomization;
             interfaceRow.key = [OAMapButtonsHelper TYPE_INTERFACE].name;
             
             OATableRowData *mapInteractionsRow = [section createNewRow];
             mapInteractionsRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
-            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
+            mapInteractionsRow.iconName = ACImageNameIcCustomShowOnMap;
             mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
             
             OATableRowData *myPlacesRow = [section createNewRow];
             myPlacesRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             myPlacesRow.title = OALocalizedString(@"shared_string_my_places");
-            myPlacesRow.iconName = @"ic_custom_favorites";
+            myPlacesRow.iconName = ACImageNameIcCustomFavorites;
             myPlacesRow.key = [OAMapButtonsHelper TYPE_MY_PLACES].name;
             
             OATableRowData *navigationRow = [section createNewRow];
             navigationRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             navigationRow.title = OALocalizedString(@"shared_string_navigation");
-            navigationRow.iconName = @"ic_custom_navigation";
+            navigationRow.iconName = ACImageNameIcCustomNavigation;
             navigationRow.key = [OAMapButtonsHelper TYPE_NAVIGATION].name;
             
             OATableRowData *settingsRow = [section createNewRow];
             settingsRow.cellType = [OASimpleTableViewCell reuseIdentifier];
             settingsRow.title = OALocalizedString(@"shared_string_settings");
-            settingsRow.iconName = @"ic_custom_settings";
+            settingsRow.iconName = ACImageNameIcCustomSettings;
             settingsRow.key = [OAMapButtonsHelper TYPE_SETTINGS].name;
         }
         else
@@ -351,7 +351,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             if (item.secondaryIconName != nil)
             {
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
-                UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
+                UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
                 [cell.leftIconView addSubview:background];

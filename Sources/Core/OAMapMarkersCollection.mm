@@ -15,6 +15,7 @@
 #include <OsmAndCore/Utilities.h>
 
 #include "OANativeUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 OAMapMarkersCollection::OAMapMarkersCollection(
                                                const OsmAnd::ZoomLevel minZoom_ /*= MinZoomLevel*/,
@@ -118,7 +119,7 @@ bool OAMapMarkersCollection::obtainData(
         
         // SpriteMapSymbol with pinIconBitmap as an icon
         
-        sk_sp<SkImage> pinIcon([OANativeUtilities skImageFromPngResource:@"icon_star_fill"]);
+        sk_sp<SkImage> pinIcon([OANativeUtilities skImageFromAssetNamed:ACImageNameIconStarFill]);
         if (pinIcon)
         {
             const std::shared_ptr<OsmAnd::BillboardRasterMapSymbol> pinIconSymbol(new OsmAnd::BillboardRasterMapSymbol(

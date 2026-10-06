@@ -11,6 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -26,7 +27,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"poi_filter_public_transport")]
               nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
-              iconName:@"ic_custom_transport_bus"]
+              iconName:ACImageNameIcCustomTransportBus]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }

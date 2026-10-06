@@ -43,6 +43,7 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 
 static const CGFloat kSpeedToHeightScale = 10.0;
@@ -855,7 +856,7 @@ colorizationScheme:(int)colorizationScheme
         {
             // Use black arrows for gradient colorization
             UIColor *color = gpx.coloringType.length != 0 && ![gpx.coloringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB(gpx.color);
-            auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+            auto iconBitmap = [self directionArrowBitmapForColor:color];
             if (iconBitmap)
             {
                 builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
@@ -949,7 +950,7 @@ colorizationScheme:(int)colorizationScheme
             {
                 // Use black arrows for gradient colorization
                 UIColor *color = gpx.getColoringType.length != 0 && ![gpx.getColoringType isEqualToString:@"solid"] ? UIColor.whiteColor : UIColorFromARGB([gpx getColorDefColor:nil].intValue);
-                auto iconBitmap = [self bitmapForColor:color fileName:@"map_direction_arrow"];
+                auto iconBitmap = [self directionArrowBitmapForColor:color];
                 if (iconBitmap)
                 {
                     builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))
@@ -1804,7 +1805,7 @@ colorizationScheme:(int)colorizationScheme
 
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
-    if (currentTrackGpxFile)
+    if (currentTrackGpxFile && self.mapViewController.recTrackShowing)
         activeGpx[kCurrentTrack] = currentTrackGpxFile;
     
     for (NSString *key in activeGpx.allKeys)
@@ -2052,7 +2053,7 @@ colorizationScheme:(int)colorizationScheme
         targetPoint.type = OATargetGPX;
         targetPoint.targetObj = [obj isKindOfClass:[OASGpxDataItem class]] ? (OASGpxDataItem *)obj : (OASGpxFile *) obj;
 
-        targetPoint.icon = [UIImage imageNamed:@"ic_custom_trip"];
+        targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
         targetPoint.title = [obj isKindOfClass:[OASGpxDataItem class]] ? item.gpxFileNameWithoutExtension :  OALocalizedString(@"shared_string_currently_recording_track");
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
@@ -2080,16 +2081,29 @@ colorizationScheme:(int)colorizationScheme
     else if ([obj isKindOfClass:[OASWptPt class]])
     {
         OASWptPt *item = (OASWptPt *)obj;
-        NSArray *foundWptGroups = self.mapViewController.foundWptGroups;
-        NSString *foundWptDocPath = self.mapViewController.foundWptDocPath;
-        
+        OASGpxFile *gpxFile = nil;
+        NSString *docPath = nil;
+        if (![[OASelectedGPXHelper instance] findGpxFile:&gpxFile path:&docPath containingWaypoint:item])
+            return nil;
+
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
         wptItem.point = item;
-        wptItem.groups = foundWptGroups;
-        wptItem.docPath = foundWptDocPath;
+        wptItem.groups = [self visibleWaypointGroupNames:gpxFile];
+        wptItem.docPath = docPath;
         return [self getTargetPoint:wptItem touchLocation:nil];
     }
     return nil;
+}
+
+- (NSArray<NSString *> *)visibleWaypointGroupNames:(OASGpxFile *)gpxFile
+{
+    NSMutableSet<NSString *> *names = [NSMutableSet set];
+    for (OASWptPt *waypoint in gpxFile.getPointsList)
+    {
+        if (waypoint.category.length > 0 && ![self isPointHidden:gpxFile point:waypoint])
+            [names addObject:waypoint.category];
+    }
+    return names.allObjects;
 }
 
 - (OATargetPoint *) getTargetPointCpp:(const void *)obj
@@ -2121,7 +2135,11 @@ colorizationScheme:(int)colorizationScheme
     if (touchPolygon31.isEmpty())
         return;
     
-    NSArray<OASGpxFile *> *visibleGpxFiles = [[OASelectedGPXHelper instance] getSelectedGPXFiles];
+    NSMutableArray<OASGpxFile *> *visibleGpxFiles = [[[OASelectedGPXHelper instance] getSelectedGPXFiles] mutableCopy];
+    OASGpxFile *currentTrack = [OASavingTrackHelper sharedInstance].currentTrack;
+    if (currentTrack && self.mapViewController.recTrackShowing)
+        [visibleGpxFiles addObject:currentTrack];
+
     for (OASGpxFile *g in visibleGpxFiles)
     {
         NSArray<OASWptPt *> *pts = [self getSelectedFilePoints:g];

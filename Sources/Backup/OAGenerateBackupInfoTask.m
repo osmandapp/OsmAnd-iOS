@@ -16,6 +16,9 @@
 #import "OABackupHelper.h"
 #import "OAFavoritesBackupMerger.h"
 #import "OAOperationLog.h"
+#import "OAFileSettingsItem.h"
+
+static const NSInteger kMaxDeflateRatio = 1032;
 
 @implementation OAGenerateBackupInfoTask
 {
@@ -69,8 +72,10 @@
 - (void)main
 {
     OABackupInfo *info = [self doInBackground];
+    [_operationLog finishOperation:[info toString]];
+    NSString *subscriptionError = [self checkSubscriptions];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onPostExecute:info];
+        [self onPostExecute:info subscriptionError:subscriptionError];
     });
 }
 
@@ -119,7 +124,17 @@
             BOOL fileChangedRemotely = remoteFile.updatetimems > localFile.uploadTime;
             if (fileChangedRemotely && fileChangedLocally)
             {
-                [info.filesToMerge addObject:@[localFile, remoteFile]];
+                if ([self isServerMapReference:localFile remoteFile:remoteFile])
+                {
+                    // Cloud stores only the map name, nothing to merge
+                    long syncTime = MAX(localFile.localModifiedTime, remoteFile.updatetimems);
+                    [OABackupHelper.sharedInstance updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:syncTime];
+                    localFile.uploadTime = syncTime;
+                }
+                else
+                {
+                    [info.filesToMerge addObject:@[localFile, remoteFile]];
+                }
             }
             else if (fileChangedLocally)
             {
@@ -208,14 +223,28 @@
     return info;
 }
 
-- (void) onPostExecute:(OABackupInfo *)backupInfo
+- (BOOL) isServerMapReference:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile
 {
-    [_operationLog finishOperation:[backupInfo toString]];
+    if (remoteFile.isDeleted || ![localFile.item isKindOfClass:OAFileSettingsItem.class])
+        return NO;
+    if (![OAFileSettingsItemFileSubtype isMap:((OAFileSettingsItem *) localFile.item).subtype])
+        return NO;
+    // A reference stores an empty archive, too small to hold the file even at max deflate ratio
+    return remoteFile.zipSize > 0 && remoteFile.zipSize * kMaxDeflateRatio < remoteFile.filesize;
+}
+
+- (NSString *) checkSubscriptions
+{
     __block NSString *subscriptionError = nil;
     [[OABackupHelper sharedInstance] checkSubscriptions:^(NSInteger status, NSString *message, NSString *error) {
         if (error)
             subscriptionError = error;
     }];
+    return subscriptionError;
+}
+
+- (void) onPostExecute:(OABackupInfo *)backupInfo subscriptionError:(NSString *)subscriptionError
+{
     if (_onComplete)
         _onComplete(backupInfo, subscriptionError);
 }

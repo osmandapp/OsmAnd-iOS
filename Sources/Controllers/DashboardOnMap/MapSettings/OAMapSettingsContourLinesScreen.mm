@@ -294,13 +294,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [imageArr addObject:@{
             @"type" : kCellTypeInfo,
             @"desc" : OALocalizedString(@"enable_contour_lines"),
-            @"img" : @"img_empty_state_contour_lines.png"
+            @"img" : ACImageNameImgEmptyStateContourLines
         }];
         [imageArr addObject:@{
             @"type" : kCellTypeButton,
             @"title" : OALocalizedString(@"shared_string_read_more"),
             @"link" : @"",
-            @"img" : @"ic_custom_safari.png"
+            @"img" : ACImageNameIcCustomSafari
         }];
         [result addObject: switchArr];
         [result addObject: imageArr];

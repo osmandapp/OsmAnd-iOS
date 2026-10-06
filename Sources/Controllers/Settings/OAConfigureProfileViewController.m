@@ -197,7 +197,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"general_settings_2"),
         @"descr" : OALocalizedString(@"general_settings_descr"),
-        @"img" : @"left_menu_icon_settings",
+        @"img" : ACImageNameLeftMenuIconSettings,
         @"key" : @"general_settings"
     }];
     if (_appMode != OAApplicationMode.DEFAULT)
@@ -206,7 +206,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"routing_settings_2"),
             @"descr" : OALocalizedString(@"routing_settings_descr"),
-            @"img" : @"left_menu_icon_navigation",
+            @"img" : ACImageNameLeftMenuIconNavigation,
             @"key" : kNavigationSettings
         }];
     }
@@ -214,14 +214,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"configure_map"),
         @"descr" : OALocalizedString(@"map_look_descr"),
-        @"img" : @"left_menu_icon_map",
+        @"img" : ACImageNameLeftMenuIconMap,
         @"key" : @"configure_map"
     }];
     [profileSettings addObject:@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"layer_map_appearance"),
         @"descr" : OALocalizedString(@"edit_profile_screen_options_subtitle"),
-        @"img" : @"left_menu_configure_screen",
+        @"img" : ACImageNameLeftMenuConfigureScreen,
         @"key" : @"configure_screen"
     }];
     [profileSettings addObject:@{
@@ -252,7 +252,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : tripRec.getName,
-            @"img" : @"ic_custom_trip",
+            @"img" : ACImageNameIcCustomTrip,
             @"key" : kTrackRecordingSettings
         }];
     }
@@ -263,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : osmEdit.getName,
-            @"img" : @"ic_custom_osm_edits",
+            @"img" : ACImageNameIcCustomOsmEdits,
             @"key" : kOsmEditsSettings
         }];
     }
@@ -274,7 +274,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : developmentPlugin.getName,
-            @"img" : @"ic_custom_laptop",
+            @"img" : ACImageNameIcCustomLaptop,
             @"key" : kOsmandDevelopmentSettings
         }];
     }
@@ -285,7 +285,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : weather.getName,
-            @"img" : @"ic_custom_umbrella",
+            @"img" : ACImageNameIcCustomUmbrella,
             @"key" : kWeatherSettings
         }];
     }
@@ -296,7 +296,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : wikipedia.getName,
-            @"img" : @"ic_custom_wikipedia",
+            @"img" : ACImageNameIcCustomWikipedia,
             @"key" : kWikipediaSettings
         }];
     }
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : externalSensors.getName,
-            @"img" : @"ic_custom_sensor",
+            @"img" : ACImageNameIcCustomSensor,
             @"key" : kExternalSensors
         }];
     }
@@ -317,7 +317,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"obd_plugin_name"),
-            @"img" : @"ic_custom_car_info",
+            @"img" : ACImageNameIcCustomCarInfo,
             @"key" : kVehicleMetrics
         }];
     }
@@ -328,7 +328,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [plugins addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : aisTracker.getName,
-            @"img" : @"ic_plugin_nautical",
+            @"img" : ACImageNameIcPluginNautical,
             @"key" : kAisTrackerSettings
         }];
     }
@@ -345,13 +345,13 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [settingsActions addObject:@{
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"export_profile"),
-        @"img" : @"ic_custom_export",
+        @"img" : ACImageNameIcCustomExport,
         @"key" : @"export_profile"
     }];
     [settingsActions addObject:@{
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"copy_from_other_profile"),
-        @"img" : @"ic_custom_copy",
+        @"img" : ACImageNameIcCustomCopy,
         @"key" : @"copy_profile"
     }];
     
@@ -360,7 +360,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [settingsActions addObject:@{
             @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"reset_to_default"),
-            @"img" : @"ic_custom_reset",
+            @"img" : ACImageNameIcCustomReset,
             @"key" : @"reset_to_default"
         }];
     }
@@ -370,7 +370,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [settingsActions addObject:@{
            @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_delete_title"),
-            @"img" : @"ic_custom_remove_outlined",
+            @"img" : ACImageNameIcCustomRemoveOutlined,
             @"key" : @"delete_profile"
         }];
     }

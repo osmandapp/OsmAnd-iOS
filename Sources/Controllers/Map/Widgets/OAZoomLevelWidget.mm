@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAZoom.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static const int ZOOM_OFFSET_FROM_31 = 17;
 static const int MAX_RATIO_DIGITS = 3;
@@ -48,7 +49,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
         [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
-        [self setIcon:@"widget_developer_map_zoom"];
+        [self setIcon:ACImageNameWidgetDeveloperMapZoom];
         
         __weak OAZoomLevelWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{

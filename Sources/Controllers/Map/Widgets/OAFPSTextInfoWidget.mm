@@ -14,6 +14,7 @@
 #import "Localization.h"
 
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define WIDGET_REFRESHING_INTERVAL_SECONDS 1.0
 
@@ -37,7 +38,7 @@
         _lastUpdatingFrameId = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@"FPS"];
-        [self setIcon:@"widget_fps"];
+        [self setIcon:ACImageNameWidgetFps];
         
         __weak OAFPSTextInfoWidget *selfWeak = self;
         self.onClickFunction = ^(id sender) {
@@ -95,7 +96,7 @@
     _lastUpdatingFrameId = frameId;
     
     [self setText:fps subtext:@"FPS"];
-    [self setIcon:@"widget_fps"];
+    [self setIcon:ACImageNameWidgetFps];
     return YES;
 }
 

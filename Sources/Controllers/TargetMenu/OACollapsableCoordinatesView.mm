@@ -18,8 +18,6 @@
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
 
-static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"OLC: ", @"MGRS: "];
-
 @interface OACollapsableCoordinatesView () <OAButtonDelegate>
 
 @end
@@ -28,7 +26,7 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
 {
     NSArray<OAButton *> *_buttons;
     NSInteger _selectedButtonIndex;
-
+    NSArray<FormattedCoordinateItem *> *_coordinates;
     UILabel *_viewLabel;
 }
 
@@ -50,8 +48,8 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     {
         _lat = lat;
         _lon = lon;
-        NSDictionary<NSNumber *, NSString*> *values = [OAPointDescription getLocationData:lat lon:lon];
-        [self setData:values];
+        _coordinates = [CoordinateFormatBridge collapsedRowsWithLat:lat lon:lon];
+        [self buildViews];
     }
     return self;
 }
@@ -62,12 +60,6 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
         [self updateButtonBorderColor];
-}
-
--(void) setData:(NSDictionary<NSNumber *,NSString *> *)data
-{
-    _coordinates = data;
-    [self buildViews];
 }
 
 - (void) buildViews
@@ -83,22 +75,25 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
     
     [self addSubview:_viewLabel];
     
-    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.coordinates.count];
+    NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:_coordinates.count];
     int i = 0;
-    for (NSNumber *format in _coordinates.allKeys)
+    for (FormattedCoordinateItem *item in _coordinates)
     {
         OAButton *btn = [OAButton buttonWithType:UIButtonTypeSystem];
-        NSString *coord;
-        if (format.integerValue == FORMAT_UTM)
-            coord = [NSString stringWithFormat:@"UTM: %@", _coordinates[format]];
-        else if (format.integerValue == FORMAT_OLC)
-            coord = [NSString stringWithFormat:@"OLC: %@", _coordinates[format]];
-        else if (format.integerValue == FORMAT_MGRS)
-            coord = [NSString stringWithFormat:@"MGRS: %@", _coordinates[format]];
+        if (item.prefix.length > 0)
+        {
+            NSString *full = [NSString stringWithFormat:@"%@: %@", item.prefix, item.text];
+            NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:full];
+            NSRange prefixRange = NSMakeRange(0, item.prefix.length + 2);
+            [attr addAttribute:NSForegroundColorAttributeName
+                         value:[UIColor colorNamed:ACColorNameTextColorSecondary]
+                         range:prefixRange];
+            [btn setAttributedTitle:attr forState:UIControlStateNormal];
+        }
         else
-            coord = _coordinates[format];
-        
-        [btn setTitle:coord forState:UIControlStateNormal];
+        {
+            [btn setTitle:item.text forState:UIControlStateNormal];
+        }
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
         btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -175,21 +170,9 @@ static NSArray<NSString *> *const kExclusionCoordinatePrefixes = @[@"UTM: ", @"O
 
 - (void)copy:(id)sender
 {
-    if (_buttons.count > _selectedButtonIndex)
+    if (_buttons.count > _selectedButtonIndex && _coordinates.count > _selectedButtonIndex)
     {
-        OAButton *button = _buttons[_selectedButtonIndex];
-        UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        NSString *textToCopy = button.titleLabel.text;
-        for (NSString *prefix in kExclusionCoordinatePrefixes)
-        {
-            if ([button.titleLabel.text hasPrefix:prefix])
-            {
-                textToCopy = [button.titleLabel.text substringFromIndex:[prefix length]];
-                break;
-            }
-        }
-        
-        [pb setString:textToCopy];
+        UIPasteboard.generalPasteboard.string = _coordinates[_selectedButtonIndex].copyText;
     }
 }
 

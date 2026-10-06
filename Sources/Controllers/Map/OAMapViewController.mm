@@ -215,6 +215,7 @@ static char kMapSourceUpdateQueueKey;
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
     OAAutoObserverProxy* _framePreparedObserver;
+    OAAutoObserverProxy* _displayLinkFrameRateObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
     
@@ -365,6 +366,8 @@ static char kMapSourceUpdateQueueKey;
     
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
+    _displayLinkFrameRateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDisplayLinkFrameRateChanged)];
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
@@ -534,6 +537,7 @@ static char kMapSourceUpdateQueueKey;
     [_stateObserver observe:_mapView.stateObservable];
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
+    [_displayLinkFrameRateObserver observe:_mapView.displayLinkFrameRateObservable];
     _mapView.rendererDelegate = self;
 
     self.mapViewLoaded = YES;
@@ -964,6 +968,10 @@ static char kMapSourceUpdateQueueKey;
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    if (gestureRecognizer == _grPointContextMenu)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapTouchAction object:self userInfo:nil];
+    }
     if (gestureRecognizer == _grZoomOut && [[OAAppSettings sharedManager].showDistanceRuler get])
         return NO;
     if (gestureRecognizer == _grZoomDoubleTap)
@@ -1752,6 +1760,10 @@ static char kMapSourceUpdateQueueKey;
         return NO;
 
     BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+    if (longPress && (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateEnded))
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapTouchAction object:self userInfo:nil];
+    }
 
     // Get location of the gesture
     CGPoint touchPoint;
@@ -1877,6 +1889,11 @@ static char kMapSourceUpdateQueueKey;
 - (void) onMapRendererFramePrepared
 {
     [_framePreparedObservable notifyEvent];
+}
+
+- (void) onDisplayLinkFrameRateChanged
+{
+    [self applyFrameRefreshRateLimit];
 }
 
 @synthesize zoomObservable = _zoomObservable;
@@ -2819,10 +2836,7 @@ static char kMapSourceUpdateQueueKey;
     }
 
     [self runWithRenderSync:^{
-        if ([settings.batterySavingMode get])
-            [_mapView limitFrameRefreshRate];
-        else
-            [_mapView restoreFrameRefreshRate];
+        [self applyFrameRefreshRateLimit];
 
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
@@ -3095,6 +3109,23 @@ static char kMapSourceUpdateQueueKey;
         commit();
     else
         dispatch_sync(dispatch_get_main_queue(), commit);
+}
+
+- (void) setAttachedToCarPlayWindow:(BOOL)attachedToCarPlayWindow
+{
+    _attachedToCarPlayWindow = attachedToCarPlayWindow;
+    [self applyFrameRefreshRateLimit];
+}
+
+- (void) applyFrameRefreshRateLimit
+{
+    if (!self.mapViewLoaded)
+        return;
+
+    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
+        [_mapView limitFrameRefreshRate];
+    else
+        [_mapView restoreFrameRefreshRate];
 }
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable
@@ -3441,6 +3472,10 @@ static char kMapSourceUpdateQueueKey;
             [_gpxFilesRec removeAllObjects];
             [_gpxFilesRec addObject:gpxFile];
             [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
+        }
+        else if (refreshData)
+        {
+            _recTrackShowing = NO;
         }
     }];
 }

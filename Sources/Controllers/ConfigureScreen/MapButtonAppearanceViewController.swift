@@ -49,12 +49,12 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
             setupOpacityType()
         }
         setupIconHandler()
+        updateSubviewHeight(previewImageHeight)
         super.viewDidLoad()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateSubviewHeight(previewImageHeight)
         updateSubview(true)
     }
     
@@ -256,7 +256,7 @@ final class MapButtonAppearanceViewController: OABaseNavbarSubviewViewController
     }
     
     override func subviewMargin() -> UIEdgeInsets {
-        .zero
+        .init(top: 8, left: 0, bottom: -8, right: 0)
     }
     
     private func setupAppearanceParams() {

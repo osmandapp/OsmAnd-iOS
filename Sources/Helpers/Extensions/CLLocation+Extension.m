@@ -33,6 +33,11 @@
     return !isnan(self.speed) && self.speed >= 0;
 }
 
+- (BOOL)hasAltitude
+{
+    return self.verticalAccuracy >= 0 && !isnan(self.altitude);
+}
+
 - (BOOL) hasAccuracy;
 {
     return (!isnan(self.horizontalAccuracy) && self.horizontalAccuracy > 0) ||

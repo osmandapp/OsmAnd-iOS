@@ -56,6 +56,8 @@
     NSDictionary<NSString *, NSString *> *_knownManoeuvreDifferences;
     int _routes;
     int _directions;
+    NSString *_storedCarRoutingProfile;
+    BOOL _didOverrideCarRoutingProfile;
 }
 
 - (void)setUp
@@ -67,15 +69,29 @@
         [NSRunLoop.currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
     XCTAssertTrue([OsmAndApp instance].initialized, @"the app did not finish starting");
 
+    if ([[OAApplicationMode CAR] getRoutingProfile].length == 0)
+    {
+        _didOverrideCarRoutingProfile = YES;
+        _storedCarRoutingProfile = [[NSUserDefaults standardUserDefaults] stringForKey:@"routingProfile_car"];
+        [OAAppSettings.sharedManager.routingProfile set:@"car" mode:OAApplicationMode.CAR];
+    }
+
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
     initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
 
     _provider = [[OARouteProvider alloc] init];
-    _readers = @[[[OASBinaryMapIndexReader alloc] initWithFilePath:obfFilePath]];
+    NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray arrayWithObject:[[OASBinaryMapIndexReader alloc] initWithFilePath:obfFilePath]];
+    for (NSString *path in [bundle pathsForResourcesOfType:@"obf" inDirectory:@"test-resources/turn_lanes"])
+    {
+        initBinaryMapFile(string(path.UTF8String), true, true);
+        [readers addObject:[[OASBinaryMapIndexReader alloc] initWithFilePath:path]];
+    }
+    _readers = readers;
     _knownManoeuvreDifferences = @{
         @"10.Ringweg Oost u-turn" : @"the C++ preparation heads the route with a \"Head toward\" the java one does not",
-        @"32.2 Motorway TR - Turn Left" : @"the java preparation announces a keep right the C++ one does not"
+        @"32.2 Motorway TR - Turn Left" : @"the java preparation announces a keep right the C++ one does not",
+        @"102. Spanische Allee (Berlin): unmarked lanes before a left turn" : @"the C++ preparation announces a keep left before the turn; the shared preparation does not"
     };
     _routes = 0;
     _directions = 0;
@@ -85,6 +101,12 @@
 {
     for (OASBinaryMapIndexReader *reader in _readers)
         [reader close];
+    if (_didOverrideCarRoutingProfile)
+    {
+        [OAAppSettings.sharedManager.routingProfile set:_storedCarRoutingProfile ?: @"" mode:OAApplicationMode.CAR];
+        if (!_storedCarRoutingProfile)
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"routingProfile_car"];
+    }
 }
 
 - (void)testSharedPlannerRoutesAsTheCppOne
@@ -162,6 +184,24 @@
     NSString *difference = _knownManoeuvreDifferences[name];
     if (difference)
     {
+        if ([name isEqualToString:@"102. Spanische Allee (Berlin): unmarked lanes before a left turn"])
+        {
+            XCTAssertEqual(sharedDirections.count, 4, @"%@: shared manoeuvres", name);
+            XCTAssertEqual(cppDirections.count, 5, @"%@: C++ manoeuvres", name);
+            if (sharedDirections.count != 4 || cppDirections.count != 5)
+                return;
+            // C++ has one extra keep-left before the turn; all other directions should still agree.
+            for (NSUInteger i = 0; i < sharedDirections.count; i++)
+            {
+                OARouteDirectionInfo *s = sharedDirections[i];
+                OARouteDirectionInfo *c = cppDirections[i < 1 ? i : i + 1];
+                XCTAssertEqual(s.turnType.value, c.turnType.value, @"%@: manoeuvre %lu", name, (unsigned long)i);
+                XCTAssertEqual(s.routePointOffset, c.routePointOffset, @"%@: manoeuvre %lu point", name, (unsigned long)i);
+                XCTAssertEqualObjects(s.getDescriptionRoute, c.getDescriptionRoute, @"%@: manoeuvre %lu description", name, (unsigned long)i);
+                _directions++;
+            }
+            return;
+        }
         XCTAssertNotEqual(sharedDirections.count, cppDirections.count, @"%@: %@ - no longer", name, difference);
         return;
     }
@@ -204,7 +244,11 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     auto builder = [OsmAndApp.instance getRoutingConfigForMode:params.mode];
     auto generalRouter = [OsmAndApp.instance getRouter:builder mode:params.mode];
-    XCTAssertTrue(generalRouter != nullptr);
+    if (!builder || !generalRouter)
+    {
+        XCTFail(@"No C++ router for profile=%@; builder=%d", [params.mode getRoutingProfile], builder != nullptr);
+        return nil;
+    }
     auto cf = [_provider initOsmAndRoutingConfig:builder params:params generalRouter:generalRouter];
 
     auto router = std::make_shared<RoutePlannerFrontEnd>();

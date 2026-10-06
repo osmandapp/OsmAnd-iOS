@@ -4551,3 +4551,9 @@
 "osm_edits_empty_state_description" = "Ändringar du gör i OsmAnd visas här innan de laddas upp till OpenStreetMap.";
 "tracks_stats_are_being_calculated" = "Spårstatistik beräknas …";
 "routing_engine_shared" = "Rutt med OsmAndShared";
+"opening_hours_public_holiday" = "Allmänna helgdagar";
+"opening_hours_school_holiday" = "Skollov";
+"opening_hours_easter" = "Påsk";
+"panels_layout_compact" = "Kompakt";
+"keep_screen_on" = "Behåll skärmen på";
+"during_navigation" = "Under navigering";

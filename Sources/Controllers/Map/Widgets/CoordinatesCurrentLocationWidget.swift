@@ -10,8 +10,11 @@
 @objcMembers
 final class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
 
-    init() {
-        super.init(type: .coordinatesCurrentLocation)
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
+        super.init(type: .coordinatesCurrentLocation,
+                   customId: customId,
+                   appMode: appMode,
+                   widgetParams: widgetParams)
     }
 
     override init(frame: CGRect) {
@@ -36,6 +39,6 @@ final class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
     }
 
     override func getCoordinateIcon() -> UIImage {
-        UIImage.widgetCoordinatesLocation
+        .widgetCoordinatesLocation
     }
 }

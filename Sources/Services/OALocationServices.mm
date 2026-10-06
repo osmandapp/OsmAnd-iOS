@@ -54,6 +54,7 @@
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _followTheRouteObserver;
     OAAutoObserverProxy* _simulateRoutingObserver;
+    OAAutoObserverProxy *_trackRecordingObserver;
 
     BOOL _waitingForAuthorization;
 
@@ -110,6 +111,10 @@
     _simulateRoutingObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onSimulateRoutingChanged)
                                                           andObserve:_app.simulateRoutingObservable];
+
+    _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onTrackRecordingChanged)
+                                                      andObserve:_app.trackStartStopRecObservable];
 
     _waitingForAuthorization = NO;
 
@@ -480,7 +485,7 @@
     return kCLLocationAccuracyThreeKilometers;
 }
 
-- (void) updateRequestedAccuracy
+- (void)updateRequestedAccuracy
 {
     CLLocationManager *manager = self.getLocationManager;
     if (!manager)
@@ -489,13 +494,14 @@
         return;
 
     CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
-    if (manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
+    OALocationServicesStatus status = self.status;
+    if (manager.desiredAccuracy == newDesiredAccuracy
+        || (status != OALocationServicesStatusActive && status != OALocationServicesStatusAuthorizing))
         return;
 
     @synchronized(_lock)
     {
-        if ([self doStop])
-            [self doStart];
+        manager.desiredAccuracy = newDesiredAccuracy;
     }
 }
 
@@ -543,6 +549,22 @@
             [self updateRequestedAccuracy];
         else
             [self start];
+    });
+}
+
+- (void)onTrackRecordingChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OALocationServicesStatus status = self.status;
+        if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+            [self updateRequestedAccuracy];
+        else if (_settings.mapSettingTrackRecording)
+        {
+            if (status == OALocationServicesStatusSuspended)
+                [self resume];
+            else
+                [self start];
+        }
     });
 }
 

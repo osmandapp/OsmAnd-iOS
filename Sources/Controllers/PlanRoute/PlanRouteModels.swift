@@ -299,10 +299,10 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var isApproximationNeeded: Bool { get }
     var shouldRequestApproximationBeforeNavigation: Bool { get }
     var shouldShowApproximationWarning: Bool { get }
-    var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 
+    func beginApproximationSession() -> UIViewController?
     func addRoutePoint()
     func undo()
     func redo()
@@ -313,6 +313,8 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func deleteRoutePoint(at index: Int)
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()
+    func startNewSegment(mode: OAApplicationMode?)
+    func continueRoute(mode: OAApplicationMode?)
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
     func applyMode(_ mode: OAApplicationMode, pointIndexes: [Int])
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext)

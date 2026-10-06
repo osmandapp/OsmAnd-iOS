@@ -20,6 +20,7 @@ final class RouteInfoWidget: OASimpleWidget {
     @IBOutlet private var leftViewButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet private var leftViewButtonTopConstraint: NSLayoutConstraint!
     @IBOutlet private var leftViewButtonBottomConstraint: NSLayoutConstraint!
+    @IBOutlet private var firstLineLeftLabelMinWidthConstraint: NSLayoutConstraint!
     @IBOutlet private var secondLineBottomConstraint: NSLayoutConstraint!
     @IBOutlet private var widgetHeightConstraint: NSLayoutConstraint!
     @IBOutlet private var trailingConstraint: NSLayoutConstraint!
@@ -65,8 +66,11 @@ final class RouteInfoWidget: OASimpleWidget {
         !hasEnoughWidth && isSmallSize ? 14 : 16
     }
     
+    private var resolvedPrimaryTextColor: UIColor?
+    private var resolvedSecondaryTextColor: UIColor?
+
     private var valueTextColor: UIColor {
-        isNightMode() ? .white : .black
+        resolvedPrimaryTextColor ?? (isNightMode() ? .white : .black)
     }
     
     private var isSmallSize: Bool {
@@ -105,7 +109,6 @@ final class RouteInfoWidget: OASimpleWidget {
     }
     
     override func layoutSubviews() {
-        super.layoutSubviews()
         let leftViewButtonVerticalSpace = leftViewButtonVerticalSpace
         leftViewButtonWidthConstraint.constant = leftViewButtonWidth
         leftViewButtonTopConstraint.constant = leftViewButtonVerticalSpace
@@ -113,6 +116,7 @@ final class RouteInfoWidget: OASimpleWidget {
         trailingConstraint.constant = trailingSpace
         secondLineBottomConstraint.constant = secondLineBottomSpace
         secondaryBlockStackView.isHidden = !hasEnoughWidth || cachedRouteInfo.count < 2
+        super.layoutSubviews()
         forceUpdateView()
     }
     
@@ -164,11 +168,13 @@ final class RouteInfoWidget: OASimpleWidget {
     
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
+        resolvedPrimaryTextColor = textState.textColor
+        resolvedSecondaryTextColor = textState.unitColor
         updateTextWitState(textState)
         let valueTextColor = valueTextColor
         firstLineRightLabel.textColor = valueTextColor
         secondLineRightLabel.textColor = valueTextColor
-        secondaryDividerView.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
+        secondaryDividerView.backgroundColor = textState.dividerColor
         buttonArrowImageView.image?.withRenderingMode(.alwaysTemplate)
         buttonArrowImageView.tintColor = isNightMode() ? .iconColorActive.dark : .iconColorActive.light
         navigationButtonView.backgroundColor = isNightMode() ? .buttonBgColorTertiary.dark : .buttonBgColorTertiary.light
@@ -262,7 +268,8 @@ final class RouteInfoWidget: OASimpleWidget {
         guard let destinationInfo, displayValues.count > 2 else { return }
         let size = widgetSizeStyle
         let data = prepareDisplayData(info: destinationInfo)
-        let textColorSecondary: UIColor = isNightMode() ? .textColorSecondary.dark : .textColorSecondary.light
+        let textColorSecondary = resolvedSecondaryTextColor
+            ?? (isNightMode() ? UIColor.textColorSecondary.dark : UIColor.textColorSecondary.light)
         let hasEnoughWidth = hasEnoughWidth
         let valueTextColor = valueTextColor
         let isSmallSize = isSmallSize
@@ -328,6 +335,8 @@ final class RouteInfoWidget: OASimpleWidget {
         }
         
         firstLineLeftLabel.attributedText = firstLineLeftString
+        // Shrink other padding first, then the primary value, preserving the button width and its insets when possible.
+        firstLineLeftLabelMinWidthConstraint.constant = max(0, ceil(firstLineLeftLabel.intrinsicContentSize.width * firstLineLeftLabel.minimumScaleFactor))
         if !secondLineLeftLabel.isHidden {
             secondLineLeftLabel.attributedText = secondLineLeftString
         }

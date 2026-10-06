@@ -7,6 +7,7 @@
 //
 
 #import "OAAltitudeWidget.h"
+#import "CLLocation+Extension.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -16,6 +17,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OANativeUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAAltitudeWidget
 {
@@ -42,9 +44,9 @@
         [self setText:@"-" subtext:nil];
 
         if (_widgetType == EOAAltitudeWidgetTypeMyLocation)
-            [self setIcon:@"widget_altitude_location"];
+            [self setIcon:ACImageNameWidgetAltitudeLocation];
         else
-            [self setIcon:@"widget_altitude_map_center"];
+            [self setIcon:ACImageNameWidgetAltitudeMapCenter];
     }
     return self;
 }
@@ -85,7 +87,7 @@
         case EOAAltitudeWidgetTypeMyLocation:
         {
             CLLocation *loc = _app.locationServices.lastKnownLocation;
-            if (loc && loc.verticalAccuracy >= 0)
+            if (loc.hasAltitude)
             {
                 [self updateAltitude:loc.altitude];
                 return;

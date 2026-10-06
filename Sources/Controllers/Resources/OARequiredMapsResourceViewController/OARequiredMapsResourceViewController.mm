@@ -235,7 +235,7 @@
             OAResourceItem * item = _resourcesItems[indexPath.row];
             BOOL selected = [_selectedResourcesItems containsObject:item];
             NSString *resourceId = [item.resourceId.toNSString() stringByDeletingPathExtension];
-            cell.leftIconView.image = [UIImage imageNamed:[self containsInMapsToUpdate:resourceId] ? @"ic_custom_update_map" : @"ic_custom_download_map"];
+            cell.leftIconView.image = [UIImage imageNamed:[self containsInMapsToUpdate:resourceId] ? @"ic_custom_update_map" : ACImageNameIcCustomDownloadMap];
             cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.leftIconView.contentMode = UIViewContentModeCenter;

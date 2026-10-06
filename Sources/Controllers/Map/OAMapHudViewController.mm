@@ -53,6 +53,7 @@ static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 static const float kGridCellWidthPt = 8.0;
 static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
+static const NSTimeInterval kTimeoutToShowButtons = 7.0;
 
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol, UIGestureRecognizerDelegate>
@@ -103,6 +104,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     CLLocation *_previousLocation;
     
     NSTimeInterval _lastWidgetsUpdateTime;
+    NSTimeInterval _lastMapTouchTime;
+    BOOL _bottomButtonsAutoHidden;
+    BOOL _routeFollowingMode;
     
     BOOL _cachedLocationAvailableState;
 
@@ -194,6 +198,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                                                                          andObserve:_app.locationServices.statusObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapTouchAction object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UIAccessibilityVoiceOverStatusDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UISceneWillConnectNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBottomButtonsAutoHideStateChanged:) name:UISceneDidDisconnectNotification object:nil];
     
     _cachedLocationAvailableState = NO;
 }
@@ -340,7 +349,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)updateStateWeatherLayersButton
 {
     BOOL allLayersAreDisabled = OAWeatherHelper.sharedInstance.allLayersAreDisabled;
-    [_weatherLayersButton setImage:[UIImage templateImageNamed:allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
+    [_weatherLayersButton setImage:[UIImage templateImageNamed:allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : ACImageNameIcCustomOverlayMap] forState:UIControlStateNormal];
     
     UIColor *color = [UIColor colorNamed:allLayersAreDisabled ? ACColorNameMapButtonBgColorDefault : ACColorNameMapButtonBgColorActive];
     
@@ -587,12 +596,59 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (BOOL)shouldShowMenu
 {
-    return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get];
+    return [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get] && ![self shouldAutoHideBottomButtons];
 }
 
 - (BOOL)shouldShowNavigation
 {
-    return [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get];
+    return [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get] && ![self shouldAutoHideBottomButtons];
+}
+
+// Same as Android: while following a route, Menu and Navigation hide until the map is touched
+- (BOOL)canAutoHideBottomButtons
+{
+    return _routeFollowingMode
+        && !UIAccessibilityIsVoiceOverRunning()
+        && !UIApplication.sharedApplication.isCarPlayConnected;
+}
+
+- (BOOL)shouldAutoHideBottomButtons
+{
+    return [self canAutoHideBottomButtons]
+        && CACurrentMediaTime() - _lastMapTouchTime >= kTimeoutToShowButtons;
+}
+
+- (void)onBottomButtonsAutoHideStateChanged:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateAutoHiddenBottomButtons];
+    });
+}
+
+- (void)onMapGestureAction:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self->_routeFollowingMode)
+            return;
+        self->_lastMapTouchTime = CACurrentMediaTime();
+        [self updateAutoHiddenBottomButtons];
+    });
+}
+
+- (void)updateAutoHiddenBottomButtons
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(updateAutoHiddenBottomButtons) object:nil];
+    BOOL autoHidden = [self shouldAutoHideBottomButtons];
+    if (_bottomButtonsAutoHidden != autoHidden)
+    {
+        _bottomButtonsAutoHidden = autoHidden;
+        [self updateBottomControlsVisibility:YES];
+    }
+    NSTimeInterval delay = kTimeoutToShowButtons - (CACurrentMediaTime() - _lastMapTouchTime);
+    if ([self canAutoHideBottomButtons] && delay > 0.)
+    {
+        [self performSelector:@selector(updateAutoHiddenBottomButtons) withObject:nil afterDelay:delay + 0.1];
+    }
 }
 
 - (BOOL)shouldShowMyLocation
@@ -993,10 +1049,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     BOOL compassChanged = [preferenceKeys intersectsSet:[self compassPropertyKeysForButtonState:compassButtonState]];
     BOOL colorsChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
-        [_settings transparentWidgetsForAppMode:[_settings.applicationMode get]],
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
+    BOOL widgetPanelAppearanceChanged = [preferenceKeys intersectsSet:
+        [WidgetPanelAppearancePreferencesRegistrar preferenceKeysWithSettings:_settings]];
     BOOL panelsLayoutModeChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
         [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]]
     ]]];
@@ -1014,7 +1071,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
     BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
     
-    if (!compassChanged && !colorsChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
+    if (!compassChanged && !colorsChanged && !widgetPanelAppearanceChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
         && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged
         && !myLocationChanged && !zoomInChanged && !zoomOutChanged)
         return;
@@ -1027,7 +1084,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         }
         if (colorsChanged)
             [self updateColors];
-        if (panelsLayoutModeChanged)
+        if (panelsLayoutModeChanged || widgetPanelAppearanceChanged)
             [_mapInfoController recreateControls];
         else if (screenElementsModeChanged)
             [_mapInfoController updateLayout];
@@ -1142,19 +1199,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void)updateMapButtonVisibility:(UIButton *)button showButton:(BOOL)showButton completionHandler:(void (^)(void))completionHandler
 {
-    BOOL needShow = button.alpha == 0.0 && showButton;
-    BOOL needHide = button.alpha == 1.0 && !showButton;
-    if (needShow)
+    CGFloat targetAlpha = showButton ? 1.0 : 0.0;
+    if (showButton)
         button.hidden = NO;
-    if (needHide)
-        button.userInteractionEnabled = NO;
-    [UIView animateWithDuration:.25 animations:^{
-        button.alpha = needShow ? 1.0 : 0.0;
+    button.userInteractionEnabled = showButton;
+    [UIView animateWithDuration:.25 delay:0. options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction animations:^{
+        button.alpha = targetAlpha;
     } completion:^(BOOL finished) {
-        if (needShow)
-            button.userInteractionEnabled = button.alpha > 0.0;
-        if (needHide)
-            button.hidden = YES;
+        button.hidden = button.alpha == 0.0;
+        button.userInteractionEnabled = button.alpha > 0.0;
         if (completionHandler)
             completionHandler();
     }];
@@ -1260,9 +1313,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             button.alpha = 0.0;
     } completion:^(BOOL finished) {
         for (OAHudButton *button in needShowButtons)
+        {
+            button.hidden = button.alpha == 0.0;
             button.userInteractionEnabled = button.alpha > 0.0;
+        }
         for (OAHudButton *button in needHideButtons)
-            button.hidden = YES;
+        {
+            button.hidden = button.alpha == 0.0;
+            button.userInteractionEnabled = button.alpha > 0.0;
+        }
         
         if (completionHandler)
             completionHandler();
@@ -1479,7 +1538,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (useClearBackground)
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
-        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].appMapThemeColor;
+        _bottomBarView.backgroundColor =
+            [WidgetPanelAppearanceResolver backgroundColorForPanel:WidgetsPanel.bottomPanel
+                                                           appMode:_settings.applicationMode.get
+                                                         nightMode:_settings.isAppMapNightMode];
+}
+
+- (void)updateWidgetPanelAppearanceColors
+{
+    _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    [self updateBottomBarViewBackgroundColor];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)updateBottomBarConstraints
@@ -1678,7 +1747,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (UIColor *) getStatusBarBackgroundColor
 {
     BOOL isNight = _settings.isAppMapNightMode;
-    BOOL transparent = _settings.isTransparentWidgets;
     UIColor *statusBarColor;
     if ([_mapPanelViewController isDashboardVisible])
         statusBarColor = UIColor.clearColor;
@@ -1689,9 +1757,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
-        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
+        statusBarColor = [WidgetPanelAppearanceResolver backgroundColorForPanel:WidgetsPanel.topPanel
+                                                                        appMode:_settings.applicationMode.get
+                                                                      nightMode:isNight];
     if (!statusBarColor)
-        statusBarColor = isNight ? (transparent ? UIColor.clearColor : UIColor.blackColor) : [UIColor colorWithWhite:1.0 alpha:(transparent ? 0.5 : 1.0)];
+        statusBarColor = isNight ? UIColor.blackColor : UIColor.whiteColor;
     return statusBarColor;
 }
 
@@ -1833,6 +1903,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         || _mapPanelViewController.activeTargetType == OATargetRouteDetails
         || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph
         || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || _mapPanelViewController.activeTargetType == OATargetWidgetPanelAppearanceSettings
         || isPlanRouteFullscreen;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
@@ -1846,28 +1917,34 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
-        _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        BOOL showConfigureMapButton = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible;
+        _mapSettingsButton.alpha = showConfigureMapButton ? 1. : 0.;
+        if (showConfigureMapButton)
+            _mapSettingsButton.hidden = NO;
         BOOL showCompassButton = [self shouldShowCompass] && isButtonsVisible;
         _compassButton.alpha = showCompassButton ? 1. : 0.;
         if (showCompassButton)
             _compassButton.hidden = NO;
 
-        _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
+        BOOL showSearchButton = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible;
+        _searchButton.alpha = showSearchButton ? 1. : 0.;
+        if (showSearchButton)
+            _searchButton.hidden = NO;
         _downloadView.alpha = isButtonsVisible ? 1. : 0.;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)
             _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
-        if (self.mapInfoController.topPanelController)
+        if (self.mapInfoController.topPanelController.parentViewController == self)
         {
             self.mapInfoController.topPanelController.view.alpha = !isTopPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.middleWidgetsView showShadow:self.mapInfoController.topPanelController.view.alpha == 1.];
         }
-        if (self.mapInfoController.leftPanelController)
+        if (self.mapInfoController.leftPanelController.parentViewController == self)
         {
             self.mapInfoController.leftPanelController.view.alpha = isWeatherToolbarVisible || !isLeftPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.leftWidgetsView showShadow:self.mapInfoController.leftPanelController.view.alpha == 1.];
         }
-        if (self.mapInfoController.rightPanelController)
+        if (self.mapInfoController.rightPanelController.parentViewController == self)
         {
             self.mapInfoController.rightPanelController.view.alpha = isWeatherToolbarVisible ? 1. : !isRightPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.rightWidgetsView showShadow:self.mapInfoController.rightPanelController.view.alpha == 1.];
@@ -1887,11 +1964,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _searchButton.userInteractionEnabled = _searchButton.alpha > 0.;
         _downloadView.userInteractionEnabled = _downloadView.alpha > 0.;
 
-        if (self.mapInfoController.topPanelController)
+        if (self.mapInfoController.topPanelController.parentViewController == self)
             self.mapInfoController.topPanelController.view.userInteractionEnabled = self.mapInfoController.topPanelController.view.alpha > 0.;
-        if (self.mapInfoController.leftPanelController)
+        if (self.mapInfoController.leftPanelController.parentViewController == self)
             self.mapInfoController.leftPanelController.view.userInteractionEnabled = self.mapInfoController.leftPanelController.view.alpha > 0.;
-        if (self.mapInfoController.rightPanelController)
+        if (self.mapInfoController.rightPanelController.parentViewController == self)
             self.mapInfoController.rightPanelController.view.userInteractionEnabled = self.mapInfoController.rightPanelController.view.alpha > 0.;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.;
@@ -1923,6 +2000,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         && _mapPanelViewController.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
         || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || _mapPanelViewController.activeTargetType == OATargetWidgetPanelAppearanceSettings
         || isPlanRouteFullscreen;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
@@ -1932,22 +2010,35 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL visible = isToolbarVisible ? isAllowToolbarsVisible
         : !self.contextMenuMode && !isWeatherToolbarVisible && !isScrollableHudVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetMultiMenuViewVisible && !isTargetToHideVisible;
     BOOL isZoomMapModeVisible = (!isDashboardVisible || isScrollableHudAllowed) && !isRouteInfoVisible && !isTargetMultiMenuViewVisible;
+    BOOL menuButtonVisible = [self shouldShowMenu] && visible;
+    BOOL navigationButtonVisible = [self shouldShowNavigation] && visible;
+    if (menuButtonVisible)
+        _optionsMenuButton.hidden = NO;
+    if (navigationButtonVisible)
+        _driveModeButton.hidden = NO;
 
     void (^mainBlock)(void) = ^{
 
         _bottomBarView.alpha = visible && isBottomPanelVisible ? 1.0 : 0.0;
-        BOOL optionsMenuButtonVisible = visible;
-        _optionsMenuButton.alpha = [self shouldShowMenu] && optionsMenuButtonVisible ? 1. : 0.;
+        _optionsMenuButton.alpha = menuButtonVisible ? 1. : 0.;
         BOOL zoomButtonsVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _zoomInButton.alpha = [self shouldShowZoomIn] && zoomButtonsVisible ? 1. : 0.;
-        _zoomOutButton.alpha = [self shouldShowZoomOut] && zoomButtonsVisible ? 1. : 0.;
+        BOOL showZoomInButton = [self shouldShowZoomIn] && zoomButtonsVisible;
+        _zoomInButton.alpha = showZoomInButton ? 1. : 0.;
+        if (showZoomInButton)
+            _zoomInButton.hidden = NO;
+        BOOL showZoomOutButton = [self shouldShowZoomOut] && zoomButtonsVisible;
+        _zoomOutButton.alpha = showZoomOutButton ? 1. : 0.;
+        if (showZoomOutButton)
+            _zoomOutButton.hidden = NO;
         BOOL mapModeButtonVisible = isToolbarVisible ? isAllowToolbarsVisible : (isZoomMapModeVisible && !isAllHidden);
-        _mapModeButton.alpha = [self shouldShowMyLocation] && mapModeButtonVisible ? 1. : 0.;
-        BOOL driveModeButtonVisible = visible;
-        _driveModeButton.alpha = [self shouldShowNavigation] && driveModeButtonVisible ? 1. : 0.;
+        BOOL showMyLocationButton = [self shouldShowMyLocation] && mapModeButtonVisible;
+        _mapModeButton.alpha = showMyLocationButton ? 1. : 0.;
+        if (showMyLocationButton)
+            _mapModeButton.hidden = NO;
+        _driveModeButton.alpha = navigationButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
-        if (self.mapInfoController.bottomPanelController)
+        if (self.mapInfoController.bottomPanelController.parentViewController == self)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
     };
@@ -1961,7 +2052,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _mapModeButton.userInteractionEnabled = _mapModeButton.alpha > 0.;
         _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.;
 
-        if (self.mapInfoController.bottomPanelController)
+        if (self.mapInfoController.bottomPanelController.parentViewController == self)
             self.mapInfoController.bottomPanelController.view.userInteractionEnabled = self.mapInfoController.bottomPanelController.view.alpha > 0.;
 
     };
@@ -2166,6 +2257,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
 
     [_driveModeButton updateColorsForPressedState:NO];
+
+    BOOL routeFollowingMode = followingMode && !routePlanningMode;
+    if (routeFollowingMode != _routeFollowingMode)
+    {
+        if (routeFollowingMode)
+            _lastMapTouchTime = 0;
+        _routeFollowingMode = routeFollowingMode;
+        [self updateAutoHiddenBottomButtons];
+    }
 }
 
 - (void) recreateAllControls

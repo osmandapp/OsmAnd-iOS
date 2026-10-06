@@ -38,7 +38,7 @@ final class ShowHideCoordinatesGridAction: OAQuickAction {
     }
     
     override func getIcon() -> UIImage? {
-        UIImage.templateImageNamed("ic_action_world_globe")
+        .icActionWorldGlobe.withRenderingMode(.alwaysTemplate)
     }
     
     override func getStateName() -> String? {

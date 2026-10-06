@@ -35,6 +35,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OACarPlayAddressSearchController() <CPSearchTemplateDelegate>
 
@@ -199,7 +200,7 @@
                     [item setDetailText:[self generateDescription:searchListItem]];
                 }
                 
-                [item setAccessoryImage:[UIImage imageNamed:@"ic_custom_download"]];
+                [item setAccessoryImage:[UIImage imageNamed:ACImageNameIcCustomDownload]];
                 return;
             }
         }
@@ -288,7 +289,7 @@
     switch (objectType)
     {
         case EOAObjectTypeIndexItem:
-            return [UIImage imageNamed:@"ic_custom_download"];
+            return [UIImage imageNamed:ACImageNameIcCustomDownload];
         default: break;
     }
     return nil;

@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OASearchCoreFactory.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAHistoryItem
 
@@ -69,7 +70,7 @@
 {
     if (self.hType == OAHistoryTypeParking)
     {
-        return [UIImage imageNamed:@"ic_parking_pin_small"];
+        return [UIImage imageNamed:ACImageNameIcParkingPinSmall];
     }
     else if (self.iconName.length > 0)
     {
@@ -93,7 +94,7 @@
             }
         }
     }
-    return [UIImage imageNamed:@"ic_map_pin_small"];
+    return [UIImage imageNamed:ACImageNameIcMapPinSmall];
 }
 
 - (NSString *) getPointDescriptionType

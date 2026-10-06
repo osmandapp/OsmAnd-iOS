@@ -27,6 +27,7 @@
 #import "OABuilding.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAMemoryLog.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -979,6 +980,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             if ([rm isCancelled])
                 return;
             
+            [OAMemoryLog.sharedInstance onSearchRun];
             [self searchInBackground:phrase matcher:rm];
             if (![rm isCancelled])
             {

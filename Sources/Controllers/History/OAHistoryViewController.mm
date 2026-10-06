@@ -147,7 +147,7 @@
 
 - (UIImage *)getCustomIconForLeftNavbarButton
 {
-    return self.tableView.editing ? [UIImage templateImageNamed:@"icon_remove"] : nil;
+    return self.tableView.editing ? [UIImage templateImageNamed:ACImageNameIconRemove] : nil;
 }
 
 - (NSString *)getCustomAccessibilityForLeftNavbarButton
@@ -158,7 +158,7 @@
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     UIBarButtonItem *rightButton = [self createRightNavbarButton:nil
-                                                        iconName:@"icon_edit"
+                                                        iconName:ACImageNameIconEdit
                                                           action:@selector(onRightNavbarButtonPressed)
                                                             menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
@@ -631,7 +631,7 @@
         HistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
         HistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
         
-        MGSwipeButton *remove = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+        MGSwipeButton *remove = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:ACImageNameIcTripRemovepoint] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
                                  {
                                      [self remove:dataItem];
                                      return YES;

@@ -611,7 +611,7 @@ static const NSInteger kColorsSection = 1;
 
 - (void)setupView
 {
-    self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_appearance"];
+    self.titleIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomAppearance];
     self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
 
     [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
@@ -1024,7 +1024,7 @@ static const NSInteger kColorsSection = 1;
 {
     NSString *title = localizedString(titleKey);
     BOOL isOsmAndProAvailable = [OAIAPHelper isOsmAndProAvailable];
-    UIImage *image = isOsmAndProAvailable ? nil : [UIImage imageNamed:@"ic_custom_pro_logo_outlined"];
+    UIImage *image = isOsmAndProAvailable ? nil : [UIImage imageNamed:ACImageNameIcCustomProLogoOutlined];
     __weak __typeof(self) weakSelf = self;
 
     UIAction *action = [UIAction actionWithTitle:title
@@ -1239,7 +1239,7 @@ static const NSInteger kColorsSection = 1;
                         kTableKey:@"vertical_exaggeration",
                         kCellType:[OAValueTableViewCell getCellIdentifier],
                         kCellTitle:OALocalizedString(@"vertical_exaggeration"),
-                        kCellIconNameKey:@"ic_custom_terrain_scale",
+                        kCellIconNameKey:ACImageNameIcCustomTerrainScale,
                         kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
                         kTableValues:@{
                             @"string_value":alphaValueString,
@@ -1256,7 +1256,7 @@ static const NSInteger kColorsSection = 1;
                         kTableKey:@"wall_height",
                         kCellType:[OAValueTableViewCell getCellIdentifier],
                         kCellTitle:OALocalizedString(@"wall_height"),
-                        kCellIconNameKey:@"ic_custom_terrain_scale",
+                        kCellIconNameKey:ACImageNameIcCustomTerrainScale,
                         kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
                         kTableValues:@{
                             @"string_value":elevationMetersValueString,
@@ -1328,7 +1328,7 @@ static const NSInteger kColorsSection = 1;
             kTableKey: @"reset",
             kCellType: [OARightIconTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"reset_to_original"),
-            kCellRightIconName: @"ic_custom_reset"
+            kCellRightIconName: ACImageNameIcCustomReset
     }];
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
@@ -1818,7 +1818,7 @@ static const NSInteger kColorsSection = 1;
         BOOL isGradientColorSelected = [self isSelectedTypeGradient];
         BOOL isRightActionButtonVisible = isSolidColorSelected || isGradientColorSelected;
         [cell rightActionButtonVisibility:isRightActionButtonVisible];
-        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage templateImageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
+        [cell.rightActionButton setImage:isRightActionButtonVisible ? [UIImage imageNamed:ACImageNameIcCustomAdd] : nil forState:UIControlStateNormal];
         cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0;
         cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? OALocalizedString(isSolidColorSelected ? @"shared_string_add_color" : @"add_palette") : nil;
         [cell.rightActionButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
@@ -2056,7 +2056,7 @@ static const NSInteger kColorsSection = 1;
                 [_trackView3DEmptyView configureWithTitle:OALocalizedString(@"track_3d_empty_view_title")
                                               description:OALocalizedString(@"track_3d_empty_view_description")
                                               buttonTitle:OALocalizedString(@"shared_string_get")
-                                                leftImage:[UIImage imageNamed:@"ic_custom_3dtrack_colored"]
+                                                leftImage:[UIImage imageNamed:ACImageNameIcCustom3DtrackColored]
                                        leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
             }
             

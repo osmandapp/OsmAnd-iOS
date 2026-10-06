@@ -246,6 +246,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) recreateControls;
 - (void) refreshMap;
 - (void) refreshMap:(BOOL)redrawMap;
+- (void)updateRouteButton;
 - (void) updateColors;
 
 - (void) addMapMarker:(double)lat lon:(double)lon description:(NSString *)descr;

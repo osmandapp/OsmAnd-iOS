@@ -32,15 +32,15 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_distance.png" translatesAutoresizingMaskIntoConstraints="NO" id="iVs-u6-J98">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_distance" translatesAutoresizingMaskIntoConstraints="NO" id="iVs-u6-J98">
                         <rect key="frame" x="16" y="33.5" width="13" height="13"/>
                         <color key="tintColor" name="textColorSecondary"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_points.png" translatesAutoresizingMaskIntoConstraints="NO" id="ooY-br-udb">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_points" translatesAutoresizingMaskIntoConstraints="NO" id="ooY-br-udb">
                         <rect key="frame" x="83" y="33.5" width="13" height="13"/>
                         <color key="tintColor" name="textColorSecondary"/>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="7Ra-cl-Eeb">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer" translatesAutoresizingMaskIntoConstraints="NO" id="7Ra-cl-Eeb">
                         <rect key="frame" x="283" y="15" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="5w6-Op-Gw8"/>
@@ -86,9 +86,9 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_gpx_distance.png" width="13" height="13"/>
-        <image name="ic_gpx_points.png" width="13" height="13"/>
-        <image name="menu_cell_pointer.png" width="6" height="10.5"/>
+        <image name="ic_gpx_distance" width="13" height="13"/>
+        <image name="ic_gpx_points" width="13" height="13"/>
+        <image name="menu_cell_pointer" width="6" height="10.5"/>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

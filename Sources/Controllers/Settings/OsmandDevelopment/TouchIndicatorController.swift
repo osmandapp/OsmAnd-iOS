@@ -108,14 +108,6 @@ final class TouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
             activeTouches.removeAll()
         }
 
-        override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
-            false
-        }
-
-        override func canBePrevented(by preventingGestureRecognizer: UIGestureRecognizer) -> Bool {
-            false
-        }
-
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
             activeTouches.formUnion(touches.map(ObjectIdentifier.init))
             overlay?.handle(touches)

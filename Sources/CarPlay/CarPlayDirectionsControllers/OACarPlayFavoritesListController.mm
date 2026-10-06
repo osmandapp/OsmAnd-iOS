@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACarPlayFavoritesListController
 {
@@ -42,7 +43,7 @@
                                                          detailText:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
                                                                                                OALocalizedString(@"points_count"),
                                                                                                @(points.count).stringValue]
-                                                              image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_folder"]
+                                                              image:[OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomFolder]
                                                                                               color:group.color]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
@@ -65,7 +66,7 @@
             [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
                                                              detailText:@(lastModifiedList.count).stringValue
-                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_history"]
+                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomHistory]
                                                                                                   color:UIColorFromRGB(color_primary_purple)]
                                                          accessoryImage:nil
                                                           accessoryType:CPListItemAccessoryTypeDisclosureIndicator];

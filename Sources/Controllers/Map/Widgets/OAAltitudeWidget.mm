@@ -17,6 +17,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OANativeUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAAltitudeWidget
 {
@@ -43,9 +44,9 @@
         [self setText:@"-" subtext:nil];
 
         if (_widgetType == EOAAltitudeWidgetTypeMyLocation)
-            [self setIcon:@"widget_altitude_location"];
+            [self setIcon:ACImageNameWidgetAltitudeLocation];
         else
-            [self setIcon:@"widget_altitude_map_center"];
+            [self setIcon:ACImageNameWidgetAltitudeMapCenter];
     }
     return self;
 }

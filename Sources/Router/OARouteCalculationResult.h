@@ -33,6 +33,16 @@
 
 @end
 
+@interface OAIntermediatePointInfo : NSObject
+
+@property (nonatomic, readonly) int routePointOffset;
+@property (nonatomic, readonly) int distance;
+@property (nonatomic, readonly) long time;
+
+- (instancetype) initWithRoutePointOffset:(int)routePointOffset distance:(int)distance time:(long)time;
+
+@end
+
 @interface OARouteCalculationResult : NSObject
 
 @property (nonatomic) NSMutableArray<id<OALocationPoint>> *locationPoints;
@@ -106,6 +116,7 @@
 - (int)getDistanceToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset;
 - (int) getIndexOfIntermediate:(int)countFromLast;
 - (int) getIntermediatePointsToPass;
+- (NSArray<OAIntermediatePointInfo *> *) getIntermediatePointInfos;
 - (long) getLeftTime:(CLLocation *)fromLoc;
 - (long) getLeftTimeToNextTurn:(CLLocation *)fromLoc;
 - (int) getLeftTimeToNextDirection:(CLLocation *)fromLoc;

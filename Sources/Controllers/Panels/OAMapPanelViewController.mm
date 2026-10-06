@@ -119,6 +119,7 @@
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
+#import "GeneratedAssetSymbols.h"
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -432,8 +433,12 @@ typedef enum
         _activeTargetType = OATargetMapModeParametersSettings;
     else if ([controller isKindOfClass:ProfileAppearanceIconSizeViewController.class])
         _activeTargetType = OATargetProfileAppearanceIconSizeSettings;
+    else if ([controller isKindOfClass:WidgetPanelColorViewController.class])
+        _activeTargetType = OATargetWidgetPanelAppearanceSettings;
 
     [self setupScrollableHud:controller];
+    if (_activeTargetType == OATargetWidgetPanelAppearanceSettings)
+        [_hudViewController updateControlsLayout:NO];
 }
 
 - (void) hideScrollableHudViewController
@@ -3793,7 +3798,7 @@ typedef enum
     else
     {
         targetPoint.type = OATargetRouteIntermediate;
-        [UIImage imageNamed:@"list_intermediate"];
+        [UIImage imageNamed:ACImageNameListIntermediate];
     }
     
     _targetMenuView.isAddressFound = YES;
@@ -3833,7 +3838,7 @@ typedef enum
     _targetLongitude = latLon.longitude;
     
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = [UIImage imageNamed:@"ic_custom_location_marker"];
+    targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomLocationMarker];
     targetPoint.toolbarNeeded = NO;
     
     _activeTargetType = targetPoint.type;
@@ -4575,7 +4580,7 @@ typedef enum
     }
 }
 
-- (void) updateRouteButton
+- (void)updateRouteButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         bool routePlanningMode = false;

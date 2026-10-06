@@ -57,7 +57,7 @@
                                             <constraint firstAttribute="height" constant="30" id="Uoj-F4-CFS"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="ic_custom_delete.png"/>
+                                        <state key="normal" image="ic_custom_delete"/>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kDK-zY-1e1">
                                         <rect key="frame" x="0.0" y="5" width="30" height="30"/>
@@ -133,7 +133,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="1Ih-Dx-Tcb" secondAttribute="trailing" id="I13-dj-AaA"/>
                     <constraint firstItem="1Ih-Dx-Tcb" firstAttribute="leading" secondItem="35W-3Q-fof" secondAttribute="leadingMargin" id="KTC-aL-6JC"/>
                     <constraint firstItem="1Ih-Dx-Tcb" firstAttribute="top" secondItem="35W-3Q-fof" secondAttribute="top" id="RBu-Ay-wzg"/>
-                    <constraint firstAttribute="bottom" secondItem="1Ih-Dx-Tcb" secondAttribute="bottom" id="X8a-vF-aTf"/>
+                    <constraint firstAttribute="bottom" secondItem="1Ih-Dx-Tcb" secondAttribute="bottom" priority="999" id="X8a-vF-aTf"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" name="groupBg"/>
@@ -155,7 +155,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_delete.png" width="30" height="30"/>
+        <image name="ic_custom_delete" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

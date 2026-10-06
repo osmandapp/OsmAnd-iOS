@@ -19,6 +19,7 @@
 #import "OAIndexConstants.h"
 #import "OAMapSource.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
@@ -133,7 +134,7 @@
                              @"title" : pair.lastObject,
                              @"value" : pair.firstObject,
                              @"param" : pair,
-                             @"img" : @"ic_custom_map_style"
+                             @"img" : ACImageNameIcCustomMapStyle
                              }];
         }
     }

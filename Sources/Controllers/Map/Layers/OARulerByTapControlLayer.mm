@@ -32,6 +32,7 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 #define DRAW_TIME 2
 #define kDefaultLineWidth 5.0
@@ -99,8 +100,8 @@ const static int kDoubleTouchCount = 2;
     _linesCollection.reset(new OsmAnd::VectorLinesCollection());
     _lineEndsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     
-    _centerIconDay = [OANativeUtilities skImageFromPngResource:@"ic_ruler_center"];
-    _centerIconNight = [OANativeUtilities skImageFromPngResource:@"ic_ruler_center_light"];
+    _centerIconDay = [OANativeUtilities skImageFromAssetNamed:ACImageNameIcRulerCenter];
+    _centerIconNight = [OANativeUtilities skImageFromAssetNamed:ACImageNameIcRulerCenterLight];
 }
 
 - (void) deinitLayer

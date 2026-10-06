@@ -78,7 +78,7 @@ final class MapSettingsBuildings3DScreen: NSObject, OAMapSettingsScreen {
         visibilityRow.cellType = OAValueTableViewCell.reuseIdentifier
         visibilityRow.key = RowKey.visibility.rawValue
         visibilityRow.title = localizedString("visibility")
-        visibilityRow.icon = UIImage.templateImageNamed("ic_custom_visibility")
+        visibilityRow.icon = .icCustomVisibility
         visibilityRow.iconTintColor = .iconColorDefault
         visibilityRow.descr = NumberFormatter.percentFormatter.string(from: srtmPlugin.buildings3dAlphaPref.get() as NSNumber)
         

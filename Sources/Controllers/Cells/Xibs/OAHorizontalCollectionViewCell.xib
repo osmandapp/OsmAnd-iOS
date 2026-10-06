@@ -35,7 +35,7 @@
                 <constraints>
                     <constraint firstItem="Cis-Rg-IDz" firstAttribute="leading" secondItem="UdM-sK-vmS" secondAttribute="leading" id="4ZV-f8-Ri5"/>
                     <constraint firstAttribute="trailing" secondItem="Cis-Rg-IDz" secondAttribute="trailing" id="kSO-r4-Bdr"/>
-                    <constraint firstAttribute="bottom" secondItem="Cis-Rg-IDz" secondAttribute="bottom" id="kqh-x4-ATw"/>
+                    <constraint firstAttribute="bottom" secondItem="Cis-Rg-IDz" secondAttribute="bottom" priority="999" id="kqh-x4-ATw"/>
                     <constraint firstItem="Cis-Rg-IDz" firstAttribute="top" secondItem="UdM-sK-vmS" secondAttribute="top" id="xjY-qu-Dru"/>
                 </constraints>
             </tableViewCellContentView>

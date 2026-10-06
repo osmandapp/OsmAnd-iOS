@@ -23,11 +23,29 @@ final class MigrationManager: NSObject {
         case migrateRouteRecalculationValues
         case migrateLocationIconSizeAndCourseIconSize
         case migrateAstronomyPreferences
+        case migrateCoordinateFormatPreferredIds
         case migrateWidgetLayoutPreferences
         case migrateTransparentWidgets
+        case migrateTransparentWidgetsToPanelAppearance
         case migrateTracksSortModeKeysAndFormat
+        case migrateCoordinateGridFormatIds
+        case migrateKeepScreenOnMode
+        case migrateLegacyRouteWidgets
     }
     
+    private enum LegacyWidgetPanelOrder {
+        static let top = [
+            [WidgetType.coordinatesMapCenter.id, WidgetType.coordinatesCurrentLocation.id, WidgetType.streetName.id,
+             WidgetType.markersTopBar.id, WidgetType.lanes.id],
+            [WidgetType.nextTurn.id, WidgetType.coordinatesMapCenter.id, WidgetType.coordinatesCurrentLocation.id,
+             WidgetType.streetName.id, WidgetType.markersTopBar.id, WidgetType.lanes.id]
+        ]
+        static let bottom = [
+            [WidgetType.elevationProfile.id],
+            [WidgetType.routeInfo.id, WidgetType.elevationProfile.id]
+        ]
+    }
+
     private struct HudMigrationScenario {
         let need: Bool
         let x: CGFloat
@@ -120,23 +138,79 @@ final class MigrationManager: NSObject {
                 migrateTransparentWidgets()
                 defaults.set(true, forKey: MigrationKey.migrateTransparentWidgets.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateTransparentWidgetsToPanelAppearance.rawValue) {
+                migrateTransparentWidgetsToPanelAppearance()
+                defaults.set(true, forKey: MigrationKey.migrateTransparentWidgetsToPanelAppearance.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue) {
+                settings.coordinateFormatSettingsStorage.migrateFromLegacyIfNeeded()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateFormatPreferredIds.rawValue)
+            }
             if !defaults.bool(forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue) {
                 migrateTracksSortModeKeysAndFormat()
                 defaults.set(true, forKey: MigrationKey.migrateTracksSortModeKeysAndFormat.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateKeepScreenOnMode.rawValue) {
+                migrateKeepScreenOnMode()
+                defaults.set(true, forKey: MigrationKey.migrateKeepScreenOnMode.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue) {
+                migrateCoordinateGridFormatIds()
+                defaults.set(true, forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue)
+            }
+        }
+    }
+
+    private func migrateCoordinateGridFormatIds() {
+        let pref = settings.coordinateGridFormat
+        for mode in OAApplicationMode.allPossibleValues() {
+            if pref.isSet(for: mode) {
+                pref.set(pref.get(mode), mode: mode)
+            } else {
+                let legacyFormat = Int(settings.settingGeoFormat.get(mode))
+                pref.set(
+                    CoordinateFormatIds.fromOldFormat(legacyFormat) ?? GridFormatWrapper.defaultFormatId,
+                    mode: mode
+                )
             }
         }
     }
 
     private func migrateTransparentWidgets() {
         let legacyPreference = OACommonBoolean.withKey("transparentMapTheme", defValue: false).makeProfile()
-        for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
+        let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
+        for appMode in OAApplicationMode.allPossibleValues() {
+            guard legacyPreference.isSet(for: appMode) else { continue }
             let value = legacyPreference.get(appMode)
-            var preferences = [settings.transparentWidgets(nil)]
-            ScreenLayoutMode.allCases.forEach {
-                preferences.append(settings.transparentWidgets(NSNumber(value: $0.rawValue)))
+            for layoutMode in layoutModes {
+                let preference = settings.transparentWidgets(
+                    layoutMode.map { NSNumber(value: $0.rawValue) }
+                )
+                if !preference.isSet(for: appMode) {
+                    preference.set(value, mode: appMode)
+                }
             }
-            for preference in preferences where !preference.isSet(for: appMode) {
-                preference.set(value, mode: appMode)
+        }
+    }
+
+    private func migrateTransparentWidgetsToPanelAppearance() {
+        OAAppSettings.performBatchedPreferenceNotifications { [self] in
+            let layoutModes: [ScreenLayoutMode?] = [nil] + ScreenLayoutMode.allCases.map { Optional($0) }
+            for appMode in OAApplicationMode.allPossibleValues() {
+                for layoutMode in layoutModes {
+                    let preference = settings.transparentWidgets(
+                        layoutMode.map { NSNumber(value: $0.rawValue) }
+                    )
+                    guard preference.isSet(for: appMode) else { continue }
+                    if preference.get(appMode) {
+                        let appearanceSettings = WidgetPanelAppearanceSettings(appMode: appMode,
+                                                                                layoutMode: layoutMode)
+                        for panel in WidgetsPanel.values {
+                            appearanceSettings.setBackgroundMode(.transparent, for: panel)
+                        }
+                    }
+                    preference.resetMode(toDefault: appMode)
+                }
             }
         }
     }
@@ -167,9 +241,60 @@ final class MigrationManager: NSObject {
                     }
                 }
             }
+            if !defaults.bool(forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue) {
+                keepLegacyRouteWidgetsForCustomizedProfiles()
+                defaults.set(true, forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue)
+            }
         }
     }
     
+    // Sync with android: profiles with customized widgets keep the old route widgets, others get the route info widget
+    private func keepLegacyRouteWidgetsForCustomizedProfiles() {
+        guard WidgetsAvailabilityHelper.hadLegacyRouteWidgets() else { return }
+        let legacyWidgetIds = [WidgetType.intermediateDestination.id, WidgetType.distanceToDestination.id,
+                               WidgetType.timeToIntermediate.id, WidgetType.timeToDestination.id]
+        for appMode in OAApplicationMode.allPossibleValues() where isWidgetsCustomized(appMode) {
+            var visibility = settings.mapInfoControls.get(appMode)
+                .components(separatedBy: SETTINGS_SEPARATOR)
+                .filter { !$0.isEmpty }
+            for widgetId in legacyWidgetIds where !isVisibilityDefined(visibility, widgetId: widgetId) {
+                visibility.append(widgetId)
+            }
+            if !isVisibilityDefined(visibility, widgetId: WidgetType.routeInfo.id) {
+                visibility.append(HIDE_PREFIX + WidgetType.routeInfo.id)
+            }
+            settings.mapInfoControls.set(visibility.map { $0 + SETTINGS_SEPARATOR }.joined(), mode: appMode)
+        }
+    }
+
+    private func isWidgetsCustomized(_ appMode: OAApplicationMode) -> Bool {
+        settings.mapInfoControls.isSet(for: appMode)
+            || settings.customWidgetKeys.isSet(for: appMode)
+            || WidgetsPanel.values.contains { isWidgetPanelCustomized($0, appMode: appMode) }
+    }
+
+    private func isWidgetPanelCustomized(_ panel: WidgetsPanel, appMode: OAApplicationMode) -> Bool {
+        let preference = panel.orderPreference(screenLayoutMode: nil)
+        guard preference.isSet(for: appMode) else { return false }
+        let pages = preference.get(appMode)
+        var defaultOrders = [panel.originalOrder()]
+        if panel == .topPanel {
+            defaultOrders.append(contentsOf: LegacyWidgetPanelOrder.top)
+        } else if panel == .bottomPanel {
+            defaultOrders.append(contentsOf: LegacyWidgetPanelOrder.bottom)
+        }
+        return !defaultOrders.contains { order in
+            pages == [order]
+                || (panel.isPanelVertical && pages == WidgetsPanel.getPagedWidgetIdsWithPages([order]))
+        }
+    }
+
+    private func isVisibilityDefined(_ visibility: [String], widgetId: String) -> Bool {
+        visibility.contains(widgetId)
+            || visibility.contains(COLLAPSED_PREFIX + widgetId)
+            || visibility.contains(HIDE_PREFIX + widgetId)
+    }
+
     private func changeWidgetIdsMigration1() {
         let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
@@ -689,6 +814,15 @@ final class MigrationManager: NSObject {
 
         if !validValues.contains(searchSortMode), let value = valuesByLocalizedTitle[searchSortMode] {
             settings.searchTracksSortModes.set(value)
+        }
+    }
+
+    private func migrateKeepScreenOnMode() {
+        for appMode in OAApplicationMode.allPossibleValues() {
+            // This migration alone must not mark the profile as changed for Cloud sync.
+            let lastModifiedTime = settings.getLastProfileSettingsModifiedTime(appMode)
+            settings.keepScreenOn.set(.always, mode: appMode)
+            settings.setLastProfileModifiedTime(lastModifiedTime, mode: appMode)
         }
     }
 

@@ -3343,7 +3343,7 @@
 "route_your_destination_is_on_left" = "Destinația dumneavoastră este la stânga";
 "route_your_destination_is_on_ahead" = "Destinația ta este drept înainte";
 "route_your_destination_is_on_right" = "Destinația dumneavoastră este pe dreapta";
-"shared_string_show" = "Spectacol";
+"shared_string_show" = "Afișaj";
 "weather_wind_animation_enable_descr" = "Activați pentru a vizualiza stratul de animație a vântului pe hartă.";
 "osmand_cloud_delete_account_descr_with_email" = "Sunteți sigur că doriți să ștergeți contul OsmAnd Cloud: %@?";
 "quick_action_toggle_preference" = "Un comutator pentru a schimba preferința.";
@@ -3788,3 +3788,6 @@
 "open_from_short" = "De la";
 "open_till_short" = "Până la";
 "shared_string_unlock" = "Deblocare";
+"ais_connection_failed" = "Conexiune nereușită";
+
+"ios_release_5_4" = "• Secțiunea „Locurile mele” reproiectată — cu subdosare pentru Favorite, dosare fixate și acțiuni mai rapide\n• Funcția „Planificați un traseu” reconstruită — adăugați puncte de traseu și POI-uri și combinați diferite tipuri de trasee\n• Modul nou de Astronomie: harta stelelor cu o bază de date detaliată pentru fiecare obiect, grafice de vizibilitate și un program de observare\n• S-a adăugat tipul de vizualizare „Umbre de relief”\n• S-a adăugat suport pentru hărți doar cu drumuri\n• Editarea paletei de culori pentru Trasee și Relief\n• Organizare automată a traseelor după an, lungime, activitate și altele\n• Împărțirea fișierelor GPX cu mai multe trasee în fișiere separate la import\n• Setarea unui aspect prestabilit pentru dosarele de trasee\n• S-a adăugat o setare pentru lățimea bicicletei pentru a evita pistele de biciclete înguste\n• S-a adăugat un widget pentru tensiunea adaptorului OBD-II\n• S-a adăugat opțiunea „Întrerupeți conținutul audio vorbit” pentru a pune pauză la podcasturi sau cărți audio în timpul instrucțiunilor de navigare\n• Selecție completă de pictograme disponibilă acum pentru profiluri\n• Performanță îmbunătățită la gestionarea unui număr mare de Favorite\n• S-a remediat o problemă legată de perioada de probă CarPlay";

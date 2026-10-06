@@ -2072,6 +2072,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     __weak __typeof(self) weakSelf = self;
     void (^onFailureNoCache)(void) = ^{
+        weakSelf.wikiCardsReady = NO;
         onlinePhotoCardsView.isLoading = NO;
         NoInternetCard *noInternetCard = [NoInternetCard new];
         noInternetCard.onTryAgainAction = ^{

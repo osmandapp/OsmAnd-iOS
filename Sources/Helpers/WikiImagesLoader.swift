@@ -20,11 +20,19 @@ final class WikiImagesLoader: NSObject {
         var rawResponse: String?
         let listener = WikiNetworkResponseListener { rawResponse = $0 }
         let images = WikiCoreHelper.shared.getWikiImageList(tags: tags, listener: listener)
-        guard let rawResponse else {
+        guard let rawResponse, isValidResponse(rawResponse) else {
             return nil
         }
         cache.save(rawKey: rawKey, json: rawResponse)
         return images
+    }
+
+    private static func isValidResponse(_ json: String) -> Bool {
+        guard let data = json.data(using: .utf8),
+              let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            return false
+        }
+        return object["features-v2"] is [Any]
     }
 
     private static func cachedImages(cache: PhotoListCache,

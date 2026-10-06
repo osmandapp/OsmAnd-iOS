@@ -76,7 +76,7 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
         
         let link: String
         if let wikiImageCard = card as? WikiImageCard {
-            link = wikiImageCard.wikiImage?.getUrlWithCommonAttributions() ?? ""
+            link = wikiImageCard.urlWithCommonAttributions.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         } else {
             link = !card.imageHiresUrl.isEmpty ? card.imageHiresUrl : card.imageUrl
         }

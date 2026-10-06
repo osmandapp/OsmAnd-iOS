@@ -153,8 +153,8 @@ enum SharedTravelArticles {
         shared.content = article.content
         shared.isPartOf = article.isPartOf
         shared.isParentOf = article.isParentOf ?? ""
-        shared.lat = article.lat
-        shared.lon = article.lon
+        shared.lat_ = article.lat
+        shared.lon_ = article.lon
         shared.imageTitle = article.imageTitle
         shared.routeId = article.routeId
         shared.ref = article.ref
@@ -197,8 +197,8 @@ enum SharedTravelArticles {
         article.content = shared.content
         article.isPartOf = shared.isPartOf
         article.isParentOf = shared.isParentOf
-        article.lat = shared.lat
-        article.lon = shared.lon
+        article.lat = shared.getLat()
+        article.lon = shared.getLon()
         article.imageTitle = shared.imageTitle
         article.routeId = shared.routeId
         article.ref = shared.ref

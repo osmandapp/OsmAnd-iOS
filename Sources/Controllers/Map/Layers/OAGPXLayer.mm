@@ -1685,15 +1685,14 @@ colorizationScheme:(int)colorizationScheme
         if (waypoints.count == 0)
             continue;
 
-        OASGpxFile *gpx = _cachedTracks[key][@"gpxFile"] ?: value;
         for (OASWptPt *waypoint in waypoints)
         {
-            OASGpxUtilitiesPointsGroup *group = [gpx.pointsGroups objectForKey:waypoint.category ?: @""];
+            OASGpxUtilitiesPointsGroup *group = [value.pointsGroups objectForKey:waypoint.category ?: @""];
             if (!group || !group.hidden)
                 [points addObject:waypoint];
         }
     }
-    return points;
+    return [points copy];
 }
 
 - (NSDictionary<NSString *, NSNumber *> *)collectPointsModifiedTimes
@@ -1701,7 +1700,7 @@ colorizationScheme:(int)colorizationScheme
     NSMutableDictionary<NSString *, NSNumber *> *times = [NSMutableDictionary dictionary];
     for (NSString *key in _gpxFiles)
         times[key] = @(_gpxFiles[key].pointsModifiedTime);
-    return times;
+    return [times copy];
 }
 
 - (void)refreshGpxWaypoints:(NSArray<OASWptPt *> *)points

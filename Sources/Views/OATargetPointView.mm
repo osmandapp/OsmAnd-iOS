@@ -2059,13 +2059,22 @@ static const NSInteger _buttonsCount = 4;
 
 - (IBAction) buttonFavoriteClicked:(id)sender
 {
+    // a favorite target can come without its item (e.g. the "Add favorite" quick action), then it is added, not edited
+    OAFavoriteItem *item = nil;
     if (self.targetPoint.type == OATargetFavorite)
+    {
+        if ([self.targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+            item = self.targetPoint.targetObj;
+        else if ([self.customController isKindOfClass:OAFavoriteViewController.class])
+            item = ((OAFavoriteViewController *) self.customController).favorite;
+    }
+
+    if (item)
     {
         self.customController.topToolbarType = ETopToolbarTypeFixed;
         [self showFullMenu];
         [self.customController activateEditing];
-        
-        OAFavoriteItem *item = self.targetPoint.targetObj;
+
         [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }

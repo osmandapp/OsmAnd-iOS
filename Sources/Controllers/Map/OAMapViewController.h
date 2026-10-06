@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
 static NSString * const kNotificationMapGestureAction = @"kNotificationMapGestureAction";
+static NSString * const kNotificationMapTouchAction = @"kNotificationMapTouchAction";
 static NSString * const kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
 
 static const float kCorrectionMinLeftSpace = 40.0;
@@ -104,6 +105,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 @property (atomic, readonly) BOOL mapViewLoaded;
 @property (nonatomic) BOOL attachedToCarPlayWindow;
+@property (nonatomic, readonly) BOOL recTrackShowing;
 
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;

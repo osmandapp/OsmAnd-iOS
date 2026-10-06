@@ -101,7 +101,15 @@ final class TouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
         weak var overlay: OverlayWindow?
 
+        private var activeTouches: Set<ObjectIdentifier> = []
+
+        override func reset() {
+            super.reset()
+            activeTouches.removeAll()
+        }
+
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+            activeTouches.formUnion(touches.map(ObjectIdentifier.init))
             overlay?.handle(touches)
         }
 
@@ -111,10 +119,19 @@ final class TouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
         override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
             overlay?.handle(touches)
+            finishTouches(touches)
         }
 
         override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
             overlay?.handle(touches)
+            finishTouches(touches)
+        }
+
+        private func finishTouches(_ touches: Set<UITouch>) {
+            activeTouches.subtract(touches.map(ObjectIdentifier.init))
+            if activeTouches.isEmpty {
+                state = .failed
+            }
         }
     }
 

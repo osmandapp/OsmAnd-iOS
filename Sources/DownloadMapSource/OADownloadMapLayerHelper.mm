@@ -45,9 +45,11 @@
             data.lastMapSource = source;
             break;
         case EOADownloadMapLayerOverlay:
+            data.lastOverlayMapSource = source;
             data.overlayMapSource = source;
             break;
         case EOADownloadMapLayerUnderlay:
+            data.lastUnderlayMapSource = source;
             data.underlayMapSource = source;
             break;
     }

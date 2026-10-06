@@ -475,6 +475,7 @@
         else if ([key isEqualToString:@"download_map"] || [key isEqualToString:@"update_map"])
         {
             BOOL update = [key isEqualToString:@"update_map"];
+            tableView.userInteractionEnabled = NO;
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             [vwController dismissWithCompletion:^{
                 [OAMoreOptionsBottomSheetScreen selectDownloadLayerForUpdate:update];

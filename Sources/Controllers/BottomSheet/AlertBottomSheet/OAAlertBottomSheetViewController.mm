@@ -85,9 +85,7 @@
 
 + (void)showAlertWithTitle:(NSString *)title selectableItemsTitles:(NSArray<NSString *> *)titles descriptions:(NSArray<NSString *> *)descriptions images:(NSArray<NSString *> *)images selection:(OAAlertBottomSheetSelectCompletionBlock)selection
 {
-    OAAlertBottomSheetViewController *bottomSheet = [[OAAlertBottomSheetViewController alloc] initWithTitle:title titleIcon:nil message:nil cancelTitle:nil doneTitle:nil selectableItemsTitles:titles selectableItemsImages:images contentView:nil doneColpletition:nil selectColpletition:selection];
-    bottomSheet->_selectableItemsDescriptions = [descriptions copy];
-    [bottomSheet generateData];
+    OAAlertBottomSheetViewController *bottomSheet = [[OAAlertBottomSheetViewController alloc] initWithTitle:title selectableItemsTitles:titles descriptions:descriptions images:images selection:selection];
     [bottomSheet presentInViewController:OARootViewController.instance];
 }
 
@@ -125,6 +123,21 @@
     return self;
 }
 
+- (instancetype)initWithTitle:(NSString *)title selectableItemsTitles:(NSArray<NSString *> *)titles descriptions:(NSArray<NSString *> *)descriptions images:(NSArray<NSString *> *)images selection:(OAAlertBottomSheetSelectCompletionBlock)selection
+{
+    self = [super init];
+    if (self)
+    {
+        _title = [title copy];
+        _selectableItemsTitles = [titles copy];
+        _selectableItemsDescriptions = [descriptions copy];
+        _selectableItemsImages = [images copy];
+        _selectCompletitionBlock = [selection copy];
+        [self generateData];
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -132,7 +145,12 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = _selectableItemsDescriptions ? UITableViewCellSeparatorStyleSingleLine : UITableViewCellSeparatorStyleNone;
     if (_selectableItemsDescriptions)
+    {
         self.tableView.estimatedRowHeight = 72.;
+        self.titleView.numberOfLines = 0;
+        self.headerViewCollapsedHeight.active = NO;
+        [self.headerView.heightAnchor constraintGreaterThanOrEqualToConstant:57.].active = YES;
+    }
     
     self.headerDividerView.hidden = YES;
     self.buttonsSectionDividerView.hidden = YES;
@@ -160,6 +178,13 @@
     
     if (!_doneTitle)
         [self.rightButton removeFromSuperview];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (_selectableItemsDescriptions)
+        self.headerView.layer.mask = nil;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -191,6 +216,8 @@
     
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = _title ? self.headerView.frame.size.height : 0;
+    if (_title && _selectableItemsDescriptions)
+        headerHeight = [self.headerView systemLayoutSizeFittingSize:CGSizeMake(width + 2 * kHorizontalMargin, 0.) withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel].height;
     CGFloat contentHeight = 0;
     
     if (_message)

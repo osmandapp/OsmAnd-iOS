@@ -43,7 +43,6 @@
 #define kMinZoomPickerRow 2
 #define kMaxZoomRow 3
 #define kMaxZoomPickerRow 4
-#define kZoomPickerRow 3
 #define kDownloadInfoSection 2
 #define kNumberOfTilesRow 0
 #define kDownloadSizeRow 1
@@ -80,7 +79,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     EOADownloadMapLayer _layer;
     OAMapSource *_selectedSource;
     OAResourceItem *_currentItem;
-    NSUInteger _previewGeneration;
     OAAutoObserverProxy* _framePreparedObserver;
 }
 
@@ -284,7 +282,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *) item;
             OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
-            return ts.minimumZoomSupported;
+            return ts.minimumZoomSupported > 0;
         }
     }
     return 1;
@@ -315,9 +313,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray<NSString *> *zoomArray = [[NSMutableArray alloc] init];
     if (!_currentItem)
         return zoomArray;
-    NSInteger minZoom = [self getItemMinZoom];
-    NSInteger maxZoom = [self getItemMaxZoom];
-    for (NSInteger i = minZoom; i <= maxZoom; i++)
+    for (NSInteger i = [self getItemMinZoom]; i <= [self getItemMaxZoom]; i++)
         [zoomArray addObject:[NSString stringWithFormat: @"%ld", i]];
     return zoomArray;
 }
@@ -400,11 +396,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return;
     }
     _currentItem = item;
-    if (_minZoom < [self getItemMinZoom] || _maxZoom > [self getItemMaxZoom] || _minZoom > _maxZoom)
-    {
-        [self refreshSource];
-        return;
-    }
     OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithResource:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom numberOfTiles:_numberOfTiles];
     [[OARootViewController instance].navigationController pushViewController:downloadMapProgressVC animated:YES];
 }
@@ -487,30 +478,21 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)downloadZoomedTiles
+- (void) downloadZoomedTiles
 {
-    NSUInteger generation = ++_previewGeneration;
-    self.minZoomTileImage = nil;
-    self.maxZoomTileImage = nil;
-    if (!_currentItem || _possibleZoomValues.count == 0)
-        return;
     NSString *minZoomTileUrl = [self getZoomTileUrl:_minZoom];
     NSString *maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
-    NSURL *minURL = minZoomTileUrl.length > 0 ? [NSURL URLWithString:minZoomTileUrl] : nil;
-    NSURL *maxURL = maxZoomTileUrl.length > 0 ? [NSURL URLWithString:maxZoomTileUrl] : nil;
-    if (!minURL || !maxURL)
+    if (!minZoomTileUrl || !maxZoomTileUrl)
         return;
-    __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSData *minZoomData = [NSData dataWithContentsOfURL:minURL];
-        NSData *maxZoomData = [NSData dataWithContentsOfURL:maxURL];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong __typeof(weakSelf) self = weakSelf;
-            if (!self || generation != self->_previewGeneration
-                || ![self->_selectedSource isEqual:[OADownloadMapLayerHelper mapSourceForLayer:self->_layer]])
-                return;
-            self.minZoomTileImage = minZoomData ? [UIImage imageWithData:minZoomData] : nil;
-            self.maxZoomTileImage = maxZoomData ? [UIImage imageWithData:maxZoomData] : nil;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        NSData *minZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:minZoomTileUrl]];
+        NSData *maxZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:maxZoomTileUrl]];
+        if (minZoomData && maxZoomData)
+        {
+            _minZoomTileImage = [[UIImage alloc] initWithData:minZoomData];
+            _maxZoomTileImage = [[UIImage alloc] initWithData:maxZoomData];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kZoomTilesRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
         });
     });
@@ -611,10 +593,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
-        NSInteger zoom = indexPath.row == kMinZoomPickerRow ? _minZoom : _maxZoom;
-        NSUInteger selectedIndex = [_possibleZoomValues indexOfObject:[NSString stringWithFormat:@"%ld", (long)zoom]];
-        if (selectedIndex != NSNotFound)
-            [cell.picker selectRow:selectedIndex inComponent:0 animated:NO];
+        [cell.picker selectRow:indexPath.row == kMinZoomPickerRow ? _minZoom - 1 : _maxZoom - 1 inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         cell.hidden = ![item[@"isVisible"] boolValue];
@@ -672,10 +651,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [vw.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:kMinZoomRow inSection:kZoomSection] && indexPath != [NSIndexPath indexPathForRow:kMaxZoomRow inSection:kZoomSection] && indexPath != [NSIndexPath indexPathForRow:kZoomPickerRow inSection:kZoomSection] ? nil : indexPath;
+    if (indexPath.section == kMapTypeSection
+        || (indexPath.section == kZoomSection && (indexPath.row == kMinZoomRow || indexPath.row == kMaxZoomRow)))
+        return indexPath;
+    return nil;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -735,9 +716,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
     {
         OACustomPickerTableViewCell *cellRes = (OACustomPickerTableViewCell *) cell;
-        NSUInteger selectedIndex = [_possibleZoomValues indexOfObject:[NSString stringWithFormat:@"%ld", (long)value]];
-        if (selectedIndex != NSNotFound)
-            [cellRes.picker selectRow:selectedIndex inComponent:0 animated:NO];
+        [cellRes.picker selectRow:value inComponent:0 animated:NO];
     }
 }
 
@@ -754,7 +733,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             _minZoom = _maxZoom;
-            [self updatePickerCell:_minZoom zoomRow:kMinZoomPickerRow];
+            [self updatePickerCell:_minZoom - 1 zoomRow:kMinZoomPickerRow];
         }
         zoomRow = kMinZoomRow;
         [self downloadZoomedTiles];
@@ -768,7 +747,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             _maxZoom = _minZoom;
-            [self updatePickerCell:_maxZoom zoomRow:kMaxZoomPickerRow];
+            [self updatePickerCell:_maxZoom - 1 zoomRow:kMaxZoomPickerRow];
         }
         zoomRow = kMaxZoomRow;
         [self downloadZoomedTiles];

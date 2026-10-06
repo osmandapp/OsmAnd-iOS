@@ -407,8 +407,6 @@
 
 - (void)dismiss:(nullable id)sender animated:(BOOL)animated completion:(nullable dispatch_block_t)completion
 {
-    if (_hiding)
-        return;
     _hiding = YES;
     self.visible = NO;
     

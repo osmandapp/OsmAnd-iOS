@@ -104,9 +104,10 @@
 
 - (void)testContinueWithDifferentProfilePreservesExistingLegs
 {
-    NSArray<OASWptPt *> *pair = @[self.original[0], self.original[1]];
+    NSArray<OASWptPt *> *points = @[self.original[0], self.original[1]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[0] second:points[1]];
     OARoadSegmentData *geometry = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                                   start:pair[0] end:pair[1] points:pair segments:{}];
+                                                                   start:points[0] end:points[1] points:points segments:{}];
     self.context.roadSegmentData[pair] = geometry;
     [self.bridge applyMode:OAApplicationMode.BICYCLE pointIndex:7 wholeRoute:NO];
     for (NSInteger index = 0; index < 7; index++)

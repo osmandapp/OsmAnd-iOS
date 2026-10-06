@@ -94,6 +94,12 @@
 
 #pragma mark - Table data
 
+- (void)registerCells
+{
+    [super registerCells];
+    [self addCell:OASearchMoreCell.reuseIdentifier];
+}
+
 - (void)generateActionSection
 {
     if (self.isNewItem)
@@ -112,10 +118,7 @@
     if (![row.cellType isEqualToString:OASearchMoreCell.reuseIdentifier])
         return [super getRow:indexPath];
 
-    OASearchMoreCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASearchMoreCell.reuseIdentifier];
-    if (!cell)
-        cell = [[NSBundle mainBundle] loadNibNamed:OASearchMoreCell.reuseIdentifier owner:self options:nil].firstObject;
-
+    OASearchMoreCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASearchMoreCell.reuseIdentifier forIndexPath:indexPath];
     cell.textView.text = row.title;
     cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     [self updateApplyToExistingCell:cell];
@@ -137,6 +140,10 @@
     BOOL enabled = [self isExistingPointsAppearanceChanged] && _favoriteGroup.points.count > 0;
     cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
     cell.textView.textColor = [UIColor colorNamed:enabled ? ACColorNameTextColorActive : ACColorNameTextColorSecondary];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityLabel = cell.textView.text;
+    cell.textView.isAccessibilityElement = NO;
+    cell.accessibilityTraits = enabled ? UIAccessibilityTraitButton : (UIAccessibilityTraitButton | UIAccessibilityTraitNotEnabled);
 }
 
 - (BOOL)isExistingPointsAppearanceChanged

@@ -30,7 +30,10 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     private lazy var shapeHandler = ShapesCollectionHandler(backgroundIconNames: backgroundIconNames, isFavoriteList: true)
 
     private var hasChanges: Bool {
-        (appearance.color != nil && appearance.color != initialAppearance.color) || (appearance.iconName != nil && appearance.iconName != initialAppearance.iconName) || (appearance.backgroundIconName != nil && appearance.backgroundIconName != initialAppearance.backgroundIconName)
+        let colorChanged = appearance.color != nil && appearance.color != initialAppearance.color
+        let iconChanged = appearance.iconName != nil && appearance.iconName != initialAppearance.iconName
+        let backgroundIconChanged = appearance.backgroundIconName != nil && appearance.backgroundIconName != initialAppearance.backgroundIconName
+        return colorChanged || iconChanged || backgroundIconChanged
     }
 
     private var previewColor: UIColor {
@@ -245,8 +248,9 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
 
     private func colorMenu() -> UIMenu {
         let unchanged = UIAction(title: localizedString("shared_string_unchanged"), state: appearance.color == nil ? .on : .off) { [weak self] _ in
-            self?.appearance.color = nil
-            self?.refreshAppearance()
+            guard let self else { return }
+            appearance.color = nil
+            refreshAppearance()
         }
 
         let solid = UIAction(title: localizedString("track_coloring_solid"), state: appearance.color != nil ? .on : .off) { [weak self] _ in
@@ -324,6 +328,9 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         let alert = UIAlertController(title: localizedString("unsaved_changes"), message: localizedString("unsaved_changes_will_be_lost"), preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_discard_changes"), style: .destructive) { [weak self] _ in
             self?.close()
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self] _ in
+            self?.onRightNavbarButtonPressed()
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
         alert.popoverPresentationController?.barButtonItem = navigationItem.leftBarButtonItem

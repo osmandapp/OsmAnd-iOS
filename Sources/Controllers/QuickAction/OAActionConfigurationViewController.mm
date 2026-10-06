@@ -608,7 +608,7 @@
         NSString *iconName = item[@"appearance_icon"];
         NSString *backgroundIconName = item[@"appearance_background"];
         FavoritesChangeAppearanceViewController *controller = [[FavoritesChangeAppearanceViewController alloc] initWithColor:UIColorFromARGB([item[@"color"] intValue]) iconName:iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY backgroundIconName:backgroundIconName.length > 0 ? backgroundIconName : DEFAULT_ICON_SHAPE_KEY];
-        __weak OAActionConfigurationViewController *weakSelf = self;
+        __weak __typeof(self) weakSelf = self;
         controller.onApply = ^(UIColor *color, NSString *selectedIconName, NSString *selectedBackgroundIconName) {
             [weakSelf appearanceChanged:color iconName:selectedIconName backgroundIconName:selectedBackgroundIconName];
         };

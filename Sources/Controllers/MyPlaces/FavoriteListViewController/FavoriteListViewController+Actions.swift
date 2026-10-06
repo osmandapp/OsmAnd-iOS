@@ -251,8 +251,9 @@ extension FavoriteListViewController {
             OAFavoritesHelperBridge.shared().changeFavoritePoints(points, color: color, iconName: iconName, backgroundIconName: backgroundIconName)
         }
         controller.onClose = { [weak self] in
-            self?.setEditing(false)
-            self?.applySnapshot(animatingDifferences: true)
+            guard let self else { return }
+            self.setEditing(false)
+            self.applySnapshot(animatingDifferences: true)
         }
         
         let modalNavigationController = UINavigationController(rootViewController: controller)

@@ -1011,7 +1011,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     @discardableResult private func presentApproximationWarning(force: Bool) -> Bool {
         if approximationNavigationController != nil { return true }
         guard force || dataProvider.shouldShowApproximationWarning,
-              let warningViewController = dataProvider.approximationWarningViewController else { return false }
+              let warningViewController = dataProvider.beginApproximationSession() else { return false }
         let navigationController = UINavigationController(rootViewController: warningViewController)
         navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.delegate = self

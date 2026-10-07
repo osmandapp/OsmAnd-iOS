@@ -37,7 +37,7 @@ final class CarPlayMapOrientationListController: OABaseCarPlayInterfaceControlle
                 text: mode.title,
                 detailText: nil,
                 image: icon(for: mode),
-                accessoryImage: CarPlaySettingsUIHelper.checkmarkImage(isSelected: mode == current),
+                accessoryImage: .carPlayCheckmark(isSelected: mode == current),
                 accessoryType: .none
             )
             item.handler = { [weak self] _, completion in

@@ -47,12 +47,17 @@
 
 static const double kProjectedStepSlack = 4.0;
 static const double kMinProjectedStep = 24.0;
-static const double kReverseProjectionTolerance = 4.0;
 
 static double maxGlobeDistance()
 {
     static const double distance = M_PI * OASKMapUtils.shared.HAVERSINE_EARTH_RADIUS_METERS;
     return distance;
+}
+
+static double earthRadius()
+{
+    static const double radius = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI);
+    return radius;
 }
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
@@ -98,7 +103,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     BOOL _sphericalMap;
     BOOL _cachedSphericalMap;
     BOOL _hasGlobeHorizon;
-    OsmAnd::LatLon _globeCameraNadir;
+    double _globeNadirLatitudeSin;
+    double _globeNadirLatitudeCos;
+    double _globeNadirLongitude;
     double _globeHorizonCos;
     
     OsmAnd::PointI _cachedCenter31;
@@ -887,7 +894,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
         projected = [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
     }
-    return projected && [self isVisibleOnGlobe:latLon screenPoint:*screenPoint];
+    return projected && [self isVisibleOnGlobe:latLon];
 }
 
 - (void)updateGlobeHorizon
@@ -897,42 +904,33 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         return;
 
     OAMapRendererView *mapView = _mapViewController.mapView;
-    double elevation = qDegreesToRadians(mapView.elevationAngle);
+    auto state = mapView.renderer->getState();
+    double elevation = qDegreesToRadians(state.elevationAngle);
     double cameraHeightAboveTargetPlane = [mapView getCameraHeightInMeters];
     if (elevation <= 0 || cameraHeightAboveTargetPlane <= 0)
         return;
 
-    double earthRadius = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI);
-    double cameraUp = earthRadius + cameraHeightAboveTargetPlane;
+    double cameraUp = earthRadius() + cameraHeightAboveTargetPlane;
     double cameraAside = cameraHeightAboveTargetPlane / tan(elevation);
-    auto targetLatLon = OsmAnd::Utilities::convert31ToLatLon(mapView.renderer->getState().target31);
-    _globeCameraNadir = [self calculateDestinationPoint:targetLatLon distance:atan2(cameraAside, cameraUp) * earthRadius bearing:mapView.azimuth + 180];
-    _globeHorizonCos = earthRadius / hypot(cameraUp, cameraAside);
+    auto targetAngles = OsmAnd::Utilities::getAnglesFrom31(state.target31);
+    OsmAnd::LatLon targetLatLon(qRadiansToDegrees(targetAngles.y), qRadiansToDegrees(targetAngles.x));
+    auto nadir = [self calculateDestinationPoint:targetLatLon distance:atan2(cameraAside, cameraUp) * earthRadius() bearing:state.azimuth + 180];
+    double nadirLatitude = qDegreesToRadians(nadir.latitude);
+    _globeNadirLatitudeSin = sin(nadirLatitude);
+    _globeNadirLatitudeCos = cos(nadirLatitude);
+    _globeNadirLongitude = qDegreesToRadians(nadir.longitude);
+    _globeHorizonCos = earthRadius() / hypot(cameraUp, cameraAside);
     _hasGlobeHorizon = YES;
 }
 
-- (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon screenPoint:(CGPoint)screenPoint
+- (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon
 {
-    if (_hasGlobeHorizon)
-        return [self.class centralAngleCosFrom:_globeCameraNadir to:latLon] > _globeHorizonCos;
+    if (!_hasGlobeHorizon)
+        return YES;
 
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    OsmAnd::PointI frontPos31;
-    if (![_mapViewController.mapView convert:CGPointMake(round(screenPoint.x * scale), round(screenPoint.y * scale)) toLocation:&frontPos31])
-        return NO;
-
-    OsmAnd::LatLon boundedLatLon(qBound(-MAX_LATITUDE_KEY, latLon.latitude, MAX_LATITUDE_KEY), latLon.longitude);
-    auto frontLatLon = OsmAnd::Utilities::convert31ToLatLon(frontPos31);
-    double tolerance = kReverseProjectionTolerance * _cachedMapDensity * scale;
-    return OsmAnd::Utilities::distance(frontLatLon, boundedLatLon) <= tolerance;
-}
-
-+ (double)centralAngleCosFrom:(OsmAnd::LatLon)from to:(OsmAnd::LatLon)to
-{
-    double fromLatitude = qDegreesToRadians(from.latitude);
-    double toLatitude = qDegreesToRadians(to.latitude);
-    double longitudeDelta = qDegreesToRadians(to.longitude - from.longitude);
-    return sin(fromLatitude) * sin(toLatitude) + cos(fromLatitude) * cos(toLatitude) * cos(longitudeDelta);
+    double latitude = qDegreesToRadians(latLon.latitude);
+    double longitudeDelta = qDegreesToRadians(latLon.longitude) - _globeNadirLongitude;
+    return _globeNadirLatitudeSin * sin(latitude) + _globeNadirLatitudeCos * cos(latitude) * cos(longitudeDelta) > _globeHorizonCos;
 }
 
 - (BOOL) isProjectionDiscontinuity:(CGPoint)previousPoint currentPoint:(CGPoint)currentPoint pixelRadius:(double)pixelRadius
@@ -947,7 +945,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if (!_sphericalMap)
         return OsmAnd::Utilities::rhumbDestinationPoint(center, distance, bearing);
 
-    double angularDistance = distance * 2 * M_PI / OASKMapUtils.shared.EARTH_CIRCUMFERENCE;
+    double angularDistance = distance / earthRadius();
     double latRad = [self toRadians:center.latitude];
     double lonRad = [self toRadians:center.longitude];
     double bearingRad = [self toRadians:bearing];

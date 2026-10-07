@@ -14844,6 +14844,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(CONFIGURATION_TEMP_DIR)/OsmAnd Maps.build/DerivedSources\"",
 					"$(PROJECT_DIR)/Sources/ThirdPart/JASidePanels",
 					"$(PROJECT_DIR)/Sources/ThirdPart/FFCircularProgressView",
 				);
@@ -14922,6 +14923,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(CONFIGURATION_TEMP_DIR)/OsmAnd Maps.build/DerivedSources\"",
 					"$(PROJECT_DIR)/Sources/ThirdPart/JASidePanels",
 					"$(PROJECT_DIR)/Sources/ThirdPart/FFCircularProgressView",
 				);

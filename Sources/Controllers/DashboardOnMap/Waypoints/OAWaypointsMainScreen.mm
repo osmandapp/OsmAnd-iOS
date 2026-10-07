@@ -78,7 +78,7 @@
     BOOL _calculatingRoute;
     
     NSArray<NSNumber *> *_sections;
-    NSDictionary *_pointsMap;
+    NSDictionary<NSNumber *, NSArray *> *_pointsMap;
 }
 
 @synthesize waypointsScreen, tableData, vwController, tblView, title;
@@ -302,7 +302,7 @@
 
 - (void) setupViewInternal
 {
-    NSMutableDictionary *points = [[self getPoints] mutableCopy];
+    NSMutableDictionary<NSNumber *, NSArray *> *points = [[self getPoints] mutableCopy];
 
     NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
     if (_flat)
@@ -316,7 +316,7 @@
             if (_calculatingRoute && i != LPW_TARGETS && i != LPW_WAYPOINTS && _pointsMap[@(i)])
                 points[@(i)] = _pointsMap[@(i)];
             
-            if ([points[@(i)] count] > 0)
+            if (points[@(i)].count > 0)
                 [sections addObject:@(i)];
         }
     }

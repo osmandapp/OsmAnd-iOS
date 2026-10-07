@@ -114,7 +114,7 @@ extension FavoriteListViewController {
 
     func reconfigureHiddenFavoriteCells() {
         if isContextMenuVisible {
-            shouldReloadCollectionView = true
+            needsHiddenFavoriteIconsRefresh = true
             return
         }
 

@@ -52,6 +52,11 @@ extension FavoriteListViewController: UICollectionViewDelegate {
                 self.shouldReloadCollectionView = false
                 self.applySnapshot(animatingDifferences: false)
             }
+
+            if self.needsHiddenFavoriteIconsRefresh {
+                self.needsHiddenFavoriteIconsRefresh = false
+                self.reconfigureHiddenFavoriteCells()
+            }
         }
     }
 

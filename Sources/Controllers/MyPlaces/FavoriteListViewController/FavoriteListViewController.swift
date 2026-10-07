@@ -41,6 +41,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var lastDistanceDirectionUpdate: TimeInterval = 0.0
     var isContextMenuVisible = false
     var shouldReloadCollectionView = false
+    var needsHiddenFavoriteIconsRefresh = false
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])

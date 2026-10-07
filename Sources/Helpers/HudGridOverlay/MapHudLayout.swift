@@ -37,6 +37,7 @@ final class MapHudLayout: NSObject {
     private var externalRulerLeftOffsetPx: CGFloat = 0
     private var ignoreTopSidePanels = false
     private var ignoreBottomSidePanels = false
+    private var buttonsKeepingPosition: [OAHudButton] = []
     
     private weak var topBarPanelContainer: UIView?
     private weak var leftWidgetsPanel: UIView?
@@ -117,6 +118,13 @@ final class MapHudLayout: NSObject {
             mapButtons.remove(at: idx)
         }
         
+        refresh()
+    }
+    
+    // Hidden buttons that still take their place, so that other views do not jump when they show again
+    func setButtonsKeepingPosition(_ buttons: [OAHudButton]) {
+        guard buttons != buttonsKeepingPosition else { return }
+        buttonsKeepingPosition = buttons
         refresh()
     }
     
@@ -327,6 +335,10 @@ final class MapHudLayout: NSObject {
         return identifier
     }
 
+    private func isPlaced(_ button: OAHudButton) -> Bool {
+        !button.isHidden || buttonsKeepingPosition.contains(button)
+    }
+    
     // Speedometer and alarm sit above the bottom panel and the map buttons, as on Android
     private func isBottomLeftWidget(_ view: UIView) -> Bool {
         view.accessibilityIdentifier == Self.speedometerWidgetId || view.accessibilityIdentifier == Self.alarmWidgetId
@@ -383,14 +395,14 @@ final class MapHudLayout: NSObject {
         }
         
         var posById: [String: ButtonPositionSize] = [:]
-        for btn in mapButtons where !btn.isHidden {
+        for btn in mapButtons where isPlaced(btn) {
             guard let state = btn.buttonState else { continue }
             let defPosition = state.getDefaultPositionSize()
             guard defPosition.width > 0 && defPosition.height > 0 else { continue }
             posById[state.id] = defPosition
         }
         
-        for btn in mapButtons where !btn.isHidden && btn.transform.isIdentity {
+        for btn in mapButtons where isPlaced(btn) && btn.transform.isIdentity {
             guard let state = btn.buttonState, let p = posById[state.id] else { continue }
             result.append((btn, p))
         }

@@ -10,6 +10,11 @@ import UIKit
 
 @objcMembers
 final class MapHudLayout: NSObject {
+    static let speedometerWidgetId = "speedometer_widget"
+    static let alarmWidgetId = "map_alarm_warning"
+
+    // Same as Android map_alarm_bottom_margin
+    private let alarmBottomMarginDp: CGFloat = 68.0
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
     private let hudBasePaddingDp: CGFloat = 16.0
@@ -167,7 +172,7 @@ final class MapHudLayout: NSObject {
     func updateButtons() {
         guard !containerView.isHidden || containerView.bounds.width > 0 || containerView.bounds.height > 0 else { return }
         let positionMap = getButtonPositionSizes()
-        for (view, pos) in positionMap where view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget {
+        for (view, pos) in positionMap where view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget || isBottomLeftWidget(view) {
             if let btn = view as? OAHudButton {
                 guard btn.transform.isIdentity else { continue }
             }
@@ -305,17 +310,26 @@ final class MapHudLayout: NSObject {
             position.setMoveHorizontal()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
             position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
+        } else if isBottomLeftWidget(view) {
+            position.setMoveVertical()
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
+            position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
         } else {
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
             position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
         }
-        
+
         return updateWidgetPosition(view, position)
     }
-    
+
     private func identifier(for view: UIView) -> String {
         guard let identifier = (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier else { fatalError("Identifier not found for view: \(view)") }
         return identifier
+    }
+
+    // Speedometer and alarm sit above the bottom panel and the map buttons, as on Android
+    private func isBottomLeftWidget(_ view: UIView) -> Bool {
+        view.accessibilityIdentifier == Self.speedometerWidgetId || view.accessibilityIdentifier == Self.alarmWidgetId
     }
     
     private func isBottomPanelVisible() -> Bool {
@@ -447,8 +461,11 @@ final class MapHudLayout: NSObject {
         } else if view is OAMapRulerView {
             position.marginX = 0
             position.marginY = 0
+        } else if isBottomLeftWidget(view) {
+            position.marginX = 0
+            position.marginY = Int32(alarmBottomMarginDp / dpToPx / cell)
         }
-        
+
         return position
     }
     

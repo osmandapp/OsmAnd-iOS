@@ -118,14 +118,18 @@ extension FavoriteListViewController {
             return
         }
 
-        var snapshot = dataSource.snapshot()
-        let hiddenFavorites = snapshot.itemIdentifiers.filter { item in
-            guard case .favorite(let favorite) = item else { return false }
-            return !favorite.isVisible
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            guard case .favorite(let favorite) = dataSource.itemIdentifier(for: indexPath),
+                  !favorite.isVisible,
+                  let cell = collectionView.cellForItem(at: indexPath) as? UICollectionViewListCell,
+                  let currentConfiguration = cell.contentConfiguration as? PointContentConfiguration else {
+                continue
+            }
+
+            var configuration = favoriteContentConfiguration(for: favorite)
+            configuration.primaryTextLayoutGuideHandler = currentConfiguration.primaryTextLayoutGuideHandler
+            cell.contentConfiguration = configuration
         }
-        guard !hiddenFavorites.isEmpty else { return }
-        snapshot.reconfigureItems(hiddenFavorites)
-        dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     private func favoriteContentConfiguration(for favorite: FavoritePointRow) -> PointContentConfiguration {

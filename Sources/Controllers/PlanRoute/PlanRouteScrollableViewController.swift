@@ -38,6 +38,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     override var currentState: EOADraggableMenuState {
         usesSidePanelLayout ? .expanded : sheetState
     }
+    
+    override var overridesMapPosition: Bool {
+        cachedMapViewportYScale != nil
+    }
 
     var mapViewportBounds: CGRect {
         let bounds = view.bounds
@@ -128,10 +132,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var hasPresentedInitialSnapWarning = false
     private var shouldEnterNavigationAfterApproximation = false
     
-    override var overridesMapPosition: Bool {
-        cachedMapViewportYScale != nil
-    }
-
     private var suggestedFileName: String {
         switch dataProvider.mode {
         case .newRoute: uniqueFileName(for: OAUtilities.generateCurrentDateFilename())
@@ -894,6 +894,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func presentRouteBetweenPoints(_ listVC: RouteBetweenPointsViewController) {
+        listVC.onContinueEditing = { [weak self] in
+            self?.setState(.initial, animated: true)
+        }
         showMediumSheetViewController(viewController: listVC, isLargeAvailable: true)
         }
 
@@ -985,9 +988,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         presentSettingsForContext(.profileGroup(group, segment: segment), applyFromPointIndex: pointIndex)
     }
 
-    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil) {
+    private func presentSettingsForContext(_ context: SegmentRouteContext, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil, futureRouteAction: SegmentRouteSettingsViewController.FutureRouteAction? = nil) {
         guard !presentApproximationWarningIfNeeded() else { return }
-        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex)
+        let settingsVC = SegmentRouteSettingsViewController(context: context, dataSource: dataProvider, applyFromPointIndex: applyFromPointIndex, applyUpToPointIndex: applyUpToPointIndex, futureRouteAction: futureRouteAction)
+        settingsVC.onContinueEditing = { [weak self] in
+            self?.setState(.initial, animated: true)
+        }
         let nav = UINavigationController(rootViewController: settingsVC)
         nav.modalPresentationStyle = .pageSheet
         if let sheet = nav.sheetPresentationController {
@@ -1005,7 +1011,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     @discardableResult private func presentApproximationWarning(force: Bool) -> Bool {
         if approximationNavigationController != nil { return true }
         guard force || dataProvider.shouldShowApproximationWarning,
-              let warningViewController = dataProvider.approximationWarningViewController else { return false }
+              let warningViewController = dataProvider.beginApproximationSession() else { return false }
         let navigationController = UINavigationController(rootViewController: warningViewController)
         navigationController.setNavigationBarHidden(true, animated: false)
         navigationController.delegate = self
@@ -1114,7 +1120,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func crosshairCenterY(sheetHeight: CGFloat, screenHeight: CGFloat? = nil) -> CGFloat {
         let targetScreenHeight = screenHeight ?? currentScreenHeight
-        guard !usesSidePanelLayout else { return targetScreenHeight / 2 }
         let coveredHeight: CGFloat
         if pointEditingView == nil {
             coveredHeight = min(sheetHeight, height(for: .expanded, screenHeight: targetScreenHeight))
@@ -1170,6 +1175,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             let mapTargetScreenPoint = CGPoint(x: cachedMapTargetScreenPointRatio.x * mapViewSize.width,
                                                y: cachedMapTargetScreenPointRatio.y * mapViewSize.height)
             mapViewController.mapRendererView?.reanchorMapTarget(mapTargetScreenPoint)
+        }
+        if shouldRestoreMapPosition {
+            OAMapViewTrackingUtilities.instance().updateMapPosition()
         }
         if shouldRestoreMapPosition {
             OAMapViewTrackingUtilities.instance().updateMapPosition()
@@ -1270,6 +1278,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             }
             routeVC.onSaveSegment = { [weak self] pointIndexes in
                 self?.presentSegmentSaveDialog(pointIndexes: pointIndexes)
+            }
+            routeVC.onContinueRoute = { [weak self] in
+                self?.presentSettingsForContext(.wholeTrack, futureRouteAction: .continueRoute)
             }
             return routeVC
         }

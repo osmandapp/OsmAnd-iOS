@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
+		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
@@ -658,6 +659,8 @@
 		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
 		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
 		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
+		C0D3C0102F60000100C0D310 /* OAMemoryLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0122F60000100C0D312 /* OAMemoryLog.mm */; };
+		C0D3C0112F60000100C0D311 /* OACrashReportSender.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0142F60000100C0D314 /* OACrashReportSender.mm */; };
 		C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */; };
 		C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57132FE9000200C0DA57 /* UITestState.swift */; };
 		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
@@ -914,6 +917,7 @@
 		D1C573510000000000000001 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
 		D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
 		D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */; };
+		D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */; };
 		D1C573520000000000000001 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
 		D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
@@ -2246,6 +2250,7 @@
 
 /* Begin PBXFileReference section */
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
+		D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		0309480ECBC201C5E8317E6D /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ko; path = ko.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -3223,6 +3228,10 @@
 		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
 		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
 		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
+		C0D3C0122F60000100C0D312 /* OAMemoryLog.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMemoryLog.mm; sourceTree = "<group>"; };
+		C0D3C0132F60000100C0D313 /* OAMemoryLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMemoryLog.h; sourceTree = "<group>"; };
+		C0D3C0142F60000100C0D314 /* OACrashReportSender.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACrashReportSender.mm; sourceTree = "<group>"; };
+		C0D3C0152F60000100C0D315 /* OACrashReportSender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACrashReportSender.h; sourceTree = "<group>"; };
 		C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		C0DA57132FE9000200C0DA57 /* UITestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestState.swift; sourceTree = "<group>"; };
 		C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAccessibilityIdentifier.swift; sourceTree = "<group>"; };
@@ -3637,6 +3646,7 @@
 		D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteEditingBridgeTest.mm; sourceTree = "<group>"; };
 		D1C573510000000000000003 /* PlanRouteTrackSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSource.swift; sourceTree = "<group>"; };
 		D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSourceTests.swift; sourceTree = "<group>"; };
+		D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileSelectionTests.swift; sourceTree = "<group>"; };
 		D1C573520000000000000003 /* PlanRoutePresentationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePresentationContext.swift; sourceTree = "<group>"; };
 		D3CA6B52398C60EDCB0357E5 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
@@ -6868,6 +6878,10 @@
 				C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */,
 				C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */,
 				C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */,
+				C0D3C0152F60000100C0D315 /* OACrashReportSender.h */,
+				C0D3C0142F60000100C0D314 /* OACrashReportSender.mm */,
+				C0D3C0132F60000100C0D313 /* OAMemoryLog.h */,
+				C0D3C0122F60000100C0D312 /* OAMemoryLog.mm */,
 			);
 			path = CrashDiagnostics;
 			sourceTree = "<group>";
@@ -6975,6 +6989,7 @@
 				D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */,
 				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
 				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
+				D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */,
 			);
 			path = PlanRoute;
 			sourceTree = "<group>";
@@ -10297,6 +10312,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C584800000000000000002 /* OALocationIconTests.m */,
+				D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
@@ -12015,6 +12031,8 @@
 				C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */,
 				C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */,
 				C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */,
+				C0D3C0102F60000100C0D310 /* OAMemoryLog.mm in Sources */,
+				C0D3C0112F60000100C0D311 /* OACrashReportSender.mm in Sources */,
 				321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */,
 				C50E32822CA3FBDF00EEC41F /* TracksFiltersViewController.swift in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
@@ -13772,6 +13790,7 @@
 				C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */,
 				C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */,
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
+				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
@@ -13784,6 +13803,7 @@
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,
 				D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */,
 				D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */,
+				D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */,
 				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -14822,6 +14842,12 @@
 				);
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(CONFIGURATION_TEMP_DIR)/OsmAnd Maps.build/DerivedSources\"",
+					"$(PROJECT_DIR)/Sources/ThirdPart/JASidePanels",
+					"$(PROJECT_DIR)/Sources/ThirdPart/FFCircularProgressView",
+				);
 				INFOPLIST_FILE = "OsmAnd MapsTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -14847,6 +14873,7 @@
 					"-licu4c_static",
 					"-lprotobuf_static",
 					"-lgdal_static",
+					"-lharfbuzz_static",
 					"-lgif_static",
 					"-ljpeg_static",
 					"-lpng_static",
@@ -14894,6 +14921,12 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(CONFIGURATION_TEMP_DIR)/OsmAnd Maps.build/DerivedSources\"",
+					"$(PROJECT_DIR)/Sources/ThirdPart/JASidePanels",
+					"$(PROJECT_DIR)/Sources/ThirdPart/FFCircularProgressView",
+				);
 				INFOPLIST_FILE = "OsmAnd MapsTests/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -14912,6 +14945,7 @@
 					"-licu4c_static",
 					"-lprotobuf_static",
 					"-lgdal_static",
+					"-lharfbuzz_static",
 					"-lgif_static",
 					"-ljpeg_static",
 					"-lpng_static",

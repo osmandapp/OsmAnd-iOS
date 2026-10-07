@@ -10,6 +10,13 @@ import UIKit
 
 @objcMembers
 final class MapHudLayout: NSObject {
+    static let speedometerWidgetId = "speedometer_widget"
+
+    // Called after the views are moved, to place views that follow them (alarm above the speedometer)
+    var onButtonsUpdated: (() -> Void)?
+    
+    // Same as Android map_alarm_bottom_margin
+    private let alarmBottomMarginDp: CGFloat = 68.0
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
     private let hudBasePaddingDp: CGFloat = 16.0
@@ -32,6 +39,7 @@ final class MapHudLayout: NSObject {
     private var externalRulerLeftOffsetPx: CGFloat = 0
     private var ignoreTopSidePanels = false
     private var ignoreBottomSidePanels = false
+    private var buttonsKeepingPosition: [OAHudButton] = []
     
     private weak var topBarPanelContainer: UIView?
     private weak var leftWidgetsPanel: UIView?
@@ -115,6 +123,13 @@ final class MapHudLayout: NSObject {
         refresh()
     }
     
+    // Hidden buttons that still take their place, so that other views do not jump when they show again
+    func setButtonsKeepingPosition(_ buttons: [OAHudButton]) {
+        guard buttons != buttonsKeepingPosition else { return }
+        buttonsKeepingPosition = buttons
+        refresh()
+    }
+    
     func setExternalTopOverlay(_ pixels: CGFloat, ignorePanels: Bool) {
         let px = max(0, pixels)
         var changed = false
@@ -167,7 +182,7 @@ final class MapHudLayout: NSObject {
     func updateButtons() {
         guard !containerView.isHidden || containerView.bounds.width > 0 || containerView.bounds.height > 0 else { return }
         let positionMap = getButtonPositionSizes()
-        for (view, pos) in positionMap where view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget {
+        for (view, pos) in positionMap where view is OAHudButton || view is OAMapRulerView || view is OADownloadMapWidget || isBottomLeftWidget(view) {
             if let btn = view as? OAHudButton {
                 guard btn.transform.isIdentity else { continue }
             }
@@ -176,6 +191,7 @@ final class MapHudLayout: NSObject {
         }
         
         refreshDebugOverlayIfNeeded(positionMap: positionMap)
+        onButtonsUpdated?()
     }
     
     func updateButton(_ button: OAHudButton, save: Bool) {
@@ -305,17 +321,30 @@ final class MapHudLayout: NSObject {
             position.setMoveHorizontal()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
             position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
+        } else if isBottomLeftWidget(view) {
+            position.setMoveVertical()
+            position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
+            position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
         } else {
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
             position.setPositionHorizontal(posH: ButtonPositionSize.companion.POS_LEFT)
         }
-        
+
         return updateWidgetPosition(view, position)
     }
-    
+
     private func identifier(for view: UIView) -> String {
         guard let identifier = (view as? OAHudButton)?.buttonState?.id ?? view.accessibilityIdentifier else { fatalError("Identifier not found for view: \(view)") }
         return identifier
+    }
+
+    private func isPlaced(_ button: OAHudButton) -> Bool {
+        !button.isHidden || buttonsKeepingPosition.contains(button)
+    }
+    
+    // Speedometer sits above the bottom panel and the map buttons, as on Android
+    private func isBottomLeftWidget(_ view: UIView) -> Bool {
+        view.accessibilityIdentifier == Self.speedometerWidgetId
     }
     
     private func isBottomPanelVisible() -> Bool {
@@ -369,19 +398,20 @@ final class MapHudLayout: NSObject {
         }
         
         var posById: [String: ButtonPositionSize] = [:]
-        for btn in mapButtons where !btn.isHidden {
+        for btn in mapButtons where isPlaced(btn) {
             guard let state = btn.buttonState else { continue }
             let defPosition = state.getDefaultPositionSize()
             guard defPosition.width > 0 && defPosition.height > 0 else { continue }
             posById[state.id] = defPosition
         }
         
-        for btn in mapButtons where !btn.isHidden && btn.transform.isIdentity {
+        for btn in mapButtons where isPlaced(btn) && btn.transform.isIdentity {
             guard let state = btn.buttonState, let p = posById[state.id] else { continue }
             result.append((btn, p))
         }
 
-        for v in additionalOrder where !v.isHidden && !(v is OADownloadMapWidget) {
+        // The speedometer keeps its place while hidden: the alarm is placed there
+        for v in additionalOrder where (!v.isHidden || isBottomLeftWidget(v)) && !(v is OADownloadMapWidget) {
             guard let saved = additionalWidgetPositions[v] else { continue }
             let pos = updateWidgetPosition(v, saved)
             guard pos.width > 0 && pos.height > 0 else {
@@ -447,8 +477,11 @@ final class MapHudLayout: NSObject {
         } else if view is OAMapRulerView {
             position.marginX = 0
             position.marginY = 0
+        } else if isBottomLeftWidget(view) {
+            position.marginX = 0
+            position.marginY = Int32(alarmBottomMarginDp / dpToPx / cell)
         }
-        
+
         return position
     }
     

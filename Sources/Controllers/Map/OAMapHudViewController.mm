@@ -622,6 +622,13 @@ static const NSTimeInterval kTimeoutToShowButtons = 7.0;
     if (_bottomButtonsAutoHidden != autoHidden)
     {
         _bottomButtonsAutoHidden = autoHidden;
+        // Auto-hidden Menu and Navigation keep their place, so the speedometer and other views do not jump
+        NSMutableArray<OAHudButton *> *keptButtons = [NSMutableArray array];
+        if (autoHidden && _optionsMenuButton && [[[[OAMapButtonsHelper sharedInstance] getMenuButtonState] visibilityPref] get])
+            [keptButtons addObject:_optionsMenuButton];
+        if (autoHidden && _driveModeButton && [[[[OAMapButtonsHelper sharedInstance] getNavigationModeButtonState] visibilityPref] get])
+            [keptButtons addObject:_driveModeButton];
+        [_mapHudLayout setButtonsKeepingPosition:keptButtons];
         [self updateBottomControlsVisibility:YES];
     }
     NSTimeInterval delay = kTimeoutToShowButtons - (CACurrentMediaTime() - _lastMapTouchTime);

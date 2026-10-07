@@ -194,10 +194,6 @@ static NSMutableArray<OAPlugin *> *allPlugins;
  */
 - (BOOL) initPlugin
 {
-    for (OAApplicationMode *appMode in [self getAddedAppModes])
-    {
-        [OAApplicationMode changeProfileAvailability:appMode isSelected:YES];
-    }
     return YES;
 }
 

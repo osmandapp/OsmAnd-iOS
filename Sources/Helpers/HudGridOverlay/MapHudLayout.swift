@@ -11,8 +11,10 @@ import UIKit
 @objcMembers
 final class MapHudLayout: NSObject {
     static let speedometerWidgetId = "speedometer_widget"
-    static let alarmWidgetId = "map_alarm_warning"
 
+    // Called after the views are moved, to place views that follow them (alarm above the speedometer)
+    var onButtonsUpdated: (() -> Void)?
+    
     // Same as Android map_alarm_bottom_margin
     private let alarmBottomMarginDp: CGFloat = 68.0
     private let containerView: UIView
@@ -189,6 +191,7 @@ final class MapHudLayout: NSObject {
         }
         
         refreshDebugOverlayIfNeeded(positionMap: positionMap)
+        onButtonsUpdated?()
     }
     
     func updateButton(_ button: OAHudButton, save: Bool) {
@@ -339,9 +342,9 @@ final class MapHudLayout: NSObject {
         !button.isHidden || buttonsKeepingPosition.contains(button)
     }
     
-    // Speedometer and alarm sit above the bottom panel and the map buttons, as on Android
+    // Speedometer sits above the bottom panel and the map buttons, as on Android
     private func isBottomLeftWidget(_ view: UIView) -> Bool {
-        view.accessibilityIdentifier == Self.speedometerWidgetId || view.accessibilityIdentifier == Self.alarmWidgetId
+        view.accessibilityIdentifier == Self.speedometerWidgetId
     }
     
     private func isBottomPanelVisible() -> Bool {
@@ -407,7 +410,8 @@ final class MapHudLayout: NSObject {
             result.append((btn, p))
         }
 
-        for v in additionalOrder where !v.isHidden && !(v is OADownloadMapWidget) {
+        // The speedometer keeps its place while hidden: the alarm is placed there
+        for v in additionalOrder where (!v.isHidden || isBottomLeftWidget(v)) && !(v is OADownloadMapWidget) {
             guard let saved = additionalWidgetPositions[v] else { continue }
             let pos = updateWidgetPosition(v, saved)
             guard pos.width > 0 && pos.height > 0 else {

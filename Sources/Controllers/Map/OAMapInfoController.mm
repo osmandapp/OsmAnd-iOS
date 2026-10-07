@@ -408,6 +408,17 @@
     }
 }
 
+// Above the speedometer, or in its place when it is hidden
+- (void)updateAlarmPosition
+{
+    if (!_alarmControl || !_alarmControl.superview || _alarmControl.hidden || !_speedometerView)
+        return;
+
+    CGRect speedometerFrame = _speedometerView.frame;
+    CGFloat alarmBottom = _speedometerView.hidden ? CGRectGetMaxY(speedometerFrame) : CGRectGetMinY(speedometerFrame);
+    _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin] + 6, alarmBottom - _alarmControl.bounds.size.height / 2);
+}
+
 - (void)configureCornerRadiusForView:(UIView *)view
                                 mask:(CACornerMask)mask
 {
@@ -447,7 +458,7 @@
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
-    // Speedometer and alarm are placed by MapHudLayout above the bottom panel and the map buttons
+    // The speedometer is placed by MapHudLayout above the bottom panel and the map buttons, the alarm follows it
     if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
     {
         CGRect speedometerFrame = _speedometerView.frame;
@@ -722,11 +733,14 @@
     }
     if (_alarmControl)
     {
-        [mapHudLayout removeWidget:_alarmControl];
         [_alarmControl removeFromSuperview];
         _alarmControl.delegate = self;
-        [mapHudLayout addWidget:_alarmControl];
+        [_mapHudViewController.view addSubview:_alarmControl];
     }
+    __weak OAMapInfoController *weakSelf = self;
+    mapHudLayout.onButtonsUpdated = ^{
+        [weakSelf updateAlarmPosition];
+    };
 
     [self updateWidgetsInfo];
 
@@ -824,13 +838,9 @@
     
     MapHudLayout *mapHudLayout = _mapHudViewController.mapHudLayout;
     if (_alarmControl)
-    {
-        [mapHudLayout removeWidget:_alarmControl];
         [_alarmControl removeFromSuperview];
-    }
 
     _alarmControl = [[OAAlarmWidget alloc] init];
-    _alarmControl.accessibilityIdentifier = MapHudLayout.alarmWidgetId;
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
 

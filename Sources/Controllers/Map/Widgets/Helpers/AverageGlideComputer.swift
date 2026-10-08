@@ -53,14 +53,15 @@ final class AverageGlideComputer: AverageValueComputer {
                 let distance = calculateTotalDistance(locationsToUse)
                 let difference = calculateAltitudeDifference(locationsToUse)
                 return GlideUtils.calculateFormattedRatio(distance, altDif: difference)
-            } else {
-                let altitudeDifference = calculateAltitudeDifference(locationsToUse)
-                if measuredInterval > 0 {
-                    let verticalSpeedValue = abs(altitudeDifference) / (Double(measuredInterval) / 1000.0)
-                    let roundedVerticalSpeedValue = round(verticalSpeedValue)
+            } else if let start = locationsToUse.first, let end = locationsToUse.last {
+                // Divide by the time the points really cover, not by the whole interval: right after
+                // the start there is less data than the interval. Positive when climbing.
+                let seconds = end.timestamp.timeIntervalSince(start.timestamp)
+                if seconds > 0 {
+                    let verticalSpeedValue = (end.altitude - start.altitude) / seconds
                     let speedSystem: EOASpeedConstant = OASpeedConstant.imperial(OAAppSettings.sharedManager().speedSystem.get())
                         ? .FEET_PER_SECOND : .METERS_PER_SECOND
-                    return OAOsmAndFormatter.getFormattedSpeed(Float(roundedVerticalSpeedValue), speedSystem: speedSystem)
+                    return OAOsmAndFormatter.getFormattedSpeed(Float(verticalSpeedValue), speedSystem: speedSystem)
                 }
             }
         }

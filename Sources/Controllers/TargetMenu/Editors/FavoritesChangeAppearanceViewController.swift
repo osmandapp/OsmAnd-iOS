@@ -146,7 +146,6 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
             cell.useMultyLines = false
             cell.forceScrollOnStart = true
             cell.hostVC = self
-            cell.topLabel.font = .preferredFont(forTextStyle: .body)
             cell.topLabel.textColor = .textColorPrimary
             cell.topLabel.text = row.title
             cell.topLabel.accessibilityTraits.insert(.header)
@@ -295,7 +294,11 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         var categoryActions: [UIMenuElement] = []
         for category in iconHandler.categories where category.key != iconHandler.ORIGINAL_KEY {
             let action = UIAction(title: category.translatedName, state: appearance.iconName != nil && iconHandler.selectedCatagoryKey == category.key ? .on : .off) { [weak self] _ in
-                self?.iconHandler.onMenuItemSelected(name: category.key)
+                guard let self else { return }
+                iconHandler.onMenuItemSelected(name: category.key)
+                if let cell = iconHandler.hostCell, let indexPath = tableView.indexPath(for: cell) {
+                    tableView.reloadRows(at: [indexPath], with: .none)
+                }
             }
 
             if category.key == iconHandler.lastUsedKey {
@@ -386,7 +389,12 @@ extension FavoritesChangeAppearanceViewController: OACollectionCellDelegate {
         if collectionView === colorHandler.getCollectionView() {
             appearance.color = (selectedItem as? PaletteItemSolid ?? colorHandler.getSelectedItem())?.colorInt
         } else if collectionView === iconHandler.getCollectionView(), let iconName = iconHandler.getSelectedItem() as? String, !iconName.isEmpty {
-            appearance.iconName = iconName
+            if let initialIconName = initialAppearance.iconName,
+               iconName == initialIconName || iconName == "mx_" + initialIconName || "mx_" + iconName == initialIconName {
+                appearance.iconName = initialIconName
+            } else {
+                appearance.iconName = iconName
+            }
         }
 
         refreshAppearance()

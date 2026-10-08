@@ -175,7 +175,7 @@
         [self.contentView layoutIfNeeded];
 
     self.collectionViewHeight.constant = [self calculateContentHeight];
-    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+    return [self.contentView systemLayoutSizeFittingSize:targetSize withHorizontalFittingPriority:horizontalFittingPriority verticalFittingPriority:verticalFittingPriority];
 }
 
 - (CGFloat) calculateContentHeight

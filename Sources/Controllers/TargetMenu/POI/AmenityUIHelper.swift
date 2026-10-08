@@ -345,7 +345,7 @@ final class AmenityUIHelper: NSObject {
             let displayKey = Self.genericFallbackDisplayKey(key)
             pType = OAPOIType(name: displayKey, category: poiCategory)
             pType?.isText = true
-            pType?.order = Self.defaultPoiTypeOrder
+            pType?.order = Self.genericRowOrder(key)
             pType?.nameLocalized = helper.getPhrase(byName: displayKey, withDefatultValue: false)
                 ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
@@ -445,6 +445,14 @@ final class AmenityUIHelper: NSObject {
 
     // the order poi_types.xml gives a type without an explicit one; Android sorts generic rows with it
     private static let defaultPoiTypeOrder: Int32 = 90
+
+    // a Garmin address reads in this order, as GpxUtilities.GPXX_ADDRESS_KEYS on Android; other generic rows sort by name
+    private static let garminAddressKeys = ["gpxx:street_address", "gpxx:city", "gpxx:state", "gpxx:postal_code", "gpxx:country"]
+
+    private static func genericRowOrder(_ key: String) -> Int32 {
+        guard let index = garminAddressKeys.firstIndex(of: key) else { return defaultPoiTypeOrder }
+        return defaultPoiTypeOrder - Int32(garminAddressKeys.count) + Int32(index)
+    }
 
     private func isKeyToSkip(key: String) -> Bool {
         return key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||

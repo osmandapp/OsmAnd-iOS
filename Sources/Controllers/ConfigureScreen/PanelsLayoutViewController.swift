@@ -100,7 +100,7 @@ final class PanelsLayoutViewController: OABaseNavbarSubviewViewController {
                 return UITableViewCell()
             }
             cell.backgroundImageView.image = item.icon
-            cell.backgroundImageView.backgroundColor = .groupBg
+            cell.backgroundImageView.backgroundColor = .secondarySystemGroupedBackground
             cell.backgroundImageView.contentMode = .center
             cell.backgroundImageView.layer.cornerRadius = previewCornerRadius
             cell.backgroundImageView.clipsToBounds = true

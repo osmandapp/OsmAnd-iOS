@@ -98,7 +98,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
     appearance.shadowColor = [SeparatorAppearance color];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName : UIColor.labelColor
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
@@ -356,7 +356,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
     NSMutableArray<NSString *> *enabledParamsIds = [NSMutableArray arrayWithArray:fetchedParams[2]];
     BOOL enabled = enabledParamsIds.count > 0;
     UIImage *icon = [UIImage templateImageNamed:enabled ? @"ic_custom_placard_hazard" : @"ic_custom_placard_hazard_off"];
-    UIColor *tint = [UIColor colorNamed:enabled ? ACColorNameIconColorDisruptive : ACColorNameIconColorDisabled];
+    UIColor *tint = enabled ? [UIColor colorNamed:ACColorNameIconColorDisruptive] : UIColor.tertiaryLabelColor;
     NSDictionary *hazmatInfo = @{
         cellTypeRouteSettingsKey : [OAValueTableViewCell getCellIdentifier],
         keyRouteSettingsKey : dangerousGoodsRouteSettingsUsaKey,
@@ -555,7 +555,7 @@ static NSString *enabledRouteSettingsKey = @"enabled";
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [vw.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 #pragma mark - OANavigationSettingsDelegate

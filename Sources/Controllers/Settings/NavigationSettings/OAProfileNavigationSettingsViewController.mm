@@ -78,7 +78,7 @@
         @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : ACImageNameIcCustomNavigation,
-        @"tintColor" : [UIColor colorNamed:ACColorNameIconColorDefault],
+        @"tintColor" : UIColor.secondaryLabelColor,
         @"key" : @"navigationType",
     }];
     [navigationArr addObject:@{
@@ -172,7 +172,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             [cell descriptionVisibility:NO];
         }
         if (cell)
@@ -198,7 +198,7 @@
             [cell leftIconVisibility:![item[@"key"] isEqualToString:@"mapBehavior"]];
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         return cell;

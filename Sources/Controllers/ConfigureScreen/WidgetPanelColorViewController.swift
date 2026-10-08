@@ -227,7 +227,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     private func configureTableView() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.separatorColor = SeparatorAppearance.color
         tableView.sectionHeaderHeight = .leastNormalMagnitude
         tableView.sectionHeaderTopPadding = 0
@@ -247,11 +247,11 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
     }
 
     private func configureSheetHeader() {
-        topHeaderContainerView.backgroundColor = .viewBg
+        topHeaderContainerView.backgroundColor = .systemGroupedBackground
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.text = target.title
         titleLabel.numberOfLines = 1
         titleLabel.accessibilityTraits = .header
@@ -303,7 +303,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
                                          action: Selector) {
         button.frame.size = CGSize(width: Constants.floatingButtonSize, height: Constants.floatingButtonSize)
         button.setImage(image, for: .normal)
-        button.tintColor = .iconColorBlack
+        button.tintColor = .label
         button.accessibilityLabel = accessibilityLabel
         button.accessibilityTraits = .button
         button.addTarget(self, action: action, for: .touchUpInside)
@@ -316,7 +316,7 @@ final class WidgetPanelColorViewController: OABaseScrollableHudViewController {
         applyButton.titleLabel?.adjustsFontForContentSizeCategory = true
         applyButton.backgroundColor = .buttonBgColorPrimary
         applyButton.setTitleColor(.buttonTextColorPrimary, for: .normal)
-        applyButton.setTitleColor(.textColorSecondary, for: .disabled)
+        applyButton.setTitleColor(.secondaryLabel, for: .disabled)
         applyButton.layer.cornerRadius = 10
         applyButton.accessibilityTraits = .button
         applyButton.addTarget(self, action: #selector(onApplyButtonPressed), for: .touchUpInside)
@@ -615,7 +615,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                 return UITableViewCell()
             }
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             cell.configureSegmentedControl(titles: [localizedString("day"),
                                                      localizedString("daynight_mode_night")],
                                            selectedSegmentIndex: isNightColorMode ? 1 : 0)
@@ -633,7 +633,7 @@ extension WidgetPanelColorViewController: UITableViewDataSource, UITableViewDele
                                                            for: indexPath) as? OACollectionSingleLineTableViewCell else {
                 return UITableViewCell()
             }
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             // Keep the 48 pt selection ring inside the 60 pt row. The shared
             // cell uses a 9 pt bottom spacer by default, which leaves only
             // 45 pt for the collection view and clips the ring vertically.
@@ -828,7 +828,7 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
 
     private func configureViews() {
         selectionStyle = .none
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
 
         topSeparatorView.translatesAutoresizingMaskIntoConstraints = false
         topSeparatorView.backgroundColor = SeparatorAppearance.color
@@ -839,7 +839,7 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
 
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = localizedString("custom_widget_colors")
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
@@ -848,7 +848,7 @@ private final class WidgetPanelColorUnavailableCell: UITableViewCell {
 
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.text = localizedString("custom_widget_colors_description")
-        descriptionLabel.textColor = .textColorSecondary
+        descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.font = .preferredFont(forTextStyle: .footnote)
         descriptionLabel.adjustsFontForContentSizeCategory = true
         descriptionLabel.numberOfLines = 0

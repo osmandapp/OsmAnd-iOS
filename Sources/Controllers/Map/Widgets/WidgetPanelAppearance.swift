@@ -72,7 +72,7 @@ enum WidgetPanelIconMode: String, CaseIterable {
     }
 
     var iconTintColor: UIColor {
-        self == .off ? .iconColorDefault : .iconColorActive
+        self == .off ? .secondaryLabel : .iconColorActive
     }
 }
 
@@ -156,9 +156,9 @@ final class WidgetPanelAppearanceSettings {
         let color: UIColor
         switch target {
         case .primaryText:
-            color = panel.isPanelVertical ? .textColorPrimary : .widgetValue
+            color = panel.isPanelVertical ? .label : .widgetValue
         case .secondaryText:
-            color = .textColorSecondary
+            color = .secondaryLabel
         case .background:
             color = .widgetBg
         }

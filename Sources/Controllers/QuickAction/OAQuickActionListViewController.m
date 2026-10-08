@@ -321,7 +321,7 @@
             CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
             UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-            [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
+            [background setTintColor:UIColor.secondarySystemGroupedBackgroundColor];
             [cell.iconView addSubview:background];
             UIImage *img = [UIImage imageNamed:action.getSecondaryIconName];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
@@ -331,7 +331,7 @@
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
         [cell.overflowButton setImage:[UIImage templateImageNamed:ACImageNameMenuCellPointer] forState:UIControlStateNormal];
-        [cell.overflowButton setTintColor:[UIColor colorNamed:ACColorNameIconColorSecondary]];
+        [cell.overflowButton setTintColor:UIColor.secondaryLabelColor];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
         cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];

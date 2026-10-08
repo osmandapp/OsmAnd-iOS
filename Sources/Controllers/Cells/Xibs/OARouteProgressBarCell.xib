@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="3"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                         <color key="progressTintColor" name="iconColorSelected"/>
-                        <color key="trackTintColor" name="iconColorDefault"/>
+                        <color key="trackTintColor" systemColor="secondaryLabelColor"/>
                     </progressView>
                 </subviews>
             </tableViewCellContentView>
@@ -32,11 +32,11 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="iconColorDefault">
-            <color red="0.74509803921568629" green="0.72549019607843135" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="iconColorSelected">
             <color red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

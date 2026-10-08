@@ -106,7 +106,7 @@
     [super viewDidLoad];
 
     _iconView.image = [UIImage imageNamed:ACImageNameIcCustomLocationMarker];
-    _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _iconView.tintColor = UIColor.secondaryLabelColor;
     if (self.delegate)
         [self.delegate requestHeaderOnlyModeAnimated:NO];
 

@@ -739,7 +739,7 @@
         UIImage *deviationImg = nil;
         if (dist > 0 && p.deviationDistance > 0) {
             deviationStr = [NSString stringWithFormat:@"+%@", [OAOsmAndFormatter getFormattedDistance:p.deviationDistance]];
-            UIColor *color = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            UIColor *color = UIColor.secondaryLabelColor;
             if (p.deviationDirectionRight)
                 deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnRight] color:color];
             else
@@ -812,7 +812,7 @@
         }
         if (descAttrStr.length > 0)
         {
-            UIColor *color = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            UIColor *color = UIColor.secondaryLabelColor;
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
             [descAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, descAttrStr.length)];
         }

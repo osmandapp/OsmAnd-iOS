@@ -116,7 +116,7 @@
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
+            cell.leftEditButton.layer.shadowColor = UIColor.secondaryLabelColor.CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -157,7 +157,7 @@
             BOOL selected = [_selectedItems containsObject:filter];
             UIImage *icon = [[OAPOIHelper getCustomFilterIcon:filter] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             [cell.leftIconView setImage:icon ];
-            UIColor *selectedColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            UIColor *selectedColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
             cell.leftIconView.tintColor = selectedColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.titleLabel.text = filter.getName ? filter.getName : @"";

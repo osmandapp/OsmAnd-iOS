@@ -14,7 +14,7 @@ enum AstroVisibilityCardViewHolder {
                          onCursorTimeChanged: @escaping (Int64) -> Void) -> UIView {
         let card = UIView()
         card.translatesAutoresizingMaskIntoConstraints = false
-        card.backgroundColor = .groupBg
+        card.backgroundColor = .secondarySystemGroupedBackground
         card.layer.cornerRadius = 26
         card.layer.masksToBounds = true
 
@@ -42,7 +42,7 @@ enum AstroVisibilityCardViewHolder {
         title.text = item.titleText
         title.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         title.adjustsFontForContentSizeCategory = true
-        title.textColor = .textColorSecondary
+        title.textColor = .secondaryLabel
         title.numberOfLines = 0
         header.addArrangedSubview(title)
         
@@ -112,11 +112,11 @@ enum AstroVisibilityCardViewHolder {
         if !item.locationText.isEmpty {
             let location = UILabel()
             location.text = item.locationText
-            location.textColor = .textColorSecondary
+            location.textColor = .secondaryLabel
             location.font = .preferredFont(forTextStyle: .footnote)
             location.numberOfLines = 0
             let iconView = UIImageView(image: UIImage(systemName: "location.fill"))
-            iconView.tintColor = .textColorSecondary
+            iconView.tintColor = .secondaryLabel
             iconView.contentMode = .scaleAspectFit
             let row = UIStackView(arrangedSubviews: [iconView, location])
             row.axis = .horizontal
@@ -160,7 +160,7 @@ enum AstroVisibilityCardViewHolder {
         symbolLabel.font = .preferredFont(forTextStyle: .footnote)
         let titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.textColor = .textColorSecondary
+        titleLabel.textColor = .secondaryLabel
         titleLabel.font = .preferredFont(forTextStyle: .footnote)
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.7
@@ -173,7 +173,7 @@ enum AstroVisibilityCardViewHolder {
 
     private static func makeDivider() -> UIView {
         let divider = UIView()
-        divider.backgroundColor = .customSeparatorSolid
+        divider.backgroundColor = .opaqueSeparator
         divider.widthAnchor.constraint(equalToConstant: 1).isActive = true
         let wrapper = UIView()
         wrapper.translatesAutoresizingMaskIntoConstraints = false

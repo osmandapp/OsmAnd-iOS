@@ -167,11 +167,11 @@
 {
     NSDictionary *nameAttributes = @{
             NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
-            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+            NSForegroundColorAttributeName : UIColor.labelColor
     };
     NSDictionary *unitAttributes = @{
             NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
-            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]
+            NSForegroundColorAttributeName : UIColor.secondaryLabelColor
     };
 
     NSMutableAttributedString *attributedString = [NSMutableAttributedString new];

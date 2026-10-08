@@ -177,7 +177,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.textAlignment = NSTextAlignmentCenter;
     self.valueLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
-    self.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.valueLabel.textColor = UIColor.labelColor;
     [verticalNameUnitStackView addArrangedSubview:self.valueLabel];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -188,7 +188,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.unitLabel.textAlignment = NSTextAlignmentCenter;
     self.unitLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
-    self.unitLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    self.unitLabel.textColor = UIColor.secondaryLabelColor;
     [verticalNameUnitStackView addArrangedSubview:self.unitLabel];
     
     [NSLayoutConstraint activateConstraints:@[

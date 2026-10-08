@@ -201,7 +201,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerHight = SeparatorAppearance.thickness;
         }
@@ -264,7 +264,7 @@
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = [UIColor colorNamed:ACColorNameIconColorDisabled].CGColor;
+            cell.leftEditButton.layer.shadowColor = UIColor.tertiaryLabelColor.CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -309,7 +309,7 @@
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
             BOOL installed = item.isInstalled;
             cell.leftIconView.image = [OAResourceType getIcon:_type.type templated:YES];
-            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] :installed  ?  [UIColor colorNamed:ACColorNameIconColorGreen] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] :installed  ?  [UIColor colorNamed:ACColorNameIconColorGreen] : UIColor.tertiaryLabelColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.accessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
             cell.titleLabel.text = item.title;

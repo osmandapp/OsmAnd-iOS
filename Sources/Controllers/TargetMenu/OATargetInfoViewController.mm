@@ -881,7 +881,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     self.tableView.separatorColor = [SeparatorAppearance color];
     
     UIView *view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    view.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     
@@ -1575,7 +1575,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            cell.backgroundColor = UIColor.systemGroupedBackgroundColor;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
@@ -1605,12 +1605,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         {
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
             cell.textView.text = info.textPrefix;
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.textView.textColor = UIColor.secondaryLabelColor;
         }
         else
         {
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textView.textColor = UIColor.labelColor;
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
@@ -1636,7 +1636,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             label = [NSString stringWithFormat:@"%@\n\n%@", label, info.textPrefix];
             
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textView.textColor = UIColor.labelColor;
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];

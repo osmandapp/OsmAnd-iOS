@@ -58,7 +58,7 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
         
         let item = tableData.item(for: indexPath)
         
-        cell.leftIconView.tintColor = .iconColorDefault
+        cell.leftIconView.tintColor = .secondaryLabel
         cell.descriptionVisibility(item.key == "telegramChats")
         cell.titleLabel.text = item.title
         cell.descriptionLabel.text = item.descr

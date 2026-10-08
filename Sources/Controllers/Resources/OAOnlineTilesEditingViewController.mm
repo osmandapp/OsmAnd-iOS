@@ -381,7 +381,7 @@
             {
                 cell.userInteractionEnabled = YES;
                 cell.textView.text = isURL ? _itemURL : _itemName;
-                cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                cell.textView.textColor = UIColor.labelColor;
                 [cell clearButtonVisibility:YES];
             }
         }
@@ -437,7 +437,7 @@
                 else
                     cell.valueLabel.text = @"";
                 
-                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                cell.valueLabel.textColor = UIColor.labelColor;
                 cell.selectionStyle = UITableViewCellSelectionStyleDefault;
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
@@ -458,7 +458,7 @@
                     else
                     {
                         cell.userInteractionEnabled = YES;
-                        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                        cell.titleLabel.textColor = UIColor.labelColor;
                     }
                 }
                 cell.valueLabel.textColor = UIColor.lightGrayColor;

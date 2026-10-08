@@ -48,14 +48,14 @@ final class RouteSettingToggleCell: UITableViewCell {
         let iconSize = Self.iconSize
         let minimumHeight = Self.minimumHeight
         let verticalPadding = Self.verticalPadding
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .none
         separatorInset = UIEdgeInsets(top: 0, left: 62, bottom: 0, right: 16)
 
         iconView.contentMode = .scaleAspectFit
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)

@@ -245,8 +245,8 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.separatorStyle = .none
         tableView.canCancelContentTouches = true
         tableView.sectionHeaderTopPadding = 0
@@ -892,7 +892,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let nameLabel = UILabel()
         nameLabel.text = item.label
         nameLabel.font = .preferredFont(forTextStyle: .caption2)
-        nameLabel.textColor = .textColorSecondary
+        nameLabel.textColor = .secondaryLabel
 
         let stack = UIStackView(arrangedSubviews: [valueLabel, nameLabel])
         stack.axis = .vertical
@@ -932,7 +932,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.axisLineColor = .chartAxisGridLine
         rightAxis.drawGridLinesEnabled = true
         rightAxis.gridColor = .chartAxisGridLine
-        rightAxis.labelTextColor = .textColorSecondary
+        rightAxis.labelTextColor = .secondaryLabel
         bindChartDelegate(barChart)
 
         let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
@@ -1043,8 +1043,8 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let dot = UIView()
         dot.backgroundColor = color
         dot.layer.cornerRadius = Self.compactLegendMarkerSize / 2
-        dot.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
-        let contrastRatio = contrastRatio(foreground: color, background: .groupBg)
+        dot.layer.borderColor = UIColor.opaqueSeparator.resolvedColor(with: traitCollection).cgColor
+        let contrastRatio = contrastRatio(foreground: color, background: .secondarySystemGroupedBackground)
         dot.layer.borderWidth = contrastRatio < Self.compactLegendMinimumContrastRatio
             ? Self.compactLegendBorderWidth
             : 0
@@ -1055,7 +1055,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         let label = UILabel()
         label.text = title
         label.font = .preferredFont(forTextStyle: .footnote)
-        label.textColor = .textColorPrimary
+        label.textColor = .label
         label.numberOfLines = 1
 
         let stack = UIStackView(arrangedSubviews: [dot, label])
@@ -1074,7 +1074,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             title: localizedString("no_elevation_data"),
             description: localizedString("no_elevation_data_description"),
             icon: .icCustomDesert,
-            iconTint: .iconColorDefault,
+            iconTint: .secondaryLabel,
             actionTitle: localizedString("get_elevation_data"),
             isSpinner: false,
             containerStyle: .card,

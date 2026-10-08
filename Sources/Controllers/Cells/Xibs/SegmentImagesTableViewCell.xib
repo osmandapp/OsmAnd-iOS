@@ -22,14 +22,14 @@
                         <segment title="" image="ic_custom20_height_m"/>
                         <segment title="" image="ic_custom20_height_s"/>
                     </segments>
-                    <color key="tintColor" name="textColorPrimary"/>
+                    <color key="tintColor" systemColor="labelColor"/>
                     <connections>
                         <action selector="segmentedControlButtonClickAction:" destination="dGr-oE-cBL" eventType="valueChanged" id="hVd-S2-SCK"/>
                     </connections>
                 </segmentedControl>
             </subviews>
             <viewLayoutGuide key="safeArea" id="poT-Zr-U8t"/>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstItem="3UB-rc-uKl" firstAttribute="top" secondItem="dGr-oE-cBL" secondAttribute="top" constant="8" id="Op7-Sp-sUK"/>
                 <constraint firstItem="3UB-rc-uKl" firstAttribute="leading" secondItem="poT-Zr-U8t" secondAttribute="leading" constant="20" id="bpW-18-j8U"/>
@@ -48,11 +48,11 @@
         <image name="ic_custom20_height_l" width="20" height="20"/>
         <image name="ic_custom20_height_m" width="20" height="20"/>
         <image name="ic_custom20_height_s" width="20" height="20"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

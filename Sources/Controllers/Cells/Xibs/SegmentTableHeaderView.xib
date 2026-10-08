@@ -27,7 +27,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="groupBg"/>
+                    <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="v2R-vL-QuM" secondAttribute="bottom" id="W3p-4f-vFh"/>
                         <constraint firstItem="v2R-vL-QuM" firstAttribute="leading" secondItem="gZ3-J7-e2l" secondAttribute="leading" id="jWl-qV-dEF"/>
@@ -43,7 +43,7 @@
                 </segmentedControl>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Kpv-1l-lTd"/>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gZ3-J7-e2l" secondAttribute="bottom" id="KsE-zy-pMN"/>
                 <constraint firstItem="rec-Lf-5Zo" firstAttribute="top" secondItem="aRy-9S-EwN" secondAttribute="top" constant="8" id="Ofm-xe-sRH"/>
@@ -62,9 +62,9 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="separatorColor">
             <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

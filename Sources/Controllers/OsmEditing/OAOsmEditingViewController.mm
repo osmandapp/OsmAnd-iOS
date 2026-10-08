@@ -269,7 +269,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     _buttonDelete.layer.cornerRadius = 9.0;
     
     _buttonDelete.userInteractionEnabled = ![_editPoiData.getEntity isKindOfClass:OAWay.class];
-    [_buttonDelete setTitleColor:_buttonDelete.userInteractionEnabled ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateNormal];
+    [_buttonDelete setTitleColor:_buttonDelete.userInteractionEnabled ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : UIColor.secondaryLabelColor forState:UIControlStateNormal];
     
     _basicEditingController = [[OABasicEditingViewController alloc] initWithFrame:_pageController.view.bounds];
     [_basicEditingController setDataProvider:self];

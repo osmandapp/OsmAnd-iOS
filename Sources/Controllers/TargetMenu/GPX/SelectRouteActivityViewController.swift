@@ -112,7 +112,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
                 row.key = activity.id
                 row.title = activity.label
                 row.icon = UIImage.routeActivityIcon(activity.iconName, fallback: .icCustomInfoOutlined)
-                row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .iconColorDefault
+                row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .secondaryLabel
                 row.setObj(activity.id == selectedActivity?.id, forKey: "isSelected")
                 row.setObj(activity, forKey: "routeActivity")
             }
@@ -126,7 +126,7 @@ final class SelectRouteActivityViewController: OABaseNavbarViewController {
                     row.key = activity.id
                     row.title = activity.label
                     row.icon = UIImage.routeActivityIcon(activity.iconName, fallback: .icCustomInfoOutlined)
-                    row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .iconColorDefault
+                    row.iconTintColor = (activity.id == selectedActivity?.id) ? .iconColorActive : .secondaryLabel
                     row.setObj(activity, forKey: "routeActivity")
                     if isCheckmarkAllowed {
                         row.setObj(activity.id == selectedActivity?.id, forKey: "isSelected")

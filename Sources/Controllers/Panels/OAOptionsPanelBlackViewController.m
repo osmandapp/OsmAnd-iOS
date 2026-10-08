@@ -272,7 +272,7 @@
     }
     
     for (UIButton *button in _menuButtonsArray) {
-        [button setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+        [button setTintColor:UIColor.secondaryLabelColor];
     }
 }
 
@@ -313,8 +313,8 @@
     button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateHighlighted];
+    [button setTitleColor:UIColor.labelColor forState:UIControlStateNormal];
+    [button setTitleColor:UIColor.secondaryLabelColor forState:UIControlStateHighlighted];
     [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
@@ -393,7 +393,7 @@
     for (UIButton *button in _menuButtonsArray) {
         button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         button.titleLabel.adjustsFontForContentSizeCategory = YES;
-        [button setTitleColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forState:UIControlStateHighlighted];
+        [button setTitleColor:UIColor.labelColor forState:UIControlStateHighlighted];
     }
 
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
@@ -453,8 +453,8 @@
             }
             else
             {
-                backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : [UIColor colorNamed:ACColorNameGroupBg];
-                updatedConfig.baseForegroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                backgroundConfig.backgroundColor = isBottom ? button.backgroundColor : UIColor.secondarySystemGroupedBackgroundColor;
+                updatedConfig.baseForegroundColor = UIColor.secondaryLabelColor;
             }
             updatedConfig.background = backgroundConfig;
             button.configuration = updatedConfig;

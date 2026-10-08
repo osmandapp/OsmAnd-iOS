@@ -28,7 +28,7 @@ final class LeftIconRightStackTitleDescriptionButtonView: UIView {
                    description: String,
                    buttonTitle: String,
                    leftImage: UIImage,
-                   leftImageTintColor: UIColor = UIColor.iconColorDefault) {
+                   leftImageTintColor: UIColor = UIColor.secondaryLabel) {
         titleLabel.text = title
         descriptionLabel.text = description
         bottomButton.setTitle(buttonTitle, for: .normal)

@@ -25,14 +25,14 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTP-2O-fC4">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="0.0"/>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="z2K-Ka-zv1"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cb8-0r-VeY">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="9"/>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="bEJ-bz-fGM"/>
                                         </constraints>
@@ -55,7 +55,7 @@
                                             <constraint firstAttribute="height" constant="30" id="owe-9Q-Dqk"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" name="textColorPrimary"/>
+                                        <color key="textColor" systemColor="labelColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Na-Pk-W0m">
@@ -74,7 +74,7 @@
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="srt-yt-shI">
                                 <rect key="frame" x="0.0" y="39" width="393" height="12"/>
-                                <color key="backgroundColor" name="groupBg"/>
+                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="12" id="5HT-4R-TiN"/>
                                 </constraints>
@@ -102,7 +102,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qjd-Sp-5Ko">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="14"/>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="14" id="lO0-is-kOv"/>
                                         </constraints>
@@ -112,14 +112,14 @@
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dPz-FR-pOJ">
                                                 <rect key="frame" x="0.0" y="0.0" width="0.0" height="1"/>
-                                                <color key="backgroundColor" name="groupBg"/>
+                                                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" id="S8O-9z-rpL"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fki-YG-97m" userLabel="Separator View" customClass="SeparatorView" customModule="OsmAnd_Maps" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="1"/>
-                                                <color key="backgroundColor" name="customSeparator"/>
+                                                <color key="backgroundColor" systemColor="separatorColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="Ezj-p8-v0I"/>
                                                 </constraints>
@@ -131,7 +131,7 @@
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UC7-iw-mHb">
                                         <rect key="frame" x="0.0" y="15" width="393" height="9"/>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="fDS-fO-Avj"/>
                                         </constraints>
@@ -154,7 +154,7 @@
                                             <constraint firstAttribute="height" constant="30" id="SLg-tZ-Qfd"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <color key="textColor" name="textColorSecondary"/>
+                                        <color key="textColor" systemColor="secondaryLabelColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -188,14 +188,14 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwP-ib-F70">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="9"/>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="9" id="tUh-U2-X2o"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WUB-aI-9oi">
                                         <rect key="frame" x="0.0" y="9" width="393" height="0.0"/>
-                                        <color key="backgroundColor" name="groupBg"/>
+                                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" id="7QX-O0-SZC"/>
                                         </constraints>
@@ -203,10 +203,10 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" name="groupBg"/>
+                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                     </stackView>
                 </subviews>
-                <color key="backgroundColor" name="groupBg"/>
+                <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                 <constraints>
                     <constraint firstItem="Pde-Gp-UrD" firstAttribute="top" secondItem="Mm8-Rd-v2K" secondAttribute="top" id="8Bg-s9-TzB"/>
                     <constraint firstAttribute="trailing" secondItem="NS9-5f-FoA" secondAttribute="trailing" id="A2I-fH-mJ5"/>
@@ -215,7 +215,7 @@
                     <constraint firstAttribute="bottom" secondItem="Pde-Gp-UrD" secondAttribute="bottom" priority="999" id="lli-Jz-ss7"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="bottomButton" destination="Oc5-lr-XlE" id="mlh-aC-ytu"/>
                 <outlet property="bottomButtonStackView" destination="C7z-M2-QQN" id="ITQ-bi-k0l"/>
@@ -238,20 +238,20 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="customSeparator">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorSecondary">
-            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="separatorColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

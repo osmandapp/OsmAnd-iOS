@@ -65,7 +65,7 @@
     [data addObject:@[@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"osmand_cloud_create_account_descr"),
-        @"color" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+        @"color" : UIColor.secondaryLabelColor,
         @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
@@ -105,7 +105,7 @@
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_continue"),
                 @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
-                @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+                @"textColor" : UIColor.secondaryLabelColor,
                 @"action": @"continueButtonPressed",
                 @"inteactive" : @NO,
             }];
@@ -134,7 +134,7 @@
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
             @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
-            @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+            @"textColor" : UIColor.secondaryLabelColor,
             @"action": @"continueButtonPressed",
             @"inteactive" : @NO,
         }];

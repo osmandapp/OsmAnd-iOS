@@ -234,7 +234,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     }
     else
     {
-        cancelSubscr.view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cancelSubscr.view.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         cancelSubscr.modalPresentationStyle = UIModalPresentationOverFullScreen;
     }
     

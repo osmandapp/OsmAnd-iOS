@@ -235,7 +235,7 @@
     
     resultCell.fieldLabel.text = item[@"hint"];
     MDCMultilineTextField *textField = resultCell.textField;
-    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    textField.textColor = UIColor.labelColor;
     textField.underline.hidden = YES;
     textField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -246,7 +246,7 @@
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
     
@@ -311,7 +311,7 @@
         text = [text stringByAppendingString:@"\n"];
         NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                     attributes:@{NSFontAttributeName : textFont,
-                                                                                                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
+                                                                                                 NSForegroundColorAttributeName : UIColor.secondaryLabelColor}];
         [textStr appendAttributedString:str];
         vw.label.text = nil;
         vw.label.attributedText = textStr;
@@ -376,7 +376,7 @@
             if (!cell.leftIconView.hidden)
             {
                 [cell.leftIconView setImage:[UIImage templateImageNamed:imgName]];
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             }
 
             if ([item.allKeys containsObject:@"hint"] && [item[@"hint"] isEqualToString:OALocalizedString(@"quick_action_template_name")])
@@ -455,7 +455,7 @@
             }
             
             cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.valueLabel.textColor = UIColor.secondaryLabelColor;
         }
         return cell;
     }
@@ -482,7 +482,7 @@
             NSString *desc = item[@"descr"];
             cell.descriptionLabel.text = desc;
             [cell descriptionVisibility:desc.length != 0];
-            [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+            [cell.leftIconView setTintColor:UIColor.secondaryLabelColor];
             cell.leftIconView.image = img;
             [cell setCustomLeftSeparatorInset:YES];
             cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
@@ -578,7 +578,7 @@
         if (cell)
         {
             MDCMultilineTextField *textField = cell.inputField;
-            textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            textField.textColor = UIColor.labelColor;
             textField.underline.hidden = YES;
             textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
             textField.placeholder = item[@"hint"];
@@ -589,7 +589,7 @@
             [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
             [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
             [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
         }

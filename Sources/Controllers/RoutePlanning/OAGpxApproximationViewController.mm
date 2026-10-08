@@ -263,7 +263,7 @@ static const float kProgressMaximumValue = 100.f;
             if (indexPath.row == 0)
             {
                 cell.titleView.text = [item[@"title"] uppercaseString];
-                cell.titleView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.titleView.textColor = UIColor.secondaryLabelColor;
                 cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
                 cell.secondaryImageView.hidden = YES;
                 cell.secondaryImageView.image = nil;
@@ -274,7 +274,7 @@ static const float kProgressMaximumValue = 100.f;
                 selected = _snapToRoadAppMode == profile;
                 cell.secondaryImageView.hidden = NO;
                 cell.titleView.text = profile.toHumanString;
-                cell.titleView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+                cell.titleView.textColor = UIColor.labelColor;
                 cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 UIImage *img = profile.getIcon;
                 cell.secondaryImageView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

@@ -268,7 +268,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableView.separatorStyle = .none
         
         tableView.backgroundColor = .clear
-        view.backgroundColor = UIColor.viewBg
+        view.backgroundColor = UIColor.systemGroupedBackground
         tableView.register(SectionHeaderFooterButton.nib,
                            forHeaderFooterViewReuseIdentifier: SectionHeaderFooterButton.getCellIdentifier())
     }

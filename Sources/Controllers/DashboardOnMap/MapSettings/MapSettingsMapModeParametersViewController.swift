@@ -99,7 +99,7 @@ final class MapSettingsMapModeParametersViewController: BaseSettingsParametersVi
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
             cell.titleLabel.font = .preferredFont(forTextStyle: isName ? .body : .subheadline)
-            cell.titleLabel.textColor = isName ? .textColorPrimary : UIColor(rgb: color_extra_text_gray)
+            cell.titleLabel.textColor = isName ? .label : UIColor(rgb: color_extra_text_gray)
             cell.titleLabel.text = isName ? currentAppearanceMode?.title : currentAppearanceMode?.desc
             cell.titleLabel.accessibilityLabel = cell.titleLabel.text
             return cell

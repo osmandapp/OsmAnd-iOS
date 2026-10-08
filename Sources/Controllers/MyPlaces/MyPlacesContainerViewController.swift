@@ -116,7 +116,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
         pageViewController?.scrollView?.backgroundColor = .clear
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.tintColor = .label
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         openTracksFolderIfNeeded()
     }
     
@@ -259,10 +259,10 @@ final class MyPlacesContainerViewController: OACompoundViewController {
 
         navigationItem.title = nil
         navigationItem.setStackViewWithTitle(title,
-                                             titleColor: .textColorPrimary,
+                                             titleColor: .label,
                                              titleFont: .scaledSystemFont(ofSize: 17.0, weight: .semibold, maximumSize: 22.0),
                                              subtitle: hideSubtitle ? "" : subtitle,
-                                             subtitleColor: .textColorSecondary,
+                                             subtitleColor: .secondaryLabel,
                                              subtitleFont: .scaledSystemFont(ofSize: 12.0, maximumSize: 18.0))
     }
     
@@ -454,7 +454,7 @@ extension MyPlacesContainerViewController: MyPlacesDelegate {
                 segmentContainerView.addInteraction(interaction)
             }
         } else {
-            segmentContainerView.backgroundColor = .viewBg
+            segmentContainerView.backgroundColor = .systemGroupedBackground
             navigationItem.standardAppearance = navigationController?.navigationBar.scrollEdgeAppearance
         }
     }

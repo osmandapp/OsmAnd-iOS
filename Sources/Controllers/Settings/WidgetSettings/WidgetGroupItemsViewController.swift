@@ -123,7 +123,7 @@ extension WidgetGroupItemsViewController {
         attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
 
         // Set color attribute
-        attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
+        attrStr.addAttribute(.foregroundColor, value: UIColor.secondaryLabel, range: NSRange(location: 0, length: attrStr.length))
         return attrStr
     }
 }

@@ -108,7 +108,7 @@
     appearance.shadowColor = self.tableView.backgroundColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName : UIColor.labelColor
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
@@ -128,7 +128,7 @@
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:fullRange];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.secondaryLabelColor range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorActive] range:coloredRange];
     UIView *footer = [OAUtilities setupTableHeaderViewWithText:attributedString tintColor:nil icon:nil iconFrameSize:0. iconBackgroundColor:nil iconContentMode:UIViewContentModeCenter];
     [footer addGestureRecognizer:_tapRecognizer];
@@ -250,7 +250,7 @@
             {
                 NSRange boldRange = [text rangeOfString:boldPart];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:boldRange];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.labelColor range:boldRange];
             }
             
             cell.titleLabel.attributedText = attributedString;
@@ -273,7 +273,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"placeholder"];
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.titleLabel.textColor = UIColor.secondaryLabelColor;
             NSString *text =  item[@"title"];
             cell.inputField.text = text;
             cell.inputField.textContentType = UITextContentTypeEmailAddress;

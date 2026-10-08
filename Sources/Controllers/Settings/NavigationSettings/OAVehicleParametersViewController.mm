@@ -316,7 +316,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : self.appMode.getProfileColor;
+            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColor.tertiaryLabelColor : self.appMode.getProfileColor;
         }
         return cell;
     }

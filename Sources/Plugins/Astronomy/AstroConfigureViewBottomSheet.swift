@@ -215,7 +215,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
         
         let title = UILabel()
         title.text = text
-        title.textColor = .textColorSecondary
+        title.textColor = .secondaryLabel
         title.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         title.translatesAutoresizingMaskIntoConstraints = false
         
@@ -624,7 +624,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
 
     private func setupSwitchItemIcon(_ imageView: UIImageView, iconName: String, isChecked: Bool) {
         imageView.image = AstroIcon.template(iconName)
-        imageView.tintColor = isChecked ? .iconColorActive : .iconColorDefault
+        imageView.tintColor = isChecked ? .iconColorActive : .secondaryLabel
     }
 
     private func addActionCard(to row: UIStackView) -> AstroActionCard {
@@ -657,7 +657,7 @@ final class AstroConfigureViewBottomSheet: UIViewController, UISheetPresentation
     }
 
     private func applyTheme() {
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
     }
     
     @objc private func closeAction() {
@@ -752,7 +752,7 @@ private final class AstroActionCard: UIControl {
     }
 
     private func applyStyle() {
-        backgroundColor = checked ? .buttonBgColorTertiary : .groupBg
+        backgroundColor = checked ? .buttonBgColorTertiary : .secondarySystemGroupedBackground
         layer.borderWidth = checked ? 2 : 0
         layer.borderColor = UIColor.buttonBgColorPrimary.cgColor
         iconView.tintColor = .iconColorActive
@@ -810,7 +810,7 @@ private final class AstroSwitchRow: UIControl {
         backgroundColor = .clear
 
         let contentView = UIView()
-        contentView.backgroundColor = .groupBg
+        contentView.backgroundColor = .secondarySystemGroupedBackground
         contentView.isUserInteractionEnabled = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
@@ -820,7 +820,7 @@ private final class AstroSwitchRow: UIControl {
         iconView.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.text = title
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -880,8 +880,8 @@ private final class AstroSwitchRow: UIControl {
 
     private func applyStyle() {
         iconView.image = AstroIcon.template(checked ? iconNameEnabled : iconNameDisabled)
-        iconView.tintColor = checked ? .iconColorActive : .iconColorDefault
-        titleLabel.textColor = .textColorPrimary
+        iconView.tintColor = checked ? .iconColorActive : .secondaryLabel
+        titleLabel.textColor = .label
     }
     
     private func updateAccessibility() {

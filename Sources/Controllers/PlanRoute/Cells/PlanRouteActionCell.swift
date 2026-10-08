@@ -28,7 +28,7 @@ final class PlanRouteActionCell: UITableViewCell {
         if isDestructive {
             titleLabel.textColor = .textColorDisruptive
         } else {
-            titleLabel.textColor = showsDisclosure ? .textColorPrimary : .iconColorActive
+            titleLabel.textColor = showsDisclosure ? .label : .iconColorActive
         }
         accessoryType = showsDisclosure ? .disclosureIndicator : .none
         editingAccessoryType = accessoryType
@@ -42,7 +42,7 @@ final class PlanRouteActionCell: UITableViewCell {
     private func setupCell() {
         let contentInsets = Self.contentInsets
         let minimumHeight = Self.minimumHeight
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .default
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)

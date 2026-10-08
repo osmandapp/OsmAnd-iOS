@@ -62,9 +62,9 @@
         int imgIndex = [text indexOf:@"<img>"];
         if (imgIndex != -1)
         {
-            UIColor *titleColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            UIColor *imgColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-            UIColor *descrColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            UIColor *titleColor = UIColor.secondaryLabelColor;
+            UIColor *imgColor = UIColor.secondaryLabelColor;
+            UIColor *descrColor = UIColor.labelColor;
             [title addAttribute:NSForegroundColorAttributeName value:titleColor range:NSMakeRange(0, imgIndex - 1)];
             [title addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, imgIndex - 1)];
             

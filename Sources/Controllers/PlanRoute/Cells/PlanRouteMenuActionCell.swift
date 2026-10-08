@@ -31,9 +31,9 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         if model.isDestructive {
             titleColor = .textColorDisruptive
         } else if model.isEnabled {
-            titleColor = .textColorPrimary
+            titleColor = .label
         } else {
-            titleColor = .textColorSecondary
+            titleColor = .secondaryLabel
         }
         titleLabel.text = model.title
         titleLabel.textColor = titleColor
@@ -48,7 +48,7 @@ final class PlanRouteMenuActionCell: UITableViewCell {
         } else if model.isEnabled {
             iconColor = .iconColorActive
         } else {
-            iconColor = .iconColorTertiary
+            iconColor = .secondaryLabel
         }
         iconView.tintColor = iconColor
         isUserInteractionEnabled = model.isEnabled || model.isDestructive
@@ -59,14 +59,14 @@ final class PlanRouteMenuActionCell: UITableViewCell {
     }
 
     private func setupCell() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         selectionStyle = .default
 
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.numberOfLines = 1
 
         subtitleLabel.font = .scaledSystemFont(ofSize: 13)
-        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.numberOfLines = 1
 
         iconView.contentMode = .scaleAspectFit

@@ -49,7 +49,7 @@
                     </subviews>
                 </stackView>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <constraints>
                 <constraint firstItem="LxC-l2-gg6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="1kU-zl-KyV"/>
                 <constraint firstAttribute="bottom" secondItem="LxC-l2-gg6" secondAttribute="bottom" constant="20" id="Jr6-WA-M6V"/>
@@ -62,8 +62,8 @@
     </objects>
     <resources>
         <image name="ic_custom_update_disabled" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

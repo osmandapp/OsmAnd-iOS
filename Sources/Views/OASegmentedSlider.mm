@@ -424,7 +424,7 @@ static CGFloat kMarkWidth = 2;
 
 - (void)layoutSelectingTitle
 {
-    _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _selectingMarkTitle.textColor = self.userInteractionEnabled ? UIColor.labelColor : UIColor.secondaryLabelColor;
     NSInteger index = self.stepsAmountWithoutDrawMark > 0 ? [self getIndexForOptionStepsAmountWithoutDrawMark] : [self getIndex];
     _selectingMarkTitle.text = [self getSelectingMarkTitleTextAtIndex:index];
 
@@ -475,7 +475,7 @@ static CGFloat kMarkWidth = 2;
     }
     for (UILabel *titleLabel in _titleViews)
     {
-        titleLabel.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+        titleLabel.textColor = self.userInteractionEnabled ? UIColor.labelColor : UIColor.secondaryLabelColor;
     }
 }
 

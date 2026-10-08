@@ -37,7 +37,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     private let messageTitleLabel: UILabel = {
         let label = UILabel()
         label.font = .scaledSystemFont(ofSize: 17, weight: .semibold)
-        label.textColor = .textColorPrimary
+        label.textColor = .label
         label.textAlignment = .center
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -49,7 +49,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     private let messageLabel: UILabel = {
         let label = UILabel()
         label.font = .scaledSystemFont(ofSize: 15)
-        label.textColor = .textColorPrimary
+        label.textColor = .label
         label.textAlignment = .natural
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
@@ -114,10 +114,10 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
 
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .viewBg
+        appearance.backgroundColor = .systemGroupedBackground
         appearance.shadowColor = nil
         appearance.titleTextAttributes = [
-            .foregroundColor: UIColor.textColorPrimary,
+            .foregroundColor: UIColor.label,
             .font: UIFont.scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
         ]
         navigationController?.navigationBar.standardAppearance = appearance
@@ -127,7 +127,7 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     }
 
     private func configureContent() {
-        view.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
         view.addSubview(scrollView)
         scrollView.addSubview(iconView)
         scrollView.addSubview(messageTitleLabel)

@@ -62,8 +62,8 @@ final class RouteSettingsViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = UITableView.automaticDimension
@@ -109,7 +109,7 @@ final class RouteSettingsViewController: UIViewController {
                 return UITableViewCell()
             }
             let isOn = parameter.isChecked()
-            let tintColor = isOn ? profileColor : .iconColorDisabled
+            let tintColor = isOn ? profileColor : .tertiaryLabel
             cell.configure(title: title, icon: icon, tintColor: tintColor, isOn: isOn) { [weak self, weak parameter] isOn in
                 parameter?.applyNewParameterValue(isOn)
                 self?.settingsChangedHandler?()
@@ -306,8 +306,8 @@ private final class PlanRouteShowAlongSettingsViewController: UIViewController {
     }
 
     private func setupTableView() {
-        view.backgroundColor = .viewBg
-        tableView.backgroundColor = .viewBg
+        view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 52
@@ -344,9 +344,9 @@ extension PlanRouteShowAlongSettingsViewController: UITableViewDataSource {
         var content = cell.defaultContentConfiguration()
         content.text = item.title
         content.textProperties.font = .scaledSystemFont(ofSize: 17)
-        content.textProperties.color = .textColorPrimary
+        content.textProperties.color = .label
         cell.contentConfiguration = content
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.selectionStyle = .none
         cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 

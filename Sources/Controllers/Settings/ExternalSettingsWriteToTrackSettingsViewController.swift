@@ -81,7 +81,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
                         }
                     }
                 }
-                dataType.iconTintColor = deviceFound ? UIColor.iconColorActive : UIColor.iconColorDisabled
+                dataType.iconTintColor = deviceFound ? UIColor.iconColorActive : UIColor.tertiaryLabel
                 dataType.descr = deviceName
                 dataType.setObj(widgetType, forKey: "widgetType")
             }

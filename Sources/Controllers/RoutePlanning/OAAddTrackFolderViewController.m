@@ -216,7 +216,7 @@
     [textView sizeToFit];
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+    footer.textLabel.textColor = _inputFieldError != nil ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : UIColor.secondaryLabelColor;
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];

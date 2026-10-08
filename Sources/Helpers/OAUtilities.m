@@ -870,7 +870,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
     else
     {
         blurView = [[UIView alloc] init];
-        UIColor *color = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+        UIColor *color = UIColor.tertiarySystemGroupedBackgroundColor;
         blurView.backgroundColor = light ? color.light : color.dark;
     }
     blurView.tag = kBlurViewTag;
@@ -2837,7 +2837,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor
 {
     if (!textColor)
-        textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        textColor = UIColor.labelColor;
 
     CGFloat red, green, blue, alpha;
     [textColor.currentThemeColor getRed:&red green:&green blue:&blue alpha:&alpha];

@@ -164,7 +164,7 @@ final class CoordinateFormatSelectorViewController: OABaseNavbarViewController {
         }
 
         cell.titleLabel.textAlignment = .natural
-        cell.titleLabel.textColor = .textColorPrimary
+        cell.titleLabel.textColor = .label
         cell.titleLabel.text = item.title
 
         let isPrimary = (item.obj(forKey: Key.isPrimary.rawValue) as? NSNumber)?.boolValue == true

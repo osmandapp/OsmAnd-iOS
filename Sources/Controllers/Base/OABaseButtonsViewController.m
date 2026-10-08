@@ -218,11 +218,11 @@
     switch ([self getBottomColorScheme])
     {
         case EOABaseBottomColorSchemeBlank:
-            return [UIColor colorNamed:ACColorNameViewBg];
+            return UIColor.systemGroupedBackgroundColor;
         case EOABaseBottomColorSchemeGray:
-            return [UIColor colorNamed:ACColorNameGroupBg];
+            return UIColor.secondarySystemGroupedBackgroundColor;
         case EOABaseBottomColorSchemeWhite:
-            return [UIColor colorNamed:ACColorNameGroupBg];
+            return UIColor.secondarySystemGroupedBackgroundColor;
         default:
             return nil;
     }
@@ -234,7 +234,7 @@
     {
         case EOABaseButtonColorSchemeBlank:
         case EOABaseButtonColorSchemeInactive:
-            return [UIColor colorNamed:ACColorNameTextColorSecondary];
+            return UIColor.secondaryLabelColor;
         case EOABaseButtonColorSchemeGrayAttn:
             return [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         case EOABaseButtonColorSchemePurple:

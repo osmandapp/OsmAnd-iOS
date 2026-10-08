@@ -82,7 +82,7 @@
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [NSString stringWithFormat:OALocalizedString(@"verify_email_address_descr"), _email],
         @"boldPart" : _email ? _email : @"",
-        @"color" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+        @"color" : UIColor.secondaryLabelColor,
         @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
@@ -118,7 +118,7 @@
         [otherCells addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"verification_code_missing_description"),
-            @"color" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+            @"color" : UIColor.secondaryLabelColor,
             @"spacing" : @1
         }];
 
@@ -152,7 +152,7 @@
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
             @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
-            @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
+            @"textColor" : UIColor.secondaryLabelColor,
             @"action": @"continueButtonPressed",
             @"inteactive" : @NO,
             @"topMargin" : continueButtonTopMargin,

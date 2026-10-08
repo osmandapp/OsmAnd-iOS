@@ -112,7 +112,7 @@ final class StarMapSearchEmptyView: UIView {
     }
 
     private func setupView() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         cornerRadius = Layout.cornerRadius
         
         containerStack.axis = .vertical
@@ -143,17 +143,17 @@ final class StarMapSearchEmptyView: UIView {
         contentStack.translatesAutoresizingMaskIntoConstraints = false
 
         iconView.contentMode = .scaleAspectFit
-        iconView.tintColor = .iconColorDefault
+        iconView.tintColor = .secondaryLabel
         iconView.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
         descriptionLabel.adjustsFontForContentSizeCategory = true
-        descriptionLabel.textColor = .textColorSecondary
+        descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false

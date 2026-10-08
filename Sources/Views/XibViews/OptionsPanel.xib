@@ -36,7 +36,7 @@
                     <rect key="frame" x="166" y="0.0" width="42" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                    <color key="textColor" name="textColorPrimary"/>
+                    <color key="textColor" systemColor="labelColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HYb-RD-p6J" customClass="CancelableScrollView" customModule="OsmAnd_Maps" customModuleProvider="target">
@@ -47,11 +47,11 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Map" image="left_menu_icon_map">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -65,11 +65,11 @@
                             <rect key="frame" x="0.0" y="50" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="My Places" image="ic_custom_my_places">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -83,11 +83,11 @@
                             <rect key="frame" x="0.0" y="100" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Destinations" image="left_menu_icon_waypoints">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -101,11 +101,11 @@
                             <rect key="frame" x="0.0" y="150" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Maps &amp; Resources" image="left_menu_icon_resources">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -119,11 +119,11 @@
                             <rect key="frame" x="0.0" y="200" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Navigation" image="left_menu_icon_navigation">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -137,11 +137,11 @@
                             <rect key="frame" x="0.0" y="250" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Plan a route" image="left_menu_icon_navigation">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -155,11 +155,11 @@
                             <rect key="frame" x="0.0" y="300" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Weather" image="ic_custom_umbrella">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -176,7 +176,7 @@
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Travel guides" image="ic_custom_umbrella">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -190,11 +190,11 @@
                             <rect key="frame" x="0.0" y="416" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="External Sensors" image="ic_custom_sensor">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -207,13 +207,13 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q6G-X8-6nF">
                             <rect key="frame" x="0.0" y="466" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Configure screen" image="left_menu_configure_screen">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -226,13 +226,13 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOI-w6-rzF">
                             <rect key="frame" x="0.0" y="516" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Plugins" image="left_menu_icon_plugins">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -245,13 +245,13 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zr6-Nz-cFS">
                             <rect key="frame" x="0.0" y="566" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="Settings" image="left_menu_icon_settings">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -264,13 +264,13 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VoA-wi-Z36">
                             <rect key="frame" x="0.0" y="616" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="tintColor" name="iconColorDefault"/>
+                            <color key="tintColor" systemColor="secondaryLabelColor"/>
                             <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                             <inset key="titleEdgeInsets" minX="19" minY="0.0" maxX="19" maxY="0.0"/>
                             <state key="normal" title="About" image="left_menu_icon_about">
-                                <color key="titleColor" name="textColorPrimary"/>
+                                <color key="titleColor" systemColor="labelColor"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <state key="highlighted">
@@ -283,7 +283,7 @@
                     </subviews>
                 </scrollView>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <point key="canvasLocation" x="463.19999999999999" y="188.45577211394306"/>
         </view>
     </objects>
@@ -299,17 +299,17 @@
         <image name="left_menu_icon_resources" width="30" height="30"/>
         <image name="left_menu_icon_settings" width="30" height="30"/>
         <image name="left_menu_icon_waypoints" width="30" height="30"/>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="iconColorDefault">
-            <color red="0.74509803921568629" green="0.72549019607843135" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="viewBg">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

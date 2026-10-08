@@ -511,7 +511,7 @@
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _poiIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
     [_poiIconCollectionHandler setItemSizeWithSize:48];
     [_poiIconCollectionHandler setIconBackgroundSizeWithSize:36];
@@ -652,7 +652,7 @@
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
-    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    textField.textColor = UIColor.labelColor;
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -664,7 +664,7 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
 
@@ -672,8 +672,8 @@
         _floatingTextFieldControllers = [NSMutableArray new];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
     fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
-    fieldController.inlinePlaceholderColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    [fieldController setFloatingPlaceholderNormalColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    fieldController.inlinePlaceholderColor = UIColor.secondaryLabelColor;
+    [fieldController setFloatingPlaceholderNormalColor:UIColor.secondaryLabelColor];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.floatingPlaceholderNormalColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
@@ -769,7 +769,7 @@
             cell.forceScrollOnStart = YES;
             cell.disableAnimationsOnStart = YES;
             cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.topLabel.textColor = UIColor.labelColor;
         }
         cell.hostVC = self;
         _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);

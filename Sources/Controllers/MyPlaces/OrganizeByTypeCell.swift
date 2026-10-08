@@ -83,10 +83,10 @@ final class OrganizeByTypeCell: UITableViewCell {
         let gap = Self.gap
         separatorInset = UIEdgeInsets(top: 0, left: leadingInset + checkmarkSize + gap + iconSize + gap, bottom: 0, right: leadingInset)
         titleLabel.text = title
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
 
         iconView.image = icon
-        iconView.tintColor = isSelected ? .iconColorActive : .iconColorDefault
+        iconView.tintColor = isSelected ? .iconColorActive : .secondaryLabel
 
         checkmarkView.image = isSelected ? .templateImageNamed("ic_checkmark_default") : nil
         checkmarkView.tintColor = .iconColorActive

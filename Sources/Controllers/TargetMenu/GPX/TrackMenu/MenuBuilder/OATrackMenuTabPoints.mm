@@ -126,7 +126,7 @@
                     }
             }];
             waypointsSectionData.values[@"tint_color"] = [waypointsSectionData.values[@"is_hidden"] boolValue]
-                    ? [UIColor colorNamed:ACColorNameIconColorDisabled]
+                    ? UIColor.tertiaryLabelColor
                     : self.trackMenuDelegate
                             ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
                             : [OADefaultFavorite getDefaultColor];
@@ -173,7 +173,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: ACImageNameIcCustomRemoveOutlined,
             kCellToggle: @(hasWaypoints),
-            kCellTintColor: hasWaypoints ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
+            kCellTintColor: hasWaypoints ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor,
     }];
     [actionsSectionData.subjects addObject:deleteCellData];
 
@@ -218,7 +218,7 @@
                 kCellDesc: description,
                 kCellLeftIcon: !isRte ? [waypoint compositeIconWithDefaultColor]
                         : [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomLocationMarker]
-                                                    color:[UIColor colorNamed:ACColorNameIconColorDisabled]],
+                                                    color:UIColor.tertiaryLabelColor],
                 kTableValues: @{
                         @"waypoint": waypoint,
                         @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.lon
@@ -293,7 +293,7 @@
                             [self.trackMenuDelegate isDefaultGroup:cellData.title] ? @"" : cellData.title]
                     : NO);
             sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
-                    ? [UIColor colorNamed:ACColorNameIconColorDisabled]
+                    ? UIColor.tertiaryLabelColor
                     : self.trackMenuDelegate
                             ? UIColorFromARGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
                             : [OADefaultFavorite getDefaultColor];

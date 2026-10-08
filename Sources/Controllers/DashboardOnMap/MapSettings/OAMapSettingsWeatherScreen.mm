@@ -204,7 +204,7 @@
 - (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [header.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -217,7 +217,7 @@
 - (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [header.textLabel setTextColor:UIColor.secondaryLabelColor];
     header.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
 }
 
@@ -240,7 +240,7 @@
 
             NSString *imgName = enabled ? @"ic_custom_umbrella" : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = enabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = enabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:enabled];
@@ -277,7 +277,7 @@
             }
             cell.valueLabel.text = valueText;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = iconEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = iconEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: UIColor.tertiaryLabelColor;
         }
         return cell;
     }

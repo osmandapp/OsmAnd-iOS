@@ -137,7 +137,7 @@
     
     if (_item.descriptionInfo.getLocalizedDescription.length > 0)
     {
-        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.labelColor];
         [data addObject:@{
                 @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"attrText" : attrString
@@ -208,7 +208,7 @@
     BOOL active = downloadButton != nil;
     [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"map_downloaded") forState:UIControlStateNormal];
     self.actionButton.backgroundColor = active ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
-    [self.actionButton setTitleColor:active ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateNormal];
+    [self.actionButton setTitleColor:active ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : UIColor.secondaryLabelColor forState:UIControlStateNormal];
     [self.actionButton setUserInteractionEnabled:active];
 }
 

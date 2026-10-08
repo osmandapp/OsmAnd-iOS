@@ -312,7 +312,7 @@
             if ([item[@"isColored"] boolValue])
                 cell.backgroundColor = [UIColor colorNamed:ACColorNameCellBgColorSelected];
             else
-                cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+                cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         }
         return cell;
     }
@@ -330,7 +330,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : UIColor.tertiaryLabelColor;
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -360,7 +360,7 @@
         }
         if ([item[@"regular_text"] boolValue])
         {
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = UIColor.labelColor;
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else

@@ -95,14 +95,14 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         
         let title = UILabel()
         title.text = item.getTitle()
-        title.textColor = .textColorPrimary
+        title.textColor = .label
         title.font = .preferredFont(forTextStyle: .body)
         title.adjustsFontForContentSizeCategory = true
         title.numberOfLines = 0
         
         let description = UILabel()
         description.text = item.getDescription()
-        description.textColor = .textColorSecondary
+        description.textColor = .secondaryLabel
         description.font = .preferredFont(forTextStyle: .subheadline)
         description.numberOfLines = 0
         
@@ -117,7 +117,7 @@ final class AstroKnowledgeCardView: AstroCardContainerView {
         
         if item.state == .download {
             let divider = UIView()
-            divider.backgroundColor = .customSeparatorSolid
+            divider.backgroundColor = .opaqueSeparator
             divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
             stack.addArrangedSubview(divider)
             stack.setCustomSpacing(0, after: divider)

@@ -225,7 +225,7 @@
         if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
             OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:item.cellType];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             
             [cell leftEditButtonVisibility:NO];
             [cell leftIconVisibility:YES];
@@ -236,7 +236,7 @@
             BOOL selected = [_selectedResourcesItems containsObject:item];
             NSString *resourceId = [item.resourceId.toNSString() stringByDeletingPathExtension];
             cell.leftIconView.image = [UIImage imageNamed:[self containsInMapsToUpdate:resourceId] ? @"ic_custom_update_map" : ACImageNameIcCustomDownloadMap];
-            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] : UIColor.tertiaryLabelColor;
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -251,7 +251,7 @@
             cell.titleLabel.text = title;
             
             UIView *bgColorView = [UIView new];
-            bgColorView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            bgColorView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             [cell setSelectedBackgroundView:bgColorView];
             
             NSString *size;
@@ -268,7 +268,7 @@
             OAProgressTitleCell *cell = [self.tableView dequeueReusableCellWithIdentifier:item.cellType];
             cell.titleLabel.text = item.title;
             [cell.titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]];
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.titleLabel.textColor = UIColor.secondaryLabelColor;
             [cell.activityIndicator startAnimating];
             return cell;
         }
@@ -308,7 +308,7 @@
         else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
             OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:item.cellType];
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             [cell leftEditButtonVisibility:NO];
             [cell leftIconVisibility:NO];
             [cell titleVisibility:YES];
@@ -320,7 +320,7 @@
             [cell.titleLabel setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
             
             UIView *bgColorView = [UIView new];
-            bgColorView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            bgColorView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             [cell setSelectedBackgroundView:bgColorView];
             
             return cell;

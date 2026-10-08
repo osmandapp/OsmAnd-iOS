@@ -175,7 +175,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
         if item.cellType == OASimpleTableViewCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell {
             cell.descriptionVisibility(false)
             cell.selectedBackgroundView = UIView()
-            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+            cell.selectedBackgroundView?.backgroundColor = UIColor.secondarySystemGroupedBackground
             cell.titleLabel.text = item.title
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
             applyYAxisColors(to: cell, item: item)
@@ -197,7 +197,7 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
             cell.leftIconView.image = isSelected ? .icCheckmarkDefault : nil
             cell.leftIconView.tintColor = .iconColorActive
             cell.secondLeftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .iconColorDisabled
+            cell.secondLeftIconView.tintColor = isSelected ? .iconColorActive : .tertiaryLabel
             cell.updateSecondLeftIconSize(30)
             return cell
         }
@@ -305,8 +305,8 @@ final class StatisticsSelectionBottomSheetViewController: OABaseNavbarSubviewVie
     }
     
     private func yAxisColors(isSelected: Bool, canSelect: Bool) -> (UIColor, UIColor) {
-        guard !isSelected else { return (.iconColorActive, .textColorPrimary) }
-        return canSelect ? (.iconColorDefault, .textColorPrimary) : (.iconColorDisabled, .textColorTertiary)
+        guard !isSelected else { return (.iconColorActive, .label) }
+        return canSelect ? (.secondaryLabel, .label) : (.tertiaryLabel, .tertiaryLabel)
     }
     
     private func applyYAxisColors(to cell: OASimpleTableViewCell, item: OATableRowData) {

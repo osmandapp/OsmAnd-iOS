@@ -30,7 +30,7 @@
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="vIO-Ub-ALl"/>
                         </constraints>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <color key="textColor" name="textColorPrimary"/>
+                        <color key="textColor" systemColor="labelColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="bWe-ig-wB0">
@@ -58,8 +58,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

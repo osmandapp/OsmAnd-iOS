@@ -125,7 +125,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.valueLabel.textColor = UIColor.labelColor;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

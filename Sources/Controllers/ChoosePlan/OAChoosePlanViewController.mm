@@ -164,7 +164,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         _subscriptionManagement = [[UILabel alloc] init];
         _subscriptionManagement.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         _subscriptionManagement.adjustsFontForContentSizeCategory = YES;
-        _subscriptionManagement.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        _subscriptionManagement.textColor = UIColor.labelColor;
         _subscriptionManagement.numberOfLines = 0;
 
         NSMutableAttributedString *attributedSubscriptionManagement =
@@ -196,7 +196,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         _labelIncludes = [[UILabel alloc] init];
         _labelIncludes.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         _labelIncludes.adjustsFontForContentSizeCategory = YES;
-        _labelIncludes.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        _labelIncludes.textColor = UIColor.labelColor;
         _labelIncludes.numberOfLines = 0;
         _labelIncludes.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
                 OALocalizedString(@"shared_string_includes"), @""];
@@ -223,7 +223,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
             _labelNotIncluded = [[UILabel alloc] init];
             _labelNotIncluded.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             _labelNotIncluded.adjustsFontForContentSizeCategory = YES;
-            _labelNotIncluded.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            _labelNotIncluded.textColor = UIColor.labelColor;
             _labelNotIncluded.numberOfLines = 0;
             _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
                                                                 OALocalizedString(@"shared_string_not_included"), @""];
@@ -248,7 +248,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     }
 
     _backgroundAboveScrollViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0., -self.scrollView.contentInset.top, DeviceScreenWidth, self.scrollView.contentInset.top)];
-    _backgroundAboveScrollViewContainer.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    _backgroundAboveScrollViewContainer.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     [self.scrollView insertSubview:_backgroundAboveScrollViewContainer aboveSubview:self.scrollViewContainerView];
 
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
@@ -525,10 +525,10 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         {
             UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
             [appearance configureWithOpaqueBackground];
-            appearance.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+            appearance.backgroundColor = UIColor.systemGroupedBackgroundColor;
             appearance.titleTextAttributes = @{
                 NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-                NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+                NSForegroundColorAttributeName : UIColor.labelColor
             };
             self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
             self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
@@ -672,7 +672,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     else if (_isHeaderBlurred && y <= 0.)
     {
         [self.viewNavigationBar removeBlurEffect];
-        self.viewNavigationBar.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        self.viewNavigationBar.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
         if (@available(iOS 26.0, *))
         {
             [self.navigationItem.titleView setHidden:YES];

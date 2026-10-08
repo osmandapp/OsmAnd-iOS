@@ -24,13 +24,13 @@
                         </constraints>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                         <state key="normal" title="Within">
-                            <color key="titleColor" name="textColorPrimary"/>
+                            <color key="titleColor" systemColor="labelColor"/>
                         </state>
                     </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IxZ-Dm-ngp">
                         <rect key="frame" x="160" y="0.0" width="144" height="48"/>
                         <state key="normal" title="Type">
-                            <color key="titleColor" name="textColorPrimary"/>
+                            <color key="titleColor" systemColor="labelColor"/>
                         </state>
                     </button>
                 </subviews>
@@ -57,8 +57,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

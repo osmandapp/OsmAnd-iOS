@@ -251,9 +251,9 @@
                 backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
 
             destCell.titleLabel.textColor = available
-            ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+            ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : UIColor.secondaryLabelColor;
             destCell.imageView.tintColor = available
-                    ? [UIColor colorNamed:ACColorNameButtonIconColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+                    ? [UIColor colorNamed:ACColorNameButtonIconColorSecondary] : UIColor.secondaryLabelColor;
             destCell.layer.borderWidth = enabled ? 0. : 1.;
             destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : [UIColor colorNamed:ACColorNameButtonBgColorSecondary].CGColor;
         }

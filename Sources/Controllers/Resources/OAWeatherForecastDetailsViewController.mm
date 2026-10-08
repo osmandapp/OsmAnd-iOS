@@ -158,7 +158,7 @@
     updatedData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatedData[@"title"] = OALocalizedString(@"shared_string_updated");
     updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:NO];
-    updatedData[@"value_color"] = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    updatedData[@"value_color"] = UIColor.labelColor;
     updatedData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatedData];
 
@@ -167,7 +167,7 @@
     nextUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     nextUpdateData[@"title"] = OALocalizedString(@"shared_string_next_update");
     nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
-    nextUpdateData[@"value_color"] = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    nextUpdateData[@"value_color"] = UIColor.labelColor;
     nextUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:nextUpdateData];
 
@@ -177,7 +177,7 @@
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
     updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance] getOfflineForecastSize:_region forUpdate:YES] countStyle:NSByteCountFormatterCountStyleFile];
     
-    updatesSizeData[@"value_color"] = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    updatesSizeData[@"value_color"] = UIColor.secondaryLabelColor;
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatesSizeData];
     _sizeIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
@@ -200,7 +200,7 @@
     autoUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     autoUpdateData[@"title"] = OALocalizedString(@"auto_update");
     autoUpdateData[@"value"] = [OAWeatherHelper getPreferenceWeatherAutoUpdateString:[OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId]];
-    autoUpdateData[@"value_color"] = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    autoUpdateData[@"value_color"] = UIColor.secondaryLabelColor;
     autoUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [updatesCells addObject:autoUpdateData];
     
@@ -212,7 +212,7 @@
         updatesFrequencyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
         updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
         updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
-        updatesFrequencyData[@"value_color"] = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        updatesFrequencyData[@"value_color"] = UIColor.secondaryLabelColor;
         updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
         [updatesCells addObject:updatesFrequencyData];
         _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
@@ -278,7 +278,7 @@
             }
 
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.labelColor;
             cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
@@ -309,7 +309,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.labelColor;
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];

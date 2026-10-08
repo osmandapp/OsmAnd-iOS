@@ -54,7 +54,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         setupNavbarButtons()
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         myPlacesDelegate?.updateContentScrollView(tableView)
     }
     
@@ -353,7 +353,7 @@ final class SavedArticlesTabViewController: UITableViewController, GpxReadDelega
         }
 
         let searchIcon = UIImage(systemName: "magnifyingglass",
-                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .textColorPrimary))
+                                 withConfiguration: UIImage.SymbolConfiguration(hierarchicalColor: .label))
         let searchButton = UIBarButtonItem(image: searchIcon,
                                            style: .plain,
                                            target: self,

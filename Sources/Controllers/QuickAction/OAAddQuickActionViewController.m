@@ -157,9 +157,9 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
     }
     else
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameIconColorTertiary]}];
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:UIColor.secondaryLabelColor}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
-        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.tertiaryLabelColor;
     }
 }
 
@@ -338,7 +338,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
             
             cell.descriptionLabel.text = item.descr;
             cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.descriptionLabel.textColor = UIColor.labelColor;
             
             if (item.icon)
                 cell.leftIconView.image = item.icon;
@@ -353,7 +353,7 @@ static NSString *_kActionObjectKey = @"actionObjectKey";
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-                [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
+                [background setTintColor:UIColor.secondarySystemGroupedBackgroundColor];
                 [cell.leftIconView addSubview:background];
                 UIImage *img = [UIImage imageNamed:item.secondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];

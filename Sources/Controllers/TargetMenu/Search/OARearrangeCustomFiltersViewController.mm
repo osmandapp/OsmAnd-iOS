@@ -268,7 +268,7 @@
             [cell descriptionVisibility:NO];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         if (cell)

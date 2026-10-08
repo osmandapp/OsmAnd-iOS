@@ -28,7 +28,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdb-Ov-Iaf">
                         <rect key="frame" x="6" y="6" width="36" height="36"/>
-                        <color key="backgroundColor" name="groupBgColorSecondary"/>
+                        <color key="backgroundColor" systemColor="tertiarySystemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="36" id="55w-OR-2cn"/>
                             <constraint firstAttribute="height" constant="36" id="OQ1-Am-lvX"/>
@@ -69,8 +69,8 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColorSecondary">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="tertiarySystemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

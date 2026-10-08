@@ -331,8 +331,8 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.heightConstraint.constant = 60
             cell.chartView.extraBottomOffset = 24
-            cell.backgroundColor = .groupBg
-            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .textColorSecondary)
+            cell.backgroundColor = .secondarySystemGroupedBackground
+            GpxUIHelper.setupGradientChart(chart: cell.chartView, useGesturesAndScale: false, xAxisGridColor: .chartAxisGridLine, labelsColor: .secondaryLabel)
             if let paletteItem = selectedPaletteColorItem {
                 let fileType = paletteItem.properties.fileType
                 let colorPalette = paletteItem.isFixed() ? GradientFormatter.getAdjustedPalette(originalPalette: paletteItem.getColorPalette(), analysis: nil, fileType: fileType) : paletteItem.getColorPalette()
@@ -379,7 +379,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else if item.cellType == SegmentImagesTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesTableViewCell.reuseIdentifier) as! SegmentImagesTableViewCell
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
             cell.setSegmentedControlBottomSpacing(isCustomWidthSelected ? 8 : 20)
             cell.configureSegmentedControl(icons: [.icCustomTrackLineThin, .icCustomTrackLineMedium, .icCustomTrackLineBold, .icCustomParameters], selectedSegmentIndex: selectedWidthIndex)
@@ -397,7 +397,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
         } else if item.cellType == SegmentTextTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentTextTableViewCell.reuseIdentifier) as! SegmentTextTableViewCell
             cell.selectionStyle = .none
-            cell.backgroundColor = .groupBg
+            cell.backgroundColor = .secondarySystemGroupedBackground
             cell.separatorInset = UIEdgeInsets(top: 0, left: CGFLOAT_MAX, bottom: 0, right: 0)
             cell.setSegmentedControlBottomSpacing(8)
             cell.configureSegmentedControl(titles: [localizedString("shared_string_none"), localizedString("shared_string_time"), localizedString("shared_string_distance")], selectedSegmentIndex: selectedSplitIntervalIndex)
@@ -417,7 +417,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             let arrayValue = item.obj(forKey: Self.widthArrayValue) as? [String] ?? []
             cell.topLeftLabel.text = item.title
             cell.topRightLabel.text = (item.key == RowKey.customSplitIntervalRowKey.rawValue) ? (item.obj(forKey: Self.customStringValue) as? String ?? "") : ""
-            cell.topRightLabel.textColor = .textColorSecondary
+            cell.topRightLabel.textColor = .secondaryLabel
             cell.topRightLabel.font = UIFont.scaledSystemFont(ofSize: 17, weight: .medium)
             cell.bottomLeftLabel.text = arrayValue.first
             cell.bottomRightLabel.text = arrayValue.last
@@ -436,7 +436,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             cell.textView.text = item.title
             cell.textView.textAlignment = .center
             cell.textView.font = UIFont.preferredFont(forTextStyle: .body)
-            cell.textView.textColor = isEnabled ? .textColorActive : .textColorSecondary
+            cell.textView.textColor = isEnabled ? .textColorActive : .secondaryLabel
             return cell
         }
         

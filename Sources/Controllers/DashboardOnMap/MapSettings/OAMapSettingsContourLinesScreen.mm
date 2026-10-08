@@ -468,7 +468,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
             NSString *imgName = [self isContourLinesOn] ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = [self isContourLinesOn] ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = [self isContourLinesOn] ? [UIColor colorNamed:ACColorNameIconColorSelected] : UIColor.tertiaryLabelColor;
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:[self isContourLinesOn]];
@@ -632,7 +632,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        v.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 
@@ -641,7 +641,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        v.textLabel.textColor = UIColor.secondaryLabelColor;
     }
 }
 

@@ -67,7 +67,7 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurePreviewHeader()
-        tableView.backgroundColor = .viewBg
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.separatorColor = SeparatorAppearance.color
         tableView.sectionHeaderTopPadding = 8
         tableView.estimatedRowHeight = Constants.rowHeight
@@ -1611,7 +1611,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         isAccessibilityElement = false
         previewContainer.isHidden = false
         valueButton.isHidden = false
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         selectionStyle = .none
         accessibilityLabel = nil
         accessibilityValue = nil
@@ -1635,7 +1635,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     func configure(title: String, preview: Preview, value: String, menu: UIMenu) {
         selectionStyle = .none
         titleLabel.text = title
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLeadingToContentConstraint.isActive = false
         titleLeadingToPreviewConstraint.isActive = true
         configurePreview(preview)
@@ -1682,7 +1682,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
     }
 
     private func setupViews() {
-        backgroundColor = .groupBg
+        backgroundColor = .secondarySystemGroupedBackground
         preservesSuperviewLayoutMargins = false
         separatorInset = .init(top: 0, left: 62, bottom: 0, right: 16)
 
@@ -1703,7 +1703,7 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         titleLabel.font = .preferredFont(forTextStyle: .body)
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.numberOfLines = 0
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.isAccessibilityElement = false
 
         valueButton.translatesAutoresizingMaskIntoConstraints = false
@@ -1783,14 +1783,14 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         case let .text(textColor, backgroundColor):
             configureColorPreview(backgroundColor)
             previewContainer.layer.borderWidth = 1
-            previewContainer.layer.borderColor = UIColor.customSeparator.cgColor
+            previewContainer.layer.borderColor = UIColor.separator.cgColor
             previewImageView.isHidden = false
             previewImageView.image = .icCustomTextPreview
             previewImageView.tintColor = textColor
         case let .color(color):
             configureColorPreview(color)
             previewContainer.layer.borderWidth = 1
-            previewContainer.layer.borderColor = UIColor.customSeparator.cgColor
+            previewContainer.layer.borderColor = UIColor.separator.cgColor
         }
     }
 

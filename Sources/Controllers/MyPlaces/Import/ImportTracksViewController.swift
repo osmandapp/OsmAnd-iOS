@@ -372,13 +372,13 @@ private extension ImportTracksViewController {
             let label = [item.title, item.descr].compactMap { $0 }.joined(separator: ", ")
             let isSelected = selection.selectedItems.contains(trackItem)
             cell.titleLabel.text = item.title
-            cell.titleLabel.textColor = .textColorPrimary
+            cell.titleLabel.textColor = .label
             cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
             cell.descriptionLabel.text = item.descr
             cell.configureAccessibility(withTitle: label, selected: isSelected)
             cell.leftIconView.isAccessibilityElement = false
             cell.leftIconView.image = isSelected ? .icCustomDone : .icCustomCheckboxUnselected
-            cell.leftIconView.tintColor = isSelected ? .iconColorActive : .iconColorSecondary
+            cell.leftIconView.tintColor = isSelected ? .iconColorActive : .secondaryLabel
             cell.leftIconVisibility(true)
             cell.titleVisibility(true)
             cell.descriptionVisibility(true)
@@ -434,7 +434,7 @@ private extension ImportTracksViewController {
     func configuredStatsCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TrackStatsTableCell.reuseIdentifier, for: indexPath) as! TrackStatsTableCell
         cell.selectionStyle = .none
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.isAccessibilityElement = false
         cell.accessibilityElementsHidden = true
         if let statisticsCells = item.obj(forKey: RowObjKey.statisticsCells.rawValue) as? [OAGPXTableCellData] {
@@ -447,7 +447,7 @@ private extension ImportTracksViewController {
     func configuredPreviewCell(for item: OATableRowData, at indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: OAImageDescTableViewCell.reuseIdentifier, for: indexPath) as! OAImageDescTableViewCell
         cell.selectionStyle = .none
-        cell.backgroundColor = .groupBg
+        cell.backgroundColor = .secondarySystemGroupedBackground
         cell.descView.isHidden = true
         cell.imageBottomToLabelConstraint.priority = .defaultLow
         cell.imageBottomConstraint.priority = .required
@@ -504,7 +504,7 @@ private extension ImportTracksViewController {
         view.addSubview(progressStackView)
 
         progressLabel.font = .preferredFont(forTextStyle: .subheadline)
-        progressLabel.textColor = .textColorSecondary
+        progressLabel.textColor = .secondaryLabel
         progressLabel.textAlignment = .center
         progressLabel.numberOfLines = 0
         progressLabel.adjustsFontForContentSizeCategory = true
@@ -578,7 +578,7 @@ private extension ImportTracksViewController {
             string: text,
             attributes: [
                 .font: UIFont.preferredFont(forTextStyle: .body),
-                .foregroundColor: UIColor.textColorPrimary
+                .foregroundColor: UIColor.label
             ]
         )
 

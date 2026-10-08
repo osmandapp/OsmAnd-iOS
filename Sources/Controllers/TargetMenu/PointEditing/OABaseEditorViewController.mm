@@ -245,7 +245,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
             UIColor *tintColor = [item objForKey:@"titleTintColor"];
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = tintColor ?: UIColor.labelColor;
         }
         return cell;
     }
@@ -306,7 +306,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             cell.forceScrollOnStart = YES;
             cell.disableAnimationsOnStart = YES;
             cell.topLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.topLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.topLabel.textColor = UIColor.labelColor;
         }
         cell.hostVC = self;
         _poiIconCollectionHandler.selectedIconColor = UIColorFromARGB(_selectedColorItem.colorInt);
@@ -414,7 +414,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     _poiIconCollectionHandler.handlerDelegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
-    _poiIconCollectionHandler.regularIconColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _poiIconCollectionHandler.regularIconColor = UIColor.secondaryLabelColor;
     _poiIconCollectionHandler.selectedIconColor = self.editColor;
     
     // A new folder has no points; its empty name can match the default favorites group.
@@ -521,7 +521,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
                                                options:nil];
     OATextInputFloatingCell *resultCell = nib[0];
     MDCMultilineTextField *textField = resultCell.inputField;
-    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    textField.textColor = UIColor.labelColor;
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -533,7 +533,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    textField.clearButton.imageView.tintColor = UIColor.secondaryLabelColor;
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
 
@@ -541,8 +541,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         _floatingTextFieldControllers = [NSMutableArray array];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
     fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
-    fieldController.inlinePlaceholderColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    [fieldController setFloatingPlaceholderNormalColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    fieldController.inlinePlaceholderColor = UIColor.secondaryLabelColor;
+    [fieldController setFloatingPlaceholderNormalColor:UIColor.secondaryLabelColor];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.floatingPlaceholderNormalColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;

@@ -372,7 +372,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         cell.accessoryView = nil;
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         cell.accessibilityTraits &= ~(UIAccessibilityTraitLink | UIAccessibilityTraitNotEnabled);
-        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.titleLabel.textColor = UIColor.labelColor;
         [cell descriptionVisibility:description && description.length > 0];
         cell.titleLabel.text = item.title;
         cell.descriptionLabel.text = description;
@@ -384,7 +384,7 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
         else
         {
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
         }
         
         cell.accessoryType = isCellAccessoryNone ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
@@ -394,14 +394,14 @@ static NSString * const kCrashReportsAvailableKey = @"crashReportsAvailable";
             UIImageView *externalLinkView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"arrow.up.forward"]];
             externalLinkView.frame = CGRectMake(0., 0., 24., 24.);
             externalLinkView.contentMode = UIViewContentModeCenter;
-            externalLinkView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            externalLinkView.tintColor = UIColor.secondaryLabelColor;
             cell.accessoryView = externalLinkView;
             cell.accessibilityTraits |= UIAccessibilityTraitLink;
         }
         else if (isCrashLogsRow && !hasCrashReports)
         {
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.titleLabel.textColor = UIColor.secondaryLabelColor;
+            cell.leftIconView.tintColor = UIColor.tertiaryLabelColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.accessibilityTraits |= UIAccessibilityTraitNotEnabled;
         }

@@ -142,7 +142,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
-    resultCell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    resultCell.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }

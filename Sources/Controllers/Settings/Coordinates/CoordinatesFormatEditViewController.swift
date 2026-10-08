@@ -137,7 +137,7 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         cell.leftIconVisibility(false)
         cell.descriptionVisibility(!isAddRow && !(item.descr ?? "").isEmpty)
         cell.titleLabel.text = item.title
-        cell.titleLabel.textColor = isAddRow ? .textColorActive : .textColorPrimary
+        cell.titleLabel.textColor = isAddRow ? .textColorActive : .label
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
         cell.descriptionLabel.numberOfLines = 1

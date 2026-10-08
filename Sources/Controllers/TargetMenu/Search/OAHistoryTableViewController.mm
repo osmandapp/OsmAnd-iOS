@@ -506,7 +506,7 @@
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell showButton:NO];
-                cell.cellImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+                cell.cellImageView.tintColor = UIColor.secondaryLabelColor;
             }
             if (cell)
             {

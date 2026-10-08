@@ -20,7 +20,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="542,2 MB of 10 GB Used" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRQ-Yw-PeO" userLabel="Title Label">
                         <rect key="frame" x="20" y="13" width="374" height="22"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                        <color key="textColor" name="textColorPrimary"/>
+                        <color key="textColor" systemColor="labelColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KoG-iN-Ayi" userLabel="Progress Container View">
@@ -102,7 +102,7 @@
                                     <constraint firstAttribute="height" constant="17" id="e7z-0c-fN5"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                <color key="textColor" name="textColorPrimary"/>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TST-aB-gpG" userLabel="Progress Second Description View">
@@ -124,7 +124,7 @@
                                     <constraint firstAttribute="height" constant="17" id="uv9-hn-nyy"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                <color key="textColor" name="textColorPrimary"/>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Xb-K8-obh" userLabel="Progress Third Description View">
@@ -146,11 +146,11 @@
                                     <constraint firstAttribute="height" constant="17" id="nK4-28-IPe"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                                <color key="textColor" name="textColorPrimary"/>
+                                <color key="textColor" systemColor="labelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" name="groupBg"/>
+                        <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="kJ5-7m-iq2" secondAttribute="bottom" constant="15.5" id="1MQ-K0-M09"/>
                             <constraint firstAttribute="bottom" secondItem="4Xb-K8-obh" secondAttribute="bottom" constant="16" id="1Yq-C0-Ufa"/>
@@ -188,7 +188,7 @@
                     <constraint firstItem="SET-oh-YyK" firstAttribute="leading" secondItem="Ak0-sY-GJL" secondAttribute="leadingMargin" constant="-4" id="zEZ-tB-hRz"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBg"/>
+            <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
             <connections>
                 <outlet property="descriptionContainerView" destination="SET-oh-YyK" id="PHN-mk-KTW"/>
                 <outlet property="firstDescriptionLabel" destination="aPW-C9-giS" id="FQ2-Y6-7rm"/>
@@ -215,11 +215,11 @@
         <namedColor name="freeSpaceBgColor">
             <color red="0.91764705882352937" green="0.9137254901960784" blue="0.92941176470588238" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBg">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="secondarySystemGroupedBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

@@ -21,7 +21,7 @@ enum CoordinateFormatTableHeader {
             string: text,
             attributes: [
                 .font: UIFont.preferredFont(forTextStyle: .footnote),
-                .foregroundColor: UIColor.textColorSecondary
+                .foregroundColor: UIColor.secondaryLabel
             ]
         )
         let label = UILabel()

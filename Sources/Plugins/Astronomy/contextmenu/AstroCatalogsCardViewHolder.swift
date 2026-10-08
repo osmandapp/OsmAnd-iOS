@@ -20,7 +20,7 @@ enum AstroCatalogsCardViewHolder {
         headerLabel.text = localizedString("astro_designations")
         headerLabel.font = UIFontMetrics(forTextStyle: .headline).scaledFont(for: .systemFont(ofSize: 17, weight: .semibold))
         headerLabel.adjustsFontForContentSizeCategory = true
-        headerLabel.textColor = .textColorSecondary
+        headerLabel.textColor = .secondaryLabel
         
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,7 @@ enum AstroCatalogsCardViewHolder {
         let card = UIView()
         card.layer.cornerRadius = 26
         card.clipsToBounds = true
-        card.backgroundColor = .groupBg
+        card.backgroundColor = .secondarySystemGroupedBackground
         card.translatesAutoresizingMaskIntoConstraints = false
 
         let chips = WrappingChipsView()

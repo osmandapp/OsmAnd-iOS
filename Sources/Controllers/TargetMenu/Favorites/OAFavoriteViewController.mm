@@ -108,7 +108,7 @@ static const NSInteger kOrderFavGroupRow = 1;
     if (favoriteGroup && favoriteGroup.points.count > 0)
     {
         UIColor *color = favoriteGroup.color ? favoriteGroup.color : [OADefaultFavorite getDefaultColor];
-        UIColor *disabledColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        UIColor *disabledColor = UIColor.secondaryLabelColor;
         color = favoriteGroup.isVisible ? color : disabledColor;
         UIImage *icon = [UIImage imageNamed:ACImageNameIcCustomFolder];
         NSString *name = [self.favorite getCategoryDisplayName];
@@ -176,7 +176,7 @@ static const NSInteger kOrderFavGroupRow = 1;
         [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
     }
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                           NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
+                                           NSForegroundColorAttributeName : UIColor.secondaryLabelColor }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;
 }

@@ -285,7 +285,7 @@ static NSInteger kButtonsSection;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [header.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -301,7 +301,7 @@ static NSInteger kButtonsSection;
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [header.textLabel setTextColor:UIColor.secondaryLabelColor];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -323,7 +323,7 @@ static NSInteger kButtonsSection;
 
             NSString *imgName = _isEnabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = _isEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = _isEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: UIColor.tertiaryLabelColor;
             [cell leftIconVisibility:YES];
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -447,7 +447,7 @@ static NSInteger kButtonsSection;
                 cell.sliderView.value = _app.data.overlayAlpha;
             else if (_mapSettingType == EMapSettingUnderlay)
                 cell.sliderView.value = _app.data.underlayAlpha;
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.valueLabel.textColor = UIColor.secondaryLabelColor;
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
         return cell;

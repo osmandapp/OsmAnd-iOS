@@ -141,7 +141,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     appearance.shadowColor = self.tableView.backgroundColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
+        NSForegroundColorAttributeName : UIColor.labelColor
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
@@ -394,7 +394,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize textColor:UIColor.labelColor];
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive]};
             [cell.textView sizeToFit];
         }
@@ -423,7 +423,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        cell.leftIconView.tintColor = isEnabled ? am.getProfileColor : UIColor.tertiaryLabelColor;
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -461,7 +461,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSAttributedString *attrString;
     if (boldFragment && boldFragment.length > 0)
     {
-        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:[UIColor colorNamed:ACColorNameTextColorPrimary] mainColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:UIColor.labelColor mainColor:UIColor.secondaryLabelColor];
     }
     else
     {

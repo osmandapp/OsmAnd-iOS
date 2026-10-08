@@ -55,7 +55,7 @@ final class StarMapMagnitudeSliderPanel: UIView {
         
         glassBackgroundView?.overrideUserInterfaceStyle = nightMode ? .dark : .light
         
-        let color: UIColor = nightMode ? .textColorPrimary.dark : .textColorPrimary.light
+        let color: UIColor = nightMode ? .label.dark : .label.light
         titleLabel.textColor = color
         valueLabel.textColor = color
         

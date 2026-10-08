@@ -237,13 +237,13 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
                 cell.imageView?.image = item.icon
                 cell.selectionStyle = .none
                 cell.accessoryType = .none
-                cell.titleLabel.textColor = .textColorPrimary
+                cell.titleLabel.textColor = .label
             } else if sectionKey == SectionKey.settings.rawValue {
                 cell.leftIconVisibility(false)
                 cell.imageView?.image = nil
                 cell.selectionStyle = .gray
                 cell.accessoryType = .disclosureIndicator
-                cell.titleLabel.textColor = .textColorPrimary
+                cell.titleLabel.textColor = .label
             } else if sectionKey == SectionKey.forgetSensor.rawValue {
                 cell.leftIconVisibility(false)
                 cell.imageView?.image = nil

@@ -106,7 +106,7 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
                 if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
                     iconColor = profileItem.appMode.getProfileColor()
                 } else {
-                    iconColor = UIColor.iconColorDefault
+                    iconColor = UIColor.secondaryLabel
                 }
                 cell.leftIconView.tintColor = iconColor
             }
@@ -116,7 +116,7 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
-            cell.titleLabel.textColor = item.obj(forKey: "titleColor") as? UIColor ?? UIColor.textColorPrimary
+            cell.titleLabel.textColor = item.obj(forKey: "titleColor") as? UIColor ?? UIColor.label
             cell.titleLabel.accessibilityLabel = item.title
             cell.rightIconView.image = UIImage.templateImageNamed(item.secondaryIconName)
             cell.rightIconView.tintColor = item.secondaryIconTintColor

@@ -2360,7 +2360,7 @@
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.labelColor;
         }
         outCell = cell;
     }
@@ -2379,7 +2379,7 @@
             cell.separatorInset =
                     UIEdgeInsetsMake(0., _selectedTab == EOATrackMenuHudSegmentsTab ? self.tableView.frame.size.width : 20., 0., 0.);
 
-            UIColor *tintColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            UIColor *tintColor = cellData.tintColor ?: UIColor.labelColor;
 
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -2392,7 +2392,7 @@
             if (isWebsite)
                 cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             else
-                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+                cell.valueLabel.textColor = UIColor.secondaryLabelColor;
 
             if (cellData.rightIconName)
             {
@@ -2462,7 +2462,7 @@
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = cellData.tintColor ?: UIColor.labelColor;
 
             cell.iconColorNormal = cellData.tintColor ?: [UIColor colorNamed:ACColorNameIconColorActive];
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
@@ -2472,8 +2472,8 @@
             cell.separatorView.hidden = isLast;
             
             cell.userInteractionEnabled = !cellData.isDisabled;
-            cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
-            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
+            cell.textColorNormal = cellData.isDisabled ? UIColor.secondaryLabelColor : UIColor.labelColor;
+            cell.iconColorNormal = cellData.isDisabled ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -2488,7 +2488,7 @@
             cell = (OATitleDescriptionIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.textColorNormal = UIColor.labelColor;
             cell.iconColorNormal = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
@@ -2503,8 +2503,8 @@
             cell.separatorView.hidden = isLast;
             
             cell.userInteractionEnabled = !cellData.isDisabled;
-            cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
-            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
+            cell.textColorNormal = cellData.isDisabled ? UIColor.secondaryLabelColor : UIColor.labelColor;
+            cell.iconColorNormal = cellData.isDisabled ? UIColor.tertiaryLabelColor : [UIColor colorNamed:ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -2554,7 +2554,7 @@
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
             cell.showWaypointImageView.image = [UIImage imageNamed:ACImageNameIcCustomLocationMarkerOutlined];
-            cell.showWaypointImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.showWaypointImageView.tintColor = UIColor.secondaryLabelColor;
             cell.showWaypointButton.accessibilityLabel = [NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), cellData.title];
             [cell.showWaypointButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
             cell.showWaypointButton.tag = indexPath.section << 10 | indexPath.row;
@@ -2782,7 +2782,7 @@
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-            UIColor *tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+            UIColor *tintColor = UIColor.secondaryLabelColor;
             cell.topLeftIcon.tintColor = tintColor;
             cell.topRightIcon.tintColor = tintColor;
             cell.bottomLeftIcon.tintColor = tintColor;
@@ -3103,7 +3103,7 @@
         else if (_isHeaderBlurred && scrollView.contentOffset.y <= 0)
         {
             [_headerView removeBlurEffect];
-            _headerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            _headerView.backgroundColor = UIColor.secondarySystemGroupedBackgroundColor;
             _isHeaderBlurred = NO;
         }
         if (_selectedTab == EOATrackMenuHudPointsTab && _waypointSortedGroupNames.count > 0)

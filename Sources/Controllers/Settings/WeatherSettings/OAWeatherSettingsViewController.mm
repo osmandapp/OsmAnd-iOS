@@ -200,7 +200,7 @@
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.leftIconView.tintColor = UIColor.secondaryLabelColor;
         }
         if (cell)
         {

@@ -45,7 +45,7 @@ final class StarMapSearchPreparedDataFactory {
             objects: objects,
             constellations: constellations
         )
-        let primaryIconColor = StarMapControlTheme.resolved(.iconColorDefault, nightMode: nightMode)
+        let primaryIconColor = StarMapControlTheme.resolved(.secondaryLabel, nightMode: nightMode)
 
         var entries: [StarMapSearchEntry] = []
         for obj in objects {

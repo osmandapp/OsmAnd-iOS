@@ -127,20 +127,20 @@ final class HorizontalEmptyCell: UITableViewCell {
         backgroundColor = .clear
         contentView.backgroundColor = .clear
 
-        cardView.backgroundColor = .groupBg
+        cardView.backgroundColor = .secondarySystemGroupedBackground
         cardView.clipsToBounds = true
         cardView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(cardView)
 
         titleLabel.font = .preferredFont(forTextStyle: .body)
-        titleLabel.textColor = .textColorPrimary
+        titleLabel.textColor = .label
         titleLabel.numberOfLines = 0
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
-        descriptionLabel.textColor = .textColorSecondary
+        descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.numberOfLines = 0
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.adjustsFontForContentSizeCategory = true
@@ -215,9 +215,9 @@ final class HorizontalEmptyCell: UITableViewCell {
     private func updateContainerStyle(_ containerStyle: ContainerStyle) {
         let usesCardStyle = containerStyle == .card
         let inset = usesCardStyle ? Layout.horizontalInset : 0
-        backgroundColor = usesCardStyle ? .clear : .groupBg
+        backgroundColor = usesCardStyle ? .clear : .secondarySystemGroupedBackground
         contentView.backgroundColor = .clear
-        cardView.backgroundColor = usesCardStyle ? .groupBg : .clear
+        cardView.backgroundColor = usesCardStyle ? .secondarySystemGroupedBackground : .clear
         cardView.layer.cornerRadius = usesCardStyle ? Layout.cornerRadius : 0
         cardLeadingConstraint?.constant = inset
         cardTrailingConstraint?.constant = -inset

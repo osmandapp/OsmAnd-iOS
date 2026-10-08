@@ -5093,3 +5093,6 @@
 "opening_hours_public_holiday" = "Public holidays";
 "opening_hours_school_holiday" = "School holidays";
 "opening_hours_easter" = "Easter";
+"tiles_failed" = "Failed";
+"download_complete" = "Download complete";
+"download_complete_with_errors" = "Download complete with errors";

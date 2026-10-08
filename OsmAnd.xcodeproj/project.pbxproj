@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C608080000000000000002 /* OAFreeMapsCountTests.m */; };
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
@@ -2249,6 +2250,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1C608080000000000000002 /* OAFreeMapsCountTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Helpers/OAFreeMapsCountTests.m; sourceTree = "<group>"; };
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
 		D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
@@ -10311,6 +10313,7 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				D1C608080000000000000002 /* OAFreeMapsCountTests.m */,
 				D1C584800000000000000002 /* OALocationIconTests.m */,
 				D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
@@ -13791,6 +13794,7 @@
 				C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */,
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
+				D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,

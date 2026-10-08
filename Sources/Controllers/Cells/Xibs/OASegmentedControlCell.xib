@@ -32,7 +32,7 @@
                     <constraint firstItem="WfI-yo-V8M" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="2TY-E6-h6c"/>
                     <constraint firstAttribute="trailingMargin" secondItem="WfI-yo-V8M" secondAttribute="trailing" id="TTl-pe-7eG"/>
                     <constraint firstItem="WfI-yo-V8M" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="i5E-4U-N3R"/>
-                    <constraint firstItem="WfI-yo-V8M" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="jcB-vP-78Y"/>
+                    <constraint firstItem="WfI-yo-V8M" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" priority="999" id="jcB-vP-78Y"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>

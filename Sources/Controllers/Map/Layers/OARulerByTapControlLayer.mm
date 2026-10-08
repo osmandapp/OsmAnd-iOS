@@ -32,6 +32,7 @@
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 #define DRAW_TIME 2
 #define kDefaultLineWidth 5.0
@@ -99,8 +100,8 @@ const static int kDoubleTouchCount = 2;
     _linesCollection.reset(new OsmAnd::VectorLinesCollection());
     _lineEndsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     
-    _centerIconDay = [OANativeUtilities skImageFromPngResource:@"ic_ruler_center"];
-    _centerIconNight = [OANativeUtilities skImageFromPngResource:@"ic_ruler_center_light"];
+    _centerIconDay = [OANativeUtilities skImageFromAssetNamed:ACImageNameIcRulerCenter];
+    _centerIconNight = [OANativeUtilities skImageFromAssetNamed:ACImageNameIcRulerCenterLight];
 }
 
 - (void) deinitLayer
@@ -456,7 +457,7 @@ const static int kDoubleTouchCount = 2;
     {
         _oneFingerDist = YES;
         _twoFingersDist = NO;
-        _tapPointOne = [self getTouchPointCoord:[recognizer locationInView:self]];
+        _tapPointOne = [self touchPointCoord:[recognizer locationInView:self]];
         if (_fingerDistanceSublayer.superlayer != self.layer)
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
@@ -468,8 +469,8 @@ const static int kDoubleTouchCount = 2;
         _oneFingerDist = NO;
         CGPoint first = [recognizer locationOfTouch:0 inView:self];
         CGPoint second = [recognizer locationOfTouch:1 inView:self];
-        _tapPointOne = [self getTouchPointCoord:first];
-        _tapPointTwo = [self getTouchPointCoord:second];
+        _tapPointOne = [self touchPointCoord:first];
+        _tapPointTwo = [self touchPointCoord:second];
         if (_fingerDistanceSublayer.superlayer != self.layer)
             [self.layer insertSublayer:_fingerDistanceSublayer above:self.layer];
         [_fingerDistanceSublayer setNeedsDisplay];
@@ -512,7 +513,7 @@ const static int kDoubleTouchCount = 2;
     }
 }
 
-- (CLLocationCoordinate2D) getTouchPointCoord:(CGPoint)touchPoint
+- (CLLocationCoordinate2D)touchPointCoord:(CGPoint)touchPoint
 {
     touchPoint.x *= _mapViewController.mapView.contentScaleFactor;
     touchPoint.y *= _mapViewController.mapView.contentScaleFactor;

@@ -16,6 +16,7 @@
 #import "OAAppData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -33,8 +34,8 @@ static QuickActionType *TYPE;
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_destination")]
                 nameAction:OALocalizedString(@"shared_string_replace")]
-               iconName:@"ic_action_target"]
-              secondaryIconName:@"ic_custom_compound_action_replace"]
+               iconName:ACImageNameIcActionTarget]
+              secondaryIconName:ACImageNameIcCustomCompoundActionReplace]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }

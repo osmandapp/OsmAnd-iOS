@@ -26,7 +26,6 @@
 #import <mach/mach_host.h>
 #import <sys/utsname.h>
 #import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
 #import "OAEmissionHelper.h"
 
 static NSInteger const kBlurViewTag = -999;
@@ -1554,20 +1553,22 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url
++ (NSDictionary<NSString *, NSString *> *)parseUrlQuery:(NSURL *)url
 {
-    NSMutableDictionary<NSString *, NSString *> *queryStrings = [[NSMutableDictionary alloc] init];
-    for (NSString *qs in [url.query componentsSeparatedByString:@"&"]) {
-        // Get the parameter name
-        NSString *key = [[qs componentsSeparatedByString:@"="] objectAtIndex:0];
-        // Get the parameter value
-        NSString *value = [[qs componentsSeparatedByString:@"="] objectAtIndex:1];
-        value = [value stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-        value = [value stringByRemovingPercentEncoding];
-        
-        queryStrings[key] = value;
+    if (!url) return @{};
+
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+    // Replace '+' with '%20' so that NSURLComponents decodes them as spaces
+    components.percentEncodedQuery = [components.percentEncodedQuery stringByReplacingOccurrencesOfString:@"+" withString:@"%20"];
+
+    NSMutableDictionary<NSString *, NSString *> *queryStrings = [NSMutableDictionary dictionary];
+    for (NSURLQueryItem *item in components.queryItems)
+    {
+        if (item.name.length > 0 && item.value != nil)
+            queryStrings[item.name] = item.value;
     }
-    return [NSDictionary dictionaryWithDictionary:queryStrings];
+
+    return [queryStrings copy];
 }
 
 + (CLLocation *)parseLatLon:(NSString *)latLon
@@ -2410,16 +2411,27 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (unsigned long long) folderSize:(NSString *)folderPath
 {
-    NSArray *filesArray = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:folderPath error:nil];
-    NSEnumerator *filesEnumerator = [filesArray objectEnumerator];
-    NSString *fileName;
+    // A single enumeration with prefetched attributes: attributesOfItemAtPath: per file
+    // costs a separate stat and dictionary for each of the thousands of tiles and maps
+    NSArray<NSURLResourceKey> *keys = @[NSURLIsRegularFileKey, NSURLFileSizeKey];
+    NSDirectoryEnumerator<NSURL *> *enumerator = [[NSFileManager defaultManager] enumeratorAtURL:[NSURL fileURLWithPath:folderPath isDirectory:YES]
+                                                                          includingPropertiesForKeys:keys
+                                                                                             options:0
+                                                                                        errorHandler:^BOOL(NSURL *url, NSError *error) {
+        return YES;
+    }];
     unsigned long long fileSize = 0;
-    while (fileName = [filesEnumerator nextObject])
+    for (NSURL *url in enumerator)
     {
-        NSDictionary *fileDictionary = [[NSFileManager defaultManager] attributesOfItemAtPath:[folderPath stringByAppendingPathComponent:fileName] error:nil];
-        fileSize += [fileDictionary fileSize];
+        NSNumber *isRegularFile = nil;
+        if (![url getResourceValue:&isRegularFile forKey:NSURLIsRegularFileKey error:nil] || !isRegularFile.boolValue)
+            continue;
+
+        NSNumber *size = nil;
+        if ([url getResourceValue:&size forKey:NSURLFileSizeKey error:nil])
+            fileSize += size.unsignedLongLongValue;
     }
-    
+
     return fileSize;
 }
 

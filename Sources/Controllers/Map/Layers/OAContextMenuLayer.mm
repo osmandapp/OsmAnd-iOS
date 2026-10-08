@@ -51,6 +51,7 @@
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -94,7 +95,7 @@
     .setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.pointsOrder)
     .setIsHidden(true)
-    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"ic_map_pin"]))
+    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameIcMapPin]))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .buildAndAddToCollection(_contextPinMarkersCollection);
@@ -419,7 +420,7 @@
     return NO;
 }
 
-- (OATargetPoint *) getUnknownTargetPoint:(double)latitude longitude:(double)longitude
+- (OATargetPoint *)unknownTargetPoint:(double)latitude longitude:(double)longitude
 {
     NSString *formattedTargetName = OALocalizedString(@"map_no_address");
     
@@ -453,6 +454,16 @@
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
+    if (showUnknownLocation)
+    {
+        // A long press selects the touched location, even when a POI icon is underneath.
+        [OsmAndApp instance].mapMode = OAMapModeFree;
+        CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
+        OATargetPoint *unknownTargetPoint = [self unknownTargetPoint:coord.latitude longitude:coord.longitude];
+        [[OARootViewController instance].mapPanel showContextMenuWithPoints:@[unknownTargetPoint]];
+        return YES;
+    }
+
     CFTimeInterval selectionStartTime = CACurrentMediaTime();
     MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:showUnknownLocation];
     CLLocation *pointLatLon = result.pointLatLon;
@@ -525,16 +536,8 @@
         return YES;
         
     }
-    else if (showUnknownLocation)
-    {
-        [OsmAndApp instance].mapMode = OAMapModeFree;
-        CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
-        OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
-        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
-        return YES;
-        
-    }
-    CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
+    CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
+
     [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
     return NO;
 }

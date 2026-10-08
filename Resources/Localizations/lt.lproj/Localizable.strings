@@ -41,7 +41,7 @@
 "shared_string_target_points" = "Tikslai";
 "search_radius_proximity" = "Atstumu";
 "poi" = "LV";
-"day_off_label" = "išj.";
+"day_off_label" = "nedirba";
 "open_from" = "Atidaryta nuo";
 "open_till" = "Atidaryta iki";
 "will_close_at" = "Užsidaro";

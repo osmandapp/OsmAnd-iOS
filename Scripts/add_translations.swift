@@ -611,19 +611,18 @@ class IOSWriter {
         var result: String = text;
         result = result.replacingOccurrences(of: ";", with: ".")
         result = result.replacingOccurrences(of: "\n", with: " ")
-        
-        if result.hasPrefix("\"") && !result.hasPrefix("\\\"") {
-            result = String(result.dropFirst())
-            result = "\\\"" + result
+
+        var escaped = ""
+        var precedingBackslashes = 0
+        for character in result {
+            if character == "\"" && precedingBackslashes.isMultiple(of: 2) {
+                escaped.append("\\")
+            }
+            escaped.append(character)
+            precedingBackslashes = character == "\\" ? precedingBackslashes + 1 : 0
         }
-        if result.hasSuffix("\"") && !result.hasSuffix("\\\"") {
-            result = String(result.dropLast())
-            result = result + "\\\""
-        }
-        
-        result = strippingZeroWidth(result)
-        
-        return result
+
+        return strippingZeroWidth(escaped)
     }
     
     static func strippingZeroWidth(_ s: String) -> String {

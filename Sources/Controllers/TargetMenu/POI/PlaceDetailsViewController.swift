@@ -73,6 +73,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func getTypeStr() -> String? {
+        guard detailsObject == nil else { return OAPOIViewController.getTypeStr(for: poi) }
         let typeString = provider.typeString { super.getTypeStr() }
         return typeString ?? super.getTypeStr()
     }
@@ -155,7 +156,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         
         searchTravelArticles(routeIds: routeIds) { articles in
             if !articles.isEmpty {
-                let icon = UIImage.templateImageNamed("ic_custom_backpack")
+                let icon = UIImage.icCustomBackpack
                 let title = localizedString("travel_guides")
                 let collapsableView = self.getGuidesCollapsableView(articles: articles)
                 

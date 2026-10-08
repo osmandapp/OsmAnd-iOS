@@ -410,20 +410,20 @@
     [_menuButtonExternalSensors.layer addSublayer:_menuButtonExternalSensorsDiv];
     [_menuButtonStarMap.layer addSublayer:_menuButtonStarMapDiv];
     
-    [_menuButtonMaps setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMap] forState:UIControlStateNormal];
-    [_menuButtonMyData setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconMyPlaces] forState:UIControlStateNormal];
-    [_menuButtonMyWaypoints setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconWaypoints] forState:UIControlStateNormal];
-    [_menuButtonMapsAndResources setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconDownloadMap] forState:UIControlStateNormal];
-    [_menuButtonConfigureScreen setImage:[UIImage templateImageNamed:ACImageNameLeftMenuConfigureScreen] forState:UIControlStateNormal];
-    [_menuButtonSettings setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconSettings] forState:UIControlStateNormal];
-    [_menuButtonHelp setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconAbout] forState:UIControlStateNormal];
-    [_menuButtonNavigation setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
-    [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:ACImageNameIcCustomRoutes] forState:UIControlStateNormal];
-    [_menuButtonWeather setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconUmbrella] forState:UIControlStateNormal];
-    [_menuButtonPlugins setImage:[UIImage templateImageNamed:ACImageNameLeftMenuIconPlugins] forState:UIControlStateNormal];
-    [_menuButtonTravelGuides setImage:[UIImage templateImageNamed:ACImageNameIcCustomBackpack] forState:UIControlStateNormal];
-    [_menuButtonExternalSensors setImage:[UIImage templateImageNamed:ACImageNameIcCustomSensor] forState:UIControlStateNormal];
-    [_menuButtonStarMap setImage:[UIImage templateImageNamed:ACImageNameIcCustomTelescope] forState:UIControlStateNormal];
+    [_menuButtonMaps setImage:[UIImage imageNamed:ACImageNameLeftMenuIconMap] forState:UIControlStateNormal];
+    [_menuButtonMyData setImage:[UIImage imageNamed:ACImageNameLeftMenuIconMyPlaces] forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setImage:[UIImage imageNamed:ACImageNameLeftMenuIconWaypoints] forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setImage:[UIImage imageNamed:ACImageNameLeftMenuIconDownloadMap] forState:UIControlStateNormal];
+    [_menuButtonConfigureScreen setImage:[UIImage imageNamed:ACImageNameLeftMenuConfigureScreen] forState:UIControlStateNormal];
+    [_menuButtonSettings setImage:[UIImage imageNamed:ACImageNameLeftMenuIconSettings] forState:UIControlStateNormal];
+    [_menuButtonHelp setImage:[UIImage imageNamed:ACImageNameLeftMenuIconAbout] forState:UIControlStateNormal];
+    [_menuButtonNavigation setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
+    [_menuButtonPlanRoute setImage:[UIImage imageNamed:ACImageNameIcCustomRoutes] forState:UIControlStateNormal];
+    [_menuButtonWeather setImage:[UIImage imageNamed:ACImageNameLeftMenuIconUmbrella] forState:UIControlStateNormal];
+    [_menuButtonPlugins setImage:[UIImage imageNamed:ACImageNameLeftMenuIconPlugins] forState:UIControlStateNormal];
+    [_menuButtonTravelGuides setImage:[UIImage imageNamed:ACImageNameIcCustomBackpack] forState:UIControlStateNormal];
+    [_menuButtonExternalSensors setImage:[UIImage imageNamed:ACImageNameIcCustomSensor] forState:UIControlStateNormal];
+    [_menuButtonStarMap setImage:[UIImage imageNamed:ACImageNameIcCustomTelescope] forState:UIControlStateNormal];
     
     [self applyingAppTheme];
     

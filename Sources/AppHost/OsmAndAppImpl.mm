@@ -29,6 +29,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OAReverseGeocoder.h"
 #import "OADiscountHelper.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -88,6 +89,8 @@
 
 #define kAppData @"app_data"
 #define kBuildVersion @"buildVersion"
+
+NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFinishedNotification";
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -340,6 +343,9 @@
     OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
     
     OpeningHoursParser::setAdditionalString("off", [OALocalizedString(@"day_off_label") UTF8String]);
+    OpeningHoursParser::setAdditionalString("public_holiday", [OALocalizedString(@"opening_hours_public_holiday") UTF8String]);
+    OpeningHoursParser::setAdditionalString("school_holiday", [OALocalizedString(@"opening_hours_school_holiday") UTF8String]);
+    OpeningHoursParser::setAdditionalString("easter", [OALocalizedString(@"opening_hours_easter") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"shared_string_open") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open_24_7", [OALocalizedString(@"shared_string_is_open_24_7") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_at", [OALocalizedString(@"will_open_at") UTF8String]);
@@ -842,9 +848,6 @@
         LogStartup(@"location services initialized and started");
     }
 
-    [self allowScreenTurnOff:NO];
-    LogStartup(@"screen turn off disallowed");
-
     _appearance = [[OADaytimeAppearance alloc] init];
     LogStartup(@"OADaytimeAppearance initialized");
     _appearanceChangeObservable = [[OAObservable alloc] init];
@@ -910,6 +913,8 @@
 
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     LogStartup(@"migration manager migration checked/done");
+
+    [[ScreenAwakeService shared] start];
 
     [OAPOIHelper sharedInstance];
     LogStartup(@"POI helper initialized");
@@ -1053,8 +1058,9 @@
     return builder;
 }
 
-// The OsmAndShared twin of getRoutingConfigForMode:, reading the same files. Only routing behind the
-// OsmAndShared flag asks for it, so a file is parsed when it is first needed rather than at startup.
+// The OsmAndShared twin of getRoutingConfigForMode:, choosing the same file: a custom one only once the
+// C++ loader has accepted it, as the OsmAndShared parser throws on a file it cannot read. A file is
+// parsed when it is first needed rather than at startup.
 - (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode
 {
     NSString *fileName = nil;
@@ -1065,7 +1071,8 @@
         if (index != -1)
         {
             NSString *key = [routingProfileKey substringToIndex:index + ROUTING_FILE_EXT.length];
-            if ([NSFileManager.defaultManager fileExistsAtPath:[self sharedRoutingFilePath:key]])
+            if (_customRoutingConfigs.find(key.UTF8String) != _customRoutingConfigs.end()
+                && [NSFileManager.defaultManager fileExistsAtPath:[self sharedRoutingFilePath:key]])
                 fileName = key;
         }
     }
@@ -1278,6 +1285,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isRepositoryUpdating = NO;
                 NSLog(@"_isRepositoryUpdating = NO");
+                [[NSNotificationCenter defaultCenter] postNotificationName:OARepositoryUpdateFinishedNotification object:nil];
             });
         });
     }
@@ -1286,6 +1294,9 @@
         self.resourcesManager->updateRepository();
         _isRepositoryUpdating = NO;
         NSLog(@"_isRepositoryUpdating = NO");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:OARepositoryUpdateFinishedNotification object:nil];
+        });
     }
 }
 
@@ -1413,6 +1424,8 @@
 
 - (void) shutdown
 {
+    [[OAReverseGeocoder instance] stop];
+
     if (_initialized)
     {
         [OAQuickSearchHelper.instance cancelSearch:YES];
@@ -1535,18 +1548,6 @@
     return deviceMemoryAvailable;
 }
 
-- (void) allowScreenTurnOff:(BOOL)allow
-{
-    if (allow)
-        OALog(@"Going to enable screen turn-off");
-    else
-        OALog(@"Going to disable screen turn-off");
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].idleTimerDisabled = !allow;
-    });
-}
-
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
 
@@ -1561,9 +1562,6 @@
 
     [self saveDataToPermamentStorage];
 
-    // In background allow to turn off screen
-    [self allowScreenTurnOff:YES];
-
     NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
     if (backgroundTimeRemaining == DBL_MAX) {
         OALog(@"Background time remaining: unlimited");
@@ -1574,7 +1572,6 @@
 
 - (void) onApplicationWillEnterForeground
 {
-    [self allowScreenTurnOff:NO];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

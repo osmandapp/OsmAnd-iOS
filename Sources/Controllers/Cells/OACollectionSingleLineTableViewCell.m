@@ -171,7 +171,9 @@
               verticalFittingPriority:(UILayoutPriority)verticalFittingPriority
 {
     self.contentView.frame = self.bounds;
-    [self.contentView layoutIfNeeded];
+    if (_useMultyLines || !_collectionHandler)
+        [self.contentView layoutIfNeeded];
+
     self.collectionViewHeight.constant = [self calculateContentHeight];
     return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
 }

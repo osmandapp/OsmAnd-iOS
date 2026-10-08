@@ -63,6 +63,7 @@
 #include <GeographicLib/GeoCoords.hpp>
 #include <OsmAndCore/CollatorStringMatcher.h>
 #include <OsmAndCore/SearchAlgorithms.h>
+#import "GeneratedAssetSymbols.h"
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
@@ -119,12 +120,12 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"ic_custom_search"];
+    return [UIImage imageNamed:ACImageNameIcCustomSearch];
 }
 
 - (NSString *)iconName
 {
-    return @"ic_custom_search";
+    return ACImageNameIcCustomSearch;
 }
 
 @end

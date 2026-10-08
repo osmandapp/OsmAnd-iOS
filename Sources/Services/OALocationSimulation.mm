@@ -19,6 +19,8 @@
 #import "OAAppSettings.h"
 #import "OARouteCalculationResult.h"
 #import "CLLocation+Extension.h"
+#import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define PRECISION_1_M 0.00001f
 #define DEVIATION_M 6
@@ -36,6 +38,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSThread *_routeAnimation;
+    BOOL _isSimulatingRoute;
     double _lastCourse;
 }
 
@@ -56,6 +59,11 @@ static const float LOCATION_TIMEOUT = 1.5;
     return _routeAnimation != nil; 
 }
 
+- (BOOL)isSimulatingRoute
+{
+    return [self isRouteAnimating] && _isSimulatingRoute;
+}
+
 - (void) startStopRouteAnimation
 {
     if (![self isRouteAnimating])
@@ -63,7 +71,7 @@ static const float LOCATION_TIMEOUT = 1.5;
         if ([[[OARoutingHelper sharedInstance] getRoute] isEmpty])
         {
             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"route_simulation")
-                                                       titleIcon:@"ic_custom_alert"
+                                                       titleIcon:ACImageNameIcCustomAlert
                                                          message:OALocalizedString(@"animate_routing_route_not_calculated")
                                                      cancelTitle:OALocalizedString(@"shared_string_cancel")];
         }
@@ -80,6 +88,7 @@ static const float LOCATION_TIMEOUT = 1.5;
 
 - (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff
 {
+    _isSimulatingRoute = directionsArray == nil;
     float simSpeed = _settings.simulateNavigationSpeed;
     EOASimulationMode simulationMode = [OASimulationMode getMode:_settings.simulateNavigationMode];
     BOOL realistic = simulationMode == EOASimulationModeRealistic;
@@ -185,6 +194,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     }];
     
     [_routeAnimation start];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (NSArray<NSNumber *> *)getSimulationParams:(NSMutableArray<OASimulatedLocation *> *)directions useLocationTime:(BOOL)useLocationTime
@@ -334,6 +344,15 @@ static const float LOCATION_TIMEOUT = 1.5;
     float speedLimit = [point getSpeedLimit];
     if (speedLimit > 0 && maxSpeed > speedLimit)
         maxSpeed = speedLimit;
+
+    OAApplicationMode *appMode = [[OARoutingHelper sharedInstance] getAppMode];
+    if ([appMode isDerivedRoutingFrom:OAApplicationMode.PEDESTRIAN])
+    {
+        float pedestrianSpeed = [appMode getDefaultSpeed];
+        if (pedestrianSpeed > 0 && maxSpeed > pedestrianSpeed)
+            maxSpeed = pedestrianSpeed;
+    }
+
     return maxSpeed * intervalTime / coeff;
 }
 
@@ -368,6 +387,7 @@ static const float LOCATION_TIMEOUT = 1.5;
 - (void) stop
 {
     _routeAnimation = nil;
+    [[ScreenAwakeService shared] updateIdleTimer];
     [_app.simulateRoutingObservable notifyEvent];
 }
 

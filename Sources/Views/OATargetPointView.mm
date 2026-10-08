@@ -136,6 +136,8 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _fullOffset;
     CGFloat _fullScreenOffset;
 
+    BOOL _rotationInProgress;
+
     BOOL _hideButtons;
     BOOL _hiding;
     BOOL _toolbarAnimating;
@@ -622,6 +624,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+    [self cancelScrollingForRotation];
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
         [self showTopToolbarWithAnimation:NO forceToShowIfTypeFloating:NO];
@@ -629,8 +632,79 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (void)cancelScrollingForRotation
+{
+    NSAssert(NSThread.isMainThread, @"Context menu gestures must be cancelled on the main thread");
+    // Both rotation callbacks may run. Cancel the gesture only once per transition.
+    if (_rotationInProgress)
+        return;
+    _rotationInProgress = YES;
+    [self cancelScrollingInView:self];
+}
+
+- (void)finishRotation
+{
+    if (!_hiding)
+    {
+        // Recompute geometry without snapping the current scroll position to a mode anchor.
+        [self doLayoutSubviews:NO];
+        if (![self isLandscape])
+            [self updateModeAfterRotation];
+        [self setNeedsLayout];
+    }
+    _rotationInProgress = NO;
+}
+
+- (void)updateModeAfterRotation
+{
+    // Match normal drag mode selection, but keep the current reading position.
+    CGFloat offsetY = self.contentOffset.y;
+    CGFloat headerDist = ABS(offsetY - _headerOffset);
+    CGFloat expandedDist = ABS(offsetY - _fullOffset);
+    CGFloat fullScreenDist = ABS(offsetY - _fullScreenOffset);
+    BOOL supportFull = !self.customController || [self.customController supportFullMenu];
+    BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
+
+    if (headerDist < expandedDist && headerDist < fullScreenDist)
+    {
+        [self requestHeaderOnlyMode:NO];
+    }
+    else if (expandedDist < headerDist && expandedDist < fullScreenDist && supportFull)
+    {
+        [self requestFullMode:NO];
+    }
+    else if (supportFullScreen)
+    {
+        [self requestFullScreenMode:NO];
+    }
+    else
+    {
+        [self requestHeaderOnlyMode:NO];
+    }
+}
+
+- (void)cancelScrollingInView:(UIView *)view
+{
+    if ([view isKindOfClass:UIScrollView.class])
+    {
+        UIScrollView *scrollView = (UIScrollView *)view;
+        // Cancel the current touch sequence before the menu changes geometry.
+        // Keep disabled recognizers disabled (e.g. non-scrolling details tables).
+        UIPanGestureRecognizer *pan = scrollView.panGestureRecognizer;
+        if (pan.enabled)
+        {
+            pan.enabled = NO;
+            pan.enabled = YES;
+        }
+        [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+    }
+    for (UIView *subview in view.subviews)
+        [self cancelScrollingInView:subview];
+}
+
 - (void) clearCustomControllerIfNeeded
 {
+    _rotationInProgress = NO;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;
@@ -1078,7 +1152,7 @@ static const NSInteger _buttonsCount = 4;
     {
         [self doLayoutSubviews:NO];
 
-        if ([_customController showDetailsButton])
+        if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
         {
             NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
             [((OATargetInfoViewController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1108,6 +1182,7 @@ static const NSInteger _buttonsCount = 4;
     {
         _showFull = NO;
         _showFullScreen = NO;
+        [self onMenuStateChanged];
     }
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
     BOOL hasVisibleBottomBar = self.customController && [self.customController hasBottomToolbar] && !self.customController.bottomToolBarView.hidden;
@@ -1333,7 +1408,9 @@ static const NSInteger _buttonsCount = 4;
     else
         _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
-    CGFloat contentHeight = _headerY + _fullScreenHeight;
+    // The details row belongs to the content view, whose origin excludes this height.
+    // Match its actual bottom so scrolling cannot expose the map below the card.
+    CGFloat contentHeight = _headerY + _fullScreenHeight - detailsButtonHeight;
     
     if (landscape)
     {
@@ -2091,13 +2168,22 @@ static const NSInteger _buttonsCount = 4;
 
 - (IBAction) buttonFavoriteClicked:(id)sender
 {
+    // a favorite target can come without its item (e.g. the "Add favorite" quick action), then it is added, not edited
+    OAFavoriteItem *item = nil;
     if (self.targetPoint.type == OATargetFavorite)
+    {
+        if ([self.targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
+            item = self.targetPoint.targetObj;
+        else if ([self.customController isKindOfClass:OAFavoriteViewController.class])
+            item = ((OAFavoriteViewController *) self.customController).favorite;
+    }
+
+    if (item)
     {
         self.customController.topToolbarType = ETopToolbarTypeFixed;
         [self showFullMenu];
         [self.customController activateEditing];
-        
-        OAFavoriteItem *item = self.targetPoint.targetObj;
+
         [self.menuViewDelegate targetPointEditFavorite:item];
         return;
     }
@@ -2462,8 +2548,11 @@ static const NSInteger _buttonsCount = 4;
         newOffset = _customController.needsLayoutOnModeChange ? [self doLayoutSubviews:NO] : [self calculateNewOffset];
         if (!_showFullScreen)
         {
+            // Rotation keeps the reading position; a normal drag snaps to the mode anchor.
+            BOOL useCurrentOffset = _rotationInProgress;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
+                CGFloat height = useCurrentOffset ? [self getVisibleHeight] : [self getVisibleHeightWithOffset:newOffset];
+                [self.menuViewDelegate targetViewHeightChanged:height animated:YES];
             });
         }
     }
@@ -2663,6 +2752,8 @@ static const NSInteger _buttonsCount = 4;
     if (copysign(1.0, newOffset.y - targetContentOffset->y) != copysign(1.0, velocity.y))
     {
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (_rotationInProgress)
+                return;
             [self setContentOffset:newOffset animated:YES];
         });
     }
@@ -2674,6 +2765,12 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    // Cancelling the pan during rotation must not select a mode or dismiss the menu.
+    if (_rotationInProgress)
+    {
+        *targetContentOffset = scrollView.contentOffset;
+        return;
+    }
     //BOOL slidingUp = velocity.y > 0;
     BOOL slidingDown = velocity.y < -0.3;
     
@@ -2835,11 +2932,8 @@ static const NSInteger _buttonsCount = 4;
         }
         case OAShareMenuActivityCopyCoordinates:
         {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
-            NSInteger f = [settings.settingGeoFormat get];
-            NSString *coordinates = [OAOsmAndFormatter getFormattedCoordinatesWithLat:_targetPoint.location.latitude
-                                                                                  lon:_targetPoint.location.longitude
-                                                                         outputFormat:f];
+            NSString *coordinates = [CoordinateFormatBridge formatPrimaryWithLat:_targetPoint.location.latitude
+                                                                             lon:_targetPoint.location.longitude];
             [self copyToClipboardWithToast:coordinates];
             break;
         }

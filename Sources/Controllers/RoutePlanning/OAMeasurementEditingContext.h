@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 @property (nonatomic) OASWptPt *originalPointToMove;
 
 @property (nonatomic) BOOL inAddPointMode;
-@property (nonatomic) BOOL inApproximationMode;
+@property (nonatomic) BOOL approximationSessionActive;
 
 @property (nonatomic) OAGpxData *gpxData;
 @property (nonatomic) NSInteger selectedSegment;

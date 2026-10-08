@@ -147,10 +147,13 @@
             continue;
         }
 
-        OASRouteDataObject *object = [[OASRouteDataObject alloc] initWithRegion:region];
-        OASRouteSegmentResult *segmentResult = [[OASRouteSegmentResult alloc] initWithRouteObject:object leftside:_leftSide];
-        [segmentResult readFromBundleBundle:[self routeSegmentToBundle:routeSegment resources:resources]];
-        [route addObject:segmentResult];
+        @autoreleasepool
+        {
+            OASRouteDataObject *object = [[OASRouteDataObject alloc] initWithRegion:region];
+            OASRouteSegmentResult *segmentResult = [[OASRouteSegmentResult alloc] initWithRouteObject:object leftside:_leftSide];
+            [segmentResult readFromBundleBundle:[self routeSegmentToBundle:routeSegment resources:resources]];
+            [route addObject:segmentResult];
+        }
     }
     return route;
 }

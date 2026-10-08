@@ -158,7 +158,6 @@ static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
     UISearchController *_searchController;
     
     uint64_t _totalInstalledSize;
-    uint64_t _liveUpdatesInstalledSize;
 
     MBProgressHUD *_refreshRepositoryProgressHUD;
     
@@ -324,7 +323,7 @@ static BOOL _repositoryUpdated = NO;
     [self obtainDataAndItems];
     [self prepareContent];
 
-    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
+    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0)];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -1402,8 +1401,6 @@ static BOOL _repositoryUpdated = NO;
     }
 
     // Local Resources
-    _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
-    
     _totalInstalledSize = 0;
     for (const auto& localResource : _localResources)
     {

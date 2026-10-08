@@ -75,4 +75,18 @@
     return YES;
 }
 
+// One preference writer at a time: concurrent writers starve the main thread's reads
++ (void) performPreferenceWrites:(void (^)(void))writes
+{
+    static NSObject *lock;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        lock = [NSObject new];
+    });
+    @synchronized (lock)
+    {
+        writes();
+    }
+}
+
 @end

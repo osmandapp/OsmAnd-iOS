@@ -2867,9 +2867,6 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        if (onComplete)
-            onComplete();
-
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -2892,6 +2889,9 @@ typedef enum
         {
             [_hudViewController updateDependentButtonsVisibility];
         }
+
+        if (onComplete)
+            onComplete();
     }];
     
     [_hudViewController updateControlsLayout:YES];
@@ -2960,11 +2960,17 @@ typedef enum
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    if (self.targetMenuView.superview)
+        [self.targetMenuView cancelScrollingForRotation];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (self.targetMenuView.superview)
+        {
+            [self.targetMenuView finishRotation];
+        }
     }];
 }
 
@@ -4756,6 +4762,8 @@ typedef enum
 - (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
+    if (updateMap && docPath.length == 0)
+        [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     [self.targetMenuView applyTargetObjectChanges];
 }
 

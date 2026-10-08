@@ -131,6 +131,8 @@ jobs:
         working-directory: baked/fat-ios-clang.xcode
         run: xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release
 
+      - name: Enable shared framework checks for CI
+        run: python3 ios/.github/scripts/configure-shared-build-for-ci.py
       - name: Build iOS tests
         env:
           LANG: en_US.UTF-8
@@ -214,6 +216,8 @@ jobs:
           BUILD_IOS_VERSION: ${{ inputs.buildversion }}
         run: |
           set -o pipefail
+          archive_log="$RUNNER_TEMP/nightly-archive-xcodebuild.log"
+          set +e
           xcodebuild \
             -workspace ios/OsmAnd.xcworkspace \
             -scheme 'OsmAnd Nightly' \
@@ -221,12 +225,17 @@ jobs:
             -destination 'generic/platform=iOS' \
             -configuration Nightly \
             -archivePath OsmAndNightly.xcarchive \
+            -allowProvisioningUpdates \
             CURRENT_PROJECT_VERSION="$BUILD_IOS_VERSION" \
             MARKETING_VERSION="$RELEASE_IOS_VERSION" \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="iPhone Distribution" \
-            PROVISIONING_PROFILE_SPECIFIER="OsmAnd Nightly Profile" \
-            archive | xcpretty
+            archive 2>&1 | tee "$archive_log" | xcpretty
+          status=$?
+          set -e
+          if (( status != 0 )); then
+            echo 'Nightly archive failed. Last 200 lines of raw xcodebuild output:' >&2
+            tail -n 200 "$archive_log" >&2
+            exit "$status"
+          fi
 
       - name: Verify archived Nightly app
         shell: bash

@@ -9,12 +9,13 @@
 #import "OACollapsableView.h"
 
 @class OAPOI;
+@class FormattedCoordinateItem;
 
 @interface OACollapsableCoordinatesView : OACollapsableView
 
 @property (nonatomic, readonly) double lat;
 @property (nonatomic, readonly) double lon;
-@property (nonatomic, readonly) NSDictionary<NSNumber *, NSString *> *coordinates;
+@property (nonatomic, readonly) NSArray<FormattedCoordinateItem *> *coordinates;
 
 - (instancetype) initWithFrame:(CGRect)frame lat:(double)lat lon:(double)lon;
 

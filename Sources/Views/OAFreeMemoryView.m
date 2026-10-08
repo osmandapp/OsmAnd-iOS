@@ -20,24 +20,21 @@
     double _appVal;
     double _freeVal;
 
-    unsigned long long _localResourcesSize;
     unsigned long long _deviceMemoryCapacity;
     unsigned long long _deviceMemoryAvailable;
     unsigned long long _documentsSize;
+    BOOL _hasValues;
     NSUInteger _updateGeneration;
 
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize
+- (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
-    {
-        _localResourcesSize = localResourcesSize;
         [self commonInit];
-    }
     return self;
 }
 
@@ -115,75 +112,69 @@
     }
 }
 
-- (void) setLocalResourcesSize:(unsigned long long)size
-{
-    _localResourcesSize = size;
-}
-
 - (void) update
 {
-    NSError *error = nil;
-
-    unsigned long long deviceMemoryCapacity = 1;
-    unsigned long long deviceMemoryAvailable = 0;
-    
-    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
-    if (dictionary && !error)
-    {
-        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
-        deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
-        if (deviceMemoryCapacity <= 0)
-        {
-            NSLog(@"Error obtaining dvice memory capacity");
-            deviceMemoryCapacity = 1;
-        }
-        
-        NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
-        NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
-        if (results)
-            deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
-
-        if (deviceMemoryAvailable == 0)
-        {
-            NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
-            deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
-        }
-    }
-    else
-    {
-        NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
-    }
-
-    _deviceMemoryCapacity = deviceMemoryCapacity;
-    _deviceMemoryAvailable = deviceMemoryAvailable;
-    [self applyValues];
-
-    NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
-    _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
-    [_freeMemLabel sizeToFit];
-    [self setNeedsLayout];
-
-    // Walking the whole Documents folder (maps, tiles, tracks) takes seconds on a full device,
-    // so it runs off the main thread and the bar is redrawn when the size is known
+    // The free space query and the walk over the whole Documents folder (maps, tiles, tracks) can take
+    // seconds on a full device, so both run off the main thread and the bar is redrawn when they are known
     NSUInteger generation = ++_updateGeneration;
-    unsigned long long localResourcesSize = _localResourcesSize;
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *hiddenMapsPath = [OsmAndApp instance].hiddenMapsPath;
     __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
-        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + localResourcesSize;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSError *error = nil;
+
+        unsigned long long deviceMemoryCapacity = 1;
+        unsigned long long deviceMemoryAvailable = 0;
+
+        NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
+        if (dictionary && !error)
+        {
+            NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+            deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
+            if (deviceMemoryCapacity <= 0)
+            {
+                NSLog(@"Error obtaining dvice memory capacity");
+                deviceMemoryCapacity = 1;
+            }
+
+            NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
+            NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
+            if (results)
+                deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
+
+            if (deviceMemoryAvailable == 0)
+            {
+                NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
+                deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
+            }
+        }
+        else
+        {
+            NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
+        }
+
+        // Installed maps are in Documents/Resources, hidden maps are in Library/Hidden
+        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + [OAUtilities folderSize:hiddenMapsPath];
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || strongSelf->_updateGeneration != generation)
                 return;
 
+            strongSelf->_deviceMemoryCapacity = deviceMemoryCapacity;
+            strongSelf->_deviceMemoryAvailable = deviceMemoryAvailable;
             strongSelf->_documentsSize = docSize;
+            strongSelf->_hasValues = YES;
             [strongSelf applyValues];
+
+            NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
+            strongSelf->_freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+            [strongSelf->_freeMemLabel sizeToFit];
+            [strongSelf setNeedsLayout];
             [strongSelf setNeedsDisplay];
         });
     });
 }
 
-// Until the Documents size is known the app share is 0 and everything used counts as system
 - (void) applyValues
 {
     unsigned long long capValue = _deviceMemoryCapacity;
@@ -207,17 +198,23 @@
 - (void) drawRect:(CGRect)rect
 {
     double treshold = 2.0;
+    double radius = 3.0f;
     UIEdgeInsets insets = [self contentInsets];
     CGRect frame = CGRectMake(insets.left, 35, self.bounds.size.width - insets.left - insets.right, 20);
     // The shrink loop below never takes a segment under treshold + 0.1, so it would not end on a narrower bar
     if (frame.size.width < 3 * (treshold + 0.1))
         return;
 
+    if (!_hasValues)
+    {
+        [[UIColor colorNamed:ACColorNameFreeSpaceBgColor] setFill];
+        [[UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:radius] fill];
+        return;
+    }
+
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
-    
-    double radius = 3.0f;
-    
+
     /*
     CGFloat compShadow[4] = { 0.2, 0.2, 0.2, 0.9 };
     CGColorRef shadowColor = CGColorCreate(rgbColorspace, compShadow);

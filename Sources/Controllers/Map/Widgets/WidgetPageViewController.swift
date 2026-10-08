@@ -99,7 +99,8 @@ final class WidgetPageViewController: UIViewController {
         var height: CGFloat = 0
         if isMultipleWidgetsInRow {
             updateSimpleWidget()
-            // Compress optional label widths, but preserve required padding and icon widths.
+            // Measure compressed content; optional padding and icon widths may shrink.
+            // Regular top/bottom panel widths are determined by OAMapInfoController, not this measurement.
             let fittingSize = stackView.systemLayoutSizeFitting(
                 UIView.layoutFittingCompressedSize,
                 withHorizontalFittingPriority: UILayoutPriority(999),

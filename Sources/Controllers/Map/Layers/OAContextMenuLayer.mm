@@ -537,6 +537,7 @@
         
     }
     CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
+
     [[OARootViewController instance].mapPanel processNoSymbolFound:coord forceHide:forceHide];
     return NO;
 }

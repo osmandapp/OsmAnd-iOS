@@ -179,13 +179,17 @@ struct FavoriteFolderStats: Hashable {
     var text: String {
         var parts: [String] = []
         if foldersCount > 0 {
-            parts.append("\(localizedString("shared_string_folders").lowercased()) \(NumberFormatter.localizedCount(foldersCount))")
+            parts.append(field("shared_string_folders", NumberFormatter.localizedCount(foldersCount)))
         }
 
-        parts.append("\(localizedString("shared_string_gpx_points").lowercased()) \(formattedPointsCount)")
-        let firstLine = parts.joined(separator: ", ")
-        let secondLine = "\(localizedString("shared_string_size").lowercased()) \(ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))"
-        return [firstLine, secondLine].map { (OAUtilities.capitalizeFirstLetter($0) ?? "") + "." }.joined(separator: "\n")
+        parts.append(field("shared_string_gpx_points", formattedPointsCount))
+        let firstLine = parts.joined(separator: " · ")
+        let secondLine = field("shared_string_size", ByteCountFormatter.string(fromByteCount: fileSize, countStyle: .file))
+        return [firstLine, secondLine].joined(separator: "\n")
+    }
+
+    private func field(_ titleKey: String, _ value: String) -> String {
+        String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString(titleKey), value)
     }
 
     private var formattedPointsCount: String {

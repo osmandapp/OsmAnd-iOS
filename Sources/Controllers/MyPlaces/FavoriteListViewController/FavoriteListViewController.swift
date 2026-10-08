@@ -41,7 +41,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var lastDistanceDirectionUpdate: TimeInterval = 0.0
     var isContextMenuVisible = false
     var shouldReloadCollectionView = false
-    var needsHiddenFavoriteIconsRefresh = false
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
@@ -168,12 +167,6 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         super.viewWillDisappear(animated)
     }
 
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        guard traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) else { return }
-        reconfigureHiddenFavoriteCells()
-    }
-    
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in

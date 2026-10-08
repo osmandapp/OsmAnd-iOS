@@ -351,14 +351,12 @@ final class AmenityUIHelper: NSObject {
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: cleanValue, subtype: subtype)
             rowParamsBuilder.iconName = Self.defaultAmenityIconName
-            if Self.looksLikePhoneNumber(cleanValue) {
-                rowParamsBuilder.isPhoneNumber = true
-            }
         } else {
             return nil // skip non-translatable NON-poiType tags
         }
-        
-        lastBuiltRowIsDescription = rowParamsBuilder.isDescription()
+
+        // a generic row has the info icon too, so decide by the key, as Android does
+        lastBuiltRowIsDescription = genericFallbackKeys.contains(key) ? key.contains(DESCRIPTION_TAG) : rowParamsBuilder.isDescription()
         rowParamsBuilder.matchWidthDivider = !rowParamsBuilder.isDescription() && rowParamsBuilder.isWiki
         
         let param = rowParamsBuilder.build()
@@ -447,11 +445,6 @@ final class AmenityUIHelper: NSObject {
 
     // the order poi_types.xml gives a type without an explicit one; Android sorts generic rows with it
     private static let defaultPoiTypeOrder: Int32 = 90
-
-    // Android links such values through Linkify; the row cell here links only isPhoneNumber rows
-    private static func looksLikePhoneNumber(_ value: String) -> Bool {
-        value.range(of: "^\\+?[0-9(][0-9 ().-]{5,}[0-9]$", options: .regularExpression) != nil
-    }
 
     private func isKeyToSkip(key: String) -> Bool {
         return key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||

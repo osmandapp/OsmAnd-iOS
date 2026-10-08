@@ -264,7 +264,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx != nil && [ctx shouldCheckApproximation] && [ctx isApproximationNeeded] && [ctx hasTimestamps];
 }
 
-- (UIViewController *)approximationWarningViewController
+- (UIViewController *)beginApproximationSession
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.getPointsCount == 0)
@@ -272,6 +272,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
     warningController.delegate = self;
     _approximationPopupController = warningController;
+    ctx.approximationSessionActive = YES;
     return warningController;
 }
 
@@ -2245,7 +2246,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || ctx.approximationSessionActive)
         return;
     if (ctx.originalPointToMove != nil || ctx.isInAddPointMode)
         return;
@@ -2708,6 +2709,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onPopupDismissed
 {
+    [self editingContext].approximationSessionActive = NO;
     UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
     _approximationPopupController = nil;
     if (controller.presentingViewController != nil)
@@ -2719,7 +2721,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    ctx.inApproximationMode = NO;
+    ctx.approximationSessionActive = NO;
     if (hasApproximationStarted)
         [ctx.commandManager undo];
     [[self layer] updateLayer];
@@ -2735,7 +2737,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onApplyGpxApproximation
 {
-    [self editingContext].inApproximationMode = NO;
+    [self editingContext].approximationSessionActive = NO;
     _approximationPopupController = nil;
     [[self layer] updateLayer];
     [self invalidateTerrainElevationGpx];

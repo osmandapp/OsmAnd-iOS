@@ -51,7 +51,7 @@
 @implementation OADonationSettingsViewController
 {
     NSArray *_headers;
-    NSArray *_data;
+    NSArray<NSArray *> *_data;
     BOOL _donation;
     
     OASwitchTableViewCell *_donationSwitch;

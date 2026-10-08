@@ -45,6 +45,7 @@
 #if DEBUG
 - (void)prepareRouteLinesForTesting;
 - (NSUInteger)routeLineCountForTesting;
+- (NSUInteger)centerLineCountForTesting;
 #endif
 
 @end

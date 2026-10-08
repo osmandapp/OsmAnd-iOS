@@ -39,7 +39,7 @@
     OAAppSettings *_settings;
     OAMapStyleSettings *_styleSettings;
     
-    NSArray *_data;
+    NSArray<NSArray *> *_data;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;

@@ -968,6 +968,10 @@ static char kMapSourceUpdateQueueKey;
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
+    if (gestureRecognizer == _grPointContextMenu)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapTouchAction object:self userInfo:nil];
+    }
     if (gestureRecognizer == _grZoomOut && [[OAAppSettings sharedManager].showDistanceRuler get])
         return NO;
     if (gestureRecognizer == _grZoomDoubleTap)
@@ -1756,6 +1760,10 @@ static char kMapSourceUpdateQueueKey;
         return NO;
 
     BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
+    if (longPress && (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateEnded))
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapTouchAction object:self userInfo:nil];
+    }
 
     // Get location of the gesture
     CGPoint touchPoint;
@@ -3464,6 +3472,10 @@ static char kMapSourceUpdateQueueKey;
             [_gpxFilesRec removeAllObjects];
             [_gpxFilesRec addObject:gpxFile];
             [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
+        }
+        else if (refreshData)
+        {
+            _recTrackShowing = NO;
         }
     }];
 }

@@ -531,7 +531,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 }
 
 - (void)addPedestrianRouteWarningIfNeeded:(NSMutableDictionary *)dictionary section:(NSMutableArray *)section sectionIndex:(int &)sectionIndex {
-    const auto route = _transportHelper.getRoutes[0];
+    const auto routes = _transportHelper.getRoutes;
+    if (routes.empty())
+        return;
+
+    const auto route = routes[0];
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:route->segments];
     NSInteger walkTimePT = (NSInteger) route->getWalkTime();
     NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;

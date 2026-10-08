@@ -151,10 +151,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.shouldShowApproximationWarning
     }
 
-    var approximationWarningViewController: UIViewController? {
-        bridge.approximationWarningViewController
-    }
-
     var canStartNewSegment: Bool {
         bridge.isAddNewSegmentAllowed
     }
@@ -241,6 +237,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
                 bridge.addPoint(at: initialPoint)
             }
         }
+    }
+
+    func beginApproximationSession() -> UIViewController? {
+        bridge.beginApproximationSession()
     }
 
     func startElevationCalculation(useNearbyRoads: Bool) {
@@ -368,6 +368,17 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func startNewSegment() {
         bridge.startNewSegment()
+    }
+
+    func startNewSegment(mode: OAApplicationMode?) {
+        guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
+        bridge.startNewSegment(with: effectiveMode)
+    }
+
+    func continueRoute(mode: OAApplicationMode?) {
+        guard let pointIndex = routeSegments.last?.pointIndexes.last,
+              let effectiveMode = mode ?? OAApplicationMode.default() else { return }
+        bridge.apply(effectiveMode, pointIndex: pointIndex, wholeRoute: false)
     }
 
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool) {

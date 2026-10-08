@@ -22,6 +22,9 @@
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
+#include <OsmAndCore/FunctorQueryController.h>
+
+#include <atomic>
 
 @interface OAReverseGeocoder ()
 
@@ -32,6 +35,9 @@
 @end
 
 @implementation OAReverseGeocoder
+{
+    std::atomic<bool> _stopping;
+}
 
 + (OAReverseGeocoder *)instance
 {
@@ -51,6 +57,7 @@
         _addressCache = [[NSCache alloc] init];
         _addressCache.countLimit = 100;
         _pendingLookups = [NSMutableDictionary dictionary];
+        _stopping = false;
 
         _lookupQueue = [[NSOperationQueue alloc] init];
         _lookupQueue.name = @"net.osmand.reverse-geocoder";
@@ -155,17 +162,32 @@
     }];
 }
 
+- (void)stop
+{
+    _stopping = true;
+    [_lookupQueue cancelAllOperations];
+}
+
 - (NSString *)performLookupAddressAtLat:(double)lat
                                     lon:(double)lon
                                objectId:(uint64_t)objectId
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
-    
     NSString *cacheKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
     NSString *cachedAddress = [self cachedAddressForKey:cacheKey];
     if (cachedAddress)
         return cachedAddress;
+
+    NSString *address = _stopping ? @"" : [self geocodeAddressAtLat:lat lon:lon];
+
+    [self cacheAddress:address forKey:cacheKey];
+
+    return address;
+}
+
+- (NSString *)geocodeAddressAtLat:(double)lat lon:(double)lon
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
 
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -176,8 +198,21 @@
     
     const auto geoCriteria = std::make_shared<OsmAnd::ReverseGeocoder::Criteria>();
     geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    const auto object = geocoder->performSearch(*geoCriteria);
-    
+    const auto queryController = std::make_shared<OsmAnd::FunctorQueryController>(
+        [self]
+        (const OsmAnd::FunctorQueryController* const) -> bool
+        {
+            return self->_stopping;
+        });
+    std::shared_ptr<const OsmAnd::ReverseGeocoder::ResultEntry> object;
+    geocoder->performSearch(*geoCriteria,
+        [&object]
+        (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::BaseSearch::IResultEntry& resultEntry)
+        {
+            object = std::make_shared<const OsmAnd::ReverseGeocoder::ResultEntry>(static_cast<const OsmAnd::ReverseGeocoder::ResultEntry&>(resultEntry));
+        },
+        queryController);
+
     NSMutableString *geocodingResult = [NSMutableString string];
     if (object)
     {
@@ -236,12 +271,8 @@
                 [geocodingResult appendString:sname.toNSString()];
         }
     }
-    
-    NSString *finalAddress = [geocodingResult copy];
-    
-    [self cacheAddress:finalAddress forKey:cacheKey];
-    
-    return finalAddress;
+
+    return [geocodingResult copy];
 }
 
 - (void) testAddressSearch:(NSString *)query lat:(double)lat lon:(double)lon

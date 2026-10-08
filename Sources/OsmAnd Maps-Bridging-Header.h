@@ -338,6 +338,8 @@
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
 #import "OANetworkUtilities.h"
+#import "OAMemoryLog.h"
+#import "OACrashReportSender.h"
 #import "OABackupDbHelper.h"
 #import "OACollectionSettingsItem.h"
 #import "OAPoiUiFilterSettingsItem.h"

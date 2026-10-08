@@ -65,7 +65,6 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 @property (nonatomic, readonly) BOOL isApproximationNeeded;
 @property (nonatomic, readonly) BOOL shouldRequestApproximationBeforeNavigation;
 @property (nonatomic, readonly) BOOL shouldShowApproximationWarning;
-@property (nonatomic, readonly, nullable) UIViewController *approximationWarningViewController;
 @property (nonatomic, readonly) BOOL hasChanges;
 @property (nonatomic, readonly) BOOL canUndo;
 @property (nonatomic, readonly) BOOL canRedo;
@@ -89,6 +88,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 - (void)dismiss;
 - (void)prepareNewRoute;
 - (void)prepareNewRouteWithApplicationMode:(OAApplicationMode *)applicationMode;
+- (nullable UIViewController *)beginApproximationSession;
 - (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate;
 - (void)openTrackWithGpxFile:(OASGpxFile *)gpxFile
              applicationMode:(nullable OAApplicationMode *)applicationMode
@@ -120,6 +120,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 - (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to;
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
+- (void)startNewSegmentWithMode:(OAApplicationMode *)mode;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
 - (void)applyMode:(OAApplicationMode *)mode pointIndexes:(NSArray<NSNumber *> *)pointIndexes;
 - (void)refreshRouteForMode:(OAApplicationMode *)mode;

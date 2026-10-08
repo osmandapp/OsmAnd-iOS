@@ -121,6 +121,8 @@
     if (_objectChanges)
     {
         NSDateFormatter *formatterFrom = [[NSDateFormatter alloc] init];
+        formatterFrom.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        formatterFrom.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         [formatterFrom setDateFormat:@"yyyy-LL"];
         NSDateFormatter *formatterTo = [[NSDateFormatter alloc] init];
         [formatterTo setDateFormat:@"LLLL yyyy"];
@@ -130,7 +132,7 @@
         [formatterYear setDateFormat:@"yyyy"];
 
         NSDate *date = [NSDate date];
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        NSCalendar *calendar = formatterFrom.calendar;
         for (NSInteger i = 0; i < VISIBLE_MONTHS_COUNT; i ++)
         {
             NSString *dateStr = [formatterFrom stringFromDate:date];
@@ -306,12 +308,14 @@
 {
     long changesSize = 0;
     NSDateFormatter *formatterFrom = [[NSDateFormatter alloc] init];
+    formatterFrom.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    formatterFrom.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [formatterFrom setDateFormat:@"yyyy-LL"];
 
     NSString *date = [formatterFrom stringFromDate:[NSDate date]];
     changesSize += [_objectChanges.allKeys containsObject:date] ? [_objectChanges[date] longValue] : 0;
 
-    date = [formatterFrom stringFromDate:[NSCalendar.autoupdatingCurrentCalendar dateByAddingUnit:NSCalendarUnitMonth
+    date = [formatterFrom stringFromDate:[formatterFrom.calendar dateByAddingUnit:NSCalendarUnitMonth
                                                                                             value:-1
                                                                                            toDate:[NSDate date]
                                                                                           options:0]];

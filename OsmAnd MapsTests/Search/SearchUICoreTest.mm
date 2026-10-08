@@ -350,6 +350,7 @@ static BOOL TEST_EXTRA_RESULTS = YES;
 
 - (void) parseResults:(NSDictionary *)sourceJson tag:(NSString *)tag results:(NSMutableArray<NSMutableArray<NSString *> *> *)results
 {
+    // Shared fixtures include boundaries, which iOS excludes in OASearchResultMatcher.publish.
     NSMutableArray<NSString *> *result = results[0];
     NSArray *resultsArr = sourceJson[tag];
     BOOL hasInnerArray = resultsArr.count > 0 && resultsArr.firstObject != nil && [resultsArr.firstObject isKindOfClass:NSArray.class];
@@ -363,13 +364,14 @@ static BOOL TEST_EXTRA_RESULTS = YES;
                 result = results[i];
                 for (NSInteger k = 0; k < innerArray.count; k++)
                 {
-                    [result addObject:innerArray[k]];
+                    if (![innerArray[k] containsString:@", BOUNDARY,"])
+                        [result addObject:innerArray[k]];
                 }
             }
         }
         else
         {
-            if (![resultsArr[i] containsString:@"[[ios, "])
+            if (![resultsArr[i] containsString:@"[[ios, "] && ![resultsArr[i] containsString:@", BOUNDARY,"])
                 [result addObject:resultsArr[i]];
         }
     }

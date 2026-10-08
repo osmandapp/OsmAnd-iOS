@@ -708,7 +708,7 @@
 "navigate_point_format_unknown" = "Непознат формат";
 "navigate_point_northing" = "Земљописна ширина";
 "navigate_point_easting" = "Земљописна дужина";
-"navigate_point_zone" = "Област";
+"navigate_point_zone" = "Зона";
 "navigate_point_olc" = "Отворени кôд положаја";
 "approximate_file_size" = "Приближна величина датотеке";
 "shared_string_example" = "Пример";

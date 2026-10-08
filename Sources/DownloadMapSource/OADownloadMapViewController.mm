@@ -65,7 +65,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @implementation OADownloadMapViewController
 {
     OAMapRendererView *_mapView;
-    NSArray *_data;
+    NSArray<NSArray *> *_data;
     
     int _currentZoom;
     int _minZoom;

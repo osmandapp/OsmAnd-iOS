@@ -81,12 +81,14 @@ final class PlanRouteSegmentGapCell: UITableViewCell {
             borderView.addSubview($0)
         }
 
+        let minimumHeightConstraint = borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumCapsuleHeight)
+        minimumHeightConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             borderView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: topInset),
             borderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             borderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             borderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumCapsuleHeight),
+            minimumHeightConstraint,
 
             iconView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor, constant: horizontalInset),
             iconView.centerYAnchor.constraint(equalTo: borderView.centerYAnchor),

@@ -7,6 +7,7 @@
 //
 
 #import "OASavingTrackHelper.h"
+#import "CLLocation+Extension.h"
 #import "OALog.h"
 #import "OAGPXDatabase.h"
 #import "OsmAndApp.h"
@@ -680,7 +681,7 @@ static const NSInteger kDBVersion = 1;
                     double lon = sqlite3_column_double(statement, 1);
                     pt.lat = lat;
                     pt.lon = lon;
-                    pt.ele = sqlite3_column_double(statement, 2);
+                    pt.ele = sqlite3_column_type(statement, 2) == SQLITE_NULL ? NAN : sqlite3_column_double(statement, 2);
                     pt.speed = sqlite3_column_double(statement, 3);
                     double hdop = sqlite3_column_double(statement, 4);
                     pt.hdop = hdop == 0 ? NAN : hdop;
@@ -825,7 +826,7 @@ static const NSInteger kDBVersion = 1;
                 NSString *pluginsInfo = [self getPluginsInfo:location];
                 [self insertDataLat:location.coordinate.latitude
                                 lon:location.coordinate.longitude
-                                alt:location.altitude
+                                alt:location.hasAltitude ? location.altitude : NAN
                               speed:location.speed
                                hdop:hdop
                                time:[location.timestamp timeIntervalSince1970]

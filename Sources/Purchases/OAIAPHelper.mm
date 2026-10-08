@@ -46,6 +46,7 @@ static NSString *kPlatformAmazon = @"amazon";
 static NSString *kPlatformHuawei = @"huawei";
 static NSString *kPlatformFastspring = @"fastspring";
 static NSString *const kFreeMapsAvailableKey = @"freeMapsAvailable";
+static NSString *const kFreeMapsMarkerCreatedKey = @"freeMapsMarkerCreated";
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
@@ -184,10 +185,10 @@ static OASubscriptionState *EXPIRED;
     BOOL _backupPurchaseRequested;
 }
 
-+ (NSString *)freeMapsCountPath
++ (NSString *)freeMapsMarkerPath
 {
     NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-    return [libraryPath stringByAppendingPathComponent:[kFreeMapsAvailableKey stringByAppendingPathExtension:@"plist"]];
+    return [libraryPath stringByAppendingPathComponent:@"freeMapsCount.marker"];
 }
 
 + (NSUserDefaults *)freeMapsCountDefaults
@@ -195,64 +196,73 @@ static OASubscriptionState *EXPIRED;
     return [NSUserDefaults standardUserDefaults];
 }
 
-+ (void)saveFreeMapsCount:(int)count
++ (void)initializeFreeMapsCount:(BOOL)mapInstalled
 {
-    @synchronized (self)
+    NSUserDefaults *defaults = [self freeMapsCountDefaults];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [self freeMapsMarkerPath];
+    BOOL markerExists = [fileManager fileExistsAtPath:path];
+    if (!markerExists && ![fileManager createFileAtPath:path contents:nil attributes:nil])
     {
-        NSString *path = [self freeMapsCountPath];
-        if (![@{kFreeMapsAvailableKey: @(count)} writeToFile:path atomically:YES])
-        {
-            NSLog(@"Failed to save free maps count to %@", path);
-            return;
-        }
-
-        // Atomic writes replace the file, so reapply the backup exclusion each time.
-        NSError *error = nil;
-        if (![[NSURL fileURLWithPath:path] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error])
-        {
-            NSLog(@"Failed to exclude free maps count from backup: %@", error);
-            return;
-        }
-
-        [[self freeMapsCountDefaults] removeObjectForKey:kFreeMapsAvailableKey];
+        NSLog(@"Failed to create free maps marker at %@", path);
+        return;
     }
+
+    NSError *error = nil;
+    if (![[NSURL fileURLWithPath:path] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error])
+    {
+        if (!markerExists)
+            [fileManager removeItemAtPath:path error:nil];
+        NSLog(@"Failed to exclude free maps marker from backup: %@", error);
+        return;
+    }
+
+    // The flag survives a backup restore; the marker does not.
+    NSNumber *remaining = [defaults objectForKey:kFreeMapsAvailableKey] ?: @(kFreeMapsAvailableTotal);
+    if (!markerExists && ([defaults boolForKey:kFreeMapsMarkerCreatedKey]
+        || (!mapInstalled && remaining.intValue <= 0)))
+        [defaults setInteger:kFreeMapsAvailableTotal forKey:kFreeMapsAvailableKey];
+
+    // Restore the flag if reset_settings cleared the defaults.
+    [defaults setBool:YES forKey:kFreeMapsMarkerCreatedKey];
 }
 
 + (int) freeMapsAvailable
 {
-    @synchronized (self)
-    {
-        NSNumber *remaining = [NSDictionary dictionaryWithContentsOfFile:[self freeMapsCountPath]][kFreeMapsAvailableKey]
-            ?: [[self freeMapsCountDefaults] objectForKey:kFreeMapsAvailableKey]
-            ?: @(kFreeMapsAvailableTotal);
-        NSLog(@"Free maps available: %d", remaining.intValue);
-        return remaining.intValue;
+    int freeMaps = kFreeMapsAvailableTotal;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
     }
-}
 
-+ (void)initializeFreeMapsCountWithMapsInstalled:(BOOL)mapInstalled
-{
-    @synchronized (self)
-    {
-        int freeMaps = [self freeMapsAvailable];
-        // Restore the allowance only during migration, never after deleting maps later.
-        if (!mapInstalled && freeMaps == 0 && ![[NSFileManager defaultManager] fileExistsAtPath:[self freeMapsCountPath]])
-            freeMaps = kFreeMapsAvailableTotal;
-        [self saveFreeMapsCount:freeMaps];
-    }
+    NSLog(@"Free maps available: %d", freeMaps);
+    return freeMaps;
 }
 
 + (void) decreaseFreeMapsCount
 {
-    [self increaseFreeMapsCount:-1];
+    int freeMaps = kFreeMapsAvailableTotal;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
+    }
+    [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    NSLog(@"Free maps left: %d", freeMaps);
 }
 
 + (void) increaseFreeMapsCount:(int)count
 {
-    @synchronized (self)
-    {
-        [self saveFreeMapsCount:[self freeMapsAvailable] + count];
+    int freeMaps = kFreeMapsAvailableTotal;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
     }
+    freeMaps += count;
+    [[NSUserDefaults standardUserDefaults] setInteger:freeMaps forKey:@"freeMapsAvailable"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
+    NSLog(@"Free maps left: %d", freeMaps);
 }
 
 + (BOOL) isPaidVersion
@@ -709,7 +719,7 @@ static OASubscriptionState *EXPIRED;
 {
     if (TEST_LOCAL_PURCHASE)
     {
-        [self.class saveFreeMapsCount:kFreeMapsAvailableTotal];
+        [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
 
         [_settings.liveUpdatesPurchased set:NO];
         [_settings.osmandProPurchased set:NO];

@@ -34,11 +34,10 @@
 {
     [super layoutSubviews];
 
-    BOOL isRTL = [self isDirectionRTL];
     CGFloat leading = _alignsWithLayoutMargins ? self.directionalLayoutMargins.leading : _dividerInsets.left;
     CGFloat trailing = _alignsWithLayoutMargins ? self.directionalLayoutMargins.trailing : _dividerInsets.right;
     CGFloat w = self.frame.size.width - leading - trailing;
-    _divider.frame = CGRectMake(isRTL ? trailing : leading, _dividerInsets.top, w, _dividerHight);
+    _divider.frame = CGRectMake([self isDirectionRTL] ? trailing : leading, _dividerInsets.top, w, _dividerHight);
 }
 
 - (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection

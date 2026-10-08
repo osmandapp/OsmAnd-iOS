@@ -38,6 +38,7 @@
 #import "OAMapDownloadController.h"
 #import "OAShareMenuActivity.h"
 #import "OAPOI.h"
+#import "OAPOILocationType.h"
 #import "OAWikiMenuViewController.h"
 #import "OAGPXWptViewController.h"
 #import "OAButton.h"
@@ -1164,6 +1165,15 @@ static const NSInteger _buttonsCount = 4;
     [self doLayoutSubviews:YES];
 }
 
+- (BOOL)shouldUseSingleLineAddress
+{
+    // Parking uses this label for the remaining time and parking date on separate lines.
+    if (_sliderView.hidden || _showFull || _showFullScreen || _targetPoint.type == OATargetParking)
+        return NO;
+
+    return ![self.customController getAttributedTypeStr];
+}
+
 - (CGPoint) doLayoutSubviews:(BOOL)adjustOffset
 {
     [self doUpdateUI];
@@ -1210,14 +1220,34 @@ static const NSInteger _buttonsCount = 4;
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     
+    BOOL singleLineAddress = [self shouldUseSingleLineAddress];
+    // For a selected map location, the resolved address replaces the title placeholder.
+    // Keep that title at one line while collapsed as well as the address subtitle.
+    BOOL singleLineTitle = singleLineAddress && _targetPoint.type == OATargetPOI
+        && [_targetPoint.targetObj isKindOfClass:OAPOI.class]
+        && [((OAPOI *)_targetPoint.targetObj).type isKindOfClass:OAPOILocationType.class]
+        && ([_targetPoint.title isEqualToString:OALocalizedString(@"map_no_address")]
+            || [_targetPoint.title isEqualToString:_targetPoint.titleAddress]);
+    _addressLabel.numberOfLines = singleLineTitle ? 1 : 0;
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
+    CGFloat addressHeight = singleLineTitle
+        ? ceil(_addressLabel.font.lineHeight)
+        : [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
     _addressLabel.frame = CGRectMake(itemsX, topLabelY, labelPreferredWidth, addressHeight);
     if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
+    // Reserve one line in the collapsed menu so an asynchronously loaded address cannot
+    // change the menu height. Allow wrapping after expansion to show the full address.
+    _coordinateLabel.numberOfLines = singleLineAddress ? 1 : 0;
     CGFloat coordinateHeight;
-    if (_coordinateLabel.attributedText)
+    if (singleLineAddress)
+    {
+        UIFont *typeFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        UIFont *addressFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+        coordinateHeight = ceil(MAX(typeFont.lineHeight, addressFont.lineHeight));
+    }
+    else if (_coordinateLabel.attributedText)
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.attributedText width:labelPreferredWidth].height;
     else
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
@@ -1831,6 +1861,8 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         self.addressStr = _targetPoint.titleAddress;
+        // Restore the default font when reusing an attributed subtitle for plain text.
+        _coordinateLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     }
         
     [_coordinateLabel setText:self.addressStr];

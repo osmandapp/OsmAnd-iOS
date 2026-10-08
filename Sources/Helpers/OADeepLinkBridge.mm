@@ -64,7 +64,7 @@ static NSInteger const kLocalResourcesScope = 1;
 + (OATargetPoint *)unknownTargetPointWithLat:(double)lat lon:(double)lon rootViewController:(OARootViewController *)rootViewController
 {
     OAMapViewController *mapViewController = [rootViewController.mapPanel mapViewController];
-    return [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+    return [mapViewController.mapLayers.contextMenuLayer unknownTargetPoint:lat longitude:lon];
 }
 
 + (BOOL)isMapsAndResourcesController:(UIViewController *)controller

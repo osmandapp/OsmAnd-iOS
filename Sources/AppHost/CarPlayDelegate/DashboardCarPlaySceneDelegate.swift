@@ -13,12 +13,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         isForegroundScene = true
         configureScene()
     }
-    
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        guard mapVC != nil else { return }
-        startObservingMapViewportSettings()
-        updateMapViewport()
-    }
 
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")

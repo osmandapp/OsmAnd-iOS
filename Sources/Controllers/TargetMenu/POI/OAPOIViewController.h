@@ -14,6 +14,8 @@ static NSString * OTHER_MAP_CATEGORY = @"Other";
 
 @interface OAPOIViewController : OATransportStopsBaseController
 
+@property (nonatomic) NSSet<NSString *> *genericFallbackKeys;
+
 - (id) initWithPOI:(OAPOI *)poi;
 
 - (void)setObject:(id)object;

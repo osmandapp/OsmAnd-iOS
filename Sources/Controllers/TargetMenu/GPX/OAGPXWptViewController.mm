@@ -75,8 +75,20 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     NSString *originName = _wpt.getAmenityOriginName;
     if (originName && originName.length > 0)
         _originObject = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
-    if (!_originObject)
+    if (_originObject)
+    {
+        // the map amenity replaces the point's own tags; keep its custom ones, as Android merges both
+        NSDictionary<NSString *, NSString *> *extensions = [_wpt.point getExtensionsToRead];
+        for (NSString *key in [AmenityUIHelper storedExtensionFallbackKeys:extensions])
+        {
+            if (![_originObject getAdditionalInfo:key])
+                [_originObject setAdditionalInfo:key value:extensions[key]];
+        }
+    }
+    else
+    {
         _originObject = [_wpt getAmenity];
+    }
 }
 
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -132,6 +144,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI:_originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
+        builder.genericFallbackKeys = [AmenityUIHelper storedExtensionFallbackKeys:[_wpt.point getExtensionsToRead]];
         NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
         [builder buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];

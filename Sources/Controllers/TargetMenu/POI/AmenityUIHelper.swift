@@ -25,7 +25,8 @@ final class AmenityUIHelper: NSObject {
     // values from parent class MenuBuilder - base ContextMenuVC class
     var showDefaultTags = false
     var matchWidthDivider = false // show separator to full screen with
-    
+    var genericFallbackKeys: Set<String> = []
+
     private let helper: OAPOIHelper
     
     private var additionalInfo: AdditionalInfoBundle
@@ -339,6 +340,20 @@ final class AmenityUIHelper: NSObject {
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
             let translation = OAPOIHelper.sharedInstance().translation(cleanValue, withDefault: false) ?? ""
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
+        } else if genericFallbackKeys.contains(key) {
+            // a custom GPX value is user data: show it as stored, do not translate it as a POI key
+            let displayKey = Self.genericFallbackDisplayKey(key)
+            pType = OAPOIType(name: displayKey, category: poiCategory)
+            pType?.isText = true
+            pType?.order = Self.defaultPoiTypeOrder
+            pType?.nameLocalized = helper.getPhrase(byName: displayKey, withDefatultValue: false)
+                ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
+            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: cleanValue, subtype: subtype)
+            rowParamsBuilder.iconName = Self.defaultAmenityIconName
+            if Self.looksLikePhoneNumber(cleanValue) {
+                rowParamsBuilder.isPhoneNumber = true
+            }
         } else {
             return nil // skip non-translatable NON-poiType tags
         }
@@ -415,6 +430,29 @@ final class AmenityUIHelper: NSObject {
         return createPoiAdditionalInfoRow(key: headerKey, value: headerValue ?? "", collapsableView: collapsableView)
     }
     
+    // keys from an external GPX namespace ("test:country", "gpxx:city"); unqualified and OsmAnd-namespace keys are OsmAnd's own fields
+    static func storedExtensionFallbackKeys(_ extensions: [String: String]) -> Set<String> {
+        Set(extensions.keys.filter { key in
+            guard let colon = key.firstIndex(of: ":"), colon > key.startIndex else { return false }
+            return !key.hasPrefix(AMENITY_PREFIX) && !key.hasPrefix(OSM_PREFIX_KEY)
+                && !key.hasPrefix(GpxUtilities.shared.OSMAND_EXTENSIONS_PREFIX)
+                && !key.hasPrefix(GpxUtilities.shared.GPXTPX_PREFIX)
+        })
+    }
+
+    private static func genericFallbackDisplayKey(_ key: String) -> String {
+        guard let colon = key.firstIndex(of: ":"), colon > key.startIndex else { return key }
+        return String(key[key.index(after: colon)...])
+    }
+
+    // the order poi_types.xml gives a type without an explicit one; Android sorts generic rows with it
+    private static let defaultPoiTypeOrder: Int32 = 90
+
+    // Android links such values through Linkify; the row cell here links only isPhoneNumber rows
+    private static func looksLikePhoneNumber(_ value: String) -> Bool {
+        value.range(of: "^\\+?[0-9(][0-9 ().-]{5,}[0-9]$", options: .regularExpression) != nil
+    }
+
     private func isKeyToSkip(key: String) -> Bool {
         return key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||
             key == WIKI_PHOTO || key == WIKIDATA_TAG || key == WIKIMEDIA_COMMONS_TAG || key == "image" || key == "mapillary" || key == "subway_region" ||

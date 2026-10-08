@@ -255,6 +255,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:self.infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
     _amenityUIHelper.showDefaultTags = self.showDefaultTags;
+    if (self.genericFallbackKeys)
+        _amenityUIHelper.genericFallbackKeys = self.genericFallbackKeys;
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal];
     [rows addObjectsFromArray:buildedRows];
 }

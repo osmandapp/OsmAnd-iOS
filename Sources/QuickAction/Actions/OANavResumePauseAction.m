@@ -59,7 +59,6 @@ static QuickActionType *TYPE;
         [_helper setPauseNavigation:YES];
     }
     [[OAMapViewTrackingUtilities instance] switchToRoutePlanningMode];
-    [[OARootViewController instance].mapPanel updateRouteButton];
     [[OARootViewController instance].mapPanel refreshMap];
 }
 

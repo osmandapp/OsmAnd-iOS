@@ -12,6 +12,7 @@
 #import "CLLocation+Extension.h"
 #import "OAMapLayers.h"
 #import "OAMeasurementEditingContext.h"
+#import "OAAppVersion.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
 #import "OAAddPointCommand.h"
@@ -1707,23 +1708,54 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder
      showOnMap:(BOOL)showOnMap
+    simplified:(BOOL)simplified
     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
 {
-    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:NO onComplete:onComplete];
+    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:NO simplified:simplified onComplete:onComplete];
 }
 
 - (void)saveAsCopy:(NSString *)fileName
             folder:(nullable NSString *)folder
          showOnMap:(BOOL)showOnMap
+        simplified:(BOOL)simplified
         onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
 {
-    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:YES onComplete:onComplete];
+    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:YES simplified:simplified onComplete:onComplete];
+}
+
+- (nullable OASGpxFile *)exportSimplifiedGpx:(NSString *)trackName editingContext:(OAMeasurementEditingContext *)ctx
+{
+    if ([ctx getPointsCount] == 0)
+        return nil;
+
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    OASTrack *track = [[OASTrack alloc] init];
+    track.name = trackName;
+    [gpx.tracks addObject:track];
+
+    if (ctx.gpxData.gpxFile != nil)
+    {
+        for (OASWptPt *point in [ctx.gpxData.gpxFile getPointsList])
+            [gpx addPointPoint:point];
+    }
+
+    NSMutableArray<OASTrkSegment *> *lines = [NSMutableArray array];
+    [lines addObjectsFromArray:[ctx getBeforeTrkSegmentLine] ?: @[]];
+    [lines addObjectsFromArray:[ctx getAfterTrkSegmentLine] ?: @[]];
+    for (OASTrkSegment *line in lines)
+    {
+        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+        segment.points = line.points;
+        [track.segments addObject:segment];
+    }
+    return gpx;
 }
 
 - (void)performSaveWithFileName:(NSString *)fileName
                          folder:(nullable NSString *)folder
                       showOnMap:(BOOL)showOnMap
                          asCopy:(BOOL)asCopy
+                     simplified:(BOOL)simplified
                      onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -1736,7 +1768,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSString *originalGpxPath = [OAUtilities absoluteGpxPathForPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
     PlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
     NSString *trackName = (fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route")).decomposedStringWithCanonicalMapping;
-    OASGpxFile *gpx = [ctx exportGpx:trackName];
+    OASGpxFile *gpx = simplified ? [self exportSimplifiedGpx:trackName editingContext:ctx] : [ctx exportGpx:trackName];
     if (gpx == nil)
     {
         if (onComplete) onComplete(NO, nil);

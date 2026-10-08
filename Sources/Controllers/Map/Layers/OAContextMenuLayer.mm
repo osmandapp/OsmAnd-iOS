@@ -531,7 +531,7 @@
         [OsmAndApp instance].mapMode = OAMapModeFree;
         CLLocationCoordinate2D coord = [self getTouchPointCoord:touchPoint];
         OATargetPoint *unknownTargetPoint = [self getUnknownTargetPoint:coord.latitude longitude:coord.longitude];
-        [[OARootViewController instance].mapPanel showContextMenu:unknownTargetPoint];
+        [[OARootViewController instance].mapPanel showContextMenuWithPoints:@[unknownTargetPoint]];
         return YES;
         
     }

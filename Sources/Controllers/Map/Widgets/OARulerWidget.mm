@@ -47,6 +47,7 @@
 
 static const double kProjectedStepSlack = 4.0;
 static const double kMinProjectedStep = 24.0;
+static const int kPolarCenterSearchIterations = 32;
 
 static double maxGlobeDistance()
 {
@@ -58,6 +59,12 @@ static double earthRadius()
 {
     static const double radius = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI);
     return radius;
+}
+
+static double maxProjectableGlobeLatitude()
+{
+    static const double latitude = qRadiansToDegrees(atan(sinh(2 * M_PI)));
+    return latitude;
 }
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
@@ -488,11 +495,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
         NSMutableArray<NSMutableArray<NSValue *> *> *arrays = [NSMutableArray array];
         NSMutableArray<NSValue *> *points = [NSMutableArray array];
-        auto centerLatLon = [self getCenterLatLon];
-        
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
-            auto latLon = [self calculateDestinationPoint:centerLatLon distance:distance bearing:a];
+            auto latLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:a];
             CGPoint screenPoint;
             BOOL projected = [self convertLatLon:latLon toScreenPoint:&screenPoint];
             // Do not connect points across a gap or a globe projection discontinuity.
@@ -821,7 +826,37 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (OsmAnd::LatLon) getCenterLatLon
 {
-    return OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
+    auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
+    if (!_sphericalMap || ABS(centerLatLon.latitude) < MAX_LATITUDE_KEY)
+        return centerLatLon;
+    return [self calculatePolarCenter:centerLatLon];
+}
+
+- (OsmAnd::LatLon)calculatePolarCenter:(OsmAnd::LatLon)boundaryCenter
+{
+    CGPoint centerPoint = [self getCenterPoint];
+    double sign = boundaryCenter.latitude > 0 ? 1 : -1;
+    double lower = MAX_LATITUDE_KEY;
+    double upper = maxProjectableGlobeLatitude();
+    for (int i = 0; i < kPolarCenterSearchIterations; i++)
+    {
+        double third = (upper - lower) / 3;
+        OsmAnd::LatLon lowerCandidate(sign * (lower + third), boundaryCenter.longitude);
+        OsmAnd::LatLon upperCandidate(sign * (upper - third), boundaryCenter.longitude);
+        if ([self screenDistanceFrom:centerPoint to:lowerCandidate] < [self screenDistanceFrom:centerPoint to:upperCandidate])
+            upper -= third;
+        else
+            lower += third;
+    }
+    return OsmAnd::LatLon(sign * (lower + upper) / 2, boundaryCenter.longitude);
+}
+
+- (double)screenDistanceFrom:(CGPoint)point to:(OsmAnd::LatLon)latLon
+{
+    CGPoint screenPoint;
+    if (![self projectGlobeLatLon:latLon toScreenPoint:&screenPoint])
+        return DBL_MAX;
+    return hypot(screenPoint.x - point.x, screenPoint.y - point.y);
 }
 
 - (OsmAnd::PointI) getCenter31
@@ -840,11 +875,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL)convertPoint:(CGPoint)point compensateMapRotation:(BOOL)disableMapRotation toScreenPoint:(CGPoint *)screenPoint
 {
-    auto circleCenterPos31 = _cachedCenter31;
-    auto centerLatLon = _cachedCenterLatLon;
-    CGPoint circleCenterPoint = _cachedCenter;
-
-    [_mapViewController.mapView convert:&_cachedCenter31 toScreen:&circleCenterPoint checkOffScreen:YES];
+    CGPoint circleCenterPoint = [self getCenterPoint];
     
     double dX = circleCenterPoint.x - point.x;
     double dY = circleCenterPoint.y - point.y;
@@ -873,7 +904,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 {
     // Flat maps have no drawable surface beyond the Web Mercator latitude boundary.
     double absoluteLatitude = ABS(latLon.latitude);
-    if (absoluteLatitude > (_sphericalMap ? 90 : MAX_LATITUDE_KEY))
+    if (absoluteLatitude > (_sphericalMap ? maxProjectableGlobeLatitude() : MAX_LATITUDE_KEY))
         return NO;
 
     OAMapRendererView *mapView = _mapViewController.mapView;
@@ -883,18 +914,19 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
     }
 
-    BOOL projected;
-    if (absoluteLatitude > MAX_LATITUDE_KEY)
+    return [self projectGlobeLatLon:latLon toScreenPoint:screenPoint] && [self isVisibleOnGlobe:latLon];
+}
+
+- (BOOL)projectGlobeLatLon:(OsmAnd::LatLon)latLon toScreenPoint:(CGPoint *)screenPoint
+{
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    if (ABS(latLon.latitude) > MAX_LATITUDE_KEY)
     {
         auto pos31 = [self.class calculateGlobePoint31:latLon];
-        projected = [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
+        return [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
     }
-    else
-    {
-        auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        projected = [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
-    }
-    return projected && [self isVisibleOnGlobe:latLon];
+    auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
 }
 
 - (void)updateGlobeHorizon

@@ -175,7 +175,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (BOOL)isCarPlayAvailable;
 
 + (int)freeMapsAvailable;
-+ (void)initializeFreeMapsCountWithMapsInstalled:(BOOL)mapInstalled;
++ (void)initializeFreeMapsCount:(BOOL)mapInstalled;
 + (void)increaseFreeMapsCount:(int)count;
 + (void)decreaseFreeMapsCount;
 

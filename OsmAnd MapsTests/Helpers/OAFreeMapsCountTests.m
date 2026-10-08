@@ -2,14 +2,15 @@
 #import "OAIAPHelper.h"
 
 static NSString *const kCounterKey = @"freeMapsAvailable";
-static NSString *testCounterPath;
+static NSString *const kMarkerCreatedKey = @"freeMapsMarkerCreated";
+static NSString *testMarkerPath;
 static NSUserDefaults *testDefaults;
 
 @interface OAFreeMapsTestHelper : OAIAPHelper
 @end
 
 @implementation OAFreeMapsTestHelper
-+ (NSString *)freeMapsCountPath { return testCounterPath; }
++ (NSString *)freeMapsMarkerPath { return testMarkerPath; }
 + (NSUserDefaults *)freeMapsCountDefaults { return testDefaults; }
 @end
 
@@ -30,93 +31,133 @@ static NSUserDefaults *testDefaults;
     _directory = [NSTemporaryDirectory() stringByAppendingPathComponent:_suiteName];
     XCTAssertTrue([[NSFileManager defaultManager] createDirectoryAtPath:_directory
                                           withIntermediateDirectories:YES attributes:nil error:nil]);
-    testCounterPath = [_directory stringByAppendingPathComponent:@"counter.plist"];
+    testMarkerPath = [_directory stringByAppendingPathComponent:@"freeMapsCount.marker"];
 }
 
 - (void)tearDown
 {
     [testDefaults removePersistentDomainForName:_suiteName];
     testDefaults = nil;
-    testCounterPath = nil;
+    testMarkerPath = nil;
     [[NSFileManager defaultManager] removeItemAtPath:_directory error:nil];
     [super tearDown];
 }
 
-- (void)testFreshInstallAndCounterChanges
+- (void)testFreshInstallCreatesMarker
 {
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 7);
-    [OAFreeMapsTestHelper decreaseFreeMapsCount];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 6);
-    [OAFreeMapsTestHelper increaseFreeMapsCount:3];
-    XCTAssertEqualObjects([NSDictionary dictionaryWithContentsOfFile:testCounterPath][kCounterKey], @9);
+    [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+    XCTAssertNil([testDefaults objectForKey:kCounterKey]);
+    XCTAssertTrue([testDefaults boolForKey:kMarkerCreatedKey]);
+    XCTAssertEqualObjects([NSData dataWithContentsOfFile:testMarkerPath], [NSData data]);
 
     NSNumber *excluded = nil;
-    XCTAssertTrue([[NSURL fileURLWithPath:testCounterPath] getResourceValue:&excluded
+    XCTAssertTrue([[NSURL fileURLWithPath:testMarkerPath] getResourceValue:&excluded
                                                                   forKey:NSURLIsExcludedFromBackupKey error:nil]);
     XCTAssertEqualObjects(excluded, @YES);
 }
 
-- (void)testLegacyZeroWithoutMapsIsReplenished
+- (void)testLegacyExhaustedCounterWithoutMapsIsReplenished
 {
-    [testDefaults setInteger:0 forKey:kCounterKey];
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 7);
-    XCTAssertNil([testDefaults objectForKey:kCounterKey]);
+    for (NSNumber *remaining in @[@0, @(-1), @(-2)])
+    {
+        [testDefaults removePersistentDomainForName:_suiteName];
+        [testDefaults setObject:remaining forKey:kCounterKey];
+        [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+        XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @7);
+        XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testMarkerPath error:nil]);
+    }
 }
 
 - (void)testExhaustedCounterIsPreservedAfterDeletingMaps
 {
-    [testDefaults setInteger:0 forKey:kCounterKey];
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:YES];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 0);
-    XCTAssertNil([testDefaults objectForKey:kCounterKey]);
-
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 0);
-}
-
-- (void)testMigrationPreservesRemainingAndBonusDownloads
-{
-    for (NSNumber *remaining in @[@3, @10, @(-1)])
+    for (NSNumber *remaining in @[@0, @(-1)])
     {
+        [testDefaults removePersistentDomainForName:_suiteName];
         [testDefaults setObject:remaining forKey:kCounterKey];
-        [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-        XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], remaining.intValue);
-        XCTAssertNil([testDefaults objectForKey:kCounterKey]);
-        XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testCounterPath error:nil]);
+        [OAFreeMapsTestHelper initializeFreeMapsCount:YES];
+        XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], remaining);
+
+        [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+        XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], remaining);
+        XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testMarkerPath error:nil]);
     }
 }
 
-- (void)testRestoreAfterMigrationStartsWithSevenDownloads
+- (void)testUpdatePreservesRemainingAndBonusDownloads
 {
-    [testDefaults setInteger:0 forKey:kCounterKey];
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:YES];
-    XCTAssertNil([testDefaults objectForKey:kCounterKey]);
-    // Simulate a restored backup containing neither the file nor the legacy key.
-    XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testCounterPath error:nil]);
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 7);
+    for (NSNumber *remaining in @[@3, @10])
+    {
+        [testDefaults removePersistentDomainForName:_suiteName];
+        [testDefaults setObject:remaining forKey:kCounterKey];
+        [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+        XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], remaining);
+        XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testMarkerPath error:nil]);
+    }
 }
 
-- (void)testFileTakesPriorityOverStaleLegacyCounter
+- (void)testRestoreResetsAnyCounterRegardlessOfInstalledMaps
 {
-    [testDefaults setInteger:3 forKey:kCounterKey];
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    [testDefaults setInteger:0 forKey:kCounterKey];
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 3);
-    XCTAssertNil([testDefaults objectForKey:kCounterKey]);
+    // A restored backup contains the flag and counter, but no marker.
+    [testDefaults setBool:YES forKey:kMarkerCreatedKey];
+    for (NSNumber *mapsInstalled in @[@NO, @YES])
+    {
+        for (NSNumber *remaining in @[@(-2), @0, @3, @10])
+        {
+            [testDefaults setObject:remaining forKey:kCounterKey];
+            [OAFreeMapsTestHelper initializeFreeMapsCount:mapsInstalled.boolValue];
+            XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @7);
+            XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testMarkerPath error:nil]);
+        }
+    }
 }
 
-- (void)testFailedWriteKeepsLegacyCounter
+- (void)testSettingsResetRestoresFlagWithoutResettingCounter
 {
-    testCounterPath = [_directory stringByAppendingPathComponent:@"missing/counter.plist"];
-    [testDefaults setInteger:3 forKey:kCounterKey];
-    [OAFreeMapsTestHelper initializeFreeMapsCountWithMapsInstalled:NO];
-    XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @3);
-    XCTAssertEqual([OAFreeMapsTestHelper freeMapsAvailable], 3);
-    XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:testCounterPath]);
+    [OAFreeMapsTestHelper initializeFreeMapsCount:YES];
+    // reset_settings clears the defaults domain but preserves the counter.
+    [testDefaults removePersistentDomainForName:_suiteName];
+    [testDefaults setInteger:0 forKey:kCounterKey];
+    [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+    XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @0);
+    XCTAssertTrue([testDefaults boolForKey:kMarkerCreatedKey]);
+
+    XCTAssertTrue([[NSFileManager defaultManager] removeItemAtPath:testMarkerPath error:nil]);
+    [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+    XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @7);
+}
+
+- (void)testExistingMarkerBackupExclusionIsRetried
+{
+    [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+    XCTAssertTrue([[NSURL fileURLWithPath:testMarkerPath] setResourceValue:@NO
+                                                                 forKey:NSURLIsExcludedFromBackupKey error:nil]);
+    [testDefaults setInteger:0 forKey:kCounterKey];
+    [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+    XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @0);
+    NSNumber *excluded = nil;
+    XCTAssertTrue([[NSURL fileURLWithPath:testMarkerPath] getResourceValue:&excluded
+                                                                  forKey:NSURLIsExcludedFromBackupKey error:nil]);
+    XCTAssertEqualObjects(excluded, @YES);
+}
+
+- (void)testFailedMarkerCreationPreservesCounterAndFlag
+{
+    NSString *validPath = testMarkerPath;
+    testMarkerPath = [_directory stringByAppendingPathComponent:@"missing/freeMapsCount.marker"];
+    for (NSNumber *restored in @[@NO, @YES])
+    {
+        [testDefaults setBool:restored.boolValue forKey:kMarkerCreatedKey];
+        [testDefaults setInteger:0 forKey:kCounterKey];
+        [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+        XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @0);
+        XCTAssertEqualObjects([testDefaults objectForKey:kMarkerCreatedKey], restored);
+        XCTAssertFalse([[NSFileManager defaultManager] fileExistsAtPath:testMarkerPath]);
+    }
+
+    testMarkerPath = validPath;
+    [OAFreeMapsTestHelper initializeFreeMapsCount:NO];
+    XCTAssertEqualObjects([testDefaults objectForKey:kCounterKey], @7);
+    XCTAssertTrue([testDefaults boolForKey:kMarkerCreatedKey]);
 }
 
 @end

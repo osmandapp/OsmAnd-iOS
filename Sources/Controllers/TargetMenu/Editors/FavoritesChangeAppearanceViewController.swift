@@ -28,6 +28,18 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     private lazy var colorHandler: OAColorCollectionHandler = .init(data: [appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []], isFavoriteList: false)
     private lazy var iconHandler = PoiIconCollectionHandler(isFavoriteList: !isPreset)
     private lazy var shapeHandler = ShapesCollectionHandler(backgroundIconNames: backgroundIconNames, isFavoriteList: true)
+    private lazy var iconAccessibilityLabels: [String: String] = {
+        var labels: [String: String] = [:]
+        for poiType in OAPOIHelper.sharedInstance().poiTypes {
+            if let iconName = poiType.iconName(), labels[iconName] == nil {
+                labels[iconName] = poiType.nameLocalized
+            }
+        }
+        for activity in RouteActivityHelper.shared.getActivities() where labels["mx_" + activity.iconName] == nil {
+            labels["mx_" + activity.iconName] = activity.label
+        }
+        return labels
+    }()
 
     private var hasChanges: Bool {
         let colorChanged = appearance.color != nil && appearance.color != initialAppearance.color
@@ -119,9 +131,11 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         guard let cellType = row.cellType, let cell = tableView.dequeueReusableCell(withIdentifier: cellType) as? OACollectionSingleLineTableViewCell else { return UITableViewCell() }
         cell.disableAnimationsOnStart = true
         cell.selectionStyle = .none
+        cell.isAccessibilityElement = false
         if let cell = cell as? OAColorsPaletteCell {
             cell.hostVC = self
             cell.topLabel.text = row.title
+            cell.topLabel.accessibilityTraits.insert(.header)
             cell.descriptionLabel.text = row.descr
             cell.bottomButton.setTitle(localizedString("shared_string_all_colors"), for: .normal)
             colorHandler.setCollectionView(cell.collectionView)
@@ -135,6 +149,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
             cell.topLabel.font = .preferredFont(forTextStyle: .body)
             cell.topLabel.textColor = .textColorPrimary
             cell.topLabel.text = row.title
+            cell.topLabel.accessibilityTraits.insert(.header)
             cell.descriptionLabel.text = row.descr
             cell.bottomButton.setTitle(localizedString("shared_string_all_icons"), for: .normal)
             iconHandler.setCollectionView(cell.collectionView)
@@ -143,6 +158,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         } else if let cell = cell as? OAShapesTableViewCell {
             cell.shapesDelegate = self
             cell.titleLabel.text = row.title
+            cell.titleLabel.accessibilityTraits.insert(.header)
             cell.descriptionLabel.text = row.descr
             cell.iconNames = backgroundIconNames.map { "bg_point_\($0)" }
             cell.contourIconNames = backgroundIconNames.map { "bg_point_\($0)_contour" }
@@ -198,6 +214,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         iconHandler.regularIconColor = .iconColorSecondary
         iconHandler.setSpacing(spacing: 9)
         iconHandler.setIconName(appearance.iconName ?? "")
+        shapeHandler.delegate = self
     }
 
     private func configureColorCell(_ cell: OAColorsPaletteCell) {
@@ -242,6 +259,7 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
         attachment.image = UIImage(systemName: "chevron.up.chevron.down", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .bold))?.withRenderingMode(.alwaysTemplate)
         attributedTitle.append(NSAttributedString(attachment: attachment))
         button.setAttributedTitle(attributedTitle, for: .normal)
+        button.accessibilityLabel = title
         button.showsMenuAsPrimaryAction = true
         button.menu = menu
     }
@@ -339,6 +357,31 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
 }
 
 extension FavoritesChangeAppearanceViewController: OACollectionCellDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        let label: String
+        let isSelected: Bool
+        if let colorCell = cell as? OAColorsCollectionViewCell, let color = colorCell.colorView.backgroundColor {
+            label = color.accessibilityName
+            isSelected = indexPath == colorHandler.getSelectedIndexPath()
+        } else if collectionView === iconHandler.getCollectionView() {
+            let iconName = iconHandler.iconNamesData[indexPath.section][indexPath.item]
+            let name = iconName.hasPrefix("mx_") ? String(iconName.dropFirst(3)) : iconName
+            let fallbackName = name.hasPrefix("special_") ? String(name.dropFirst(8)) : name
+            label = iconAccessibilityLabels["mx_" + name] ?? OAPOIHelper.sharedInstance().getPhraseByName(fallbackName) ?? fallbackName
+            isSelected = indexPath == iconHandler.getSelectedIndexPath()
+        } else if collectionView === shapeHandler.getCollectionView() {
+            let name = backgroundIconNames[indexPath.item]
+            label = localizedString("shared_string_\(name)")
+            isSelected = appearance.backgroundIconName == name
+        } else {
+            return
+        }
+        
+        cell.isAccessibilityElement = true
+        cell.accessibilityLabel = label
+        cell.accessibilityTraits = isSelected ? [.button, .selected] : .button
+    }
+
     func onCollectionItemSelected(_ indexPath: IndexPath, selectedItem: Any?, collectionView: UICollectionView, shouldDismiss: Bool) {
         if collectionView === colorHandler.getCollectionView() {
             appearance.color = (selectedItem as? PaletteItemSolid ?? colorHandler.getSelectedItem())?.colorInt

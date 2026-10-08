@@ -280,6 +280,13 @@
 
 #pragma mark - UICollectionViewDelegate
 
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id<OACollectionCellDelegate> delegate = _collectionHandler.delegate;
+    if ([delegate respondsToSelector:@selector(collectionView:willDisplayCell:forItemAtIndexPath:)])
+        [delegate collectionView:collectionView willDisplayCell:cell forItemAtIndexPath:indexPath];
+}
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_collectionHandler)

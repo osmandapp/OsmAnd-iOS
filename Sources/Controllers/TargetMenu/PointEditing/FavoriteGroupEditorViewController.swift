@@ -194,7 +194,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         progressHUD = MBProgressHUD.showAdded(to: containerView, animated: false)
         progressHUD?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         progressHUD?.accessibilityViewIsModal = true
-        if isIconNameChanged(favoriteGroup?.iconName) || (updatePoints && lastAppliedIconName != nil && isIconNameChanged(lastAppliedIconName)) {
+        if isIconNameChanged(favoriteGroup?.iconName) || (updatePoints && editIconName.isEmpty) || (updatePoints && lastAppliedIconName != nil && isIconNameChanged(lastAppliedIconName)) {
             OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: editIconName, updatePoints: updatePoints, updateGroupIcon: updateGroupValues, saveImmediately: false) {
                 self.finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
             }

@@ -705,7 +705,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     if (indexPath)
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    if (_isNewItem && [category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY])
+    if ([category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY])
     {
         _selectedIconName = @"";
         self.editIconName = _selectedIconName;

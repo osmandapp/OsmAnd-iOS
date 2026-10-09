@@ -152,7 +152,15 @@ jobs:
           -destination "platform=iOS Simulator,arch=arm64,id=$SIMULATOR_ID" \
           -testLanguage en \
           -testRegion US \
+          -resultBundlePath "$RUNNER_TEMP/ios-tests.xcresult" \
           | xcpretty
+    - name: Upload iOS test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-tests-xcresult
+        path: ${{ runner.temp }}/ios-tests.xcresult
+        if-no-files-found: warn
     - name: Run iOS UI tests
       env:
         LANG: "en_US.UTF-8"
@@ -180,7 +188,15 @@ jobs:
           "-only-testing:OsmAnd MapsUITests" \
           -testLanguage en \
           -testRegion US \
-          | xcpretty 
+          -resultBundlePath "$RUNNER_TEMP/ios-ui-tests.xcresult" \
+          | xcpretty
+    - name: Upload iOS UI test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-ui-tests-xcresult
+        path: ${{ runner.temp }}/ios-ui-tests.xcresult
+        if-no-files-found: warn
     - name: Creating iOS archive
       env:
         LANG: "en_US.UTF-8"

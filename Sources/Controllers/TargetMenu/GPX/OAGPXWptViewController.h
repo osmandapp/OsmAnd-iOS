@@ -19,7 +19,7 @@
 @end
 
 
-@class OAMapViewController;
+@class OAMapViewController, OAPOI;
 
 @interface OAGPXWptViewController : OATargetInfoViewController
 
@@ -29,6 +29,9 @@
 @property (nonatomic, weak) id<OAGPXWptViewControllerDelegate> wptDelegate;
 
 - (instancetype) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly;
+
+// the amenity of the point card: the map amenity with the point's custom tags, or the point's own tags
++ (OAPOI *) cardAmenityForPoint:(OAGpxWptItem *)wpt mapAmenity:(OAPOI *)mapAmenity genericRowKeys:(NSSet<NSString *> *)genericRowKeys;
 
 - (NSString *) getGpxFileName;
 - (NSString *) getItemName;

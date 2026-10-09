@@ -6,3 +6,5 @@
 #import "OAUtilities.h"
 #import "OAPOI.h"
 #import "OAAmenityInfoRow.h"
+#import "OAGpxWptItem.h"
+#import "OAGPXWptViewController.h"

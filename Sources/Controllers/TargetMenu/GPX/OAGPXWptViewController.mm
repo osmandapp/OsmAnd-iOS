@@ -75,23 +75,25 @@ static const NSInteger kOrderWptPointLinkRow = 2;
 - (void) acquireOriginObject
 {
     NSString *originName = _wpt.getAmenityOriginName;
+    OAPOI *mapAmenity = nil;
     if (originName && originName.length > 0)
-        _originObject = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
-    NSDictionary<NSString *, NSString *> *extensions = [_wpt.point getExtensionsToRead];
-    _genericFallbackKeys = [OASAdditionalInfoBundle.companion getGenericRowKeysStoredExtensions:extensions];
-    if (_originObject)
+        mapAmenity = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
+    _genericFallbackKeys = [OASAdditionalInfoBundle.companion getGenericRowKeysStoredExtensions:[_wpt.point getExtensionsToRead]];
+    _originObject = [self.class cardAmenityForPoint:_wpt mapAmenity:mapAmenity genericRowKeys:_genericFallbackKeys];
+}
+
++ (OAPOI *) cardAmenityForPoint:(OAGpxWptItem *)wpt mapAmenity:(OAPOI *)mapAmenity genericRowKeys:(NSSet<NSString *> *)genericRowKeys
+{
+    if (!mapAmenity)
+        return [wpt getAmenity];
+    // keep the point's custom tags, the map amenity has none
+    NSDictionary<NSString *, NSString *> *extensions = [wpt.point getExtensionsToRead];
+    for (NSString *key in genericRowKeys)
     {
-        // keep the point's custom tags, the map amenity has none
-        for (NSString *key in _genericFallbackKeys)
-        {
-            if (![_originObject getAdditionalInfo:key])
-                [_originObject setAdditionalInfo:key value:extensions[key]];
-        }
+        if (![mapAmenity getAdditionalInfo:key])
+            [mapAmenity setAdditionalInfo:key value:extensions[key]];
     }
-    else
-    {
-        _originObject = [_wpt getAmenity];
-    }
+    return mapAmenity;
 }
 
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows

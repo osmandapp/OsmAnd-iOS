@@ -109,13 +109,52 @@ final class AmenityCardRowsTests: XCTestCase {
         XCTAssertNotNil(rows["delivery_yes"], rows.keys.sorted().description)
     }
 
+    // a point saved from a map POI: the card shows the POI found on the map together with the point's custom tags
+    func testMapAmenityKeepsCustomTagsOfThePoint() {
+        let point = WptPt(lat: 50.451145, lon: 30.52157)
+        point.setAmenityOriginName(originName: "Amenity:McDonald's: sustenance:fast_food")
+        let pointTags = point.getExtensionsToWrite()
+        pointTags["test:country"] = "Ukraine"
+        pointTags["test:reference"] = "from the point"
+        let item = OAGpxWptItem.withGpxWpt(point)
+        let keys = genericRowKeys(point.getExtensionsToRead())
+        let mapAmenity = OAPOI.fromTagValue(["amenity_type": "sustenance", "amenity_subtype": "fast_food",
+                                             "osm_tag_phone": "+380441234567", "test:reference": "from the map"],
+                                            privatePrefix: "amenity_", osmPrefix: "osm_tag_")
+
+        let rows = buildRows(OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: mapAmenity, genericRowKeys: keys), keys)
+
+        XCTAssertEqual(rows["test:country"]?.text, "Ukraine")
+        XCTAssertEqual(rows["phone"]?.text, "+380441234567")
+        XCTAssertEqual(rows["test:reference"]?.text, "from the map", "a tag of the map POI is not replaced")
+    }
+
+    func testPointWithoutMapAmenityShowsItsOwnTags() {
+        let point = WptPt(lat: 50.451145, lon: 30.52157)
+        point.getExtensionsToWrite()["test:country"] = "Ukraine"
+        let item = OAGpxWptItem.withGpxWpt(point)
+        let keys = genericRowKeys(point.getExtensionsToRead())
+
+        let rows = buildRows(OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: nil, genericRowKeys: keys), keys)
+
+        XCTAssertEqual(rows["test:country"]?.text, "Ukraine")
+    }
+
     private func buildRows(_ extensions: [String: String],
                            genericRowKeysFrom stored: [String: String]? = nil) -> [String: OAAmenityInfoRow] {
-        // OAPOIViewController.buildInternalRows without the map-dependent rows of buildMenu
         let poi = OAPOI.fromTagValue(extensions, privatePrefix: "amenity_", osmPrefix: "osm_tag_")
+        return buildRows(poi, genericRowKeys(stored ?? extensions))
+    }
+
+    private func buildRows(_ poi: OAPOI?, _ genericRowKeys: Set<String>) -> [String: OAAmenityInfoRow] {
+        // OAPOIViewController.buildInternalRows without the map-dependent rows of buildMenu
+        guard let poi else {
+            XCTFail("no amenity")
+            return [:]
+        }
         let helper = AmenityUIHelper(preferredLang: "en",
                                      infoBundle: AdditionalInfoBundle(additionalInfo: poi.getAmenityExtensions(false)))
-        helper.genericFallbackKeys = genericRowKeys(stored ?? extensions)
+        helper.genericFallbackKeys = genericRowKeys
         var result = [String: OAAmenityInfoRow]()
         for row in helper.buildInternal() {
             result[row.key] = row

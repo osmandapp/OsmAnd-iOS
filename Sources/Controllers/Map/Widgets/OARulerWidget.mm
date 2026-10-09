@@ -24,6 +24,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 #import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -43,6 +44,28 @@
 #define ELEVATION_UPDATING_THRESHOLD 2
 #define TARGET31_UPDATING_THRESHOLD 1000000
 #define FRAMES_PER_SECOND 10
+
+static const double kProjectedStepSlack = 4.0;
+static const double kMinProjectedStep = 24.0;
+static const int kPolarCenterSearchIterations = 32;
+
+static double maxGlobeDistance()
+{
+    static const double distance = M_PI * OASKMapUtils.shared.HAVERSINE_EARTH_RADIUS_METERS;
+    return distance;
+}
+
+static double earthRadius()
+{
+    static const double radius = OASKMapUtils.shared.EARTH_CIRCUMFERENCE / (2 * M_PI);
+    return radius;
+}
+
+static double maxProjectableGlobeLatitude()
+{
+    static const double latitude = qRadiansToDegrees(atan(sinh(2 * M_PI)));
+    return latitude;
+}
 
 typedef NS_ENUM(NSInteger, EOATextSide) {
     EOATextSideVertical = 0,
@@ -84,6 +107,13 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     EOAMetricsConstant _cacheMetricSystem;
     EOARulerWidgetMode _cachedRulerMode;
     BOOL _cachedMapMode;
+    BOOL _sphericalMap;
+    BOOL _cachedSphericalMap;
+    BOOL _hasGlobeHorizon;
+    double _globeNadirLatitudeSin;
+    double _globeNadirLatitudeCos;
+    double _globeNadirLongitude;
+    double _globeHorizonCos;
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
@@ -247,6 +277,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
     CGPoint circleCenterPoint = [self getCenterPoint];
     _imageView.center = circleCenterPoint;
+    _sphericalMap = [_settings.sphericalMap get];
+    [self updateGlobeHorizon];
     if ([self rulerModeOn])
     {
         [self updateStyles];
@@ -369,9 +401,63 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cachedMapDensity = _mapViewController.mapView.currentPixelsToMetersScaleFactor;
     double fullMapScale = _cachedMapDensity * kMapRulerMaxWidth * [[UIScreen mainScreen] scale];
     _mapScaleUnrounded = fullMapScale;
-    _roundedDist = [OAOsmAndFormatter calculateRoundedDist:_mapScaleUnrounded];
-    _radius = _mapScale / _cachedMapDensity / [[UIScreen mainScreen] scale];
+    double referenceDistance = fullMapScale;
+    if (_sphericalMap)
+    {
+        double globeDistance = [self globeDistanceForPixelRadius:kMapRulerMaxWidth];
+        if ([self.class isValidGlobeDistance:globeDistance])
+            referenceDistance = globeDistance;
+        if (!isfinite(referenceDistance) || referenceDistance <= 0)
+            referenceDistance = maxGlobeDistance();
+        else
+            referenceDistance = MIN(referenceDistance, maxGlobeDistance());
+    }
+    _roundedDist = [OAOsmAndFormatter calculateRoundedDist:referenceDistance];
+    _radius = _sphericalMap
+        ? MAX(1, kMapRulerMaxWidth * _roundedDist / referenceDistance)
+        : _mapScale / _cachedMapDensity / [[UIScreen mainScreen] scale];
     [self updateText];
+}
+
+- (double)globeDistanceForPixelRadius:(double)pixelRadius
+{
+    // currentPixelsToMetersScaleFactor follows Web Mercator, so calibrate it against the active globe projection.
+    double distance = pixelRadius * _cachedMapDensity * [[UIScreen mainScreen] scale];
+    if (![self.class isValidGlobeDistance:distance])
+        return NAN;
+
+    CGPoint center = [self getCenterPoint];
+    for (int i = 0; i < 2; i++)
+    {
+        double projectedRadius = [self globePixelRadiusForDistance:distance center:center];
+        if (!isfinite(projectedRadius) || projectedRadius < 1)
+            return NAN;
+        double correctedDistance = distance * pixelRadius / projectedRadius;
+        if (![self.class isValidGlobeDistance:correctedDistance])
+            return NAN;
+        distance = correctedDistance;
+    }
+    return distance;
+}
+
+- (double)globePixelRadiusForDistance:(double)distance center:(CGPoint)center
+{
+    if (![self.class isVisibleGlobeDistance:distance])
+        return NAN;
+
+    double radiusSum = 0;
+    int samplesCount = 0;
+    for (int bearing = -90; bearing <= 90; bearing += 180)
+    {
+        auto latLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:bearing];
+        CGPoint screenPoint;
+        if ([self convertLatLon:latLon toScreenPoint:&screenPoint])
+        {
+            radiusSum += hypot(screenPoint.x - center.x, screenPoint.y - center.y);
+            samplesCount++;
+        }
+    }
+    return samplesCount > 0 ? radiusSum / samplesCount : NAN;
 }
 
 - (void) updateText
@@ -380,7 +466,12 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double maxCircleRadius = _maxRadius;
     int i = 1;
     while ((maxCircleRadius -= _radius) > 0)
-        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) withParams:[OsmAndFormatterParams noTrailingZeros]]];
+    {
+        double circleDistance = _roundedDist * i++;
+        if (_sphericalMap && ![self.class isVisibleGlobeDistance:circleDistance])
+            break;
+        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:circleDistance withParams:[OsmAndFormatterParams noTrailingZeros]]];
+    }
 }
 
 - (void) drawRulerCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
@@ -389,7 +480,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     
     NSString *text = _cacheDistances[circleNumber - 1];
     double circleRadius = _radius * circleNumber;
-    NSArray<NSValue *> *textCoords = [self calculateTextCoords:text rightOrBottomText:text drawingTextRadius:circleRadius center:center];
+    NSArray<id> *textCoords = [self calculateTextCoords:text rightOrBottomText:text drawingTextRadius:circleRadius center:center];
     [self drawTextCoords: text textCoords:textCoords font:_font];
 }
 
@@ -398,26 +489,25 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     if (!_mapViewController.zoomingByGesture)
     {
         double circleRadius = _radius * circleNumber;
+        double distance = [self distanceForPixelRadius:circleRadius];
+        if (_sphericalMap && ![self.class isVisibleGlobeDistance:distance])
+            return;
+
         NSMutableArray<NSMutableArray<NSValue *> *> *arrays = [NSMutableArray array];
         NSMutableArray<NSValue *> *points = [NSMutableArray array];
-        auto centerLatLon = [self getCenterLatLon];
-        
         for (int a = -180; a <= 180; a+= CIRCLE_ANGLE_STEP)
         {
-            double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
-            auto latLon = OsmAnd::Utilities::rhumbDestinationPoint(centerLatLon, circleRadius * pixelDensity, a);
-            if (ABS(latLon.latitude) > 90)
+            auto latLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:a];
+            CGPoint screenPoint;
+            BOOL projected = [self convertLatLon:latLon toScreenPoint:&screenPoint];
+            // Do not connect points across a gap or a globe projection discontinuity.
+            if (points.count > 0 && (!projected || [self isProjectionDiscontinuity:points.lastObject.CGPointValue currentPoint:screenPoint pixelRadius:circleRadius]))
             {
-                if (points.count > 0)
-                {
-                    [arrays addObject:points];
-                    points = [NSMutableArray array];
-                }
-                continue;
+                [arrays addObject:points];
+                points = [NSMutableArray array];
             }
-            
-            CGPoint screenPoint = [self latLonToScreenPoint:latLon];
-            [points addObject:[NSValue valueWithCGPoint:screenPoint]];
+            if (projected)
+                [points addObject:[NSValue valueWithCGPoint:screenPoint]];
         }
         if (points.count > 0)
             [arrays addObject:points];
@@ -430,20 +520,18 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     }
 }
 
-- (void) drawTextCoords:(NSString *)text textCoords:(NSArray<NSValue *> *)textCoords font:(UIFont *)font
+- (void)drawTextCoords:(NSString *)text textCoords:(NSArray<id> *)textCoords font:(UIFont *)font
 {
     NSAttributedString *distString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:nil strokeWidth:0 alignment:NSTextAlignmentCenter];
     NSAttributedString *distShadowString = [OAUtilities createAttributedString:text font:font color:_textColor strokeColor:_textShadowColor strokeWidth:_strokeWidthText alignment:NSTextAlignmentCenter];
     
-    if (textCoords.count > 0 && textCoords[0])
+    for (NSUInteger i = 0; i < MIN(textCoords.count, 2); i++)
     {
-        [distShadowString drawAtPoint:CGPointMake(textCoords[0].CGPointValue.x, textCoords[0].CGPointValue.y)];
-        [distString drawAtPoint:CGPointMake(textCoords[0].CGPointValue.x, textCoords[0].CGPointValue.y)];
-    }
-    if (textCoords.count > 1 && textCoords[1])
-    {
-        [distShadowString drawAtPoint:CGPointMake(textCoords[1].CGPointValue.x, textCoords[1].CGPointValue.y)];
-        [distString drawAtPoint:CGPointMake(textCoords[1].CGPointValue.x, textCoords[1].CGPointValue.y)];
+        if (![textCoords[i] isKindOfClass:NSValue.class])
+            continue;
+        CGPoint textCoord = [textCoords[i] CGPointValue];
+        [distShadowString drawAtPoint:textCoord];
+        [distString drawAtPoint:textCoord];
     }
 }
 
@@ -467,7 +555,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return @[ [NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
 }
 
-- (NSArray<NSValue *> *) calculateTextCoords:(NSString *)topOrLeftText rightOrBottomText:(NSString *)rightOrBottomText drawingTextRadius:(double)drawingTextRadius center:(CGPoint)center
+- (NSArray<id> *)calculateTextCoords:(NSString *)topOrLeftText rightOrBottomText:(NSString *)rightOrBottomText drawingTextRadius:(double)drawingTextRadius center:(CGPoint)center
 {
     CGSize boundsDistance;
     CGSize boundsHeading;
@@ -487,14 +575,21 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         topOrLeftCoordinate.y = center.y - drawingTextRadius - boundsHeading.height / 2;
         rightOrBottomCoordinate.x = center.x - boundsDistance.width / 2;
         rightOrBottomCoordinate.y = center.y + drawingTextRadius - boundsDistance.height / 2;
-        return @[[NSValue valueWithCGPoint:[self screenPointFromPoint:topOrLeftCoordinate compensateMapRotation:YES]], [NSValue valueWithCGPoint:[self screenPointFromPoint:rightOrBottomCoordinate compensateMapRotation:YES]]];
+        CGPoint topOrLeftScreenPoint, rightOrBottomScreenPoint;
+        BOOL hasTopOrLeft = [self convertPoint:topOrLeftCoordinate compensateMapRotation:YES toScreenPoint:&topOrLeftScreenPoint];
+        BOOL hasRightOrBottom = [self convertPoint:rightOrBottomCoordinate compensateMapRotation:YES toScreenPoint:&rightOrBottomScreenPoint];
+        return @[hasTopOrLeft ? [NSValue valueWithCGPoint:topOrLeftScreenPoint] : NSNull.null,
+                 hasRightOrBottom ? [NSValue valueWithCGPoint:rightOrBottomScreenPoint] : NSNull.null];
     }
     else if (_textSide == EOATextSideHorizontal)
     {
-        topOrLeftCoordinate.x = center.x - drawingTextRadius - boundsHeading.width;
-        topOrLeftCoordinate.y = center.y - boundsHeading.height / 2;
-        rightOrBottomCoordinate.x = center.x + drawingTextRadius;
-        rightOrBottomCoordinate.y = center.y - boundsDistance.height / 2;
+        CGPoint leftScreenPoint = CGPointZero, rightScreenPoint = CGPointZero;
+        BOOL hasLeft = [self convertPoint:CGPointMake(center.x - drawingTextRadius, center.y) compensateMapRotation:YES toScreenPoint:&leftScreenPoint];
+        BOOL hasRight = [self convertPoint:CGPointMake(center.x + drawingTextRadius, center.y) compensateMapRotation:YES toScreenPoint:&rightScreenPoint];
+        CGPoint leftTextPoint = CGPointMake(leftScreenPoint.x - boundsHeading.width, leftScreenPoint.y - boundsHeading.height / 2);
+        CGPoint rightTextPoint = CGPointMake(rightScreenPoint.x, rightScreenPoint.y - boundsDistance.height / 2);
+        return @[hasLeft ? [NSValue valueWithCGPoint:leftTextPoint] : NSNull.null,
+                 hasRight ? [NSValue valueWithCGPoint:rightTextPoint] : NSNull.null];
     }
     return @[[NSValue valueWithCGPoint:topOrLeftCoordinate], [NSValue valueWithCGPoint:rightOrBottomCoordinate]];
 }
@@ -523,7 +618,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double offset = _textSide == EOATextSideHorizontal ? 5 : 20;
     double drawingTextRadius = radiusLength + offset;
     
-    NSArray<NSValue *> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
+    NSArray<id> *textCoords = [self calculateTextCoords:heading rightOrBottomText:distance drawingTextRadius:drawingTextRadius center:center];
     [self drawTextCoords: heading textCoords:@[textCoords[0]] font:_boldFont];
     [self drawTextCoords: distance textCoords:@[textCoords[1]] font:_font];
 }
@@ -551,24 +646,33 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             CGFloat startY = center.y + y * (radiusLength - shortLineMargin);
             CGFloat stopY = center.y + y * (radiusLength - shortLineMargin - shortLineHeight);
 
-            CGPoint startScreenPoint = [self screenPointFromPoint:CGPointMake(center.x, startY)];
-            CGPoint stopScreenPoint = [self screenPointFromPoint:CGPointMake(center.x, stopY)];
-            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
+            CGPoint startScreenPoint, stopScreenPoint;
+            if ([self convertPoint:CGPointMake(center.x, startY) toScreenPoint:&startScreenPoint]
+                && [self convertPoint:CGPointMake(center.x, stopY) toScreenPoint:&stopScreenPoint])
+            {
+                [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
+                [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
+            }
         }
         else
         {
-            CGPoint startScreenPoint = [self screenPointFromPoint:CGPointMake(lineStartX, lineStartY)];
-            CGPoint stopScreenPoint = [self screenPointFromPoint:CGPointMake(lineStopX, lineStopY)];
-            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
+            CGPoint startScreenPoint, stopScreenPoint;
+            if ([self convertPoint:CGPointMake(lineStartX, lineStartY) toScreenPoint:&startScreenPoint]
+                && [self convertPoint:CGPointMake(lineStopX, lineStopY) toScreenPoint:&stopScreenPoint])
+            {
+                [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
+                [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_circleColor strokeWidth:_strokeWidth inContext:ctx];
+            }
         }
         if (i % 9 == 0 && i != 18)
         {
-            CGPoint startScreenPoint = [self screenPointFromPoint:CGPointMake(lineStartX, lineStartY)];
-            CGPoint stopScreenPoint = [self screenPointFromPoint:CGPointMake(lineStopX, lineStopY)];
-            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
-            [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
+            CGPoint startScreenPoint, stopScreenPoint;
+            if ([self convertPoint:CGPointMake(lineStartX, lineStartY) toScreenPoint:&startScreenPoint]
+                && [self convertPoint:CGPointMake(lineStopX, lineStopY) toScreenPoint:&stopScreenPoint])
+            {
+                [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_textShadowColor strokeWidth:_strokeWidth*3 inContext:ctx];
+                [self drawLineFrom:startScreenPoint stopPoint:stopScreenPoint color:_cardinalLinesColor strokeWidth:_strokeWidth inContext:ctx];
+            }
         }
     }
 }
@@ -598,7 +702,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             CGFloat textHeight = cardinalString.size.height;
             
             double textRadius = radiusLength - textMargin;
-            CGPoint point = [self getPointFromCenterByRadius:textRadius angle: -i*5 + 90];
+            CGPoint point;
+            if (![self convertRadius:textRadius angle:-i*5 + 90 toScreenPoint:&point])
+                continue;
             [cardinalShadowString drawAtPoint:CGPointMake(point.x - textWidth / 2, point.y - textHeight / 2)];
             [cardinalString drawAtPoint:CGPointMake(point.x - textWidth / 2, point.y - textHeight / 2)];
         }
@@ -679,17 +785,20 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double radians = [self toRadians:zeroAngle];
     CGFloat firstPointX = center.x + cos(radians) * (radius + headOffsesFromRadius);
     CGFloat firstPointY = center.y + sin(radians) * (radius + headOffsesFromRadius);
-    CGPoint firstScreenPoint = [self screenPointFromPoint:CGPointMake(firstPointX, firstPointY)];
     
     double radians2 = [self toRadians:zeroAngle + triangleHeadAngle / 2 + 180];
     CGFloat secondPointX = firstPointX + cos(radians2) * triangleSideLength;
     CGFloat secondPointY = firstPointY + sin(radians2) * triangleSideLength;
-    CGPoint secondScreenPoint = [self screenPointFromPoint:CGPointMake(secondPointX, secondPointY)];
     
     double radians3 = [self toRadians:zeroAngle - triangleHeadAngle / 2 + 180];
     CGFloat thirdPointX = firstPointX + cos(radians3) * triangleSideLength;
     CGFloat thirdPointY = firstPointY + sin(radians3) * triangleSideLength;
-    CGPoint thirdScreenPoint = [self screenPointFromPoint:CGPointMake(thirdPointX, thirdPointY)];
+    
+    CGPoint firstScreenPoint, secondScreenPoint, thirdScreenPoint;
+    if (![self convertPoint:CGPointMake(firstPointX, firstPointY) toScreenPoint:&firstScreenPoint]
+        || ![self convertPoint:CGPointMake(secondPointX, secondPointY) toScreenPoint:&secondScreenPoint]
+        || ![self convertPoint:CGPointMake(thirdPointX, thirdPointY) toScreenPoint:&thirdScreenPoint])
+        return;
     
     [_textShadowColor set];
     CGContextSetLineWidth(ctx, _strokeWidth*2);
@@ -717,7 +826,37 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (OsmAnd::LatLon) getCenterLatLon
 {
-    return OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
+    auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
+    if (!_sphericalMap || ABS(centerLatLon.latitude) < MAX_LATITUDE_KEY)
+        return centerLatLon;
+    return [self calculatePolarCenter:centerLatLon];
+}
+
+- (OsmAnd::LatLon)calculatePolarCenter:(OsmAnd::LatLon)boundaryCenter
+{
+    CGPoint centerPoint = [self getCenterPoint];
+    double sign = boundaryCenter.latitude > 0 ? 1 : -1;
+    double lower = MAX_LATITUDE_KEY;
+    double upper = maxProjectableGlobeLatitude();
+    for (int i = 0; i < kPolarCenterSearchIterations; i++)
+    {
+        double third = (upper - lower) / 3;
+        OsmAnd::LatLon lowerCandidate(sign * (lower + third), boundaryCenter.longitude);
+        OsmAnd::LatLon upperCandidate(sign * (upper - third), boundaryCenter.longitude);
+        if ([self screenDistanceFrom:centerPoint to:lowerCandidate] < [self screenDistanceFrom:centerPoint to:upperCandidate])
+            upper -= third;
+        else
+            lower += third;
+    }
+    return OsmAnd::LatLon(sign * (lower + upper) / 2, boundaryCenter.longitude);
+}
+
+- (double)screenDistanceFrom:(CGPoint)point to:(OsmAnd::LatLon)latLon
+{
+    CGPoint screenPoint;
+    if (![self projectGlobeLatLon:latLon toScreenPoint:&screenPoint])
+        return DBL_MAX;
+    return hypot(screenPoint.x - point.x, screenPoint.y - point.y);
 }
 
 - (OsmAnd::PointI) getCenter31
@@ -729,18 +868,14 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     return target31;
 }
 
-- (CGPoint) screenPointFromPoint:(CGPoint)point
+- (BOOL)convertPoint:(CGPoint)point toScreenPoint:(CGPoint *)screenPoint
 {
-    return [self screenPointFromPoint:point compensateMapRotation:false];
+    return [self convertPoint:point compensateMapRotation:NO toScreenPoint:screenPoint];
 }
 
-- (CGPoint) screenPointFromPoint:(CGPoint)point compensateMapRotation:(BOOL)disableMapRotation
+- (BOOL)convertPoint:(CGPoint)point compensateMapRotation:(BOOL)disableMapRotation toScreenPoint:(CGPoint *)screenPoint
 {
-    auto circleCenterPos31 = _cachedCenter31;
-    auto centerLatLon = _cachedCenterLatLon;
-    CGPoint circleCenterPoint = _cachedCenter;
-
-    [_mapViewController.mapView convert:&_cachedCenter31 toScreen:&circleCenterPoint checkOffScreen:YES];
+    CGPoint circleCenterPoint = [self getCenterPoint];
     
     double dX = circleCenterPoint.x - point.x;
     double dY = circleCenterPoint.y - point.y;
@@ -748,22 +883,127 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double angleFromCenter = [self toDegrees:atan2(dY, dX)] - 90;
     angleFromCenter = disableMapRotation ? angleFromCenter + _cachedMapAzimuth : angleFromCenter;
     
-    return [self getPointFromCenterByRadius:distanceFromCenter angle:angleFromCenter];
+    return [self convertRadius:distanceFromCenter angle:angleFromCenter toScreenPoint:screenPoint];
 }
 
-- (CGPoint) getPointFromCenterByRadius:(double)radius angle:(double)angle
+- (BOOL)convertRadius:(double)radius angle:(double)angle toScreenPoint:(CGPoint *)screenPoint
 {
-    double pixelDensity = _cachedMapDensity * [[UIScreen mainScreen] scale];
-    auto pointLatLon = OsmAnd::Utilities::rhumbDestinationPoint(_cachedCenterLatLon, radius * pixelDensity, angle);
-    return [self latLonToScreenPoint:pointLatLon];
+    double distance = [self distanceForPixelRadius:radius];
+    auto pointLatLon = [self calculateDestinationPoint:_cachedCenterLatLon distance:distance bearing:angle];
+    return [self convertLatLon:pointLatLon toScreenPoint:screenPoint];
 }
 
-- (CGPoint) latLonToScreenPoint:(OsmAnd::LatLon)latLon
+- (double)distanceForPixelRadius:(double)pixelRadius
 {
+    return _sphericalMap && _radius > 0
+        ? _roundedDist * pixelRadius / _radius
+        : pixelRadius * _cachedMapDensity * [[UIScreen mainScreen] scale];
+}
+
+- (BOOL)convertLatLon:(OsmAnd::LatLon)latLon toScreenPoint:(CGPoint *)screenPoint
+{
+    // Flat maps have no drawable surface beyond the Web Mercator latitude boundary.
+    double absoluteLatitude = ABS(latLon.latitude);
+    if (absoluteLatitude > (_sphericalMap ? maxProjectableGlobeLatitude() : MAX_LATITUDE_KEY))
+        return NO;
+
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    if (!_sphericalMap)
+    {
+        auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
+    }
+
+    return [self projectGlobeLatLon:latLon toScreenPoint:screenPoint] && [self isVisibleOnGlobe:latLon];
+}
+
+- (BOOL)projectGlobeLatLon:(OsmAnd::LatLon)latLon toScreenPoint:(CGPoint *)screenPoint
+{
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    if (ABS(latLon.latitude) > MAX_LATITUDE_KEY)
+    {
+        auto pos31 = [self.class calculateGlobePoint31:latLon];
+        return [mapView obtainScreenPointFromPosition:&pos31 toScreen:screenPoint checkOffScreen:YES];
+    }
     auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    CGPoint screenPoint;
-    [_mapViewController.mapView convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
-    return screenPoint;
+    return [mapView convert:&pos31 toScreen:screenPoint checkOffScreen:YES];
+}
+
+- (void)updateGlobeHorizon
+{
+    _hasGlobeHorizon = NO;
+    if (!_sphericalMap)
+        return;
+
+    OAMapRendererView *mapView = _mapViewController.mapView;
+    auto state = mapView.renderer->getState();
+    double elevation = qDegreesToRadians(state.elevationAngle);
+    double cameraHeightAboveTargetPlane = [mapView getCameraHeightInMeters];
+    if (elevation <= 0 || cameraHeightAboveTargetPlane <= 0)
+        return;
+
+    double cameraUp = earthRadius() + cameraHeightAboveTargetPlane;
+    double cameraAside = cameraHeightAboveTargetPlane / tan(elevation);
+    auto targetAngles = OsmAnd::Utilities::getAnglesFrom31(state.target31);
+    OsmAnd::LatLon targetLatLon(qRadiansToDegrees(targetAngles.y), qRadiansToDegrees(targetAngles.x));
+    auto nadir = [self calculateDestinationPoint:targetLatLon distance:atan2(cameraAside, cameraUp) * earthRadius() bearing:state.azimuth + 180];
+    double nadirLatitude = qDegreesToRadians(nadir.latitude);
+    _globeNadirLatitudeSin = sin(nadirLatitude);
+    _globeNadirLatitudeCos = cos(nadirLatitude);
+    _globeNadirLongitude = qDegreesToRadians(nadir.longitude);
+    _globeHorizonCos = earthRadius() / hypot(cameraUp, cameraAside);
+    _hasGlobeHorizon = YES;
+}
+
+- (BOOL)isVisibleOnGlobe:(OsmAnd::LatLon)latLon
+{
+    if (!_hasGlobeHorizon)
+        return YES;
+
+    double latitude = qDegreesToRadians(latLon.latitude);
+    double longitudeDelta = qDegreesToRadians(latLon.longitude) - _globeNadirLongitude;
+    return _globeNadirLatitudeSin * sin(latitude) + _globeNadirLatitudeCos * cos(latitude) * cos(longitudeDelta) > _globeHorizonCos;
+}
+
+- (BOOL) isProjectionDiscontinuity:(CGPoint)previousPoint currentPoint:(CGPoint)currentPoint pixelRadius:(double)pixelRadius
+{
+    double expectedStep = 2 * ABS(pixelRadius) * sin([self toRadians:CIRCLE_ANGLE_STEP] / 2);
+    double maxProjectedStep = MAX(kMinProjectedStep, expectedStep * kProjectedStepSlack);
+    return hypot(currentPoint.x - previousPoint.x, currentPoint.y - previousPoint.y) > maxProjectedStep;
+}
+
+- (OsmAnd::LatLon) calculateDestinationPoint:(OsmAnd::LatLon)center distance:(double)distance bearing:(double)bearing
+{
+    if (!_sphericalMap)
+        return OsmAnd::Utilities::rhumbDestinationPoint(center, distance, bearing);
+
+    double angularDistance = distance / earthRadius();
+    double latRad = [self toRadians:center.latitude];
+    double lonRad = [self toRadians:center.longitude];
+    double bearingRad = [self toRadians:bearing];
+    double destLatRad = asin(sin(latRad) * cos(angularDistance) + cos(latRad) * sin(angularDistance) * cos(bearingRad));
+    double y = sin(bearingRad) * sin(angularDistance) * cos(latRad);
+    double x = cos(angularDistance) - sin(latRad) * sin(destLatRad);
+    double destLon = fmod([self toDegrees:lonRad + atan2(y, x)] + 540, 360) - 180;
+    return OsmAnd::LatLon([self toDegrees:destLatRad], destLon);
+}
+
++ (OsmAnd::PointI) calculateGlobePoint31:(OsmAnd::LatLon)latLon
+{
+    // The globe renderer accepts Point31 y values beyond the Web Mercator tile range;
+    // like the renderer, truncate the extended 64-bit value to the signed Point31 representation.
+    auto location64 = OsmAnd::Utilities::get64FromAngles(OsmAnd::PointD(qDegreesToRadians(latLon.longitude), qDegreesToRadians(latLon.latitude)));
+    return OsmAnd::PointI(static_cast<int32_t>(location64.x), static_cast<int32_t>(location64.y));
+}
+
++ (BOOL) isValidGlobeDistance:(double)distance
+{
+    return isfinite(distance) && distance > 0 && distance <= maxGlobeDistance();
+}
+
++ (BOOL) isVisibleGlobeDistance:(double)distance
+{
+    return [self isValidGlobeDistance:distance] && distance <= maxGlobeDistance() / 2;
 }
 
 - (double) toRadians:(double)degrees
@@ -808,6 +1048,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             [self updateCenterImage];
 
         BOOL modeChanged = _cachedRulerMode != _settings.rulerMode.get;
+        BOOL sphericalMap = [_settings.sphericalMap get];
+        BOOL sphericalMapChanged = _cachedSphericalMap != sphericalMap;
         if (_firstUpdate || (visible && _cachedRulerMode != RULER_MODE_NO_CIRCLES) || centerChanged || viewportChanged || modeChanged)
         {
             _cachedMapDensity = mapRendererView.currentPixelsToMetersScaleFactor;
@@ -839,7 +1081,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
                              || wasElevated
                              || wasRotated
                              || _cachedMapZoom != mapZoom
-                             || modeChanged);
+                             || modeChanged
+                             || sphericalMapChanged);
             
             BOOL compassVisible = _settings.showCompassControlRuler.get && [_mapViewController getMapZoom] > SHOW_COMPASS_MIN_ZOOM;
             double heading = _app.locationServices.lastKnownHeading;
@@ -847,6 +1090,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
             BOOL shouldUpdateCompass = compassVisible && headingChanged;
             
             _cachedCenter2 = centerPoint;
+            _cachedSphericalMap = sphericalMap;
             _cachedWidth = viewSize.width;
             _cachedHeight = viewSize.height;
             _cachedHeading = heading;

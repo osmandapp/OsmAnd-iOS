@@ -16,6 +16,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAPhrasesParser.h"
 #import "OsmAndApp.h"
+#import "OsmAndSharedWrapper.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
 #import "OASearchPoiTypeFilter.h"
@@ -98,12 +99,21 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     return _isInit;
 }
 
+// the point card rows (OASAdditionalInfoBundle) are built in OsmAndShared on its copy of the types
+- (void)initSharedPoiTypes:(NSString *)poiXmlPath
+{
+    if ([OASMapPoiTypes.companion getDefaultNoInit].isInit)
+        return;
+    [OASMapPoiTypes.companion setDefaultTypes:[[OASMapPoiTypes alloc] initWithResourceName:poiXmlPath]];
+}
+
 - (void)readPOI
 {
     NSString *poiXmlPath = [[NSBundle mainBundle] pathForResource:@"poi_types" ofType:@"xml"];
     
     OAPOIParser *parser = [[OAPOIParser alloc] init];
     [parser getPOITypesSync:poiXmlPath];
+    [self initSharedPoiTypes:poiXmlPath];
     _poiTypes = parser.poiTypes;
     _poiTypesByName = parser.poiTypesByName;
     _poiCategories = parser.poiCategories;

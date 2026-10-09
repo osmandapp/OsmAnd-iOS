@@ -6,206 +6,76 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-// analog in android AmenityUIHelper.java
+import OsmAndShared
+
+// analog in android AmenityUIHelper.java: which tags get a row is decided by AdditionalInfoBundle of OsmAndShared
 
 @objcMembers
 final class AmenityUIHelper: NSObject {
-    
+
     static let defaultAmenityIconName = "ic_custom_info_outlined"
-    
-    private static let CUISINE_INFO_ID = COLLAPSABLE_PREFIX + "cuisine"
-    private static let DISH_INFO_ID = COLLAPSABLE_PREFIX + "dish"
+
     private static let US_MAPS_RECREATION_AREA = "us_maps_recreation_area"
-    
+
     private static let NAMES_ROW_KEY = "names_row_key"
     private static let ALT_NAMES_ROW_KEY = "alt_names_row_key"
-    
+
     var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
-    
+
     // values from parent class MenuBuilder - base ContextMenuVC class
-    var showDefaultTags = false
     var matchWidthDivider = false // show separator to full screen with
     var genericFallbackKeys: Set<String> = []
 
     private let helper: OAPOIHelper
-    
+
     private var additionalInfo: AdditionalInfoBundle
-    
+
     private var preferredLang: String
-    private var wikiAmenity: OAPOI?
     private var poiCategory: OAPOICategory?
-    private var poiType: OAPOIType?
+    private var sharedPoiCategory: PoiCategory?
     private var subtype: String?
-    
-    private var cuisineRow: OAAmenityInfoRow?
-    private var poiAdditionalCategories = [String: [OAPOIType]]()
-    private var collectedPoiTypes = [String: [OAPOIType]]()
+
     private var osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self)
-    private var lastBuiltRowIsDescription = false
-    
+
     init(preferredLang: String, infoBundle: AdditionalInfoBundle) {
         self.preferredLang = preferredLang
         self.additionalInfo = infoBundle
         self.helper = OAPOIHelper.sharedInstance()
         super.init()
     }
-    
+
     func initVariables() {
-        poiCategory = nil
-        if let typeTag = additionalInfo.get(POITYPE), !typeTag.isEmpty {
-            poiCategory = helper.getPoiCategory(byName: typeTag)
-        }
-        if poiCategory == nil {
-            poiCategory = helper.otherPoiCategory
-        }
-        
-        subtype = additionalInfo.get(SUBTYPE)
-        cuisineRow = nil
-        poiAdditionalCategories = [:]
-        collectedPoiTypes = [:]
+        sharedPoiCategory = additionalInfo.getCategory()
+        poiCategory = sharedPoiCategory.flatMap { helper.getPoiCategory(byName: $0.getKeyName()) } ?? helper.otherPoiCategory
+        subtype = additionalInfo.get(key: SUBTYPE)
         osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self)
     }
-    
+
     func setPreferredLang(_ lang: String) {
         preferredLang = lang
     }
-    
+
     func buildInternal() -> [OAAmenityInfoRow] {
         initVariables()
         var infoRows = [OAAmenityInfoRow]()
         var descriptions = [OAAmenityInfoRow]()
-        var resultRows = [OAAmenityInfoRow]()
-  
-        let filteredInfo = additionalInfo.getFilteredLocalizedInfo()
-        for entry in filteredInfo {
-            let key = entry.key
-            let value = filteredInfo[key]
-    
-            if let that = helper.getAnyPoiAdditionalType(byKey: key) as? OAPOIType {
-                if that.isHidden {
-                    continue
-                }
-            }
-            if key.contains(WIKIPEDIA_TAG) || key.contains(CONTENT_TAG) || key.contains(SHORT_DESCRIPTION_TAG) || key.contains(WIKI_LANG) {
-                continue
-            }
-            if subtype == ROUTE_ARTICLE && key.contains(DESCRIPTION_TAG) {
-                continue
-            }
-            if key == POI_NAME || kNameTagPrefixes.contains(key) {
-                continue // will be added in buildNamesRow
-            }            
-            
-            var infoRow: OAAmenityInfoRow?
-            if let strValue = value as? String {
-                infoRow = createPoiAdditionalInfoRow(key: key, value: strValue, collapsableView: nil)
-            } else if let value {
-                infoRow = createLocalizedAmenityInfoRow(key: key, value: value)
-            }
-            
-            if let infoRow {
-                if lastBuiltRowIsDescription {
-                    descriptions.append(infoRow)
-                } else if key == CUISINE_TAG {
-                    cuisineRow = infoRow
-                } else if poiType == nil {
-                    infoRows.append(infoRow)
-                }
+
+        let entries = additionalInfo.getVisibleTags(allowNoteTag: osmEditingEnabled,
+                                                    preferredLangs: LocaleHelper.getPreferredLangCandidates(),
+                                                    genericRowKeys: genericFallbackKeys)
+        for case let entry as AmenityTagEntry in entries {
+            guard let row = buildRow(entry) else { continue }
+            if entry.isDescription {
+                descriptions.append(row)
+            } else {
+                infoRows.append(row)
             }
         }
-        
-        if let cuisineRow, !additionalInfo.containsAny([AmenityUIHelper.CUISINE_INFO_ID, AmenityUIHelper.DISH_INFO_ID]) {
-            infoRows.append(cuisineRow)
-        }
-        
-        for entry in additionalInfo.getFilteredInfo() ?? [:] {
-            let key = entry.key
-            let value = entry.value
-            if key.hasPrefix(COLLAPSABLE_PREFIX) {
-                var categoryTypes = [OAPOIType]()
-                
-                if !value.isEmpty {
-                    var sb = ""
-                    let records = value.components(separatedBy: SEPARATOR)
-                    for record in records {
-                        var pt = helper.getPoiAdditionalType(poiCategory, name: record)
-                        if pt == nil {
-                            pt = helper.getAnyPoiAdditionalType(byKey: record) as? OAPOIType
-                        }
-                        if let pt {
-                            categoryTypes.append(pt)
-                            if sb.length > 0 {
-                                sb.append(" • ")
-                            }
-                            sb.append(pt.nameLocalized)
-                        }
-                    }
-                    
-                    guard let pType = categoryTypes.first else { continue }
-                    
-                    var icon: UIImage?
-                    let poiAdditionalCategoryName = pType.poiAdditionalCategory
-                    let poiAdditionalIconName = helper.getPoiAdditionalCategoryIcon(poiAdditionalCategoryName)
-                    
-                    if let poiAdditionalIconName {
-                        icon = getRowIcon(poiAdditionalIconName)
-                    }
-                    if icon == nil, let poiAdditionalCategoryName {
-                        icon = getRowIcon(poiAdditionalCategoryName)
-                    }
-                    if icon == nil, let typeIconKeyName = pType.iconName() {
-                        icon = getRowIcon(typeIconKeyName)
-                    }
-                    if icon == nil {
-                        icon = .icDescription
-                    }
-                    
-                    let cuisineOrDish = key == CUISINE_TAG || key == DISH_TAG
-                    
-                    let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: true, textRow: cuisineOrDish ? cuisineRow : nil, type: poiCategory)
-                    
-                    let row = OAAmenityInfoRow(key: poiAdditionalCategoryName ?? "", icon: icon, textPrefix: pType.poiAdditionalCategoryLocalized, text: sb, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(pType.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
-                    row.collapsed = collapsableView?.collapsed ?? true
-                    infoRows.append(row)
-                }
-            }
-        }
-        
-        if !collectedPoiTypes.isEmpty {
-            for entry in collectedPoiTypes {
-                let poiTypeList = entry.value
-                let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: poiTypeList, poiAdditional: false, textRow: nil, type: poiCategory)
-                var poiCategory = self.poiCategory
-                var sb = ""
-                
-                for pt in poiTypeList {
-                    if sb.length > 0 {
-                        sb.append(" • ")
-                    }
-                    sb.append(pt.nameLocalized)
-                    poiCategory = pt.category
-                }
-                
-                var icon: UIImage?
-                if let poiCategory {
-                    icon = getRowIcon(poiCategory.iconName())
-                    let row = OAAmenityInfoRow(key: poiCategory.name, icon: icon, textPrefix: poiCategory.nameLocalized, text: sb, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: 40, name: poiCategory.name, matchWidthDivider: false, textLinesLimit: 1)
-                    row.collapsed = true
-                    infoRows.append(row)
-                }
-            }
-        }
-        
+
         sortInfoRows(&infoRows)
-        for info in infoRows {
-            resultRows.append(info)
-        }
-        
         sortDescriptionRows(&descriptions)
-        for info in descriptions {
-            resultRows.append(info)
-        }
-        
+        var resultRows = infoRows + descriptions
+
         if let osmPlugin = OAPluginsHelper.getPlugin(OAOsmEditingPlugin.self) as? OAOsmEditingPlugin, osmPlugin.isEnabled() {
             if let info = buildWikiDataRow() {
                 resultRows.append(info)
@@ -214,9 +84,73 @@ final class AmenityUIHelper: NSObject {
 
         return resultRows
     }
-    
+
+    private func buildRow(_ entry: AmenityTagEntry) -> OAAmenityInfoRow? {
+        if entry.collapsableEntryType == AmenityTagEntry.CollapsableEntryType.poiTypeGroup {
+            return buildPoiTypeGroupRow(entry)
+        }
+        // names are shown by buildNamesRow
+        let baseKey = entry.key.components(separatedBy: ":")[0]
+        guard baseKey != POI_NAME && !kNameTagPrefixes.contains(baseKey), let value = entry.value else { return nil }
+        if let localizations = entry.collapsableEntries, !localizations.isEmpty {
+            return buildLocalizedRow(entry, value: value, localizations: localizations)
+        }
+        return createPoiAdditionalInfoRow(key: entry.key, value: value, resolvedType: entry.resolvedType, collapsableView: nil)
+    }
+
+    private func buildPoiTypeGroupRow(_ entry: AmenityTagEntry) -> OAAmenityInfoRow? {
+        let categoryTypes: [OAPOIType] = (entry.collapsablePoiTypes ?? []).compactMap { type in
+            entry.poiAdditional
+                ? helper.getAnyPoiAdditionalType(byKey: type.getKeyName()) as? OAPOIType
+                : helper.getAnyPoiType(byKey: type.getKeyName())
+        }
+        guard let pType = categoryTypes.first else { return nil }
+        let text = categoryTypes.map { $0.nameLocalized }.joined(separator: " • ")
+        let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: entry.poiAdditional, type: poiCategory)
+
+        if entry.poiAdditional {
+            var icon: UIImage?
+            let poiAdditionalCategoryName = pType.poiAdditionalCategory
+            if let poiAdditionalIconName = helper.getPoiAdditionalCategoryIcon(poiAdditionalCategoryName) {
+                icon = getRowIcon(poiAdditionalIconName)
+            }
+            if icon == nil, let poiAdditionalCategoryName {
+                icon = getRowIcon(poiAdditionalCategoryName)
+            }
+            if icon == nil, let typeIconKeyName = pType.iconName() {
+                icon = getRowIcon(typeIconKeyName)
+            }
+            if icon == nil {
+                icon = .icDescription
+            }
+            let row = OAAmenityInfoRow(key: entry.key, icon: icon, textPrefix: pType.poiAdditionalCategoryLocalized, text: text, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(entry.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
+            row.collapsed = collapsableView?.collapsed ?? true
+            return row
+        }
+
+        guard let category = pType.category else { return nil }
+        let row = OAAmenityInfoRow(key: category.name, icon: getRowIcon(category.iconName()), textPrefix: category.nameLocalized, text: text, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(entry.order), name: category.name, matchWidthDivider: false, textLinesLimit: 1)
+        row.collapsed = true
+        return row
+    }
+
+    private func buildLocalizedRow(_ entry: AmenityTagEntry, value: String, localizations: [AmenityTagEntry]) -> OAAmenityInfoRow? {
+        var infoRows = [OAAmenityInfoRow]()
+        for localization in localizations {
+            guard let localizedValue = localization.value, !localizedValue.isEmpty else { continue }
+            let resolvedType = additionalInfo.resolvePoiType(category: sharedPoiCategory, key: localization.key, vl: localizedValue)
+            if let infoRow = createPoiAdditionalInfoRow(key: localization.key, value: localizedValue, resolvedType: resolvedType, collapsableView: nil) {
+                infoRows.append(infoRow)
+            }
+        }
+        sortInfoRows(&infoRows)
+        let collapsableContent = infoRows.map { $0.textPrefix + ": " + $0.text }.joined(separator: "\n\n")
+        let collapsableView = OACollapsableLabelView(text: collapsableContent, collapsed: true)
+        return createPoiAdditionalInfoRow(key: entry.key, value: value, resolvedType: entry.resolvedType, collapsableView: collapsableView)
+    }
+
     func buildWikiDataRow() -> OAAmenityInfoRow? {
-        if let value = additionalInfo.get(WIKIDATA_TAG) {
+        if let value = additionalInfo.get(key: WIKIDATA_TAG) {
             let url = Self.getSocialMediaUrl(key: WIKIDATA_TAG, value: value)
             if let pType = OAPOIHelper.sharedInstance().getAnyPoiAdditionalType(byKey: WIKIDATA_TAG) as? OAPOIType {
                 let rowInfo = OAAmenityInfoRow(key: WIKIDATA_TAG, icon: UIImage.templateImageNamed("ic_custom_wikipedia"), textPrefix: pType.nameLocalized, text: value, hiddenUrl: url, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: true, order: Int(pType.order), name: pType.name, matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
@@ -225,7 +159,7 @@ final class AmenityUIHelper: NSObject {
         }
         return nil
     }
-    
+
     private func sortInfoRows(_ infoRows: inout [OAAmenityInfoRow]) {
         infoRows.sort { (row1: OAAmenityInfoRow, row2: OAAmenityInfoRow) -> Bool in
             if row1.order != row2.order {
@@ -234,7 +168,7 @@ final class AmenityUIHelper: NSObject {
             return row1.typeName.localizedCompare(row2.typeName) == .orderedAscending
         }
     }
-    
+
     private func sortDescriptionRows(_ descriptions: inout [OAAmenityInfoRow]) {
         let langSuffix = ":" + getPreferredMapAppLang()
         var descInPrefLang: OAAmenityInfoRow?
@@ -244,7 +178,7 @@ final class AmenityUIHelper: NSObject {
                 break
             }
         }
-        
+
         if let descInPrefLang {
             if let index = descriptions.firstIndex(of: descInPrefLang) {
                 descriptions.remove(at: index)
@@ -252,12 +186,12 @@ final class AmenityUIHelper: NSObject {
             }
         }
     }
-    
+
     func getPreferredMapAppLang() -> String {
         let lang = OAAppSettings.sharedManager().settingPrefMapLanguage.get()
         return lang.isEmpty ? "en" : lang
     }
-    
+
     static func getSocialMediaUrl(key: String, value: String) -> String? {
         // Remove leading and closing slashes
         let value = value.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -293,149 +227,49 @@ final class AmenityUIHelper: NSObject {
         }
         return nil
     }
-    
+
     private static func isWebUrlLike(_ value: String) -> Bool {
         // java: PatternsCompat.AUTOLINK_WEB_URL()
         OAUtilities.isValidURL(value)
     }
-    
-    private func createPoiAdditionalInfoRow(key: String, value: String, collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
-        guard !isKeyToSkip(key: key) else { return nil }
+
+    private func createPoiAdditionalInfoRow(key: String, value: String, resolvedType: AdditionalInfoBundle.ResolvedPoiType?,
+                                            collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
         let cleanValue = value.replacingNbsp()
-        var pType = fetchPoiAdditionalType(key: key, value: cleanValue)
-        if pType == nil {
-            let altKey = key.replacingOccurrences(of: ":", with: "_")
-            pType = fetchPoiAdditionalType(key: altKey, value: cleanValue)
-        }
-        
-        if let pType, pType.filterOnly {
-            return nil
-        }
-        
-        // filter poi additional categories on this step, they will be processed separately
-        if let pType, !pType.isText {
-            if let categoryName = pType.poiAdditionalCategory, !categoryName.isEmpty {
-                poiAdditionalCategories = computeIfAbsent(dictionary: poiAdditionalCategories, key: categoryName, value: pType)
-                return nil
-            }
-        }
-        
         let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
         rowParamsBuilder.collapsableView = collapsableView
-        
-        if let pType {
-            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
-        } else if let poiType {
-            let category = poiType.category.name
-            if category == OTHER_MAP_CATEGORY {
-                return nil // the "Others" value is already displayed as a title
-            }
-            if let category {
-                collectedPoiTypes = computeIfAbsent(dictionary: collectedPoiTypes, key: category, value: poiType)
-            }
-        } else if showDefaultTags {
-            pType = OAPOIType(name: key, category: poiCategory)
-            pType?.isText = true
-            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            let translation = OAPOIHelper.sharedInstance().translation(cleanValue, withDefault: false) ?? ""
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
-        } else if genericFallbackKeys.contains(key) {
-            // user data, shown as stored
-            let displayKey = Self.genericFallbackDisplayKey(key)
-            pType = OAPOIType(name: displayKey, category: poiCategory)
-            pType?.isText = true
-            pType?.order = 90 // the order OAPOIParser gives a type without one
-            pType?.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
-                ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
-            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: cleanValue, subtype: subtype)
-            rowParamsBuilder.iconName = Self.defaultAmenityIconName
-        } else {
-            return nil // skip non-translatable NON-poiType tags
-        }
+        let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
 
-        // a generic row has the info icon too, so decide by the key, as Android does
-        lastBuiltRowIsDescription = genericFallbackKeys.contains(key) ? key.contains(DESCRIPTION_TAG) : rowParamsBuilder.isDescription()
+        if let additionalType = resolvedType?.additionalType,
+           let pType = helper.getAnyPoiAdditionalType(byKey: additionalType.getKeyName()) as? OAPOIType {
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
+        } else {
+            // a key without a poi type: a generic row of a GPX point or a tag of a category that shows all its tags
+            let useGenericFallback = genericFallbackKeys.contains(key)
+            let displayKey = useGenericFallback ? Self.genericFallbackDisplayKey(key) : key
+            let fallbackType: OAPOIType? = OAPOIType(name: displayKey, category: poiCategory)
+            guard let fallbackType else { return nil }
+            fallbackType.isText = true
+            fallbackType.order = 90 // the order OAPOIParser gives a type without one
+            fallbackType.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
+                ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
+            // a custom GPX value is user data: show it as stored, do not translate it as a POI key
+            let displayValue = useGenericFallback ? cleanValue : helper.translation(cleanValue, withDefault: false) ?? cleanValue
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: fallbackType, key: key, value: displayValue, subtype: subtype)
+            if useGenericFallback {
+                rowParamsBuilder.iconName = Self.defaultAmenityIconName
+            }
+        }
         rowParamsBuilder.matchWidthDivider = !rowParamsBuilder.isDescription() && rowParamsBuilder.isWiki
-        
+
         let param = rowParamsBuilder.build()
         let iconName = param.iconName ?? "ic_custom_info_outlined"
         let icon = OAUtilities.getMxIcon(iconName) ?? UIImage.templateImageNamed(iconName)
-        
+
         let result = OAAmenityInfoRow(key: param.key, icon: icon, textPrefix: param.textPrefix, text: param.text, hiddenUrl: param.hiddenUrl, collapsableView: param.collapsableView, textColor: param.textColor, isWiki: param.isWiki, isText: param.isText, needLinks: param.needLinks, isPhoneNumber: param.isPhoneNumber, isUrl: param.isUrl, order: param.order, name: param.name, matchWidthDivider: param.matchWidthDivider, textLinesLimit: Int32(param.textLinesLimit))
         result.collapsed = true
-        
+
         return result
-    }
-    
-    private func computeIfAbsent(dictionary: [String: [OAPOIType]], key: String, value: OAPOIType) -> [String: [OAPOIType]] {
-        var newDictionary = dictionary
-        if var list = dictionary[key] {
-            list.append(value)
-            newDictionary[key] = list
-        } else {
-            newDictionary[key] = [value]
-        }
-        return newDictionary
-    }
-    
-    private func createLocalizedAmenityInfoRow(key: String, value: Any) -> OAAmenityInfoRow? {
-        guard let map = value as? [String: Any] else { return nil }
-        guard let localizedAdditionalInfo = map["localizations"] as? [String: String] else { return nil }
-        guard !localizedAdditionalInfo.isEmpty else { return nil }
-        
-        let keys = Array(localizedAdditionalInfo.keys)
-        let availableLocales = Array(Self.collectAvailableLocalesFromTags(keys))
-        
-        var headerKey = key
-        if let prefferedLocale = getPreferredLocale(availableLocales) {
-            headerKey = key + ":" + prefferedLocale
-        }
-        var headerValue = localizedAdditionalInfo[headerKey]
-        if headerValue == nil {
-            headerKey = keys[0]
-            headerValue = localizedAdditionalInfo[headerKey]
-        }
-        
-        var collapsableView: OACollapsableView?
-        if !localizedAdditionalInfo.isEmpty {
-            var infoRows: [OAAmenityInfoRow] = []
-            for localizedEntry in localizedAdditionalInfo {
-                let localizedKey = localizedEntry.key
-                let localizedValue = localizedEntry.value
-                
-                if !localizedKey.isEmpty && !localizedValue.isEmpty && headerKey != localizedKey {
-                    if let infoRow = createPoiAdditionalInfoRow(key: localizedKey, value: localizedValue, collapsableView: nil) {
-                        infoRows.append(infoRow)
-                    }
-                }
-            }
-            
-            if infoRows.count > 1 {
-                sortInfoRows(&infoRows)
-            }
-            
-            var collapsableContent = ""
-            for infoRow in infoRows {
-                if !collapsableContent.isEmpty {
-                    collapsableContent += "\n\n"
-                }
-                collapsableContent += infoRow.textPrefix + ": " + infoRow.text
-            }
-            collapsableView = OACollapsableLabelView(text: collapsableContent, collapsed: true)
-        }
-        return createPoiAdditionalInfoRow(key: headerKey, value: headerValue ?? "", collapsableView: collapsableView)
-    }
-    
-    // keys from an external GPX namespace ("test:country", "gpxx:city"); unqualified and OsmAnd-namespace keys are OsmAnd's own fields
-    static func storedExtensionFallbackKeys(_ extensions: [String: String]) -> Set<String> {
-        Set(extensions.keys.filter { key in
-            guard let colon = key.firstIndex(of: ":"), colon > key.startIndex else { return false }
-            return !key.hasPrefix(AMENITY_PREFIX) && !key.hasPrefix(OSM_PREFIX_KEY)
-                && !key.hasPrefix(GpxUtilities.shared.OSMAND_EXTENSIONS_PREFIX)
-                && !key.hasPrefix(GpxUtilities.shared.GPXTPX_PREFIX)
-        })
     }
 
     private static func genericFallbackDisplayKey(_ key: String) -> String {
@@ -443,39 +277,19 @@ final class AmenityUIHelper: NSObject {
         return String(key[key.index(after: colon)...])
     }
 
-    private func isKeyToSkip(key: String) -> Bool {
-        return key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||
-            key == WIKI_PHOTO || key == WIKIDATA_TAG || key == WIKIMEDIA_COMMONS_TAG || key == "image" || key == "mapillary" || key == "subway_region" ||
-            (key == "note" && !osmEditingEnabled) ||
-            OAMapObject.isNameLangTag(key) ||
-            key.contains(ROUTE_TAG)
-    }
-    
-    private func fetchPoiAdditionalType(key: String, value: String) -> OAPOIType? {
-        poiType = helper.getAnyPoiType(byKey: key)
-        var pt: OAPOIBaseType? = helper.getAnyPoiAdditionalType(byKey: key)
-        if pt == nil && !value.isEmpty && value.length < 50 {
-            pt = helper.getAnyPoiAdditionalType(byKey: key + "_" + value)
-        }
-        if poiType == nil && pt == nil {
-            poiType = helper.getPoiType(byKey: key)
-        }
-        return pt != nil ? (pt as? OAPOIType) : nil
-    }
-    
-    func buildNamesRow(name: String) -> OAAmenityInfoRow? {        
+    func buildNamesRow(name: String) -> OAAmenityInfoRow? {
         // android here creates collapsable view with all translations. ios opens a new screen with translations instead.
         // implementaion: OAPOIViewContoller.buildNamesRow() and OATargetInfoViewController.showPOITagsDetails()
 
         return OAAmenityInfoRow(key: Self.NAMES_ROW_KEY, icon: UIImage.templateImageNamed("ic_custom_map_languge"), textPrefix:  localizedString("shared_string_name"), text: name, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 18000, name: "names", matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
     }
 
-    private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, textRow: OAAmenityInfoRow?, type: OAPOICategory?) -> OACollapsableView? {
+    private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, type: OAPOICategory?) -> OACollapsableView? {
         let collapsableView = OACollapsableNearestPoiTypeView(defaultParameters: true)
-        collapsableView?.setData(categoryTypes, amenityPoiCategory: type, lat: latLon.latitude, lon: latLon.longitude, isPoiAdditional: poiAdditional, textRow: textRow)
+        collapsableView?.setData(categoryTypes, amenityPoiCategory: type, lat: latLon.latitude, lon: latLon.longitude, isPoiAdditional: poiAdditional, textRow: nil)
         return collapsableView
     }
-    
+
     static func collectAvailableLocalesFromTags(_ tags: [String]) -> Set<String> {
         var result: Set<String> = []
         for tag in tags {
@@ -487,38 +301,34 @@ final class AmenityUIHelper: NSObject {
         }
         return result
     }
-    
-    private func getPreferredLocale(_ localeIds: [String]) -> String? {
-        LocaleHelper.getPreferredNameLocale(localeIds)
-    }
-    
+
     static func getDescriptionWithPreferredLang(amenity: OAPOI, key: String, map: [String: Any]) -> NullablePair? {
         if let descriptions = map[key] as? [String: Any] {
             if let localizations = descriptions["localizations"] as? [String: String] {
                 let locales = AmenityUIHelper.collectAvailableLocalesFromTags(Array(localizations.keys))
-                
+
                 let locale = LocaleHelper.getPreferredNameLocale(Array(locales))
                 var localeKey = key
                 if let locale {
                     localeKey = "\(key):\(locale)"
                 }
-                
+
                 var description = localizations[localeKey]
                 if description == nil && locale != nil && locale == "en" {
                     description = localizations[key]
                 }
-                
+
                 return description != nil ? NullablePair(description, locale) : nil
             }
         }
-        
+
         if let description = amenity.getAdditionalInfo(key), !description.isEmpty {
             return NullablePair(description, nil)
         }
 
         return nil
     }
-    
+
     private func getRowIcon(_ name: String) -> UIImage? {
         let iconName = name.hasPrefix("mx_") ? name : "mx_" + name
         return OATargetInfoViewController.getIcon(iconName, size: CGSize(width: 20, height: 20))

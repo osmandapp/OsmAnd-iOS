@@ -28,6 +28,7 @@
 #import "OARootViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OAAmenitySearcher.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -77,7 +78,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     if (originName && originName.length > 0)
         _originObject = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     NSDictionary<NSString *, NSString *> *extensions = [_wpt.point getExtensionsToRead];
-    _genericFallbackKeys = [AmenityUIHelper storedExtensionFallbackKeys:extensions];
+    _genericFallbackKeys = [OASAdditionalInfoBundle.companion getGenericRowKeysStoredExtensions:extensions];
     if (_originObject)
     {
         // keep the point's custom tags, the map amenity has none

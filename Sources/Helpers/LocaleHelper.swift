@@ -15,6 +15,21 @@ final class LocaleHelper: NSObject {
         return preferred
     }
          
+    // analog of android LocaleHelper.getPreferredLangCandidates: the app language, then the system ones
+    static func getPreferredLangCandidates() -> [String] {
+        var candidates = [String]()
+        if let current = OAUtilities.currentLang(), !current.isEmpty {
+            candidates.append(current)
+        }
+        for locale in NSLocale.preferredLanguages {
+            let lang = locale.components(separatedBy: "-")[0].lowercased()
+            if !lang.isEmpty && !candidates.contains(lang) {
+                candidates.append(lang)
+            }
+        }
+        return candidates
+    }
+
     static func getAvailablePreferredLocale(_ availableLocales: [String]) -> String? {
         // this function is different from android, beause ios lang codes are different from our map data short lang codes.
         

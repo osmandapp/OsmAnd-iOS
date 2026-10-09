@@ -108,7 +108,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             hasDescription = buildDescription(amenities: getTravelAmenities(), allowOnlineWiki: false, rows: rows)
         }
         if hasDescription {
-            infoBundle.setCustomHiddenExtensions([DESCRIPTION_TAG])
+            infoBundle.setCustomHiddenExtensions(customHiddenExtensions: [DESCRIPTION_TAG])
         }
         
         if customOnlinePhotosPosition {

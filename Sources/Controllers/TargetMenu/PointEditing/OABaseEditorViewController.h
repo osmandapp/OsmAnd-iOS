@@ -52,6 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)changeSaveButtonAvailabilityWithGroup;
 - (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
 - (BOOL)allowsValidationForGroupName;
+- (void)generateActionSection;
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler;
 

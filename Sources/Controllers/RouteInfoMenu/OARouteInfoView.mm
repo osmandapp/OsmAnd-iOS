@@ -1725,9 +1725,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerColor = [SeparatorAppearance color];
-            CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
-            CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
-            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
+            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62.0, 0., 0.) : UIEdgeInsetsZero;
             cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;

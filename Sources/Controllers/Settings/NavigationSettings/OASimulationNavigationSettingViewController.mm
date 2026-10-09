@@ -98,8 +98,7 @@
 - (void)generateData
 {
     NSMutableArray *result = [NSMutableArray array];
-    NSNumber *defaultInset = [NSNumber numberWithFloat:20 + [OAUtilities getLeftMargin]];
-    
+
     NSString *selectedModeDescription = @"";
     for (OASimulationMode *mode in [OASimulationMode values])
     {
@@ -133,8 +132,7 @@
             @"footerTitle" : selectedModeDescription
         }];
         [paramsSection addObject:@{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : defaultInset,
+            @"type" : [OADividerCell getCellIdentifier]
         }];
         [paramsSection addObject:@{
             @"type" : kUICellKey,
@@ -155,8 +153,7 @@
             }];
         }
         [paramsSection addObject:@{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : defaultInset,
+            @"type" : [OADividerCell getCellIdentifier]
         }];
         [paramsSection addObject:@{
             @"type" : kUICellKey,
@@ -322,8 +319,8 @@
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerHight = SeparatorAppearance.thickness;
+            cell.alignsWithLayoutMargins = YES;
         }
-        cell.dividerInsets = UIEdgeInsetsMake(0, [item[@"inset"] doubleValue], 0, 0);
         return cell;
     }
     return nil;

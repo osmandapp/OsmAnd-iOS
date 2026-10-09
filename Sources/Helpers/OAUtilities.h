@@ -454,8 +454,8 @@ static inline double normalizeDouble(double v)
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
-+ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
-+ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
++ (NSString *)formattedValue:(NSString *)value unit:(NSString *)unit;
++ (NSString *)formattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
 
 + (NSString *)buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom label:(NSString *)label;
 

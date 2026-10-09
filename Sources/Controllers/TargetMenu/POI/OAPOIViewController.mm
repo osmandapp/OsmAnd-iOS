@@ -116,6 +116,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
     NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
     self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
+    [SharedTravel initPoiTypes];
     self.infoBundle = [[OASAdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
 }
 
@@ -252,11 +253,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
-    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:self.infoBundle];
+    _amenityUIHelper = [[AmenityUIHelper alloc] initWithInfoBundle:self.infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
-    if (self.genericFallbackKeys)
-        _amenityUIHelper.genericFallbackKeys = self.genericFallbackKeys;
+    if (self.genericRowKeys)
+        _amenityUIHelper.genericRowKeys = self.genericRowKeys;
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal];
     [rows addObjectsFromArray:buildedRows];
 }

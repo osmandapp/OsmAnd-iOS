@@ -42,7 +42,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
     OAPOI *_originObject;
-    NSSet<NSString *> *_genericFallbackKeys;
+    NSSet<NSString *> *_genericRowKeys;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
@@ -78,21 +78,20 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     OAPOI *mapAmenity = nil;
     if (originName && originName.length > 0)
         mapAmenity = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
-    _genericFallbackKeys = [OASAdditionalInfoBundle.companion getGenericRowKeysStoredExtensions:[_wpt.point getExtensionsToRead]];
-    _originObject = [self.class cardAmenityForPoint:_wpt mapAmenity:mapAmenity genericRowKeys:_genericFallbackKeys];
+    _genericRowKeys = [OASAdditionalInfoBundle.companion getGenericRowKeysStoredExtensions:[_wpt.point getExtensionsToRead]];
+    _originObject = [self.class cardAmenityForPoint:_wpt mapAmenity:mapAmenity];
 }
 
-+ (OAPOI *) cardAmenityForPoint:(OAGpxWptItem *)wpt mapAmenity:(OAPOI *)mapAmenity genericRowKeys:(NSSet<NSString *> *)genericRowKeys
++ (OAPOI *) cardAmenityForPoint:(OAGpxWptItem *)wpt mapAmenity:(OAPOI *)mapAmenity
 {
-    if (!mapAmenity)
-        return [wpt getAmenity];
-    // keep the point's custom tags, the map amenity has none
-    NSDictionary<NSString *, NSString *> *extensions = [wpt.point getExtensionsToRead];
-    for (NSString *key in genericRowKeys)
-    {
+    OAPOI *storedAmenity = [wpt getAmenity];
+    if (!mapAmenity || !storedAmenity)
+        return mapAmenity ?: storedAmenity;
+    // as Android getUpdatedAmenityExtensions: the stored tags of the point, the map amenity on top of them
+    [[storedAmenity getAdditionalInfo] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
         if (![mapAmenity getAdditionalInfo:key])
-            [mapAmenity setAdditionalInfo:key value:extensions[key]];
-    }
+            [mapAmenity setAdditionalInfo:key value:value];
+    }];
     return mapAmenity;
 }
 
@@ -149,7 +148,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI:_originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
-        builder.genericFallbackKeys = _genericFallbackKeys;
+        builder.genericRowKeys = _genericRowKeys;
         NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
         [builder buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];

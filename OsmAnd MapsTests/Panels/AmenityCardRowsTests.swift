@@ -116,17 +116,19 @@ final class AmenityCardRowsTests: XCTestCase {
         let pointTags = point.getExtensionsToWrite()
         pointTags["test:country"] = "Ukraine"
         pointTags["test:reference"] = "from the point"
+        pointTags["amenity_opening_hours"] = "Mo-Su 05:30-23:00"
         let item = OAGpxWptItem.withGpxWpt(point)
         let keys = genericRowKeys(point.getExtensionsToRead())
         let mapAmenity = OAPOI.fromTagValue(["amenity_type": "sustenance", "amenity_subtype": "fast_food",
                                              "osm_tag_phone": "+380441234567", "test:reference": "from the map"],
                                             privatePrefix: "amenity_", osmPrefix: "osm_tag_")
 
-        let rows = buildRows(OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: mapAmenity, genericRowKeys: keys), keys)
+        let rows = buildRows(OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: mapAmenity), keys)
 
         XCTAssertEqual(rows["test:country"]?.text, "Ukraine")
         XCTAssertEqual(rows["phone"]?.text, "+380441234567")
         XCTAssertEqual(rows["test:reference"]?.text, "from the map", "a tag of the map POI is not replaced")
+        XCTAssertNotNil(rows["opening_hours"], "a stored POI tag the map POI does not have is kept")
     }
 
     func testPointWithoutMapAmenityShowsItsOwnTags() {
@@ -135,7 +137,7 @@ final class AmenityCardRowsTests: XCTestCase {
         let item = OAGpxWptItem.withGpxWpt(point)
         let keys = genericRowKeys(point.getExtensionsToRead())
 
-        let rows = buildRows(OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: nil, genericRowKeys: keys), keys)
+        let rows = buildRows(OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: nil), keys)
 
         XCTAssertEqual(rows["test:country"]?.text, "Ukraine")
     }
@@ -152,9 +154,9 @@ final class AmenityCardRowsTests: XCTestCase {
             XCTFail("no amenity")
             return [:]
         }
-        let helper = AmenityUIHelper(preferredLang: "en",
-                                     infoBundle: AdditionalInfoBundle(additionalInfo: poi.getAmenityExtensions(false)))
-        helper.genericFallbackKeys = genericRowKeys
+        SharedTravel.initPoiTypes()
+        let helper = AmenityUIHelper(infoBundle: AdditionalInfoBundle(additionalInfo: poi.getAmenityExtensions(false)))
+        helper.genericRowKeys = genericRowKeys
         var result = [String: OAAmenityInfoRow]()
         for row in helper.buildInternal() {
             result[row.key] = row

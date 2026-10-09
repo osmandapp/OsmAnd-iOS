@@ -15,30 +15,25 @@ final class AmenityUIHelper: NSObject {
 
     static let defaultAmenityIconName = "ic_custom_info_outlined"
 
-    private static let US_MAPS_RECREATION_AREA = "us_maps_recreation_area"
-
     private static let NAMES_ROW_KEY = "names_row_key"
-    private static let ALT_NAMES_ROW_KEY = "alt_names_row_key"
 
     var latLon: CLLocationCoordinate2D = CLLocationCoordinate2DMake(0, 0)
 
     // values from parent class MenuBuilder - base ContextMenuVC class
     var matchWidthDivider = false // show separator to full screen with
-    var genericFallbackKeys: Set<String> = []
+    var genericRowKeys: Set<String> = []
 
     private let helper: OAPOIHelper
 
     private var additionalInfo: AdditionalInfoBundle
 
-    private var preferredLang: String
     private var poiCategory: OAPOICategory?
     private var sharedPoiCategory: PoiCategory?
     private var subtype: String?
 
     private var osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self)
 
-    init(preferredLang: String, infoBundle: AdditionalInfoBundle) {
-        self.preferredLang = preferredLang
+    init(infoBundle: AdditionalInfoBundle) {
         self.additionalInfo = infoBundle
         self.helper = OAPOIHelper.sharedInstance()
         super.init()
@@ -51,10 +46,6 @@ final class AmenityUIHelper: NSObject {
         osmEditingEnabled = OAPluginsHelper.isEnabled(OAOsmEditingPlugin.self)
     }
 
-    func setPreferredLang(_ lang: String) {
-        preferredLang = lang
-    }
-
     func buildInternal() -> [OAAmenityInfoRow] {
         initVariables()
         var infoRows = [OAAmenityInfoRow]()
@@ -62,7 +53,7 @@ final class AmenityUIHelper: NSObject {
 
         let entries = additionalInfo.getVisibleTags(allowNoteTag: osmEditingEnabled,
                                                     preferredLangs: LocaleHelper.getPreferredLangCandidates(),
-                                                    genericRowKeys: genericFallbackKeys)
+                                                    genericRowKeys: genericRowKeys)
         for case let entry as AmenityTagEntry in entries {
             guard let row = buildRow(entry) else { continue }
             if entry.isDescription {
@@ -245,7 +236,7 @@ final class AmenityUIHelper: NSObject {
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
         } else {
             // a key without a poi type: a generic row of a GPX point or a tag of a category that shows all its tags
-            let useGenericFallback = genericFallbackKeys.contains(key)
+            let useGenericFallback = genericRowKeys.contains(key)
             let displayKey = useGenericFallback ? Self.genericFallbackDisplayKey(key) : key
             let fallbackType: OAPOIType? = OAPOIType(name: displayKey, category: poiCategory)
             guard let fallbackType else { return nil }

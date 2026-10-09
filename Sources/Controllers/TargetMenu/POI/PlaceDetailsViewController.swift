@@ -130,6 +130,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
         let extensions = amenity.getAmenityExtensions(false)
+        SharedTravel.initPoiTypes()
         let bundle = AdditionalInfoBundle(additionalInfo: extensions)
         let filteredInfo = bundle.getFilteredLocalizedInfo()
         

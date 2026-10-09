@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 extension FavoriteListViewController {
     func openFavoriteGroupAppearance(_ groupName: String) {
-        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesHelperBridge.shared().pointsGroup(forGroupName: groupName)) else { return }
+        guard let viewController = FavoriteGroupEditorViewController(group: OAFavoritesHelperBridge.shared().pointsGroup(forGroupName: groupName)) else { return }
         favoriteGroupAppearanceGroupName = groupName
         favoriteGroupAppearanceEditor = viewController
         viewController.delegate = self
@@ -440,7 +440,7 @@ extension FavoriteListViewController {
     }
     
     private func openNewFavoriteGroupEditor() {
-        guard let navigationController, let viewController = OAFavoriteGroupEditorViewController(new: ()) else { return }
+        guard let navigationController, let viewController = FavoriteGroupEditorViewController(new: ()) else { return }
         viewController.parentGroupName = parentGroupName
         viewController.delegate = self
         let modalNavigationController = UINavigationController(rootViewController: viewController)

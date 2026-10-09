@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAFavoriteGroup.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateCollapsedSections:(NSArray<NSString *> *)sections;
 - (NSArray<OAFavoriteFolderBridgeItem *> *)favoriteFolders;
 - (NSArray<NSString *> *)favoriteGroupNames;
+- (NSArray<OAFavoriteGroup *> *)favoriteGroups;
+- (nullable OAFavoriteGroup *)favoriteGroupWithName:(NSString *)groupName;
+- (nullable OAFavoriteGroup *)groupByTrimmedName:(NSString *)groupName;
 - (BOOL)hasFavoriteGroup:(NSString *)groupName;
 - (NSString *)displayNameForFavoriteGroup:(NSString *)groupName;
 - (NSInteger)pointsCountForFavoriteGroup:(NSString *)groupName;
@@ -45,6 +49,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)changeFavoritePoints:(NSArray<OAFavoritePointBridgeItem *> *)favoritePoints color:(nullable UIColor *)color iconName:(nullable NSString *)iconName backgroundIconName:(nullable NSString *)backgroundIconName;
 - (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName;
 - (BOOL)canUseGroupWithName:(NSString *)groupName;
+
+- (void)updateGroup:(nullable OAFavoriteGroup *)group newName:(NSString *)newName saveImmediately:(BOOL)saveImmediately;
+- (void)updateGroup:(nullable OAFavoriteGroup *)group iconName:(NSString *)iconName updatePoints:(BOOL)updatePoints updateGroupIcon:(BOOL)updateGroupIcon saveImmediately:(BOOL)saveImmediately completion:(void (^)(void))completion;
+- (void)updateGroup:(nullable OAFavoriteGroup *)group color:(UIColor *)color updatePoints:(BOOL)updatePoints updateGroupColor:(BOOL)updateGroupColor saveImmediately:(BOOL)saveImmediately;
+- (void)updateGroup:(nullable OAFavoriteGroup *)group backgroundIconName:(NSString *)backgroundIconName updatePoints:(BOOL)updatePoints updateGroupShape:(BOOL)updateGroupShape saveImmediately:(BOOL)saveImmediately;
+- (void)notifyFavoritesStorageChanged;
+- (void)saveCurrentPointsIntoFile;
 
 - (nullable NSURL *)shareFavoriteItems:(NSArray *)favoriteItems;
 

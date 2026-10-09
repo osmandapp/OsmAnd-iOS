@@ -10,7 +10,6 @@
 #import "OAAppSettings.h"
 #import "OAEditPointViewController.h"
 #import "OAFavoriteItem.h"
-#import "OAFavoriteGroupEditorViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAIndexConstants.h"
@@ -146,6 +145,46 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
 - (BOOL)hasFavoriteGroup:(NSString *)groupName
 {
     return [[OAFavoritesHelper getGroups].allKeys containsObject:groupName];
+}
+
+- (NSArray<OAFavoriteGroup *> *)favoriteGroups
+{
+    return [OAFavoritesHelper favoriteGroups];
+}
+
+- (OAFavoriteGroup *)groupByTrimmedName:(NSString *)groupName
+{
+    return [OAFavoritesHelper groupByTrimmedName:groupName];
+}
+
+- (void)updateGroup:(OAFavoriteGroup *)group newName:(NSString *)newName saveImmediately:(BOOL)saveImmediately
+{
+    [OAFavoritesHelper updateGroup:group newName:newName saveImmediately:saveImmediately];
+}
+
+- (void)updateGroup:(OAFavoriteGroup *)group iconName:(NSString *)iconName updatePoints:(BOOL)updatePoints updateGroupIcon:(BOOL)updateGroupIcon saveImmediately:(BOOL)saveImmediately completion:(void (^)(void))completion
+{
+    [OAFavoritesHelper updateGroup:group iconName:iconName updatePoints:updatePoints updateGroupIcon:updateGroupIcon saveImmediately:saveImmediately completion:completion];
+}
+
+- (void)updateGroup:(OAFavoriteGroup *)group color:(UIColor *)color updatePoints:(BOOL)updatePoints updateGroupColor:(BOOL)updateGroupColor saveImmediately:(BOOL)saveImmediately
+{
+    [OAFavoritesHelper updateGroup:group color:color updatePoints:updatePoints updateGroupColor:updateGroupColor saveImmediately:saveImmediately];
+}
+
+- (void)updateGroup:(OAFavoriteGroup *)group backgroundIconName:(NSString *)backgroundIconName updatePoints:(BOOL)updatePoints updateGroupShape:(BOOL)updateGroupShape saveImmediately:(BOOL)saveImmediately
+{
+    [OAFavoritesHelper updateGroup:group backgroundIconName:backgroundIconName updatePoints:updatePoints updateGroupShape:updateGroupShape saveImmediately:saveImmediately];
+}
+
+- (void)notifyFavoritesStorageChanged
+{
+    [OAFavoritesHelper notifyFavoritesStorageChanged];
+}
+
+- (void)saveCurrentPointsIntoFile
+{
+    [OAFavoritesHelper saveCurrentPointsIntoFile];
 }
 
 - (NSString *)displayNameForFavoriteGroup:(NSString *)groupName

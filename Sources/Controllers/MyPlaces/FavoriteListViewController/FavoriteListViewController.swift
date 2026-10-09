@@ -27,7 +27,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var layoutSections: [FavoriteListSection] = []
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?
-    var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
+    var favoriteGroupAppearanceEditor: FavoriteGroupEditorViewController?
     var addToTrackGroupName: String?
     var addToTrackFavoriteItems: [Any]?
     var pointToShare: OAFavoritePointBridgeItem?

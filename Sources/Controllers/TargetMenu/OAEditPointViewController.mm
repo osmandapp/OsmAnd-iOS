@@ -7,7 +7,6 @@
 //
 
 #import "OAEditPointViewController.h"
-#import "OAFavoriteGroupEditorViewController.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
@@ -1235,7 +1234,7 @@
 
 - (void)onAddFolderButtonPressed
 {
-    OAFavoriteGroupEditorViewController *groupEditor = [[OAFavoriteGroupEditorViewController alloc] initWithNew];
+    FavoriteGroupEditorViewController *groupEditor = [[FavoriteGroupEditorViewController alloc] initWithNew];
     groupEditor.delegate = self;
     [self showModalViewController:groupEditor];
 }

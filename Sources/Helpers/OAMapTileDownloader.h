@@ -22,6 +22,7 @@ typedef NS_ENUM (NSInteger, EOATileRequestType)
 @protocol OATileDownloadDelegate <NSObject>
 
 - (void) onTileDownloaded:(BOOL)updateUI;
+- (void) onTileFailed;
 
 @end
 

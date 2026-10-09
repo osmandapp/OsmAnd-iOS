@@ -19,6 +19,7 @@
 #import "Localization.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource, OATileDownloadDelegate>
 
@@ -42,6 +43,7 @@
     int _maxZoom;
     CALayer *_horizontalLine;
     NSInteger _downloadedNumberOfTiles;
+    NSInteger _failedNumberOfTiles;
     BOOL _downloaded;
 }
 
@@ -68,8 +70,6 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    _tileDownloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
-    _tileDownloader.delegate = self;
     _downloaded = NO;
     _horizontalLine = [CALayer layer];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, 0.5);
@@ -100,6 +100,24 @@
         @"value" : [NSString stringWithFormat:@" / ~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
         @"key" : @"download_size"
     }];
+    if (_failedNumberOfTiles > 0)
+    {
+        [tableData addObject:@{
+            @"type" : [OAValueTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"tiles_failed"),
+            @"value" : @"",
+            @"key" : @"failed_tiles"
+        }];
+    }
+    if (_downloaded && _failedNumberOfTiles > 0)
+    {
+        [tableData addObject:@{
+            @"type" : [OAValueTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"retry"),
+            @"value" : @"",
+            @"key" : @"retry"
+        }];
+    }
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -131,15 +149,35 @@
 
 - (void) startDownload
 {
+    _tileDownloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
+    _tileDownloader.delegate = self;
     [_tileDownloader startDownload];
+}
+
+- (void) retryFailedTiles
+{
+    [_tileDownloader cancellAllRequests];
+    _downloaded = NO;
+    _downloadedNumberOfTiles = 0;
+    _failedNumberOfTiles = 0;
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self setupView];
+    [_tableView reloadData];
+    [self startDownload];
 }
 
 - (void) updateProgress
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_tableView reloadSections:[[NSIndexSet alloc] initWithIndex:0] withRowAnimation:UITableViewRowAnimationNone];
-        if (_downloadedNumberOfTiles == _numberOfTiles)
+        if (!_downloaded && _downloadedNumberOfTiles + _failedNumberOfTiles >= _numberOfTiles)
+        {
             [self onDownloadFinished];
+        }
+        else
+        {
+            [self setupView];
+            [_tableView reloadData];
+        }
     });
 }
 
@@ -148,6 +186,7 @@
     [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
     _downloaded = YES;
     [self.cancelButton setTitle: OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
+    [self setupView];
     [_tableView reloadData];
 }
 
@@ -169,7 +208,10 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.progressStatusLabel.text = OALocalizedString(@"downloading");
+        if (_downloaded)
+            cell.progressStatusLabel.text = OALocalizedString(_failedNumberOfTiles > 0 ? @"download_complete_with_errors" : @"download_complete");
+        else
+            cell.progressStatusLabel.text = OALocalizedString(@"downloading");
         cell.progressValueLabel.text = [NSString stringWithFormat:@"%ld%%", (NSInteger) (((double)_downloadedNumberOfTiles / (double)_numberOfTiles * 100.))];
         [cell.progressBarView setProgress:(double)_downloadedNumberOfTiles / (double)_numberOfTiles];
         
@@ -189,6 +231,23 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            if ([item[@"key"] isEqualToString:@"failed_tiles"])
+            {
+                cell.valueLabel.attributedText = nil;
+                cell.valueLabel.text = [NSString stringWithFormat:@"%ld", _failedNumberOfTiles];
+                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
+                return cell;
+            }
+            else if ([item[@"key"] isEqualToString:@"retry"])
+            {
+                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+                cell.valueLabel.attributedText = nil;
+                cell.valueLabel.text = @"";
+                cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+                return cell;
+            }
 
             NSString *total = item[@"value"];
             NSString *done = @"";
@@ -240,13 +299,26 @@
     }
 }
 
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if ([_data[indexPath.row][@"key"] isEqualToString:@"retry"])
+        [self retryFailedTiles];
+}
+
 #pragma mark - OATileDownloadDelegate
 
 - (void) onTileDownloaded:(BOOL)updateUI
 {
     _downloadedNumberOfTiles++;
-    if (updateUI || _downloadedNumberOfTiles == _numberOfTiles)
+    if (updateUI || _downloadedNumberOfTiles + _failedNumberOfTiles >= _numberOfTiles)
         [self updateProgress];
+}
+
+- (void) onTileFailed
+{
+    _failedNumberOfTiles++;
+    [self updateProgress];
 }
 
 @end

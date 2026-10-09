@@ -345,6 +345,7 @@ final class AmenityUIHelper: NSObject {
             let displayKey = Self.genericFallbackDisplayKey(key)
             pType = OAPOIType(name: displayKey, category: poiCategory)
             pType?.isText = true
+            pType?.order = 90 // the order OAPOIParser gives a type without one
             pType?.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
                 ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)

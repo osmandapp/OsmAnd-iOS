@@ -23,8 +23,8 @@ final class PoiAdditionalUiRule: NSObject {
         self.key = key
     }
     
-    func apply(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType, key: String, value: String, subtype: String?) {
-        let params = PoiRowParams(builder: builder, poiType: poiType, rule: self, key: key, value: value, subtype: subtype)
+    func apply(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType, key: String, value: String, subtype: String?, openingHoursCheckDate: String? = nil) {
+        let params = PoiRowParams(builder: builder, poiType: poiType, rule: self, key: key, value: value, subtype: subtype, openingHoursCheckDate: openingHoursCheckDate)
         apply(params: params)
     }
     

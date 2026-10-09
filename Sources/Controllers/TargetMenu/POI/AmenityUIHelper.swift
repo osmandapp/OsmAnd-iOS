@@ -319,12 +319,13 @@ final class AmenityUIHelper: NSObject {
             }
         }
         
+        let openingHoursCheckDate = key == OPENING_HOURS_TAG ? additionalInfo.get(CHECK_DATE_OPENING_HOURS_TAG) : nil
         let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
         rowParamsBuilder.collapsableView = collapsableView
         
         if let pType {
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype, openingHoursCheckDate: openingHoursCheckDate)
         } else if let poiType {
             let category = poiType.category.name
             if category == OTHER_MAP_CATEGORY {
@@ -338,7 +339,7 @@ final class AmenityUIHelper: NSObject {
             pType?.isText = true
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
             let translation = OAPOIHelper.sharedInstance().translation(cleanValue, withDefault: false) ?? ""
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype, openingHoursCheckDate: openingHoursCheckDate)
         } else {
             return nil // skip non-translatable NON-poiType tags
         }
@@ -416,7 +417,7 @@ final class AmenityUIHelper: NSObject {
     }
     
     private func isKeyToSkip(key: String) -> Bool {
-        return key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||
+        return key == CHECK_DATE_OPENING_HOURS_TAG || key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||
             key == WIKI_PHOTO || key == WIKIDATA_TAG || key == WIKIMEDIA_COMMONS_TAG || key == "image" || key == "mapillary" || key == "subway_region" ||
             (key == "note" && !osmEditingEnabled) ||
             OAMapObject.isNameLangTag(key) ||

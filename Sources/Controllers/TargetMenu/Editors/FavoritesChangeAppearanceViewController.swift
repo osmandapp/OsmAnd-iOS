@@ -28,18 +28,6 @@ final class FavoritesChangeAppearanceViewController: OABaseNavbarViewController 
     private lazy var colorHandler: OAColorCollectionHandler = .init(data: [appearanceCollection.getAvailableColorsSortingByLastUsed() ?? []], isFavoriteList: false)
     private lazy var iconHandler = PoiIconCollectionHandler(isFavoriteList: !isPreset)
     private lazy var shapeHandler = ShapesCollectionHandler(backgroundIconNames: backgroundIconNames, isFavoriteList: true)
-    private lazy var iconAccessibilityLabels: [String: String] = {
-        var labels: [String: String] = [:]
-        for poiType in OAPOIHelper.sharedInstance().poiTypes {
-            if let iconName = poiType.iconName(), labels[iconName] == nil {
-                labels[iconName] = poiType.nameLocalized
-            }
-        }
-        for activity in RouteActivityHelper.shared.getActivities() where labels["mx_" + activity.iconName] == nil {
-            labels["mx_" + activity.iconName] = activity.label
-        }
-        return labels
-    }()
 
     private var hasChanges: Bool {
         let colorChanged = appearance.color != nil && appearance.color != initialAppearance.color
@@ -367,10 +355,7 @@ extension FavoritesChangeAppearanceViewController: OACollectionCellDelegate {
             label = color.accessibilityName
             isSelected = indexPath == colorHandler.getSelectedIndexPath()
         } else if collectionView === iconHandler.getCollectionView() {
-            let iconName = iconHandler.iconNamesData[indexPath.section][indexPath.item]
-            let name = iconName.hasPrefix("mx_") ? String(iconName.dropFirst(3)) : iconName
-            let fallbackName = name.hasPrefix("special_") ? String(name.dropFirst(8)) : name
-            label = iconAccessibilityLabels["mx_" + name] ?? OAPOIHelper.sharedInstance().getPhraseByName(fallbackName) ?? fallbackName
+            label = iconHandler.iconAccessibilityLabel(iconHandler.iconNamesData[indexPath.section][indexPath.item])
             isSelected = indexPath == iconHandler.getSelectedIndexPath()
         } else if collectionView === shapeHandler.getCollectionView() {
             let name = backgroundIconNames[indexPath.item]

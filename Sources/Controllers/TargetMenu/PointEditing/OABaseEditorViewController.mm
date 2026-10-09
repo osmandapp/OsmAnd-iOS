@@ -149,6 +149,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)generateData
 {
+    [self.tableData clearAllData];
     if (self.isNewItem)
         [self generateDescriptionSection];
     [self generateGroupSection];

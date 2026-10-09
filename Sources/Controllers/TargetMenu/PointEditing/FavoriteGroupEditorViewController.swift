@@ -92,6 +92,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         guard row.cellType == OASearchMoreCell.reuseIdentifier, let cell = tableView.dequeueReusableCell(withIdentifier: OASearchMoreCell.reuseIdentifier, for: indexPath) as? OASearchMoreCell else { return super.getRow(indexPath) }
         cell.textView.text = row.title
         cell.textView.font = .preferredFont(forTextStyle: .body)
+        cell.textView.numberOfLines = 0
         updateApplyToExistingCell(cell)
         return cell
     }

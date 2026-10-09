@@ -731,6 +731,7 @@
 "traffic_warning_red_light_camera" = "Red light camera";
 "traffic_warning" = "Traffic warning";
 "traffic_warning_railways" = "Railroad crossing";
+"traffic_warning_tram" = "Tram crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
 "tunnel_warning" = "Tunnel ahead";

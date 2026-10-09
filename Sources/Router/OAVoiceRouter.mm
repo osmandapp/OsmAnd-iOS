@@ -844,7 +844,7 @@ std::string preferredLanguage;
 
         if (speakSpeedCamera || speakPedestrian || speakTunnels || (speakTrafficWarnings && !speakPrefType))
         {
-            NSString *typeName = [OAAlarmInfo getName:type];
+            NSString *typeName = [OAAlarmInfo getName:type == AIT_TRAM ? AIT_RAILWAY : type];
             OACommandBuilder *p = [self getNewCommandPlayerToPlay];
             if (p)
                 [[p attention:typeName] play];

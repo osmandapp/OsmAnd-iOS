@@ -227,7 +227,7 @@ final class InputDevicesHelper: NSObject {
     
     @discardableResult
     private func reloadInputDevicesCollection(with cacheId: Int, appMode: OAApplicationMode) -> InputDevicesCollection {
-        let collection = InputDevicesCollection(appMode: appMode, customDevices: loadCustomDevices(with: appMode))
+        let collection = InputDevicesCollection(appMode: appMode, customDevices: loadCustomDevices())
         cachedDevicesCollections[cacheId] = collection
         return collection
     }
@@ -236,9 +236,16 @@ final class InputDevicesHelper: NSObject {
         reloadInputDevicesCollection(with: Self.functionalityPurposeId, appMode: appMode)
     }
     
-    private func loadCustomDevices(with appMode: OAApplicationMode) -> [InputDeviceProfile] {
-        let json = settings.settingCustomExternalInputDevice.get(appMode)
-        guard !json.isEmpty else { return [] }
+    private func loadCustomDevices() -> [InputDeviceProfile] {
+        var devices = readCustomDevices(settings.settingCustomExternalInputDevice.get())
+        if mergeLegacyCustomDevices(into: &devices) {
+            saveCustomDevices(devices)
+        }
+        return devices
+    }
+    
+    private func readCustomDevices(_ json: String?) -> [InputDeviceProfile] {
+        guard let json, !json.isEmpty else { return [] }
         do {
             if let data = json.data(using: .utf8),
                let jsonObj = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
@@ -250,20 +257,100 @@ final class InputDevicesHelper: NSObject {
         return []
     }
     
-    private func syncSettings(in devicesCollection: InputDevicesCollection) {
-        let appMode = devicesCollection.currentAppMode()
+    private func saveCustomDevices(_ devices: [InputDeviceProfile]) {
         var json: [String: Any] = [:]
         do {
-            let items = devicesCollection.storedCustomDevices()
-            Self.writeToJson(&json, customDevices: items)
+            Self.writeToJson(&json, customDevices: devices)
             let data = try JSONSerialization.data(withJSONObject: json, options: [])
             if let str = String(data: data, encoding: .utf8) {
-                settings.settingCustomExternalInputDevice.set(str, mode: appMode)
+                settings.settingCustomExternalInputDevice.set(str)
             }
-            reloadFunctionalityCollection(with: appMode)
         } catch {
             debugPrint("Error while writing custom devices to JSON \(error)")
         }
+    }
+    
+    // Custom devices were stored per profile before they became shared by all profiles.
+    // Such per-profile lists still come from the app upgrade, from imported profiles
+    // and from Cloud data of older clients, so they are merged into the global list.
+    private func mergeLegacyCustomDevices(into devices: inout [InputDeviceProfile]) -> Bool {
+        let legacyPreference = settings.settingLegacyCustomExternalInputDevice
+        var changed = false
+        for appMode in OAApplicationMode.allPossibleValues() where legacyPreference.isSet(for: appMode) {
+            let selectedId = settings.settingExternalInputDevice.get(appMode)
+            for device in readCustomDevices(legacyPreference.get(appMode)) {
+                let mergedId = mergeLegacyDevice(device, into: &devices)
+                if device.id() == selectedId && device.id() != mergedId {
+                    settings.settingExternalInputDevice.set(mergedId, mode: appMode)
+                }
+            }
+            legacyPreference.resetMode(toDefault: appMode)
+            changed = true
+        }
+        return changed
+    }
+    
+    // Returns id of the device in the global list that now holds this legacy device
+    private func mergeLegacyDevice(_ device: InputDeviceProfile, into devices: inout [InputDeviceProfile]) -> String {
+        let content = deviceContent(device)
+        if let content, let existing = devices.first(where: { deviceContent($0) == content }) {
+            return existing.id()
+        }
+        var merged = device
+        let name = device.toHumanString()
+        let nameTaken = hasDeviceName(name, in: devices)
+        if nameTaken || devices.contains(where: { $0.id() == device.id() }) {
+            let uniqueName = nameTaken ? Self.makeUniqueName(name, checkName: { !hasDeviceName($0, in: devices) }) : name
+            merged = makeCustomDevice(with: makeUniqueId(in: devices), name: uniqueName, parentDevice: device)
+        }
+        devices.append(merged)
+        return merged.id()
+    }
+    
+    private func deviceContent(_ device: InputDeviceProfile) -> String? {
+        guard let custom = device as? CustomInputDeviceProfile else { return nil }
+        var json = custom.toJson()
+        // A merged copy may get a new id and name, so only the assignments are compared.
+        // Quick action ids are generated on every read, and commandId is kept only
+        // for assignments read from the old format, so they are not part of the content either
+        json.removeValue(forKey: "id")
+        json.removeValue(forKey: "name")
+        if let assignments = json["assignments"] as? [[String: Any]] {
+            json["assignments"] = assignments.map { assignment -> [String: Any] in
+                var assignment = assignment
+                assignment.removeValue(forKey: "commandId")
+                if let actions = assignment["action"] as? [[String: Any]] {
+                    assignment["action"] = actions.map { action -> [String: Any] in
+                        var action = action
+                        action.removeValue(forKey: "id")
+                        return action
+                    }
+                }
+                return assignment
+            }
+        }
+        guard let data = try? JSONSerialization.data(withJSONObject: json, options: [.sortedKeys]) else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+    
+    private func hasDeviceName(_ name: String, in customDevices: [InputDeviceProfile]) -> Bool {
+        let trimmedName = name.trimmingCharacters(in: .whitespaces)
+        return (DefaultInputDevices.values() + customDevices).contains { $0.toHumanString().trimmingCharacters(in: .whitespaces) == trimmedName }
+    }
+    
+    private func makeUniqueId(in devices: [InputDeviceProfile]) -> String {
+        var time = Int(Date().timeIntervalSince1970 * 1000)
+        while devices.contains(where: { $0.id() == Self.customDevicePrefix + String(time) }) {
+            time += 1
+        }
+        return Self.customDevicePrefix + String(time)
+    }
+    
+    private func syncSettings(in devicesCollection: InputDevicesCollection) {
+        saveCustomDevices(devicesCollection.storedCustomDevices())
+        // Custom devices are shared by all profiles, so the active device must be reloaded
+        // whichever profile was edited
+        cachedDevicesCollections.removeValue(forKey: Self.functionalityPurposeId)
     }
     
     private static func readFromJson(_ json: [String: Any]) -> [InputDeviceProfile] {

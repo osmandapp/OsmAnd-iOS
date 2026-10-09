@@ -341,7 +341,7 @@ final class AmenityUIHelper: NSObject {
             let translation = OAPOIHelper.sharedInstance().translation(cleanValue, withDefault: false) ?? ""
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: translation, subtype: subtype)
         } else if genericFallbackKeys.contains(key) {
-            // a custom GPX value is user data: show it as stored, do not translate it as a POI key
+            // user data, shown as stored
             let displayKey = Self.genericFallbackDisplayKey(key)
             pType = OAPOIType(name: displayKey, category: poiCategory)
             pType?.isText = true

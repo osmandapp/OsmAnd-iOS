@@ -80,7 +80,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     _genericFallbackKeys = [AmenityUIHelper storedExtensionFallbackKeys:extensions];
     if (_originObject)
     {
-        // the map amenity replaces the point's own tags; keep its custom ones, as Android merges both
+        // keep the point's custom tags, the map amenity has none
         for (NSString *key in _genericFallbackKeys)
         {
             if (![_originObject getAdditionalInfo:key])

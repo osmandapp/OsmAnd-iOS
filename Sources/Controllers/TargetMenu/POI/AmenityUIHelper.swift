@@ -345,8 +345,7 @@ final class AmenityUIHelper: NSObject {
             let displayKey = Self.genericFallbackDisplayKey(key)
             pType = OAPOIType(name: displayKey, category: poiCategory)
             pType?.isText = true
-            pType?.order = Self.defaultPoiTypeOrder
-            pType?.nameLocalized = helper.getPhrase(byName: displayKey, withDefatultValue: false)
+            pType?.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
                 ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
             let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType ?? OAPOIType(), key: key, value: cleanValue, subtype: subtype)
@@ -442,9 +441,6 @@ final class AmenityUIHelper: NSObject {
         guard let colon = key.firstIndex(of: ":"), colon > key.startIndex else { return key }
         return String(key[key.index(after: colon)...])
     }
-
-    // the order poi_types.xml gives a type without an explicit one; Android sorts generic rows with it
-    private static let defaultPoiTypeOrder: Int32 = 90
 
     private func isKeyToSkip(key: String) -> Bool {
         return key.hasPrefix(COLLAPSABLE_PREFIX) || key.hasPrefix(ALT_NAME_WITH_LANG_PREFIX) || key.hasPrefix(LANG_YES) ||

@@ -79,6 +79,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     EOADownloadMapLayer _layer;
     OAMapSource *_selectedSource;
     OAResourceItem *_currentItem;
+    NSUInteger _previewRequestGeneration;
     OAAutoObserverProxy* _framePreparedObserver;
 }
 
@@ -227,6 +228,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)refreshSource
 {
+    _minZoomTileImage = nil;
+    _maxZoomTileImage = nil;
     _selectedSource = [[OADownloadMapLayerHelper mapSourceForLayer:_layer] copy];
     _currentItem = [OADownloadMapLayerHelper resourceItemForLayer:_layer];
     _currentZoom = _mapView.zoom;
@@ -478,22 +481,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void) downloadZoomedTiles
+- (void)downloadZoomedTiles
 {
+    NSUInteger generation = ++_previewRequestGeneration;
     NSString *minZoomTileUrl = [self getZoomTileUrl:_minZoom];
     NSString *maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
     if (!minZoomTileUrl || !maxZoomTileUrl)
         return;
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSData *minZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:minZoomTileUrl]];
         NSData *maxZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:maxZoomTileUrl]];
-        if (minZoomData && maxZoomData)
-        {
-            _minZoomTileImage = [[UIImage alloc] initWithData:minZoomData];
-            _maxZoomTileImage = [[UIImage alloc] initWithData:maxZoomData];
-        }
+        UIImage *minZoomImage = minZoomData ? [[UIImage alloc] initWithData:minZoomData] : nil;
+        UIImage *maxZoomImage = maxZoomData ? [[UIImage alloc] initWithData:maxZoomData] : nil;
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kZoomTilesRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || generation != strongSelf->_previewRequestGeneration)
+                return;
+            strongSelf.minZoomTileImage = minZoomImage;
+            strongSelf.maxZoomTileImage = maxZoomImage;
+            [strongSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kZoomTilesRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
         });
     });
 }

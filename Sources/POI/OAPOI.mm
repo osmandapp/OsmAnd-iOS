@@ -862,14 +862,13 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
-                NSString *trimmedKey = [key stringByReplacingOccurrencesOfString:COLLAPSABLE_PREFIX withString:@""];
                 // "osmand:color" is a service key, "test:color" of an external namespace is user data
                 BOOL externalNamespace = [key containsString:@":"]
                         && ![key hasPrefix:OASGpxUtilities.shared.OSMAND_EXTENSIONS_PREFIX]
                         && ![key hasPrefix:OASGpxUtilities.shared.GPXTPX_PREFIX];
                 BOOL hidden = [HIDDEN_EXTENSIONS containsObject:key] || (!externalNamespace && [HIDDEN_EXTENSIONS containsObject:shortKey]);
                 if (!hidden && map[key].length > 0)
-                    additionalInfo[trimmedKey] = map[key];
+                    additionalInfo[key] = map[key];
             }
         }
         if (!type)

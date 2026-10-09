@@ -38,6 +38,7 @@
 #import "OAMapDownloadController.h"
 #import "OAShareMenuActivity.h"
 #import "OAPOI.h"
+#import "OAPOILocationType.h"
 #import "OAWikiMenuViewController.h"
 #import "OAGPXWptViewController.h"
 #import "OAButton.h"
@@ -134,6 +135,8 @@ static const NSInteger _buttonsCount = 4;
     CGFloat _headerOffset;
     CGFloat _fullOffset;
     CGFloat _fullScreenOffset;
+
+    BOOL _rotationInProgress;
 
     BOOL _hideButtons;
     BOOL _hiding;
@@ -621,6 +624,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
+    [self cancelScrollingForRotation];
     if ([self isLandscapeSupported] && [OAUtilities isLandscape:toInterfaceOrientation])
     {
         [self showTopToolbarWithAnimation:NO forceToShowIfTypeFloating:NO];
@@ -628,8 +632,79 @@ static const NSInteger _buttonsCount = 4;
     }
 }
 
+- (void)cancelScrollingForRotation
+{
+    NSAssert(NSThread.isMainThread, @"Context menu gestures must be cancelled on the main thread");
+    // Both rotation callbacks may run. Cancel the gesture only once per transition.
+    if (_rotationInProgress)
+        return;
+    _rotationInProgress = YES;
+    [self cancelScrollingInView:self];
+}
+
+- (void)finishRotation
+{
+    if (!_hiding)
+    {
+        // Recompute geometry without snapping the current scroll position to a mode anchor.
+        [self doLayoutSubviews:NO];
+        if (![self isLandscape])
+            [self updateModeAfterRotation];
+        [self setNeedsLayout];
+    }
+    _rotationInProgress = NO;
+}
+
+- (void)updateModeAfterRotation
+{
+    // Match normal drag mode selection, but keep the current reading position.
+    CGFloat offsetY = self.contentOffset.y;
+    CGFloat headerDist = ABS(offsetY - _headerOffset);
+    CGFloat expandedDist = ABS(offsetY - _fullOffset);
+    CGFloat fullScreenDist = ABS(offsetY - _fullScreenOffset);
+    BOOL supportFull = !self.customController || [self.customController supportFullMenu];
+    BOOL supportFullScreen = !self.customController || [self.customController supportFullScreen];
+
+    if (headerDist < expandedDist && headerDist < fullScreenDist)
+    {
+        [self requestHeaderOnlyMode:NO];
+    }
+    else if (expandedDist < headerDist && expandedDist < fullScreenDist && supportFull)
+    {
+        [self requestFullMode:NO];
+    }
+    else if (supportFullScreen)
+    {
+        [self requestFullScreenMode:NO];
+    }
+    else
+    {
+        [self requestHeaderOnlyMode:NO];
+    }
+}
+
+- (void)cancelScrollingInView:(UIView *)view
+{
+    if ([view isKindOfClass:UIScrollView.class])
+    {
+        UIScrollView *scrollView = (UIScrollView *)view;
+        // Cancel the current touch sequence before the menu changes geometry.
+        // Keep disabled recognizers disabled (e.g. non-scrolling details tables).
+        UIPanGestureRecognizer *pan = scrollView.panGestureRecognizer;
+        if (pan.enabled)
+        {
+            pan.enabled = NO;
+            pan.enabled = YES;
+        }
+        [scrollView setContentOffset:scrollView.contentOffset animated:NO];
+    }
+    for (UIView *subview in view.subviews)
+        [self cancelScrollingInView:subview];
+}
+
 - (void) clearCustomControllerIfNeeded
 {
+    _rotationInProgress = NO;
     _toolbarHeight = OAUtilities.getStatusBarHeight;
     
     _bottomBarVisible = NO;
@@ -1077,7 +1152,7 @@ static const NSInteger _buttonsCount = 4;
     {
         [self doLayoutSubviews:NO];
 
-        if ([_customController showDetailsButton])
+        if ([_customController showDetailsButton] && [_customController isKindOfClass:OATargetInfoViewController.class])
         {
             NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
             [((OATargetInfoViewController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -1090,6 +1165,15 @@ static const NSInteger _buttonsCount = 4;
     [self doLayoutSubviews:YES];
 }
 
+- (BOOL)shouldUseSingleLineAddress
+{
+    // Parking uses this label for the remaining time and parking date on separate lines.
+    if (_sliderView.hidden || _showFull || _showFullScreen || _targetPoint.type == OATargetParking)
+        return NO;
+
+    return ![self.customController getAttributedTypeStr];
+}
+
 - (CGPoint) doLayoutSubviews:(BOOL)adjustOffset
 {
     [self doUpdateUI];
@@ -1098,6 +1182,7 @@ static const NSInteger _buttonsCount = 4;
     {
         _showFull = NO;
         _showFullScreen = NO;
+        [self onMenuStateChanged];
     }
     BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
     BOOL hasVisibleBottomBar = self.customController && [self.customController hasBottomToolbar] && !self.customController.bottomToolBarView.hidden;
@@ -1135,14 +1220,34 @@ static const NSInteger _buttonsCount = 4;
     
     CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
     
+    BOOL singleLineAddress = [self shouldUseSingleLineAddress];
+    // For a selected map location, the resolved address replaces the title placeholder.
+    // Keep that title at one line while collapsed as well as the address subtitle.
+    BOOL singleLineTitle = singleLineAddress && _targetPoint.type == OATargetPOI
+        && [_targetPoint.targetObj isKindOfClass:OAPOI.class]
+        && [((OAPOI *)_targetPoint.targetObj).type isKindOfClass:OAPOILocationType.class]
+        && ([_targetPoint.title isEqualToString:OALocalizedString(@"map_no_address")]
+            || [_targetPoint.title isEqualToString:_targetPoint.titleAddress]);
+    _addressLabel.numberOfLines = singleLineTitle ? 1 : 0;
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
-    CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
+    CGFloat addressHeight = singleLineTitle
+        ? ceil(_addressLabel.font.lineHeight)
+        : [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
     _addressLabel.frame = CGRectMake(itemsX, topLabelY, labelPreferredWidth, addressHeight);
     if ([_addressLabel isDirectionRTL])
         _addressLabel.textAlignment = NSTextAlignmentRight;
     
+    // Reserve one line in the collapsed menu so an asynchronously loaded address cannot
+    // change the menu height. Allow wrapping after expansion to show the full address.
+    _coordinateLabel.numberOfLines = singleLineAddress ? 1 : 0;
     CGFloat coordinateHeight;
-    if (_coordinateLabel.attributedText)
+    if (singleLineAddress)
+    {
+        UIFont *typeFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        UIFont *addressFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+        coordinateHeight = ceil(MAX(typeFont.lineHeight, addressFont.lineHeight));
+    }
+    else if (_coordinateLabel.attributedText)
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.attributedText width:labelPreferredWidth].height;
     else
         coordinateHeight = [OAUtilities calculateTextBounds:_coordinateLabel.text width:labelPreferredWidth font:_coordinateLabel.font].height;
@@ -1303,7 +1408,9 @@ static const NSInteger _buttonsCount = 4;
     else
         _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
-    CGFloat contentHeight = _headerY + _fullScreenHeight;
+    // The details row belongs to the content view, whose origin excludes this height.
+    // Match its actual bottom so scrolling cannot expose the map below the card.
+    CGFloat contentHeight = _headerY + _fullScreenHeight - detailsButtonHeight;
     
     if (landscape)
     {
@@ -1754,6 +1861,8 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         self.addressStr = _targetPoint.titleAddress;
+        // Restore the default font when reusing an attributed subtitle for plain text.
+        _coordinateLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     }
         
     [_coordinateLabel setText:self.addressStr];
@@ -2439,8 +2548,11 @@ static const NSInteger _buttonsCount = 4;
         newOffset = _customController.needsLayoutOnModeChange ? [self doLayoutSubviews:NO] : [self calculateNewOffset];
         if (!_showFullScreen)
         {
+            // Rotation keeps the reading position; a normal drag snaps to the mode anchor.
+            BOOL useCurrentOffset = _rotationInProgress;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.menuViewDelegate targetViewHeightChanged:[self getVisibleHeightWithOffset:newOffset] animated:YES];
+                CGFloat height = useCurrentOffset ? [self getVisibleHeight] : [self getVisibleHeightWithOffset:newOffset];
+                [self.menuViewDelegate targetViewHeightChanged:height animated:YES];
             });
         }
     }
@@ -2640,6 +2752,8 @@ static const NSInteger _buttonsCount = 4;
     if (copysign(1.0, newOffset.y - targetContentOffset->y) != copysign(1.0, velocity.y))
     {
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (_rotationInProgress)
+                return;
             [self setContentOffset:newOffset animated:YES];
         });
     }
@@ -2651,6 +2765,12 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    // Cancelling the pan during rotation must not select a mode or dismiss the menu.
+    if (_rotationInProgress)
+    {
+        *targetContentOffset = scrollView.contentOffset;
+        return;
+    }
     //BOOL slidingUp = velocity.y > 0;
     BOOL slidingDown = velocity.y < -0.3;
     

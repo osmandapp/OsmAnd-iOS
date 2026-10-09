@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
+		D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */; };
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
@@ -855,6 +856,8 @@
 		CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */; };
 		CE72E15C30125FB400E89264 /* CarPlaySettingsListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */; };
 		CE72E15E301264DE00E89264 /* CarPlayMapModeListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */; };
+		CE72E160301264DE00E89264 /* CarPlayMapOrientationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E15F301264DE00E89264 /* CarPlayMapOrientationListController.swift */; };
+		CE72E162301264DE00E89264 /* UIImage+CarPlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE72E161301264DE00E89264 /* UIImage+CarPlay.swift */; };
 		CE7339672FF6D01900A9B191 /* TrackPointsKDIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */; };
 		CE762AEE2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AED2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift */; };
 		CE762AF02FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE762AEF2FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift */; };
@@ -2250,6 +2253,7 @@
 
 /* Begin PBXFileReference section */
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
+		D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/UtilitiesUrlQueryTests.swift; sourceTree = "<group>"; };
 		D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -3578,6 +3582,8 @@
 		CE71B88B2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapSearchEmptyView.swift; sourceTree = "<group>"; };
 		CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySettingsListController.swift; sourceTree = "<group>"; };
 		CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayMapModeListController.swift; sourceTree = "<group>"; };
+		CE72E15F301264DE00E89264 /* CarPlayMapOrientationListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayMapOrientationListController.swift; sourceTree = "<group>"; };
+		CE72E161301264DE00E89264 /* UIImage+CarPlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+CarPlay.swift"; sourceTree = "<group>"; };
 		CE7339662FF6D01900A9B191 /* TrackPointsKDIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPointsKDIndex.swift; sourceTree = "<group>"; };
 		CE762AED2FFE0A2A001BF551 /* StarMapMagnitudeFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMagnitudeFilterButton.swift; sourceTree = "<group>"; };
 		CE762AEF2FFE0F32001BF551 /* StarMapMagnitudeSliderPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarMapMagnitudeSliderPanel.swift; sourceTree = "<group>"; };
@@ -7385,6 +7391,7 @@
 				DA5A795B26C563A000F274C7 /* OADirectionsGridController.m */,
 				CE72E15B30125FB400E89264 /* CarPlaySettingsListController.swift */,
 				CE72E15D301264DE00E89264 /* CarPlayMapModeListController.swift */,
+				CE72E15F301264DE00E89264 /* CarPlayMapOrientationListController.swift */,
 			);
 			path = CarPlay;
 			sourceTree = "<group>";
@@ -10310,6 +10317,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C584800000000000000002 /* OALocationIconTests.m */,
+				D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */,
 				D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
@@ -10486,6 +10494,7 @@
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
 				4609FAA12C5158F100B57F06 /* UIImageView+Extension.swift */,
 				8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */,
+				CE72E161301264DE00E89264 /* UIImage+CarPlay.swift */,
 				32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */,
 				CEAF081A2FD9226C0048A74A /* Array+Extension.swift */,
 			);
@@ -12366,6 +12375,8 @@
 				DA5A815926C563A700F274C7 /* OASkiMapsPlugin.m in Sources */,
 				DA5A812026C563A700F274C7 /* OAProducts.mm in Sources */,
 				CE72E15E301264DE00E89264 /* CarPlayMapModeListController.swift in Sources */,
+				CE72E160301264DE00E89264 /* CarPlayMapOrientationListController.swift in Sources */,
+				CE72E162301264DE00E89264 /* UIImage+CarPlay.swift in Sources */,
 				DA5A84F426C563A900F274C7 /* OATargetPoint.m in Sources */,
 				C5A70DF83025CF6B00EDD44B /* SeparatorView.swift in Sources */,
 				DA9A2C3026FDB72800BEC681 /* OARouteColorize.mm in Sources */,
@@ -13788,6 +13799,7 @@
 				C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */,
 				C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */,
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
+				D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */,
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,

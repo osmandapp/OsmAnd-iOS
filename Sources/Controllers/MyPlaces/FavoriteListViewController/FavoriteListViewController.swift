@@ -165,7 +165,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
-    
+
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in

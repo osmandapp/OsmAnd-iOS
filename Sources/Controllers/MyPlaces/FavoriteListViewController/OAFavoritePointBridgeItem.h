@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
 - (UIImage *)icon;
+- (UIImage *)iconWithColor:(UIColor *)color;
 - (void)updateDistanceAndDirection;
 - (void)updateDistanceAndDirectionFromMapCenter:(CLLocationCoordinate2D)mapCenterCoordinate mapAzimuth:(CLLocationDirection)mapAzimuth;
 

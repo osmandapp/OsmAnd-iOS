@@ -8,6 +8,7 @@
 
 #import "OAFavoritePointBridgeItem.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoritesHelper.h"
 #import "OsmAndApp.h"
 #import "OALocationServices.h"
 
@@ -39,6 +40,11 @@
 - (UIImage *)icon
 {
     return [_favorite getCompositeIcon];
+}
+
+- (UIImage *)iconWithColor:(UIColor *)color
+{
+    return [OAFavoritesHelper getCompositeIcon:[_favorite getIcon] backgroundIcon:[_favorite getBackgroundIcon] color:color];
 }
 
 - (UIColor *)color

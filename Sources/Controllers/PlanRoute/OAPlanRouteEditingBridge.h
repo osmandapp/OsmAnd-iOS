@@ -138,11 +138,13 @@ typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder
      showOnMap:(BOOL)showOnMap
+    simplified:(BOOL)simplified
     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
 
 - (void)saveAsCopy:(NSString *)fileName
             folder:(nullable NSString *)folder
          showOnMap:(BOOL)showOnMap
+        simplified:(BOOL)simplified
         onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
 
 - (void)saveSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes

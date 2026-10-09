@@ -654,7 +654,7 @@ static char kMapSourceUpdateQueueKey;
                                    _app.initialURLMapState.target31.y);
         OARootViewController *rootViewController = [OARootViewController instance];
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
-        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer unknownTargetPoint:latLon.latitude longitude:latLon.longitude];
         targetPoint.centerMap = YES;
         [rootViewController.mapPanel showContextMenu:targetPoint];
     }
@@ -968,10 +968,6 @@ static char kMapSourceUpdateQueueKey;
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    if (gestureRecognizer == _grPointContextMenu)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapTouchAction object:self userInfo:nil];
-    }
     if (gestureRecognizer == _grZoomOut && [[OAAppSettings sharedManager].showDistanceRuler get])
         return NO;
     if (gestureRecognizer == _grZoomDoubleTap)
@@ -1760,10 +1756,6 @@ static char kMapSourceUpdateQueueKey;
         return NO;
 
     BOOL longPress = [recognizer isKindOfClass:[UILongPressGestureRecognizer class]];
-    if (longPress && (recognizer.state == UIGestureRecognizerStateBegan || recognizer.state == UIGestureRecognizerStateEnded))
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapTouchAction object:self userInfo:nil];
-    }
 
     // Get location of the gesture
     CGPoint touchPoint;

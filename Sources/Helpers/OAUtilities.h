@@ -348,7 +348,7 @@ static inline double normalizeDouble(double v)
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 
-+ (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url;
++ (NSDictionary<NSString *, NSString *> *)parseUrlQuery:(nullable NSURL *)url;
 + (CLLocation *)parseLatLon:(NSString *)latLon;
 + (BOOL) isOsmAndMapUrl:(NSURL *)url;
 + (BOOL) isOsmAndGoUrl:(NSURL *)url;

@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)displayNameForFavoriteGroup:(NSString *)groupName;
 - (NSInteger)pointsCountForFavoriteGroup:(NSString *)groupName;
 - (UIColor *)colorForFavoriteGroup:(NSString *)groupName;
+- (NSArray<NSString *> *)backgroundIconNames;
 - (NSArray<OAFavoritePointBridgeItem *> *)favoritePointsForGroupName:(NSString *)groupName;
 - (NSString *)sharePoiURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
 - (NSString *)geoURLStringForFavoritePoint:(OAFavoritePointBridgeItem *)favoriteItem;
@@ -41,8 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)renameFavoriteGroup:(NSString *)groupName newName:(NSString *)newName;
 - (BOOL)moveFavoriteItems:(NSArray *)favoriteItems toGroupName:(NSString *)targetGroupName;
 - (NSArray<NSString *> *)favoriteGroupNamesForMovingFavoriteItems:(NSArray *)favoriteItems;
-- (void)changeFavoriteItems:(NSArray *)favoriteItems colorIndex:(NSInteger)colorIndex;
-
+- (void)changeFavoritePoints:(NSArray<OAFavoritePointBridgeItem *> *)favoritePoints color:(nullable UIColor *)color iconName:(nullable NSString *)iconName backgroundIconName:(nullable NSString *)backgroundIconName;
 - (OASGpxUtilitiesPointsGroup *)pointsGroupForGroupName:(NSString *)groupName;
 - (BOOL)canUseGroupWithName:(NSString *)groupName;
 

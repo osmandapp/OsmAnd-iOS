@@ -253,7 +253,9 @@
     NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[@"category_name"] ?: @""] trim];
     NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[@"category_color"] integerValue]];
     OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][colorIndex];
-    UIColor *selectedColor = favCol.color;
+    UIColor *selectedColor = params[@"appearance_color"] ? UIColorFromARGB([params[@"appearance_color"] intValue]) : favCol.color;
+    NSString *iconName = params[@"appearance_icon"];
+    NSString *backgroundIconName = params[@"appearance_background"];
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
@@ -261,14 +263,9 @@
             selectedColor = group.color;
 
         if (group.iconName.length > 0)
-        {
-            _selectedIconName = group.iconName;
-            [_poiIconCollectionHandler setIconName:_selectedIconName];
-        }
-        
-        NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
-        if (backgroundIndex != NSNotFound)
-            _selectedBackgroundIndex = backgroundIndex;
+            iconName = group.iconName;
+        if (group.backgroundType.length > 0)
+            backgroundIconName = group.backgroundType;
 
         self.groupTitle = [OAFavoriteGroup getDisplayName:group ? group.name : groupName];
     }
@@ -280,10 +277,24 @@
         OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
         if (group.color != 0)
             selectedColor = UIColorFromARGB(group.color);
+        if (group.iconName.length > 0)
+            iconName = group.iconName;
+        if (group.backgroundType.length > 0)
+            backgroundIconName = group.backgroundType;
 
         _selectedWaypointGroupKey = groupName;
         self.groupTitle = groupName.length > 0 ? groupName : OALocalizedString(@"shared_string_waypoints");
     }
+
+    if (iconName.length > 0)
+    {
+        _selectedIconName = iconName;
+        [_poiIconCollectionHandler setIconName:_selectedIconName];
+    }
+
+    NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName ?: @""];
+    if (backgroundIndex != NSNotFound)
+        _selectedBackgroundIndex = backgroundIndex;
 
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
@@ -483,14 +494,17 @@
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0)
+        _selectedIconName = selectedGroup.iconName;
+
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
         else if (!_selectedIconName || _selectedIconName.length == 0)
             _selectedIconName = DEFAULT_ICON_NAME_KEY;
     }
+
     [_poiIconCollectionHandler setIconName:_selectedIconName];
-    
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
 

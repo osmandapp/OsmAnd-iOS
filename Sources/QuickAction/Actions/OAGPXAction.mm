@@ -29,6 +29,9 @@
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor =  @"category_color";
+static NSString * const kAppearanceColor = @"appearance_color";
+static NSString * const kAppearanceIcon = @"appearance_icon";
+static NSString * const kAppearanceBackground = @"appearance_background";
 
 static QuickActionType *TYPE;
 
@@ -102,7 +105,11 @@ static QuickActionType *TYPE;
         groupName = @"";
 
     UIColor* color;
-    if (self.getParams[kCategoryColor])
+    if (self.getParams[kAppearanceColor])
+    {
+        color = UIColorFromARGB([self.getParams[kAppearanceColor] intValue]);
+    }
+    else if (self.getParams[kCategoryColor])
     {
         NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
@@ -125,6 +132,12 @@ static QuickActionType *TYPE;
     p.lon = lon;
     p.category = groupName;
     p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
+    NSString *iconName = group.iconName.length > 0 ? group.iconName : self.getParams[kAppearanceIcon];
+    if (iconName.length > 0)
+        [p setIconNameIconName:iconName];
+    NSString *backgroundIconName = group.backgroundType.length > 0 ? group.backgroundType : self.getParams[kAppearanceBackground];
+    if (backgroundIconName.length > 0)
+        [p setBackgroundTypeBackType:backgroundIconName];
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -185,23 +198,26 @@ static QuickActionType *TYPE;
                       ] forKey:kSectionNoName];
     
     NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-    OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
+    UIColor *color = self.getParams[kAppearanceColor] ? UIColorFromARGB([self.getParams[kAppearanceColor] intValue]) : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][defaultColor]).color;
+    NSMutableDictionary *appearanceRow = [@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"key" : @"appearance",
+        @"title" : OALocalizedString(@"shared_string_appearance"),
+        @"color" : @([color toARGBNumber])
+    } mutableCopy];
+    [appearanceRow setValue:self.getParams[kAppearanceColor] ? @([self.getParams[kAppearanceColor] intValue]) : nil forKey:kAppearanceColor];
+    [appearanceRow setValue:self.getParams[kAppearanceIcon] forKey:kAppearanceIcon];
+    [appearanceRow setValue:self.getParams[kAppearanceBackground] forKey:kAppearanceBackground];
     
     [data setObject:@[@{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
-                          @"color" : @(defaultColor),
+                          @"color" : @([color toARGBNumber]),
                           @"img" : ACImageNameIcCustomFolder
                           },
-                      @{
-                          @"type" : [OAValueTableViewCell getCellIdentifier],
-                          @"key" : kCategoryColor,
-                          @"title" : OALocalizedString(@"shared_string_color"),
-                          @"value" : color ? color.name : @"",
-                          @"color" : @(defaultColor)
-                          },
+                      appearanceRow,
                       @{
                           @"footer" : OALocalizedString(@"quick_action_select_group")
                           }
@@ -224,7 +240,12 @@ static QuickActionType *TYPE;
             else if ([item[@"key"] isEqualToString:kCategoryName])
             {
                 [params setValue:item[@"value"] forKey:kCategoryName];
-                [params setValue:item[@"color"] forKey:kCategoryColor];
+            }
+            else if ([item[@"key"] isEqualToString:@"appearance"])
+            {
+                [params setValue:item[kAppearanceColor] forKey:kAppearanceColor];
+                [params setValue:item[kAppearanceIcon] forKey:kAppearanceIcon];
+                [params setValue:item[kAppearanceBackground] forKey:kAppearanceBackground];
             }
         }
     }

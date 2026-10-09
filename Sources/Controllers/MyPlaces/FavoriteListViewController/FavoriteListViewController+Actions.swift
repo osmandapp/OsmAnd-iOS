@@ -237,10 +237,27 @@ extension FavoriteListViewController {
         }
 
         guard let navigationController else { return }
-        let colorController = OAEditColorViewController()
-        colorController.delegate = self
-        self.colorController = colorController
-        let modalNavigationController = UINavigationController(rootViewController: colorController)
+        var identifiers = Set<String>()
+        let points = bridgeItems(for: selectionManager.selectedItems).flatMap { item -> [OAFavoritePointBridgeItem] in
+            if let point = item as? OAFavoritePointBridgeItem { return [point] }
+            if let folderPath = item as? String {
+                return FavoriteFolderProvider.shared.favoriteFolder(folderPath)?.exactPoints() ?? []
+            }
+            return []
+        }.filter { identifiers.insert($0.identifier).inserted }
+        guard !points.isEmpty else { return }
+        let controller = FavoritesChangeAppearanceViewController(points: points)
+        controller.onApply = { color, iconName, backgroundIconName in
+            OAFavoritesHelperBridge.shared().changeFavoritePoints(points, color: color, iconName: iconName, backgroundIconName: backgroundIconName)
+        }
+        controller.onClose = { [weak self] in
+            guard let self else { return }
+            self.setEditing(false)
+            self.applySnapshot(animatingDifferences: true)
+        }
+        
+        let modalNavigationController = UINavigationController(rootViewController: controller)
+        modalNavigationController.modalPresentationStyle = .fullScreen
         navigationController.present(modalNavigationController, animated: true)
     }
     

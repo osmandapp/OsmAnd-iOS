@@ -11,14 +11,18 @@
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
+#import "OASearchMoreCell.h"
 #import "OsmAnd_Maps-Swift.h"
-
-#import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAFavoriteGroupEditorViewController
 {
     OAFavoriteGroup *_favoriteGroup;
     MBProgressHUD *_progressHUD;
+    NSIndexPath *_applyToExistingIndexPath;
+    UIColor *_lastAppliedColor;
+    NSString *_lastAppliedIconName;
+    NSString *_lastAppliedBackgroundIconName;
 }
 
 #pragma mark - Initialization
@@ -59,9 +63,9 @@
     }
 }
 
-- (EOABaseNavbarColorScheme)getNavbarColorScheme
+- (BOOL)shouldBlurAppearanceNavBar
 {
-    return self.isNewItem ? [super getNavbarColorScheme] : EOABaseNavbarColorSchemeOrange;
+    return NO;
 }
 
 - (OAFavoriteGroup *)existingGroupFor:(NSString *)name
@@ -88,6 +92,81 @@
     return !self.isNewItem;
 }
 
+#pragma mark - Table data
+
+- (void)registerCells
+{
+    [super registerCells];
+    [self addCell:OASearchMoreCell.reuseIdentifier];
+}
+
+- (void)generateActionSection
+{
+    if (self.isNewItem)
+        return;
+
+    OATableSectionData *section = [self.tableData createNewSection];
+    OATableRowData *row = [section createNewRow];
+    row.cellType = OASearchMoreCell.reuseIdentifier;
+    row.title = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"apply_to_existing"), [NSString stringWithFormat:@"(%lu)", (unsigned long)_favoriteGroup.points.count]];
+    _applyToExistingIndexPath = [NSIndexPath indexPathForRow:[section rowCount] - 1 inSection:[self.tableData sectionCount] - 1];
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OATableRowData *row = [self.tableData itemForIndexPath:indexPath];
+    if (![row.cellType isEqualToString:OASearchMoreCell.reuseIdentifier])
+        return [super getRow:indexPath];
+
+    OASearchMoreCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASearchMoreCell.reuseIdentifier forIndexPath:indexPath];
+    cell.textView.text = row.title;
+    cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    [self updateApplyToExistingCell:cell];
+    return cell;
+}
+
+- (void)changeSaveButtonAvailabilityWithGroup
+{
+    [super changeSaveButtonAvailabilityWithGroup];
+    if (_applyToExistingIndexPath)
+        [self updateApplyToExistingCell:(OASearchMoreCell *)[self.tableView cellForRowAtIndexPath:_applyToExistingIndexPath]];
+}
+
+- (void)updateApplyToExistingCell:(OASearchMoreCell *)cell
+{
+    if (!cell)
+        return;
+
+    BOOL enabled = [self isExistingPointsAppearanceChanged] && _favoriteGroup.points.count > 0;
+    cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+    cell.textView.textColor = [UIColor colorNamed:enabled ? ACColorNameTextColorActive : ACColorNameTextColorSecondary];
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityLabel = cell.textView.text;
+    cell.textView.isAccessibilityElement = NO;
+    cell.accessibilityTraits = enabled ? UIAccessibilityTraitButton : (UIAccessibilityTraitButton | UIAccessibilityTraitNotEnabled);
+}
+
+- (BOOL)isExistingPointsAppearanceChanged
+{
+    if (!_lastAppliedColor)
+        return [self isAppearanceChanged];
+
+    return ![self.editColor isEqual:_lastAppliedColor] || [self isIconNameChanged:_lastAppliedIconName] || ![self.editBackgroundIconName isEqualToString:_lastAppliedBackgroundIconName];
+}
+
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+    OATableRowData *row = [self.tableData itemForIndexPath:indexPath];
+    if (![row.cellType isEqualToString:OASearchMoreCell.reuseIdentifier])
+    {
+        [super onRowSelected:indexPath];
+        return;
+    }
+
+    if ([self isExistingPointsAppearanceChanged] && _favoriteGroup.points.count > 0)
+        [self editPointsGroup:YES updateGroupValues:NO];
+}
+
 #pragma mark - Selectors
 
 - (void)onRightNavbarButtonPressed
@@ -101,16 +180,6 @@
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_save")
                                                                        message:OALocalizedString(@"save_favorite_default_appearance")
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
-        NSString *titleApplyExisting = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
-                                        OALocalizedString(@"apply_to_existing"),
-                                        [NSString stringWithFormat:@"(%lu)", _favoriteGroup.points.count]];
-
-        [alert addAction:[UIAlertAction actionWithTitle:titleApplyExisting
-                                                  style:UIAlertActionStyleDefault
-                                                handler:^(UIAlertAction * _Nonnull action) {
-            [self editPointsGroup:YES updateGroupValues:NO];
-        }]];
-
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"apply_only_to_new_points")
                                                   style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * _Nonnull action) {
@@ -137,7 +206,7 @@
 
 - (void)onLeftNavbarButtonPressed
 {
-    if (self.isNewItem || ![self isAppearanceChanged])
+    if (self.isNewItem || ![self isExistingPointsAppearanceChanged])
     {
         [super onLeftNavbarButtonPressed];
     }
@@ -189,7 +258,7 @@
     _progressHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _progressHUD.accessibilityViewIsModal = YES;
 
-    if (![self.editIconName isEqual:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0))
+    if ([self isIconNameChanged:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0) || (updatePoints && _lastAppliedIconName && [self isIconNameChanged:_lastAppliedIconName]))
     {
         [OAFavoritesHelper updateGroup:_favoriteGroup
                               iconName:self.editIconName
@@ -209,27 +278,40 @@
 - (void)finishSavingGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
+    if (updatePoints)
+    {
+        _lastAppliedColor = self.editColor;
+        _lastAppliedIconName = [self.editIconName copy];
+        _lastAppliedBackgroundIconName = [self.editBackgroundIconName copy];
+        [self changeSaveButtonAvailabilityWithGroup];
+    }
+
     [_progressHUD hide:NO];
     _progressHUD = nil;
 
     if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];
     if (self.navigationController.topViewController == self)
-        [self dismissViewController];
+    {
+        if (updateGroupValues)
+            [self dismissViewController];
+        else
+            [OAUtilities showToast:OALocalizedString(@"settings_applied") details:nil duration:4 verticalOffset:50 inView:self.view];
+    }
 }
 
 - (void)finishEditingPointsGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [[self getPoiIconCollectionHandler] addIconToLastUsed:self.editIconName];
 
-    if (![self.editColor isEqual:_favoriteGroup.color])
+    if (![self.editColor isEqual:_favoriteGroup.color] || (updatePoints && _lastAppliedColor && ![self.editColor isEqual:_lastAppliedColor]))
         [OAFavoritesHelper updateGroup:_favoriteGroup
                                  color:self.editColor
                           updatePoints:updatePoints
                       updateGroupColor:updateGroupValues
                        saveImmediately:NO];
 
-    if (![self.editBackgroundIconName isEqualToString:_favoriteGroup.backgroundType])
+    if (![self.editBackgroundIconName isEqualToString:_favoriteGroup.backgroundType] || (updatePoints && _lastAppliedBackgroundIconName && ![self.editBackgroundIconName isEqualToString:_lastAppliedBackgroundIconName]))
         [OAFavoritesHelper updateGroup:_favoriteGroup
                     backgroundIconName:self.editBackgroundIconName
                           updatePoints:updatePoints

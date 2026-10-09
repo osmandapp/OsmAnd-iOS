@@ -48,6 +48,8 @@ NS_ASSUME_NONNULL_BEGIN
                                              text:(NSString *)text
                                               tag:(NSInteger)tag;
 - (BOOL)isAppearanceChanged;
+- (BOOL)isIconNameChanged:(nullable NSString *)iconName;
+- (void)changeSaveButtonAvailabilityWithGroup;
 - (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
 - (BOOL)allowsValidationForGroupName;
 

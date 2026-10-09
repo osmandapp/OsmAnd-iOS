@@ -177,6 +177,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             [self askReview];
             LogStartup(@"initialize: review requested");
 
+            [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
+
             BOOL mapInstalled = NO;
             for (const auto& resource : _app.resourcesManager->getLocalResources())
             {
@@ -188,7 +190,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                 }
             }
             [OAIAPHelper initializeFreeMapsCount:mapInstalled];
-            [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
 
             if (!mapInstalled && !AppEnvironment.isUITesting)
             {

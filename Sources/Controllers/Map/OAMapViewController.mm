@@ -215,6 +215,7 @@ static char kMapSourceUpdateQueueKey;
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
     OAAutoObserverProxy* _framePreparedObserver;
+    OAAutoObserverProxy* _displayLinkFrameRateObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
     
@@ -365,6 +366,8 @@ static char kMapSourceUpdateQueueKey;
     
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
+    _displayLinkFrameRateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDisplayLinkFrameRateChanged)];
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
@@ -534,6 +537,7 @@ static char kMapSourceUpdateQueueKey;
     [_stateObserver observe:_mapView.stateObservable];
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
+    [_displayLinkFrameRateObserver observe:_mapView.displayLinkFrameRateObservable];
     _mapView.rendererDelegate = self;
 
     self.mapViewLoaded = YES;
@@ -650,7 +654,7 @@ static char kMapSourceUpdateQueueKey;
                                    _app.initialURLMapState.target31.y);
         OARootViewController *rootViewController = [OARootViewController instance];
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
-        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer unknownTargetPoint:latLon.latitude longitude:latLon.longitude];
         targetPoint.centerMap = YES;
         [rootViewController.mapPanel showContextMenu:targetPoint];
     }
@@ -1879,6 +1883,11 @@ static char kMapSourceUpdateQueueKey;
     [_framePreparedObservable notifyEvent];
 }
 
+- (void) onDisplayLinkFrameRateChanged
+{
+    [self applyFrameRefreshRateLimit];
+}
+
 @synthesize zoomObservable = _zoomObservable;
 
 @synthesize mapObservable = _mapObservable;
@@ -2819,10 +2828,7 @@ static char kMapSourceUpdateQueueKey;
     }
 
     [self runWithRenderSync:^{
-        if ([settings.batterySavingMode get])
-            [_mapView limitFrameRefreshRate];
-        else
-            [_mapView restoreFrameRefreshRate];
+        [self applyFrameRefreshRateLimit];
 
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
@@ -3095,6 +3101,23 @@ static char kMapSourceUpdateQueueKey;
         commit();
     else
         dispatch_sync(dispatch_get_main_queue(), commit);
+}
+
+- (void) setAttachedToCarPlayWindow:(BOOL)attachedToCarPlayWindow
+{
+    _attachedToCarPlayWindow = attachedToCarPlayWindow;
+    [self applyFrameRefreshRateLimit];
+}
+
+- (void) applyFrameRefreshRateLimit
+{
+    if (!self.mapViewLoaded)
+        return;
+
+    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
+        [_mapView limitFrameRefreshRate];
+    else
+        [_mapView restoreFrameRefreshRate];
 }
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable
@@ -3441,6 +3464,10 @@ static char kMapSourceUpdateQueueKey;
             [_gpxFilesRec removeAllObjects];
             [_gpxFilesRec addObject:gpxFile];
             [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
+        }
+        else if (refreshData)
+        {
+            _recTrackShowing = NO;
         }
     }];
 }

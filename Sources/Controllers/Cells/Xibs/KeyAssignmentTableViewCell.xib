@@ -41,7 +41,7 @@
                             </stackView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="height" constant="48" id="RWd-ex-PWV"/>
+                            <constraint firstAttribute="height" priority="999" constant="48" id="RWd-ex-PWV"/>
                         </constraints>
                     </stackView>
                 </subviews>

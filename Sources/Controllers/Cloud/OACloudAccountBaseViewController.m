@@ -278,7 +278,13 @@
             cell.inputField.text = text;
             cell.inputField.textContentType = UITextContentTypeEmailAddress;
             if ([item[@"numbersKeyboard"] boolValue])
-                cell.inputField.keyboardType = UIKeyboardTypePhonePad;
+            {
+                // Code field also accepts the web password, so letters must be available
+                cell.inputField.keyboardType = UIKeyboardTypeASCIICapable;
+                cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                cell.inputField.smartQuotesType = UITextSmartQuotesTypeNo;
+                cell.inputField.smartDashesType = UITextSmartDashesTypeNo;
+            }
             else
                 cell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
             cell.inputField.returnKeyType = UIReturnKeyGo;

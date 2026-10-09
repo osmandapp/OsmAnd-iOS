@@ -127,7 +127,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.estimatedRowHeight = 44.;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 

@@ -233,10 +233,12 @@ static NSDictionary<NSString *, NSString *> *_pluginIdMapping;
     }
 
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-    [OAAppSettings performBatchedPreferenceNotifications:^{
-        [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-            [self.item readPreferenceFromJson:key value:obj];
-            [OAAppSettings notifyPreferenceKeysChanged:[NSSet setWithObject:key]];
+    [OASettingsItemReader performPreferenceWrites:^{
+        [OAAppSettings performBatchedPreferenceNotifications:^{
+            [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+                [self.item readPreferenceFromJson:key value:obj];
+                [OAAppSettings notifyPreferenceKeysChanged:[NSSet setWithObject:key]];
+            }];
         }];
     }];
 

@@ -3,6 +3,8 @@
 "send_crash_log_descr" = "From previous crashes";
 "no_crashes_recorded" = "No crashes recorded";
 "share_crash_log" = "Share crash log";
+"crash_report_sent" = "Report sent. Thank you!";
+"crash_report_send_failed" = "Could not send the report. Try again later.";
 "crash_report_prompt_title" = "OsmAnd has encountered an unexpected error.";
 "crash_report_prompt_description" = "Please help us improve the app by sending the crash report. Your crash report will help us identify and fix the issue.";
 "shared_string_send" = "Send";
@@ -1745,7 +1747,11 @@
 "add_new_folder" = "Add new folder";
 "plan_route_select_segment_hint" = "Select segment or section to change Route type and Settings.";
 "plan_route_change_for_whole_segment" = "Change for whole segment";
-"plan_route_change_for_whole_track" = "Change for whole track";
+"plan_route_change_for_whole_track" = "Change type for whole track";
+"plan_route_continue_with_different_route_type" = "Continue with a different route type";
+"plan_route_continue_with_different_type" = "Continue with a different type";
+"plan_route_continue_or_start_segment_hint" = "Continue within the current segment, or start a new one that is not connected to the previous part of the track.";
+"plan_route_new_segment_separate_hint" = "A new segment starts a separate part of the track, not connected to the previous one.";
 "plan_route_section_recalculate_format" = "%1$@ section of %2$@ will be recalculated using the selected profile.";
 "plan_route_segment_recalculate_format" = "%@ will be recalculated using the selected profile.";
 "plan_route_start_new_segment_hint" = "New segment continues with the same route type.";
@@ -4450,8 +4456,8 @@
 "average_glide_ratio" = "Average glide ratio";
 "average_vertical_speed" = "Average vertical speed";
 "glide_ratio_to_target" = "Glide ratio to target";
-"map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
-"map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
+"map_widget_glide_average_desc" = "Shows the average glide ratio or the average vertical speed for the set interval.";
+"map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point or the elevation of the target point.";
 "map_widget_group_glide_ratio" = "Glide ratio";
 "obd_speed_desc" = "Shows speed from the Vehicle Speed Sensor (VSS).";
 "obd_rpm_desc" = "Shows vehicle tachometer RPM over OBD sensor";
@@ -5055,6 +5061,21 @@
 "recalculate_elevation" = "Recalculate elevation";
 "average_speed" = "Avg. speed";
 
+"coordinate_format_description" = "Preferred formats for quick access from context menu and search.";
+"coordinate_format_primary" = "Primary";
+"coordinate_format_cancel_changes_title" = "Discard changes?";
+"coordinate_format_cancel_changes_message" = "Your changes to preferred formats will not be saved.";
+"coordinate_format_last_item_warning" = "At least one coordinate format is required.";
+"coordinate_format_add_title" = "Add format";
+"coordinate_format_add_search_hint" = "Search EPSG code or format name";
+"coordinate_format_add_empty_title" = "Looking for a specific format?";
+"coordinate_format_add_empty_body" = "Search a database of over 5,000 local and national EPSG codes by country, name, or ID.";
+"navigate_point_format_swiss_grid" = "Swiss Grid (CH1903)";
+"navigate_point_format_swiss_grid_plus" = "Swiss Grid (CH1903+)";
+"navigate_point_format_maidenhead" = "Maidenhead";
+"shared_string_recent" = "Recent";
+"coordinate_format_select_other" = "Select other format";
+
 "text_color" = "Text color";
 "secondary_text_color" = "Secondary text color";
 "background_color" = "Background color";
@@ -5067,6 +5088,7 @@
 "custom_widget_colors" = "Custom widget colors";
 "custom_widget_colors_description" = "Improve readability on the go. Unlock full color customization to ensure perfect widget visibility against any map background, day or night.";
 "unlock_custom_colors" = "Unlock Custom Colors";
+
 "carplay_trip_via_point" = "Via %@";
 "opening_hours_public_holiday" = "Public holidays";
 "opening_hours_school_holiday" = "School holidays";

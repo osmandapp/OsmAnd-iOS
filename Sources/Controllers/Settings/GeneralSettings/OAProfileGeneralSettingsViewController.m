@@ -12,7 +12,6 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
-#import "OACoordinatesFormatViewController.h"
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -27,6 +26,7 @@
     int _sectionUnitsAndFormats;
     int _sectionOther;
     int _sectionAnimateMyPosition;
+    NSInteger _displayedRotateMap;
 }
 
 #pragma mark - Initialization
@@ -44,6 +44,11 @@
 {
     [self.tableView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:OAValueTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAValueTableViewCell.reuseIdentifier];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 #pragma mark - UIViewController
@@ -109,6 +114,7 @@
     
     NSString *rotateMapValue;
     NSString *rotateMapIcon;
+    _displayedRotateMap = [_settings.rotateMap get:self.appMode];
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
@@ -220,30 +226,7 @@
     
     NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
-    NSString *geoFormatValue;
-    switch ([_settings.settingGeoFormat get:self.appMode]) {
-        case MAP_GEO_FORMAT_DEGREES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-        case MAP_GEO_FORMAT_MINUTES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DM");
-            break;
-        case MAP_GEO_FORMAT_SECONDS:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DMS");
-            break;
-        case MAP_GEO_UTM_FORMAT:
-            geoFormatValue = @"UTM";
-            break;
-        case MAP_GEO_OLC_FORMAT:
-            geoFormatValue = @"OLC";
-            break;
-        case MAP_GEO_MGRS_FORMAT:
-            geoFormatValue = @"MGRS";
-            break;
-        default:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-    }
+    NSString *geoFormatValue = [CoordinateFormatBridge primaryFormatTitleWithMode:self.appMode];
     
     NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])
@@ -493,7 +476,7 @@
     else if ([itemKey isEqualToString:@"tempUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
+        settingsViewController = [[CoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
@@ -505,7 +488,7 @@
         settingsViewController.delegate = self;
         if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"keep_screen_on"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
-        else if ([itemKey isEqualToString:@"externalImputDevice"])
+        else if ([itemKey isEqualToString:@"externalImputDevice"] || [itemKey isEqualToString:@"coordsFormat"])
             [self showViewController:settingsViewController];
         else
             [self showModalViewController:settingsViewController];
@@ -517,6 +500,16 @@
 - (void)onRotation
 {
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:_settings.rotateMap.key] && [_settings.rotateMap get:self.appMode] != _displayedRotateMap)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)applyParameter:(id)sender

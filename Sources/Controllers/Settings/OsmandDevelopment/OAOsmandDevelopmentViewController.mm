@@ -293,10 +293,7 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     else if ([item.key isEqualToString:kBatterySavingModeKey])
     {
         [[OAAppSettings sharedManager].batterySavingMode set:sender.isOn];
-        if (sender.isOn)
-            [OARootViewController.instance.mapPanel.mapViewController.mapView limitFrameRefreshRate];
-        else
-            [OARootViewController.instance.mapPanel.mapViewController.mapView restoreFrameRefreshRate];
+        [OARootViewController.instance.mapPanel.mapViewController applyFrameRefreshRateLimit];
     }
     else if ([item.key isEqualToString:kEnableMsaaKey])
     {

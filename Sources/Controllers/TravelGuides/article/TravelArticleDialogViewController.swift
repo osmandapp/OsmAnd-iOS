@@ -185,7 +185,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
         view.addSubview(bottomView)
         
-        bottomStackView = UIStackView()
+        bottomStackView = UIStackView(frame: view.bounds)
         guard let bottomStackView else { return }
         bottomStackView.axis = .horizontal
         bottomStackView.alignment = .center

@@ -48,7 +48,7 @@
     double longitude = [point getLongitude];
 
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
     
     OASWptPt *wptPt = (OASWptPt *)p.point;
     targetPoint.title = wptPt.name;

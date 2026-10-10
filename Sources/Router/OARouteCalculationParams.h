@@ -50,6 +50,7 @@
 @property (nonatomic) BOOL inSnapToRoadMode;
 
 @property (nonatomic, assign) std::shared_ptr<RouteCalculationProgress> calculationProgress;
+@property (atomic) BOOL memoryLimitExceeded; // set with calculationProgress->cancelled when OANativeRoutingMemoryGuard stops the calculation
 @property (nonatomic) id<OARouteCalculationProgressCallback> calculationProgressCallback;
 @property (nonatomic) id<OARouteCalculationResultListener> resultListener;
 

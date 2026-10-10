@@ -34,6 +34,7 @@
 #import "OACollapsableLabelView.h"
 #import "OARenderedObject.h"
 #import "OAOSMSettings.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
@@ -115,7 +116,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
     NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
     self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
-    self.infoBundle = [[AdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
+    self.infoBundle = [[OASAdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
 }
 
 - (void) viewDidLoad
@@ -241,7 +242,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             OAAmenityInfoRow *info = [[OAAmenityInfoRow alloc] initWithKey:SHORT_DESCRIPTION_TAG icon:nil textPrefix:nil text:description hiddenUrl:nil collapsableView:nil textColor:nil isWiki:YES isText:NO needLinks:NO isPhoneNumber:NO isUrl:NO order:kOrderShortDescrRow name:nil matchWidthDivider:NO textLinesLimit:5];
             info.typeName = kShortDescriptionRowType;
             [rows addObject:info];
-            [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+            [self.infoBundle setCustomHiddenExtensionsCustomHiddenExtensions:@[DESCRIPTION_TAG]];
         }
     }
     
@@ -251,10 +252,10 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (void)buildInternalRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    NSString *lang = [[OAAppSettings.sharedManager settingPrefMapLanguage] get];
-    _amenityUIHelper = [[AmenityUIHelper alloc] initWithPreferredLang:lang infoBundle:self.infoBundle];
+    _amenityUIHelper = [[AmenityUIHelper alloc] initWithInfoBundle:self.infoBundle];
     _amenityUIHelper.latLon = CLLocationCoordinate2DMake(self.poi.latitude, self.poi.longitude);
-    _amenityUIHelper.showDefaultTags = self.showDefaultTags;
+    if (self.genericRowKeys)
+        _amenityUIHelper.genericRowKeys = self.genericRowKeys;
     NSArray<OAAmenityInfoRow *> *buildedRows = [_amenityUIHelper buildInternal];
     [rows addObjectsFromArray:buildedRows];
 }
@@ -438,7 +439,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 }
                 
                 description = pairDescription.first;
-                [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+                [self.infoBundle setCustomHiddenExtensionsCustomHiddenExtensions:@[DESCRIPTION_TAG]];
             }
         }
     }
@@ -446,7 +447,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     BOOL hasShortDescription = !NSStringIsEmpty(description);
     if (hasShortDescription)
     {
-        [self.infoBundle setCustomHiddenExtensions:@[DESCRIPTION_TAG]];
+        [self.infoBundle setCustomHiddenExtensionsCustomHiddenExtensions:@[DESCRIPTION_TAG]];
     }
     if (!hasShortDescription && allowOnlineWiki)
     {

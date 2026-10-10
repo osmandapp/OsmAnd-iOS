@@ -919,6 +919,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     [OAPOIHelper sharedInstance];
     LogStartup(@"POI helper initialized");
 
+    [SharedTravel initPoiTypes];
+    LogStartup(@"shared POI types initialized");
+
     if (_terminating)
     {
         LogStartup(@"terminating early after POI helper init");

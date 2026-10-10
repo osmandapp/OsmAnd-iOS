@@ -5093,3 +5093,6 @@
 "opening_hours_public_holiday" = "Public holidays";
 "opening_hours_school_holiday" = "School holidays";
 "opening_hours_easter" = "Easter";
+
+"select_layer" = "Select layer";
+"maps_could_not_be_downloaded" = "This map could not be downloaded";

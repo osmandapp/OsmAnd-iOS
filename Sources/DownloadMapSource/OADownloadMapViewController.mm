@@ -14,6 +14,7 @@
 #import "OsmAndApp.h"
 #import "OAAppData.h"
 #import "OASelectMapSourceViewController.h"
+#import "OAAlertBottomSheetViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapCreatorHelper.h"
 #import "OASQLiteTileSource.h"
@@ -42,7 +43,6 @@
 #define kMinZoomPickerRow 2
 #define kMaxZoomRow 3
 #define kMaxZoomPickerRow 4
-#define kZoomPickerRow 3
 #define kDownloadInfoSection 2
 #define kNumberOfTilesRow 0
 #define kDownloadSizeRow 1
@@ -64,7 +64,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @implementation OADownloadMapViewController
 {
-    OsmAndAppInstance _app;
     OAMapRendererView *_mapView;
     NSArray<NSArray *> *_data;
     
@@ -77,7 +76,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     BOOL _minZoomPickerIsShown;
     BOOL _maxZoomPickerIsShown;
     
-    NSDictionary<OAMapSource *, OAResourceItem *> *_onlineMapSources;
+    EOADownloadMapLayer _layer;
+    OAMapSource *_selectedSource;
+    OAResourceItem *_currentItem;
+    NSUInteger _previewRequestGeneration;
     OAAutoObserverProxy* _framePreparedObserver;
 }
 
@@ -183,13 +185,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return @"";
 }
 
-- (instancetype) init
+- (instancetype)initWithLayer:(EOADownloadMapLayer)layer
 {
     self = [super init];
     
     if (self)
     {
-        _app = [OsmAndApp instance];
+        _layer = layer;
     }
     return self;
 }
@@ -207,15 +209,37 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self updateToolBar];
     _cancelButton.layer.cornerRadius = 9.0;
     _downloadButton.layer.cornerRadius = 9.0;
-    _onlineMapSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _currentZoom = _mapView.zoom;
     _minZoomPickerIsShown = NO;
     _maxZoomPickerIsShown = NO;
+    [self refreshSource];
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    OAResourceItem *item = [OADownloadMapLayerHelper resourceItemForLayer:_layer];
+    OAMapSource *source = [OADownloadMapLayerHelper mapSourceForLayer:_layer];
+    if (![source isEqual:_selectedSource] || !item || !_currentItem)
+        [self refreshSource];
+}
+
+- (void)refreshSource
+{
+    _minZoomTileImage = nil;
+    _maxZoomTileImage = nil;
+    _selectedSource = [[OADownloadMapLayerHelper mapSourceForLayer:_layer] copy];
+    _currentItem = [OADownloadMapLayerHelper resourceItemForLayer:_layer];
+    _currentZoom = _mapView.zoom;
+    _minZoomPickerIsShown = NO;
+    _maxZoomPickerIsShown = NO;
     [self setZoomValues];
+    self.downloadButton.enabled = _currentItem && _possibleZoomValues.count > 0;
     [self calculateDownloadInfo];
     [self setupView];
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0, 0.0, self.bottomToolBarView.bounds.size.height, 0.0);
+    [self.tableView reloadData];
 }
 
 - (void) dealloc
@@ -234,7 +258,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (OAResourceItem *) getCurrentItem
 {
-    return _onlineMapSources[_app.data.lastMapSource];
+    return _currentItem;
 }
 
 - (NSInteger) getDefaultItemMinZoom
@@ -290,6 +314,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (NSMutableArray<NSString *> *) getPossibleZoomValues
 {
     NSMutableArray<NSString *> *zoomArray = [[NSMutableArray alloc] init];
+    if (!_currentItem)
+        return zoomArray;
     for (NSInteger i = [self getItemMinZoom]; i <= [self getItemMaxZoom]; i++)
         [zoomArray addObject:[NSString stringWithFormat: @"%ld", i]];
     return zoomArray;
@@ -302,10 +328,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray *zoomLevelArr = [NSMutableArray array];
     NSMutableArray *generalInfoArr = [NSMutableArray array];
     NSString *mapSourceName;
-    mapSourceName = _app.data.lastMapSource.name;
+    mapSourceName = _selectedSource.name ?: @"";
     [mapTypeArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"map_settings_type"),
+        @"title" : [OADownloadMapLayerHelper titleForLayer:_layer],
         @"value" : mapSourceName,
     }];
     [zoomLevelArr addObject:@{
@@ -361,7 +387,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [self.delegate btnCancelPressed];
 }
 
-- (IBAction) downloadButtonPressed:(id)sender {
+- (IBAction)downloadButtonPressed:(id)sender
+{
+    OAResourceItem *item = [OADownloadMapLayerHelper resourceItemForLayer:_layer];
+    OAMapSource *source = [OADownloadMapLayerHelper mapSourceForLayer:_layer];
+    if (!item || ![source isEqual:_selectedSource])
+    {
+        [self refreshSource];
+        if (!item)
+            [OAAlertBottomSheetViewController showAlertWithMessage:OALocalizedString(@"maps_could_not_be_downloaded") cancelTitle:OALocalizedString(@"shared_string_close")];
+        return;
+    }
+    _currentItem = item;
     OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithResource:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom numberOfTiles:_numberOfTiles];
     [[OARootViewController instance].navigationController pushViewController:downloadMapProgressVC animated:YES];
 }
@@ -372,6 +409,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox.topLeft);
     const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox.bottomRight);
     _numberOfTiles = 0;
+    _downloadSize = 0;
+    if (!_currentItem)
+        return;
     for (NSInteger z = _minZoom; z <= _maxZoom; z++)
     {
         NSInteger x1 = OsmAnd::Utilities::getTileNumberX(z, topLeft.longitude);
@@ -441,22 +481,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void) downloadZoomedTiles
+- (void)downloadZoomedTiles
 {
+    NSUInteger generation = ++_previewRequestGeneration;
     NSString *minZoomTileUrl = [self getZoomTileUrl:_minZoom];
     NSString *maxZoomTileUrl = [self getZoomTileUrl:_maxZoom];
     if (!minZoomTileUrl || !maxZoomTileUrl)
         return;
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         NSData *minZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:minZoomTileUrl]];
         NSData *maxZoomData = [NSData dataWithContentsOfURL:[NSURL URLWithString:maxZoomTileUrl]];
-        if (minZoomData && maxZoomData)
-        {
-            _minZoomTileImage = [[UIImage alloc] initWithData:minZoomData];
-            _maxZoomTileImage = [[UIImage alloc] initWithData:maxZoomData];
-        }
+        UIImage *minZoomImage = minZoomData ? [[UIImage alloc] initWithData:minZoomData] : nil;
+        UIImage *maxZoomImage = maxZoomData ? [[UIImage alloc] initWithData:maxZoomData] : nil;
         dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kZoomTilesRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (!strongSelf || generation != strongSelf->_previewRequestGeneration)
+                return;
+            strongSelf.minZoomTileImage = minZoomImage;
+            strongSelf.maxZoomTileImage = maxZoomImage;
+            [strongSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kZoomTilesRow inSection:kZoomSection]] withRowAnimation:UITableViewRowAnimationFade];
         });
     });
 }
@@ -614,10 +658,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [vw.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:kMinZoomRow inSection:kZoomSection] && indexPath != [NSIndexPath indexPathForRow:kMaxZoomRow inSection:kZoomSection] && indexPath != [NSIndexPath indexPathForRow:kZoomPickerRow inSection:kZoomSection] ? nil : indexPath;
+    if (indexPath.section == kMapTypeSection
+        || (indexPath.section == kZoomSection && (indexPath.row == kMinZoomRow || indexPath.row == kMaxZoomRow)))
+        return indexPath;
+    return nil;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -633,6 +679,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         OASelectMapSourceViewController *mapSource = [[OASelectMapSourceViewController alloc] init];
         mapSource.delegate = self;
+        mapSource.layer = _layer;
         [OARootViewController.instance.mapPanel presentViewController:mapSource animated:YES completion:nil];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -774,12 +821,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - OAMapSourceSelectionDelegate
 
-- (void) onNewSourceSelected
+- (void)onNewSourceSelected
 {
-    [self setZoomValues];
-    [self calculateDownloadInfo];
-    [self setupView];
-    [self.tableView reloadData];
+    [self refreshSource];
 }
 
 #pragma mark - OAPreviewZoomLevelsCellDelegate

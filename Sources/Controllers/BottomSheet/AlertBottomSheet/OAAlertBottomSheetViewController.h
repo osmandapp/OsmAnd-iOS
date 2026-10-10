@@ -19,4 +19,6 @@ typedef void(^OAAlertBottomSheetSelectCompletionBlock)(NSInteger selectedIndex);
 + (void) showAlertWithTitle:(NSString *)title titleIcon:(NSString *)titleIcon cancelTitle:(NSString *)cancelTitle selectableItemsTitles:(NSArray<NSString *> *)selectableItemsTitles selectableItemsImages:(NSArray<NSString *> *)selectableItemsImages  selectColpletition:(OAAlertBottomSheetSelectCompletionBlock)selectColpletition;
 + (void) showAlertWithTitle:(NSString *)title titleIcon:(NSString *)titleIcon message:(NSString *)message cancelTitle:(NSString *)cancelTitle doneTitle:(NSString *)doneTitle  selectableItemsTitles:(NSArray<NSString *> *)selectableItemsTitles selectableItemsImages:(NSArray<NSString *> *)selectableItemsImages doneColpletition:(OAAlertBottomSheetDoneCompletionBlock)doneColpletition selectColpletition:(OAAlertBottomSheetSelectCompletionBlock)selectColpletition;
 
++ (void)showAlertWithTitle:(NSString *)title selectableItemsTitles:(NSArray<NSString *> *)titles descriptions:(NSArray<NSString *> *)descriptions images:(NSArray<NSString *> *)images selection:(OAAlertBottomSheetSelectCompletionBlock)selection;
+
 @end

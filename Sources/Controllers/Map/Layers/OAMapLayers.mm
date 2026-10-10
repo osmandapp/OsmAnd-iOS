@@ -147,10 +147,13 @@
 
 - (void) onBackgroundStateChanged
 {
-    if (!OsmAndApp.instance.isInBackground)
-        for (OAMapLayer *layer in _layers.objectEnumerator)
-            if (layer.invalidated)
-                [layer updateLayer];
+    // layers are updated on the main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!OsmAndApp.instance.isInBackground)
+            for (OAMapLayer *layer in _layers.objectEnumerator)
+                if (layer.invalidated)
+                    [layer updateLayer];
+    });
 }
 
 - (NSArray<OAMapLayer *> *) getLayers

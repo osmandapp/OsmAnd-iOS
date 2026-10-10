@@ -1972,7 +1972,7 @@ static BOOL _repositoryUpdated = NO;
     [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
         NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated end");
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-            // Reloading the region tree drops the group items built on startup, so do it only when regions.ocbf changed.
+            // The region tree is reread only when regions.ocbf changed.
             // The tree is read here but published on the main thread: self.region, the region-keyed resource cache and
             // the section layout are all compared against _app.worldRegion by identity.
             OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
@@ -1986,7 +1986,7 @@ static BOOL _repositoryUpdated = NO;
                 }
                 [_refreshRepositoryProgressHUD hide:YES];
                 [self updateContent];
-                [_app.worldRegion buildResourceGroupItem];
+                [_app.worldRegion rebuildResourceGroupItem];
                 _updateButton.enabled = YES;
             });
         });

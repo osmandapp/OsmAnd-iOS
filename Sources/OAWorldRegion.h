@@ -80,6 +80,7 @@
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 
 - (void)buildResourceGroupItem;
+- (void)rebuildResourceGroupItem;
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type;
 - (BOOL)hasGroupItems;
 + (NSArray<OAWorldRegion *> *)removeDuplicates:(NSArray<OAWorldRegion *> *)regions;

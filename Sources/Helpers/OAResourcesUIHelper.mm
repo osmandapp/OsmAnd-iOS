@@ -2079,8 +2079,13 @@ includeHidden:(BOOL)includeHidden
 
                 if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
-                
-                [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
+
+                // group items are rebuilt on the main thread
+                OAWorldRegion *region = item.worldRegion;
+                NSNumber *type = [OAResourceType toValue:item.resourceType];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [region.superregion updateGroupItems:region type:type];
+                });
             }
         }
 

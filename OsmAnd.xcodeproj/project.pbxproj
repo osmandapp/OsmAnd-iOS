@@ -13,6 +13,7 @@
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
+		0A5E1C0D2F7A10000000A001 /* OANativeRoutingMemoryGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
 		0575058E292D254500FEECD4 /* weather.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0575058D292D254500FEECD4 /* weather.addon.render.xml */; };
@@ -3672,6 +3673,8 @@
 		040A97D4493C89D048F33E9F /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteRecalculationHelper.h; sourceTree = "<group>"; };
 		051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteRecalculationHelper.mm; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000A002 /* OANativeRoutingMemoryGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANativeRoutingMemoryGuard.h; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANativeRoutingMemoryGuard.mm; sourceTree = "<group>"; };
 		0513AA362A9B530A00CFA2A0 /* OADestinationBarWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationBarWidget.h; sourceTree = "<group>"; };
 		0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationBarWidget.mm; sourceTree = "<group>"; };
 		05541D94299267900014AEF8 /* contourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = contourlines.addon.render.xml; path = ../resources/rendering_styles/contourlines.addon.render.xml; sourceTree = "<group>"; };
@@ -14802,6 +14805,8 @@
 				461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */,
 				051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */,
 				051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */,
+				0A5E1C0D2F7A10000000A002 /* OANativeRoutingMemoryGuard.h */,
+				0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -18410,6 +18415,7 @@
 				DA5A848226C563A900F274C7 /* OADistanceToPointWidget.mm in Sources */,
 				FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */,
 				051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */,
+				0A5E1C0D2F7A10000000A001 /* OANativeRoutingMemoryGuard.mm in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */,

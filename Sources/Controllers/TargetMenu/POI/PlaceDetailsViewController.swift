@@ -9,6 +9,7 @@
 // analog in android: PlaceDetailsMenuBuilder.java
 
 import QuartzCore
+import OsmAndShared
 
 @objcMembers
 final class PlaceDetailsViewController: OAPOIViewController {

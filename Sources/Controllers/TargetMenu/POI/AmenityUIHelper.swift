@@ -80,7 +80,6 @@ final class AmenityUIHelper: NSObject {
         if entry.collapsableEntryType == AmenityTagEntry.CollapsableEntryType.poiTypeGroup {
             return buildPoiTypeGroupRow(entry)
         }
-        // names are shown by buildNamesRow
         let baseKey = entry.key.components(separatedBy: ":")[0]
         guard baseKey != POI_NAME && !kNameTagPrefixes.contains(baseKey), let value = entry.value else { return nil }
         if let localizations = entry.collapsableEntries, !localizations.isEmpty {
@@ -243,7 +242,6 @@ final class AmenityUIHelper: NSObject {
             fallbackType.order = 90 // the order OAPOIParser gives a type without one
             fallbackType.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
                 ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
-            // a custom GPX value is user data: show it as stored, do not translate it as a POI key
             let displayValue = useGenericFallback ? cleanValue : helper.translation(cleanValue, withDefault: false) ?? cleanValue
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: fallbackType, key: key, value: displayValue, subtype: subtype)
             if useGenericFallback {

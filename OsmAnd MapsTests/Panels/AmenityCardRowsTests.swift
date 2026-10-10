@@ -144,7 +144,6 @@ final class AmenityCardRowsTests: XCTestCase {
     }
 
     private func buildRows(_ poi: OAPOI?, _ genericRowKeys: Set<String>) -> [String: OAAmenityInfoRow] {
-        // OAPOIViewController.buildInternalRows without the map-dependent rows of buildMenu
         guard let poi else {
             XCTFail("no amenity")
             return [:]

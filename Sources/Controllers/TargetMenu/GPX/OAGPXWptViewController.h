@@ -30,7 +30,6 @@
 
 - (instancetype) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly;
 
-// the amenity of the point card: the map amenity on top of the point's stored tags, or the stored tags alone
 + (OAPOI *) cardAmenityForPoint:(OAGpxWptItem *)wpt mapAmenity:(OAPOI *)mapAmenity;
 
 - (NSString *) getGpxFileName;

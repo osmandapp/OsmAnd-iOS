@@ -262,8 +262,7 @@ final class SharedTravel: NSObject {
     private static let poiTypesLock = NSLock()
 
     /// Reads poi_types.xml into the shared registry. The obf reader needs it to name the amenities
-    /// it decodes, the travel code needs it to read an activity back out of a route's subtype, and
-    /// the point card builds its rows with it (AdditionalInfoBundle).
+    /// it decodes, and the travel code needs it to read an activity back out of a route's subtype.
     /// `OAPOIHelper` parses the same file for the app's own model; the two live side by side until
     /// the search moves to OsmAndShared.
     static func initPoiTypes() {

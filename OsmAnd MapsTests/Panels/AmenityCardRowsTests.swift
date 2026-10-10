@@ -2,8 +2,6 @@ import XCTest
 import OsmAndShared
 @testable import OsmAnd_Maps
 
-// Rows of a GPX point card built from the point's stored extensions, the way OAGPXWptViewController
-// builds them. Port of AmenityUIHelperStoredExtensionsTest of Android.
 @MainActor
 final class AmenityCardRowsTests: XCTestCase {
 
@@ -61,7 +59,6 @@ final class AmenityCardRowsTests: XCTestCase {
         XCTAssertNotNil(rows[Self.customKey])
     }
 
-    // the fields OAFavoriteItem.toWpt and the editors write on a point never become generic rows
     func testNoInternalPointFieldIsTreatedAsCustom() {
         let serviceFields = ["hidden": "true", "address": "address", "pickup_date": "2024-01-01T00:00:00Z",
                         "visited_date": "2024-01-01T00:00:00Z", "creation_date": "2024-01-01T00:00:00Z",
@@ -80,7 +77,6 @@ final class AmenityCardRowsTests: XCTestCase {
         XCTAssertEqual(rows["test:reference"]?.text, "abc_def")
     }
 
-    // a key with "route", "content" or "wikipedia" is dropped before the generic row, as on Android
     func testCustomFieldMatchingAmenityFilterIsStillNotShown() {
         let rows = buildRows(["test:route_id": "1234"])
         XCTAssertNil(rows["test:route_id"])
@@ -109,7 +105,6 @@ final class AmenityCardRowsTests: XCTestCase {
         XCTAssertNotNil(rows["delivery_yes"], rows.keys.sorted().description)
     }
 
-    // a point saved from a map POI: the card shows the POI found on the map together with the point's custom tags
     func testMapAmenityKeepsCustomTagsOfThePoint() {
         let point = WptPt(lat: 50.451145, lon: 30.52157)
         point.setAmenityOriginName(originName: "Amenity:McDonald's: sustenance:fast_food")

@@ -15,7 +15,6 @@ final class LocaleHelper: NSObject {
         return preferred
     }
          
-    // analog of android LocaleHelper.getPreferredLangCandidates: the app language, then the system ones
     static func getPreferredLangCandidates() -> [String] {
         var candidates = [String]()
         if let current = OAUtilities.currentLang(), !current.isEmpty {

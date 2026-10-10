@@ -8,7 +8,7 @@
 
 import OsmAndShared
 
-// analog in android AmenityUIHelper.java: which tags get a row is decided by AdditionalInfoBundle of OsmAndShared
+// analog in android AmenityUIHelper.java
 
 @objcMembers
 final class AmenityUIHelper: NSObject {
@@ -235,7 +235,6 @@ final class AmenityUIHelper: NSObject {
            let pType = helper.getAnyPoiAdditionalType(byKey: additionalType.getKeyName()) as? OAPOIType {
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
         } else {
-            // a key without a poi type: a generic row of a GPX point or a tag of a category that shows all its tags
             let useGenericFallback = genericRowKeys.contains(key)
             let displayKey = useGenericFallback ? Self.genericFallbackDisplayKey(key) : key
             let fallbackType: OAPOIType? = OAPOIType(name: displayKey, category: poiCategory)

@@ -87,7 +87,6 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     OAPOI *storedAmenity = [wpt getAmenity];
     if (!mapAmenity || !storedAmenity)
         return mapAmenity ?: storedAmenity;
-    // as Android getUpdatedAmenityExtensions: the stored tags of the point, the map amenity on top of them
     [[storedAmenity getAdditionalInfo] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
         if (![mapAmenity getAdditionalInfo:key])
             [mapAmenity setAdditionalInfo:key value:value];

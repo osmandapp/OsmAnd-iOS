@@ -61,7 +61,6 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     OsmAndAppInstance _app;
     NSDictionary *_phrases;
     NSDictionary *_phrasesEN;
-    NSArray<OAPOIType *> *_textPoiAdditionals;
     NSDictionary<NSString *, NSString *> *_poiTypeOptionalIcons;
     NSDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
     NSMapTable<NSString *, NSString *> *_deprecatedTags;

@@ -17,6 +17,7 @@ final class AmenityUIHelper: NSObject {
     private static let DISH_INFO_ID = COLLAPSABLE_PREFIX + "dish"
     private static let US_MAPS_RECREATION_AREA = "us_maps_recreation_area"
     
+    private static let SOCKET = "socket"
     private static let NAMES_ROW_KEY = "names_row_key"
     private static let ALT_NAMES_ROW_KEY = "alt_names_row_key"
     
@@ -74,6 +75,7 @@ final class AmenityUIHelper: NSObject {
         var infoRows = [OAAmenityInfoRow]()
         var descriptions = [OAAmenityInfoRow]()
         var resultRows = [OAAmenityInfoRow]()
+        var socketTags = [String: String]()
   
         let filteredInfo = additionalInfo.getFilteredLocalizedInfo()
         for entry in filteredInfo {
@@ -95,6 +97,11 @@ final class AmenityUIHelper: NSObject {
                 continue // will be added in buildNamesRow
             }            
             
+            if let strValue = value as? String, let socketTag = socketOsmTag(key) {
+                socketTags[socketTag] = strValue
+                continue
+            }
+
             var infoRow: OAAmenityInfoRow?
             if let strValue = value as? String {
                 infoRow = createPoiAdditionalInfoRow(key: key, value: strValue, collapsableView: nil)
@@ -115,6 +122,9 @@ final class AmenityUIHelper: NSObject {
         
         if let cuisineRow, !additionalInfo.containsAny([AmenityUIHelper.CUISINE_INFO_ID, AmenityUIHelper.DISH_INFO_ID]) {
             infoRows.append(cuisineRow)
+        }
+        if let socketRow = buildSocketRow(socketTags) {
+            infoRows.append(socketRow)
         }
         
         for entry in additionalInfo.getFilteredInfo() ?? [:] {
@@ -491,6 +501,76 @@ final class AmenityUIHelper: NSObject {
         return nil
     }
     
+    // map data keeps the poi type name (socket_type2_output), GPX and OSM edits the tag (socket:type2:output)
+    private func socketOsmTag(_ key: String) -> String? {
+        var tag = key
+        if let pt = helper.getAnyPoiAdditionalType(byKey: key) as? OAPOIType, pt.isText, let osmTag = pt.getOsmTag() {
+            tag = osmTag
+        }
+        return tag.hasPrefix(Self.SOCKET + ":") ? tag : nil
+    }
+
+    // one row for all socket:<type>[:<attribute>] tags: "Type 2 • CHAdeMO", expanded to "Type 2: 4 × 22 kW"
+    private func buildSocketRow(_ socketTags: [String: String]) -> OAAmenityInfoRow? {
+        var attributesByType = [String: [String: String]]()
+        for (tag, value) in socketTags {
+            let parts = tag.dropFirst(Self.SOCKET.count + 1).split(separator: ":", maxSplits: 1).map(String.init)
+            guard let type = parts.first else { continue }
+            attributesByType[type, default: [:]][parts.count > 1 ? parts[1] : ""] = value
+        }
+        // the order of poi_types.xml
+        let orderedNames = helper.textPoiAdditionals.map { $0.name ?? "" }
+        let types = attributesByType.keys.sorted { a, b in
+            let ia = orderedNames.firstIndex(of: Self.SOCKET + "_" + a) ?? Int.max
+            let ib = orderedNames.firstIndex(of: Self.SOCKET + "_" + b) ?? Int.max
+            return ia != ib ? ia < ib : a < b
+        }
+        var names = [String]()
+        var lines = [String]()
+        for type in types {
+            guard let attributes = attributesByType[type] else { continue }
+            let count = attributes[""]
+            if count == "no" || count == "0" {
+                continue
+            }
+            let name = helper.getPhraseByName(Self.SOCKET + "_" + type + "_yes", withDefatultValue: true) ?? type
+            let details = Self.formatSocketAttributes(attributes)
+            names.append(name)
+            lines.append(details.isEmpty ? name : name + ": " + details)
+        }
+        guard !lines.isEmpty else { return nil }
+        let single = lines.count == 1
+        let collapsableView = single ? nil : OACollapsableLabelView(text: lines.joined(separator: "\n"), collapsed: true)
+        let icon = getRowIcon("charging_station") ?? UIImage.templateImageNamed(Self.defaultAmenityIconName)
+        let textPrefix = helper.getPhraseByName(Self.SOCKET, withDefatultValue: true) ?? Self.SOCKET
+        let row = OAAmenityInfoRow(key: Self.SOCKET, icon: icon, textPrefix: textPrefix, text: single ? lines[0] : names.joined(separator: " • "), hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 50, name: Self.SOCKET, matchWidthDivider: false, textLinesLimit: 2)
+        row.collapsed = true
+        return row
+    }
+
+    // "4 × 22 kW · 400 V · 32 A": the values are OSM text, so no units are added or translated
+    private static func formatSocketAttributes(_ attributes: [String: String]) -> String {
+        var rest = attributes
+        var text = ""
+        if let count = rest.removeValue(forKey: ""), Int(count) != nil {
+            text = count
+        }
+        if let output = rest.removeValue(forKey: "output"), !output.isEmpty {
+            text += (text.isEmpty ? "" : " × ") + output
+        }
+        var details = [String]()
+        for attribute in ["voltage", "current"] {
+            if let value = rest.removeValue(forKey: attribute), !value.isEmpty {
+                details.append(value)
+            }
+        }
+        details += rest.keys.sorted().compactMap { rest[$0] }.filter { !$0.isEmpty }
+        for detail in details {
+            text += (text.isEmpty ? "" : " · ") + detail
+        }
+        return text
+    }
+
     private func getRowIcon(_ name: String) -> UIImage? {
         let iconName = name.hasPrefix("mx_") ? name : "mx_" + name
         return OATargetInfoViewController.getIcon(iconName, size: CGSize(width: 20, height: 20))

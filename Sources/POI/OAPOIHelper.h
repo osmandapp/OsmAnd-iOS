@@ -37,6 +37,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, readonly) OAPOICategory *otherPoiCategory;
 @property (nonatomic, readonly) OAPOICategory *otherMapCategory;
 @property (nonatomic, readonly) NSArray<OAPOIFilter *> *poiFilters;
+@property (nonatomic, readonly) NSArray<OAPOIType *> *textPoiAdditionals;
 
 + (nonnull OAPOIHelper *) sharedInstance;
 

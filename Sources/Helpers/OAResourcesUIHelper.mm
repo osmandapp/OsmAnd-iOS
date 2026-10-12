@@ -1820,6 +1820,13 @@ includeHidden:(BOOL)includeHidden
         OAResourceItem *item = mutableItems.firstObject;
 
         const auto resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId);
+        if (!resource)
+        {
+            // an item list built before a repository update can hold an id the repository no longer has
+            NSLog(@"[WARNING] startDownloadOfItems: %@ is not in the repository", item.resourceId.toNSString());
+            [mutableItems removeObject:item];
+            continue;
+        }
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
         repositoryItem.resourceId = resource->id;
         repositoryItem.resourceType = resource->type;

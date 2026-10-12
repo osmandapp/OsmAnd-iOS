@@ -150,7 +150,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 @property (nonatomic, assign) BOOL checkApproximation;
 - (NSArray<NSArray<OASWptPt *> *> *)getOrderedRoadSegmentDataKeys;
 - (void)removeUnusedRoadSegmentData;
-- (void)updateSegmentsForSnap:(BOOL)both;
 - (BOOL)needDuplicatePoint:(const std::vector<SHARED_PTR<GpxPoint>> &)gpxPoints index:(NSInteger)index;
 @end
 

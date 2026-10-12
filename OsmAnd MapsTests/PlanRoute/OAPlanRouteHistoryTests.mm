@@ -473,6 +473,35 @@
     [self assertFinishedPoints:[self latitudes:self.original]];
 }
 
+- (void)testDeletingFirstSegmentIsOneUndoStep
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    [self.bridge deleteSegmentWithPointIndexes:@[@0, @1, @2, @3]];
+    [self assertFinishedPoints:[self latitudes:[self.original subarrayWithRange:NSMakeRange(4, 4)]]];
+    for (OASWptPt *point in self.context.getPoints)
+        XCTAssertFalse(point.isGap);
+    [self.bridge undo];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    [self assertFinishedPoints:[self latitudes:self.original]];
+    for (NSInteger index = 0; index < self.original.count; index++)
+        XCTAssertEqual(self.context.getPoints[index].isGap, index == 3);
+}
+
+- (void)testDeletingLastSegmentIsOneUndoStep
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    [self.bridge deleteSegmentWithPointIndexes:@[@4, @5, @6, @7]];
+    [self assertFinishedPoints:[self latitudes:[self.original subarrayWithRange:NSMakeRange(0, 4)]]];
+    XCTAssertTrue(self.context.getPoints[3].isGap);
+    [self.bridge undo];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    [self assertFinishedPoints:[self latitudes:self.original]];
+    [self.bridge redo];
+    [self assertFinishedPoints:[self latitudes:[self.original subarrayWithRange:NSMakeRange(0, 4)]]];
+}
+
 - (void)testSplitDuringInsertionUndoDoesNotLoseSuffix
 {
     [self.context splitSegments:4];

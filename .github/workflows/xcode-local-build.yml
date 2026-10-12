@@ -204,6 +204,7 @@ jobs:
         RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }}
       run: |
         set -o pipefail
+        trap 'status=$?; if [ "$status" -ne 0 ]; then cat "$RUNNER_TEMP/ios-archive.log"; fi; exit "$status"' EXIT
         xcodebuild \
           -workspace ios/OsmAnd.xcworkspace \
           -scheme "OsmAnd Maps Release" \
@@ -211,9 +212,19 @@ jobs:
           -destination "generic/platform=iOS" \
           -configuration Release \
           -archivePath OsmAndMaps.xcarchive \
+          -resultBundlePath "$RUNNER_TEMP/ios-archive-${{ github.run_id }}-${{ github.run_attempt }}.xcresult" \
           CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}" \
           MARKETING_VERSION="${RELEASE_IOS_VERSION}" \
-          archive | xcpretty
+          archive 2>&1 | tee "$RUNNER_TEMP/ios-archive.log" | xcpretty
+    - name: Upload iOS archive diagnostics
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-archive-diagnostics
+        path: |
+          ${{ runner.temp }}/ios-archive.log
+          ${{ runner.temp }}/ios-archive-${{ github.run_id }}-${{ github.run_attempt }}.xcresult
+        if-no-files-found: warn
     - name: Zip iOS archive
       env:
         LANG: "en_US.UTF-8"

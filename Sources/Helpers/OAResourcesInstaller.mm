@@ -385,7 +385,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 }
                             }
                             if (foundRegion)
-                                [foundRegion.superregion updateGroupItems:foundRegion type:[OAResourceType toValue:resource->type]];
+                            {
+                                // group items are rebuilt on the main thread
+                                NSNumber *type = [OAResourceType toValue:resource->type];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [foundRegion.superregion updateGroupItems:foundRegion type:type];
+                                });
+                            }
                         }
                     }
                     else

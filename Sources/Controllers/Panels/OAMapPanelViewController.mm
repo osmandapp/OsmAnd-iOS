@@ -1432,6 +1432,12 @@ typedef enum
     if (!self.canPresentNewContextMenu)
         return;
 
+    if (self.isRouteTargetSelectionActive)
+    {
+        [self presentContextMenuWithPoints:targetPoints selectedObjects:selectedObjects touchPointLatLon:touchPointLatLon];
+        return;
+    }
+
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1455,6 +1461,11 @@ typedef enum
         [validPoints addObjectsFromArray:targetPoints];
         if (!NSArrayIsEmpty(selectedObjects))
             [validSelectedObjects addObjectsFromArray:selectedObjects];
+    }
+    else if (self.isRouteTargetSelectionActive && targetPoints.count > 0)
+    {
+        [self processTargetPoint:targetPoints.firstObject];
+        return;
     }
     else
     {
@@ -1513,6 +1524,15 @@ typedef enum
     || _activeTargetType == OATargetWeatherToolbar
     || _activeTargetType == OATargetTerrainParametersSettings
     || _activeTargetType == OATargetMapModeParametersSettings;
+}
+
+- (BOOL)isRouteTargetSelectionActive
+{
+    return _activeTargetType == OATargetRouteStartSelection
+        || _activeTargetType == OATargetRouteFinishSelection
+        || _activeTargetType == OATargetRouteIntermediateSelection
+        || _activeTargetType == OATargetHomeSelection
+        || _activeTargetType == OATargetWorkSelection;
 }
 
 - (BOOL)canPresentNewContextMenu

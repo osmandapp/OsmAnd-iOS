@@ -411,6 +411,9 @@
     // the guard can set memoryLimitExceeded after a cancel cleared it, so a cancelled operation is checked too
     if (_params.calculationProgress->isCancelled() && (self.isCancelled || !_params.calculationProgress->memoryLimitExceeded))
         return; // stopped by stopCalculation or the caller; a stop by OANativeRoutingMemoryGuard is an error to show
+    // a nested part stopped by the guard can leave a calculated route without that part
+    if (_params.calculationProgress->memoryLimitExceeded && [res isCalculated])
+        res = [[OARouteCalculationResult alloc] initWithErrorMessage:OALocalizedString(@"route_calculation_out_of_memory")];
 
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && !AFNetworkReachabilityManager.sharedManager.isReachable;
     if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts.get)

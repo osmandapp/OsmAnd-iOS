@@ -374,7 +374,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             NSNumber *osmIdObj = (that.obfId == [OAMapObject getInvalidObfId] || (int64_t)that.obfId < 0) ? nil : @(osmId);
             NSString *wikidata = [that getWikidata];
 
-            if (that.isRouteTrack)
+            if (that.isRouteTrack || that.isSuperRoute)
             {
                 osmIdObj = nil;
                 wikidata = nil; // do not merge routes

@@ -901,6 +901,8 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
+    if (_reopeningState.temporarilyShown && self.isShown && !self.isCurrentTrack)
+        [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
     [self hide];
 }
 
@@ -1590,6 +1592,7 @@
 
 - (BOOL)changeTrackVisible
 {
+    _reopeningState.temporarilyShown = NO;
     BOOL visible = [super changeTrackVisible];
     [_uiBuilder resetDataInTab:_selectedTab == EOATrackMenuHudOverviewTab ? EOATrackMenuHudActionsTab : EOATrackMenuHudOverviewTab];
     return visible;

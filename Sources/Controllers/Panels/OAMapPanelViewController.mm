@@ -3194,6 +3194,7 @@ typedef enum
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid openedFromMap:NO];
     state.openedFromTracksList = YES;
     state.openedFromTrackMenu = fromTrackMenu;
+    state.temporarilyShown = !item.isShowCurrentTrack && ![_settings isGpxVisible:item.gpxFilePath];
     state.navControllerHistory = navControllerHistory;
     state.lastSelectedTab = selectedTab;
     [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode state:state];

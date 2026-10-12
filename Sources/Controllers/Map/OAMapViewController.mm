@@ -4000,6 +4000,21 @@ static char kMapSourceUpdateQueueKey;
     if (items.count == 0)
         return NO;
 
+    if (docPath.length == 0)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        for (OAGpxWptItem *item in items)
+            [helper saveWpt:item.point];
+
+        if (updateMap)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+            });
+        }
+        return YES;
+    }
+
     BOOL found = NO;
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
     for (NSString *key in activeGpx) {

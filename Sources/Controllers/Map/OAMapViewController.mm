@@ -4003,8 +4003,12 @@ static char kMapSourceUpdateQueueKey;
     if (docPath.length == 0)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
         for (OAGpxWptItem *item in items)
+        {
             [helper saveWpt:item.point];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
+        }
 
         if (updateMap)
         {

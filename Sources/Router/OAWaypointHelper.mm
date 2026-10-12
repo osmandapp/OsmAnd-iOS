@@ -445,6 +445,11 @@
                                         announceRadius = kStateShortAlarmAnnounce;
                                         filter = YES;
                                         break;
+                                    case AIT_TRAM:
+                                        // one announcement for several tracks of one junction
+                                        announceRadius = kStateLongAlarmAnnounce;
+                                        filter = YES;
+                                        break;
                                     case AIT_PEDESTRIAN:
                                         announceRadius = (nextRoute != nil
                                                           && [nextRoute.turnType isRoundAbout]

@@ -116,6 +116,10 @@
             else
                 return [UIImage imageNamed:ACImageNameListWarningsRailways];
         }
+        else if (type == AIT_TRAM)
+        {
+            return [UIImage imageNamed:ACImageNameListWarningsTram];
+        }
         else if (type == AIT_TRAFFIC_CALMING)
         {
             if (americanSigns)

@@ -393,7 +393,7 @@
 - (void) stopCalculation
 {
     _params.calculationProgress->cancelled = true;
-    _params.memoryLimitExceeded = NO; // a stop requested here wins over a stop by the memory guard
+    _params.calculationProgress->memoryLimitExceeded = false; // a stop requested here wins over a stop by the memory guard
 }
 
 - (void) cancel
@@ -408,7 +408,8 @@
     _routeCalcError = nil;
     _routeCalcErrorShort = nil;
     OARouteCalculationResult *res = [_routingHelper.provider calculateRouteImpl:_params];
-    if (_params.calculationProgress->isCancelled() && !_params.memoryLimitExceeded)
+    // the guard can set memoryLimitExceeded after a cancel cleared it, so a cancelled operation is checked too
+    if (_params.calculationProgress->isCancelled() && (self.isCancelled || !_params.calculationProgress->memoryLimitExceeded))
         return; // stopped by stopCalculation or the caller; a stop by OANativeRoutingMemoryGuard is an error to show
 
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && !AFNetworkReachabilityManager.sharedManager.isReachable;
@@ -429,7 +430,7 @@
         else
         {
             if (!_params.resultListener) // only the navigation route is recalculated on location updates
-                _recalcHelper.memoryLimitExceeded = _params.memoryLimitExceeded;
+                _recalcHelper.memoryLimitExceeded = _params.calculationProgress->memoryLimitExceeded;
             _evalWaitInterval = MAX(3, _evalWaitInterval * 3 / 2); // for Issue #3899
             _evalWaitInterval = MIN(_evalWaitInterval, 120);
         }
@@ -461,7 +462,7 @@
             _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), res.errorMessage];
             _routeCalcErrorShort = OALocalizedString(@"error_calculating_route");
             [self showMessage:_routeCalcError];
-            if (_params.memoryLimitExceeded)
+            if (_params.calculationProgress->memoryLimitExceeded)
             {
                 NSString *message = res.errorMessage;
                 dispatch_async(dispatch_get_main_queue(), ^{

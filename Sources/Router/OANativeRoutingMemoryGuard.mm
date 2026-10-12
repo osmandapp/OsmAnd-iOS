@@ -18,7 +18,6 @@ static const NSTimeInterval kCheckInterval = 0.2;
 
 @implementation OANativeRoutingMemoryGuard
 {
-    OARouteCalculationParams *_params;
     std::shared_ptr<RouteCalculationProgress> _progress;
     dispatch_semaphore_t _stopSignal;
     dispatch_semaphore_t _finished;
@@ -31,7 +30,6 @@ static const NSTimeInterval kCheckInterval = 0.2;
     self = [super init];
     if (self)
     {
-        _params = params;
         _progress = params.calculationProgress;
         _stopSignal = dispatch_semaphore_create(0);
         _finished = dispatch_semaphore_create(0);
@@ -76,7 +74,7 @@ static const NSTimeInterval kCheckInterval = 0.2;
         if (available > 0 && available < kReservedMemory)
         {
             _exceeded = true;
-            _params.memoryLimitExceeded = YES;
+            _progress->memoryLimitExceeded = true;
             _progress->cancelled = true;
             NSLog(@"Route calculation stopped: footprint %llu MB, %zu MB left before the limit", footprint / kMB, available / kMB);
             break;

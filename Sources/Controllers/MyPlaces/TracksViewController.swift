@@ -1143,22 +1143,25 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let totalTime = folderAnalysis.timeSpan
         let totalSizeBytes = folderAnalysis.fileSize
         
-        var statistics = "\(localizedString("shared_string_gpx_tracks")) – \(NumberFormatter.localizedCount(folderAnalysis.tracksCount))"
+        var fields = [statisticsField("shared_string_gpx_tracks", NumberFormatter.localizedCount(folderAnalysis.tracksCount))]
         if let distance = OAOsmAndFormatter.getFormattedDistance(totalDistance) {
-            statistics += ", \(localizedString("shared_string_distance").lowercased()) – \(distance)"
+            fields.append(statisticsField("shared_string_distance", distance))
         }
         if let uphill = OAOsmAndFormatter.getFormattedAlt(totalUphill) {
-            statistics += ", \(localizedString("map_widget_trip_recording_uphill").lowercased()) – \(uphill)"
+            fields.append(statisticsField("map_widget_trip_recording_uphill", uphill))
         }
         if let downhill = OAOsmAndFormatter.getFormattedAlt(totalDownhill) {
-            statistics += ", \(localizedString("map_widget_trip_recording_downhill").lowercased()) – \(downhill)"
+            fields.append(statisticsField("map_widget_trip_recording_downhill", downhill))
         }
         if let duration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(totalTime), shortFormat: true) {
-            statistics += ", \(localizedString("map_widget_trip_recording_duration").lowercased()) – \(duration)."
+            fields.append(statisticsField("map_widget_trip_recording_duration", duration))
         }
         let size = ByteCountFormatter.string(fromByteCount: totalSizeBytes, countStyle: .file)
-        statistics += "\n\n\(localizedString("shared_string_total_size")) – \(size)"
-        return statistics
+        return fields.joined(separator: " · ") + "\n\n" + statisticsField("shared_string_total_size", size)
+    }
+    
+    private func statisticsField(_ titleKey: String, _ value: String) -> String {
+        String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString(titleKey), value)
     }
     
     private func configureToolbar() {

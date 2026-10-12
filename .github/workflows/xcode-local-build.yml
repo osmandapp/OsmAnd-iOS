@@ -197,6 +197,23 @@ jobs:
         name: ios-ui-tests-xcresult
         path: ${{ runner.temp }}/ios-ui-tests.xcresult
         if-no-files-found: warn
+    - name: Prepare signing for iOS archive
+      env:
+        USER_KEY: ${{ secrets.USER_KEY }}
+      run: |
+        set -o pipefail
+        {
+          whoami
+          printf 'HOME=%s\n' "$HOME"
+          security list-keychains -d user
+          echo "Signing identities before unlocking login keychain:"
+          security find-identity -v -p codesigning
+          security unlock-keychain -p "$USER_KEY" "$HOME/Library/Keychains/login.keychain-db"
+          echo "Signing identities after unlocking login keychain:"
+          security find-identity -v -p codesigning
+          echo "Signing identities in login keychain:"
+          security find-identity -v -p codesigning "$HOME/Library/Keychains/login.keychain-db"
+        } 2>&1 | tee "$RUNNER_TEMP/ios-archive-signing.log"
     - name: Creating iOS archive
       env:
         LANG: "en_US.UTF-8"
@@ -223,6 +240,7 @@ jobs:
         name: ios-archive-diagnostics
         path: |
           ${{ runner.temp }}/ios-archive.log
+          ${{ runner.temp }}/ios-archive-signing.log
           ${{ runner.temp }}/ios-archive-${{ github.run_id }}-${{ github.run_attempt }}.xcresult
         if-no-files-found: warn
     - name: Zip iOS archive

@@ -2470,8 +2470,11 @@ typedef enum
 {
     CLLocationCoordinate2D initialPoint = CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude);
     [self targetHideContextPinMarker];
-    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:^{
+        // Closing the result card restores any suspended planner before this callback.
+        if (![_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+            [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
+    }];
 }
 
 - (void) targetGoToPoint

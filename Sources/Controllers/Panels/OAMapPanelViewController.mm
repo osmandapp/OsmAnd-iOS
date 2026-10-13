@@ -2827,6 +2827,9 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
+        if (onComplete)
+            onComplete();
+
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -2840,18 +2843,16 @@ typedef enum
             }
         }
         
-        if (_prevScrollableHudViewController)
+        if (_prevScrollableHudViewController && !hideActiveTarget)
         {
-            [self showScrollableHudViewController:_prevScrollableHudViewController];
+            OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
             _prevScrollableHudViewController = nil;
+            [self showScrollableHudViewController:controller];
         }
         else
         {
             [_hudViewController updateDependentButtonsVisibility];
         }
-
-        if (onComplete)
-            onComplete();
     }];
     
     [_hudViewController updateControlsLayout:YES];
@@ -2897,6 +2898,12 @@ typedef enum
                 [self restoreActiveTargetMenu];
 
             _activeTargetChildPushed = NO;
+        }
+        if (_prevScrollableHudViewController)
+        {
+            OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+            _prevScrollableHudViewController = nil;
+            [self showScrollableHudViewController:controller];
         }
         if (onComplete)
             onComplete();
@@ -3220,6 +3227,12 @@ typedef enum
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
 
+            // Search results temporarily hide the planner in showTargetPointMenu.
+            // Force hiding it here would discard the route editing context.
+            if (strongSelf->_isNewContextMenuStillEnabled
+                && [strongSelf->_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+                return NO;
+
             [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
             return YES;
         }],
@@ -3236,7 +3249,9 @@ typedef enum
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
 
-            strongSelf->_prevScrollableHudViewController = nil;
+            // Keep the planner suspended when replacing a search result menu.
+            if (![strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+                strongSelf->_prevScrollableHudViewController = nil;
             [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
             return YES;
         }],

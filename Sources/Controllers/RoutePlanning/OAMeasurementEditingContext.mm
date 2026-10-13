@@ -1310,7 +1310,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             [weakSelf.progressDelegate hideProgressBar];
     });
     if (_calculationProgress != nullptr)
+    {
         _calculationProgress->cancelled = true;
+        _calculationProgress->memoryLimitExceeded = false; // a stop requested here wins over a stop by the memory guard
+    }
 }
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter

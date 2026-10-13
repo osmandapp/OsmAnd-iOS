@@ -29,6 +29,11 @@
     NSInteger _minValue;
     NSInteger _defaultValue;
     NSInteger _selectedValue;
+
+    NSInteger _maxSpeedMaxValue;
+    NSInteger _maxSpeedMinValue;
+    NSInteger _maxSpeedValue;
+
     NSString *_units;
 }
 
@@ -74,19 +79,27 @@
     }
 
     CGFloat settingsDefaultSpeed = self.appMode.getDefaultSpeed;
+    CGFloat settingsMaxSpeed = self.appMode.getMaxSpeed;
 
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     if (!router || self.appMode.getRouterService == STRAIGHT || self.appMode.getRouterService == DIRECT_TO)
     {
         _minValue = round(MIN(1, settingsDefaultSpeed) * _ratio);
         _maxValue = round(MAX(300, settingsDefaultSpeed) * _ratio);
+
+        _maxSpeedMinValue = 0;
+        _maxSpeedMaxValue = round(MAX(300, settingsMaxSpeed) * _ratio);
     }
     else
     {
         _minValue = round(router->getMinSpeed() * _ratio / 2.);
         _maxValue = round(router->getMaxSpeed() * _ratio * 1.5);
+
+        _maxSpeedMinValue = 0;
+        _maxSpeedMaxValue = round(router->getMaxSpeed() * _ratio * 1.5);
     }
     _defaultValue = round(self.appMode.getDefaultSpeed * _ratio);
+    _maxSpeedValue = round(self.appMode.getMaxSpeed * _ratio);
 }
 
 #pragma mark - Base UI
@@ -116,22 +129,41 @@
     NSMutableArray *tableData = [NSMutableArray array];
     if (_selectedValue == 0)
         _selectedValue = _defaultValue;
+
     [tableData addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"default_speed_setting_title"),
-        @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
+        @"value" : [NSString stringWithFormat:@"%ld %@", (long)_selectedValue, _units],
     }];
     [tableData addObject:@{
         @"type" : [OASliderWithValuesCell getCellIdentifier],
         @"minValue" : [NSString stringWithFormat:@"%ld %@", (long)_minValue, _units],
         @"maxValue" : [NSString stringWithFormat:@"%ld %@", (long)_maxValue, _units],
+        @"tag": @(0)
     }];
+
+    NSString *maxSpeedStr = (_maxSpeedValue == 0) ? OALocalizedString(@"shared_string_no") : [NSString stringWithFormat:@"%ld %@", (long)_maxSpeedValue, _units];
+    [tableData addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"max_speed"),
+        @"value" : maxSpeedStr,
+    }];
+
+    if (_maxSpeedMaxValue < 120) _maxSpeedMaxValue = 120; // fallback
+
+    [tableData addObject:@{
+        @"type" : [OASliderWithValuesCell getCellIdentifier],
+        @"minValue" : OALocalizedString(@"shared_string_no"),
+        @"maxValue" : [NSString stringWithFormat:@"%ld %@", (long)_maxSpeedMaxValue, _units],
+        @"tag": @(1)
+    }];
+
     _data = [NSArray arrayWithArray:tableData];
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    return OALocalizedString(@"default_speed_dialog_msg");
+    return [NSString stringWithFormat:@"%@\n\n%@", OALocalizedString(@"default_speed_dialog_msg"), OALocalizedString(@"road_max_speed_descr")];
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -176,9 +208,19 @@
         {
             cell.leftValueLabel.text = item[@"minValue"];
             cell.rightValueLabel.text = item[@"maxValue"];
-            cell.sliderView.minimumValue = _minValue;
-            cell.sliderView.maximumValue = _maxValue;
-            cell.sliderView.value = _selectedValue;
+            NSInteger tag = [item[@"tag"] integerValue];
+            cell.sliderView.tag = tag;
+
+            if (tag == 0) {
+                cell.sliderView.minimumValue = _minValue;
+                cell.sliderView.maximumValue = _maxValue;
+                cell.sliderView.value = _selectedValue;
+            } else {
+                cell.sliderView.minimumValue = _maxSpeedMinValue;
+                cell.sliderView.maximumValue = _maxSpeedMaxValue;
+                cell.sliderView.value = _maxSpeedValue;
+            }
+
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.sliderView addTarget:self action:@selector(speedValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
@@ -198,6 +240,8 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     [self.appMode setDefaultSpeed:_selectedValue / _ratio];
+    [self.appMode setMaxSpeed:_maxSpeedValue / _ratio];
+
     if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
         [routingHelper recalculateRouteDueToSettingsChange];
     [self dismissViewController];
@@ -205,9 +249,15 @@
 
 - (void)speedValueChanged:(UISlider *)sender
 {
-    _selectedValue = sender.value;
-    [self generateData];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    if (sender.tag == 0) {
+        _selectedValue = sender.value;
+        [self generateData];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    } else if (sender.tag == 1) {
+        _maxSpeedValue = sender.value;
+        [self generateData];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 @end

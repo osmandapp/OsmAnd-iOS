@@ -437,6 +437,8 @@ typedef enum
 - (void) hideScrollableHudViewController
 {
     self.sidePanelController.recognizesPanGesture = YES;
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        [(PlanRouteScrollableViewController *)_scrollableHudViewController suspendMapCursor];
     if (_scrollableHudViewController != nil && self.view == _scrollableHudViewController.view.superview)
     {
         [_scrollableHudViewController.view removeFromSuperview];
@@ -2468,8 +2470,11 @@ typedef enum
 {
     CLLocationCoordinate2D initialPoint = CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude);
     [self targetHideContextPinMarker];
-    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:^{
+        // Closing the result card restores any suspended planner before this callback.
+        if (![_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+            [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
+    }];
 }
 
 - (void) targetGoToPoint
@@ -2844,10 +2849,11 @@ typedef enum
             }
         }
         
-        if (_prevScrollableHudViewController)
+        if (_prevScrollableHudViewController && !hideActiveTarget)
         {
-            [self showScrollableHudViewController:_prevScrollableHudViewController];
+            OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
             _prevScrollableHudViewController = nil;
+            [self showScrollableHudViewController:controller];
         }
         else
         {
@@ -2901,6 +2907,12 @@ typedef enum
                 [self restoreActiveTargetMenu];
 
             _activeTargetChildPushed = NO;
+        }
+        if (_prevScrollableHudViewController)
+        {
+            OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+            _prevScrollableHudViewController = nil;
+            [self showScrollableHudViewController:controller];
         }
         if (onComplete)
             onComplete();
@@ -3196,6 +3208,9 @@ typedef enum
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
     BOOL shouldClearNavControllerHistory = _scrollableHudViewController != nil && !state.openedFromTrackMenu;
+    // A GPX HUD replaces the planner instead of suspending it in showTargetPointMenu.
+    // Let the presentation coordinator close the editor before attaching the track HUD.
+    _isNewContextMenuStillEnabled = NO;
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -3204,6 +3219,14 @@ typedef enum
 
         if (shouldClearNavControllerHistory)
             state.navControllerHistory = nil;
+
+        // A result card may have already suspended the planner before GPX was selected.
+        if ([strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        {
+            OABaseScrollableHudViewController *planner = strongSelf->_prevScrollableHudViewController;
+            strongSelf->_prevScrollableHudViewController = nil;
+            [planner forceHide];
+        }
 
         [strongSelf doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
     }];
@@ -3224,6 +3247,12 @@ typedef enum
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
 
+            // Search results temporarily hide the planner in showTargetPointMenu.
+            // Force hiding it here would discard the route editing context.
+            if (strongSelf->_isNewContextMenuStillEnabled
+                && [strongSelf->_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+                return NO;
+
             [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
             return YES;
         }],
@@ -3240,7 +3269,9 @@ typedef enum
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
 
-            strongSelf->_prevScrollableHudViewController = nil;
+            // Keep the planner suspended when replacing a search result menu.
+            if (![strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+                strongSelf->_prevScrollableHudViewController = nil;
             [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
             return YES;
         }],

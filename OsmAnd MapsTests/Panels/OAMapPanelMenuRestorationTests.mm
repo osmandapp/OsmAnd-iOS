@@ -1,6 +1,17 @@
 #import <XCTest/XCTest.h>
 #import "OAMapPanelViewController.h"
 #import "OABaseScrollableHudViewController.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
+#import "OAMapLayers.h"
+#import "OAMeasurementToolLayer.h"
+#import "OAAppDelegate.h"
+#import "OAMapViewTrackingUtilities.h"
+
+@interface OABaseScrollableHudViewController (PlanRouteTestFactory)
++ (void)showNewRoute;
+@end
 
 @interface OAMapPanelViewController (MenuRestorationTests)
 @property (nonatomic, strong) OATargetPointView *targetMenuView;
@@ -101,5 +112,109 @@
     XCTAssertNil(panel.scrollableHudViewController);
     XCTAssertNil(planner.view.superview);
     XCTAssertEqual(panel.prevScrollableHudViewController, planner);
+}
+
+- (void)testRealPlannerRestoresViewportCenterToCrosshair
+{
+    OAAppDelegate *appDelegate = (OAAppDelegate *)UIApplication.sharedApplication.delegate;
+    [appDelegate initialize];
+    NSPredicate *initialized = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        return !appDelegate.isAppInitializing;
+    }];
+    XCTestExpectation *appReady = [[XCTNSPredicateExpectation alloc] initWithPredicate:initialized object:nil];
+    XCTWaiterResult initializedResult = [XCTWaiter waitForExpectations:@[appReady] timeout:30];
+    XCTAssertEqual(initializedResult, XCTWaiterResultCompleted);
+    if (initializedResult != XCTWaiterResultCompleted)
+        return;
+
+    OARootViewController *previousRoot = appDelegate.rootViewController;
+    UIWindowScene *scene = nil;
+    for (UIScene *candidate in UIApplication.sharedApplication.connectedScenes)
+    {
+        if ([candidate isKindOfClass:UIWindowScene.class])
+        {
+            scene = (UIWindowScene *)candidate;
+            break;
+        }
+    }
+    XCTAssertNotNil(scene);
+    if (!scene)
+        return;
+    UIWindow *previousKeyWindow = nil;
+    for (UIWindow *window in scene.windows)
+        if (window.isKeyWindow)
+            previousKeyWindow = window;
+    appDelegate.rootViewController = [[OARootViewController alloc] initWithNibName:nil bundle:nil];
+    UIWindow *testWindow = [[UIWindow alloc] initWithWindowScene:scene];
+    testWindow.frame = UIScreen.mainScreen.bounds;
+    testWindow.rootViewController = [[UINavigationController alloc] initWithRootViewController:appDelegate.rootViewController];
+    [testWindow makeKeyAndVisible];
+    [appDelegate.rootViewController.mapPanel loadViewIfNeeded];
+    [appDelegate.rootViewController.view layoutIfNeeded];
+    NSPredicate *ready = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        OAMapViewController *mapController = OARootViewController.instance.mapPanel.mapViewController;
+        OAMapRendererView *map = (OAMapRendererView *)mapController.mapRendererView;
+        return mapController.mapViewLoaded && map && [map getCenterPixel].y > 0;
+    }];
+    XCTestExpectation *mapReady = [[XCTNSPredicateExpectation alloc] initWithPredicate:ready object:nil];
+    XCTWaiterResult result = [XCTWaiter waitForExpectations:@[mapReady] timeout:30];
+    XCTAssertEqual(result, XCTWaiterResultCompleted);
+    if (result != XCTWaiterResultCompleted)
+    {
+        testWindow.hidden = YES;
+        testWindow.rootViewController = nil;
+        appDelegate.rootViewController = previousRoot;
+        [OAMapViewTrackingUtilities.instance setMapViewController:previousRoot.mapPanel.mapViewController];
+        [previousKeyWindow makeKeyWindow];
+        return;
+    }
+
+    OAMapPanelViewController *panel = OARootViewController.instance.mapPanel;
+    OAMapViewController *mapController = panel.mapViewController;
+    Class plannerClass = NSClassFromString(@"OsmAnd_Maps.PlanRouteScrollableViewController");
+    XCTAssertNotNil(plannerClass);
+    [plannerClass showNewRoute];
+    OABaseScrollableHudViewController *planner = panel.scrollableHudViewController;
+    [planner viewWillAppear:NO];
+    OAMeasurementToolLayer *layer = mapController.mapLayers.routePlanningLayer;
+    @try
+    {
+        // Hiding the planner for a context menu resets the viewport to full screen.
+        for (NSUInteger cycle = 0; cycle < 2; cycle++)
+        {
+            OAMapRendererView *map = (OAMapRendererView *)mapController.mapRendererView;
+            CGPoint cursor = layer.cursorScreenPoint;
+            CGPoint cursorPixel = CGPointMake(cursor.x * map.contentScaleFactor, cursor.y * map.contentScaleFactor);
+            mapController.viewportYScale = 1.0;
+            [map reanchorMapTarget:CGPointMake(planner.view.bounds.size.width / 2, planner.view.bounds.size.height / 2)];
+            OsmAnd::PointI locationBefore;
+            [map convert:cursorPixel toLocation:&locationBefore];
+            [planner viewWillAppear:NO];
+            cursor = layer.cursorScreenPoint;
+            XCTAssertGreaterThan(cursor.y, 0);
+            XCTAssertLessThan(cursor.y, planner.view.bounds.size.height / 2);
+            XCTAssertEqualWithAccuracy(mapController.viewportYScale,
+                                       2 * cursor.y / planner.view.bounds.size.height, 0.0001);
+            OsmAnd::PointI center = [map getCenterPixel];
+            XCTAssertEqualWithAccuracy(center.y / map.contentScaleFactor, cursor.y, 1.0);
+            XCTAssertEqualWithAccuracy(map.mapTargetScreenPoint.y, cursor.y, 1.0);
+            OsmAnd::PointI locationAfter;
+            [map convert:cursorPixel toLocation:&locationAfter];
+            XCTAssertEqualWithAccuracy(locationAfter.x, locationBefore.x, 1);
+            XCTAssertEqualWithAccuracy(locationAfter.y, locationBefore.y, 1);
+        }
+    }
+    @finally
+    {
+        [planner forceHide];
+        if (testWindow)
+        {
+            testWindow.hidden = YES;
+            testWindow.rootViewController = nil;
+            appDelegate.rootViewController = previousRoot;
+            [OAMapViewTrackingUtilities.instance setMapViewController:previousRoot.mapPanel.mapViewController];
+            [previousKeyWindow makeKeyWindow];
+        }
+    }
 }
 @end

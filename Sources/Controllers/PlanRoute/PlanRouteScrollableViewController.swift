@@ -837,10 +837,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         guard centerX > 0, targetScreenSize.height > 0 else { return }
         let screenPoint = CGPoint(x: centerX, y: centerY)
         let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
         if preserveMapPosition {
             mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
         } else {
-            mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
             mapViewController.mapRendererView?.mapTargetScreenPoint = screenPoint
         }
         dataProvider.setCrosshairPosition(screenPoint: screenPoint)

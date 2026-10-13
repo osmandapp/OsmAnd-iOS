@@ -3201,6 +3201,9 @@ typedef enum
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
     BOOL shouldClearNavControllerHistory = _scrollableHudViewController != nil && !state.openedFromTrackMenu;
+    // A GPX HUD replaces the planner instead of suspending it in showTargetPointMenu.
+    // Let the presentation coordinator close the editor before attaching the track HUD.
+    _isNewContextMenuStillEnabled = NO;
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;

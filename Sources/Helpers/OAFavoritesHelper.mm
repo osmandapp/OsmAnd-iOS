@@ -1421,6 +1421,8 @@ static NSOperationQueue *_favQueue;
     UIImage *resultImg;
     NSString *backgrounfIconName = [@"bg_point_" stringByAppendingString:backgroundIcon];
     UIImage *backgroundImg = [UIImage imageNamed:backgrounfIconName];
+    if (!backgroundImg)
+        backgroundImg = [UIImage imageNamed:[@"bg_point_" stringByAppendingString:DEFAULT_ICON_SHAPE_KEY]];
     backgroundImg = [OAUtilities tintImageWithColor:backgroundImg color:color];
 
     NSString *iconName = icon;

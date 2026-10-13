@@ -1327,6 +1327,7 @@ typedef enum
 - (void)clearSearchViewController
 {
     _searchViewController = nil;
+    _isNewContextMenuStillEnabled = NO;
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
@@ -3218,6 +3219,9 @@ typedef enum
         [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
+                return NO;
+
+            if (strongSelf->_isNewContextMenuStillEnabled && [strongSelf->_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
                 return NO;
 
             [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];

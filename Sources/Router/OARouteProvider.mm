@@ -25,6 +25,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
 #import "MissingMapsCalculator.h"
+#import "OANativeRoutingMemoryGuard.h"
 #import "OARTargetPoint.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
@@ -969,7 +970,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     }
 }
 
-- (OARouteCalculationResult *) calcOfflineRouteImpl:(OARouteCalculationParams *)params router:(std::shared_ptr<RoutePlannerFrontEnd>)router ctx:(std::shared_ptr<RoutingContext>)ctx complexCtx:(std::shared_ptr<RoutingContext>)complexCtx st:(CLLocation *)st en:(CLLocation *)en inters:(NSArray<CLLocation *> *)inters precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated
+- (OARouteCalculationResult *) calcOfflineRouteImpl:(OARouteCalculationParams *)params router:(std::shared_ptr<RoutePlannerFrontEnd>)router ctx:(std::shared_ptr<RoutingContext>)ctx complexCtx:(std::shared_ptr<RoutingContext>)complexCtx st:(CLLocation *)st en:(CLLocation *)en inters:(NSArray<CLLocation *> *)inters precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated memoryGuard:(OANativeRoutingMemoryGuard *)memoryGuard
 {
     try
     {
@@ -1037,8 +1038,11 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                     }
                 });
                  */
-                [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
-                result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
+                if (![memoryGuard isExceeded])
+                {
+                    [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
+                    result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
+                }
             }
         }
         else
@@ -1046,7 +1050,10 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
             result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
         }
-        
+
+        if ([memoryGuard stop])
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:OALocalizedString(@"route_calculation_out_of_memory")];
+
         if (result.empty())
         {
             if (ctx->progress->segmentNotFound == 0)
@@ -1311,7 +1318,9 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         if (params.intermediates)
             inters = [NSArray arrayWithArray:params.intermediates];
 
-        OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+        OANativeRoutingMemoryGuard *memoryGuard = [OANativeRoutingMemoryGuard start:params];
+        OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated memoryGuard:memoryGuard];
+        [memoryGuard stop];
         [_missingMapsCalculator attachToRouteCalculationResult:result progress:env.ctx->progress];
 
         return result;

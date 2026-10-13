@@ -2826,8 +2826,9 @@ typedef enum
     if (_targetMenuView.needsManualContextMode)
         [self restoreFromContextMenuMode];
     
+    BOOL completeAfterChangePositionCleanup = hideActiveTarget && _activeTargetType == OATargetChangePosition;
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        if (onComplete)
+        if (onComplete && !completeAfterChangePositionCleanup)
             onComplete();
 
         if (_activeTargetType != OATargetNone)
@@ -2852,6 +2853,9 @@ typedef enum
         {
             [_hudViewController updateDependentButtonsVisibility];
         }
+
+        if (onComplete && completeAfterChangePositionCleanup)
+            onComplete();
     }];
     
     [_hudViewController updateControlsLayout:YES];

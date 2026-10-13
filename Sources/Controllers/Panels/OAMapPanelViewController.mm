@@ -3213,6 +3213,14 @@ typedef enum
         if (shouldClearNavControllerHistory)
             state.navControllerHistory = nil;
 
+        // A result card may have already suspended the planner before GPX was selected.
+        if ([strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        {
+            OABaseScrollableHudViewController *planner = strongSelf->_prevScrollableHudViewController;
+            strongSelf->_prevScrollableHudViewController = nil;
+            [planner forceHide];
+        }
+
         [strongSelf doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
     }];
 }

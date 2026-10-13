@@ -437,6 +437,8 @@ typedef enum
 - (void) hideScrollableHudViewController
 {
     self.sidePanelController.recognizesPanGesture = YES;
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        [(PlanRouteScrollableViewController *)_scrollableHudViewController suspendMapCursor];
     if (_scrollableHudViewController != nil && self.view == _scrollableHudViewController.view.superview)
     {
         [_scrollableHudViewController.view removeFromSuperview];

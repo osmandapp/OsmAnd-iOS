@@ -372,6 +372,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         refreshMapControls()
     }
 
+    @objc func suspendMapCursor() {
+        // While a result menu is visible, the route layer follows the map center.
+        dataProvider.setCrosshairPosition(screenPoint: .zero)
+    }
+
     private func restorePreviousScreenIfNeeded() {
         if isForceHiding {
             let hasNavHistory = !navControllerHistory.isEmpty
@@ -831,16 +836,18 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {
+        guard let mapPanel = OARootViewController.instance().mapPanel,
+              mapPanel.scrollableHudViewController === self else { return }
         let targetScreenSize = screenSize ?? CGSize(width: view.bounds.width, height: currentScreenHeight)
         let centerY = crosshairCenterY(sheetHeight: sheetHeight, screenHeight: targetScreenSize.height)
         let centerX = targetScreenSize.width / 2
         guard centerX > 0, targetScreenSize.height > 0 else { return }
         let screenPoint = CGPoint(x: centerX, y: centerY)
-        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewController = mapPanel.mapViewController
+        mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
         if preserveMapPosition {
             mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
         } else {
-            mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
             mapViewController.mapRendererView?.mapTargetScreenPoint = screenPoint
         }
         dataProvider.setCrosshairPosition(screenPoint: screenPoint)

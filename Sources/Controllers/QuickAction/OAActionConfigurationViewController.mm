@@ -15,7 +15,6 @@
 #import "OASizes.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
-#import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAEditGroupViewController.h"
 #import "OANativeUtilities.h"
@@ -48,7 +47,7 @@
 
 #define KEY_MESSAGE @"message"
 
-@interface OAActionConfigurationViewController () <OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate>
+@interface OAActionConfigurationViewController () <OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate>
 
 @end
 
@@ -63,7 +62,6 @@
     
     BOOL _isNew;
 
-    OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
     
     UIView *_tableHeaderView;
@@ -437,23 +435,20 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            OAFavoriteColor *color = [OADefaultFavorite builtinColors][[item[@"color"] integerValue]];
+            BOOL isAppearance = [item[@"key"] isEqualToString:@"appearance"];
+            [cell leftIconVisibility:item[@"img"] != nil || isAppearance];
+            [cell valueVisibility:!isAppearance];
+            cell.leftIconView.layer.cornerRadius = 0.;
+            cell.leftIconView.backgroundColor = UIColor.clearColor;
             if (item[@"img"])
             {
-                cell.leftIconView.layer.cornerRadius = 0.;
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.leftIconView.tintColor = color.color;
+                cell.leftIconView.tintColor = [item[@"key"] isEqualToString:@"category_name"] ? UIColorFromARGB([item[@"color"] intValue]) : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][[item[@"color"] integerValue]]).color;
             }
-            else if ([item[@"key"] isEqualToString:@"category_color"])
+            else if (isAppearance)
             {
-                cell.leftIconView.layer.cornerRadius = cell.leftIconView.frame.size.height / 2;
-                cell.leftIconView.backgroundColor = color.color;
+                cell.leftIconView.image = [OAFavoritesHelper getCompositeIcon:item[@"appearance_icon"] backgroundIcon:item[@"appearance_background"] color:UIColorFromARGB([item[@"color"] intValue])];
             }
-            else
-            {
-                [cell leftIconVisibility:NO];
-            }
-            
             cell.valueLabel.text = item[@"value"];
             cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
@@ -608,13 +603,20 @@
         [self showViewController:_groupController];
         [self.view endEditing:YES];
     }
-    else if ([item[@"key"] isEqualToString:@"category_color"])
+    else if ([item[@"key"] isEqualToString:@"appearance"])
     {
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[item[@"color"] integerValue]];
-        _colorController = [[OAEditColorViewController alloc] initWithColor:favCol.color];
-        _colorController.delegate = self;
-        [self showViewController:_colorController];
+        NSString *iconName = item[@"appearance_icon"];
+        NSString *backgroundIconName = item[@"appearance_background"];
+        FavoritesChangeAppearanceViewController *controller = [[FavoritesChangeAppearanceViewController alloc] initWithColor:UIColorFromARGB([item[@"color"] intValue]) iconName:iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY backgroundIconName:backgroundIconName.length > 0 ? backgroundIconName : DEFAULT_ICON_SHAPE_KEY];
+        __weak __typeof(self) weakSelf = self;
+        controller.onApply = ^(UIColor *color, NSString *selectedIconName, NSString *selectedBackgroundIconName) {
+            [weakSelf appearanceChanged:color iconName:selectedIconName backgroundIconName:selectedBackgroundIconName];
+        };
+
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        navigationController.modalPresentationStyle = UIModalPresentationFullScreen;
         [self.view endEditing:YES];
+        [self presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([item[@"key"] isEqualToString:@"key_category"])
     {
@@ -1042,23 +1044,24 @@
     } completion:nil];
 }
 
-#pragma mark - OAEditColorViewControllerDelegate
+#pragma mark - Appearance
 
-- (void)colorChanged
+- (void)appearanceChanged:(UIColor *)color iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName
 {
     NSString *key = _data.allKeys.lastObject;
-    NSArray *colorItems = _data[key];
+    NSArray *items = _data[key];
     NSMutableArray *newItems = [NSMutableArray new];
-    for (NSDictionary *item in colorItems)
+    for (NSDictionary *item in items)
     {
-        if (!item[@"footer"])
+        if ([item[@"key"] isEqualToString:@"category_name"] || [item[@"key"] isEqualToString:@"appearance"])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
-            [mutableItem setObject:@(_colorController.colorIndex) forKey:@"color"];
-            if ([item[@"key"] isEqualToString:@"category_color"])
+            [mutableItem setObject:@([color toARGBNumber]) forKey:@"color"];
+            if ([item[@"key"] isEqualToString:@"appearance"])
             {
-                OAFavoriteColor *col = [OADefaultFavorite builtinColors][_colorController.colorIndex];
-                [mutableItem setObject:col.name forKey:@"value"];
+                [mutableItem setObject:@([color toARGBNumber]) forKey:@"appearance_color"];
+                [mutableItem setValue:iconName forKey:@"appearance_icon"];
+                [mutableItem setValue:backgroundIconName forKey:@"appearance_background"];
             }
             [newItems addObject:[NSDictionary dictionaryWithDictionary:mutableItem]];
         }

@@ -398,7 +398,6 @@
 		4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */; };
 		466A01802BFBA9B7008CC50E /* QuickActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466A017F2BFBA9B7008CC50E /* QuickActionType.swift */; };
 		4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */; };
-		467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */; };
 		467DFD7D297EFDBB008A9830 /* OACardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */; };
 		467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 467DFD7F297F172C008A9830 /* OACardTableViewCell.m */; };
 		468443402B83C57A006B8E62 /* CheckCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4684433F2B83C57A006B8E62 /* CheckCodeCommand.swift */; };
@@ -671,6 +670,7 @@
 		C1A55E0B77300000000000E1 /* OACppRouteCalculationProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000E3 /* OACppRouteCalculationProgress.mm */; };
 		C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */; };
 		C2E8E311482906B2954F30E1 /* OACppRouteConverterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */; };
+		C50364FB3078C303001B6EDE /* FavoriteGroupEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50364FA3078C303001B6EDE /* FavoriteGroupEditorViewController.swift */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
 		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
@@ -1531,7 +1531,7 @@
 		DA5A83D926C563A800F274C7 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */; };
 		DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */; };
 		DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */; };
-		DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */; };
+		C5C58153306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */; };
 		DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */; };
 		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */; };
 		DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */; };
@@ -2821,8 +2821,6 @@
 		4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsPaletteUtils.swift; sourceTree = "<group>"; };
 		466A017F2BFBA9B7008CC50E /* QuickActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionType.swift; sourceTree = "<group>"; };
 		4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxUtils.swift; sourceTree = "<group>"; };
-		467D7DC02ADDE95B0037A593 /* OAFavoriteGroupEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteGroupEditorViewController.h; sourceTree = "<group>"; };
-		467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteGroupEditorViewController.mm; sourceTree = "<group>"; };
 		467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACardTableViewCell.xib; sourceTree = "<group>"; };
 		467DFD7E297F16AF008A9830 /* OACardTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACardTableViewCell.h; sourceTree = "<group>"; };
 		467DFD7F297F172C008A9830 /* OACardTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACardTableViewCell.m; sourceTree = "<group>"; };
@@ -3250,6 +3248,7 @@
 		C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteProgressTest.mm; sourceTree = "<group>"; };
 		C1AB8471989D79CC4F5F17A1 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = my; path = my.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C390E2A13B31BA32AE26F2BF /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		C50364FA3078C303001B6EDE /* FavoriteGroupEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGroupEditorViewController.swift; sourceTree = "<group>"; };
 		C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCoordinatesGridAction.swift; sourceTree = "<group>"; };
 		C503BC4D3045798E00EB704D /* FavoriteFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolder.swift; sourceTree = "<group>"; };
 		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
@@ -3490,6 +3489,7 @@
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
 		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeProvider.swift; sourceTree = "<group>"; };
 		C5F1323A31A0000000000001 /* OAMeasurementEditingContextTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContextTypes.h; sourceTree = "<group>"; };
+		C5F46C193079C501002AAA41 /* OAFavoriteGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteGroup.h; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
 		CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastDetailsViewController.h; sourceTree = "<group>"; };
 		CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherCacheSettingsViewController.h; sourceTree = "<group>"; };
@@ -4723,10 +4723,9 @@
 		DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditGroupViewController.mm; sourceTree = "<group>"; };
 		DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
 		DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditDescriptionViewController.h; sourceTree = "<group>"; };
-		DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditColorViewController.m; sourceTree = "<group>"; };
+		C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		DA5A7E1626C563A300F274C7 /* OAEditGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditGroupViewController.h; sourceTree = "<group>"; };
 		DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditDescriptionViewController.m; sourceTree = "<group>"; };
-		DA5A7E1A26C563A300F274C7 /* OAEditColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditColorViewController.h; sourceTree = "<group>"; };
 		DA5A7E1C26C563A300F274C7 /* OACollapsableTransportStopRoutesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableTransportStopRoutesView.h; sourceTree = "<group>"; };
 		DA5A7E1E26C563A400F274C7 /* OAWikiMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiMenuViewController.h; sourceTree = "<group>"; };
 		DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiWebViewController.mm; sourceTree = "<group>"; };
@@ -9045,8 +9044,7 @@
 		DA5A7E0E26C563A300F274C7 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7E1A26C563A300F274C7 /* OAEditColorViewController.h */,
-				DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */,
+				C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */,
 				DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */,
 				DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */,
 				DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */,
@@ -9168,8 +9166,7 @@
 				46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */,
 				DA5A7E6026C563A400F274C7 /* OAFavoriteEditingHandler.h */,
 				DA5A7E6126C563A400F274C7 /* OAFavoriteEditingHandler.mm */,
-				467D7DC02ADDE95B0037A593 /* OAFavoriteGroupEditorViewController.h */,
-				467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */,
+				C50364FA3078C303001B6EDE /* FavoriteGroupEditorViewController.swift */,
 				DA5A7E6326C563A400F274C7 /* OAGpxWptEditingHandler.h */,
 				DA5A7E6426C563A400F274C7 /* OAGpxWptEditingHandler.mm */,
 				46220B772AD70A7B006C3248 /* OAGroupEditorViewController.h */,
@@ -10104,6 +10101,7 @@
 				321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */,
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 				DA5A80D126C563A600F274C7 /* OAFavoritesHelper.h */,
+				C5F46C193079C501002AAA41 /* OAFavoriteGroup.h */,
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
 				C503BC4D3045798E00EB704D /* FavoriteFolder.swift */,
 				C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */,
@@ -12963,7 +12961,6 @@
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				C5A466CE2D356B68008E0C87 /* OAGpxApproximationHelper.mm in Sources */,
 				46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */,
-				467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */,
 				DA5A82E326C563A800F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,
 				326087092F324B290038A34B /* PoiAdditionalUiRule.swift in Sources */,
 				DA4ABF212876DA6800B996EF /* OAMarkersSettingsItem.mm in Sources */,
@@ -13628,7 +13625,7 @@
 				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,
 				46BCB1602CC2AC6D004E0283 /* GradientChartCell.swift in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
-				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
+				C5C58153306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift in Sources */,
 				4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,
 				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
@@ -13652,6 +13649,7 @@
 				DA5A855E26C563A900F274C7 /* OATransportRouteCalculationParams.mm in Sources */,
 				DA5A855926C563A900F274C7 /* OAMapillaryImage.mm in Sources */,
 				DA5A839D26C563A800F274C7 /* OAMapPanelViewController.mm in Sources */,
+				C50364FB3078C303001B6EDE /* FavoriteGroupEditorViewController.swift in Sources */,
 				DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */,
 				B0D61F02E8A3B7B2733E2C18 /* OATrackMenuHudViewController.mm in Sources */,
 				B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */,

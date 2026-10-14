@@ -14,6 +14,8 @@
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAlarmWidget.h"
+#import "OAAutoObserverProxy.h"
+#import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kViewportXNonShifted 1.0
@@ -38,6 +40,8 @@
     NSLayoutConstraint *_speedometerHeightConstraint;
     NSLayoutConstraint *_alarmSpeedometerStackViewLeftConstraint;
     NSLayoutConstraint *_alarmSpeedometerStackViewRightConstraint;
+
+    OAAutoObserverProxy *_applicationModeObserver;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -46,8 +50,33 @@
     if (self) {
         _window = window;
         _mapVc = mapVC;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+        _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onApplicationModeChanged)
+                                                              andObserve:[OsmAndApp instance].applicationModeChangedObservable];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [_applicationModeObserver detach];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if (self.isViewLoaded && [preferenceKeys containsObject:[OAAppSettings sharedManager].rotateMap.key])
+        [self updateMapCenterPoint];
+}
+
+- (void)onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.isViewLoaded)
+            [self updateMapCenterPoint];
+    });
 }
 
 - (void)viewWillAppear:(BOOL)animated

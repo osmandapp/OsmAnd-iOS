@@ -4,6 +4,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 
 @interface OAGpxWptEditingHandlerTest : XCTestCase
 

@@ -219,7 +219,6 @@ static BOOL _isDeviatedFromRoute = false;
     [self setFollowingMode:YES];
     [self setCurrentLocation:_app.locationServices.lastKnownLocation returnUpdatedLocation:NO];
     [[OAMapViewTrackingUtilities instance] switchToRoutePlanningMode];
-    [[OARootViewController instance].mapPanel updateRouteButton];
     [[OARootViewController instance].mapPanel refreshMap];
 }
 
@@ -229,7 +228,6 @@ static BOOL _isDeviatedFromRoute = false;
     [self setFollowingMode:NO];
     [self setPauseNavigation:YES];
     [[OAMapViewTrackingUtilities instance] switchToRoutePlanningMode];
-    [[OARootViewController instance].mapPanel updateRouteButton];
     [[OARootViewController instance].mapPanel refreshMap];
 }
 

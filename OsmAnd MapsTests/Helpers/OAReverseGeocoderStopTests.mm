@@ -17,6 +17,10 @@
 #include <OsmAndCore/Search/ReverseGeocoder.h>
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
 
+@interface OAReverseGeocoder (StopTests)
+- (NSString *)performLookupAddressAtLat:(double)lat lon:(double)lon objectId:(uint64_t)objectId;
+@end
+
 static const double kTestLatitude = 50.356646571646124;
 static const double kTestLongitude = 7.5956672430038452;
 static const int kNeverAbort = -1;
@@ -243,12 +247,12 @@ static bool findStreetPosition31(const std::shared_ptr<const OsmAnd::IObfsCollec
     XCTAssertLessThan(abortedRun.polls, fullRun.polls);
 }
 
-- (void)testSyncLookupAfterStopReturnsEmptyAddress
+- (void)testLookupWorkerAfterStopReturnsEmptyAddress
 {
     OAReverseGeocoder *geocoder = [[OAReverseGeocoder alloc] init];
     [geocoder stop];
 
-    NSString *address = [geocoder lookupAddressAtLat:kTestLatitude lon:kTestLongitude];
+    NSString *address = [geocoder performLookupAddressAtLat:kTestLatitude lon:kTestLongitude objectId:0];
 
     XCTAssertEqualObjects(address, @"");
 }

@@ -131,6 +131,8 @@ jobs:
         working-directory: baked/fat-ios-clang.xcode
         run: xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release
 
+      - name: Enable shared framework checks for CI
+        run: python3 ios/.github/scripts/configure-shared-build-for-ci.py
       - name: Build iOS tests
         env:
           LANG: en_US.UTF-8

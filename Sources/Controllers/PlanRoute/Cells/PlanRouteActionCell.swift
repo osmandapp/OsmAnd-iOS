@@ -51,13 +51,15 @@ final class PlanRouteActionCell: UITableViewCell {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
 
+        let minimumHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumHeight)
+        minimumHeightConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: contentInsets.leading),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -contentInsets.trailing),
             titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: contentInsets.top),
             titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -contentInsets.bottom),
             titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumHeight)
+            minimumHeightConstraint
         ])
     }
 }

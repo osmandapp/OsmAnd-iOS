@@ -344,6 +344,15 @@ static const float LOCATION_TIMEOUT = 1.5;
     float speedLimit = [point getSpeedLimit];
     if (speedLimit > 0 && maxSpeed > speedLimit)
         maxSpeed = speedLimit;
+
+    OAApplicationMode *appMode = [[OARoutingHelper sharedInstance] getAppMode];
+    if ([appMode isDerivedRoutingFrom:OAApplicationMode.PEDESTRIAN])
+    {
+        float pedestrianSpeed = [appMode getDefaultSpeed];
+        if (pedestrianSpeed > 0 && maxSpeed > pedestrianSpeed)
+            maxSpeed = pedestrianSpeed;
+    }
+
     return maxSpeed * intervalTime / coeff;
 }
 

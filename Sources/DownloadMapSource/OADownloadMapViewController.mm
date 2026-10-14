@@ -66,7 +66,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     OAMapRendererView *_mapView;
-    NSArray *_data;
+    NSArray<NSArray *> *_data;
     
     int _currentZoom;
     int _minZoom;

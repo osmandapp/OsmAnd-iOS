@@ -6,21 +6,24 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     private var mapVC: OAMapViewController?
     private var window: UIWindow?
     private var isForegroundScene = false
-    
+    private var applicationModeChangedObserver: OAAutoObserverProxy?
+
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
         isForegroundScene = true
         configureScene()
     }
-    
+
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
+        stopObservingMapViewportSettings()
         isForegroundScene = false
     }
-    
+
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
+        stopObservingMapViewportSettings()
         guard window != nil else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
@@ -36,20 +39,13 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
             if let mapVC {
-                let settings: OAAppSettings = OAAppSettings.sharedManager()
                 CarPlayService.shared.configure()
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
                 dashboardVC?.attachMapToWindow()
                 self.window?.rootViewController = dashboardVC
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
-                let placement = settings.positionPlacementOnMap.get()
-                var y: Double
-                if placement == EOAPositionPlacement.auto.rawValue {
-                    y = settings.rotateMap.get() == ROTATE_MAP_BEARING ? mapCenterBottomY() : 1.0
-                } else {
-                    y = placement == EOAPositionPlacement.center.rawValue ? 1.0 : mapCenterBottomY()
-                }
-                mapVC.setViewportForCarPlayScaleX(1.0, y: y)
+                updateMapViewport()
+                startObservingMapViewportSettings()
             }
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
@@ -57,6 +53,33 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         }
     }
     
+    private func startObservingMapViewportSettings() {
+        stopObservingMapViewportSettings()
+        NotificationCenter.default.addObserver(self, selector: #selector(onProfileSettingSet(notification:)), name: NSNotification.Name(kNotificationSetProfileSetting), object: nil)
+        applicationModeChangedObserver = OAAutoObserverProxy(self,
+                                                             withHandler: #selector(onApplicationModeChanged),
+                                                             andObserve: OsmAndApp.swiftInstance().applicationModeChangedObservable)
+    }
+
+    private func stopObservingMapViewportSettings() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kNotificationSetProfileSetting), object: nil)
+        applicationModeChangedObserver?.detach()
+        applicationModeChangedObserver = nil
+    }
+
+    private func updateMapViewport() {
+        guard let mapVC else { return }
+        let settings: OAAppSettings = OAAppSettings.sharedManager()
+        let placement = settings.positionPlacementOnMap.get()
+        var y: Double
+        if placement == EOAPositionPlacement.auto.rawValue {
+            y = settings.rotateMap.get() == ROTATE_MAP_BEARING ? mapCenterBottomY() : 1.0
+        } else {
+            y = placement == EOAPositionPlacement.center.rawValue ? 1.0 : mapCenterBottomY()
+        }
+        mapVC.setViewportForCarPlayScaleX(1.0, y: y)
+    }
+
     private func mapCenterBottomY(bottomMargin: CGFloat = 60.0) -> CGFloat {
         guard let screenHeight = dashboardVC?.view.frame.height, screenHeight > 0 else {
             return 1.5
@@ -64,6 +87,20 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         return 2.0 - (bottomMargin / (screenHeight / 2.0))
     }
     
+    @objc private func onProfileSettingSet(notification: Notification) {
+        guard let preferenceKeys = notification.userInfo?[kPreferenceKeysUserInfoKey] as? Set<String>,
+              preferenceKeys.contains(OAAppSettings.sharedManager().rotateMap.key) else {
+            return
+        }
+        updateMapViewport()
+    }
+
+    @objc private func onApplicationModeChanged() {
+        DispatchQueue.main.async { [weak self] in
+            self?.updateMapViewport()
+        }
+    }
+
     @objc private func appInitEventConfigureScene(notification: Notification) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate appInitEventConfigureScene")
         guard let userInfo = notification.userInfo,
@@ -88,6 +125,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
         CarPlayService.shared.disconnectScene(.dashboard)
+        stopObservingMapViewportSettings()
         dashboardVC?.detachFromCarPlayWindow()
         dashboardVC = nil
         mapVC = nil

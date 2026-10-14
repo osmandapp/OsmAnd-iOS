@@ -7,6 +7,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAUtilities.h"
 #import "OAGpxWptItem.h"
 #import "OsmAnd_Maps-Swift.h"
 

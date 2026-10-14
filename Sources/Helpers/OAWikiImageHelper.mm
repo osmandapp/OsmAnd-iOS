@@ -7,6 +7,7 @@
 //
 
 #import "OAWikiImageHelper.h"
+#import "OAAppSettings.h"
 #import "OATargetInfoViewController.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -31,6 +32,67 @@ static NSString *OANormalizedWikiMediaTag(NSString *tag)
 {
     NSString *decodedTag = tag.stringByRemovingPercentEncoding ?: tag;
     return [[decodedTag stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString];
+}
+
+static NSString *OANormalizedWikipediaTitle(NSString *language, NSString *title)
+{
+    if (language.length == 0 || title.length == 0)
+        return nil;
+
+    NSString *languagePrefix = [language stringByAppendingString:@":"];
+    if ([title rangeOfString:languagePrefix options:NSCaseInsensitiveSearch].location == 0
+        || [title indexOf:kWikipediaShortLink] > 0)
+    {
+        return title;
+    }
+    return [NSString stringWithFormat:@"%@:%@", language, title];
+}
+
+static void OAAddWikipediaLanguageCandidates(NSMutableOrderedSet<NSString *> *languages, NSString *language)
+{
+    NSString *normalizedLanguage = [[language stringByReplacingOccurrencesOfString:@"_" withString:@"-"] lowercaseString];
+    if (normalizedLanguage.length == 0)
+        return;
+
+    [languages addObject:normalizedLanguage];
+    NSRange separatorRange = [normalizedLanguage rangeOfString:@"-"];
+    if (separatorRange.location != NSNotFound)
+        [languages addObject:[normalizedLanguage substringToIndex:separatorRange.location]];
+}
+
+static NSString *OAExtractWikipediaTitle(MutableOrderedDictionary<NSString *, NSString *> *values)
+{
+    NSString *directTitle = values[WIKIPEDIA_TAG];
+    if (directTitle.length > 0)
+        return directTitle;
+
+    NSString *localizedPrefix = [WIKIPEDIA_TAG stringByAppendingString:@":"];
+    NSMutableOrderedSet<NSString *> *preferredLanguages = [NSMutableOrderedSet orderedSet];
+    OAAddWikipediaLanguageCandidates(preferredLanguages, [OAAppSettings sharedManager].settingPrefMapLanguage.get);
+    for (NSString *language in NSLocale.preferredLanguages)
+        OAAddWikipediaLanguageCandidates(preferredLanguages, language);
+    [preferredLanguages addObject:@"en"];
+
+    for (NSString *language in preferredLanguages)
+    {
+        NSString *title = values[[localizedPrefix stringByAppendingString:language]];
+        NSString *normalizedTitle = OANormalizedWikipediaTitle(language, title);
+        if (normalizedTitle.length > 0)
+            return normalizedTitle;
+    }
+
+    for (NSString *key in values.allKeys)
+    {
+        if (![key hasPrefix:localizedPrefix] || key.length == localizedPrefix.length)
+            continue;
+
+        NSString *title = values[key];
+        NSString *language = [key substringFromIndex:localizedPrefix.length];
+        NSString *normalizedTitle = OANormalizedWikipediaTitle(language, title);
+        if (normalizedTitle.length > 0)
+            return normalizedTitle;
+    }
+    return nil;
 }
 
 static NSURLRequest *OARequestForLegacyWikiCacheKey(NSURLRequest *request)
@@ -128,10 +190,9 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"article=", encodedWikidataId]
                 : [url stringByAppendingFormat:@"&%@%@", @"article=", encodedWikidataId];
         }
-        if ([keys containsObject:WIKIPEDIA_TAG])
+        NSString *wikiTitle = OAExtractWikipediaTitle(poi.values);
+        if (wikiTitle.length > 0)
         {
-            NSString *wikiTitle = poi.values[WIKIPEDIA_TAG];
-
             NSInteger urlInd = [wikiTitle indexOf:kWikipediaShortLink];
             if (urlInd > 0)
             {
@@ -159,7 +220,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         {
             if (url.length > 0)
             {
-                url = [url stringByAppendingFormat:@"&addMetaData=true"];
+                url = [url stringByAppendingString:@"&addMetaData=true"];
                 [self addOsmandAPIImageList:url cards:cards session:session onFailureNoCache:onFailureNoCache];
             }
             else

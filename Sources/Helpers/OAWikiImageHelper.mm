@@ -95,15 +95,21 @@ static NSString *OAExtractWikipediaTitle(MutableOrderedDictionary<NSString *, NS
     return nil;
 }
 
-static NSURLRequest *OARequestForLegacyWikiCacheKey(NSURLRequest *request)
+static NSURLRequest *OARequestForLegacyWikiCacheKey(NSURLRequest *request, BOOL removeLocalizedWikipedia)
 {
     NSURLComponents *components = [NSURLComponents componentsWithURL:request.URL resolvingAgainstBaseURL:NO];
     NSMutableArray<NSURLQueryItem *> *legacyItems = [NSMutableArray array];
     BOOL hasLegacySource = NO;
+    BOOL didRemoveNewParameter = NO;
     for (NSURLQueryItem *item in components.queryItems)
     {
-        if ([item.name isEqualToString:@"file"])
+        BOOL shouldRemoveItem = [item.name isEqualToString:@"file"]
+            || (removeLocalizedWikipedia && [item.name isEqualToString:@"wiki"]);
+        if (shouldRemoveItem)
+        {
+            didRemoveNewParameter = YES;
             continue;
+        }
         if ([item.name isEqualToString:@"article"]
             || [item.name isEqualToString:@"category"]
             || [item.name isEqualToString:@"wiki"])
@@ -112,7 +118,7 @@ static NSURLRequest *OARequestForLegacyWikiCacheKey(NSURLRequest *request)
         }
         [legacyItems addObject:item];
     }
-    if (!hasLegacySource || legacyItems.count == components.queryItems.count)
+    if (!didRemoveNewParameter || !hasLegacySource)
         return nil;
     components.queryItems = legacyItems;
     return [NSURLRequest requestWithURL:components.URL
@@ -190,7 +196,9 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"article=", encodedWikidataId]
                 : [url stringByAppendingFormat:@"&%@%@", @"article=", encodedWikidataId];
         }
+        NSString *directWikiTitle = poi.values[WIKIPEDIA_TAG];
         NSString *wikiTitle = OAExtractWikipediaTitle(poi.values);
+        BOOL usesLocalizedWikipediaTag = directWikiTitle.length == 0 && wikiTitle.length > 0;
         if (wikiTitle.length > 0)
         {
             NSInteger urlInd = [wikiTitle indexOf:kWikipediaShortLink];
@@ -220,8 +228,17 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         {
             if (url.length > 0)
             {
+                BOOL isFileMetadataOnlyRequest = wikiFileName.length > 0
+                    && wikiCategory.length == 0
+                    && wikidataId.length == 0
+                    && wikiTitle.length == 0;
                 url = [url stringByAppendingString:@"&addMetaData=true"];
-                [self addOsmandAPIImageList:url cards:cards session:session onFailureNoCache:onFailureNoCache];
+                [self addOsmandAPIImageList:url
+          removeLocalizedWikipediaFromLegacyKey:usesLocalizedWikipediaTag
+                    fileMetadataOnlyRequest:isFileMetadataOnlyRequest
+                                      cards:cards
+                                    session:session
+                           onFailureNoCache:onFailureNoCache];
             }
             else
             {
@@ -258,6 +275,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 }
 
 - (void)addOsmandAPIImageList:(NSString *)url
+removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKey
+      fileMetadataOnlyRequest:(BOOL)fileMetadataOnlyRequest
                         cards:(NSMutableArray<AbstractCard *> *)cards
                       session:(nullable NSURLSession *)session
              onFailureNoCache:(void (^)(void))onFailureNoCache
@@ -278,6 +297,17 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         
         if (error && error.code == NSURLErrorCancelled)
             return;
+
+        void (^completeWithoutWikiData)(void) = ^{
+            if (fileMetadataOnlyRequest)
+            {
+                [strongSelf runCallback:cards];
+            }
+            else if (onFailureNoCache)
+            {
+                dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
+            }
+        };
         
         NSData *effectiveData = data;
 
@@ -290,7 +320,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             }
             else
             {
-                NSURLRequest *legacyRequest = OARequestForLegacyWikiCacheKey(request);
+                NSURLRequest *legacyRequest = OARequestForLegacyWikiCacheKey(request, removeLocalizedWikipediaFromLegacyKey);
                 NSCachedURLResponse *legacyCached = legacyRequest
                     ? [URLSessionManager cachedResponseFor:legacyRequest sessionKey:key]
                     : nil;
@@ -300,7 +330,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 }
                 else
                 {
-                    [strongSelf runCallback:cards];
+                    completeWithoutWikiData();
                     return;
                 }
             }
@@ -309,7 +339,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         if (!effectiveData)
         {
             NSLog(@"[ERROR] addOsmandAPIImageList effectiveData is nil, cannot parse JSON.");
-            [strongSelf runCallback:cards];
+            completeWithoutWikiData();
             return;
         }
 

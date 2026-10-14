@@ -128,7 +128,7 @@ static NSURLRequest *OARequestForLegacyWikiCacheKey(NSURLRequest *request, BOOL 
 
 @interface OAWikiImageHelper ()
 
-typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *cards);
+typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *cards, BOOL requestFailed);
 @property OAWikiImageHelperOtherImages addOtherImagesFunction;
 
 @end
@@ -152,8 +152,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 - (void)sendNearbyWikiImagesRequest:(OAAmenityInfoRow *)nearbyImagesRowInfo
                           targetObj:(id)targetObj
                             session:(nullable NSURLSession *)session
-           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete
-                   onFailureNoCache:(void (^)(void))onFailureNoCache
+           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed))addOtherImagesOnComplete
 {
     if (!nearbyImagesRowInfo)
         return;
@@ -228,17 +227,11 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         {
             if (url.length > 0)
             {
-                BOOL isFileMetadataOnlyRequest = wikiFileName.length > 0
-                    && wikiCategory.length == 0
-                    && wikidataId.length == 0
-                    && wikiTitle.length == 0;
                 url = [url stringByAppendingString:@"&addMetaData=true"];
                 [self addOsmandAPIImageList:url
           removeLocalizedWikipediaFromLegacyKey:usesLocalizedWikipediaTag
-                    fileMetadataOnlyRequest:isFileMetadataOnlyRequest
                                       cards:cards
-                                    session:session
-                           onFailureNoCache:onFailureNoCache];
+                                    session:session];
             }
             else
             {
@@ -276,10 +269,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
 - (void)addOsmandAPIImageList:(NSString *)url
 removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKey
-      fileMetadataOnlyRequest:(BOOL)fileMetadataOnlyRequest
                         cards:(NSMutableArray<AbstractCard *> *)cards
                       session:(nullable NSURLSession *)session
-             onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     NSURL *urlObj = [NSURL URLWithString:url];
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
@@ -299,14 +290,7 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
             return;
 
         void (^completeWithoutWikiData)(void) = ^{
-            if (fileMetadataOnlyRequest)
-            {
-                [strongSelf runCallback:cards];
-            }
-            else if (onFailureNoCache)
-            {
-                dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
-            }
+            [strongSelf runCallback:cards requestFailed:YES];
         };
         
         NSData *effectiveData = data;
@@ -411,10 +395,10 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
 
 - (WikiImage *)getOsmandApiWikiImage:(NSString *)imageUrl
 {
-    NSString *url = [imageUrl stringByRemovingPercentEncoding];
-    NSString *imageHiResUrl = [url stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    NSString *imageFileName = url.lastPathComponent;
-    NSString *imageName = imageFileName.stringByDeletingPathExtension;
+    NSString *imageHiResUrl = [imageUrl stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    NSString *imageFileName = imageHiResUrl.lastPathComponent;
+    NSString *decodedImageFileName = imageFileName.stringByRemovingPercentEncoding ?: imageFileName;
+    NSString *imageName = decodedImageFileName.stringByDeletingPathExtension;
     NSString *imageStubUrl = [NSString stringWithFormat:@"%@%@%i", imageHiResUrl, @"?width=", THUMB_SIZE];
     return [[WikiImage alloc] initWithWikiMediaTag:imageFileName
                                            imageName:imageName
@@ -442,9 +426,14 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
 
 - (void)runCallback:(NSMutableArray<AbstractCard *> *)cards
 {
+    [self runCallback:cards requestFailed:NO];
+}
+
+- (void)runCallback:(NSMutableArray<AbstractCard *> *)cards requestFailed:(BOOL)requestFailed
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_addOtherImagesFunction)
-            _addOtherImagesFunction(cards);
+            _addOtherImagesFunction(cards, requestFailed);
     });
 }
 

@@ -122,6 +122,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 @property (nonatomic) BOOL wikiCardsReady;
 @property (nonatomic, strong) NSURLSession *onlineAndMapillarySession;
 
+- (NoInternetCard *)createOnlinePhotosNoInternetCard;
+
 @end
 
 @implementation OATargetInfoViewController
@@ -137,6 +139,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _wikiCardsRequestFailed;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
 }
@@ -1188,7 +1191,13 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
             else
             {
-                if (onFailureNoCache)
+                if (newCards.count > 0 && strongSelf->_wikiCardsRequestFailed)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                    });
+                }
+                else if (onFailureNoCache)
                 {
                     dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
                 }
@@ -1345,12 +1354,15 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
 {
-    if (_otherCardsReady && _wikiCardsReady)
+    if (_otherCardsReady && (_wikiCardsReady || _wikiCardsRequestFailed))
     {
         CardsFilter *filter = [[CardsFilter alloc] initWithCards:cards];
         
         if (cards.count > 1)
             [self reorderCards:cards];
+
+        if (_wikiCardsRequestFailed)
+            [cards addObject:[self createOnlinePhotosNoInternetCard]];
         
         // After forming the list of cards, fill the collection
         if (_onlinePhotoCardsRowInfo)
@@ -2066,6 +2078,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
  
     _wikiCardsReady = NO;
+    _wikiCardsRequestFailed = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
     if (_mapillaryCardsRowInfo)
@@ -2083,14 +2096,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     __weak __typeof(self) weakSelf = self;
     void (^onFailureNoCache)(void) = ^{
         weakSelf.wikiCardsReady = NO;
+        weakSelf->_wikiCardsRequestFailed = YES;
         onlinePhotoCardsView.isLoading = NO;
-        NoInternetCard *noInternetCard = [NoInternetCard new];
-        noInternetCard.onTryAgainAction = ^{
-            if (AFNetworkReachabilityManager.sharedManager.isReachable)
-            {
-                [weakSelf startLoadingImages];
-            }
-        };
+        NoInternetCard *noInternetCard = [weakSelf createOnlinePhotosNoInternetCard];
         [onlinePhotoCardsView setCards:@[noInternetCard]];
         if (mapillaryCardsView)
         {
@@ -2100,10 +2108,27 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     };
     
     mapillaryCardsView.isLoading = YES;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-        weakSelf.wikiCardsReady = YES;
+    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed) {
+        weakSelf.wikiCardsReady = !requestFailed;
+        weakSelf->_wikiCardsRequestFailed = requestFailed;
         [weakSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
-    } onFailureNoCache:onFailureNoCache];
+    }];
+}
+
+- (NoInternetCard *)createOnlinePhotosNoInternetCard
+{
+    NoInternetCard *noInternetCard = [NoInternetCard new];
+    __weak __typeof(self) weakSelf = self;
+    noInternetCard.onTryAgainAction = ^{
+        if (AFNetworkReachabilityManager.sharedManager.isReachable)
+        {
+            weakSelf.wikiCardsReady = NO;
+            weakSelf->_otherCardsReady = NO;
+            weakSelf->_wikiCardsRequestFailed = NO;
+            [weakSelf startLoadingImages];
+        }
+    };
+    return noInternetCard;
 }
 
 - (NSURLSession *)onlineAndMapillarySession

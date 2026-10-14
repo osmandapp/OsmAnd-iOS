@@ -48,6 +48,7 @@
 #import "OATextMultilineTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OACollapsableView.h"
@@ -1801,7 +1802,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             cell.backgroundColor = _contentColor;
             cell.iconView.image = info.icon;
             
-            cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+            NSString *text = info.isPhoneNumber ? [OASPhoneNumberFormatter.shared formatValue:info.text] : info.text;
+            cell.textView.text = info.textPrefix.length == 0 ? text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, text];
             
             if (info.isPhoneNumber || info.isUrl)
                 cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];

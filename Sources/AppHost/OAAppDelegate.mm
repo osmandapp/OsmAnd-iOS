@@ -189,6 +189,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                     break;
                 }
             }
+            [OAIAPHelper initializeFreeMapsCount:mapInstalled];
+
             if (!mapInstalled && !AppEnvironment.isUITesting)
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];

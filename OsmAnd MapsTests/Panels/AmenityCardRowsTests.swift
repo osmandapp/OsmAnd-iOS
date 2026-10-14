@@ -73,8 +73,9 @@ final class AmenityCardRowsTests: XCTestCase {
     }
 
     func testGenericFallbackShowsStoredValueAsIs() {
-        let rows = buildRows(["test:reference": "abc_def"])
+        let rows = buildRows(["test:reference": "abc_def", "test:status": "air_conditioning_yes"])
         XCTAssertEqual(rows["test:reference"]?.text, "abc_def")
+        XCTAssertEqual(rows["test:status"]?.text, "air_conditioning_yes")
     }
 
     func testCustomFieldMatchingAmenityFilterIsStillNotShown() {

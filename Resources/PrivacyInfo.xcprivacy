@@ -10,7 +10,7 @@
 			<key>NSPrivacyCollectedDataType</key>
 			<string>NSPrivacyCollectedDataTypeAdvertisingData</string>
 			<key>NSPrivacyCollectedDataTypeLinked</key>
-			<true/>
+			<false/>
 			<key>NSPrivacyCollectedDataTypeTracking</key>
 			<false/>
 			<key>NSPrivacyCollectedDataTypePurposes</key>

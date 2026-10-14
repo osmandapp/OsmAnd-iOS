@@ -116,7 +116,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
     NSDictionary<NSString *, NSString *> *extensions = [poi getAmenityExtensions:NO];
     self.customOnlinePhotosPosition = [extensions.allKeys containsObject:WIKIDATA_TAG];
-    self.infoBundle = [[OASAdditionalInfoBundle alloc] initWithAdditionalInfo:extensions];
+    self.infoBundle = [[OASAdditionalInfoBundle alloc] initWithPoiTypes:OAPOIHelper.sharedInstance.kPoiTypes additionalInfo:extensions];
 }
 
 - (void) viewDidLoad

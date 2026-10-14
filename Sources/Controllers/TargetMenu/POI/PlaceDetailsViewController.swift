@@ -131,7 +131,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
         let extensions = amenity.getAmenityExtensions(false)
-        let bundle = AdditionalInfoBundle(additionalInfo: extensions)
+        let bundle = AdditionalInfoBundle(poiTypes: OAPOIHelper.sharedInstance().kPoiTypes, additionalInfo: extensions)
         let filteredInfo = bundle.getFilteredLocalizedInfo()
         
         if buildShortWikiDescription(filteredInfo, allowOnlineWiki: allowOnlineWiki, rows: rows) {

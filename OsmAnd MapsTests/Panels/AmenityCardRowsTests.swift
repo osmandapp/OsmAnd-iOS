@@ -148,8 +148,8 @@ final class AmenityCardRowsTests: XCTestCase {
             XCTFail("no amenity")
             return [:]
         }
-        SharedTravel.initPoiTypes()
-        let helper = AmenityUIHelper(infoBundle: AdditionalInfoBundle(additionalInfo: poi.getAmenityExtensions(false)))
+        let helper = AmenityUIHelper(infoBundle: AdditionalInfoBundle(poiTypes: OAPOIHelper.sharedInstance().kPoiTypes,
+                                                                      additionalInfo: poi.getAmenityExtensions(false)))
         helper.genericRowKeys = genericRowKeys
         var result = [String: OAAmenityInfoRow]()
         for row in helper.buildInternal() {

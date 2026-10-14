@@ -259,28 +259,8 @@ enum SharedTravelArticles {
 @objcMembers
 final class SharedTravel: NSObject {
 
-    private static let poiTypesLock = NSLock()
-
-    /// Reads poi_types.xml into the shared registry. The obf reader needs it to name the amenities
-    /// it decodes, and the travel code needs it to read an activity back out of a route's subtype.
-    /// `OAPOIHelper` parses the same file for the app's own model; the two live side by side until
-    /// the search moves to OsmAndShared.
-    static func initPoiTypes() {
-        poiTypesLock.lock()
-        defer { poiTypesLock.unlock() }
-        guard !MapPoiTypes.companion.getDefaultNoInit().isInit() else { return }
-        guard let xml = PlatformUtil.shared.getOsmAndContext().getAssetAsString(name: "poi_types.xml") else {
-            NSLog("SharedTravel: poi_types.xml is not in the bundle, travel search will not work")
-            return
-        }
-        let types = MapPoiTypes(resourceName: nil)
-        types.doInitFromString(xml: xml)
-        MapPoiTypes.companion.setDefault(types: types)
-    }
-
     static let helper: OsmAndShared.TravelObfHelper = {
-        initPoiTypes()
-        return OsmAndShared.TravelObfHelper(context: SharedTravelContext.shared,
-                                            bookmarks: SharedTravelBookmarks.shared)
+        OsmAndShared.TravelObfHelper(context: SharedTravelContext.shared,
+                                     bookmarks: SharedTravelBookmarks.shared)
     }()
 }

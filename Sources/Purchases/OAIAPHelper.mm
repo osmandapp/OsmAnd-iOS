@@ -7,6 +7,7 @@
 //
 
 #import "OAIAPHelper.h"
+#import "OAInstallAttribution.h"
 #import "OsmAndApp.h"
 #import "OAAnalyticsHelper.h"
 #import "OANetworkUtilities.h"
@@ -1644,6 +1645,7 @@ static OASubscriptionState *EXPIRED;
     [params setObject:[NSString stringWithFormat:@"%d", app.getAppInstalledDays] forKey:@"nd"];
     [params setObject:[NSString stringWithFormat:@"%d", app.getAppExecCount] forKey:@"ns"];
     [params setObject:app.getLanguageCode forKey:@"lang"];
+    [OAInstallAttribution addParams:params];
     NSString *aid = app.getUserIosId;
     if (aid.length > 0)
         [params setObject:aid forKey:@"aid"];

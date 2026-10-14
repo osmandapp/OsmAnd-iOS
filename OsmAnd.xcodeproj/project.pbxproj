@@ -1805,6 +1805,7 @@
 		DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */; };
 		DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */; };
 		DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */; };
+		0EACBEE6C24FB1216C606B48 /* OAInstallAttribution.m in Sources */ = {isa = PBXBuildFile; fileRef = FD721D5DEBD58F4D5E7F7F01 /* OAInstallAttribution.m */; };
 		DA5A853426C563A900F274C7 /* OASettingsExporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */; };
 		DA5A853526C563A900F274C7 /* kml2gpx.xslt in Resources */ = {isa = PBXBuildFile; fileRef = DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */; };
 		DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */; };
@@ -5229,6 +5230,8 @@
 		DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsImporter.mm; sourceTree = "<group>"; };
 		DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUIHelper.mm; sourceTree = "<group>"; };
 		DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiImageHelper.h; sourceTree = "<group>"; };
+		38085CD17DC087CC9AEF40AB /* OAInstallAttribution.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAInstallAttribution.h; sourceTree = "<group>"; };
+		FD721D5DEBD58F4D5E7F7F01 /* OAInstallAttribution.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAInstallAttribution.m; sourceTree = "<group>"; };
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
 		DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapTileDownloader.h; sourceTree = "<group>"; };
@@ -10099,6 +10102,8 @@
 				DA5A80AF26C563A600F274C7 /* OADefaultFavorite.m */,
 				DA5A80BD26C563A600F274C7 /* OADiscountHelper.h */,
 				DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */,
+				38085CD17DC087CC9AEF40AB /* OAInstallAttribution.h */,
+				FD721D5DEBD58F4D5E7F7F01 /* OAInstallAttribution.m */,
 				DA5A80CA26C563A600F274C7 /* OADownloadsItem.h */,
 				DA5A80C726C563A600F274C7 /* OADownloadsItem.mm */,
 				321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */,
@@ -12889,6 +12894,7 @@
 				DA5A84BE26C563A900F274C7 /* OASegmentOptionsBottomSheetViewController.mm in Sources */,
 				46C841352C32F33D00E284B0 /* OANavAddDestinationAction.m in Sources */,
 				DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */,
+				0EACBEE6C24FB1216C606B48 /* OAInstallAttribution.m in Sources */,
 				C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */,
 				DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */,
 				FA64087B2D3E88C0005FD12D /* MapillaryContributeCard.swift in Sources */,

@@ -93,7 +93,7 @@ final class URLSessionManager: NSObject {
     
     // MARK: - Fetch
     
-    /// Returns cached response if it's not expired. Removes it otherwise.
+    /// Returns the cached response, including expired entries that can be used when offline.
     static func cachedResponse(for request: URLRequest,
                                sessionKey: String) -> CachedURLResponse? {
         guard let cache = session(for: sessionKey).configuration.urlCache,
@@ -102,6 +102,11 @@ final class URLSessionManager: NSObject {
         }
         
         return cached
+    }
+
+    static func isExpiredCachedResponse(_ cached: CachedURLResponse) -> Bool {
+        guard let expirationDate = cached.userInfo?[expirationDateKey] as? Date else { return false }
+        return expirationDate <= Date()
     }
     
     // MARK: - Cleanup

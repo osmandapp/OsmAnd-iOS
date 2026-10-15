@@ -44,7 +44,8 @@ static BOOL OAIsWikiFileMetadataMissing(NSData *data, NSString *fileName)
     if (![images isKindOfClass:NSArray.class])
         return NO;
 
-    NSString *normalizedFileName = OANormalizedWikiMediaTag(fileName);
+    // NSURLComponents has already decoded the file query value once.
+    NSString *normalizedFileName = [[fileName stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString];
     for (NSDictionary *image in images)
     {
         if (![image isKindOfClass:NSDictionary.class])
@@ -248,7 +249,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
         if (wikiFileName.length > 0)
         {
-            NSString *encodedWikiFileName = OAEncodedWikiQueryValue(wikiFileName);
+            NSString *decodedWikiFileName = wikiFileName.stringByRemovingPercentEncoding ?: wikiFileName;
+            NSString *encodedWikiFileName = OAEncodedWikiQueryValue(decodedWikiFileName);
             url = url.length == 0
                 ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"file=", encodedWikiFileName]
                 : [url stringByAppendingFormat:@"&%@%@", @"file=", encodedWikiFileName];
@@ -319,14 +321,15 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
             break;
         }
     }
-    NSCachedURLResponse *existingCached = fileName.length > 0
-        ? [URLSessionManager cachedResponseFor:request sessionKey:key]
-        : nil;
+    NSCachedURLResponse *existingCached = [URLSessionManager cachedResponseFor:request sessionKey:key];
     // The server may legitimately have no metadata for this file, so refresh an old cache entry only once.
     BOOL metadataAlreadyChecked = [existingCached.userInfo[[URLSessionManager wikiFileMetadataCheckedKey]] boolValue];
     BOOL refreshIncompleteMetadata = !metadataAlreadyChecked
         && OAIsWikiFileMetadataMissing(existingCached.data, fileName);
-    NSURLRequest *requestForTask = refreshIncompleteMetadata
+    BOOL refreshExpiredCache = existingCached && [URLSessionManager isExpiredCachedResponse:existingCached];
+    // Only a cache miss or a forced reload should extend the cache lifetime.
+    BOOL fetchFreshResponse = !existingCached || refreshIncompleteMetadata || refreshExpiredCache;
+    NSURLRequest *requestForTask = (refreshIncompleteMetadata || refreshExpiredCache)
         ? [NSURLRequest requestWithURL:urlObj cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30]
         : request;
     __weak __typeof(self) weakSelf = self;
@@ -347,7 +350,7 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
 
         if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
         {
-            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
+            NSCachedURLResponse *cached = existingCached ?: [URLSessionManager cachedResponseFor:request sessionKey:key];
             if (cached)
             {
                 effectiveData = cached.data;
@@ -410,7 +413,7 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
             NSLog(@"JSON parsing error: %@", jsonError ?: @"unknown error");
         }
 
-        BOOL isSuccessfulNetworkResponse = data != nil
+        BOOL isSuccessfulNetworkResponse = fetchFreshResponse && data != nil
             && [response isKindOfClass:NSHTTPURLResponse.class]
             && ((NSHTTPURLResponse *)response).statusCode == 200;
         if (isSuccessfulNetworkResponse && [images isKindOfClass:NSArray.class])

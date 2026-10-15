@@ -34,6 +34,33 @@ static NSString *OANormalizedWikiMediaTag(NSString *tag)
     return [[decodedTag stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString];
 }
 
+static BOOL OAIsWikiFileMetadataMissing(NSData *data)
+{
+    if (!data)
+        return NO;
+
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSArray *images = [json isKindOfClass:NSDictionary.class] ? json[@"features-v2"] : nil;
+    if (![images isKindOfClass:NSArray.class])
+        return NO;
+
+    for (NSDictionary *image in images)
+    {
+        if (![image isKindOfClass:NSDictionary.class])
+            continue;
+        if ([image[@"mediaId"] respondsToSelector:@selector(longLongValue)]
+            && [image[@"mediaId"] longLongValue] > 0)
+            return NO;
+        for (NSString *key in @[@"date", @"author", @"license", @"description"])
+        {
+            NSString *value = image[key];
+            if ([value isKindOfClass:NSString.class] && value.length > 0)
+                return NO;
+        }
+    }
+    return YES;
+}
+
 static NSString *OANormalizedWikipediaTitle(NSString *language, NSString *title)
 {
     if (language.length == 0 || title.length == 0)
@@ -279,8 +306,19 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
+    BOOL hasFileParameter = [[NSURLComponents componentsWithURL:urlObj resolvingAgainstBaseURL:NO].queryItems
+        indexOfObjectPassingTest:^BOOL(NSURLQueryItem *item, NSUInteger idx, BOOL *stop) {
+            return [item.name isEqualToString:@"file"];
+        }] != NSNotFound;
+    NSCachedURLResponse *existingCached = hasFileParameter
+        ? [URLSessionManager cachedResponseFor:request sessionKey:key]
+        : nil;
+    BOOL refreshIncompleteMetadata = OAIsWikiFileMetadataMissing(existingCached.data);
+    NSURLRequest *requestForTask = refreshIncompleteMetadata
+        ? [NSURLRequest requestWithURL:urlObj cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30]
+        : request;
     __weak __typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [urlSession dataTaskWithRequest:request
+    NSURLSessionDataTask *task = [urlSession dataTaskWithRequest:requestForTask
                                             completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)

@@ -1368,17 +1368,17 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         if (_onlinePhotoCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
-            collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             
             [collapsableView setCards:cards];
+            collapsableView.isLoading = NO;
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
-            collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
+            collapsableView.isLoading = NO;
         }
     }
 }
@@ -2101,13 +2101,13 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
         strongSelf.wikiCardsReady = NO;
         strongSelf->_wikiCardsRequestFailed = YES;
-        onlinePhotoCardsView.isLoading = NO;
         NoInternetCard *noInternetCard = [strongSelf createOnlinePhotosNoInternetCard];
         [onlinePhotoCardsView setCards:@[noInternetCard]];
+        onlinePhotoCardsView.isLoading = NO;
         if (mapillaryCardsView)
         {
-            mapillaryCardsView.isLoading = NO;
             [mapillaryCardsView setCards:@[noInternetCard]];
+            mapillaryCardsView.isLoading = NO;
         }
     };
     

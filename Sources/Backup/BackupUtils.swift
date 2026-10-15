@@ -13,6 +13,8 @@ final class BackupUtils: NSObject {
 
     static let backupTypePrefix = "backup_type_"
     static let versionHistoryPrefix = "save_version_history_"
+    // file systems of the device limit a file or folder name to 255 UTF-16 code units
+    private static let maxFileNameLength = 255
 
     static func setLastModifiedTime(_ name: String) {
         setLastModifiedTime(name, lastModifiedTime: Int(NSDate().timeIntervalSince1970))
@@ -161,6 +163,22 @@ final class BackupUtils: NSObject {
         }
 
         return fileName
+    }
+
+    static func isFileNameTooLong(_ path: String) -> Bool {
+        path.split(separator: "/").contains { $0.utf16.count > maxFileNameLength }
+    }
+
+    // the last name of the path is cut, so that together with the tail it still fits the limit
+    static func appendToFileName(_ path: String, tail: String) -> String {
+        let nameStart = path.lastIndex(of: "/").map { path.index(after: $0) } ?? path.startIndex
+        let nameTail = tail.prefix { $0 != "/" }
+        let maxLength = maxFileNameLength - nameTail.utf16.count
+        var name = path[nameStart...]
+        while name.utf16.count > maxLength, !name.isEmpty {
+            name.removeLast()
+        }
+        return String(path[..<nameStart]) + name + tail
     }
 
     static func isLimitedFilesCollectionItem(_ item: OAFileSettingsItem) -> Bool {

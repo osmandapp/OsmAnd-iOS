@@ -25,6 +25,17 @@ extension NumberFormatter {
         return formatter
     }()
 
+    static func speedToleranceFormatter(for speed: Float) -> NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = false
+        formatter.maximumFractionDigits = 0
+        // Match Math.round: halfway values round toward positive infinity.
+        formatter.roundingMode = speed < 0 ? .halfDown : .halfUp
+        return formatter
+    }
+
     private static let countFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

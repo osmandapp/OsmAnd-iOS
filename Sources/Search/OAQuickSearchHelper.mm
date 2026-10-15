@@ -294,6 +294,9 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
+        if (![point isVisible])
+            continue;
+
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
         sr.localeName = [point getName];
         sr.favorite = point.favorite;
@@ -338,6 +341,9 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
+        if (![point isVisible])
+            continue;
+
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
         sr.localeName = [point getName];
         sr.favorite = point.favorite;

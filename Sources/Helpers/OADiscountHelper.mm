@@ -29,7 +29,6 @@
 #import "OAPOIUIFilter.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAppVersion.h"
-#import "OAInstallAttribution.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OASearchResult.h"
@@ -238,7 +237,6 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
     NSString *aid = app.getUserIosId;
     if (aid.length > 0)
        url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
-    url = [url stringByAppendingString:OAInstallAttribution.urlQuery];
     
     NSURL *urlObj = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj

@@ -62,8 +62,33 @@
     [self initData];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)deinitView
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
+}
+
+- (void)updateOrientationObserver
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
+    if (vwController.type == EOAQASelectionTypeOrientation)
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:[OAAppSettings sharedManager].rotateMap.key])
+        [tblView reloadData];
+}
+
 - (void) setupView
 {
+    [self updateOrientationObserver];
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSArray *params = _action.loadListFromParams;

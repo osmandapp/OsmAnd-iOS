@@ -34,9 +34,9 @@ static NSString *OANormalizedWikiMediaTag(NSString *tag)
     return [[decodedTag stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString];
 }
 
-static BOOL OAIsWikiFileMetadataMissing(NSData *data)
+static BOOL OAIsWikiFileMetadataMissing(NSData *data, NSString *fileName)
 {
-    if (!data)
+    if (!data || fileName.length == 0)
         return NO;
 
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
@@ -44,19 +44,23 @@ static BOOL OAIsWikiFileMetadataMissing(NSData *data)
     if (![images isKindOfClass:NSArray.class])
         return NO;
 
+    NSString *normalizedFileName = OANormalizedWikiMediaTag(fileName);
     for (NSDictionary *image in images)
     {
         if (![image isKindOfClass:NSDictionary.class])
             continue;
-        if ([image[@"mediaId"] respondsToSelector:@selector(longLongValue)]
-            && [image[@"mediaId"] longLongValue] > 0)
-            return NO;
+        NSString *imageURL = image[@"image"];
+        if (![imageURL isKindOfClass:NSString.class]
+            || ![OANormalizedWikiMediaTag(imageURL.lastPathComponent) isEqualToString:normalizedFileName])
+            continue;
+
         for (NSString *key in @[@"date", @"author", @"license", @"description"])
         {
             NSString *value = image[key];
             if ([value isKindOfClass:NSString.class] && value.length > 0)
                 return NO;
         }
+        return YES;
     }
     return YES;
 }
@@ -233,7 +237,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
                 NSString *prefix = [wikiTitle substringToIndex:urlInd];
                 NSString *lang = [[prefix substringFromIndex:[prefix lastIndexOf:@"/"] + 1] stringByReplacingOccurrencesOfString:@"/" withString:@""];
                 NSString *title = [wikiTitle substringFromIndex:urlInd + kWikipediaShortLink.length];
-                wikiTitle = [NSString stringWithFormat:@"%@:%@", lang, title];
+                wikiTitle = [NSString stringWithFormat:@"%@:%@", lang, title.stringByRemovingPercentEncoding ?: title];
             }
 
             NSString *encodedWikiTitle = OAEncodedWikiQueryValue(wikiTitle);
@@ -306,14 +310,22 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
-    BOOL hasFileParameter = [[NSURLComponents componentsWithURL:urlObj resolvingAgainstBaseURL:NO].queryItems
-        indexOfObjectPassingTest:^BOOL(NSURLQueryItem *item, NSUInteger idx, BOOL *stop) {
-            return [item.name isEqualToString:@"file"];
-        }] != NSNotFound;
-    NSCachedURLResponse *existingCached = hasFileParameter
+    NSString *fileName = nil;
+    for (NSURLQueryItem *item in [NSURLComponents componentsWithURL:urlObj resolvingAgainstBaseURL:NO].queryItems)
+    {
+        if ([item.name isEqualToString:@"file"])
+        {
+            fileName = item.value;
+            break;
+        }
+    }
+    NSCachedURLResponse *existingCached = fileName.length > 0
         ? [URLSessionManager cachedResponseFor:request sessionKey:key]
         : nil;
-    BOOL refreshIncompleteMetadata = OAIsWikiFileMetadataMissing(existingCached.data);
+    // The server may legitimately have no metadata for this file, so refresh an old cache entry only once.
+    BOOL metadataAlreadyChecked = [existingCached.userInfo[[URLSessionManager wikiFileMetadataCheckedKey]] boolValue];
+    BOOL refreshIncompleteMetadata = !metadataAlreadyChecked
+        && OAIsWikiFileMetadataMissing(existingCached.data, fileName);
     NSURLRequest *requestForTask = refreshIncompleteMetadata
         ? [NSURLRequest requestWithURL:urlObj cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30]
         : request;
@@ -403,7 +415,11 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
             && ((NSHTTPURLResponse *)response).statusCode == 200;
         if (isSuccessfulNetworkResponse && [images isKindOfClass:NSArray.class])
         {
-            [URLSessionManager storeResponse:response data:data for:request sessionKey:key];
+            [URLSessionManager storeResponse:response
+                                       data:data
+                                        for:request
+                                 sessionKey:key
+                     wikiFileMetadataChecked:fileName.length > 0];
         }
 
         @synchronized(cards) {

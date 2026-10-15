@@ -34,6 +34,7 @@ final class URLSessionConfigProvider: NSObject {
 final class URLSessionManager: NSObject {
     // 30 days
     static let cacheLifetime: TimeInterval = 30 * 24 * 60 * 60
+    static let wikiFileMetadataCheckedKey = "wikiFileMetadataChecked"
     
     // UserInfo keys
     private static let expirationDateKey = "expirationDate"
@@ -58,8 +59,19 @@ final class URLSessionManager: NSObject {
                               data: Data,
                               for request: URLRequest,
                               sessionKey: String) {
+        storeResponse(response, data: data, for: request, sessionKey: sessionKey, wikiFileMetadataChecked: false)
+    }
+
+    static func storeResponse(_ response: URLResponse,
+                              data: Data,
+                              for request: URLRequest,
+                              sessionKey: String,
+                              wikiFileMetadataChecked: Bool) {
         let expirationDate = Date().addingTimeInterval(cacheLifetime)
-        let userInfo: [AnyHashable: Any] = [expirationDateKey: expirationDate]
+        var userInfo: [AnyHashable: Any] = [expirationDateKey: expirationDate]
+        if wikiFileMetadataChecked {
+            userInfo[wikiFileMetadataCheckedKey] = true
+        }
         
         let cached = CachedURLResponse(response: response,
                                        data: data,

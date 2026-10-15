@@ -319,11 +319,8 @@ extension FavoriteListViewController {
         }
     }
 
-    @objc func shareButtonClicked(_ sender: Any) {
-        let sourceView = sender as? UIView ?? collectionView
-        shareItems(for: sourceView)
-        setEditing(false)
-        applySnapshot()
+    @objc func shareButtonClicked(_ sender: UIBarButtonItem) {
+        shareItems(from: sender)
     }
 
     @objc func moveButtonClicked(_ sender: Any) {
@@ -480,7 +477,7 @@ extension FavoriteListViewController {
         }
     }
     
-    private func shareItems(for sourceView: UIView) {
+    private func shareItems(from barButtonItem: UIBarButtonItem) {
         let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
         guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(
@@ -501,14 +498,20 @@ extension FavoriteListViewController {
         }
 
         guard let favoritesUrl = OAFavoritesHelperBridge.shared().shareFavoriteItems(selectedBridgeItems) else { return }
-        showActivity(
-            [favoritesUrl],
-            sourceView: sourceView,
-            barButtonItem: nil,
-            completionWithItemsHandler: {
-                try? FileManager.default.removeItem(at: favoritesUrl)
+        let activityViewController = UIActivityViewController(activityItems: [favoritesUrl], applicationActivities: nil)
+        if OAUtilities.isIPad() {
+            activityViewController.popoverPresentationController?.barButtonItem = barButtonItem
+        } else {
+            activityViewController.popoverPresentationController?.sourceView = collectionView
+        }
+        activityViewController.completionWithItemsHandler = { [weak self] _, completed, _, _ in
+            try? FileManager.default.removeItem(at: favoritesUrl)
+            if completed {
+                self?.setEditing(false)
+                self?.applySnapshot()
             }
-        )
+        }
+        present(activityViewController, animated: true)
     }
 
     private func removeSelectedFavoriteItems(_ items: [Any]) {

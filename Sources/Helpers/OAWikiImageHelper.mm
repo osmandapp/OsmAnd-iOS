@@ -460,7 +460,7 @@ removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKe
         }
         _foundImages = nil;
         _cardTypesReady = nil;
-        _addOtherImagesFunction(cards);
+        _addOtherImagesFunction(cards, NO);
     }
 }
 

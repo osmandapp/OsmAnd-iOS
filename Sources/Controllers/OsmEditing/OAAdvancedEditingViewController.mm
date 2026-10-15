@@ -23,7 +23,8 @@
 #import "OAKeyboardHintBar.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kVerticalMargin 8.
+static const CGFloat kTextFieldTopInset = 8.0;
+static const CGFloat kTextFieldBottomInset = 0.0;
 
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, UIGestureRecognizerDelegate, MDCMultilineTextInputLayoutDelegate, OAKeyboardHintBarDelegate>
 
@@ -107,7 +108,12 @@
     }
     
     resultCell.fieldLabel.text = item[@"hint"];
+    // Preserve the previous 8pt of cell padding in addition to the Material field's own insets.
+    resultCell.textFieldTopConstraint.constant = kTextFieldTopInset;
+    resultCell.textFieldBottomConstraint.constant = kTextFieldBottomInset;
     MDCMultilineTextField *textField = resultCell.textField;
+    // Let the table measure the configured cell at its actual width without forcing nested layout.
+    textField.useConstraintsForIntrinsicContentSize = YES;
     textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     textField.underline.hidden = YES;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -283,12 +289,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
-    {
-        return ((OATextInputFloatingCellWithIcon *)cell).textField.intrinsicContentSize.height + kVerticalMargin;
-    }
-    
     return UITableViewAutomaticDimension;
 }
 

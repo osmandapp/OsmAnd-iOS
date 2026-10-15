@@ -1877,13 +1877,15 @@ typedef enum
 
     [self closeDashboard];
 
+    // the menu saves the map center it corrects its position against, so move the map first
     Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+
     OATargetPoint *targetPoint = [self.mapViewController.mapLayers.contextMenuLayer unknownTargetPoint:lat longitude:lon];
     if (title.length > 0)
         targetPoint.title = title;
 
     [self showContextMenu:targetPoint];
-    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
 }
 
 - (void) goToTargetPointDefault

@@ -172,13 +172,18 @@ final class BackupUtils: NSObject {
     // the last name of the path is cut, so that together with the tail it still fits the limit
     static func appendToFileName(_ path: String, tail: String) -> String {
         let nameStart = path.lastIndex(of: "/").map { path.index(after: $0) } ?? path.startIndex
-        let nameTail = tail.prefix { $0 != "/" }
+        let tailEnd = tail.firstIndex(of: "/") ?? tail.endIndex
+        let nameTail = cutToLength(String(tail[..<tailEnd]), maxLength: maxFileNameLength)
         let maxLength = maxFileNameLength - nameTail.utf16.count
-        var name = path[nameStart...]
-        while name.utf16.count > maxLength, !name.isEmpty {
-            name.removeLast()
+        return String(path[..<nameStart]) + cutToLength(String(path[nameStart...]), maxLength: maxLength) + nameTail + tail[tailEnd...]
+    }
+
+    private static func cutToLength(_ str: String, maxLength: Int) -> String {
+        var str = str
+        while str.utf16.count > maxLength, !str.isEmpty {
+            str.removeLast()
         }
-        return String(path[..<nameStart]) + name + tail
+        return str
     }
 
     static func isLimitedFilesCollectionItem(_ item: OAFileSettingsItem) -> Bool {

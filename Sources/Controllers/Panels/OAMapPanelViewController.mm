@@ -1432,12 +1432,14 @@ typedef enum
     if (!self.canPresentNewContextMenu)
         return;
 
-    BOOL isSelectingNavigationPoint = _activeTargetType == OATargetRouteStartSelection
-        || _activeTargetType == OATargetRouteFinishSelection
-        || _activeTargetType == OATargetRouteIntermediateSelection
-        || _activeTargetType == OATargetHomeSelection
-        || _activeTargetType == OATargetWorkSelection;
-    if (isSelectingNavigationPoint && targetPoints.count == 1)
+    NSArray<NSNumber *> *targetRouteTypes = @[
+        @(OATargetRouteStartSelection),
+        @(OATargetRouteFinishSelection),
+        @(OATargetRouteIntermediateSelection),
+        @(OATargetHomeSelection),
+        @(OATargetWorkSelection)
+    ];
+    if ([targetRouteTypes containsObject:@(_activeTargetType)] && targetPoints.count == 1)
     {
         // Apply the selection before the presentation queue closes its menu and clears the active target.
         [self processTargetPoint:targetPoints.firstObject];

@@ -1432,10 +1432,12 @@ typedef enum
     if (!self.canPresentNewContextMenu)
         return;
 
-    BOOL isSelectingRoutePoint = _activeTargetType == OATargetRouteStartSelection
+    BOOL isSelectingNavigationPoint = _activeTargetType == OATargetRouteStartSelection
         || _activeTargetType == OATargetRouteFinishSelection
-        || _activeTargetType == OATargetRouteIntermediateSelection;
-    if (isSelectingRoutePoint && targetPoints.count == 1)
+        || _activeTargetType == OATargetRouteIntermediateSelection
+        || _activeTargetType == OATargetHomeSelection
+        || _activeTargetType == OATargetWorkSelection;
+    if (isSelectingNavigationPoint && targetPoints.count == 1)
     {
         // Apply the selection before the presentation queue closes its menu and clears the active target.
         [self processTargetPoint:targetPoints.firstObject];

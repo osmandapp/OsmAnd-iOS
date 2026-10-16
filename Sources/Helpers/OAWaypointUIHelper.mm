@@ -39,22 +39,49 @@
 
 + (void) showOnMap:(OALocationPointWrapper *)p
 {
-    if (![p.point isKindOfClass:[OASWptPt class]])
-        return;
-    
     id<OALocationPoint> point = p.point;
+    BOOL isRoutePoint = [point isKindOfClass:OARTargetPoint.class];
+    if (!isRoutePoint && ![point isKindOfClass:OASWptPt.class])
+        return;
     
     double latitude = [point getLatitude];
     double longitude = [point getLongitude];
 
-    OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
-    
-    OASWptPt *wptPt = (OASWptPt *)p.point;
-    targetPoint.title = wptPt.name;
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OATargetPoint *targetPoint;
+    if (isRoutePoint)
+    {
+        OARTargetPoint *routePoint = (OARTargetPoint *)point;
+        targetPoint = [[OATargetPoint alloc] init];
+        if (routePoint.start)
+            targetPoint.type = OATargetRouteStart;
+        else if (routePoint.intermediate)
+            targetPoint.type = OATargetRouteIntermediate;
+        else
+            targetPoint.type = OATargetRouteFinish;
+        targetPoint.location = CLLocationCoordinate2DMake(latitude, longitude);
+        targetPoint.title = [routePoint getOnlyName];
+        targetPoint.icon = [p getImage:NO];
+        targetPoint.targetObj = routePoint;
+    }
+    else
+    {
+        targetPoint = [mapPanel.mapViewController.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
+        targetPoint.title = ((OASWptPt *)point).name;
+        targetPoint.minimized = YES;
+    }
     targetPoint.centerMap = YES;
-    targetPoint.minimized = YES;
-    [[OARootViewController instance].mapPanel showContextMenu:targetPoint];
+
+    if (isRoutePoint && [mapPanel isRouteInfoVisible])
+    {
+        [mapPanel closeRouteInfo:YES onComplete:^{
+            [mapPanel showContextMenu:targetPoint];
+        }];
+    }
+    else
+    {
+        [mapPanel showContextMenu:targetPoint];
+    }
 }
 
 + (void) sortAllTargets:(void (^)(void))onComplete

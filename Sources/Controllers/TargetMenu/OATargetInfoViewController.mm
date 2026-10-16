@@ -122,6 +122,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 @property (nonatomic) BOOL wikiCardsReady;
 @property (nonatomic, strong) NSURLSession *onlineAndMapillarySession;
 
+- (NoInternetCard *)createOnlinePhotosNoInternetCard;
+
 @end
 
 @implementation OATargetInfoViewController
@@ -137,6 +139,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _wikiCardsRequestFailed;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
 }
@@ -1188,7 +1191,13 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
             else
             {
-                if (onFailureNoCache)
+                if (newCards.count > 0 && strongSelf->_wikiCardsRequestFailed)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                    });
+                }
+                else if (onFailureNoCache)
                 {
                     dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
                 }
@@ -1345,28 +1354,31 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
 {
-    if (_otherCardsReady && _wikiCardsReady)
+    if (_otherCardsReady && (_wikiCardsReady || _wikiCardsRequestFailed))
     {
         CardsFilter *filter = [[CardsFilter alloc] initWithCards:cards];
         
         if (cards.count > 1)
             [self reorderCards:cards];
+
+        if (_wikiCardsRequestFailed)
+            [cards addObject:[self createOnlinePhotosNoInternetCard]];
         
         // After forming the list of cards, fill the collection
         if (_onlinePhotoCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
-            collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             
             [collapsableView setCards:cards];
+            collapsableView.isLoading = NO;
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
-            collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             [collapsableView setCards:cards];
+            collapsableView.isLoading = NO;
         }
     }
 }
@@ -2066,6 +2078,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
  
     _wikiCardsReady = NO;
+    _wikiCardsRequestFailed = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
     if (_mapillaryCardsRowInfo)
@@ -2082,27 +2095,52 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     __weak __typeof(self) weakSelf = self;
     void (^onFailureNoCache)(void) = ^{
-        onlinePhotoCardsView.isLoading = NO;
-        NoInternetCard *noInternetCard = [NoInternetCard new];
-        noInternetCard.onTryAgainAction = ^{
-            if (AFNetworkReachabilityManager.sharedManager.isReachable)
-            {
-                [weakSelf startLoadingImages];
-            }
-        };
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        strongSelf.wikiCardsReady = NO;
+        strongSelf->_wikiCardsRequestFailed = YES;
+        NoInternetCard *noInternetCard = [strongSelf createOnlinePhotosNoInternetCard];
         [onlinePhotoCardsView setCards:@[noInternetCard]];
+        onlinePhotoCardsView.isLoading = NO;
         if (mapillaryCardsView)
         {
-            mapillaryCardsView.isLoading = NO;
             [mapillaryCardsView setCards:@[noInternetCard]];
+            mapillaryCardsView.isLoading = NO;
         }
     };
     
     mapillaryCardsView.isLoading = YES;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-        weakSelf.wikiCardsReady = YES;
-        [weakSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
-    } onFailureNoCache:onFailureNoCache];
+    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        strongSelf.wikiCardsReady = !requestFailed;
+        strongSelf->_wikiCardsRequestFailed = requestFailed;
+        [strongSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
+    }];
+}
+
+- (NoInternetCard *)createOnlinePhotosNoInternetCard
+{
+    NoInternetCard *noInternetCard = [NoInternetCard new];
+    __weak __typeof(self) weakSelf = self;
+    noInternetCard.onTryAgainAction = ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        if (AFNetworkReachabilityManager.sharedManager.isReachable)
+        {
+            strongSelf.wikiCardsReady = NO;
+            strongSelf->_otherCardsReady = NO;
+            strongSelf->_wikiCardsRequestFailed = NO;
+            [strongSelf startLoadingImages];
+        }
+    };
+    return noInternetCard;
 }
 
 - (NSURLSession *)onlineAndMapillarySession

@@ -1,6 +1,8 @@
 #import <XCTest/XCTest.h>
+#import <CoreLocation/CoreLocation.h>
 #import "OALocationIcon.h"
 #import "OAApplicationMode.h"
+#import "OsmAndApp.h"
 
 @interface OALocationIconExportMode : OAApplicationMode
 
@@ -151,6 +153,82 @@
     OAApplicationModeBean *bean = [OAApplicationModeBean fromJson:@{@"locIcon": @"MOVEMENT_CAR", @"navIcon": @"STATIC_DEFAULT"}];
     XCTAssertEqualObjects(bean.locIcon, @"MOVEMENT_CAR");
     XCTAssertEqualObjects(bean.navIcon, @"DEFAULT");
+}
+
+@end
+
+@interface OALocationIconModelTests : XCTestCase
+@end
+
+@implementation OALocationIconModelTests
+{
+    NSString *_modelDir;
+}
+
+static NSString * const kTestModelDirName = @"OALocationIconTestModel";
+static NSString * const kTestModelName = @"model_OALocationIconTestModel";
+
+- (void)setUp
+{
+    [super setUp];
+    _modelDir = [OsmAndApp.instance.models3dPath stringByAppendingPathComponent:kTestModelDirName];
+    [NSFileManager.defaultManager createDirectoryAtPath:_modelDir withIntermediateDirectories:YES attributes:nil error:nil];
+    NSString *objPath = [[_modelDir stringByAppendingPathComponent:kTestModelDirName] stringByAppendingPathExtension:@"obj"];
+    [@"v 0 0 0\n" writeToFile:objPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+}
+
+- (void)tearDown
+{
+    [NSFileManager.defaultManager removeItemAtPath:_modelDir error:nil];
+    [super tearDown];
+}
+
+- (void)testInstalledModelNameResolvesToModelIcon
+{
+    for (NSNumber *navigation in @[@NO, @YES])
+    {
+        OALocationIcon *icon = [OALocationIcon locationIconWithName:kTestModelName forNavigation:navigation.boolValue];
+        XCTAssertEqualObjects(icon.name, kTestModelName);
+        XCTAssertEqualObjects(icon.exportName, kTestModelName);
+        XCTAssertEqualObjects(icon.modelName, kTestModelName);
+        XCTAssertTrue(icon.isModel);
+        XCTAssertTrue(icon.shouldDisplayModel);
+        XCTAssertFalse([OALocationIcon.defaultIcons containsObject:icon]);
+    }
+}
+
+- (void)testModelNameRoundTripsThroughLookup
+{
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:kTestModelName];
+    XCTAssertEqualObjects([OALocationIcon locationIconWithName:icon.name].name, kTestModelName);
+    XCTAssertEqualObjects([OALocationIcon locationIconWithName:icon.exportName forNavigation:YES].name, kTestModelName);
+}
+
+- (void)testProfileImportPreservesInstalledModel
+{
+    OAApplicationModeBean *bean = [OAApplicationModeBean fromJson:@{@"locIcon": kTestModelName, @"navIcon": kTestModelName}];
+    XCTAssertEqualObjects(bean.locIcon, kTestModelName);
+    XCTAssertEqualObjects(bean.navIcon, kTestModelName);
+}
+
+- (void)testMissingModelUsesContextDefault
+{
+    [NSFileManager.defaultManager removeItemAtPath:_modelDir error:nil];
+    XCTAssertEqual([OALocationIcon locationIconWithName:kTestModelName forNavigation:NO], OALocationIcon.DEFAULT);
+    XCTAssertEqual([OALocationIcon locationIconWithName:kTestModelName forNavigation:YES], OALocationIcon.MOVEMENT_DEFAULT);
+    XCTAssertEqual([OALocationIcon locationIconWithName:@"model_" forNavigation:NO], OALocationIcon.DEFAULT);
+}
+
+- (void)testModelWithoutPreviewImageHasFallbackPreview
+{
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:kTestModelName];
+    XCTAssertNotNil([icon getPreviewIconWithColor:UIColor.redColor]);
+}
+
+- (void)testBuiltInModelNamesStillResolveToBuiltInIcons
+{
+    for (OALocationIcon *builtIn in OALocationIcon.defaultIcons)
+        XCTAssertEqual([OALocationIcon locationIconWithName:builtIn.modelName], builtIn);
 }
 
 @end

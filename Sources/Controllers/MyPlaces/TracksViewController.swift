@@ -60,6 +60,53 @@ private final class IndexingProgressRingView: UIView {
     }
 }
 
+private final class TracksIndexingTracker {
+    private static var baseline = 0
+    private(set) var remaining = 0
+    private var loadedRootFolder: TrackFolder?
+
+    var isInProgress: Bool {
+        remaining > 0
+    }
+
+    var progress: CGFloat {
+        let baseline = Self.baseline
+        return baseline > 0 ? CGFloat(max(0, baseline - remaining)) / CGFloat(baseline) : 0
+    }
+
+    func onRootFolderLoaded(_ folder: TrackFolder) {
+        loadedRootFolder = folder
+    }
+
+    func refresh(currentRootFolder: TrackFolder?) {
+        let helper = GpxDbHelper.shared
+        guard helper.isInitialized() else { return }
+        var count = loadedRootFolder.map { pendingTracksCount(in: $0, helper: helper) } ?? 0
+        if let currentRootFolder, currentRootFolder !== loadedRootFolder {
+            count = max(count, pendingTracksCount(in: currentRootFolder, helper: helper))
+        }
+        remaining = count
+        if count > 0 {
+            Self.baseline = max(Self.baseline, count)
+        } else if loadedRootFolder != nil || !(helper.isReading() || helper.isFilesystemReconciliationRunning()) {
+            Self.baseline = 0
+        }
+    }
+
+    private func pendingTracksCount(in folder: TrackFolder, helper: GpxDbHelper) -> Int {
+        var count = 0
+        for item in folder.getTrackItems() where item.dataItem == nil {
+            if let file = item.getFile(), !helper.hasGpxDataItem(file: file), helper.isReading(file: file) {
+                count += 1
+            }
+        }
+        for subfolder in folder.getSubFolders() {
+            count += pendingTracksCount(in: subfolder, helper: helper)
+        }
+        return count
+    }
+}
+
 private protocol TrackListUpdatableDelegate: AnyObject {
     func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder)
 }
@@ -74,12 +121,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     fileprivate var shouldReload = false
     
-    fileprivate var rootFolder: TrackFolder! {
-        didSet {
-            indexingCountSeeded = false
-            cachedIndexingRemaining = 0
-        }
-    }
+    fileprivate var rootFolder: TrackFolder!
     fileprivate var visibleTracksFolder: TrackFolder!
     fileprivate var currentFolder: TrackFolder!
     fileprivate var smartFolder: SmartFolder!
@@ -127,9 +169,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var loaderRefreshTimer: Timer?
     private var lastLoaderRefreshTime: TimeInterval = 0
     private static let loaderRefreshInterval: TimeInterval = 0.5
-    private var cachedIndexingRemaining = 0
-    private var cachedIndexingTotal = 0
-    private var indexingCountSeeded = false
+    fileprivate var indexingTracker = TracksIndexingTracker()
+    private var isIndexingRowShown = false
 
     private var recCell: OATwoButtonsTableViewCell?
     private var baseFilters: TracksSearchFilter?
@@ -255,37 +296,29 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func isIndexingInProgress() -> Bool {
-        let helper = GpxDbHelper.shared
-        guard helper.isReading() || helper.isFilesystemReconciliationRunning() else {
-            cachedIndexingRemaining = 0
-            cachedIndexingTotal = 0
-            indexingCountSeeded = false
-            return false
-        }
-        if !indexingCountSeeded, let counts = indexingCounts() {
-            cachedIndexingRemaining = max(0, counts.total - counts.done)
-            cachedIndexingTotal = counts.total
-            indexingCountSeeded = true
-        }
-        return cachedIndexingRemaining > 0
+        indexingTracker.isInProgress
     }
 
-    private func refreshIndexingRow() {
-        if isIndexingInProgress() {
-            startIndexingProgressTimer()
-        } else {
-            stopIndexingProgressTimer()
-        }
-        updateIndexingRingProgress()
+    private func shouldShowIndexingRow(isEditing: Bool) -> Bool {
+        !isEditing && isIndexingInProgress()
+    }
+
+    private func isIndexerBusy() -> Bool {
+        let helper = GpxDbHelper.shared
+        return helper.isReading() || helper.isFilesystemReconciliationRunning()
+    }
+
+    private func refreshIndexingState() {
+        indexingTracker.refresh(currentRootFolder: rootFolder)
     }
 
     private func updateIndexingRingProgress() {
-        let done = max(0, cachedIndexingTotal - cachedIndexingRemaining)
-        indexingRing?.progress = cachedIndexingTotal > 0 ? CGFloat(done) / CGFloat(cachedIndexingTotal) : 0
+        indexingRing?.progress = indexingTracker.progress
     }
 
-    private func addCalculatingStatsSectionIfNeeded() {
-        guard !tableView.isEditing, isIndexingInProgress() else { return }
+    private func addCalculatingStatsSectionIfNeeded(isEditing: Bool) {
+        isIndexingRowShown = shouldShowIndexingRow(isEditing: isEditing)
+        guard isIndexingRowShown else { return }
         let section = OATableSectionData()
         section.key = calculatingStatsKey
         let row = section.createNewRow()
@@ -295,32 +328,33 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         tableData.addSection(section, at: 0)
     }
 
-    private func indexingCounts() -> (done: Int, total: Int)? {
-        guard let root = rootFolder else { return nil }
-        let items = root.getFlattenedTrackItems()
-        guard !items.isEmpty else { return nil }
-        let done = items.reduce(into: 0) { count, item in
-            if item.dataItem != nil { count += 1 }
+    private func startIndexingProgressTimerIfNeeded() {
+        guard indexingProgressTimer == nil,
+              view.window != nil,
+              isIndexingRowShown || isIndexingInProgress() || isIndexerBusy() else {
+            return
         }
-        return (done, items.count)
-    }
-
-    private func startIndexingProgressTimer() {
-        guard indexingProgressTimer == nil, view.window != nil else { return }
         let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            let counts = self.indexingCounts()
-            self.cachedIndexingRemaining = max(0, (counts?.total ?? 0) - (counts?.done ?? 0))
-            self.cachedIndexingTotal = counts?.total ?? 0
-            if self.isIndexingInProgress() {
-                self.updateIndexingRingProgress()
-            } else {
-                self.stopIndexingProgressTimer()
-                self.updateData()
-            }
+            self?.onIndexingProgressTimerTick()
         }
         RunLoop.main.add(timer, forMode: .common)
         indexingProgressTimer = timer
+    }
+
+    private func onIndexingProgressTimerTick() {
+        refreshIndexingState()
+        if isIndexingRowShown != shouldShowIndexingRow(isEditing: tableView.isEditing) {
+            guard !isContextMenuVisible else {
+                shouldReloadTableView = true
+                return
+            }
+            updateData()
+        } else {
+            updateIndexingRingProgress()
+        }
+        if !isIndexingRowShown && !isIndexingInProgress() && !isIndexerBusy() {
+            stopIndexingProgressTimer()
+        }
     }
 
     private func stopIndexingProgressTimer() {
@@ -343,6 +377,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        refreshIndexingState()
         setupNavbar()
         updateNavigationBarTitle()
         tableView.tableHeaderView = setupHeaderView()
@@ -361,7 +396,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             if !isLoadingInProgress {
                 reloadTracks()
             }
-        } else if isIndexingInProgress() {
+        } else if isIndexingInProgress() || isIndexingRowShown {
             updateData()
         }
     }
@@ -445,7 +480,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         navigationItem.searchController = nil
         definesPresentationContext = true
         reloadTableViewOnAppearIfNeeded()
-        refreshIndexingRow()
+        startIndexingProgressTimerIfNeeded()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -460,7 +495,9 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     deinit {
-        asyncLoader?.cancel()
+        if isLoadingInProgress {
+            asyncLoader?.cancel()
+        }
         indexingProgressTimer?.invalidate()
         loaderRefreshTimer?.invalidate()
         unregisterNotificationsAndObservers()
@@ -528,8 +565,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func reloadTracks(forceLoad: Bool = false) {
-        if let asyncLoader {
-            asyncLoader.cancel()
+        if isLoadingInProgress {
+            asyncLoader?.cancel()
         }
         isLoadingInProgress = false
 
@@ -550,7 +587,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         generateData(isEditing: isEditing)
         tableView.reloadData()
         setupTableFooter(isEditing: isEditing)
-        refreshIndexingRow()
+        updateIndexingRingProgress()
+        startIndexingProgressTimerIfNeeded()
     }
     
     private func updateAllFoldersVCData(forceLoad: Bool = false) {
@@ -738,7 +776,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             }
         }
 
-        addCalculatingStatsSectionIfNeeded()
+        addCalculatingStatsSectionIfNeeded(isEditing: isEditing)
 
         let lastNonEmptySection = mainSection.rowCount() > 0 ? mainSection : recordingTracksSection
         if let lastNonEmptySection, lastNonEmptySection.rowCount() > 0 {
@@ -1326,6 +1364,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         vc.currentFolder = subfolder
         vc.currentFolderPath = subfolder.relativePath
         vc.rootFolder = rootFolder
+        vc.indexingTracker = indexingTracker
         vc.visibleTracksFolder = visibleTracksFolder
         vc.hostVCDelegate = self
         navigationController?.pushViewController(vc, animated: true)
@@ -1367,6 +1406,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         vc.smartFolder = smartFolder
         vc.organizedGroup = group
         vc.rootFolder = rootFolder
+        vc.indexingTracker = indexingTracker
         vc.currentFolder = currentFolder
         vc.visibleTracksFolder = visibleTracksFolder
         vc.hostVCDelegate = self
@@ -2147,7 +2187,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                  shouldReloadTableView = true
                  return
              }
+             let wasIndexingRowShown = isIndexingRowShown
              generateData()
+             guard wasIndexingRowShown == isIndexingRowShown else {
+                 tableView.reloadData()
+                 return
+             }
              
              let section = 0
              guard tableView.numberOfSections > section else {
@@ -2438,6 +2483,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         let vc = TracksViewController(isRootFolder: false, isSmartFolder: true)
         vc.smartFolder = smartFolder
         vc.rootFolder = rootFolder
+        vc.indexingTracker = indexingTracker
         vc.currentFolder = currentFolder
         vc.visibleTracksFolder = visibleTracksFolder
         vc.hostVCDelegate = self
@@ -2714,6 +2760,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                         vc.currentFolder = subfolder
                         vc.currentFolderPath = subfolderPath
                         vc.rootFolder = rootFolder
+                        vc.indexingTracker = indexingTracker
                         vc.visibleTracksFolder = visibleTracksFolder
                         vc.hostVCDelegate = self
                         show(vc)
@@ -3123,6 +3170,10 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 
     func deferredLoadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
+        guard folder === rootFolder else {
+            propagateLoaderRefresh(force: true)
+            return
+        }
         hasReceivedFirstBatch = true
         isLoadingInProgress = false
         onLoadFinished(folder: folder, endRefresh: true)
@@ -3131,6 +3182,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
+        indexingTracker.onRootFolderLoaded(folder)
         hasReceivedFirstBatch = true
         isLoadingInProgress = false
         onLoadFinished(folder: folder, endRefresh: true, openSubfolder: true)

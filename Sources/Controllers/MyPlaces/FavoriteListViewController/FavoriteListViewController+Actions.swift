@@ -498,20 +498,18 @@ extension FavoriteListViewController {
         }
 
         guard let favoritesUrl = OAFavoritesHelperBridge.shared().shareFavoriteItems(selectedBridgeItems) else { return }
-        let activityViewController = UIActivityViewController(activityItems: [favoritesUrl], applicationActivities: nil)
-        if OAUtilities.isIPad() {
-            activityViewController.popoverPresentationController?.barButtonItem = barButtonItem
-        } else {
-            activityViewController.popoverPresentationController?.sourceView = collectionView
-        }
-        activityViewController.completionWithItemsHandler = { [weak self] _, completed, _, _ in
-            try? FileManager.default.removeItem(at: favoritesUrl)
-            if completed {
-                self?.setEditing(false)
-                self?.applySnapshot()
+        showActivity(
+            [favoritesUrl],
+            sourceView: collectionView,
+            barButtonItem: barButtonItem,
+            completionHandler: { [weak self] completed in
+                try? FileManager.default.removeItem(at: favoritesUrl)
+                if completed {
+                    self?.setEditing(false)
+                    self?.applySnapshot()
+                }
             }
-        }
-        present(activityViewController, animated: true)
+        )
     }
 
     private func removeSelectedFavoriteItems(_ items: [Any]) {

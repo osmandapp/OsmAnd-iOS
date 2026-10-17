@@ -62,7 +62,7 @@ final class PoiAdditionalLabels: NSObject {
     static func getSearchName(_ poiType: OAPOIBaseType) -> String? {
         guard let type = poiType as? OAPOIType, type.isAdditional() else { return poiType.nameLocalized }
         return getSearchName(translation: type.nameLocalized, enTranslation: type.nameLocalizedEN,
-                             synonyms: OAPOIHelper.sharedInstance().getSynonyms(type), groupName: type.poiAdditionalCategoryLocalized)
+                             synonyms: OAPOIHelper.sharedInstance().getSynonymsByName(type.name), groupName: type.poiAdditionalCategoryLocalized)
     }
 
     static func getEnSearchName(_ poiType: OAPOIBaseType) -> String? {

@@ -543,7 +543,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
                 if ([OSM_WIKI_CATEGORY isEqualToString:pt.name])
                     sr.localeName = [NSString stringWithFormat:@"%@ (%@)", pt.nameLocalized, [mapPoiTypes getAllLanguagesTranslationSuffix]];
                 else
-                    sr.localeName = pt.nameLocalized;
+                    sr.localeName = [PoiAdditionalLabels getSearchName:pt];
                 sr.object = pt;
                 sr.relatedObject = point;
                 sr.priorityDistance = 0;

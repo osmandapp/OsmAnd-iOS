@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) show;
 - (void) dismiss;
+- (void)dismissWithCompletion:(nullable dispatch_block_t)completion;
 - (void) dismiss:(nullable id)sender;
 
 - (void) commonInit;

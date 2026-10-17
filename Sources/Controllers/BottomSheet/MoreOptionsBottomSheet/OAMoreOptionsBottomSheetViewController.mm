@@ -33,6 +33,7 @@
 #import "OAMapLayers.h"
 #import "OAContextMenuLayer.h"
 #import "OADownloadMapViewController.h"
+#import "OAAlertBottomSheetViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "OASimpleTableViewCell.h"
 #import "OASelectedGPXHelper.h"
@@ -94,6 +95,82 @@
     [self initData];
 }
 
++ (void)showDownloadUnavailable
+{
+    [OAAlertBottomSheetViewController showAlertWithMessage:OALocalizedString(@"maps_could_not_be_downloaded") cancelTitle:OALocalizedString(@"shared_string_close")];
+}
+
++ (void)performDownloadActionForLayer:(EOADownloadMapLayer)layer source:(OAMapSource *)source update:(BOOL)update
+{
+    if (![source isEqual:[OADownloadMapLayerHelper mapSourceForLayer:layer]] || ![OADownloadMapLayerHelper resourceItemForLayer:layer])
+    {
+        [self showDownloadUnavailable];
+        return;
+    }
+    if (!update)
+    {
+        [OARootViewController.instance.mapPanel openTargetViewWithDownloadMapSource:YES layer:layer];
+        return;
+    }
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"map_update_warning") preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    __weak __typeof(alert) weakAlert = alert;
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        OAResourceItem *resource = [OADownloadMapLayerHelper resourceItemForLayer:layer];
+        if (!resource || ![source isEqual:[OADownloadMapLayerHelper mapSourceForLayer:layer]])
+        {
+            [weakAlert dismissViewControllerAnimated:YES completion:^{
+                [OAMoreOptionsBottomSheetScreen showDownloadUnavailable];
+            }];
+            return;
+        }
+        OAMapViewController *mapVC = OARootViewController.instance.mapPanel.mapViewController;
+        [OAResourcesUIHelper clearTilesOf:resource area:mapVC.mapView.getVisibleBBox31 zoom:mapVC.getMapZoom onComplete:^{
+            [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
+        }];
+    }]];
+    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+}
+
++ (void)selectDownloadLayerForUpdate:(BOOL)update
+{
+    NSArray<NSNumber *> *layers = [OADownloadMapLayerHelper downloadableLayers];
+    if (layers.count == 0)
+    {
+        [self showDownloadUnavailable];
+        return;
+    }
+    if (layers.count == 1)
+    {
+        EOADownloadMapLayer layer = (EOADownloadMapLayer)layers.firstObject.integerValue;
+        [self performDownloadActionForLayer:layer source:[OADownloadMapLayerHelper mapSourceForLayer:layer] update:update];
+        return;
+    }
+    NSMutableArray<NSString *> *titles = [NSMutableArray array];
+    NSMutableArray<NSString *> *descriptions = [NSMutableArray array];
+    NSMutableArray<NSString *> *images = [NSMutableArray array];
+    NSMutableArray<OAMapSource *> *sources = [NSMutableArray array];
+    for (NSNumber *value in layers)
+    {
+        EOADownloadMapLayer layer = (EOADownloadMapLayer)value.integerValue;
+        OAMapSource *source = [OADownloadMapLayerHelper mapSourceForLayer:layer];
+        if (!source)
+        {
+            [self showDownloadUnavailable];
+            return;
+        }
+        [sources addObject:[source copy]];
+        [titles addObject:[OADownloadMapLayerHelper titleForLayer:layer]];
+        [descriptions addObject:source.name ?: @""];
+        [images addObject:[OADownloadMapLayerHelper iconNameForLayer:layer]];
+    }
+    [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"select_layer") selectableItemsTitles:titles descriptions:descriptions images:images selection:^(NSInteger selectedIndex) {
+        if (selectedIndex < 0 || selectedIndex >= layers.count)
+            return;
+        [OAMoreOptionsBottomSheetScreen performDownloadActionForLayer:(EOADownloadMapLayer)layers[selectedIndex].integerValue source:sources[selectedIndex] update:update];
+    }];
+}
+
 - (void) setupView
 {
     [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
@@ -109,7 +186,7 @@
                       @"img" : ACImageNameIcCustomSearch,
                       @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
     // Download/Update online map
-    if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.type isEqualToString:@"sqlitedb"])
+    if ([OADownloadMapLayerHelper downloadableLayers].count > 0)
     {
         [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_download_map"),
                           @"key" : @"download_map",
@@ -393,27 +470,15 @@
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:noteScreen];
             [mapPanel.navigationController presentViewController:navigationController animated:YES completion:nil];
         }
-        else if ([key isEqualToString:@"download_map"])
+        else if ([key isEqualToString:@"download_map"] || [key isEqualToString:@"update_map"])
         {
-            [[OARootViewController instance].mapPanel openTargetViewWithDownloadMapSource:YES];
-        }
-        else if ([key isEqualToString:@"update_map"])
-        {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"map_update_warning") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                OAMapViewController *mapVC = mapPanel.mapViewController;
-                float zoom = mapVC.getMapZoom;
-                const auto visibleArea = mapVC.mapView.getVisibleBBox31;
-                NSDictionary<OAMapSource *, OAResourceItem *> *onlineSources = [OAResourcesUIHelper getOnlineRasterMapSourcesBySource];
-                OAResourceItem *resource = onlineSources[_app.data.lastMapSource];
-                if (!resource)
-                    return;
-                [OAResourcesUIHelper clearTilesOf:resource area:visibleArea zoom:zoom onComplete:^{
-                    [_app.mapSettingsChangeObservable notifyEvent];
-                }];
-            }]];
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+            BOOL update = [key isEqualToString:@"update_map"];
+            tableView.userInteractionEnabled = NO;
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [vwController dismissWithCompletion:^{
+                [OAMoreOptionsBottomSheetScreen selectDownloadLayerForUpdate:update];
+            }];
+            return;
         }
         else if ([key isEqualToString:@"plan_route"])
         {

@@ -365,7 +365,12 @@
         }
         case OATargetDownloadMapSource:
         {
-            controller = [[OADownloadMapViewController alloc] init];
+            if ([targetPoint.targetObj isKindOfClass:NSNumber.class])
+            {
+                NSInteger layer = [targetPoint.targetObj integerValue];
+                if (layer >= EOADownloadMapLayerMapSource && layer <= EOADownloadMapLayerUnderlay)
+                    controller = [[OADownloadMapViewController alloc] initWithLayer:(EOADownloadMapLayer)layer];
+            }
             break;
         }
         case OATargetNewMovableWpt:

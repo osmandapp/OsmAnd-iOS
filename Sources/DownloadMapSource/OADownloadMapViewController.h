@@ -7,7 +7,10 @@
 //
 
 #import "OATargetMenuViewController.h"
+#import "OADownloadMapLayerHelper.h"
 
 @interface OADownloadMapViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
+
+- (instancetype)initWithLayer:(EOADownloadMapLayer)layer;
 
 @end

@@ -240,10 +240,37 @@
     }
 }
 
+- (BOOL) isSuccessfulResponse:(NSURLResponse *)response location:(NSURL *)location error:(NSError *)error
+{
+    if (error || !location)
+        return NO;
+    if ([response isKindOfClass:NSHTTPURLResponse.class])
+    {
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        return statusCode >= 200 && statusCode < 300;
+    }
+    return YES;
+}
+
+- (void) onTileFailed
+{
+    if (_cancelled)
+        return;
+    if (_delegate)
+        [_delegate onTileFailed];
+    _activeDownloads--;
+    [self startDownloadIfPossible];
+}
+
 - (void) downloadTile:(NSURL *)url toPath:(NSString *)path
 {
     _activeDownloads++;
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (![self isSuccessfulResponse:response location:location error:error])
+        {
+            [self onTileFailed];
+            return;
+        }
         NSError *err = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *dir = [path stringByDeletingLastPathComponent];
@@ -274,6 +301,11 @@
     [request setHTTPMethod:@"GET"];
     [request addValue:tileSource.userAgent.length > 0 ? tileSource.userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (![self isSuccessfulResponse:response location:location error:error])
+        {
+            [self onTileFailed];
+            return;
+        }
         NSData *data = [NSData dataWithContentsOfFile:location.path];
         if (data)
         {

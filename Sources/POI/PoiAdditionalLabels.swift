@@ -13,7 +13,11 @@
 final class PoiAdditionalLabels: NSObject {
 
     private static let yes = "yes"
-    // values that mean the property is there; search finds an additional value only by one of them
+    // OSM values of a property state ("smoking=no"); a value outside it is an option ("diesel", "gynaecology")
+    private static let stateValues: Set<String> = [yes, "no", "only", "designated", "limited", "permissive",
+                                                   "private", "customers", "destination", "unknown", "outside",
+                                                   "separated", "isolated", "dedicated"]
+    // states that mean the property is there
     private static let acceptedValues: Set<String> = [yes, "only", "designated"]
     private static let separator = " • "
 
@@ -26,19 +30,16 @@ final class PoiAdditionalLabels: NSObject {
         return !name.contains(where: \.isLetter) || value.isEmpty ? nil : [name, value]
     }
 
-    // Search shows and indexes accepted values only (yes, only, designated): by the OSM value, or by the value of
-    // the English translation "Name: yes" ("Subway station: yes" for station=subway) or the older "Yes;Name".
-    static func isAcceptedValue(osmValue: String?, enTranslation: String?) -> Bool {
-        if let osmValue, acceptedValues.contains(osmValue) {
-            return true
-        }
-        guard let enTranslation else { return false }
-        let value = splitNameValue(enTranslation)?[1] ?? enTranslation
-        return acceptedValues.contains(value.lowercased())
+    // Search shows and indexes an additional value unless it is a state that does not mean the property is there:
+    // yes, only, designated and every option ("diesel", "gynaecology", station=subway) are taken; no, limited,
+    // outside... are not.
+    static func isAcceptedValue(osmValue: String?) -> Bool {
+        guard let osmValue else { return true }
+        return !stateValues.contains(osmValue) || acceptedValues.contains(osmValue)
     }
 
     static func isAcceptedValue(_ poiType: OAPOIType) -> Bool {
-        isAcceptedValue(osmValue: poiType.getOsmValue(), enTranslation: poiType.nameLocalizedEN)
+        isAcceptedValue(osmValue: poiType.getOsmValue())
     }
 
     // Name of an additional value in search, the part before ":" ("Subway station: yes" -> "Subway station").

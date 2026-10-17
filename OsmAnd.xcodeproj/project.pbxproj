@@ -180,6 +180,7 @@
 		32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */; };
 		32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */; };
 		3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
+		4452B88BEBDEF179C92E49EF /* PoiAdditionalLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */; };
 		32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32190FD72D4909850006E91C /* RenderedObjectHelper.swift */; };
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
@@ -2492,6 +2493,7 @@
 		32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.h; sourceTree = "<group>"; };
 		32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.m; sourceTree = "<group>"; };
 		3216E9522BA097BD0087D0EF /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalLabels.swift; sourceTree = "<group>"; };
 		32190FD72D4909850006E91C /* RenderedObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectHelper.swift; sourceTree = "<group>"; };
 		32190FD92D490B460006E91C /* OAMapUtils+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMapUtils+cpp.h"; sourceTree = "<group>"; };
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
@@ -7891,6 +7893,7 @@
 				32FEF4802D073169005E8B55 /* OARenderedObject.h */,
 				3226C1A82D3E67D5008F9905 /* OARenderedObject+cpp.h */,
 				32FEF4812D073174005E8B55 /* OARenderedObject.mm */,
+				D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */,
 				32190FD72D4909850006E91C /* RenderedObjectHelper.swift */,
 				DA5A7A5426C563A000F274C7 /* OAPOIBaseType.h */,
 				DA5A7A5526C563A000F274C7 /* OAPOIBaseType.mm */,
@@ -12241,6 +12244,7 @@
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
+				4452B88BEBDEF179C92E49EF /* PoiAdditionalLabels.swift in Sources */,
 				32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */,
 				FAAAADDE2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,

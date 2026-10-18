@@ -29,6 +29,7 @@
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
 #import "OAResourcesUISwiftHelper.h"
+#import "OAFreeRegionHelper.h"
 #import "StartupLogging.h"
 
 #include <OsmAndCore.h>
@@ -869,6 +870,8 @@ typedef enum
                                                    withRegionName:YES
                                                  withResourceType:YES];
     
+    // the start screen never asks: its map becomes the free region
+    [OAFreeRegionHelper chooseFreeRegionOf:item.worldRegion];
     [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
 }
 

@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionBannerType)
 
 @property (nonatomic, assign, readonly) EOASubscriptionBannerType type;
 @property (nonatomic, assign) NSInteger freeMapsCount;
+@property (nonatomic, copy, nullable) NSString *freeRegionName;
 
 - (instancetype)initWithType:(EOASubscriptionBannerType)type;
 

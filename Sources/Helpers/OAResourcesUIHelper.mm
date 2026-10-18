@@ -26,6 +26,7 @@
 #import "OAWorldRegion.h"
 #import "OAIndexConstants.h"
 #import "OAResourcesInstaller.h"
+#import "OAFreeRegionHelper.h"
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
 #import "OAApplicationMode.h"
@@ -925,14 +926,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
 {
-    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
     const auto res = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(region.regionId));
     bool free = res && res->free;
 
-    if (region.regionId == nil || [region isInPurchasedArea] || free || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
-        return YES;
-
-    return NO;
+    return region.regionId == nil || [region isInPurchasedArea] || free || [OAFreeRegionHelper isDownloadFree:region];
 }
 
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
@@ -1343,16 +1340,23 @@ includeHidden:(BOOL)includeHidden
     return countryName;
 }
 
-+ (BOOL) checkIfDownloadEnabled:(OAWorldRegion *)region
+/**
+ * Free version: a map of another region than the free one asks to replace the free region;
+ * {@code onReplaced} restarts the download after the replace.
+ */
++ (BOOL) checkIfDownloadEnabled:(OAWorldRegion *)region onReplaced:(dispatch_block_t)onReplaced
 {
     BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
+    if (!isAvailable && [OAFreeRegionHelper getFreeRegion])
+    {
+        [OAFreeRegionDialogs showOtherRegion:region onReplaced:onReplaced];
+        return NO;
+    }
     if (!isAvailable)
     {
-        OAWorldRegion * globalRegion = [region getPrimarySuperregion];
-        OAProduct* product = [globalRegion getProduct];
-        if (!product)
-            product = OAIAPHelper.sharedInstance.allWorld;
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
+        // the old region in-apps are not sold any more
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS
+                                              navController:[OARootViewController instance].navigationController];
         return NO;
     }
     return isAvailable;
@@ -1507,7 +1511,13 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
-    if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
+    if (item.disabled)
+        return;
+    // updates of installed maps are always free
+    if (item.resourceType == OsmAndResourceType::MapRegion && !OsmAndApp.instance.resourcesManager->isResourceInstalled(item.resourceId)
+        && ![self.class checkIfDownloadEnabled:item.worldRegion onReplaced:^{
+            [self.class offerDownloadAndInstallOf:item sourceView:sourceView onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:silent];
+        }])
         return;
     if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
         return;
@@ -1595,14 +1605,29 @@ includeHidden:(BOOL)includeHidden
                             onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
+    OAWorldRegion *blockedRegion = nil;
     for (OAResourceItem *item in selectedItems)
     {
-        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion])
+        // updates of installed maps are always free
+        BOOL blocked = item.resourceType == OsmAndResourceType::MapRegion && ![item isKindOfClass:OALocalResourceItem.class]
+            && ![self.class checkIfDownloadAvailable:item.worldRegion];
+        if (blocked && !blockedRegion)
+            blockedRegion = item.worldRegion;
+        if (![multipleItem.items containsObject:item] || item.disabled || blocked
             || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
             [items removeObject:item];
     }
     if (items.count == 0)
+    {
+        // one dialog for the whole group, not one per map
+        if (blockedRegion)
+        {
+            [self.class checkIfDownloadEnabled:blockedRegion onReplaced:^{
+                [self.class offerMultipleDownloadAndInstallOf:multipleItem selectedItems:selectedItems sourceView:sourceView onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+            }];
+        }
         return;
+    }
 
     uint64_t totalSpaceNeeded = 0;
     uint64_t downloadSpaceNeeded = 0;

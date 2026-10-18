@@ -1432,6 +1432,20 @@ typedef enum
     if (!self.canPresentNewContextMenu)
         return;
 
+    NSArray<NSNumber *> *targetPointTypes = @[
+        @(OATargetRouteStartSelection),
+        @(OATargetRouteFinishSelection),
+        @(OATargetRouteIntermediateSelection),
+        @(OATargetHomeSelection),
+        @(OATargetWorkSelection)
+    ];
+    if ([targetPointTypes containsObject:@(_activeTargetType)] && targetPoints.count == 1)
+    {
+        // Apply the selection before the presentation queue closes its menu and clears the active target.
+        [self processTargetPoint:targetPoints.firstObject];
+        return;
+    }
+
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1815,7 +1829,6 @@ typedef enum
                 [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:pointDescription];
             }
 
-            [self hideTargetPointMenu];
             BOOL fullScreen = (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection) && !_app.data.pointToNavigate; // We need to show full screen only if there aren't enough points count to build the route
             [self showRouteInfo:fullScreen];
             

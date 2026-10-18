@@ -13,6 +13,7 @@
 @property (nonatomic) CGFloat dividerHight;
 @property (nonatomic) UIEdgeInsets dividerInsets;
 @property (nonatomic) UIColor *dividerColor;
+@property (nonatomic) BOOL alignsWithLayoutMargins;
 
 @property (nonatomic, readonly) CGFloat cellHeight;
 

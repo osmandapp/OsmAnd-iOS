@@ -816,10 +816,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
               let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
         let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
         UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-            self.tableView.contentInset = contentInsets
-            self.tableView.scrollIndicatorInsets = contentInsets
+            self.tableView.contentInset.bottom = keyboardHeight
+            self.tableView.verticalScrollIndicatorInsets.bottom = keyboardHeight
             self.buttonsBottomOffsetConstraint.constant = keyboardHeight
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -829,10 +828,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         guard let userInfo = notification.userInfo,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
               let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
-        let contentInsets = UIEdgeInsets.zero
         UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-            self.tableView.contentInset = contentInsets
-            self.tableView.scrollIndicatorInsets = contentInsets
+            self.tableView.contentInset.bottom = 0
+            self.tableView.verticalScrollIndicatorInsets.bottom = 0
             self.buttonsBottomOffsetConstraint.constant = 0
             self.view.layoutIfNeeded()
         }, completion: nil)

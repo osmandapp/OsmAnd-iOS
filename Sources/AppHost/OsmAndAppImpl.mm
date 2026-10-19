@@ -1484,6 +1484,7 @@
 - (void) onApplicationWillEnterForeground
 {
     [self allowScreenTurnOff:NO];
+    [InstallAttribution checkAndReport];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

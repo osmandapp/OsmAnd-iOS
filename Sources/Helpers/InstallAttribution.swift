@@ -26,6 +26,11 @@ final class InstallAttribution: NSObject {
         OAAppSettings.sharedManager().sendAnonymousAppUsageData.get()
     }
 
+    private static var storedParams: [String: String] {
+        guard isAllowed else { return [:] }
+        return UserDefaults.standard.dictionary(forKey: attributionKey) as? [String: String] ?? [:]
+    }
+
     static func checkAndReport() {
         readOnce { reportIfNeeded() }
     }
@@ -51,7 +56,7 @@ final class InstallAttribution: NSObject {
         isReading = true
         lock.unlock()
 
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .utility).async {
             guard isAllowed else {
                 finish()
                 return
@@ -80,9 +85,12 @@ final class InstallAttribution: NSObject {
         request.httpMethod = "POST"
         request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
         request.httpBody = token.data(using: .utf8)
-
         URLSession.shared.dataTask(with: request) { data, response, error in
             let status = (response as? HTTPURLResponse)?.statusCode
+            if error != nil {
+                finish()
+                return
+            }
             if status == 200, let data,
                let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
                let attributed = json["attribution"] as? Bool {
@@ -98,12 +106,9 @@ final class InstallAttribution: NSObject {
                 // A malformed response remains retryable on the next foreground entry.
                 finish()
             } else if status == 400 {
-                if isAllowed {
-                    UserDefaults.standard.set(true, forKey: checkedKey)
-                }
                 finish()
-            } else if (status == 404 || status == 500 || error != nil), attempt < maxAttempts {
-                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + retryDelay) {
+            } else if status == 404 || status == 500, attempt < maxAttempts {
+                DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + retryDelay) {
                     requestAttribution(token: token, attempt: attempt + 1)
                 }
             } else {
@@ -114,8 +119,10 @@ final class InstallAttribution: NSObject {
     }
 
     private static func campaignParams(from json: [String: Any]) -> [String: String]? {
-        guard let campaignID = identifier(json["campaignId"]) else { return nil }
-        var params = ["utm_source": "apple_ads", "utm_campaign": campaignID]
+        guard let campaignID = identifier(json["campaignId"]),
+              let conversionType = json["conversionType"] as? String,
+              !conversionType.isEmpty else { return nil }
+        var params = ["utm_source": "apple_ads", "utm_campaign": campaignID, "conversion_type": conversionType]
         if let adGroupID = identifier(json["adGroupId"]) {
             params["utm_content"] = adGroupID
         }
@@ -145,23 +152,21 @@ final class InstallAttribution: NSObject {
         }
     }
 
-    private static var storedParams: [String: String] {
-        guard isAllowed else { return [:] }
-        return UserDefaults.standard.dictionary(forKey: attributionKey) as? [String: String] ?? [:]
-    }
-
-    @objc static func addParams(_ params: NSMutableDictionary) {
-        for (key, value) in storedParams {
-            params[key] = value
-        }
-    }
-
     private static func reportIfNeeded() {
         let params = storedParams
-        guard !params.isEmpty,
-              !UserDefaults.standard.bool(forKey: reportedKey),
-              let app = OsmAndApp.swiftInstance(),
-              var components = URLComponents(string: "https://osmand.net/api/motd") else { return }
+        guard isAllowed else {
+            return
+        }
+        guard !params.isEmpty else {
+            return
+        }
+        guard !UserDefaults.standard.bool(forKey: reportedKey) else {
+            return
+        }
+        guard let app = OsmAndApp.swiftInstance(),
+              var components = URLComponents(string: "https://osmand.net/api/motd") else {
+            return
+        }
 
         var queryItems = [
             URLQueryItem(name: "os", value: "ios"),
@@ -175,7 +180,9 @@ final class InstallAttribution: NSObject {
         }
         queryItems += params.keys.sorted().map { URLQueryItem(name: $0, value: params[$0]) }
         components.queryItems = queryItems
-        guard let url = components.url else { return }
+        guard let url = components.url else {
+            return
+        }
 
         lock.lock()
         if reportInFlight {
@@ -199,4 +206,11 @@ final class InstallAttribution: NSObject {
             lock.unlock()
         }.resume()
     }
+
+    @objc static func addParams(_ params: NSMutableDictionary) {
+        for (key, value) in storedParams {
+            params[key] = value
+        }
+    }
+
 }

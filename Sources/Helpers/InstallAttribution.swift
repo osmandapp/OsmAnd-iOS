@@ -207,10 +207,9 @@ final class InstallAttribution: NSObject {
         }.resume()
     }
 
-    @objc static func addParams(_ params: NSMutableDictionary) {
+    static func addParams(_ params: NSMutableDictionary) {
         for (key, value) in storedParams {
             params[key] = value
         }
     }
-
 }

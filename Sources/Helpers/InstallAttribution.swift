@@ -2,7 +2,7 @@
 //  InstallAttribution.swift
 //  OsmAnd
 //
-//  Created by OsmAnd on 14/10/2026.
+//  Created by OsmAnd on 19/10/2026.
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
@@ -22,25 +22,28 @@ final class InstallAttribution: NSObject {
     private static var reportInFlight = false
     private static var pendingCompletions: [() -> Void] = []
 
-    private static func debugLog(_ message: @autoclosure () -> String) {
-        #if DEBUG
-        NSLog("[InstallAttribution] %@", message())
-        #endif
-    }
-
     private static var isAllowed: Bool {
         OAAppSettings.sharedManager().sendAnonymousAppUsageData.get()
     }
 
+    private static var storedParams: [String: String] {
+        guard isAllowed else { return [:] }
+        return UserDefaults.standard.dictionary(forKey: attributionKey) as? [String: String] ?? [:]
+    }
+
     static func checkAndReport() {
-        debugLog("checkAndReport called")
         readOnce { reportIfNeeded() }
+    }
+    
+    static func addParams(_ params: NSMutableDictionary) {
+        for (key, value) in storedParams {
+            params[key] = value
+        }
     }
 
     // The completion runs on the main queue after a definitive result or a retryable failure.
     private static func readOnce(completion: @escaping () -> Void) {
         guard isAllowed else {
-            debugLog("Attribution skipped: anonymous usage data is disabled")
             DispatchQueue.main.async(execute: completion)
             return
         }
@@ -48,36 +51,31 @@ final class InstallAttribution: NSObject {
         lock.lock()
         if UserDefaults.standard.bool(forKey: checkedKey) {
             lock.unlock()
-            debugLog("Apple attribution already checked")
             DispatchQueue.main.async(execute: completion)
             return
         }
         pendingCompletions.append(completion)
         if isReading {
             lock.unlock()
-            debugLog("Apple attribution request already in progress")
             return
         }
         isReading = true
         lock.unlock()
 
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .utility).async {
             guard isAllowed else {
-                debugLog("Apple attribution stopped: anonymous usage data was disabled")
                 finish()
                 return
             }
             do {
                 let token = try AAAttribution.attributionToken()
                 guard !token.isEmpty else {
-                    debugLog("Empty Apple attribution token; will retry on next check")
                     finish()
                     return
                 }
                 requestAttribution(token: token, attempt: 1)
             } catch {
                 // A network or internal error may be temporary. Retry on the next foreground entry.
-                debugLog("Apple attribution token failed: \(error.localizedDescription)")
                 finish()
             }
         }
@@ -85,7 +83,6 @@ final class InstallAttribution: NSObject {
 
     private static func requestAttribution(token: String, attempt: Int) {
         guard isAllowed else {
-            debugLog("Apple attribution request stopped: anonymous usage data was disabled")
             finish()
             return
         }
@@ -94,54 +91,44 @@ final class InstallAttribution: NSObject {
         request.httpMethod = "POST"
         request.setValue("text/plain", forHTTPHeaderField: "Content-Type")
         request.httpBody = token.data(using: .utf8)
-        debugLog("Requesting Apple attribution (attempt \(attempt)/\(maxAttempts))")
-
         URLSession.shared.dataTask(with: request) { data, response, error in
             let status = (response as? HTTPURLResponse)?.statusCode
-            debugLog("Apple attribution response: HTTP \(status.map(String.init) ?? "none"), error: \(error?.localizedDescription ?? "none")")
+            if error != nil {
+                finish()
+                return
+            }
             if status == 200, let data,
                let json = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
                let attributed = json["attribution"] as? Bool {
                 if !attributed {
-                    debugLog("Apple reports no ad attribution")
                     if isAllowed {
                         UserDefaults.standard.removeObject(forKey: attributionKey)
                         UserDefaults.standard.set(true, forKey: checkedKey)
                     }
                 } else if let params = campaignParams(from: json), isAllowed {
-                    debugLog("Apple campaign saved: campaignId=\(params["utm_campaign"] ?? "missing"), conversionType=\(params["conversion_type"] ?? "missing")")
                     UserDefaults.standard.set(params, forKey: attributionKey)
                     UserDefaults.standard.set(true, forKey: checkedKey)
-                } else {
-                    debugLog("Attributed response has no usable campaign or anonymous usage data was disabled")
                 }
                 // A malformed response remains retryable on the next foreground entry.
                 finish()
             } else if status == 400 {
-                debugLog("Apple rejected attribution token; marking checked")
-                if isAllowed {
-                    UserDefaults.standard.set(true, forKey: checkedKey)
-                }
                 finish()
-            } else if (status == 404 || status == 500 || error != nil), attempt < maxAttempts {
-                debugLog("Retrying Apple attribution in \(Int(retryDelay)) seconds")
-                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + retryDelay) {
+            } else if status == 404 || status == 500, attempt < maxAttempts {
+                DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + retryDelay) {
                     requestAttribution(token: token, attempt: attempt + 1)
                 }
             } else {
                 // Exhausted retries and unexpected responses can be retried on a later launch.
-                debugLog("Apple attribution unresolved; will retry on next check")
                 finish()
             }
         }.resume()
     }
 
     private static func campaignParams(from json: [String: Any]) -> [String: String]? {
-        guard let campaignID = identifier(json["campaignId"]) else { return nil }
-        var params = ["utm_source": "apple_ads", "utm_campaign": campaignID]
-        if let conversionType = json["conversionType"] as? String, !conversionType.isEmpty {
-            params["conversion_type"] = conversionType
-        }
+        guard let campaignID = identifier(json["campaignId"]),
+              let conversionType = json["conversionType"] as? String,
+              !conversionType.isEmpty else { return nil }
+        var params = ["utm_source": "apple_ads", "utm_campaign": campaignID, "conversion_type": conversionType]
         if let adGroupID = identifier(json["adGroupId"]) {
             params["utm_content"] = adGroupID
         }
@@ -171,34 +158,19 @@ final class InstallAttribution: NSObject {
         }
     }
 
-    private static var storedParams: [String: String] {
-        guard isAllowed else { return [:] }
-        return UserDefaults.standard.dictionary(forKey: attributionKey) as? [String: String] ?? [:]
-    }
-
-    @objc static func addParams(_ params: NSMutableDictionary) {
-        for (key, value) in storedParams {
-            params[key] = value
-        }
-    }
-
     private static func reportIfNeeded() {
         let params = storedParams
         guard isAllowed else {
-            debugLog("Report skipped: anonymous usage data is disabled")
             return
         }
         guard !params.isEmpty else {
-            debugLog("Report skipped: no saved Apple campaign")
             return
         }
         guard !UserDefaults.standard.bool(forKey: reportedKey) else {
-            debugLog("Report skipped: campaign was already reported")
             return
         }
         guard let app = OsmAndApp.swiftInstance(),
               var components = URLComponents(string: "https://osmand.net/api/motd") else {
-            debugLog("Report skipped: app or URL is unavailable")
             return
         }
 
@@ -215,14 +187,12 @@ final class InstallAttribution: NSObject {
         queryItems += params.keys.sorted().map { URLQueryItem(name: $0, value: params[$0]) }
         components.queryItems = queryItems
         guard let url = components.url else {
-            debugLog("Report skipped: unable to build URL")
             return
         }
 
         lock.lock()
         if reportInFlight {
             lock.unlock()
-            debugLog("Report skipped: request already in progress")
             return
         }
         reportInFlight = true
@@ -231,10 +201,8 @@ final class InstallAttribution: NSObject {
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 30)
         request.httpMethod = "GET"
         request.setValue("OsmAndiOS", forHTTPHeaderField: "User-Agent")
-        debugLog("Sending campaign to /api/motd: campaignId=\(params["utm_campaign"] ?? "missing"), conversionType=\(params["conversion_type"] ?? "missing")")
         URLSession.shared.dataTask(with: request) { _, response, error in
             let status = (response as? HTTPURLResponse)?.statusCode ?? 0
-            debugLog("Campaign report completed: HTTP \(status), error: \(error?.localizedDescription ?? "none")")
             if error == nil && (200..<300).contains(status) {
                 // The request may finish after the user disables anonymous usage data.
                 UserDefaults.standard.set(true, forKey: reportedKey)

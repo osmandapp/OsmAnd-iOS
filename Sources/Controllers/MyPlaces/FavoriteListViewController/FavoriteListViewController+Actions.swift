@@ -319,11 +319,8 @@ extension FavoriteListViewController {
         }
     }
 
-    @objc func shareButtonClicked(_ sender: Any) {
-        let sourceView = sender as? UIView ?? collectionView
-        shareItems(for: sourceView)
-        setEditing(false)
-        applySnapshot()
+    @objc func shareButtonClicked(_ sender: UIBarButtonItem) {
+        shareItems(from: sender)
     }
 
     @objc func moveButtonClicked(_ sender: Any) {
@@ -480,7 +477,7 @@ extension FavoriteListViewController {
         }
     }
     
-    private func shareItems(for sourceView: UIView) {
+    private func shareItems(from barButtonItem: UIBarButtonItem) {
         let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
         guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(
@@ -503,10 +500,14 @@ extension FavoriteListViewController {
         guard let favoritesUrl = OAFavoritesHelperBridge.shared().shareFavoriteItems(selectedBridgeItems) else { return }
         showActivity(
             [favoritesUrl],
-            sourceView: sourceView,
-            barButtonItem: nil,
-            completionWithItemsHandler: {
+            sourceView: collectionView,
+            barButtonItem: barButtonItem,
+            completionHandler: { [weak self] completed in
                 try? FileManager.default.removeItem(at: favoritesUrl)
+                if completed {
+                    self?.setEditing(false)
+                    self?.applySnapshot()
+                }
             }
         )
     }

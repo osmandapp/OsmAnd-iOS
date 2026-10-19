@@ -3195,6 +3195,7 @@ typedef enum
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid openedFromMap:NO];
     state.openedFromTracksList = YES;
     state.openedFromTrackMenu = fromTrackMenu;
+    state.temporarilyShown = !item.isShowCurrentTrack && ![_settings isGpxVisible:item.gpxFilePath];
     state.navControllerHistory = navControllerHistory;
     state.lastSelectedTab = selectedTab;
     [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode state:state];
@@ -4763,8 +4764,6 @@ typedef enum
 - (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
-    if (updateMap && docPath.length == 0)
-        [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     [self.targetMenuView applyTargetObjectChanges];
 }
 

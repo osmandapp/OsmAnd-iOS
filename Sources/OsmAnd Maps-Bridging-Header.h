@@ -64,6 +64,7 @@
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
 #import "OADownloadTask.h"
+#import "OAMapTileDownloader.h"
 #import "OACommonTypes.h"
 #import "OABaseCollectionHandler.h"
 #import "OAResourcesUISwiftHelper.h"

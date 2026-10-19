@@ -63,6 +63,7 @@
     BOOL _isNew;
 
     OAEditGroupViewController *_groupController;
+    PoiIconCollectionHandler *_poiIconCollectionHandler;
     
     UIView *_tableHeaderView;
     OAKeyboardHintBar *_hintView;
@@ -436,6 +437,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             BOOL isAppearance = [item[@"key"] isEqualToString:@"appearance"];
+            cell.accessibilityValue = nil;
             [cell leftIconVisibility:item[@"img"] != nil || isAppearance];
             [cell valueVisibility:!isAppearance];
             cell.leftIconView.layer.cornerRadius = 0.;
@@ -448,6 +450,12 @@
             else if (isAppearance)
             {
                 cell.leftIconView.image = [OAFavoritesHelper getCompositeIcon:item[@"appearance_icon"] backgroundIcon:item[@"appearance_background"] color:UIColorFromARGB([item[@"color"] intValue])];
+                if (!_poiIconCollectionHandler)
+                    _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] init];
+                
+                NSString *iconName = item[@"appearance_icon"] ?: DEFAULT_ICON_NAME_KEY;
+                NSString *backgroundIconName = item[@"appearance_background"] ?: DEFAULT_ICON_SHAPE_KEY;
+                cell.accessibilityValue = [NSString stringWithFormat:@"%@, %@, %@", UIColorFromARGB([item[@"color"] intValue]).accessibilityName, [_poiIconCollectionHandler iconAccessibilityLabel:iconName], OALocalizedString([@"shared_string_" stringByAppendingString:backgroundIconName])];
             }
             cell.valueLabel.text = item[@"value"];
             cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];

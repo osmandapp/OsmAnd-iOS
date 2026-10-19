@@ -645,18 +645,21 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func getGpxForSelectedRow(at indexPath: IndexPath) -> GpxDataItem? {
+        let gpxList: [GpxDataItem]
         if isSearchActive {
-            return filteredGpxList[indexPath.row]
+            gpxList = filteredGpxList
         } else {
             switch indexPath.section {
             case 0:
-                return isShowingVisibleTracks ? visibleGpxList[indexPath.row] : allGpxList[indexPath.row]
+                gpxList = isShowingVisibleTracks ? visibleGpxList : allGpxList
             case 1 where isShowingVisibleTracks:
-                return recentlyVisibleGpxList[indexPath.row]
+                gpxList = recentlyVisibleGpxList
             default:
                 return nil
             }
         }
+        guard gpxList.indices.contains(indexPath.row) else { return nil }
+        return gpxList[indexPath.row]
     }
     
     private func getSelectedTrackPaths() -> [String] {

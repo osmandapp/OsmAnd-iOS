@@ -356,6 +356,28 @@ static const CGFloat kTextFieldBottomInset = 0.0;
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
       didChangeContentSize:(CGSize)size
 {
+    MDCMultilineTextField *textField = (MDCMultilineTextField *)multilineTextField;
+    UIButton *clearButton = textField.clearButton;
+    BOOL isClearButtonVisible = clearButton.alpha > 0;
+    // Apply the pending width change only when the clear button appears or disappears.
+    if (isClearButtonVisible != (CGRectGetWidth(clearButton.bounds) > 0))
+        [textField layoutIfNeeded];
+
+    UITextView *textView = textField.textView;
+    CGFloat textWidth = CGRectGetWidth(textView.bounds);
+    if (textWidth <= 0)
+        return;
+
+    // With constraint-based sizing, the callback's height is UIViewNoIntrinsicMetric.
+    // Measure the text view directly so unchanged heights do not relayout the table.
+    CGFloat scale = MAX(textField.traitCollection.displayScale, 1.0);
+    CGFloat minimumHeight = ceil(textView.font.lineHeight * scale) / scale * textField.minimumLines;
+    CGFloat textHeight = [textView sizeThatFits:CGSizeMake(textWidth, CGFLOAT_MAX)].height;
+    UIEdgeInsets insets = textField.textInsets;
+    CGFloat requiredHeight = MAX(textHeight, minimumHeight) + insets.top + insets.bottom;
+    if (fabs(requiredHeight - CGRectGetHeight(textField.bounds)) < 1.0 / scale)
+        return;
+
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }

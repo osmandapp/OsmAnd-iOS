@@ -359,8 +359,9 @@ static const CGFloat kTextFieldBottomInset = 0.0;
     MDCMultilineTextField *textField = (MDCMultilineTextField *)multilineTextField;
     UIButton *clearButton = textField.clearButton;
     BOOL isClearButtonVisible = clearButton.alpha > 0;
+    BOOL textWidthChanged = isClearButtonVisible != (CGRectGetWidth(clearButton.bounds) > 0);
     // Apply the pending width change only when the clear button appears or disappears.
-    if (isClearButtonVisible != (CGRectGetWidth(clearButton.bounds) > 0))
+    if (textWidthChanged)
         [textField layoutIfNeeded];
 
     UITextView *textView = textField.textView;
@@ -369,12 +370,16 @@ static const CGFloat kTextFieldBottomInset = 0.0;
         return;
 
     // With constraint-based sizing, the callback's height is UIViewNoIntrinsicMetric.
-    // Measure the text view directly so unchanged heights do not relayout the table.
+    // Check UIKit's cached height before measuring, unless the text width has just changed.
     CGFloat scale = MAX(textField.traitCollection.displayScale, 1.0);
     CGFloat minimumHeight = ceil(textView.font.lineHeight * scale) / scale * textField.minimumLines;
-    CGFloat textHeight = [textView sizeThatFits:CGSizeMake(textWidth, CGFLOAT_MAX)].height;
     UIEdgeInsets insets = textField.textInsets;
-    CGFloat requiredHeight = MAX(textHeight, minimumHeight) + insets.top + insets.bottom;
+    CGFloat requiredHeight = MAX(textView.contentSize.height, minimumHeight) + insets.top + insets.bottom;
+    if (!textWidthChanged && fabs(requiredHeight - CGRectGetHeight(textField.bounds)) < 1.0 / scale)
+        return;
+
+    CGFloat textHeight = [textView sizeThatFits:CGSizeMake(textWidth, CGFLOAT_MAX)].height;
+    requiredHeight = MAX(textHeight, minimumHeight) + insets.top + insets.bottom;
     if (fabs(requiredHeight - CGRectGetHeight(textField.bounds)) < 1.0 / scale)
         return;
 

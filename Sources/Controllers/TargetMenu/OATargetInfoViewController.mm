@@ -1361,23 +1361,25 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         if (cards.count > 1)
             [self reorderCards:cards];
 
-        if (_wikiCardsRequestFailed)
-            [cards addObject:[self createOnlinePhotosNoInternetCard]];
-        
         // After forming the list of cards, fill the collection
         if (_onlinePhotoCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
             collapsableView.placeholderImage = [self targetImage];
             
-            [collapsableView setCards:cards];
+            // Keep content and error states exclusive, without hiding available photos.
+            NSArray<AbstractCard *> *displayCards = _wikiCardsRequestFailed && !filter.hasOnlyOnlinePhotosContent
+                ? @[[self createOnlinePhotosNoInternetCard]] : cards;
+            [collapsableView setCards:displayCards];
             collapsableView.isLoading = NO;
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
             collapsableView.placeholderImage = [self targetImage];
-            [collapsableView setCards:cards];
+            NSArray<AbstractCard *> *displayCards = _wikiCardsRequestFailed && !filter.hasOnlyMapillaryPhotosContent
+                ? @[[self createOnlinePhotosNoInternetCard]] : cards;
+            [collapsableView setCards:displayCards];
             collapsableView.isLoading = NO;
         }
     }

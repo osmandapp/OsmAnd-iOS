@@ -1449,7 +1449,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) updateTopButtonsLayoutY
 {
     BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
-    BOOL contextMenuMode = self.contextMenuMode;
+    BOOL contextMenuMode = self.contextMenuMode || _mapPanelViewController.suspendedPlanRouteController != nil;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
     CGFloat ctxToolbarH = 0.0;
@@ -1457,6 +1457,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         ctxToolbarH = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
     else if ([_mapPanelViewController isTopToolbarActive])
         ctxToolbarH = [_mapPanelViewController getTargetToolbarHeight];
+    else if (_mapPanelViewController.suspendedPlanRouteController)
+        ctxToolbarH = [_mapPanelViewController.suspendedPlanRouteController getNavbarHeight];
     
     BOOL isToolbarVisible = !_mapInfoController.weatherToolbarVisible && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isAllowToolbarsVisible = isToolbarVisible && ([_mapPanelViewController isTopToolbarSearchVisible] || [_mapPanelViewController isTopToolbarDiscountVisible]);
@@ -1582,9 +1584,13 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (CGFloat) getHudTopOffset
 {
-    CGFloat contextMenuToolbarHeight = _mapPanelViewController.scrollableHudViewController
-            ? [_mapPanelViewController.scrollableHudViewController getNavbarHeight]
-            : [_mapPanelViewController isTopToolbarActive] ? [_mapPanelViewController getTargetToolbarHeight] : 0.;
+    CGFloat contextMenuToolbarHeight = 0.;
+    if (_mapPanelViewController.scrollableHudViewController)
+        contextMenuToolbarHeight = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
+    else if ([_mapPanelViewController isTopToolbarActive])
+        contextMenuToolbarHeight = [_mapPanelViewController getTargetToolbarHeight];
+    else if (_mapPanelViewController.suspendedPlanRouteController)
+        contextMenuToolbarHeight = [_mapPanelViewController.suspendedPlanRouteController getNavbarHeight];
     CGFloat offset = [OAUtilities isLandscape] && ![OAUtilities isIPad] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
     BOOL isToolbarAllowed = !_mapInfoController.weatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
@@ -1596,7 +1602,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     {
         offset += _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     }
-    else if (!self.contextMenuMode)
+    else if (!self.contextMenuMode && !_mapPanelViewController.suspendedPlanRouteController)
     {
         if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware])
             offset += self.topWidgetsViewHeightConstraint.constant;

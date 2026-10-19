@@ -402,6 +402,13 @@ typedef enum
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
+- (OABaseScrollableHudViewController *)suspendedPlanRouteController
+{
+    if (!_scrollableHudViewController && [_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        return _prevScrollableHudViewController;
+    return nil;
+}
+
 - (void)setupScrollableHud:(OABaseScrollableHudViewController *)controller {
     _scrollableHudViewController = controller;
     _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

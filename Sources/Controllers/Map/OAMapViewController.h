@@ -103,6 +103,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property(readonly) NSDate *lastRotatingByGestureTime;
 
 @property (atomic, readonly) BOOL mapViewLoaded;
+@property (atomic, readonly) BOOL renderedNightMode;
 @property (nonatomic) BOOL attachedToCarPlayWindow;
 @property (nonatomic, readonly) BOOL recTrackShowing;
 

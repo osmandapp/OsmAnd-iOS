@@ -153,6 +153,7 @@ static char kMapSourceUpdateQueueKey;
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
+@property (atomic) BOOL renderedNightMode;
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable;
 - (void)updateMapLocaleLanguageForEnvironment:(const std::shared_ptr<OsmAnd::MapPresentationEnvironment>&)mapPresentationEnvironment
@@ -2289,7 +2290,7 @@ static char kMapSourceUpdateQueueKey;
             _mapSourceInvalidated = YES;
             return;
         }
-        
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self updateCurrentMapSource];
         });
@@ -2594,6 +2595,8 @@ static char kMapSourceUpdateQueueKey;
         return;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL nightMode = settings.isCurrentMapNightMode;
+    self.renderedNightMode = nightMode;
     const auto screenTileSize = 256 * displayDensityFactor;
     double mapDensity = [settings.mapDensity get];
     double mapDensityAligned;
@@ -2672,7 +2675,7 @@ static char kMapSourceUpdateQueueKey;
             NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
             newSettings[@"baseAppMode"] = baseMode;
 
-            if (settings.isCurrentMapNightMode)
+            if (nightMode)
                 newSettings[@"nightMode"] = @"true";
             shouldSetSkyFog = YES;
 
@@ -2867,8 +2870,7 @@ static char kMapSourceUpdateQueueKey;
             [_mapView setVisualZoomShift:mapDensity];
         if (shouldSetSkyFog)
         {
-            BOOL mapNightMode = settings.isCurrentMapNightMode;
-            if (mapNightMode)
+            if (nightMode)
             {
                 [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
                 [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];

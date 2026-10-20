@@ -728,6 +728,7 @@
 		C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */; };
 		C57693172D66159200E4F772 /* AppearanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693162D66159200E4F772 /* AppearanceData.swift */; };
 		C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */; };
+		C57E1E47308635D200112730 /* DownloadMapProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */; };
 		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
 		C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */; };
@@ -1144,8 +1145,6 @@
 		DA5A819C26C563A700F274C7 /* OAAddPOIAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A1B26C563A000F274C7 /* OAAddPOIAction.mm */; };
 		DA5A819D26C563A700F274C7 /* OASwitchProfileAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A1C26C563A000F274C7 /* OASwitchProfileAction.m */; };
 		DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */; };
-		DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */; };
-		DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */; };
 		DA5A81A126C563A700F274C7 /* OADownloadMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */; };
 		DA5A81A226C563A700F274C7 /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */; };
 		DA5A81A326C563A700F274C7 /* OASelectMapSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7A2A26C563A000F274C7 /* OASelectMapSourceViewController.xib */; };
@@ -3405,6 +3404,7 @@
 		C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		C57693162D66159200E4F772 /* AppearanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceData.swift; sourceTree = "<group>"; };
 		C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTracksAppearanceTask.swift; sourceTree = "<group>"; };
+		C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadMapProgressViewController.swift; sourceTree = "<group>"; };
 		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
 		C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAnimationAction.swift; sourceTree = "<group>"; };
@@ -4059,10 +4059,7 @@
 		DA5A7A2126C563A000F274C7 /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAWorldRegion+Protected.h"; sourceTree = "<group>"; };
 		DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
-		DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapProgressViewController.mm; sourceTree = "<group>"; };
-		DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMapProgressViewController.xib; sourceTree = "<group>"; };
 		DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapViewController.mm; sourceTree = "<group>"; };
-		DA5A7A2826C563A000F274C7 /* OADownloadMapProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMapProgressViewController.h; sourceTree = "<group>"; };
 		DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectMapSourceViewController.mm; sourceTree = "<group>"; };
 		DA5A7A2A26C563A000F274C7 /* OASelectMapSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASelectMapSourceViewController.xib; sourceTree = "<group>"; };
 		DA5A7A2B26C563A000F274C7 /* OASelectMapSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectMapSourceViewController.h; sourceTree = "<group>"; };
@@ -7815,9 +7812,7 @@
 		DA5A7A2426C563A000F274C7 /* DownloadMapSource */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7A2826C563A000F274C7 /* OADownloadMapProgressViewController.h */,
-				DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */,
-				DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */,
+				C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */,
 				DA5A7A2D26C563A000F274C7 /* OADownloadMapViewController.h */,
 				DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */,
 				DA5A7A2C26C563A000F274C7 /* OADownloadMapViewController.xib */,
@@ -11809,7 +11804,6 @@
 				C56F0B242F76B53900FC543B /* MapSettingsBuildings3DParametersViewController.xib in Resources */,
 				DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */,
 				DA5A849426C563A900F274C7 /* OASaveTrackBottomSheetViewController.xib in Resources */,
-				DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */,
 				465D7E21295494000099B206 /* OATextMultilineTableViewCell.xib in Resources */,
 				DA5A838B26C563A800F274C7 /* OAOsmAndLiveSelectionViewController.xib in Resources */,
 				DA5A82DD26C563A800F274C7 /* OAGPXRouteRoundCell.xib in Resources */,
@@ -12828,7 +12822,6 @@
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
 				CE7CC392302AFE620048D36F /* CoordinatesFormatEditViewController.swift in Sources */,
-				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
 				DA5A833226C563A800F274C7 /* OAPoiCollectionViewCell.m in Sources */,
 				DA5A81B826C563A700F274C7 /* OAPOI.mm in Sources */,
 				DA5A814B26C563A700F274C7 /* OABaseCarPlayInterfaceController.mm in Sources */,
@@ -12903,6 +12896,7 @@
 				DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */,
 				DA5A854626C563A900F274C7 /* OASavingTrackHelper.mm in Sources */,
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,
+				C57E1E47308635D200112730 /* DownloadMapProgressViewController.swift in Sources */,
 				DAA61CBF2A02789D00AFF65D /* MapWidgetInfo.swift in Sources */,
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
 				27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */,

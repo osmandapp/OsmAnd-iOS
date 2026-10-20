@@ -1657,7 +1657,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     }
     NSArray<OASRouteSegmentResult *> *originalRoute = route.getOriginalRoute;
     if (originalRoute.count == 0)
-        originalRoute = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:DEFAULT_APP_MODE.getDefaultSpeed
+        originalRoute = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[DEFAULT_APP_MODE defaultSpeed]
                                                                                               points:[self waypointsToLatLons:pts]]];
 
     __weak __typeof(self) weakSelf = self;

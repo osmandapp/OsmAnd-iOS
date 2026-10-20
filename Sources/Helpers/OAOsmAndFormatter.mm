@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmAndFormatter.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OALocationConvert.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -14,6 +15,8 @@
 #include <GeographicLib/GeoCoords.hpp>
 
 #define MIN_DURATION_FOR_DATE_FORMAT (48 * 60)
+
+static const int kSecondsInHour = 3600;
 
 @implementation OAOsmAndFormatter
 
@@ -348,7 +351,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     [valueUnitArray addObject:formattedValue];
     [valueUnitArray addObject:unit];
 
-    return [OAUtilities getFormattedValue:formattedValue unit:unit];
+    return [OAUtilities formattedValue:formattedValue unit:unit];
 }
 
 + (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
@@ -450,7 +453,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         {
             [valueUnitArray addObject:@"-"];
             [valueUnitArray addObject:_unitsMinKm];
-            return [OAUtilities getFormattedValue:@"-" unit:_unitsMinKm];
+            return [OAUtilities formattedValue:@"-" unit:_unitsMinKm];
         }
         float minPerKm = METERS_IN_KILOMETER / (metersperseconds * 60);
         if (minPerKm >= 10)
@@ -463,7 +466,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
             NSString *value = [self getFormattedDurationShort:seconds fullForm:NO];
             [valueUnitArray addObject:value];
             [valueUnitArray addObject:_unitsMinKm];
-            return [OAUtilities getFormattedValue:value unit:_unitsMinKm];
+            return [OAUtilities formattedValue:value unit:_unitsMinKm];
         }
     }
     else if (speedSystem == MINUTES_PER_MILE)
@@ -472,7 +475,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         {
             [valueUnitArray addObject:@"-"];
             [valueUnitArray addObject:_unitsMinMi];
-            return [OAUtilities getFormattedValue:@"-" unit:_unitsMinMi];
+            return [OAUtilities formattedValue:@"-" unit:_unitsMinMi];
         }
         float minPerM = (METERS_IN_ONE_MILE) / (metersperseconds * 60);
         if (minPerM >= 10)
@@ -526,6 +529,103 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *)getFormattedLowSpeed:(float)speed unit:(NSString *)unit valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
+}
+
++ (NSString *)formattedSpeedTolerance:(float)metersperseconds
+                          speedSystem:(EOASpeedConstant)speedSystem
+                         hasFastSpeed:(BOOL)hasFastSpeed
+                       valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray
+{
+    speedSystem = [self speedModeForPaceMode:speedSystem];
+    float kmh = metersperseconds * 3.6f;
+    float speed;
+    switch (speedSystem)
+    {
+        case MILES_PER_HOUR:
+            speed = kmh * METERS_IN_KILOMETER / (float)METERS_IN_ONE_MILE;
+            break;
+        case NAUTICALMILES_PER_HOUR:
+            speed = kmh * METERS_IN_KILOMETER / (float)METERS_IN_ONE_NAUTICALMILE;
+            break;
+        case METERS_PER_SECOND:
+            speed = metersperseconds;
+            break;
+        case FEET_PER_SECOND:
+            speed = metersperseconds * FEET_IN_ONE_METER;
+            break;
+        default:
+            speed = kmh;
+            break;
+    }
+    BOOL shouldRoundToInteger = speedSystem == METERS_PER_SECOND || speedSystem == FEET_PER_SECOND
+        ? speed >= 10
+        : speed >= 20 || hasFastSpeed;
+    float roundingMultiplier = shouldRoundToInteger ? 1.f : 10.f;
+
+    NSNumberFormatter *formatter = [NSNumberFormatter speedToleranceFormatterFor:speed];
+    int roundedSpeed = [formatter stringFromNumber:@(speed * roundingMultiplier)].intValue;
+    float value = roundedSpeed / roundingMultiplier;
+
+    NSMutableArray<NSString *> *formattedValueAndUnit = [NSMutableArray array];
+    NSString *result = [self getFormattedSpeed:[self mpSFromFormattedValue:value speedSystem:speedSystem]
+                                  speedSystem:speedSystem
+                                        drive:hasFastSpeed
+                               valueUnitArray:formattedValueAndUnit];
+    if (!shouldRoundToInteger)
+    {
+        formatter.locale = [NSLocale localeWithLocaleIdentifier:OAUtilities.currentLang];
+        NSString *decimalSeparator = formatter.decimalSeparator;
+        if (![formattedValueAndUnit.firstObject containsString:decimalSeparator])
+        {
+            formattedValueAndUnit[0] = [formattedValueAndUnit.firstObject stringByAppendingFormat:@"%@%@", decimalSeparator, [formatter stringFromNumber:@0]];
+            result = [OAUtilities formattedValue:formattedValueAndUnit.firstObject unit:formattedValueAndUnit.lastObject];
+        }
+    }
+    [valueUnitArray addObjectsFromArray:formattedValueAndUnit];
+    return result;
+}
+
++ (EOASpeedConstant)speedModeForPaceMode:(EOASpeedConstant)speedSystem
+{
+    if (speedSystem == MINUTES_PER_KILOMETER)
+        return KILOMETERS_PER_HOUR;
+    if (speedSystem == MINUTES_PER_MILE)
+        return MILES_PER_HOUR;
+    return speedSystem;
+}
+
++ (float)mpSFromFormattedValue:(float)value speedSystem:(EOASpeedConstant)speedSystem
+{
+    return (value * [self metersInModeUnit:speedSystem] / METERS_IN_KILOMETER) / 3.6f;
+}
+
++ (float)metersInModeUnit:(EOASpeedConstant)speedFormat
+{
+    float metersInUnit = 0.f;
+
+    switch (speedFormat)
+    {
+        case MILES_PER_HOUR:
+        case MINUTES_PER_MILE:
+            metersInUnit = METERS_IN_ONE_MILE;
+            break;
+        case KILOMETERS_PER_HOUR:
+        case MINUTES_PER_KILOMETER:
+            metersInUnit = METERS_IN_KILOMETER;
+            break;
+        case METERS_PER_SECOND:
+            metersInUnit = 1.f * kSecondsInHour;
+            break;
+        case NAUTICALMILES_PER_HOUR:
+            metersInUnit = METERS_IN_ONE_NAUTICALMILE;
+            break;
+        case FEET_PER_SECOND:
+            metersInUnit = 1.f * kSecondsInHour / (float)FEET_IN_ONE_METER;
+            break;
+        default:
+            break;
+    }
+    return metersInUnit;
 }
 
 + (double) calculateRoundedDist:(double)baseMetersDist

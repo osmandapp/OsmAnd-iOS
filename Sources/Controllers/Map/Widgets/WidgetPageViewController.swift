@@ -71,9 +71,11 @@ final class WidgetPageViewController: UIViewController {
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        let trailingStackViewConstraint = stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        trailingStackViewConstraint.priority = isMultipleWidgetsInRow ? .required : UILayoutPriority(999)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            trailingStackViewConstraint,
             stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
         bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

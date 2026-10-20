@@ -60,53 +60,6 @@ private final class IndexingProgressRingView: UIView {
     }
 }
 
-private final class TracksIndexingTracker {
-    private static var baseline = 0
-    private(set) var remaining = 0
-    private var loadedRootFolder: TrackFolder?
-
-    var isInProgress: Bool {
-        remaining > 0
-    }
-
-    var progress: CGFloat {
-        let baseline = Self.baseline
-        return baseline > 0 ? CGFloat(max(0, baseline - remaining)) / CGFloat(baseline) : 0
-    }
-
-    func onRootFolderLoaded(_ folder: TrackFolder) {
-        loadedRootFolder = folder
-    }
-
-    func refresh(currentRootFolder: TrackFolder?) {
-        let helper = GpxDbHelper.shared
-        guard helper.isInitialized() else { return }
-        var count = loadedRootFolder.map { pendingTracksCount(in: $0, helper: helper) } ?? 0
-        if let currentRootFolder, currentRootFolder !== loadedRootFolder {
-            count = max(count, pendingTracksCount(in: currentRootFolder, helper: helper))
-        }
-        remaining = count
-        if count > 0 {
-            Self.baseline = max(Self.baseline, count)
-        } else if loadedRootFolder != nil || !(helper.isReading() || helper.isFilesystemReconciliationRunning()) {
-            Self.baseline = 0
-        }
-    }
-
-    private func pendingTracksCount(in folder: TrackFolder, helper: GpxDbHelper) -> Int {
-        var count = 0
-        for item in folder.getTrackItems() where item.dataItem == nil {
-            if let file = item.getFile(), !helper.hasGpxDataItem(file: file), helper.isReading(file: file) {
-                count += 1
-            }
-        }
-        for subfolder in folder.getSubFolders() {
-            count += pendingTracksCount(in: subfolder, helper: helper)
-        }
-        return count
-    }
-}
-
 private protocol TrackListUpdatableDelegate: AnyObject {
     func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder)
 }
@@ -309,7 +262,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func refreshIndexingState() {
-        indexingTracker.refresh(currentRootFolder: rootFolder)
+        indexingTracker.refresh(rootFolder: rootFolder)
     }
 
     private func updateIndexingRingProgress() {
@@ -3182,7 +3135,6 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
-        indexingTracker.onRootFolderLoaded(folder)
         hasReceivedFirstBatch = true
         isLoadingInProgress = false
         onLoadFinished(folder: folder, endRefresh: true, openSubfolder: true)

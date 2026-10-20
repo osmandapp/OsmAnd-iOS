@@ -101,6 +101,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     NSLayoutConstraint *_leftRulerConstraint;
     
     CLLocation *_previousLocation;
+    dispatch_queue_t _locationAddressQueue;
+    uint64_t _locationAddressRequestId;
     
     NSTimeInterval _lastWidgetsUpdateTime;
     
@@ -135,6 +137,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     _mapHudType = EOAMapHudBrowse;
     _hudButtonsVisible = YES;
+    _locationAddressQueue = dispatch_queue_create("net.osmand.maps.location-address", DISPATCH_QUEUE_SERIAL);
     
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
@@ -1664,9 +1667,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
 }
 
-- (void) updateCurrentLocationAddress
+- (void)updateCurrentLocationAddress
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(_locationAddressQueue, ^{
         if (UIAccessibilityIsVoiceOverRunning())
         {
             CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
@@ -1675,11 +1678,20 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 if (!_previousLocation || [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters)
                 {
                     _previousLocation = currentLocation;
+                    uint64_t requestId;
+                    @synchronized (self)
+                    {
+                        requestId = ++_locationAddressRequestId;
+                    }
                     [OAReverseGeocoder.instance lookupAddressAtLat:currentLocation.coordinate.latitude
                                                                lon:currentLocation.coordinate.longitude
                                                           objectId:0
                                                         completion:^(NSString *positionAddress) {
-                        _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                        @synchronized (self)
+                        {
+                            if (requestId == _locationAddressRequestId)
+                                _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                        }
                     }];
                 }
             }

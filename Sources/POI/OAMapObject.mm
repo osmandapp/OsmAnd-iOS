@@ -227,9 +227,13 @@
                 NSString *nm = self.localizedNames[lang];
                 if (nm.length > 0)
                     return nm;
-                
-                if (transliterate)
-                    return OsmAnd::ICU::transliterateToLatin(QString::fromNSString(self.name)).toNSString();
+            }
+            if (transliterate)
+            {
+                // a Latin name of the map (name:en, or the generator's romanisation) beats a transliteration
+                NSString *enName = [self getEnName:YES];
+                if (enName.length > 0)
+                    return enName;
             }
         }
     }

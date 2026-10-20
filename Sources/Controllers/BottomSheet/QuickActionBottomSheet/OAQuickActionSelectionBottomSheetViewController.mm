@@ -18,6 +18,8 @@
 #import "OAMapStyleAction.h"
 #import "OAIndexConstants.h"
 #import "OAMapSource.h"
+#import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -36,6 +38,7 @@
     
     OASwitchableAction *_action;
     EOAQASelectionType _type;
+    OAAutoObserverProxy *_appModeObserver;
 }
 
 @synthesize tableData, tblView;
@@ -69,14 +72,33 @@
 
 - (void)deinitView
 {
+    [self removeOrientationObservers];
+}
+
+- (void)removeOrientationObservers
+{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
+    [_appModeObserver detach];
+    _appModeObserver = nil;
 }
 
 - (void)updateOrientationObserver
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
+    [self removeOrientationObservers];
     if (vwController.type == EOAQASelectionTypeOrientation)
+    {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+        _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onApplicationModeChanged)
+                                                      andObserve:_app.applicationModeChangedObservable];
+    }
+}
+
+- (void)onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [tblView reloadData];
+    });
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification

@@ -153,7 +153,7 @@ extension FavoriteListViewController {
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
         menuElements.append(thirdButtonsSection)
 
-        if hasPoints || folders.contains(where: { $0.pointsCount > 0 }) {
+        if selectedFavoritePointsCount(for: selectedBridgeItems) > 0 {
             let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
                 self?.openFavoriteItemsAppearance()
             }

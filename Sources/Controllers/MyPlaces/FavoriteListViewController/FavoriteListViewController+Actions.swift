@@ -241,7 +241,7 @@ extension FavoriteListViewController {
         let points = bridgeItems(for: selectionManager.selectedItems).flatMap { item -> [OAFavoritePointBridgeItem] in
             if let point = item as? OAFavoritePointBridgeItem { return [point] }
             if let folderPath = item as? String {
-                return FavoriteFolderProvider.shared.favoriteFolder(folderPath)?.exactPoints() ?? []
+                return favoritePointRows(inFolder: folderPath).map { $0.bridgeItem }
             }
             return []
         }.filter { identifiers.insert($0.identifier).inserted }

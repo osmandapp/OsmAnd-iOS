@@ -485,7 +485,15 @@ typedef enum {
     courseMarkerBuilder.setBaseOrder(baseOrder);
     courseMarkerBuilder.setIsHidden(true);
     courseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * courseIconScaleFactor * [[UIScreen mainScreen] scale]));
-    
+
+    if (_lastLocation)
+    {
+        const OsmAnd::PointI lastTarget31(OsmAnd::Utilities::get31TileNumberX(_lastLocation.coordinate.longitude),
+                                          OsmAnd::Utilities::get31TileNumberY(_lastLocation.coordinate.latitude));
+        locationMarkerBuilder.setPosition(lastTarget31);
+        courseMarkerBuilder.setPosition(lastTarget31);
+    }
+
     UIColor *iconColor = [mode getProfileColor];
     
     NSString *locationIconName = [mode.getLocationIcon name];

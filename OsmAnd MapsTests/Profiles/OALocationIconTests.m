@@ -225,6 +225,23 @@ static NSString * const kTestModelName = @"model_OALocationIconTestModel";
     XCTAssertNotNil([icon getPreviewIconWithColor:UIColor.redColor]);
 }
 
+- (void)testFolderNameContainingModelPrefixResolvesToModelIcon
+{
+    NSString *dirName = @"OALocationIcon_model_TestModel";
+    NSString *dirPath = [OsmAndApp.instance.models3dPath stringByAppendingPathComponent:dirName];
+    [NSFileManager.defaultManager createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:nil];
+    NSString *objPath = [[dirPath stringByAppendingPathComponent:dirName] stringByAppendingPathExtension:@"obj"];
+    [@"v 0 0 0\n" writeToFile:objPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+
+    NSString *modelName = [@"model_" stringByAppendingString:dirName];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:modelName forNavigation:YES];
+    [NSFileManager.defaultManager removeItemAtPath:dirPath error:nil];
+
+    XCTAssertEqualObjects(icon.name, modelName);
+    XCTAssertEqualObjects(icon.modelName, modelName);
+    XCTAssertTrue(icon.isModel);
+}
+
 - (void)testBuiltInModelNamesStillResolveToBuiltInIcons
 {
     for (OALocationIcon *builtIn in OALocationIcon.defaultIcons)

@@ -491,11 +491,20 @@ typedef enum {
     std::shared_ptr<const OsmAnd::Model3D> navigationModelCpp;
     std::shared_ptr<const OsmAnd::Model3D> locationModelCpp;
 
+    __weak OAMyPositionLayer *weakSelf = self;
+    OAModel3dCallback *modelLoadedCallback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
+        if (!model)
+            return;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf refreshMarkersCollectionForMode:mode];
+        });
+    }];
+
     OALocationIcon *navIcon = [OALocationIcon locationIconWithName:navigationIconName];
     navigationIconName = [navIcon iconName];
     if ([navIcon shouldDisplayModel])
     {
-        navigationModel = [Model3dHelper.shared getModelWithModelName:[navIcon modelName] callback:nil];
+        navigationModel = [Model3dHelper.shared getModelWithModelName:[navIcon modelName] callback:modelLoadedCallback];
         if (!navigationModel)
         {
             navIcon = [OALocationIcon MOVEMENT_DEFAULT];
@@ -507,7 +516,7 @@ typedef enum {
     locationIconName = [locIcon iconName];
     if ([locIcon shouldDisplayModel])
     {
-        locationModel = [Model3dHelper.shared getModelWithModelName:[locIcon modelName] callback:nil];
+        locationModel = [Model3dHelper.shared getModelWithModelName:[locIcon modelName] callback:modelLoadedCallback];
         if (!locationModel)
         {
             locIcon = [OALocationIcon DEFAULT];

@@ -189,7 +189,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
+            @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparencyPercent]]
         }];
         if (!isTerrainShadows)
         {

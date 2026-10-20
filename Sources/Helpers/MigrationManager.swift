@@ -25,6 +25,7 @@ final class MigrationManager: NSObject {
         case migrateAstronomyPreferences
         case migrateCarPlayMapAppearanceMode
         case migrateLegacyRouteWidgets
+        case migrateTerrainTransparencyToAlpha255
     }
     
     private enum LegacyWidgetPanelOrder {
@@ -131,6 +132,21 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue) {
                 keepLegacyRouteWidgetsForCustomizedProfiles()
                 defaults.set(true, forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue) {
+                migrateTerrainTransparencyToAlpha255()
+                defaults.set(true, forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue)
+            }
+        }
+    }
+
+    // Terrain transparency was stored in percent, now it is 0-255 alpha like on Android.
+    private func migrateTerrainTransparencyToAlpha255() {
+        for type in TerrainMode.TerrainType.allCases {
+            let pref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(TerrainMode.defaultTransparency(type))).makeProfile()
+            for mode in OAApplicationMode.allPossibleValues() where pref.isSet(for: mode) {
+                let percent = min(max(pref.get(mode), 0), 100)
+                pref.set(Int32((Double(percent) * 2.55).rounded()), mode: mode)
             }
         }
     }

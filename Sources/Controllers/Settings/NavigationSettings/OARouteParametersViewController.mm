@@ -342,6 +342,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         }
     }
     [self setupTimeConditionalRoutingPref:tableSection];
+    [self setupRoadSpeedsPref:tableSection];
 }
 
 - (void) setupHazmatUSACategoryPreference:(NSMutableArray *)tableSection
@@ -595,6 +596,17 @@ static NSString *foregroundImageKey = @"foregroundImage";
         titleKey : OALocalizedString(@"temporary_conditional_routing"),
         iconKey : ACImageNameIcCustomRoadWorks,
         valueKey : @([_settings.enableTimeConditionalRouting get:self.appMode])
+    }];
+}
+
+- (void) setupRoadSpeedsPref:(NSMutableArray *)tableSection
+{
+    [tableSection addObject:@{
+        typeKey : [OASimpleTableViewCell getCellIdentifier],
+        keyKey : roadSpeedsKey,
+        titleKey : OALocalizedString(@"road_speeds"),
+        iconKey : ACImageNameIcCustomSpeed,
+        valueKey : @(self.appMode.getMinSpeed > 0 || self.appMode.getMaxSpeed > 0)
     }];
 }
 

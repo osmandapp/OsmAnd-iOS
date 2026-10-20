@@ -265,6 +265,14 @@ static NSString * const kMovementIconPrefix = @"MOVEMENT_";
     return modelName && [modelName hasPrefix:MODEL_NAME_PREFIX];
 }
 
++ (BOOL)isCustomModel:(id)name
+{
+    return [name isKindOfClass:NSString.class]
+        && [self isModel:name]
+        && [name length] > MODEL_NAME_PREFIX.length
+        && ![[self defaultIconModels] containsObject:name];
+}
+
 - (BOOL) isModel
 {
     return _modelName && [_modelName hasPrefix:MODEL_NAME_PREFIX];

@@ -403,6 +403,11 @@ typedef enum {
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     OAMarkerCollection *_previewMarker;
+    CLLocation *_previewLocation;
+    float _previewLocationFactor;
+    float _previewCourseFactor;
+    BOOL _previewShowBearing;
+    BOOL _previewVisible;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastCourse;
@@ -497,6 +502,7 @@ typedef enum {
             return;
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf refreshMarkersCollectionForMode:mode];
+            [weakSelf refreshPreviewMarkerForMode:mode];
         });
     }];
 
@@ -724,7 +730,18 @@ typedef enum {
         [self generatePreviewMarkerCollectionFor:locationFactor courseIconScaleFactor:courseFactor];
         [self updateMyPreviewLocationCourseProviderFor:showBearing newLocation:newLocation];
         [self.mapView invalidateFrame];
+        _previewLocation = newLocation;
+        _previewLocationFactor = locationFactor;
+        _previewCourseFactor = courseFactor;
+        _previewShowBearing = showBearing;
+        _previewVisible = YES;
     }];
+}
+
+- (void)refreshPreviewMarkerForMode:(OAApplicationMode *)mode
+{
+    if (_previewVisible && mode == [OAAppSettings sharedManager].applicationMode.get)
+        [self updatePreviewMarker:_previewLocation locationFactor:_previewLocationFactor courseFactor:_previewCourseFactor showBearing:_previewShowBearing];
 }
 
 - (void) onSettingsChanged
@@ -763,6 +780,7 @@ typedef enum {
 
 - (void)hidePreviewMarker
 {
+    _previewVisible = NO;
     OAMarkerCollection *collection = _previewMarker;
     [collection hideMarkers];
     [self.mapView removeKeyedSymbolsProvider:collection.markerCollection];

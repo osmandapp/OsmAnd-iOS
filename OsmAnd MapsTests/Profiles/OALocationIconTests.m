@@ -211,6 +211,32 @@ static NSString * const kTestModelName = @"model_OALocationIconTestModel";
     XCTAssertEqualObjects(bean.navIcon, kTestModelName);
 }
 
+- (void)testProfileImportPreservesModelThatIsNotInstalledYet
+{
+    [NSFileManager.defaultManager removeItemAtPath:_modelDir error:nil];
+    OAApplicationModeBean *bean = [OAApplicationModeBean fromJson:@{@"locIcon": kTestModelName, @"navIcon": kTestModelName}];
+    XCTAssertEqualObjects(bean.locIcon, kTestModelName);
+    XCTAssertEqualObjects(bean.navIcon, kTestModelName);
+}
+
+- (void)testProfileImportStillResolvesBuiltInAndInvalidNames
+{
+    OAApplicationModeBean *bean = [OAApplicationModeBean fromJson:@{@"locIcon": @"model_map_car_location", @"navIcon": @"model_"}];
+    XCTAssertEqualObjects(bean.locIcon, OALocationIcon.CAR.name);
+    XCTAssertEqualObjects(bean.navIcon, OALocationIcon.MOVEMENT_DEFAULT.name);
+}
+
+- (void)testCustomModelDetection
+{
+    XCTAssertTrue([OALocationIcon isCustomModel:kTestModelName]);
+    XCTAssertFalse([OALocationIcon isCustomModel:@"model_"]);
+    XCTAssertFalse([OALocationIcon isCustomModel:@"CAR"]);
+    XCTAssertFalse([OALocationIcon isCustomModel:@42]);
+    XCTAssertFalse([OALocationIcon isCustomModel:nil]);
+    for (NSString *builtInModel in OALocationIcon.defaultIconModels)
+        XCTAssertFalse([OALocationIcon isCustomModel:builtInModel]);
+}
+
 - (void)testMissingModelUsesContextDefault
 {
     [NSFileManager.defaultManager removeItemAtPath:_modelDir error:nil];

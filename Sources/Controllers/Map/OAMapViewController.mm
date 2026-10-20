@@ -2811,7 +2811,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (enabledSrtmPlugin && [enabledSrtmPlugin isTerrainLayerEnabled] && [enabledSrtmPlugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -3020,7 +3020,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (plugin && [plugin isTerrainLayerEnabled] && [plugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] / 255.0);
     }
     else
     {

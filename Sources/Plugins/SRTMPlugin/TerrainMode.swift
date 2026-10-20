@@ -95,7 +95,16 @@ final class TerrainMode: NSObject {
         let settings = OAAppSettings.sharedManager()
         minZoomPref = settings.registerIntPreference(type.name + "_min_zoom", defValue: Int32(terrainMinSupportedZoom)).makeProfile()
         maxZoomPref = settings.registerIntPreference(type.name + "_max_zoom", defValue: Int32(terrainMaxSupportedZoom)).makeProfile()
-        transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(type == .hillshade || type == .terrainShadows ? hillshadeDefaultTrasparency : defaultTrasparency)).makeProfile()
+        transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(Self.defaultTransparency(type))).makeProfile()
+    }
+
+    // Transparency is stored as 0-255 alpha, like on Android
+    static func defaultTransparency(_ type: TerrainType) -> Int {
+        switch type {
+        case .hillshade: hillshadeDefaultTrasparency
+        case .terrainShadows: 255
+        default: defaultTrasparency
+        }
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
@@ -259,6 +268,22 @@ final class TerrainMode: NSObject {
 
     func getTransparency() -> Int32 {
         transparencyPref.get()
+    }
+
+    func getAlpha() -> Double {
+        Double(getTransparency()) / 255.0
+    }
+
+    func setAlpha(_ alpha: Double) {
+        setTransparency(Int32((alpha * 255.0).rounded()))
+    }
+
+    func getDefaultAlpha() -> Double {
+        Double(transparencyPref.defValue) / 255.0
+    }
+
+    func getTransparencyPercent() -> Int32 {
+        Int32((getAlpha() * 100.0).rounded())
     }
 
     func resetZoomsToDefault() {

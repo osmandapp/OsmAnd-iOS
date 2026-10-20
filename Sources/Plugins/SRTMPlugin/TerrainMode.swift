@@ -270,20 +270,17 @@ final class TerrainMode: NSObject {
         transparencyPref.get()
     }
 
-    func getAlpha() -> Double {
-        Double(getTransparency()) / 255.0
+    var alpha: Double {
+        get { Double(transparencyPref.get()) / 255.0 }
+        set { transparencyPref.set(Int32((newValue * 255.0).rounded())) }
     }
 
-    func setAlpha(_ alpha: Double) {
-        setTransparency(Int32((alpha * 255.0).rounded()))
-    }
-
-    func getDefaultAlpha() -> Double {
+    var defaultAlpha: Double {
         Double(transparencyPref.defValue) / 255.0
     }
 
-    func getTransparencyPercent() -> Int32 {
-        Int32((getAlpha() * 100.0).rounded())
+    var transparencyPercent: Int32 {
+        Int32((alpha * 100.0).rounded())
     }
 
     func resetZoomsToDefault() {

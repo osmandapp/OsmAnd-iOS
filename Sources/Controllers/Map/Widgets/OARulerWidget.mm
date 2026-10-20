@@ -84,6 +84,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     EOARulerWidgetMode _cachedRulerMode;
     BOOL _cachedMapMode;
     BOOL _isPlanRoutePreview;
+    BOOL _rulerDrawingSuppressed;
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
@@ -246,7 +247,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-    if (![self isRulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
+    if (_rulerDrawingSuppressed || ![self isRulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
         return;
 
     UIGraphicsPushContext(ctx);
@@ -803,9 +804,15 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
         }
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
-        visible = isPlanRoutePreview || ([_mapViewController calculateMapRuler] != 0
+        BOOL rulerVisible = [_mapViewController calculateMapRuler] != 0
             && !_mapViewController.zoomingByGesture
-            && !_mapViewController.rotatingByGesture);
+            && !_mapViewController.rotatingByGesture;
+        if (_rulerDrawingSuppressed != !rulerVisible)
+        {
+            _rulerDrawingSuppressed = !rulerVisible;
+            [self setNeedsDisplay];
+        }
+        visible = isPlanRoutePreview || rulerVisible;
 
         CGSize viewSize = self.bounds.size;
         float viewportYScale = mapRendererView.viewportYScale;

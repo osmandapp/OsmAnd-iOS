@@ -181,6 +181,7 @@ final class DownloadMapProgressViewController: OABaseButtonsViewController, OATi
         generateData()
         updateBottomButtons()
         tableView.reloadData()
+        UIAccessibility.post(notification: .announcement, argument: localizedString("map_downloaded"))
     }
     
     private func cancelDownload() {

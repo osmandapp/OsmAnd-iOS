@@ -29,19 +29,30 @@ final class TracksIndexingTracker {
 
     private static var run: IndexingRun?
 
+    private let loadingOwners = NSHashTable<AnyObject>.weakObjects()
+    private var hasRefreshed = false
     private(set) var isInProgress = false
 
     var progress: CGFloat {
         Self.run?.progress ?? 0
     }
 
+    func setLoading(_ isLoading: Bool, by owner: AnyObject) {
+        if isLoading {
+            loadingOwners.add(owner)
+        } else {
+            loadingOwners.remove(owner)
+        }
+    }
+
     func refresh(rootFolder: TrackFolder?) {
         let helper = GpxDbHelper.shared
         guard helper.isInitialized() else { return }
         var pendingFiles = Self.run?.pendingFiles.filter { isPending($0.value, helper: helper) } ?? [:]
-        if pendingFiles.isEmpty {
+        if pendingFiles.isEmpty && (!hasRefreshed || !isScanning(helper: helper)) {
             Self.run = nil
         }
+        hasRefreshed = true
         if let rootFolder {
             collectPendingFiles(in: rootFolder, helper: helper, into: &pendingFiles)
         }
@@ -53,6 +64,10 @@ final class TracksIndexingTracker {
             }
         }
         isInProgress = Self.run != nil
+    }
+
+    private func isScanning(helper: GpxDbHelper) -> Bool {
+        !loadingOwners.allObjects.isEmpty || helper.isFilesystemReconciliationRunning()
     }
 
     private func collectPendingFiles(in folder: TrackFolder, helper: GpxDbHelper, into pendingFiles: inout [String: KFile]) {

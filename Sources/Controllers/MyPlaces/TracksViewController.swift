@@ -116,7 +116,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     private var tableData = OATableDataModel()
     private var asyncLoader: TrackFolderLoaderTask?
     private var hasReceivedFirstBatch = false
-    private var isLoadingInProgress = false
+    private var isLoadingInProgress = false {
+        didSet {
+            indexingTracker.setLoading(isLoadingInProgress, by: self)
+        }
+    }
     private weak var indexingRing: IndexingProgressRingView?
     private var indexingProgressTimer: Timer?
     private var loaderRefreshTimer: Timer?
@@ -3135,8 +3139,9 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
-        hasReceivedFirstBatch = true
         isLoadingInProgress = false
+        guard folder === rootFolder else { return }
+        hasReceivedFirstBatch = true
         onLoadFinished(folder: folder, endRefresh: true, openSubfolder: true)
         propagateLoaderRefresh(force: true)
     }

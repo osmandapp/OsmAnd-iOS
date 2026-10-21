@@ -2805,7 +2805,18 @@ typedef enum
     if (self.targetMultiMenuView.superview)
     {
         [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
-            [_hudViewController updateDependentButtonsVisibility];
+            if (_prevScrollableHudViewController && !hideActiveTarget)
+            {
+                OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+                _prevScrollableHudViewController = nil;
+                [self showScrollableHudViewController:controller];
+            }
+            else
+            {
+                [_hudViewController updateDependentButtonsVisibility];
+            }
+            if (onComplete)
+                onComplete();
         }];
         return;
     }
@@ -2876,7 +2887,17 @@ typedef enum
 {
     if (self.targetMultiMenuView.superview)
     {
-        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:onComplete];
+        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
+            if (_prevScrollableHudViewController)
+            {
+                OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+                _prevScrollableHudViewController = nil;
+                [self showScrollableHudViewController:controller];
+            }
+            if (onComplete)
+                onComplete();
+            [_hudViewController updateDependentButtonsVisibility];
+        }];
         return;
     }
 

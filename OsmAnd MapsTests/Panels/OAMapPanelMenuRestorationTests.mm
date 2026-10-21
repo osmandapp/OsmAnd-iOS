@@ -8,6 +8,7 @@
 #import "OAMeasurementToolLayer.h"
 #import "OAAppDelegate.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OATargetMultiView.h"
 
 @interface OABaseScrollableHudViewController (PlanRouteTestFactory)
 + (void)showNewRoute;
@@ -15,6 +16,9 @@
 
 @interface OAMapPanelViewController (MenuRestorationTests)
 @property (nonatomic, strong) OATargetPointView *targetMenuView;
+@property (nonatomic, strong) OATargetMultiView *targetMultiMenuView;
+- (void)hideMultiMenuIfNeeded;
+- (void)hideTargetPointMenu:(CGFloat)duration onComplete:(void (^)(void))completion;
 - (void)hideTargetPointMenu:(CGFloat)duration onComplete:(void (^)(void))completion hideActiveTarget:(BOOL)hideActiveTarget mapGestureAction:(BOOL)mapGestureAction;
 @end
 
@@ -108,6 +112,73 @@
 
     [panel hideTargetPointMenu:0.2 onComplete:nil hideActiveTarget:YES mapGestureAction:NO];
     [menu finishDismissal];
+
+    XCTAssertNil(panel.scrollableHudViewController);
+    XCTAssertNil(planner.view.superview);
+    XCTAssertEqual(panel.prevScrollableHudViewController, planner);
+}
+
+- (void)checkMultiMenuRestorationWithBackButton:(BOOL)backButton
+{
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    panel.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    OABaseScrollableHudViewController *planner = [[OABaseScrollableHudViewController alloc] initWithNibName:nil bundle:nil];
+    planner.view = [[UIView alloc] initWithFrame:panel.view.bounds];
+    [panel setValue:planner forKey:@"prevScrollableHudViewController"];
+    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:panel.view.bounds];
+    panel.targetMultiMenuView = menu;
+    [panel.view addSubview:menu];
+
+    __block BOOL completed = NO;
+    if (backButton)
+    {
+        [panel targetHideMenu:0.2 backButtonClicked:YES onComplete:^{ completed = YES; }];
+    }
+    else
+    {
+        [panel hideTargetPointMenu:0.2 onComplete:^{ completed = YES; }];
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        return completed;
+    }];
+    XCTNSPredicateExpectation *dismissed = [[XCTNSPredicateExpectation alloc] initWithPredicate:predicate object:nil];
+    [self waitForExpectations:@[dismissed] timeout:3];
+
+    XCTAssertTrue(completed);
+    XCTAssertEqual(panel.scrollableHudViewController, planner);
+    XCTAssertEqual(planner.parentViewController, panel);
+    XCTAssertEqual(planner.view.superview, panel.view);
+    XCTAssertNil(panel.prevScrollableHudViewController);
+    XCTAssertNil(menu.superview);
+}
+
+- (void)testMultiMenuDismissRestoresEditor
+{
+    [self checkMultiMenuRestorationWithBackButton:NO];
+}
+
+- (void)testMultiMenuBackButtonRestoresEditor
+{
+    [self checkMultiMenuRestorationWithBackButton:YES];
+}
+
+- (void)testReplacingMultiMenuKeepsEditorSuspended
+{
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    panel.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    OABaseScrollableHudViewController *planner = [[OABaseScrollableHudViewController alloc] initWithNibName:nil bundle:nil];
+    planner.view = [[UIView alloc] initWithFrame:panel.view.bounds];
+    [panel setValue:planner forKey:@"prevScrollableHudViewController"];
+    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:panel.view.bounds];
+    panel.targetMultiMenuView = menu;
+    [panel.view addSubview:menu];
+
+    [panel hideMultiMenuIfNeeded];
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        return menu.superview == nil;
+    }];
+    XCTNSPredicateExpectation *dismissed = [[XCTNSPredicateExpectation alloc] initWithPredicate:predicate object:nil];
+    [self waitForExpectations:@[dismissed] timeout:3];
 
     XCTAssertNil(panel.scrollableHudViewController);
     XCTAssertNil(planner.view.superview);

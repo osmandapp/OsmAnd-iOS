@@ -67,6 +67,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var navControllerHistory: [UIViewController] = []
     private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
+    private var isClosing = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
@@ -335,6 +336,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
+        isClosing = true
+        view.isUserInteractionEnabled = false
         let dismiss: () -> Void = { [weak self] in
             guard let self else { return }
             setMapHudStatusBarHidden(false)
@@ -1026,6 +1029,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleClose() {
+        guard !isClosing, presentedViewController == nil else { return }
         guard dataProvider.hasChanges else {
             hide()
             return

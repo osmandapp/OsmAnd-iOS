@@ -83,6 +83,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     EOAMetricsConstant _cacheMetricSystem;
     EOARulerWidgetMode _cachedRulerMode;
     BOOL _cachedMapMode;
+    BOOL _isPlanRoutePreview;
+    BOOL _rulerDrawingSuppressed;
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
@@ -226,6 +228,13 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) updateCenterImageStyle
 {
+    if (_isPlanRoutePreview)
+    {
+        _imageView.image = [UIImage imageNamed:@"map_ruler_center"];
+        _imageView.tintColor = [UIColor colorNamed:@"iconColorBlack"].appMapThemeColor;
+        return;
+    }
+
     BOOL showLightCenterIcon;
     if (_cachedRulerMode == RULER_MODE_NO_CIRCLES)
         showLightCenterIcon = _settings.isAppMapNightMode;
@@ -238,7 +247,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-    if (![self isRulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
+    if (_rulerDrawingSuppressed || ![self isRulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
         return;
 
     UIGraphicsPushContext(ctx);
@@ -777,21 +786,33 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL) updateInfo
 {
-    BOOL visible = [self isRulerWidgetOn];
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    BOOL isPlanRoutePreview = mapPanel.suspendedPlanRouteController != nil && [mapPanel isContextMenuVisible];
+    if (_isPlanRoutePreview != isPlanRoutePreview)
+    {
+        _isPlanRoutePreview = isPlanRoutePreview;
+        [self updateCenterImageStyle];
+    }
+    BOOL visible = [self isRulerWidgetOn] || isPlanRoutePreview;
     _imageView.hidden = mapPanel.activeTargetType == OATargetRoutePlanning;
     if (visible)
     {
         if (_firstUpdate || _cachedMapMode != _settings.isAppMapNightMode)
         {
-            _imageView.image = _settings.isAppMapNightMode ? _centerIconNight : _centerIconDay;
+            [self updateCenterImageStyle];
             _cachedMapMode = _settings.isAppMapNightMode;
         }
         
         OAMapRendererView *mapRendererView = _mapViewController.mapView;
-        visible = [_mapViewController calculateMapRuler] != 0
+        BOOL rulerVisible = [_mapViewController calculateMapRuler] != 0
             && !_mapViewController.zoomingByGesture
             && !_mapViewController.rotatingByGesture;
+        if (_rulerDrawingSuppressed != !rulerVisible)
+        {
+            _rulerDrawingSuppressed = !rulerVisible;
+            [self setNeedsDisplay];
+        }
+        visible = isPlanRoutePreview || rulerVisible;
 
         CGSize viewSize = self.bounds.size;
         float viewportYScale = mapRendererView.viewportYScale;

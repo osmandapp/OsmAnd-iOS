@@ -29,7 +29,6 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
-#import "OADiscountHelper.h"
 #import "OALinks.h"
 #import "OADownloadsManager.h"
 #import "OABackupHelper.h"
@@ -212,6 +211,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
             [self requestUpdatesOnNetworkReachable];
             LogStartup(@"initialize: requested updates on network reachable");
+
+            [InstallAttribution checkAndReport];
 
             _appInitDone = YES;
             _appInitializing = NO;

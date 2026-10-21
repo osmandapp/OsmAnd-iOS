@@ -107,8 +107,7 @@ QByteArray OAWebClient::downloadData(
             if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
                 responseCode = (unsigned int) ((NSHTTPURLResponse *) response).statusCode;
         
-            // an HTTP error is a failure, as in core's WebClient
-            if (!response || error || responseCode >= 400)
+            if (!response || error)
             {
                 dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
@@ -192,7 +191,7 @@ QString OAWebClient::downloadString(
                 }
             }
         
-            if (!response || error || responseCode >= 400)
+            if (!response || error)
             {
                 dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
@@ -264,7 +263,7 @@ long long OAWebClient::downloadFile(
             if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
                 responseCode = (unsigned int) ((NSHTTPURLResponse *) response).statusCode;
 
-            if (!response || error || responseCode >= 400)
+            if (!response || error)
             {
                 dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 

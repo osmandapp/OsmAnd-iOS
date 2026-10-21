@@ -272,6 +272,7 @@
                     ? waypoint.point.name
                     : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"plugin_distance_point"),
                [sectionData.subjects indexOfObject:tableData]];
+            name = name ?: @"";
             [tableData setData:@{
                     kTableKey: [NSString stringWithFormat:@"waypoint_%@", name],
                     kCellTitle: name,

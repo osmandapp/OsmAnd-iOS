@@ -121,7 +121,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
     _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].min : [_plugin getTerrainMinZoom];
     _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings getZoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].max : [_plugin getTerrainMaxZoom];
-    _baseAlpha = [_terrainMode getTransparency] * 0.01;
+    _baseAlpha = _terrainMode.alpha;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
@@ -496,7 +496,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)hide
 {
     if (_terrainType == EOATerrainSettingsTypeVisibility && _baseAlpha != _currentAlpha)
-        [_terrainMode setTransparency:_baseAlpha / 0.01];
+        _terrainMode.alpha = _baseAlpha;
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
         [_terrainMode setZoomValuesWithMinZoom:(int32_t) _baseMinZoom maxZoom:(int32_t) _baseMaxZoom];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _baseVerticalExaggerationScale != _currentVerticalExaggerationScale)
@@ -537,11 +537,11 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetVisibilityValues
 {
-    CGFloat defaultAlpha = ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
+    CGFloat defaultAlpha = _terrainMode.defaultAlpha;
     if (_currentAlpha != defaultAlpha)
     {
         _currentAlpha = defaultAlpha;
-        [_terrainMode setTransparency:defaultAlpha / 0.01];
+        _terrainMode.alpha = defaultAlpha;
         _isValueChange = _baseAlpha != _currentAlpha;
         [self updateApplyButton];
         return YES;
@@ -688,7 +688,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentVisibility
 {
-    [_terrainMode setTransparency:_currentAlpha / 0.01];
+    _terrainMode.alpha = _currentAlpha;
 }
 
 - (void)applyCurrentZoomLevels
@@ -787,7 +787,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)onApplyButtonPressed
 {
-    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01)
+    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != _terrainMode.alpha)
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
@@ -868,7 +868,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
 
     _currentAlpha = slider.value;
-    [_terrainMode setTransparency:_currentAlpha / 0.01];
+    _terrainMode.alpha = _currentAlpha;
 
     _isValueChange = _baseAlpha != _currentAlpha;
     [self updateApplyButton];
@@ -973,9 +973,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         else
         {
             cell.updateValueCallback = nil;
-            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
-            cell.sliderView.value = transparency * 0.01;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
+            TerrainMode *terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode];
+            cell.sliderView.value = terrainMode.alpha;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%d%%", terrainMode.transparencyPercent];
         }
 
         [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];

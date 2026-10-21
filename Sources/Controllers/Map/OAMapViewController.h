@@ -103,7 +103,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property(readonly) NSDate *lastRotatingByGestureTime;
 
 @property (atomic, readonly) BOOL mapViewLoaded;
-@property (atomic, readonly) BOOL renderedNightMode;
 @property (nonatomic) BOOL attachedToCarPlayWindow;
 @property (nonatomic, readonly) BOOL recTrackShowing;
 
@@ -115,6 +114,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (float) getMapZoom;
 - (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
+- (void)reloadMapSourceIfNightModeChanged;
 - (void)setSingleTapContextMenuGestureEnabled:(BOOL)enabled;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;

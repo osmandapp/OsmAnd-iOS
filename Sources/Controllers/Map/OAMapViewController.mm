@@ -2297,6 +2297,14 @@ static char kMapSourceUpdateQueueKey;
     });
 }
 
+- (void)reloadMapSourceIfNightModeChanged
+{
+    dispatch_async(_mapSourceUpdateQueue, ^{
+        if (self.renderedNightMode != [OAAppSettings sharedManager].isCurrentMapNightMode)
+            [self reloadMapSourceForDayNightModeChange];
+    });
+}
+
 - (void)onDayNightModeChanged
 {
     if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive)

@@ -93,10 +93,8 @@ final class CarPlayService: NSObject {
 
     @objc private func onSceneDidActivate(_ notification: Notification) {
         guard isMapAppearanceConfigured,
-              notification.object is CPTemplateApplicationScene || notification.object is CPTemplateApplicationDashboardScene,
-              let mapViewController = OARootViewController.instance()?.mapPanel.mapViewController,
-              mapViewController.renderedNightMode != OAAppSettings.sharedManager().isCurrentMapNightMode else { return }
-        reloadMapForRenderingContextChange()
+              notification.object is CPTemplateApplicationScene || notification.object is CPTemplateApplicationDashboardScene else { return }
+        OARootViewController.instance()?.mapPanel.mapViewController.reloadMapSourceIfNightModeChanged()
     }
     
     private func applyVehicleAppearance(with contentStyle: CPContentStyle) {

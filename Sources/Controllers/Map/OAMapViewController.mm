@@ -2596,7 +2596,6 @@ static char kMapSourceUpdateQueueKey;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL nightMode = settings.isCurrentMapNightMode;
-    self.renderedNightMode = nightMode;
     const auto screenTileSize = 256 * displayDensityFactor;
     double mapDensity = [settings.mapDensity get];
     double mapDensityAligned;
@@ -2919,6 +2918,7 @@ static char kMapSourceUpdateQueueKey;
         [_mapLayers updateLayers];
         [_mapView setFlatEarth:![settings.sphericalMap get]];
     }];
+    self.renderedNightMode = nightMode;
 
     [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:[[OAMapPresentationEnvironment alloc] initWithEnvironment:mapPresentationEnvironment]];
     if (shouldApplyWeatherBandSettings)

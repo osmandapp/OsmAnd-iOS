@@ -3295,6 +3295,7 @@ typedef enum
     BOOL showCurrentTrack = item.isShowCurrentTrack;
 
     [_mapViewController hidePolygonHighlight];
+    [_mapViewController.mapLayers.gpxMapLayer setSelectedTrackPath:showCurrentTrack ? nil : item.path];
     
     if (_dashboard)
         [self closeDashboard];

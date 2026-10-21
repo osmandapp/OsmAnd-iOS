@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -30,7 +31,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"osm_edits_title")]
               nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
-              iconName:@"ic_custom_osm_edits"]
+              iconName:ACImageNameIcCustomOsmEdits]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }

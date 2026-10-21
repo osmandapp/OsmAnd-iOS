@@ -33,6 +33,7 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 static float kRotateAnimationTime = 1.0f;
 static int MODEL_3D_MAX_SIZE_DP = 6;
@@ -997,7 +998,7 @@ typedef enum {
         targetPoint.type = OATargetMyLocation;
         targetPoint.location = myLocation.coordinate;
         targetPoint.title = OALocalizedString(@"my_location");
-        targetPoint.icon = [UIImage imageNamed:@"ic_action_location_color.png"];
+        targetPoint.icon = [UIImage imageNamed:ACImageNameIcActionLocationColor];
 
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;

@@ -24,6 +24,7 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
@@ -45,8 +46,8 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                  name:OALocalizedString(@"quick_action_track_waypoint")]
                 nameAction:OALocalizedString(@"shared_string_add")]
-               iconName:@"ic_custom_favorites"]
-              secondaryIconName:@"ic_custom_compound_action_add"]
+               iconName:ACImageNameIcCustomFavorites]
+              secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             forceUseExtendedName];
 }
@@ -176,7 +177,7 @@ static QuickActionType *TYPE;
                           @"key" : kName,
                           @"title" : self.getParams[kName] ? self.getParams[kName] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),
-                          @"img" : @"ic_custom_text_field_name"
+                          @"img" : ACImageNameIcCustomTextFieldName
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_fav_name_descr")
@@ -192,7 +193,7 @@ static QuickActionType *TYPE;
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
                           @"color" : @(defaultColor),
-                          @"img" : @"ic_custom_folder"
+                          @"img" : ACImageNameIcCustomFolder
                           },
                       @{
                           @"type" : [OAValueTableViewCell getCellIdentifier],

@@ -103,7 +103,7 @@ final class OrganizeByStepSizeViewController: OABaseNavbarViewController {
     override func systemRightBarButtonItems() -> [UIBarButtonItem]? {
         let isFeatureAccessible = !type.isPro || OAIAPHelper.isOsmAndProAvailable()
         if isFeatureAccessible {
-            let image = UIImage.templateImageNamed("ic_checkmark_default")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+            let image = UIImage.icCheckmarkDefault.withTintColor(.white, renderingMode: .alwaysOriginal)
             return [UIBarButtonItem(image: image, style: .done, target: self, action: #selector(onConfirmPressed))]
         } else {
             return [UIBarButtonItem(title: localizedString("shared_string_unlock"), style: .done, target: self, action: #selector(onUnlockPressed))]

@@ -50,7 +50,7 @@
 
 - (UIImage *)getTabIcon
 {
-    return [OABaseTrackMenuTabItem getUnselectedIcon:@"ic_custom_overview"];
+    return [OABaseTrackMenuTabItem getUnselectedIcon:ACImageNameIcCustomOverview];
 }
 
 - (void)generateData

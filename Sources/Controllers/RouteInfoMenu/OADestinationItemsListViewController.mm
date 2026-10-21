@@ -25,6 +25,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOASortType)
 {
@@ -272,7 +273,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                 cell.titleIcon.image = [UIImage imageNamed:imageName];
                 
                 [cell.distanceView setText:item.distanceStr];
-                cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
                 cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
                 cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             }
@@ -296,7 +297,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
             cell.titleIcon.image = item.getCompositeIcon;
             
             [cell.distanceView setText:item.distance];
-            cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
@@ -319,7 +320,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         cell.titleIcon.image = item.getCompositeIcon;
         
         [cell.distanceView setText:item.distance];
-        cell.directionImageView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+        cell.directionImageView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
         cell.directionImageView.tintColor = UIColorFromRGB(color_elevation_chart);
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
     }

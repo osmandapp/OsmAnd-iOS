@@ -22,6 +22,7 @@
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAActionAddMapSourceViewController () <UITextFieldDelegate>
 
@@ -199,7 +200,7 @@
         {
             OAOnlineTilesResourceItem *item = [self getItem:indexPath];
             UIImage *img = nil;
-            img = [UIImage imageNamed:@"ic_custom_map_style"];
+            img = [UIImage imageNamed:ACImageNameIcCustomMapStyle];
             
             cell.titleLabel.text = item.mapSource.name;
             cell.leftIconView.image = img;

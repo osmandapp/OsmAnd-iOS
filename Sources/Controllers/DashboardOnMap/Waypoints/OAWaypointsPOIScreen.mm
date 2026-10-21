@@ -77,7 +77,7 @@
     else
     {
         [okButton setTitle:nil forState:UIControlStateNormal];
-        [okButton setImage:[UIImage imageNamed:@"selection_checked"] forState:UIControlStateNormal];
+        [okButton setImage:[UIImage imageNamed:ACImageNameSelectionChecked] forState:UIControlStateNormal];
         okButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         okButton.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 12);
     }
@@ -93,7 +93,7 @@
                            @"value" : [_poiFilters getCustomPOIFilter],
                            @"selectable" : @NO,
                            @"selected" : @NO,
-                           @"img" : @"search_icon" } mutableCopy]];
+                           @"img" : ACImageNameSearchIcon } mutableCopy]];
         i++;
     }
 

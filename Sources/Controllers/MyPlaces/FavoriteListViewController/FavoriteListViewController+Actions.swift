@@ -105,10 +105,10 @@ extension FavoriteListViewController {
             applySnapshot(animatingDifferences: false)
         }
 
+        configureToolbar()
         navigationController?.setToolbarHidden(!isEditing, animated: true)
         myPlacesDelegate?.updateEditMode(isEditing)
         configureNavigation()
-        configureToolbar()
     }
 
     func showRenameAlert(for folder: FavoriteFolderRow) {
@@ -425,7 +425,6 @@ extension FavoriteListViewController {
     private func openNewFavoriteGroupEditor() {
         guard let navigationController, let viewController = OAFavoriteGroupEditorViewController(new: ()) else { return }
         viewController.parentGroupName = parentGroupName
-        viewController.validatesGroupUniqueness = true
         viewController.delegate = self
         let modalNavigationController = UINavigationController(rootViewController: viewController)
         navigationController.present(modalNavigationController, animated: true)

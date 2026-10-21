@@ -147,7 +147,7 @@
                                         </constraints>
                                         <color key="tintColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="ic_custom_clear_field.png">
+                                        <state key="normal" image="ic_custom_clear_field">
                                             <color key="titleColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
@@ -192,7 +192,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_clear_field.png" width="30" height="30"/>
+        <image name="ic_custom_clear_field" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

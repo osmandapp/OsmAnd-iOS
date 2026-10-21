@@ -2502,7 +2502,7 @@
 "daynight_mode_sunrise_sunset_summary" = "Aŭtomate baskuligas inter taga kaj nokta map-reĝimoj surbaze de tempoj de sunleviĝo kaj sunsubiro.";
 "of" = "%d el %d";
 "downloaded_bytes" = "%@ el %@";
-"daynight_mode_app_theme_summary" = "La map-reĝimo agordiĝas laŭ etoso de la aplikaĵo – taga reĝimo por hela etoso kaj nokta reĝimo por malhela etoso.";
+"daynight_mode_app_theme_summary" = "La map-reĝimo agordiĝas laŭ haŭto de la aplikaĵo – taga reĝimo por hela haŭto kaj nokta reĝimo por malhela haŭto.";
 "quick_action_terrain_color_scheme" = "Kolor-skemo de tereno";
 "quick_action_need_to_add_item_to_list" = "Aldonu almenaŭ unu elementon al la listo en agordoj de “rapida ago”";
 "rendering_attr_showClimbingRoutes_name" = "Grimpadaj kursoj";
@@ -2770,3 +2770,8 @@
 "traffic_warning_red_light_camera" = "Red-lum-kontrolilo";
 "preparing_file" = "Prepari dosieron";
 "astro_search_info_nebulas" = "Nebulastro (nebulozo) estas grandspaca nubego el polvo kaj gaso en la kosmo, kutime tie, kie novaj steloj naskiĝas.";
+"opening_hours_public_holiday" = "ŝtatfestoj";
+"opening_hours_school_holiday" = "lernej-ferioj";
+"opening_hours_easter" = "Pasko";
+"ais_connection_failed" = "Malsukcesis konekti";
+"ais_mmsi" = "MMSI";

@@ -62,6 +62,10 @@ NSString *normalizeString(const std::string &value) {
     OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
 }
 
++ (void)setAdditionalString:(NSString *)value forKey:(NSString *)key {
+    OpeningHoursParser::setAdditionalString(key.UTF8String, value.UTF8String);
+}
+
 + (NSInteger)weekdayForDate:(NSDate *)date {
     return [date toTm].tm_wday;
 }

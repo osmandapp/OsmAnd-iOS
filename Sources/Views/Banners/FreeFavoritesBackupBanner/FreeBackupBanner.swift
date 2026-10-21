@@ -42,14 +42,14 @@ final class FreeBackupBanner: UIView {
         switch bannerType {
         case .favorite:
             titleLabel.text = localizedString("free_favorites_backup")
-            imageView.image = UIImage(named: "ic_custom_folder_cloud_colored")
+            imageView.image = .icCustomFolderCloudColored
         case .settings:
             titleLabel.text = localizedString("banner_payment_free_backup_settings_title")
-            imageView.image = UIImage(named: "ic_custom_settings_cloud_colored")
+            imageView.image = .icCustomSettingsCloudColored
         case .mapSettingsTopography:
             titleLabel.text = localizedString("srtm_plugin_name")
             descriptionLabel.text = localizedString("purchases_feature_desc_terrain")
-            imageView.image = UIImage.templateImageNamed("ic_custom_terrain")
+            imageView.image = .icCustomTerrain
             imageView.tintColor = UIColor.iconColorActive
             closeButton.isHidden = true
             osmAndCloudButton.setTitle(localizedString("shared_string_get"), for: .normal)

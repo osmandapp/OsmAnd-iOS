@@ -89,7 +89,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="62" height="50"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="tintColor" name="iconColorActive"/>
-                            <state key="normal" image="ic_custom_arrow_back.png">
+                            <state key="normal" image="ic_custom_arrow_back">
                                 <color key="titleColor" name="iconColorActive"/>
                             </state>
                             <connections>
@@ -156,7 +156,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_arrow_back.png" width="30" height="30"/>
+        <image name="ic_custom_arrow_back" width="30" height="30"/>
         <namedColor name="buttonBgColorTertiary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

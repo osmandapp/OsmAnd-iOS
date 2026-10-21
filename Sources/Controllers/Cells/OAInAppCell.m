@@ -39,7 +39,7 @@
             self.btnPrice.layer.borderWidth = 0.0;
             self.btnPrice.backgroundColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             self.btnPrice.tintColor = [UIColor whiteColor];
-            [self.btnPrice setImage:[UIImage imageNamed:@"ic_checkmark_small_enable"] forState:UIControlStateNormal];
+            [self.btnPrice setImage:[UIImage imageNamed:ACImageNameIcCheckmarkSmallEnable] forState:UIControlStateNormal];
         }
         else
         {
@@ -47,7 +47,7 @@
             self.btnPrice.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorSelected].CGColor;
             self.btnPrice.backgroundColor = [UIColor clearColor];
             self.btnPrice.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
-            [self.btnPrice setImage:[UIImage imageNamed:@"ic_checkmark_small_enable"] forState:UIControlStateNormal];
+            [self.btnPrice setImage:[UIImage imageNamed:ACImageNameIcCheckmarkSmallEnable] forState:UIControlStateNormal];
         }
     }
     else

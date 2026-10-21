@@ -97,13 +97,6 @@ static NSString * const kOriginalKey = @"original";
         [self.shapesDelegate iconChanged:tag];
 }
 
-- (CGSize) systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
-    self.contentView.frame = self.bounds;
-    [self.contentView layoutIfNeeded];
-    self.collectionViewHeight.constant = self.collectionView.contentSize.height;
-    return [self.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
-}
-
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
 {
     [super setSelected:selected animated:animated];

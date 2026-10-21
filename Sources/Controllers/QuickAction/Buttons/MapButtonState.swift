@@ -95,7 +95,7 @@ open class MapButtonState: NSObject {
             }
             return icon
         } else {
-            return UIImage.templateImageNamed("ic_custom_quick_action")
+            return .icCustomQuickAction
         }
     }
     

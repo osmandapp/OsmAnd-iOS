@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)buildGpxList;
 - (void)markTrackForReload:(NSString *)filePath;
 - (nullable OASGpxFile *)getSelectedGpx:(OASWptPt *)gpxWpt;
+- (BOOL)findGpxFile:(OASGpxFile * _Nullable *)gpxFile path:(NSString * _Nullable *)path containingWaypoint:(OASWptPt *)gpxWpt;
 - (BOOL)isShowingAnyGpxFiles;
 - (void)clearAllGpxFilesToShow:(BOOL) backupSelection;
 - (void)restoreSelectedGpxFiles;

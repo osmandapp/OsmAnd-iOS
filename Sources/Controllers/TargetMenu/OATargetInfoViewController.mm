@@ -336,7 +336,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         NSString *title = [self.delegate getTargetTitle];
         if (title.length > kTitleLimit)
         {
-            OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:@"title" icon:[UIImage templateImageNamed:@"ic_description"] textPrefix:nil text:title textColor:nil isText:YES needLinks:NO order:kOrderTitleRow typeName:@"title" isPhoneNumber:NO isUrl:NO];
+            OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:@"title" icon:[UIImage templateImageNamed:ACImageNameIcDescription] textPrefix:nil text:title textColor:nil isText:YES needLinks:NO order:kOrderTitleRow typeName:@"title" isPhoneNumber:NO isUrl:NO];
             [rows addObject:row];
         }
     }
@@ -376,7 +376,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         NSMutableArray *detailsArray = [self getWithinCollapsableContent:polygons];
         
         OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:WITHIN_POLYGONS_ROW_KEY
-                                        icon:[UIImage templateImageNamed:@"ic_custom_pin_location"]
+                                        icon:[UIImage imageNamed:ACImageNameIcCustomPinLocation]
                                   textPrefix:title
                                         text:rowSummary
                                    textColor:nil
@@ -453,7 +453,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
         dateFormatter.timeStyle = NSDateFormatterShortStyle;
         NSString *formattedDate = [dateFormatter stringFromDate:timestamp];
-        OAAmenityInfoRow *dateRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *dateRowCell = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:ACImageNameIcCustomDate] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:kOrderDateRow typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:dateRowCell];
     }
 }
@@ -462,7 +462,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     if (comment.length > 0)
     {
-        OAAmenityInfoRow *commentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
+        OAAmenityInfoRow *commentRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcDescription] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:kOrderCoommentRow typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
     }
 }
@@ -835,9 +835,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     if (_calculatedWidth != width)
     {
         [self calculateRowsHeight:width];
-        [self calculateContentHeight];
         _calculatedWidth = width;
     }
+    // Cell configuration can update row heights without changing the width.
+    [self calculateContentHeight];
     return _contentHeight;
 }
 
@@ -845,9 +846,18 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     CGFloat h = 0;
     for (OAAmenityInfoRow *row in _rows)
-        h += row.height;
+        h += [self heightForInfoRow:row];
 
     _contentHeight = h;
+}
+
+- (CGFloat)heightForInfoRow:(OAAmenityInfoRow *)info
+{
+    if ([info.typeName isEqualToString:kGroupRowType])
+        return info.height + 16;
+    if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
+        return info.height + OAUtilities.getBottomMargin;
+    return info.height;
 }
 
 - (void)cancelPressed
@@ -891,9 +901,16 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     __weak __typeof(self) weakSelf = self;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakSelf.tableView reloadData];
-    } completion:nil];
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        // Reload at the final width, then update the outer scroll extent using the laid-out rows.
+        [strongSelf contentHeight:strongSelf.tableView.bounds.size.width];
+        [strongSelf.tableView reloadData];
+        [strongSelf.tableView layoutIfNeeded];
+        [strongSelf.delegate contentHeightChanged];
+    }];
 }
 
 - (void)updateNavBarSubviewsLayout
@@ -1385,7 +1402,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcCustomPhoto] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoRow typeName:@"" isPhoneNumber:NO isUrl:NO];
     
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
@@ -1410,7 +1427,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     if ([plugin isEnabled])
     {
         OAAmenityInfoRow *mapillaryCardsRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil
-                                                                     icon:[UIImage imageNamed:@"ic_custom_photo_street"]
+                                                                     icon:[UIImage imageNamed:ACImageNameIcCustomPhotoStreet]
                                                                textPrefix:nil
                                                                      text:OALocalizedString(@"street_level_imagery")
                                                                 textColor:nil
@@ -1448,7 +1465,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             NSString *osmUrl = [ObfConstants getOsmUrlForId:targetObj];
             if (!NSStringIsEmpty(osmUrl))
             {
-                [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_osm_edits"] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
+                [rows addObject:[[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcCustomOsmEdits] textPrefix:nil text:osmUrl textColor:[UIColor colorNamed:ACColorNameTextColorActive] isText:YES needLinks:YES order:kOrderOsmRow typeName:nil isPhoneNumber:NO isUrl:YES]];
             }
         }
     }
@@ -1840,14 +1857,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
-    if ([info.typeName isEqualToString:kGroupRowType])
-        return info.height + 16;
-    if ([info.typeName isEqualToString:kDescriptionRowType])
-        return info.height;
-    else if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
-        return info.height + OAUtilities.getBottomMargin;
-    else
-        return info.height;
+    return [self heightForInfoRow:info];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -2032,7 +2042,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         OAAmenityInfoRow *info = _rows[indexPath.row];
         NSString *textToCopy;
         if ([info.collapsableView isKindOfClass:OACollapsableCoordinatesView.class])
-            textToCopy = [OAPointDescription getLocationName:self.location.latitude lon:self.location.longitude sh:YES];
+            textToCopy = [CoordinateFormatBridge formatPrimaryWithLat:self.location.latitude lon:self.location.longitude];
         else
             textToCopy = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
 

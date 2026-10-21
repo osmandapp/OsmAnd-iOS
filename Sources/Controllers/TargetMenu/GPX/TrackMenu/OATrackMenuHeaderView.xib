@@ -33,7 +33,7 @@
                             <color key="textColor" name="textColorPrimary"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_trip.png" translatesAutoresizingMaskIntoConstraints="NO" id="fzz-Q2-eTx">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_trip" translatesAutoresizingMaskIntoConstraints="NO" id="fzz-Q2-eTx">
                             <rect key="frame" x="344" y="0.0" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" name="iconColorSecondary"/>
@@ -66,7 +66,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iio-8u-at5" userLabel="Direction Container">
                             <rect key="frame" x="0.0" y="0.0" width="70" height="24"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction.png" translatesAutoresizingMaskIntoConstraints="NO" id="zXJ-Kc-6n6">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_direction" translatesAutoresizingMaskIntoConstraints="NO" id="zXJ-Kc-6n6">
                                     <rect key="frame" x="0.0" y="2" width="20" height="20"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                     <constraints>
@@ -109,7 +109,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hg9-IY-pWs" userLabel="GPX Activity Container">
                             <rect key="frame" x="90" y="0.0" width="68.5" height="24"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_map_point.png" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-lc-ITM" userLabel="Gpx Activity Icon View">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_map_point" translatesAutoresizingMaskIntoConstraints="NO" id="jWM-lc-ITM" userLabel="Gpx Activity Icon View">
                                     <rect key="frame" x="0.0" y="2" width="20" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="AzW-9a-WMq"/>
@@ -151,7 +151,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-uC-2EY" userLabel="Region Container">
                             <rect key="frame" x="178.5" y="0.0" width="123.5" height="24"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_map_point.png" translatesAutoresizingMaskIntoConstraints="NO" id="XVR-ZX-2dk">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_small_map_point" translatesAutoresizingMaskIntoConstraints="NO" id="XVR-ZX-2dk">
                                     <rect key="frame" x="0.0" y="2" width="20" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="20" id="1ch-H7-nok"/>
@@ -238,7 +238,7 @@
                             <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-24" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="35" minY="-18" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Appearance" image="ic_custom_appearance.png">
+                            <state key="normal" title="Appearance" image="ic_custom_appearance">
                                 <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
@@ -278,7 +278,7 @@
                             <color key="tintColor" name="iconColorActive"/>
                             <inset key="titleEdgeInsets" minX="-30" minY="28" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="30" minY="-18" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Navigation" image="ic_custom_navigation.png">
+                            <state key="normal" title="Navigation" image="ic_custom_navigation">
                                 <color key="titleColor" name="textColorActive"/>
                             </state>
                             <userDefinedRuntimeAttributes>
@@ -361,13 +361,13 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_appearance.png" width="30" height="30"/>
+        <image name="ic_custom_appearance" width="30" height="30"/>
         <image name="ic_custom_export" width="30" height="30"/>
         <image name="ic_custom_hide" width="30" height="30"/>
-        <image name="ic_custom_navigation.png" width="30" height="30"/>
-        <image name="ic_custom_trip.png" width="30" height="30"/>
-        <image name="ic_small_direction.png" width="20" height="20"/>
-        <image name="ic_small_map_point.png" width="20" height="20"/>
+        <image name="ic_custom_navigation" width="30" height="30"/>
+        <image name="ic_custom_trip" width="30" height="30"/>
+        <image name="ic_small_direction" width="20" height="20"/>
+        <image name="ic_small_map_point" width="20" height="20"/>
         <namedColor name="contextMenuButtonBg">
             <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

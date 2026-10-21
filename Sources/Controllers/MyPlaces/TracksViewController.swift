@@ -1491,11 +1491,11 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             hideSearch()
         }
 
+        configureToolbar()
         navigationController?.setToolbarHidden(!edit, animated: true)
         myPlacesDelegate?.updateEditMode(edit)
         setupNavbar()
         updateNavigationBarTitle()
-        configureToolbar()
     }
     
     @objc private func onNavbarImportButtonClicked() {

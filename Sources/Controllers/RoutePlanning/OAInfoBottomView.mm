@@ -77,7 +77,7 @@
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"add_one_more_pnt"),
-                    @"img" : @"ic_custom_add_point_after"
+                    @"img" : ACImageNameIcCustomAddPointAfter
                 }
             ];
             break;
@@ -88,7 +88,7 @@
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"add_one_more_pnt"),
-                    @"img" : @"ic_custom_add_point_before"
+                    @"img" : ACImageNameIcCustomAddPointBefore
                 }
             ];
             break;

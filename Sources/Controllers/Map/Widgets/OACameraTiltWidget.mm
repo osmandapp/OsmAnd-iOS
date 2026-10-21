@@ -13,6 +13,7 @@
 #import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACameraTiltWidget
 {
@@ -31,7 +32,7 @@
         _cachedMapTilt = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@"°"];
-        [self setIcon:@"widget_developer_camera_tilt"];
+        [self setIcon:ACImageNameWidgetDeveloperCameraTilt];
         __weak OACameraTiltWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{
             [selfWeak updateInfo];
@@ -48,7 +49,7 @@
         _cachedMapTilt = mapTilt;
     NSString *cachedMapTiltText = [NSString stringWithFormat:@"%d", _cachedMapTilt];
     [self setText:cachedMapTiltText subtext:@"°"];
-    [self setIcon:@"widget_developer_camera_tilt"];
+    [self setIcon:ACImageNameWidgetDeveloperCameraTilt];
     return YES;
 }
 

@@ -79,7 +79,7 @@
         availableTitle = [[OALocalizedString(@"shared_string_available_until") stringByAppendingString:@" "]
                 stringByAppendingString:[dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:expireTime]]];
         availableDescription = OALocalizedString(@"enough_contributions_descr");
-        rightIcon = @"ic_custom_download_map";
+        rightIcon = ACImageNameIcCustomDownloadMap;
     }
     else
     {
@@ -87,7 +87,7 @@
         availableDescription = [NSString stringWithFormat:OALocalizedString(@"not_enough_contributions_descr"),
                 @(CHANGES_FOR_MAPPER_PROMO).stringValue,
                 [[@"(" stringByAppendingString:[self getMonthPeriod]] stringByAppendingString:@")"]];
-        rightIcon = @"ic_custom_download_map_unavailable";
+        rightIcon = ACImageNameIcCustomDownloadMapUnavailable;
     }
 
     [data addObject:@[
@@ -112,7 +112,7 @@
                                                                                  NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
                                                                                  NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive]
                                                                                      }],
-                    @"right_icon": @"ic_custom_reset",
+                    @"right_icon": ACImageNameIcCustomReset,
                     @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive]
             }
     ]];
@@ -121,6 +121,8 @@
     if (_objectChanges)
     {
         NSDateFormatter *formatterFrom = [[NSDateFormatter alloc] init];
+        formatterFrom.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        formatterFrom.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         [formatterFrom setDateFormat:@"yyyy-LL"];
         NSDateFormatter *formatterTo = [[NSDateFormatter alloc] init];
         [formatterTo setDateFormat:@"LLLL yyyy"];
@@ -130,7 +132,7 @@
         [formatterYear setDateFormat:@"yyyy"];
 
         NSDate *date = [NSDate date];
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
+        NSCalendar *calendar = formatterFrom.calendar;
         for (NSInteger i = 0; i < VISIBLE_MONTHS_COUNT; i ++)
         {
             NSString *dateStr = [formatterFrom stringFromDate:date];
@@ -187,7 +189,7 @@
                                                                          NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
                                                                          NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive]
                                                                              }],
-            @"right_icon" : @"ic_action_openstreetmap_logo",
+            @"right_icon" : ACImageNameIcActionOpenstreetmapLogo,
             @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"url" : [NSURL URLWithString:url]
     }];
@@ -306,12 +308,14 @@
 {
     long changesSize = 0;
     NSDateFormatter *formatterFrom = [[NSDateFormatter alloc] init];
+    formatterFrom.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+    formatterFrom.calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     [formatterFrom setDateFormat:@"yyyy-LL"];
 
     NSString *date = [formatterFrom stringFromDate:[NSDate date]];
     changesSize += [_objectChanges.allKeys containsObject:date] ? [_objectChanges[date] longValue] : 0;
 
-    date = [formatterFrom stringFromDate:[NSCalendar.autoupdatingCurrentCalendar dateByAddingUnit:NSCalendarUnitMonth
+    date = [formatterFrom stringFromDate:[formatterFrom.calendar dateByAddingUnit:NSCalendarUnitMonth
                                                                                             value:-1
                                                                                            toDate:[NSDate date]
                                                                                           options:0]];

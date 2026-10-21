@@ -167,7 +167,7 @@
 
         if (!self.directionContainerView.hidden)
         {
-            self.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+            self.directionIconView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
             self.directionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
@@ -176,7 +176,7 @@
 
         if (nearestCity.length > 0)
         {
-            self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
+            self.regionIconView.image = [UIImage templateImageNamed:ACImageNameIcSmallMapPoint];
             self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
             [self.regionTextView setText:nearestCity];
             self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -202,7 +202,7 @@
             [self.appearanceButton addTarget:self
                                       action:@selector(onAppearancePressed:)
                             forControlEvents:UIControlEventTouchUpInside];
-            [self.appearanceButton setImage:[UIImage templateImageNamed:@"ic_custom_appearance.png"] forState:UIControlStateNormal];
+            [self.appearanceButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAppearance] forState:UIControlStateNormal];
 
             if (!currentTrack)
             {
@@ -230,7 +230,7 @@
             [self.showHideButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
             [self.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [self.showHideButton addTarget:self action:@selector(onSaveNetworkRoutePressed) forControlEvents:UIControlEventTouchUpInside];
-            [self.showHideButton setImage:[UIImage templateImageNamed:@"ic_custom_download"] forState:UIControlStateNormal];
+            [self.showHideButton setImage:[UIImage imageNamed:ACImageNameIcCustomDownload] forState:UIControlStateNormal];
             
             [self.appearanceButton setTitle:OALocalizedString(@"routing_settings")
                                    forState:UIControlStateNormal];
@@ -238,7 +238,7 @@
             [self.appearanceButton addTarget:self
                                       action:@selector(onNavigationPressed:)
                             forControlEvents:UIControlEventTouchUpInside];
-            [self.appearanceButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation.png"] forState:UIControlStateNormal];
+            [self.appearanceButton setImage:[UIImage imageNamed:ACImageNameIcCustomNavigation] forState:UIControlStateNormal];
             
         }
     }
@@ -267,7 +267,7 @@
     [self setGpxActivity:activity.label];
     if (!self.gpxActivityContainerView.hidden)
     {
-        self.gpxActivityIconView.image = [UIImage routeActivityIcon:activity.iconName fallback:[UIImage templateImageNamed:@"ic_custom_info_outlined"]];
+        self.gpxActivityIconView.image = [UIImage routeActivityIcon:activity.iconName fallback:[UIImage imageNamed:ACImageNameIcCustomInfoOutlined]];
         self.gpxActivityIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
         self.gpxActivityTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
@@ -297,7 +297,7 @@
                             @"int_value": @[@(GPXDataSetTypeAltitude)]
                     },
                     kCellTitle: OALocalizedString(@"shared_string_distance"),
-                    kCellRightIconName: @"ic_custom_length"
+                    kCellRightIconName: ACImageNameIcCustomLength
             }]];
         }
 
@@ -309,7 +309,7 @@
                             @"int_value": @[@(GPXDataSetTypeSlope)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_ascent"),
-                    kCellRightIconName: @"ic_custom_uphill"
+                    kCellRightIconName: ACImageNameIcCustomUphill
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
@@ -317,7 +317,7 @@
                             @"int_value": @[@(GPXDataSetTypeSlope)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_descent"),
-                    kCellRightIconName: @"ic_custom_downhill"
+                    kCellRightIconName: ACImageNameIcCustomDownhill
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues:@{
@@ -327,7 +327,7 @@
                             @"int_value": @[@(GPXDataSetTypeAltitude)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_range"),
-                    kCellRightIconName: @"ic_small_altitude_range"
+                    kCellRightIconName: ACImageNameIcSmallAltitudeRange
             }]];
         }
 
@@ -339,7 +339,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"map_widget_average_speed"),
-                    kCellRightIconName: @"ic_custom_speed_average"
+                    kCellRightIconName: ACImageNameIcCustomSpeedAverage
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
@@ -347,7 +347,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"gpx_max_speed"),
-                    kCellRightIconName: @"ic_custom_speed_max"
+                    kCellRightIconName: ACImageNameIcCustomSpeedMax
             }]];
         }
 
@@ -360,7 +360,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
-                    kCellRightIconName: @"ic_custom_time_span"
+                    kCellRightIconName: ACImageNameIcCustomTimeSpan
             }]];
         }
 
@@ -373,7 +373,7 @@
                             @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),
-                    kCellRightIconName: @"ic_custom_time_in_motion"
+                    kCellRightIconName: ACImageNameIcCustomTimeInMotion
             }]];
         }
     }

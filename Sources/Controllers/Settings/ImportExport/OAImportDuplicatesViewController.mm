@@ -252,6 +252,15 @@
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
+                else if ([currentItem isKindOfClass:QuickActionButtonState.class])
+                {
+                    QuickActionButtonState *buttonState = (QuickActionButtonState *)currentItem;
+                    item[@"label"] = [buttonState getName];
+                    item[@"icon"] = [buttonState getIcon];
+                    item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorActive];
+                    item[@"description"] = @"";
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
+                }
                 else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
                 {
                     OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
@@ -265,7 +274,7 @@
                     OATileSource *tileSource = currentItem;
                     NSString *caption = tileSource.name;
                     item[@"label"] = caption;
-                    item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
+                    item[@"icon"] = [UIImage templateImageNamed:ACImageNameIcCustomMap];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                     item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorDefault];
@@ -278,32 +287,32 @@
                     if ([file hasSuffix:RENDERER_INDEX_EXT])
                     {
                         item[@"label"] = [fileName stringByDeletingPathExtension];
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_map_style"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomMapStyle];
                     }
                     else if ([file hasSuffix:ROUTING_FILE_EXT])
                     {
                         item[@"label"] = fileName;
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_route"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomRoute];
                     }
                     else if ([file.lowercaseString hasSuffix:GPX_FILE_EXT])
                     {
                         item[@"label"] = fileName;
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_trip"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomTrip];
                     }
                     else if (type == EOAFileSettingsItemFileSubtypeWikiMap)
                     {
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_wikipedia"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomWikipedia];
                     }
                     else if (type == EOAFileSettingsItemFileSubtypeSrtmMap)
                     {
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_contour_lines"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomContourLines];
                     }
                     else
                     {
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
-                        item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
+                        item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomMap];
                     }
                     item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorDefault];
                     item[@"description"] = @"";
@@ -312,7 +321,7 @@
                 else if ([currentItem isKindOfClass:OAAvoidRoadInfo.class])
                 {
                     item[@"label"] = ((OAAvoidRoadInfo *)currentItem).name;
-                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_alert"];
+                    item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomAlert];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
@@ -320,7 +329,7 @@
                 {
                     OAFavoriteGroup *group = (OAFavoriteGroup *)currentItem;
                     item[@"label"] = [OAFavoriteGroup getDisplayName:group.name];
-                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_favorites"];
+                    item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomFavorites];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
@@ -328,7 +337,7 @@
                 {
                     OADestination *marker = (OADestination *)currentItem;
                     item[@"label"] = marker.desc;
-                    item[@"icon"] = [UIImage imageNamed:@"ic_custom_marker"];
+                    item[@"icon"] = [UIImage imageNamed:ACImageNameIcCustomMarker];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
@@ -474,7 +483,7 @@
 {
     NSMutableArray<NSMutableArray *> *duplicates = [NSMutableArray array];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *actions = [NSMutableArray array];
+    NSMutableArray *actions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSources = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
@@ -491,8 +500,8 @@
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
             [profiles addObject: (OAApplicationModeBean *)object];
-        else if ([object isKindOfClass:OAQuickAction.class])
-            [actions addObject: (OAQuickAction *)object];
+        else if ([object isKindOfClass:OAQuickAction.class] || [object isKindOfClass:QuickActionButtonState.class])
+            [actions addObject:object];
         if ([object isKindOfClass:OAPOIUIFilter.class])
             [filters addObject: (OAPOIUIFilter *)object];
         else if ([object isKindOfClass:OATileSource.class])

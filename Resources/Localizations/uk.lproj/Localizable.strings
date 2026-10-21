@@ -690,7 +690,7 @@
 "shared_string_select_avoid_road_on_map" = "Виберіть дорогу, яку слід уникати під час маршрутизації";
 "shared_string_road" = "Дорога";
 "avoid_roads_msg" = "Прокласти альтернативний маршрут, вибравши дороги, яких варто уникати";
-"day_off_label" = "вих.";
+"day_off_label" = "вихідний";
 "open_from" = "Відкрито з";
 "open_till" = "Відкрито до";
 "will_open_at" = "Відкриється о";
@@ -4180,3 +4180,6 @@
 "ais_type_sar_vessel" = "Пошуково-рятувальне судно";
 "ais_type_base_station" = "Базова станція";
 "ais_type_sar_aircraft" = "Літак SAR";
+"opening_hours_public_holiday" = "Свята";
+"opening_hours_school_holiday" = "Канікули";
+"opening_hours_easter" = "Великдень";

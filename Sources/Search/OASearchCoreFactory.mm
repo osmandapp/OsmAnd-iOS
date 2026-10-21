@@ -63,6 +63,7 @@
 #include <GeographicLib/GeoCoords.hpp>
 #include <OsmAndCore/CollatorStringMatcher.h>
 #include <OsmAndCore/SearchAlgorithms.h>
+#import "GeneratedAssetSymbols.h"
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km
 
@@ -119,12 +120,12 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:@"ic_custom_search"];
+    return [UIImage imageNamed:ACImageNameIcCustomSearch];
 }
 
 - (NSString *)iconName
 {
-    return @"ic_custom_search";
+    return ACImageNameIcCustomSearch;
 }
 
 @end
@@ -1326,8 +1327,7 @@
             }
             else
             {
-                NSString *enTranslation = [a.nameLocalizedEN lowerCase];
-                if (![@"no" isEqualToString:enTranslation]) // && !"yes".equals(enTranslation))
+                if ([PoiAdditionalLabels isAcceptedValue:a])
                 {
                     OAPoiTypeResult *ptr = [self checkPoiType:nm type:a];
                     if (ptr != nil && ptr.pt != nil && ptr.pt.top)
@@ -1341,11 +1341,14 @@
 - (OAPoiTypeResult *) checkPoiType:(OANameStringMatcher *)nm type:(OAPOIBaseType *)pf
 {
     OAPoiTypeResult *res = nil;
-    if ([nm matches:pf.nameLocalized])
-        res = [self addIfMatch:nm name:pf.nameLocalized type:pf res:res];
+    // an additional value is found by its name only: "Subway station", not "yes"
+    NSString *translation = [PoiAdditionalLabels getSearchName:pf];
+    NSString *enTranslation = [PoiAdditionalLabels getEnSearchName:pf];
+    if ([nm matches:translation])
+        res = [self addIfMatch:nm name:translation type:pf res:res];
     
-    if ([nm matches:pf.nameLocalizedEN])
-        res = [self addIfMatch:nm name:pf.nameLocalizedEN type:pf res:res];
+    if (enTranslation && [nm matches:enTranslation])
+        res = [self addIfMatch:nm name:enTranslation type:pf res:res];
     
     if ([nm matches:pf.name])
         res = [self addIfMatch:nm name:[pf.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] type:pf res:res];
@@ -1385,7 +1388,7 @@
         for (OAPOIBaseType *pt in _topVisibleFilters)
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-            res.localeName = pt.nameLocalized;
+            res.localeName = [PoiAdditionalLabels getSearchName:pt];
             res.object = pt;
             [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:[self getStandardFilterId:pt] searchResult:res];
         }
@@ -1426,7 +1429,7 @@
                 }
                 else
                 {
-                    res.localeName = ptr.pt.nameLocalized;
+                    res.localeName = [PoiAdditionalLabels getSearchName:ptr.pt];
                 }
                 res.object = ptr.pt;
                 [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:[self getStandardFilterId:ptr.pt] searchResult:res];

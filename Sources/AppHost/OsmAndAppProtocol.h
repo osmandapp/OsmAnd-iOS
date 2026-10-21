@@ -14,6 +14,9 @@
 
 @protocol OAAppearanceProtocol;
 
+// Posted on the main thread when a repository update ends, whether it succeeded or not
+FOUNDATION_EXTERN NSString *const OARepositoryUpdateFinishedNotification;
+
 @protocol OsmAndAppProtocol <NSObject>
 @required
 
@@ -83,8 +86,6 @@
 
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
-
-- (void)allowScreenTurnOff:(BOOL)allow;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
 

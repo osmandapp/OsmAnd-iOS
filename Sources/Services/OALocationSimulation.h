@@ -55,6 +55,8 @@
 @interface OALocationSimulation : NSObject
 
 - (BOOL) isRouteAnimating;
+// Whether the active simulation uses the calculated route instead of a supplied GPX track.
+- (BOOL)isSimulatingRoute;
 - (void) startStopRouteAnimation;
 - (void) startAnimationThread:(NSArray<OASimulatedLocation *> *)directionsArray useLocationTime:(BOOL)useLocationTime coeff:(float)coeff;
 

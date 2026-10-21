@@ -143,7 +143,7 @@
             @"name" : @"osmand_settings",
             @"title" : OALocalizedString(@"osmand_settings"),
             @"description" : OALocalizedString(@"global_settings_descr"),
-            @"img" : @"left_menu_icon_settings",
+            @"img" : ACImageNameLeftMenuIconSettings,
             @"type" : [OAValueTableViewCell getCellIdentifier]
         },
         @{
@@ -151,14 +151,14 @@
             @"title" : OALocalizedString(@"osmand_cloud"),
             @"value" : @"", // TODO: insert value
             @"description" : OALocalizedString(@"global_settings_descr"),
-            @"img" : @"ic_custom_cloud_upload_colored_day",
+            @"img" : ACImageNameIcCustomCloudUploadColoredDay,
             @"type" : [OAValueTableViewCell getCellIdentifier]
         },
         @{
             @"name" : @"purchases",
             @"title" : OALocalizedString(@"purchases"),
             @"description" : OALocalizedString(@"global_settings_descr"),
-            @"img" : @"ic_custom_shop_bag",
+            @"img" : ACImageNameIcCustomShopBag,
             @"type" : [OAValueTableViewCell getCellIdentifier]
         }
     ]];
@@ -187,14 +187,14 @@
 
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"new_profile"),
-        @"img" : @"ic_custom_add",
+        @"img" : ACImageNameIcCustomAdd,
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"add_profile"
     }];
 
     [profilesSection addObject:@{
         @"title" : OALocalizedString(@"reorder_profiles"),
-        @"img" : @"ic_custom_edit",
+        @"img" : ACImageNameIcCustomEdit,
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"name" : @"edit_profiles"
     }];
@@ -215,14 +215,14 @@
             @"type": OARightIconTableViewCell.getCellIdentifier,
             @"name": @"backupIntoFile",
             @"title": OALocalizedString(@"backup_into_file"),
-            @"img": @"ic_custom_save_to_file",
+            @"img": ACImageNameIcCustomSaveToFile,
             @"regular_text": @(YES)
         },
         @{
             @"type": OARightIconTableViewCell.getCellIdentifier,
             @"name": @"restoreFromFile",
             @"title": OALocalizedString(@"restore_from_file"),
-            @"img": @"ic_custom_read_from_file",
+            @"img": ACImageNameIcCustomReadFromFile,
             @"regular_text": @(YES)
         }
     ];

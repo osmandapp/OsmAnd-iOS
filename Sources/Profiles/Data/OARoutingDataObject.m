@@ -8,6 +8,7 @@
 
 #import "OARoutingDataObject.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSArray<NSString *> *_rpValues;
 
@@ -78,31 +79,31 @@ static NSArray<NSString *> *_rpValues;
 {
     switch (res) {
         case EOARoutingProfilesResourceDirectTo:
-            return @"ic_custom_navigation_type_direct_to";
+            return ACImageNameIcCustomNavigationTypeDirectTo;
         case EOARoutingProfilesResourceStraightLine:
-            return @"ic_custom_straight_line";
+            return ACImageNameIcCustomStraightLine;
         case EOARoutingProfilesResourceBrouter:
-            return @"ic_custom_straight_line";
+            return ACImageNameIcCustomStraightLine;
         case EOARoutingProfilesResourceCar:
-            return @"ic_profile_car";
+            return ACImageNameIcProfileCar;
         case EOARoutingProfilesResourcePedestrian:
-            return @"ic_profile_pedestrian";
+            return ACImageNameIcProfilePedestrian;
         case EOARoutingProfilesResourceBicycle:
-            return @"ic_profile_bicycle";
+            return ACImageNameIcProfileBicycle;
         case EOARoutingProfilesResourceSki:
-            return @"ic_action_skiing";
+            return ACImageNameIcActionSkiing;
         case EOARoutingProfilesResourcePublicTransport:
-            return @"ic_action_bus_dark";
+            return ACImageNameIcActionBusDark;
         case EOARoutingProfilesResourceTrain:
-            return @"ic_action_train";
+            return ACImageNameIcActionTrain;
         case EOARoutingProfilesResourceBoat:
-            return @"ic_action_sail_boat_dark";
+            return ACImageNameIcActionSailBoatDark;
         case EOARoutingProfilesResourceHorsebackriding:
-            return @"ic_action_horse";
+            return ACImageNameIcActionHorse;
         case EOARoutingProfilesResourceGeocoding:
-            return @"ic_custom_online";
+            return ACImageNameIcCustomOnline;
         case EOARoutingProfilesResourceMoped:
-            return @"ic_action_motor_scooter";
+            return ACImageNameIcActionMotorScooter;
         default:
             return @"";
     };

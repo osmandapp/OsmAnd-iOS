@@ -288,7 +288,7 @@ private final class PlanRouteShowAlongSettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = localizedString("show_along_the_route")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage.icNavbarChevron.imageFlippedForRightToLeftLayoutDirection(),
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: .icNavbarChevron.imageFlippedForRightToLeftLayoutDirection(),
                                                            style: .plain,
                                                            target: self,
                                                            action: #selector(onBackTapped))

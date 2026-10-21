@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OABackupHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OADeleteAllVersionsBackupViewController () <OADeleteAllVersionsBackupDelegate, OAOnDeleteFilesListener>
 
@@ -135,7 +136,7 @@
 {
     NSString *iconName;
     if (_screenType == EOADeleteAllDataProgressBackupScreenType || _screenType == EOARemoveOldVersionsProgressBackupScreenType)
-        iconName = @"ic_navbar_close";
+        iconName = ACImageNameIcNavbarClose;
     return iconName ? [UIImage templateImageNamed:iconName] : nil;
 }
 

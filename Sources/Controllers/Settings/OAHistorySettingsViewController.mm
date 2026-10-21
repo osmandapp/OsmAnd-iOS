@@ -33,6 +33,7 @@
 #import "OASizes.h"
 #import "OsmAndApp.h"
 #import <CoreLocation/CoreLocation.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAHistorySettingsViewController
 {
@@ -258,7 +259,7 @@
                     prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
                     prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
                     prevRouteHistoryitem.date = [NSDate date];
-                    prevRouteHistoryitem.iconName = @"ic_custom_point_to_point";
+                    prevRouteHistoryitem.iconName = ACImageNameIcCustomPointToPoint;
                     prevRouteHistoryTableitem = [[OASearchHistoryTableItem alloc] initWithItem:prevRouteHistoryitem mapCenterCoordinate:myLocation];
                     
                     prevRouteItem = [prevRouteSection createNewRow];

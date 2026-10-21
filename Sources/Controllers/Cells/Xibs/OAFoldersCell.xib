@@ -51,7 +51,7 @@
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="tintColor" name="iconColorActive"/>
-                                <state key="normal" image="ic_custom_add.png"/>
+                                <state key="normal" image="ic_custom_add"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="18"/>
@@ -88,7 +88,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_add.png" width="30" height="30"/>
+        <image name="ic_custom_add" width="30" height="30"/>
         <namedColor name="buttonBgColorTertiary">
             <color red="0.88627450980392153" green="0.85098039215686272" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

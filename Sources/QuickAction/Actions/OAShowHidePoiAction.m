@@ -21,6 +21,7 @@
 #import "OAObservable.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -41,7 +42,7 @@ static QuickActionType *TYPE;
                                                  cl:self.class]
               name:OALocalizedString(@"poi")]
              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
-             iconName:@"ic_custom_poi"]
+             iconName:ACImageNameIcCustomPoi]
             category:QuickActionTypeCategoryConfigureMap];
 }
 

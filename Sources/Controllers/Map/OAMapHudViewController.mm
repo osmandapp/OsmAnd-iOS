@@ -52,6 +52,7 @@ static const float kButtonOffset = 16.0;
 static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 static const float kGridCellWidthPt = 8.0;
+static const CGFloat kProgressViewTopMargin = 12.0;
 static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 
@@ -340,7 +341,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)updateStateWeatherLayersButton
 {
     BOOL allLayersAreDisabled = OAWeatherHelper.sharedInstance.allLayersAreDisabled;
-    [_weatherLayersButton setImage:[UIImage templateImageNamed:allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
+    [_weatherLayersButton setImage:[UIImage templateImageNamed:allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : ACImageNameIcCustomOverlayMap] forState:UIControlStateNormal];
     
     UIColor *color = [UIColor colorNamed:allLayersAreDisabled ? ACColorNameMapButtonBgColorDefault : ACColorNameMapButtonBgColorActive];
     
@@ -419,6 +420,24 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             CGFloat w = x2 - x1;
             CGFloat h = [_overlayUnderlayView getHeight:w];
             _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
+        }
+    }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+
+    if (_downloadView)
+    {
+        CGRect frame = [self getDownloadViewFrame];
+        if (!CGRectEqualToRect(_downloadView.frame, frame))
+            _downloadView.frame = frame;
+        if (_routingProgressView)
+        {
+            CGRect routingFrame = [self getRoutingProgressViewFrame];
+            if (!CGRectEqualToRect(_routingProgressView.frame, routingFrame))
+                _routingProgressView.frame = routingFrame;
         }
     }
 }
@@ -993,10 +1012,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     BOOL compassChanged = [preferenceKeys intersectsSet:[self compassPropertyKeysForButtonState:compassButtonState]];
     BOOL colorsChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
-        [_settings transparentWidgetsForAppMode:[_settings.applicationMode get]],
         _settings.profileIconColor,
         _settings.profileCustomIconColor
     ]]];
+    BOOL widgetPanelAppearanceChanged = [preferenceKeys intersectsSet:
+        [WidgetPanelAppearancePreferencesRegistrar preferenceKeysWithSettings:_settings]];
     BOOL panelsLayoutModeChanged = [preferenceKeys intersectsSet:[self keysFromPreferences:@[
         [_settings panelsLayoutModeForAppMode:[_settings.applicationMode get]]
     ]]];
@@ -1014,7 +1034,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     BOOL zoomInChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomInButtonState.visibilityPref buttonState:zoomInButtonState]];
     BOOL zoomOutChanged = [preferenceKeys intersectsSet:[self buttonStateAppearanceKeysForVisibilityPref:zoomOutButtonState.visibilityPref buttonState:zoomOutButtonState]];
     
-    if (!compassChanged && !colorsChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
+    if (!compassChanged && !colorsChanged && !widgetPanelAppearanceChanged && !panelsLayoutModeChanged && !screenElementsModeChanged && !map3DChanged && !quickActionChanged
         && !configureMapChanged && !searchChanged && !menuChanged && !navigationChanged
         && !myLocationChanged && !zoomInChanged && !zoomOutChanged)
         return;
@@ -1027,7 +1047,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         }
         if (colorsChanged)
             [self updateColors];
-        if (panelsLayoutModeChanged)
+        if (panelsLayoutModeChanged || widgetPanelAppearanceChanged)
             [_mapInfoController recreateControls];
         else if (screenElementsModeChanged)
             [_mapInfoController updateLayout];
@@ -1479,7 +1499,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (useClearBackground)
         _bottomBarView.backgroundColor = [UIColor clearColor];
     else
-        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].appMapThemeColor;
+        _bottomBarView.backgroundColor =
+            [WidgetPanelAppearanceResolver backgroundColorForPanel:WidgetsPanel.bottomPanel
+                                                           appMode:_settings.applicationMode.get
+                                                         nightMode:_settings.isAppMapNightMode];
+}
+
+- (void)updateWidgetPanelAppearanceColors
+{
+    _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    [self updateBottomBarViewBackgroundColor];
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)updateBottomBarConstraints
@@ -1630,7 +1660,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return self.statusBarViewHeightConstraint.constant;
 }
 
-- (CGFloat) getHudTopOffset
+- (CGFloat)hudTopOffset
 {
     CGFloat contextMenuToolbarHeight = _mapPanelViewController.scrollableHudViewController
             ? [_mapPanelViewController.scrollableHudViewController getNavbarHeight]
@@ -1678,7 +1708,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (UIColor *) getStatusBarBackgroundColor
 {
     BOOL isNight = _settings.isAppMapNightMode;
-    BOOL transparent = _settings.isTransparentWidgets;
     UIColor *statusBarColor;
     if ([_mapPanelViewController isDashboardVisible])
         statusBarColor = UIColor.clearColor;
@@ -1689,18 +1718,60 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
-        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
+        statusBarColor = [WidgetPanelAppearanceResolver backgroundColorForPanel:WidgetsPanel.topPanel
+                                                                        appMode:_settings.applicationMode.get
+                                                                      nightMode:isNight];
     if (!statusBarColor)
-        statusBarColor = isNight ? (transparent ? UIColor.clearColor : UIColor.blackColor) : [UIColor colorWithWhite:1.0 alpha:(transparent ? 0.5 : 1.0)];
+        statusBarColor = isNight ? UIColor.blackColor : UIColor.whiteColor;
     return statusBarColor;
 }
 
 - (CGRect) getDownloadViewFrame
 {
-    CGFloat y = [self getHudTopOffset];
-    CGFloat leftMargin = _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets] ? _mapInfoController.leftPanelController.view.bounds.size.width + kButtonOffset : self.searchButton.frame.origin.x + kButtonWidth + kButtonOffset;
-    CGFloat rightMargin = _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets] ? _mapInfoController.rightPanelController.view.bounds.size.width + kButtonOffset : kButtonOffset;
-    return CGRectMake(leftMargin, y + 12.0, self.view.bounds.size.width - leftMargin - rightMargin, 28.0);
+    CGFloat y = [self hudTopOffset] + kProgressViewTopMargin;
+    UIView *topPanelView = _mapInfoController.topPanelController.viewIfLoaded;
+    if ([_mapInfoController.topPanelController hasWidgets] && topPanelView.superview && !topPanelView.hidden && topPanelView.alpha > 0)
+    {
+        CGRect panelFrame = [topPanelView convertRect:topPanelView.bounds toView:self.view];
+        y = MAX(y, CGRectGetMaxY(panelFrame) + kProgressViewTopMargin);
+    }
+
+    CGFloat leftMargin = self.view.safeAreaInsets.left + kButtonOffset;
+    CGFloat rightMargin = self.view.safeAreaInsets.right + kButtonOffset;
+    CGFloat availableWidth = CGRectGetWidth(self.view.bounds);
+    CGRect frame = CGRectMake(leftMargin, y, MAX(0, availableWidth - leftMargin - rightMargin), 28.0);
+
+    // Side panels may already be above the progress banner, including in Compact.
+    // Only reserve horizontal space for views that actually overlap its row.
+    UIView *leftPanelView = [_mapInfoController.leftPanelController hasWidgets] ? _mapInfoController.leftPanelController.viewIfLoaded : nil;
+    UIView *rightPanelView = [_mapInfoController.rightPanelController hasWidgets] ? _mapInfoController.rightPanelController.viewIfLoaded : nil;
+    NSMutableArray<UIView *> *viewsToAvoid = [NSMutableArray array];
+    if (leftPanelView)
+        [viewsToAvoid addObject:leftPanelView];
+    if (rightPanelView)
+        [viewsToAvoid addObject:rightPanelView];
+    
+    for (UIView *subview in self.view.subviews)
+    {
+        if ([subview isKindOfClass:OAHudButton.class])
+            [viewsToAvoid addObject:subview];
+    }
+    
+    for (UIView *view in viewsToAvoid)
+    {
+        if (!view.superview || view.hidden || view.alpha <= 0)
+            continue;
+        CGRect viewFrame = [view convertRect:view.bounds toView:self.view];
+        if (!CGRectIntersectsRect(frame, viewFrame))
+            continue;
+        BOOL isOnRightSide = view == rightPanelView || (view != leftPanelView && [self.mapHudLayout isOnRightSide:viewFrame]);
+        if (isOnRightSide)
+            rightMargin = MAX(rightMargin, availableWidth - CGRectGetMinX(viewFrame) + kButtonOffset);
+        else
+            leftMargin = MAX(leftMargin, CGRectGetMaxX(viewFrame) + kButtonOffset);
+    }
+
+    return CGRectMake(leftMargin, y, MAX(0, availableWidth - leftMargin - rightMargin), frame.size.height);
 }
 
 - (CGRect) getRoutingProgressViewFrame
@@ -1709,9 +1780,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (_downloadView)
         y = _downloadView.frame.origin.y + _downloadView.frame.size.height;
     else
-        y = [self getHudTopOffset];
+        y = [self hudTopOffset];
     
-    return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
+    return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + kProgressViewTopMargin, 100.0, 20.0);
 }
 
 - (void) updateCurrentLocationAddress
@@ -1754,7 +1825,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         if (!_downloadView)
         {
             self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
-            _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
             _downloadView.layer.cornerRadius = 5.0;
             [_downloadView.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -1833,6 +1903,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         || _mapPanelViewController.activeTargetType == OATargetRouteDetails
         || _mapPanelViewController.activeTargetType == OATargetRouteDetailsGraph
         || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || _mapPanelViewController.activeTargetType == OATargetWidgetPanelAppearanceSettings
         || isPlanRouteFullscreen;
     BOOL isInContextMenuVisible = self.contextMenuMode && !isTargetToHideVisible;
     BOOL isTargetBackButtonVisible = [_mapPanelViewController isTargetBackButtonVisible];
@@ -1857,17 +1928,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)
             _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
-        if (self.mapInfoController.topPanelController)
+        if (self.mapInfoController.topPanelController.parentViewController == self)
         {
             self.mapInfoController.topPanelController.view.alpha = !isTopPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.middleWidgetsView showShadow:self.mapInfoController.topPanelController.view.alpha == 1.];
         }
-        if (self.mapInfoController.leftPanelController)
+        if (self.mapInfoController.leftPanelController.parentViewController == self)
         {
             self.mapInfoController.leftPanelController.view.alpha = isWeatherToolbarVisible || !isLeftPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.leftWidgetsView showShadow:self.mapInfoController.leftPanelController.view.alpha == 1.];
         }
-        if (self.mapInfoController.rightPanelController)
+        if (self.mapInfoController.rightPanelController.parentViewController == self)
         {
             self.mapInfoController.rightPanelController.view.alpha = isWeatherToolbarVisible ? 1. : !isRightPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
             [self.rightWidgetsView showShadow:self.mapInfoController.rightPanelController.view.alpha == 1.];
@@ -1887,11 +1958,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _searchButton.userInteractionEnabled = _searchButton.alpha > 0.;
         _downloadView.userInteractionEnabled = _downloadView.alpha > 0.;
 
-        if (self.mapInfoController.topPanelController)
+        if (self.mapInfoController.topPanelController.parentViewController == self)
             self.mapInfoController.topPanelController.view.userInteractionEnabled = self.mapInfoController.topPanelController.view.alpha > 0.;
-        if (self.mapInfoController.leftPanelController)
+        if (self.mapInfoController.leftPanelController.parentViewController == self)
             self.mapInfoController.leftPanelController.view.userInteractionEnabled = self.mapInfoController.leftPanelController.view.alpha > 0.;
-        if (self.mapInfoController.rightPanelController)
+        if (self.mapInfoController.rightPanelController.parentViewController == self)
             self.mapInfoController.rightPanelController.view.userInteractionEnabled = self.mapInfoController.rightPanelController.view.alpha > 0.;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.;
@@ -1923,6 +1994,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         && _mapPanelViewController.scrollableHudViewController.currentState == EOADraggableMenuStateFullScreen;
     BOOL isAllHidden = _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance
         || _mapPanelViewController.activeTargetType == OATargetProfileAppearanceIconSizeSettings
+        || _mapPanelViewController.activeTargetType == OATargetWidgetPanelAppearanceSettings
         || isPlanRouteFullscreen;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance;
@@ -1947,7 +2019,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _driveModeButton.alpha = [self shouldShowNavigation] && driveModeButtonVisible ? 1. : 0.;
         _rulerLabel.alpha = (self.contextMenuMode && !isScrollableHudVisible) || isAllHidden || (isDashboardVisible && !isScrollableHudAllowed) ? 0. : 1.;
 
-        if (self.mapInfoController.bottomPanelController)
+        if (self.mapInfoController.bottomPanelController.parentViewController == self)
             self.mapInfoController.bottomPanelController.view.alpha = visible && isBottomPanelVisible && (!isToolbarVisible || isAllowToolbarsVisible) ? 1. : 0.;
         [self updateBottomContolMarginsForHeight];
     };
@@ -1961,7 +2033,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _mapModeButton.userInteractionEnabled = _mapModeButton.alpha > 0.;
         _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.;
 
-        if (self.mapInfoController.bottomPanelController)
+        if (self.mapInfoController.bottomPanelController.parentViewController == self)
             self.mapInfoController.bottomPanelController.view.userInteractionEnabled = self.mapInfoController.bottomPanelController.view.alpha > 0.;
 
     };

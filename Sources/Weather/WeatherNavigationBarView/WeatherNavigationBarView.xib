@@ -54,7 +54,7 @@
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <color key="tintColor" name="buttonBgColorPrimary"/>
-                    <state key="normal" image="ic_navbar_settings.png"/>
+                    <state key="normal" image="ic_navbar_settings"/>
                     <connections>
                         <action selector="rightButtonTapped:" destination="AB3-JX-r91" eventType="touchUpInside" id="A5E-pz-EUL"/>
                     </connections>
@@ -87,7 +87,7 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron" width="28" height="28"/>
-        <image name="ic_navbar_settings.png" width="28" height="28"/>
+        <image name="ic_navbar_settings" width="28" height="28"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

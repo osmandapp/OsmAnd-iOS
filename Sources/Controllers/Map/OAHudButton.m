@@ -113,7 +113,7 @@ static CGFloat const kShadowRadius = 6;
 
 - (ButtonAppearanceParams *)createDefaultAppearanceParams
 {
-    return [[ButtonAppearanceParams alloc] initWithIconName:@"ic_custom_quick_action" size:MapButtonState.defaultSizeDp opacity:MapButtonState.opaqueAlpha cornerRadius:MapButtonState.roundRadiusDp glassStyle:MapButtonState.defaultGlassStyle];
+    return [[ButtonAppearanceParams alloc] initWithIconName:ACImageNameIcCustomQuickAction size:MapButtonState.defaultSizeDp opacity:MapButtonState.opaqueAlpha cornerRadius:MapButtonState.roundRadiusDp glassStyle:MapButtonState.defaultGlassStyle];
 }
 
 - (void)setCustomAppearanceParams:(ButtonAppearanceParams *)customAppearanceParams

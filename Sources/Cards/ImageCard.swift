@@ -49,11 +49,11 @@ class ImageCard: AbstractCard {
     // Private Method to determine icon name
     private func getIconName(_ serverIconName: String) -> String {
         if serverIconName == "ic_logo_mapillary" {
-            return "ic_custom_mapillary_color_logo.png"
+            return "ic_custom_mapillary_color_logo"
         } else if type == "wikimedia-photo" {
-            return "ic_custom_logo_wikimedia.png"
+            return "ic_custom_logo_wikimedia"
         } else if type == "wikidata-photo" {
-            return "ic_custom_logo_wikidata.png"
+            return "ic_custom_logo_wikidata"
         } else {
             return serverIconName
         }

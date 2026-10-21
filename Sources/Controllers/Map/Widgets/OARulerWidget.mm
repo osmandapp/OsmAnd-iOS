@@ -24,6 +24,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -168,8 +169,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cachedCenter = CGPointMake(0, 0);
     
     _cardinalDirections = @[ @"N", @"NE", @"E", @"SE", @"S", @"SW", @"W", @"NW"];
-    _centerIconDay = [UIImage imageNamed:@"ic_ruler_center.png"];
-    _centerIconNight = [UIImage imageNamed:@"ic_ruler_center_light.png"];
+    _centerIconDay = [UIImage imageNamed:ACImageNameIcRulerCenter];
+    _centerIconNight = [UIImage imageNamed:ACImageNameIcRulerCenterLight];
     _imageView.image = _settings.isAppMapNightMode ? _centerIconNight : _centerIconDay;
     self.hidden = YES;
 

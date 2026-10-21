@@ -30,6 +30,7 @@
 #import "OANativeUtilities.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -48,6 +49,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/MapObject.h>
+#import "GeneratedAssetSymbols.h"
 
 NSString * const OSM_WIKI_CATEGORY = @"osmwiki";
 NSString * const SPEED_CAMERA = @"speed_camera";
@@ -87,9 +89,19 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         [self updateReferences];
         [self updatePhrases];
         [self sortPoiCategories];
+        [self readKPoiTypes];
         _isInit = YES;
     }
     return self;
+}
+
+- (void)readKPoiTypes
+{
+    NSString *xml = [[OASPlatformUtil.shared getOsmAndContext] getAssetAsStringName:@"poi_types.xml"];
+    OASMapPoiTypes *types = [[OASMapPoiTypes alloc] initWithResourceName:nil];
+    [types doInitFromStringXml:xml];
+    [OASMapPoiTypes.companion setDefaultTypes:types];
+    _kPoiTypes = types;
 }
 
 - (BOOL) isInit
@@ -819,7 +831,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         }
         else
         {
-            customFilterIcon = [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            customFilterIcon = [UIImage imageNamed:ACImageNameIcCustomSearchCategories];
         }
     }
     return customFilterIcon;

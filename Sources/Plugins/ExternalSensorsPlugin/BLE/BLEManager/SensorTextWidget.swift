@@ -316,7 +316,7 @@ final class SensorTextWidget: OASimpleWidget {
     }
 
     private func getDeviceId() -> String? {
-        deviceIdPref?.getProfileDefaultValue(appMode) as? String
+        deviceIdPref?.profileDefaultValue(appMode) as? String
     }
 
     private func getCurrentSensor() -> Sensor? {

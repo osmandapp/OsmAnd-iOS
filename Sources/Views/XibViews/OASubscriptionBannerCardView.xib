@@ -36,7 +36,7 @@
                     <color key="textColor" white="1" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_five_downloads_big.png" translatesAutoresizingMaskIntoConstraints="NO" id="GRm-sK-glZ" userLabel="Icon View">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_five_downloads_big" translatesAutoresizingMaskIntoConstraints="NO" id="GRm-sK-glZ" userLabel="Icon View">
                     <rect key="frame" x="317" y="16" width="48" height="48"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -71,6 +71,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_five_downloads_big.png" width="48" height="48"/>
+        <image name="ic_custom_five_downloads_big" width="48" height="48"/>
     </resources>
 </document>

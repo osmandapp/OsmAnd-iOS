@@ -50,6 +50,10 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     }
     
     override func setIconName(_ iconName: String) {
+        if isFavoriteList && iconName.isEmpty {
+            selectCategory(ORIGINAL_KEY)
+            return
+        }
         guard !iconName.isEmpty else { return }
         for category in categories {
             if allIconsVCDelegate == nil && isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {

@@ -25,37 +25,37 @@ final class WeatherContoursButton: OAHudButton {
         let isECMWF = app.data.weatherSource == "ecmwf"
         
         let none = UIAction(title: localizedString("shared_string_none"),
-                            image: UIImage(named: "ic_custom_contour_lines_disabled")?
+                            image: .icCustomContourLinesDisabled
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.disableContourLayer()
         }
         
         let temperature = UIAction(title: localizedString("map_settings_weather_temp"),
-                                   image: UIImage(named: "ic_custom_thermometer")?
+                                   image: .icCustomThermometer
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.updateContourLayer(WEATHER_TEMP_CONTOUR_LINES_ATTR)
         }
         
         let pressure = UIAction(title: localizedString("map_settings_weather_pressure"),
-                                image: UIImage(named: "ic_custom_air_pressure")?
+                                image: .icCustomAirPressure
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.updateContourLayer(WEATHER_PRESSURE_CONTOURS_LINES_ATTR)
         }
         
         let wind = UIAction(title: localizedString("map_settings_weather_wind"),
-                            image: UIImage(named: "ic_custom_wind")?
+                            image: .icCustomWind
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.updateContourLayer(WEATHER_WIND_CONTOURS_LINES_ATTR)
         }
         
         let cloud = UIAction(title: localizedString("map_settings_weather_cloud"),
-                             image: UIImage(named: "ic_custom_clouds")?
+                             image: .icCustomClouds
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.updateContourLayer(WEATHER_CLOUD_CONTOURS_LINES_ATTR)
         }
         
         let precipitation = UIAction(title: localizedString("map_settings_weather_precip"),
-                                     image: UIImage(named: "ic_custom_precipitation")?
+                                     image: .icCustomPrecipitation
                     .withTintColor(.mapButtonIconColorDefault)) { [weak self] _ in
             self?.updateContourLayer(WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR)
         }

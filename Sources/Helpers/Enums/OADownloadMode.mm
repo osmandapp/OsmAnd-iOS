@@ -9,6 +9,7 @@
 #import "OADownloadMode.h"
 #import "Localization.h"
 #import "OAColoringType.h"
+#import "GeneratedAssetSymbols.h"
 
 static OADownloadMode * NONE;
 static OADownloadMode * WIFI_ONLY;
@@ -34,7 +35,7 @@ static NSArray<OADownloadMode *> * DOWNLOAD_MODES = @[OADownloadMode.NONE, OADow
 {
     if (!NONE)
     {
-        NONE = [[OADownloadMode alloc] initWithName:@"none" title:OALocalizedString(@"dont_download") iconName:@"ic_navbar_image_disabled_outlined"];
+        NONE = [[OADownloadMode alloc] initWithName:@"none" title:OALocalizedString(@"dont_download") iconName:ACImageNameIcNavbarImageDisabledOutlined];
     }
     return NONE;
 }
@@ -43,7 +44,7 @@ static NSArray<OADownloadMode *> * DOWNLOAD_MODES = @[OADownloadMode.NONE, OADow
 {
     if (!WIFI_ONLY)
     {
-        WIFI_ONLY = [[OADownloadMode alloc] initWithName:@"wifiOnly" title:OALocalizedString(@"over_wifi_only") iconName:@"ic_navbar_image_outlined"];
+        WIFI_ONLY = [[OADownloadMode alloc] initWithName:@"wifiOnly" title:OALocalizedString(@"over_wifi_only") iconName:ACImageNameIcNavbarImageOutlined];
     }
     return WIFI_ONLY;
 }
@@ -52,7 +53,7 @@ static NSArray<OADownloadMode *> * DOWNLOAD_MODES = @[OADownloadMode.NONE, OADow
 {
     if (!ANY_NETWORK)
     {
-        ANY_NETWORK = [[OADownloadMode alloc] initWithName:@"anyNetwork" title:OALocalizedString(@"over_any_network") iconName:@"ic_navbar_image_outlined"];
+        ANY_NETWORK = [[OADownloadMode alloc] initWithName:@"anyNetwork" title:OALocalizedString(@"over_any_network") iconName:ACImageNameIcNavbarImageOutlined];
     }
     return ANY_NETWORK;
 }

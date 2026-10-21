@@ -9,6 +9,7 @@
 #import "OABuilding.h"
 #import "OAStreet.h"
 #import "OACity.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OABuilding ()
 
@@ -69,7 +70,7 @@
 
 - (NSString *) iconName
 {
-    return @"ic_action_building";
+    return ACImageNameIcActionBuilding;
 }
 
 @end

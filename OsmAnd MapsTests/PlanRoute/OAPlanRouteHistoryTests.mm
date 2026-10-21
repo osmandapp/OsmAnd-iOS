@@ -13,16 +13,29 @@
 #import "OASplitPointsCommand.h"
 #import "OAReversePointsCommand.h"
 #import "OAJoinPointsCommand.h"
+#import "OAPlanningPopupBaseViewController.h"
 
 @interface OAMeasurementToolLayer (HistoryTesting)
 - (void)drawRouteSegments;
+- (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center;
 @end
 
 @interface OAPlanRouteEditingBridge (HistoryTouchTesting)
 - (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress;
+- (void)onContinueSnapApproximation:(OAPlanningPopupBaseViewController *)approximationController;
+- (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted;
+- (void)onApplyGpxApproximation;
+- (void)onPopupDismissed;
 @end
 
 @interface OAPlanRouteHistoryLayer : OAMeasurementToolLayer
+@end
+
+@interface OAPlanRouteHistoryContext : OAMeasurementEditingContext
+@end
+
+@implementation OAPlanRouteHistoryContext
+- (void)scheduleRouteCalculateIfNotEmpty {}
 @end
 
 @implementation OAPlanRouteHistoryLayer
@@ -51,7 +64,7 @@
 - (void)setUp
 {
     [super setUp];
-    self.context = [[OAMeasurementEditingContext alloc] init];
+    self.context = [[OAPlanRouteHistoryContext alloc] init];
     self.layer = [[OAPlanRouteHistoryLayer alloc] init];
     self.layer.editingCtx = self.context;
     self.bridge = [[OAPlanRouteHistoryBridge alloc] init];
@@ -87,6 +100,219 @@
 {
     CLLocation *location = [[CLLocation alloc] initWithLatitude:51 + number * 0.001 longitude:21];
     XCTAssertTrue([self.context.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:self.layer coordinate:location]]);
+}
+
+- (void)testContinueWithDifferentProfilePreservesExistingLegs
+{
+    NSArray<OASWptPt *> *points = @[self.original[0], self.original[1]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[0] second:points[1]];
+    OARoadSegmentData *geometry = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
+                                                                   start:points[0] end:points[1] points:points segments:{}];
+    self.context.roadSegmentData[pair] = geometry;
+    [self.bridge applyMode:OAApplicationMode.BICYCLE pointIndex:7 wholeRoute:NO];
+    for (NSInteger index = 0; index < 7; index++)
+        XCTAssertFalse(self.original[index].hasProfile);
+    XCTAssertEqualObjects(self.original.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqual(self.context.roadSegmentData[pair], geometry);
+    XCTAssertFalse(self.bridge.isCalculatingRoute);
+    [self addPointNumber:0];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    [self.bridge undo];
+    [self.bridge undo];
+    XCTAssertFalse(self.context.getPoints.lastObject.hasProfile);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.DEFAULT);
+    XCTAssertEqual(self.context.roadSegmentData[pair], geometry);
+    [self.bridge redo];
+    [self.bridge redo];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testStartNewSegmentProfileAndGapShareOneHistoryEntry
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        [self.bridge undo];
+        XCTAssertFalse(self.context.getPoints.lastObject.isGap);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.DEFAULT);
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        [self.bridge redo];
+        XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    }
+    [self addPointNumber:0];
+    [self addPointNumber:1];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints[8].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqualObjects(self.context.getPoints[9].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    [self.bridge undo];
+    [self.bridge undo];
+    [self.bridge undo];
+    XCTAssertFalse(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.DEFAULT);
+    [self.bridge redo];
+    [self.bridge redo];
+    [self.bridge redo];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testNewSegmentRejectsAlreadyPendingSegment
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    XCTAssertFalse(self.bridge.isAddNewSegmentAllowed);
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.CAR];
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge undo];
+    XCTAssertFalse(self.context.getPoints.lastObject.isGap);
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    XCTAssertTrue(self.bridge.isAddNewSegmentAllowed);
+}
+
+- (void)testContinuePendingSegmentPreservesGap
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.DEFAULT pointIndex:7 wholeRoute:NO];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.DEFAULT);
+    [self.bridge undo];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge redo];
+    [self addPointNumber:0];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertFalse(self.context.getPoints.lastObject.hasProfile);
+}
+
+- (void)testSingleRouteTypeOnlyChangesSelectedSegment
+{
+    [self.original[1] setProfileTypeProfileType:OAApplicationMode.BICYCLE.stringKey];
+    [self.original[3] setGap];
+    [self.original[4] setProfileTypeProfileType:OAApplicationMode.CAR.stringKey];
+    [self.context updateSegmentsForSnap];
+    [self.bridge applyMode:OAApplicationMode.DEFAULT pointIndexes:@[@0, @1, @2, @3]];
+    XCTAssertFalse(self.original[1].hasProfile);
+    XCTAssertTrue(self.original[3].isGap);
+    XCTAssertEqualObjects(self.original[4].getProfileType, OAApplicationMode.CAR.stringKey);
+    [self.bridge undo];
+    XCTAssertEqualObjects(self.original[1].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    [self.bridge redo];
+    XCTAssertFalse(self.original[1].hasProfile);
+    XCTAssertTrue(self.original[3].isGap);
+}
+
+- (void)testNewSegmentRejectsEmptyAndSinglePointTrack
+{
+    [self.context clearPoints];
+    [self.context updateSegmentsForSnap];
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    [self.context addPoint:self.original.firstObject];
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    XCTAssertFalse(self.context.getPoints.lastObject.isGap);
+}
+
+- (void)testChangingEarlierSegmentPreservesPendingSegmentProfile
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.DEFAULT pointIndexes:@[@0, @1, @2, @3]];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge undo];
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge redo];
+    [self addPointNumber:0];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)verifyEditingBeforePendingSegmentWithPointIndexes:(NSArray<NSNumber *> *)pointIndexes
+{
+    for (NSInteger index = 4; index < self.original.count; index++)
+        [self.original[index] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context updateSegmentsForSnap];
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.CAR pointIndexes:pointIndexes];
+    XCTAssertTrue(self.original.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    for (NSNumber *indexNumber in pointIndexes)
+    {
+        NSInteger index = indexNumber.integerValue;
+        if (index < 7)
+            XCTAssertEqualObjects(self.original[index].getProfileType, OAApplicationMode.CAR.stringKey);
+    }
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        [self.bridge undo];
+        XCTAssertTrue(self.original.lastObject.isGap);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+        for (NSInteger index = 0; index < 4; index++)
+            XCTAssertFalse(self.original[index].hasProfile);
+        for (NSInteger index = 4; index < 7; index++)
+            XCTAssertEqualObjects(self.original[index].getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+        [self.bridge redo];
+        XCTAssertTrue(self.original.lastObject.isGap);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+        XCTAssertEqualObjects(self.original[6].getProfileType, OAApplicationMode.CAR.stringKey);
+    }
+    [self addPointNumber:0];
+    [self addPointNumber:1];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints[8].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqualObjects(self.context.getPoints[9].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testChangingLastSectionPreservesPendingSegmentProfile
+{
+    [self verifyEditingBeforePendingSegmentWithPointIndexes:@[@4, @5, @6, @7]];
+    for (NSInteger index = 0; index < 4; index++)
+        XCTAssertFalse(self.original[index].hasProfile);
+}
+
+- (void)testChangingLastWholeSegmentPreservesPendingSegmentProfile
+{
+    [self verifyEditingBeforePendingSegmentWithPointIndexes:@[@0, @1, @2, @3, @4, @5, @6, @7]];
+}
+
+- (void)testChangingExistingLegPreservesPendingSegmentProfile
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.CAR pointIndex:5 wholeRoute:NO];
+    XCTAssertEqualObjects(self.original[5].getProfileType, OAApplicationMode.CAR.stringKey);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge undo];
+    XCTAssertFalse(self.original[5].hasProfile);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self.bridge redo];
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self addPointNumber:0];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testChangingWholeRouteUpdatesPendingSegmentProfile
+{
+    [self.bridge startNewSegmentWithMode:OAApplicationMode.BICYCLE];
+    [self.bridge applyMode:OAApplicationMode.CAR pointIndex:0 wholeRoute:YES];
+    XCTAssertTrue(self.original.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    for (NSInteger index = 0; index < 7; index++)
+        XCTAssertEqualObjects(self.original[index].getProfileType, OAApplicationMode.CAR.stringKey);
+    [self.bridge undo];
+    XCTAssertTrue(self.original.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    for (NSInteger index = 0; index < 7; index++)
+        XCTAssertFalse(self.original[index].hasProfile);
+    [self.bridge redo];
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self addPointNumber:0];
+    XCTAssertTrue(self.context.getPoints[7].isGap);
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.CAR.stringKey);
 }
 
 - (void)testTrimBeforeRedoMatchesInitialExecution
@@ -167,25 +393,27 @@
 
 - (void)testRoadGeometrySurvivesTrimUndoAndRepeatedCycles
 {
-    NSArray *pair = @[self.original[0], self.original[1]];
+    NSArray<OASWptPt *> *points = @[self.original[0], self.original[1]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[0] second:points[1]];
     OARoadSegmentData *data = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                               start:pair[0] end:pair[1] points:pair segments:{}];
+                                                               start:points[0] end:points[1] points:points segments:{}];
     self.context.roadSegmentData[pair] = data;
     [self.bridge trimBeforeIndex:4];
     for (NSInteger i = 0; i < 3; i++)
     {
         [self.bridge undo];
         XCTAssertEqual(self.context.roadSegmentData.count, 1);
-        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:pair]);
+        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:points]);
         [self.bridge redo];
     }
 }
 
 - (void)testClearAllUndoRestoresRoadGeometry
 {
-    NSArray *pair = @[self.original[0], self.original[1]];
+    NSArray<OASWptPt *> *points = @[self.original[0], self.original[1]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[0] second:points[1]];
     self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                                          start:pair[0] end:pair[1] points:pair segments:{}];
+                                                                          start:points[0] end:points[1] points:points segments:{}];
     [self.bridge clearAllPoints];
     [self.bridge undo];
     XCTAssertNotNil(self.context.roadSegmentData[pair]);
@@ -360,11 +588,132 @@
     [self assertFinishedPoints:[self latitudes:self.original]];
 }
 
+- (void)assertApproximationBlocksMapTaps
+{
+    NSArray *expected = [self latitudes:self.context.getAllPoints];
+    BOOL canUndo = self.context.commandManager.canUndo;
+    BOOL canRedo = self.context.commandManager.canRedo;
+    BOOL hasChanges = self.context.hasChanges;
+    NSInteger selectedPoint = self.context.selectedPointPosition;
+    EOAAddPointMode addPointMode = self.context.addPointMode;
+    NSInteger beforeCount = self.context.getBeforePoints.count;
+    NSInteger afterCount = self.context.getAfterPoints.count;
+    self.bridge.onChange = ^{ XCTFail(@"Blocked input must not publish a change"); };
+    for (NSInteger i = 0; i < 3; i++)
+    {
+        [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
+        [self.bridge onTouch:CLLocationCoordinate2DMake(50, 20) longPress:NO];
+        [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:YES];
+    }
+    self.bridge.onChange = nil;
+    XCTAssertEqualObjects([self latitudes:self.context.getAllPoints], expected);
+    XCTAssertEqual(self.context.commandManager.canUndo, canUndo);
+    XCTAssertEqual(self.context.commandManager.canRedo, canRedo);
+    XCTAssertEqual(self.context.hasChanges, hasChanges);
+    XCTAssertEqual(self.context.selectedPointPosition, selectedPoint);
+    XCTAssertEqual(self.context.addPointMode, addPointMode);
+    XCTAssertEqual(self.context.getBeforePoints.count, beforeCount);
+    XCTAssertEqual(self.context.getAfterPoints.count, afterCount);
+    XCTAssertNil(self.layer.pressPointLocation);
+}
+
+- (void)testApproximationSessionRequiresRoutePoints
+{
+    [self.context clearSegments];
+    XCTAssertNil([self.bridge beginApproximationSession]);
+    XCTAssertFalse(self.context.approximationSessionActive);
+    [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
+    XCTAssertEqual(self.context.getPointsCount, 1);
+}
+
+- (void)testApproximationWarningBlocksMapTapsAndPreservesRedo
+{
+    [self addPointNumber:0];
+    [self.bridge undo];
+    XCTAssertTrue(self.context.commandManager.canRedo);
+    XCTAssertNotNil([self.bridge beginApproximationSession]);
+    [self assertApproximationBlocksMapTaps];
+    [self.bridge onCancelSnapApproximation:NO];
+    [self.bridge onPopupDismissed];
+    [self.bridge redo];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+}
+
+- (void)testApproximationCalculationAndPreviewBlockMapTaps
+{
+    XCTAssertNotNil([self.bridge beginApproximationSession]);
+    [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
+    [self assertApproximationBlocksMapTaps];
+    self.context.approximationMode = YES;
+    [self assertApproximationBlocksMapTaps];
+    [self.bridge onApplyGpxApproximation];
+    [self.bridge onTouch:CLLocationCoordinate2DMake(51, 21) longPress:NO];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+    XCTAssertTrue(self.context.commandManager.canUndo);
+    [self.bridge undo];
+    [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)testApproximationCancelBeforePreviewPreservesPreviousEditAndAllowsAdding
+{
+    [self addPointNumber:0];
+    XCTAssertNotNil([self.bridge beginApproximationSession]);
+    [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
+    [self.bridge onCancelSnapApproximation:NO];
+    [self.bridge onPopupDismissed];
+    XCTAssertEqual(self.context.getPointsCount, 9);
+    [self.bridge onTouch:CLLocationCoordinate2DMake(52, 22) longPress:NO];
+    XCTAssertEqual(self.context.getPointsCount, 10);
+    [self.bridge undo];
+    [self.bridge undo];
+    [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)testApproximationHidesCenterLineAndRestoresItWithoutMapMovement
+{
+    OAMeasurementToolLayer *renderLayer = [[OAMeasurementToolLayer alloc] init];
+    renderLayer.editingCtx = self.context;
+    [renderLayer prepareRouteLinesForTesting];
+    [renderLayer drawRouteSegments];
+    NSUInteger routeLineCount = renderLayer.routeLineCountForTesting;
+    XCTAssertGreaterThan(routeLineCount, 0);
+    OsmAnd::PointI center(1000000, 1000000);
+    [renderLayer drawBeforeAfterPath:center];
+    XCTAssertEqual(renderLayer.centerLineCountForTesting, 1);
+
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        XCTAssertNotNil([self.bridge beginApproximationSession]);
+        XCTAssertTrue(self.context.approximationSessionActive);
+        [renderLayer drawBeforeAfterPath:center];
+        XCTAssertEqual(renderLayer.centerLineCountForTesting, 0);
+        [self.bridge onContinueSnapApproximation:[[OAPlanningPopupBaseViewController alloc] init]];
+        [renderLayer drawBeforeAfterPath:OsmAnd::PointI(2000000, 2000000)];
+        XCTAssertEqual(renderLayer.centerLineCountForTesting, 0);
+        XCTAssertEqual(renderLayer.routeLineCountForTesting, routeLineCount);
+
+        if (cycle == 0)
+            [self.bridge onApplyGpxApproximation];
+        else if (cycle == 1)
+        {
+            [self.bridge onCancelSnapApproximation:NO];
+            [self.bridge onPopupDismissed];
+        }
+        else
+            [self.bridge onPopupDismissed];
+        XCTAssertFalse(self.context.approximationSessionActive);
+        [renderLayer drawBeforeAfterPath:center];
+        XCTAssertEqual(renderLayer.centerLineCountForTesting, 1);
+        XCTAssertEqual(renderLayer.routeLineCountForTesting, routeLineCount);
+    }
+}
+
 - (void)verifyRoadGeometryHistoryForCommand:(OAMeasurementModeCommand *)command
 {
-    NSArray *pair = @[self.original[0], self.original[1]];
+    NSArray<OASWptPt *> *points = @[self.original[0], self.original[1]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[0] second:points[1]];
     OARoadSegmentData *data = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.DEFAULT
-                                                               start:pair[0] end:pair[1] points:pair segments:{}];
+                                                               start:points[0] end:points[1] points:points segments:{}];
     self.context.roadSegmentData[pair] = data;
     BOOL hadGap = self.original[3].isGap;
     XCTAssertTrue([self.context.commandManager execute:command]);
@@ -373,7 +722,7 @@
         [self.bridge undo];
         XCTAssertEqual(self.context.roadSegmentData.count, 1);
         XCTAssertEqual(self.context.roadSegmentData[pair], data);
-        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:pair]);
+        XCTAssertEqualObjects([self latitudes:self.context.roadSegmentData[pair].gpxPoints], [self latitudes:points]);
         [self assertFinishedPoints:[self latitudes:self.original]];
         XCTAssertEqual(self.context.getPoints[3].isGap, hadGap);
         [self.bridge redo];

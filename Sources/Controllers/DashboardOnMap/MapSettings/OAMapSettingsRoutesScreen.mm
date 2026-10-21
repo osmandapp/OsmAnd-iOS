@@ -287,11 +287,11 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             NSString *imgName = enabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             if (isMountain)
             {
-                imgName = @"ic_action_bicycle_dark";
+                imgName = ACImageNameIcActionBicycleDark;
             }
             else if (isDifficultyClassification)
             {
-                imgName = @"ic_action_trekking_dark";
+                imgName = ACImageNameIcActionTrekkingDark;
             }
             
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];

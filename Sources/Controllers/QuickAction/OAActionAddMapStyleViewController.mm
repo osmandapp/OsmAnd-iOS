@@ -21,6 +21,7 @@
 #import "OAApplicationMode.h"
 
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAActionAddMapStyleViewController () <UITextFieldDelegate>
 
@@ -193,7 +194,7 @@
     {
         OAMapStyleResourceItem* style = [self getItem:path];
         NSString *imgName = [NSString stringWithFormat:@"img_mapstyle_%@", [style.mapSource.resourceId stringByReplacingOccurrencesOfString:RENDERER_INDEX_EXT withString:@""]];
-        [arr addObject:@{@"name" : style.mapSource.name, @"img" : imgName ? imgName : @"ic_custom_show_on_map"}];
+        [arr addObject:@{@"name" : style.mapSource.name, @"img" : imgName ? imgName : ACImageNameIcCustomShowOnMap}];
     }
     if (self.delegate)
         [self.delegate onMapStylesSelected:[NSArray arrayWithArray:arr]];

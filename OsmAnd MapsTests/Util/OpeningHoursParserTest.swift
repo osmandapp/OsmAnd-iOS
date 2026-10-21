@@ -670,6 +670,21 @@ final class OpeningHoursParserTest: XCTestCase {
         assertOpened("06.10.2025 11:00", hours: hours, expected: false) // Regular Monday.
     }
 
+    func testLocalizedHolidays() {
+        configure(localeIdentifier: "en_US", twelveHour: false)
+        OpeningHoursParserTestSupport.setAdditionalString("Public holidays", forKey: "public_holiday")
+        OpeningHoursParserTestSupport.setAdditionalString("School holidays", forKey: "school_holiday")
+        OpeningHoursParserTestSupport.setAdditionalString("Easter", forKey: "easter")
+        defer {
+            OpeningHoursParserTestSupport.setAdditionalString("PH", forKey: "public_holiday")
+            OpeningHoursParserTestSupport.setAdditionalString("SH", forKey: "school_holiday")
+        }
+
+        let hours = makeHours("Mo-Fr 10:00-18:00; Sa-Su, PH, SH, Easter 12:00-16:00")
+        assertAssembled(hours, equals: "Mon-Fri 10:00-18:00; Sat, Sun, Public holidays, School holidays, Easter 12:00-16:00", localized: true)
+        assertAssembled(hours, equals: "Mo-Fr 10:00-18:00; Sa, Su, PH, SH, Easter 12:00-16:00")
+    }
+
     func testNthWeekdayOfMonth() {
         // Nth weekday of the month like "Su[1]", "Su[-1]" or "Su[1,3]" (#23990).
         configure(localeIdentifier: "en_GB", twelveHour: false)

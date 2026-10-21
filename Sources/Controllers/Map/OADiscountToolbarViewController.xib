@@ -36,7 +36,7 @@
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" image="menu_icon_back.png"/>
+                            <state key="normal" image="menu_icon_back"/>
                             <connections>
                                 <action selector="backPress:" destination="-1" eventType="touchUpInside" id="pb7-Yq-tGX"/>
                             </connections>
@@ -75,7 +75,7 @@
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" image="ic_close.png"/>
+                            <state key="normal" image="ic_close"/>
                             <connections>
                                 <action selector="closePress:" destination="-1" eventType="touchUpInside" id="5RB-j4-Bt2"/>
                             </connections>
@@ -114,7 +114,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
-        <image name="menu_icon_back.png" width="10.666666984558105" height="20.666666030883789"/>
+        <image name="ic_close" width="10" height="10"/>
+        <image name="menu_icon_back" width="10.666666984558105" height="20.666666030883789"/>
     </resources>
 </document>

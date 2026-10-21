@@ -13,6 +13,7 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -30,7 +31,7 @@ static QuickActionType *TYPE;
                                                  cl:self.class]
               name:OALocalizedString(@"shared_string_action")]
              nameAction:OALocalizedString(@"shared_string_add")]
-             iconName:@"ic_custom_add"]
+             iconName:ACImageNameIcCustomAdd]
             nonEditable];
 }
 

@@ -27,6 +27,7 @@
 #import "OAOnlinePlugin.h"
 #import "OAInAppCell.h"
 #import "OsmAndApp.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAPluginsViewController () <OASubscriptionBannerCardViewDelegate, OAPluginDetailsDelegate, OAOnlinePluginsCallback, OAPluginInstallListener>
 
@@ -232,7 +233,7 @@
 
             cell.imgIcon.contentMode = UIViewContentModeCenter;
             if (!imgTitle)
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+                imgTitle = [UIImage imageNamed:ACImageNameImgAppPurchase2];
             else if (indexPath.section == _customPluginsSection || indexPath.section == _onlinePluginsSection)
                 cell.imgIcon.contentMode = UIViewContentModeScaleAspectFit;
             

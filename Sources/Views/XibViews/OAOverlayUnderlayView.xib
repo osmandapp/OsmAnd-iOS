@@ -18,7 +18,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <color key="tintColor" red="0.99015593528747559" green="0.48271048069000244" blue="0.032639358192682266" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <state key="normal" image="ic_close.png"/>
+                    <state key="normal" image="ic_close"/>
                     <connections>
                         <action selector="btnExitPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="gi4-4Y-hfz"/>
                     </connections>
@@ -70,7 +70,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
+        <image name="ic_close" width="10" height="10"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -151,7 +151,7 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             allDataDeletedTitle.addAttribute(.font, value: UIFont.preferredFont(forTextStyle: .headline),
                                              range: allDataDeletedTitle.mutableString.range(of: deletedText))
             allDataDeletedRow.setObj(allDataDeletedTitle, forKey: "attributedTitle")
-            allDataDeletedRow.icon = UIImage.icCustomFileDelete
+            allDataDeletedRow.icon = .icCustomFileDelete
             allDataDeletedRow.iconTintColor = .textColorDisruptive
             
             let accoundDetailsDeletedRow = infoSection.createNewRow()
@@ -161,13 +161,13 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
             accoundDetailsDeletedTitle.addAttribute(.font, value: UIFont.preferredFont(forTextStyle: .headline),
                                                     range: accoundDetailsDeletedTitle.mutableString.range(of: deletedText))
             accoundDetailsDeletedRow.setObj(accoundDetailsDeletedTitle, forKey: "attributedTitle")
-            accoundDetailsDeletedRow.icon = UIImage.icCustomUserProfileDelete
+            accoundDetailsDeletedRow.icon = .icCustomUserProfileDelete
             accoundDetailsDeletedRow.iconTintColor = .textColorDisruptive
             
             let secondaryDevicesRow = infoSection.createNewRow()
             secondaryDevicesRow.cellType = OASimpleTableViewCell.reuseIdentifier
             secondaryDevicesRow.title = localizedString("osmand_cloud_deletion_secondary_devices_warning")
-            secondaryDevicesRow.icon = UIImage.icCustomSecondaryDevicesDisabled
+            secondaryDevicesRow.icon = .icCustomSecondaryDevicesDisabled
             secondaryDevicesRow.iconTintColor = .textColorDisruptive
             
             infoSection.addRow(from: [kCellTypeKey: OADividerCell.reuseIdentifier])

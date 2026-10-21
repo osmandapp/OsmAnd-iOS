@@ -181,7 +181,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
                 }
                 cell.leftIconView.tintColor = iconColor
 
-                if indexPath == selectedIndexPath {
+                if indexPath == selectedIndexPath || isItemSyncing(trashItem) {
                     addProgress(to: cell)
                 } else {
                     removeProgress(from: cell)
@@ -216,7 +216,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     override func onRowSelected(_ indexPath: IndexPath) {
         let item: OATableRowData = tableData.item(for: indexPath)
-        if let trashItem = item.obj(forKey: "trashItem") as? TrashItem {
+        if let trashItem = item.obj(forKey: "trashItem") as? TrashItem, !isSyncing(trashItem), backupHelper?.isBackupPreparing() == false {
             selectedIndexPath = indexPath
             let cloudTrashItemViewController = CloudTrashItemMenuViewController(with: trashItem)
             cloudTrashItemViewController.delegate = self
@@ -264,6 +264,14 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         let trashDeletionListener = TrashDeletionListener(with: localizedString("trash_is_empty"), deleteAll: true)
         trashDeletionListener.delegate = self
         backupHelper?.deleteFilesSync(files, byVersion: true, listener: trashDeletionListener)
+    }
+
+    private func isSyncing(_ trashItem: TrashItem) -> Bool {
+        isItemSyncing(trashItem) || settingsHelper?.getSyncTask(kSyncItemsKey) != nil
+    }
+
+    private func isItemSyncing(_ trashItem: TrashItem) -> Bool {
+        settingsHelper?.getSyncTask(trashItem.oldFile.name) != nil
     }
 
     private func downloadItem(_ trashItem: TrashItem, shouldReplace: Bool) {
@@ -347,6 +355,15 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     func downloadItem(_ trashItem: TrashItem) {
+        guard (trashItem.oldFile.item as OASettingsItem?) != nil else {
+            Self.logger.error("Failed to download item: \(trashItem.oldFile.name), settings item is nil")
+            resetSelectedIndexPath()
+            return
+        }
+        guard !isSyncing(trashItem) else {
+            resetSelectedIndexPath()
+            return
+        }
         if backupHelper?.backup.localFiles[trashItem.oldFile.getTypeNamePath()] != nil {
             downloadItem(trashItem, shouldReplace: false) // TODO: - android uses FileExistBottomSheet here
         } else {

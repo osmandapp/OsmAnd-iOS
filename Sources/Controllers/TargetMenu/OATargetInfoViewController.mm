@@ -140,6 +140,7 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 
     BOOL _otherCardsReady;
     BOOL _wikiCardsRequestFailed;
+    BOOL _cmPlaceRequestFailed;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
 }
@@ -1191,9 +1192,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
             else
             {
-                if (newCards.count > 0 && strongSelf->_wikiCardsRequestFailed)
+                if (newCards.count > 0)
                 {
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        strongSelf->_cmPlaceRequestFailed = YES;
                         [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                     });
                 }
@@ -1377,7 +1379,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
             collapsableView.placeholderImage = [self targetImage];
-            NSArray<AbstractCard *> *displayCards = _wikiCardsRequestFailed && !filter.hasOnlyMapillaryPhotosContent
+            NSArray<AbstractCard *> *displayCards = _cmPlaceRequestFailed && !filter.hasOnlyMapillaryPhotosContent
                 ? @[[self createOnlinePhotosNoInternetCard]] : cards;
             [collapsableView setCards:displayCards];
             collapsableView.isLoading = NO;
@@ -2081,6 +2083,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
  
     _wikiCardsReady = NO;
     _wikiCardsRequestFailed = NO;
+    _cmPlaceRequestFailed = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
     if (_mapillaryCardsRowInfo)
@@ -2101,8 +2104,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         if (!strongSelf)
             return;
 
-        strongSelf.wikiCardsReady = NO;
-        strongSelf->_wikiCardsRequestFailed = YES;
+        strongSelf->_cmPlaceRequestFailed = YES;
         NoInternetCard *noInternetCard = [strongSelf createOnlinePhotosNoInternetCard];
         [onlinePhotoCardsView setCards:@[noInternetCard]];
         onlinePhotoCardsView.isLoading = NO;
@@ -2139,6 +2141,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             strongSelf.wikiCardsReady = NO;
             strongSelf->_otherCardsReady = NO;
             strongSelf->_wikiCardsRequestFailed = NO;
+            strongSelf->_cmPlaceRequestFailed = NO;
             [strongSelf startLoadingImages];
         }
     };

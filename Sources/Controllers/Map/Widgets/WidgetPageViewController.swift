@@ -41,6 +41,9 @@ final class WidgetPageViewController: UIViewController {
                         $0.isFullRow = false
                         configureSimple(widget: $0)
                         multipleWidgetsInRowStackView.addArrangedSubview($0)
+                        // Pixel rounding can overlap adjacent widgets. Keep each trailing
+                        // separator above the next widget without changing arranged order.
+                        multipleWidgetsInRowStackView.sendSubviewToBack($0)
                     }
                     stackView.addArrangedSubview(multipleWidgetsInRowStackView)
                 } else {
@@ -232,8 +235,9 @@ extension WidgetPageViewController {
                 }
             }
             // show right separator
-            items.enumerated().forEach { idx, widget in
-                widget.showRightSeparator(idx != items.count - 1)
+            let lastVisibleWidget = visibleWidgets.last
+            items.forEach { widget in
+                widget.showRightSeparator(!widget.isHidden && widget !== lastVisibleWidget)
             }
         }
         updateHorizontalSeparatorVisibility(for: stackView.subviews)

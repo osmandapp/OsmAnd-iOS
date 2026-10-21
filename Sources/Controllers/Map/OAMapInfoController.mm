@@ -871,6 +871,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         // Set panel overrides before updateWidgetPages builds each widget's layout.
         [container prepareAppearanceModesForPanel:panel appMode:appMode];
         [_mapWidgetRegistry populateControlsContainer:container mode:appMode widgetPanel:panel];
+        // Medium/Large layouts recreate separator views, so restore their colors after population.
+        ResolvedWidgetPanelAppearance *appearance =
+            [WidgetPanelAppearanceResolver resolveForPanel:panel appMode:appMode nightMode:_settings.isAppMapNightMode];
+        [container applyAppearance:appearance];
         [container updateWidgetSizes];
     }
 }

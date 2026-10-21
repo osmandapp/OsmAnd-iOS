@@ -784,14 +784,25 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     NSMutableArray<NSArray<OASWptPt *> *> *res = [NSMutableArray new];
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
-        for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
+        NSInteger segmentStart = 0;
+        BOOL hasRoute = NO;
+        for (NSInteger i = 0; i < points.count; i++)
         {
-            OASWptPt *startPoint = points[i];
-            OASWptPt *endPoint = points[i + 1];
-            NSArray<OASWptPt *> *pair = @[startPoint, endPoint];
-            
-            if (_roadSegmentData[pair] == nil && startPoint.hasProfile)
-                [res addObject:pair];
+            if (points[i].isGap || i == points.count - 1)
+            {
+                for (NSInteger j = segmentStart; j < i; j++)
+                {
+                    NSArray<OASWptPt *> *pair = @[points[j], points[j + 1]];
+                    if (_roadSegmentData[pair] == nil && (points[j].hasProfile || hasRoute))
+                        [res addObject:pair];
+                }
+                segmentStart = i + 1;
+                hasRoute = NO;
+            }
+            else if (_roadSegmentData[@[points[i], points[i + 1]]] != nil)
+            {
+                hasRoute = YES;
+            }
         }
     }
     return res;

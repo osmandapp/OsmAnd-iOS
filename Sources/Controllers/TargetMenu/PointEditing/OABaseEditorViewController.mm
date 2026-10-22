@@ -647,7 +647,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     }
     else if (collectionView == [_poiIconCollectionHandler getCollectionView])
     {
-        label = [_poiIconCollectionHandler iconAccessibilityLabel:_poiIconCollectionHandler.iconNamesData[indexPath.section][indexPath.item]];
+        label = [PoiIconCollectionHandler iconAccessibilityLabel:_poiIconCollectionHandler.iconNamesData[indexPath.section][indexPath.item]];
         isSelected = [indexPath isEqual:[_poiIconCollectionHandler getSelectedIndexPath]];
     }
     else if (collectionView == [_shapesCollectionHandler getCollectionView])

@@ -11,9 +11,7 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     static var cachedCategories = [IconsAppearanceCategory]()
     static var cachedCategoriesByKeyName = [String: IconsAppearanceCategory]()
     
-    var isFavoriteList = false
-    
-    private lazy var iconLabelsByName: [String: String] = {
+    private static let iconLabelsByName: [String: String] = {
         var labels: [String: String] = [:]
         for poiType in OAPOIHelper.sharedInstance().poiTypes {
             if let iconName = poiType.iconName(), labels[iconName] == nil {
@@ -26,6 +24,8 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         return labels
     }()
     
+    var isFavoriteList = false
+    
     override init() {
         super.init()
         setup()
@@ -35,6 +35,12 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         super.init()
         self.isFavoriteList = isFavoriteList
         setup()
+    }
+    
+    static func iconAccessibilityLabel(_ iconName: String) -> String {
+        let name = iconName.hasPrefix("mx_") ? String(iconName.dropFirst(3)) : iconName
+        let fallbackName = name.hasPrefix("special_") ? String(name.dropFirst(8)) : name
+        return iconLabelsByName["mx_" + name] ?? OAPOIHelper.sharedInstance().getPhraseByName(fallbackName) ?? fallbackName
     }
     
     override func initIconCategories() {
@@ -112,11 +118,5 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     
     override func lastUsed() -> [String] {
         return OAAppSettings.sharedManager().lastUsedFavIcons.get()
-    }
-    
-    func iconAccessibilityLabel(_ iconName: String) -> String {
-        let name = iconName.hasPrefix("mx_") ? String(iconName.dropFirst(3)) : iconName
-        let fallbackName = name.hasPrefix("special_") ? String(name.dropFirst(8)) : name
-        return iconLabelsByName["mx_" + name] ?? OAPOIHelper.sharedInstance().getPhraseByName(fallbackName) ?? fallbackName
     }
 }

@@ -355,7 +355,7 @@ extension FavoritesChangeAppearanceViewController: OACollectionCellDelegate {
             label = color.accessibilityName
             isSelected = indexPath == colorHandler.getSelectedIndexPath()
         } else if collectionView === iconHandler.getCollectionView() {
-            label = iconHandler.iconAccessibilityLabel(iconHandler.iconNamesData[indexPath.section][indexPath.item])
+            label = PoiIconCollectionHandler.iconAccessibilityLabel(iconHandler.iconNamesData[indexPath.section][indexPath.item])
             isSelected = indexPath == iconHandler.getSelectedIndexPath()
         } else if collectionView === shapeHandler.getCollectionView() {
             let name = backgroundIconNames[indexPath.item]

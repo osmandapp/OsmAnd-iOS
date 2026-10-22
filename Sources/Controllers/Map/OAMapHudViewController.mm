@@ -1143,6 +1143,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             buttonState.quickActionsPref
         ]]];
     }
+    if (_settings.rotateMap.key.length > 0)
+        [keys addObject:_settings.rotateMap.key];
     return [keys copy];
 }
 

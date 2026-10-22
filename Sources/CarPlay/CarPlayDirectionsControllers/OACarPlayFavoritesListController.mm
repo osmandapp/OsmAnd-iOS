@@ -31,12 +31,7 @@
 
 - (NSArray<CPListSection *> *) generateSections
 {
-    // Personal first, then the other folders by name, as on Android Auto
-    NSArray<OAFavoriteGroup *> *favoriteGroups = [[OAFavoritesHelper favoriteGroups] sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteGroup *g1, OAFavoriteGroup *g2) {
-        if (g1.isPersonal != g2.isPersonal)
-            return g1.isPersonal ? NSOrderedAscending : NSOrderedDescending;
-        return [[OAFavoriteGroup getDisplayName:g1.name] compare:[OAFavoriteGroup getDisplayName:g2.name]];
-    }];
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper favoriteGroups];
     if (favoriteGroups.count > 0)
     {
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];

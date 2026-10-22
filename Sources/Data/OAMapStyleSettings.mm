@@ -438,8 +438,8 @@
             OAMapStyleSettings *resetingMapStyle = [[OAMapStyleSettings alloc] initWithStyleName:renderStyleName mapPresetName:mapPresetName];
                 for (OAMapStyleParameter *p in resetingMapStyle.parameters)
                 {
-                    p.value = p.defaultValue;
-                    p.storedValue = p.defaultValue;
+                    p.value = p.dataType == OABoolean ? p.defaultValue : @"";
+                    p.storedValue = p.value;
                     NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
                     [[NSUserDefaults standardUserDefaults] setValue:p.value forKey:name];
                 }

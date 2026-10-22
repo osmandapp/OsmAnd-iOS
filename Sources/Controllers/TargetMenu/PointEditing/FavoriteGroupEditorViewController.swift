@@ -230,7 +230,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
             OAFavoritesHelperBridge.shared().update(favoriteGroup, color: editColor, updatePoints: updatePoints, updateGroupColor: updateGroupValues, saveImmediately: false)
         }
 
-        if editBackgroundIconName != favoriteGroup?.backgroundType || (updatePoints && lastAppliedBackgroundIconName != nil && editBackgroundIconName != lastAppliedBackgroundIconName) {
+        if isBackgroundIconNameChanged(favoriteGroup?.backgroundType) || (updatePoints && lastAppliedBackgroundIconName != nil && editBackgroundIconName != lastAppliedBackgroundIconName) {
             OAFavoritesHelperBridge.shared().update(favoriteGroup, backgroundIconName: editBackgroundIconName, updatePoints: updatePoints, updateGroupShape: updateGroupValues, saveImmediately: false)
         }
 

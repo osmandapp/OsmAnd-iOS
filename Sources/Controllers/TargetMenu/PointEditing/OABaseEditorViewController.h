@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
                                               tag:(NSInteger)tag;
 - (BOOL)isAppearanceChanged;
 - (BOOL)isIconNameChanged:(nullable NSString *)iconName;
+- (BOOL)isBackgroundIconNameChanged:(nullable NSString *)backgroundIconName;
 - (void)changeSaveButtonAvailabilityWithGroup;
 - (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
 - (BOOL)allowsValidationForGroupName;

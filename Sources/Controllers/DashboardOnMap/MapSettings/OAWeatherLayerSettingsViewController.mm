@@ -729,7 +729,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = UIColor.clearColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         }
         cell.dividerColor = [SeparatorAppearance color];
         CGFloat leftInset = [item[@"inset"] floatValue];

@@ -285,15 +285,11 @@
         self.groupTitle = groupName.length > 0 ? groupName : OALocalizedString(@"shared_string_waypoints");
     }
 
-    if (iconName.length > 0)
-    {
-        _selectedIconName = iconName;
-        [_poiIconCollectionHandler setIconName:_selectedIconName];
-    }
+    _selectedIconName = iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY;
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
 
     NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName ?: @""];
-    if (backgroundIndex != NSNotFound)
-        _selectedBackgroundIndex = backgroundIndex;
+    _selectedBackgroundIndex = backgroundIndex != NSNotFound ? backgroundIndex : [_backgroundIconNames indexOfObject:DEFAULT_ICON_SHAPE_KEY];
 
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];

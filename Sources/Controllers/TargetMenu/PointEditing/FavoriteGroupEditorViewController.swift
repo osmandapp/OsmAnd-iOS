@@ -83,7 +83,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         let section = tableData.createNewSection()
         let row = section.createNewRow()
         row.cellType = OASearchMoreCell.reuseIdentifier
-        row.title = String(format: localizedString("ltr_or_rtl_combine_via_space"), localizedString("apply_to_existing"), "(\(favoriteGroup?.points?.count ?? 0))")
+        row.title = String(format: localizedString("ltr_or_rtl_combine_with_brackets"), localizedString("apply_to_existing"), NumberFormatter.localizedCount(favoriteGroup?.points?.count ?? 0))
         applyToExistingIndexPath = IndexPath(row: Int(section.rowCount()) - 1, section: Int(tableData.sectionCount()) - 1)
     }
     

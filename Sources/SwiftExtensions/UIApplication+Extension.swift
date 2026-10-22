@@ -18,7 +18,10 @@ extension UIApplication {
     }
     
     @objc var mainScene: UIScene? {
-        connectedScenes.first(where: { $0.session.configuration.name == Constants.defaultConfiguration })
+        let scenes = connectedScenes.filter { $0.session.configuration.name == Constants.defaultConfiguration }
+        return scenes.first { $0.activationState == .foregroundActive }
+            ?? scenes.first { $0.activationState == .foregroundInactive }
+            ?? scenes.first
     }
 }
 

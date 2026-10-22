@@ -47,7 +47,7 @@
 
 static const double kProjectedStepSlack = 4.0;
 static const double kMinProjectedStep = 24.0;
-static const int kPolarCenterSearchIterations = 32;
+static const double kCenterProjectionTolerance = 2.0;
 
 static double maxGlobeDistance()
 {
@@ -117,6 +117,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     
     OsmAnd::PointI _cachedCenter31;
     OsmAnd::LatLon _cachedCenterLatLon;
+    BOOL _hasCachedCenterLatLon;
     CGPoint _cachedCenter;
     NSMutableArray<NSString *> *_cacheDistances;
     CGPoint _cachedCenter2;
@@ -360,6 +361,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     _cacheIntZoom = int(_mapViewController.getMapZoom);
     _cachedCenter31 = [self getCenter31];
     _cachedCenterLatLon = [self getCenterLatLon];
+    _hasCachedCenterLatLon = [self isLatLonAtCenterPoint:_cachedCenterLatLon];
     _cachedMapDensity = [_mapDensity get];
     _cachedMapElevation = _mapViewController.mapView.elevationAngle;
     _cachedHeading = _app.locationServices.lastKnownHeading;
@@ -463,6 +465,9 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 - (void) updateText
 {
     _cacheDistances = [NSMutableArray new];
+    if (!_hasCachedCenterLatLon)
+        return;
+
     double maxCircleRadius = _maxRadius;
     int i = 1;
     while ((maxCircleRadius -= _radius) > 0)
@@ -826,37 +831,18 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (OsmAnd::LatLon) getCenterLatLon
 {
-    auto centerLatLon = OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
-    if (!_sphericalMap || ABS(centerLatLon.latitude) < MAX_LATITUDE_KEY)
-        return centerLatLon;
-    return [self calculatePolarCenter:centerLatLon];
+    return OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
 }
 
-- (OsmAnd::LatLon)calculatePolarCenter:(OsmAnd::LatLon)boundaryCenter
+- (BOOL)isLatLonAtCenterPoint:(OsmAnd::LatLon)latLon
 {
-    CGPoint centerPoint = [self getCenterPoint];
-    double sign = boundaryCenter.latitude > 0 ? 1 : -1;
-    double lower = MAX_LATITUDE_KEY;
-    double upper = maxProjectableGlobeLatitude();
-    for (int i = 0; i < kPolarCenterSearchIterations; i++)
-    {
-        double third = (upper - lower) / 3;
-        OsmAnd::LatLon lowerCandidate(sign * (lower + third), boundaryCenter.longitude);
-        OsmAnd::LatLon upperCandidate(sign * (upper - third), boundaryCenter.longitude);
-        if ([self screenDistanceFrom:centerPoint to:lowerCandidate] < [self screenDistanceFrom:centerPoint to:upperCandidate])
-            upper -= third;
-        else
-            lower += third;
-    }
-    return OsmAnd::LatLon(sign * (lower + upper) / 2, boundaryCenter.longitude);
-}
+    if (!_sphericalMap || ABS(latLon.latitude) < MAX_LATITUDE_KEY)
+        return YES;
 
-- (double)screenDistanceFrom:(CGPoint)point to:(OsmAnd::LatLon)latLon
-{
     CGPoint screenPoint;
-    if (![self projectGlobeLatLon:latLon toScreenPoint:&screenPoint])
-        return DBL_MAX;
-    return hypot(screenPoint.x - point.x, screenPoint.y - point.y);
+    CGPoint centerPoint = [self getCenterPoint];
+    return [self projectGlobeLatLon:latLon toScreenPoint:&screenPoint]
+        && hypot(screenPoint.x - centerPoint.x, screenPoint.y - centerPoint.y) <= kCenterProjectionTolerance;
 }
 
 - (OsmAnd::PointI) getCenter31

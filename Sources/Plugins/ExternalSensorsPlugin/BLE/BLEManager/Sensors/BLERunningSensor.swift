@@ -30,6 +30,31 @@ final class BLERunningSensor: Sensor {
         [.bicycleCadence, .bicycleSpeed, .bicycleDistance]
     }
     
+    override var dataFields: [[String: String]]? {
+        var result = [[String: String]]()
+        if let lastRunningCadenceData {
+            result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
+        }
+        if let lastRunningSpeedData {
+            if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value)) {
+                result.append([localizedString("external_device_characteristic_speed"): String(speed)])
+            }
+        }
+        if let lastRunningDistanceData {
+            let distanceMeters = lastRunningDistanceData.totalDistance.value / 10
+            if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), with: OsmAndFormatterParams.noTrailingZeros) {
+                result.append([localizedString("external_device_characteristic_total_distance"): String(distance)])
+            }
+        }
+        if let lastRunningStrideLengthData {
+            let strideLengthMeters = lastRunningStrideLengthData.strideLength.value / 100
+            if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), with: OsmAndFormatterParams.noTrailingZeros) {
+                result.append([localizedString("external_device_characteristic_stride_length"): String(strideLength)])
+            }
+        }
+        return result.isEmpty ? nil : result
+    }
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else {
             return

@@ -79,7 +79,8 @@ class Device: NSObject {
     }
 
     var getDataFields: [[String: String]]? {
-        nil
+        let result = sensors.compactMap { $0.dataFields }.flatMap { $0 }
+        return result.isEmpty ? nil : result
     }
 
     var getSettingsFields: [String: Any]? {
@@ -111,7 +112,13 @@ class Device: NSObject {
     }
 
     func getSupportedWidgetDataFieldTypes() -> [WidgetType]? {
-        return nil
+        var result = [WidgetType]()
+        for sensor in sensors {
+            for widgetType in sensor.getSupportedWidgetDataFieldTypes() ?? [] where !result.contains(widgetType) {
+                result.append(widgetType)
+            }
+        }
+        return result.isEmpty ? nil : result
     }
 
     func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) { }
@@ -290,6 +297,67 @@ extension Device {
                 }
                 debugPrint(self.rssi)
             }
+        }
+    }
+}
+
+// MARK: - Sensors of several services
+extension Device {
+    // Supported sensor services in the order of priority for the device type
+    static let sensorServiceUUIDs = [GattAttributes.SERVICE_HEART_RATE,
+                                     GattAttributes.SERVICE_TEMPERATURE,
+                                     GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE,
+                                     GattAttributes.SERVICE_RUNNING_SPEED_AND_CADENCE]
+
+    // CoreBluetooth gives standard 16-bit UUIDs in the short form, e.g. "180D"
+    static func isService(_ serviceUUID: String, matching uuid: String) -> Bool {
+        fullUUID(serviceUUID) == fullUUID(uuid)
+    }
+
+    private static func fullUUID(_ uuid: String) -> String {
+        let lowercased = uuid.lowercased()
+        return lowercased.count == 4 ? "0000\(lowercased)-0000-1000-8000-00805f9b34fb" : lowercased
+    }
+
+    // A sensor can have several services (Garmin HRM 600: running speed and cadence + heart rate).
+    // Adds a sensor for every supported service that has no sensor yet, returns true if one was added.
+    @discardableResult
+    func addSensors(forServices uuids: [String]) -> Bool {
+        var added = false
+        for serviceUUID in Device.sensorServiceUUIDs where !hasSensor(forService: serviceUUID) {
+            guard uuids.contains(where: { Device.isService(serviceUUID, matching: $0) }),
+                  let sensor = makeSensor(forService: serviceUUID) else { continue }
+            sensors.append(sensor)
+            added = true
+        }
+        return added
+    }
+
+    func getSensorServiceUUIDs() -> [String] {
+        Device.sensorServiceUUIDs.filter { hasSensor(forService: $0) }
+    }
+
+    private func hasSensor(forService serviceUUID: String) -> Bool {
+        sensors.contains { Device.serviceUUID(of: $0) == serviceUUID }
+    }
+
+    private static func serviceUUID(of sensor: Sensor) -> String? {
+        switch sensor {
+        case is BLEHeartRateSensor: return GattAttributes.SERVICE_HEART_RATE
+        case is BLETemperatureSensor: return GattAttributes.SERVICE_TEMPERATURE
+        case is BLEBikeSensor: return GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE
+        case is BLERunningSensor: return GattAttributes.SERVICE_RUNNING_SPEED_AND_CADENCE
+        default: return nil
+        }
+    }
+
+    private func makeSensor(forService serviceUUID: String) -> Sensor? {
+        switch serviceUUID {
+        case GattAttributes.SERVICE_HEART_RATE: return BLEHeartRateSensor(device: self, sensorId: "heart_rate")
+        case GattAttributes.SERVICE_TEMPERATURE: return BLETemperatureSensor(device: self, sensorId: "temperature")
+        case GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE: return BLEBikeSensor(device: self, sensorId: "bike_scd")
+        case GattAttributes.SERVICE_RUNNING_SPEED_AND_CADENCE: return BLERunningSensor(device: self, sensorId: "running")
+        default: return nil
         }
     }
 }

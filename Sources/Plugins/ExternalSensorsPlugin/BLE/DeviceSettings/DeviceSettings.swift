@@ -14,6 +14,8 @@ class DeviceSettings: Codable {
     var deviceName: String = ""
     var deviceEnabled: Bool
     var additionalParams: [String: String]?
+    // Supported services of the sensor, it can have sensors of several types
+    var serviceUUIDs: [String]?
     
     init(deviceId: String,
          deviceType: DeviceType,

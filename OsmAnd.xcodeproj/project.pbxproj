@@ -1804,6 +1804,7 @@
 		DA5A853026C563A900F274C7 /* OAOsmAndLiveHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A326C563A500F274C7 /* OAOsmAndLiveHelper.mm */; };
 		DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */; };
 		DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */; };
+		8F6539571FA7FFA908FD8C52 /* OAFreeRegionHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 957EFAE7D81EE752737AF6D4 /* OAFreeRegionHelper.mm */; };
 		DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */; };
 		DA5A853426C563A900F274C7 /* OASettingsExporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */; };
 		DA5A853526C563A900F274C7 /* kml2gpx.xslt in Resources */ = {isa = PBXBuildFile; fileRef = DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */; };
@@ -5227,6 +5228,7 @@
 		DA5A80A426C563A500F274C7 /* OANetworkUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANetworkUtilities.h; sourceTree = "<group>"; };
 		DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsImporter.mm; sourceTree = "<group>"; };
 		DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUIHelper.mm; sourceTree = "<group>"; };
+		957EFAE7D81EE752737AF6D4 /* OAFreeRegionHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFreeRegionHelper.mm; sourceTree = "<group>"; };
 		DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiImageHelper.h; sourceTree = "<group>"; };
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
@@ -5252,6 +5254,7 @@
 		DA5A80BD26C563A600F274C7 /* OADiscountHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADiscountHelper.h; sourceTree = "<group>"; };
 		DA5A80BE26C563A600F274C7 /* OADayNightHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADayNightHelper.m; sourceTree = "<group>"; };
 		DA5A80BF26C563A600F274C7 /* OAResourcesUIHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAResourcesUIHelper.h; sourceTree = "<group>"; };
+		5064E7FE248B3FB643EAFAAD /* OAFreeRegionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFreeRegionHelper.h; sourceTree = "<group>"; };
 		DA5A80C026C563A600F274C7 /* OASuggestedDownloadsItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASuggestedDownloadsItem.m; sourceTree = "<group>"; };
 		DA5A80C126C563A600F274C7 /* OAAvoidRoadInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAvoidRoadInfo.h; sourceTree = "<group>"; };
 		DA5A80C226C563A600F274C7 /* OAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUtilities.h; sourceTree = "<group>"; };
@@ -10149,6 +10152,8 @@
 				DA5A80DB26C563A600F274C7 /* OAResourcesInstaller.mm */,
 				DA5A80BF26C563A600F274C7 /* OAResourcesUIHelper.h */,
 				DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */,
+				5064E7FE248B3FB643EAFAAD /* OAFreeRegionHelper.h */,
+				957EFAE7D81EE752737AF6D4 /* OAFreeRegionHelper.mm */,
 				32464B7F2A7012C300DA6980 /* OAResourcesUISwiftHelper.h */,
 				32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */,
 				DA5A809C26C563A500F274C7 /* OAReverseGeocoder.h */,
@@ -12129,6 +12134,7 @@
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
 				323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
+				8F6539571FA7FFA908FD8C52 /* OAFreeRegionHelper.mm in Sources */,
 				32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */,
 				46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */,
 				32C41F542E0C4CEF00E9941C /* OAHeightDataLoader.mm in Sources */,

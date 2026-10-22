@@ -596,6 +596,9 @@
 
 - (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(id)object selectedObject:(SelectedMapObject *)selectedObject provider:(id<OAContextMenuProvider>)provider touchPointLatLon:(CLLocation *)touchPointLatLon
 {
+    if (![OARootViewController.instance.mapPanel canPresentNewContextMenu])
+        return;
+
     NSLog(@"[ContextMenu] Target point creation BEGIN provider=%@ location=%@",
           provider ? NSStringFromClass([provider class]) : @"none",
           latLon ? @"yes" : @"no");

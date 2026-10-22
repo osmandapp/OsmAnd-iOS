@@ -220,6 +220,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"type" : kCellTypeSwitch
     }];
     OAMapStyleParameter *param = nil;
+    OAMapStyleParameter *labelDirectionParam = [_styleSettings getParameter:CONTOUR_LABEL_DIRECTION_ATTR];
     if ([self isContourLinesOn])
     {
         NSMutableArray *zoomArr = [NSMutableArray array];
@@ -274,16 +275,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }];
         }
         
-        NSMutableArray *labelsArr = [NSMutableArray array];
-        param = [_styleSettings getParameter:CONTOUR_LABEL_DIRECTION_ATTR];
-        if (param)
-        {
-            [labelsArr addObject:@{
-                @"type" : kCellTypeMenu,
-                @"parameter" : param
-            }];
-        }
-
         NSMutableArray *availableMapsArr = [NSMutableArray array];
         for (OAMultipleResourceItem* item in _mapMultipleItems)
         {
@@ -297,8 +288,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [result addObject: switchArr];
         [result addObject: zoomArr];
         [result addObject: linesArr];
-        if (labelsArr.count > 0)
-            [result addObject: labelsArr];
+        if (labelDirectionParam)
+        {
+            [result addObject:@[@{
+                @"type" : kCellTypeMenu,
+                @"parameter" : labelDirectionParam
+            }]];
+        }
         if (availableMapsArr.count > 0)
             [result addObject: availableMapsArr];
     }
@@ -336,7 +332,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"header" : OALocalizedString(@"shared_string_appearance"),
                             @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
                             }];
-        if ([_styleSettings getParameter:CONTOUR_LABEL_DIRECTION_ATTR])
+        if (labelDirectionParam)
         {
             [sectionArr addObject:@{
                             @"header" : OALocalizedString(@"contour_labels"),
@@ -451,17 +447,44 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return [parameter.value isEqual:@"disabled"] ? false : true;
 }
 
-- (UIMenu *) createMenuForParameter:(OAMapStyleParameter *)parameter button:(UIButton *)button
+- (NSString *)selectedValueForParameter:(OAMapStyleParameter *)parameter
+{
+    NSString *value = parameter.value ?: @"";
+    for (OAMapStyleParameterValue *possibleValue in parameter.possibleValuesUnsorted)
+    {
+        if ([possibleValue.name isEqualToString:value])
+            return value;
+    }
+    return @"";
+}
+
+- (NSIndexPath *)indexPathForParameter:(NSString *)parameterName
+{
+    for (NSInteger section = 0; section < _data.count; section++)
+    {
+        for (NSInteger row = 0; row < _data[section].count; row++)
+        {
+            OAMapStyleParameter *parameter = _data[section][row][@"parameter"];
+            if ([parameter.name isEqualToString:parameterName])
+                return [NSIndexPath indexPathForRow:row inSection:section];
+        }
+    }
+    return nil;
+}
+
+- (UIMenu *)createMenuForParameter:(OAMapStyleParameter *)parameter button:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *actions = [NSMutableArray array];
     __weak __typeof(self) weakSelf = self;
-    NSString *current = parameter.value ?: @"";
+    NSString *parameterName = parameter.name;
+    NSString *selectedValue = [self selectedValueForParameter:parameter];
     for (OAMapStyleParameterValue *value in parameter.possibleValuesUnsorted)
     {
+        NSString *valueName = value.name;
         UIAction *action = [UIAction actionWithTitle:value.title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-            [weakSelf onParameter:parameter selected:value.name];
+            [weakSelf onParameter:parameterName selected:valueName];
         }];
-        if ([current isEqualToString:value.name])
+        if ([selectedValue isEqualToString:valueName])
         {
             action.state = UIMenuElementStateOn;
             NSMutableAttributedString *title = [[NSMutableAttributedString alloc] initWithString:[value.title stringByAppendingString:@" "]];
@@ -476,11 +499,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return [UIMenu menuWithChildren:actions];
 }
 
-- (void) onParameter:(OAMapStyleParameter *)parameter selected:(NSString *)value
+- (void)onParameter:(NSString *)parameterName selected:(NSString *)value
 {
+    OAMapStyleParameter *parameter = [_styleSettings getParameter:parameterName];
+    if (!parameter || [[self selectedValueForParameter:parameter] isEqualToString:value])
+        return;
+
     parameter.value = value;
     [_styleSettings save:parameter];
-    [self.tblView reloadData];
+    NSIndexPath *indexPath = [self indexPathForParameter:parameterName];
+    if (indexPath)
+        [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (NSString *) getLocalizedParamValue:(NSString *)value
@@ -643,7 +672,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             OAMapStyleParameter *p = item[@"parameter"];
             cell.titleLabel.text = p.title;
+            [cell.button setTitle:nil forState:UIControlStateNormal];
             cell.button.configuration = nil;
+            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.button.menu = [self createMenuForParameter:p button:cell.button];
             cell.button.showsMenuAsPrimaryAction = YES;

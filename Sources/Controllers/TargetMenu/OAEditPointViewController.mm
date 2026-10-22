@@ -482,14 +482,12 @@
 
 - (void)setupIcons
 {
-    NSString *preselectedIconName = [_pointHandler getIcon];
-    if (!preselectedIconName)
-        preselectedIconName = [self defaultIconName];
-    _selectedIconName = preselectedIconName;
+    NSString *pointIconName = [_pointHandler getIcon];
+    _selectedIconName = pointIconName ?: [self defaultIconName];
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
-    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0)
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0 && (pointIconName.length == 0 || ![selectedGroup.iconName isEqualToString:DEFAULT_ICON_NAME_KEY]))
         _selectedIconName = selectedGroup.iconName;
 
     if (!_selectedIconName) {

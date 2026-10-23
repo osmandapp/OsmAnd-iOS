@@ -1,0 +1,72 @@
+name: App Store Metadata
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_title:
+        description: 'Title (App Name)'
+        type: boolean
+        default: false
+      upload_subtitle:
+        description: 'Subtitle'
+        type: boolean
+        default: false
+      upload_promotional_text:
+        description: 'Promotional Text'
+        type: boolean
+        default: false
+      upload_whats_new:
+        description: "What's New (from iOS localizations)"
+        type: boolean
+        default: true
+      upload_description:
+        description: 'Description'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: app-store-metadata
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/heads/r')
+    runs-on: macos-15
+    environment: app-store-metadata
+    steps:
+      - name: Require master or a release branch
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
+        run: |
+          if [[ "$BRANCH_NAME" != master && ! "$BRANCH_NAME" =~ ^r[0-9]+\.[0-9]+$ ]]; then
+            echo 'Select master or a release branch such as r5.4 or r5.5' >&2
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - name: Clean generated metadata
+        run: rm -rf .generated/app-store-metadata
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+      - name: Install Fastlane
+        env:
+          BUNDLE_FROZEN: 'true'
+        run: bundle install
+      - name: Validate and publish
+        env:
+          UPLOAD_TITLE: ${{ inputs.upload_title }}
+          UPLOAD_SUBTITLE: ${{ inputs.upload_subtitle }}
+          UPLOAD_PROMOTIONAL_TEXT: ${{ inputs.upload_promotional_text }}
+          UPLOAD_WHATS_NEW: ${{ inputs.upload_whats_new }}
+          UPLOAD_DESCRIPTION: ${{ inputs.upload_description }}
+          ASC_KEY_ID: ${{ secrets.PUBLISH_BUILD_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.PUBLISH_BUILD_ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.PUBLISH_BUILD_SECRET }}
+        run: bundle exec fastlane ios metadata_publish
+      - name: Clean generated metadata
+        if: always()
+        run: rm -rf .generated/app-store-metadata

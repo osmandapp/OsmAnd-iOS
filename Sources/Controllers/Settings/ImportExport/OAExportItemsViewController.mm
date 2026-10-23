@@ -19,9 +19,6 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kDefaultArchiveName @"Export"
-#define kSettingsSectionIndex 0
-#define kMyPlacesSectionIndex 1
-#define kResourcesSectionIndex 2
 
 typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
     EOAExportItemsViewControllerStateTypeInited,
@@ -191,17 +188,17 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
 
         if (_shouldOpenSettingsOnInit)
         {
-            self.data[kSettingsSectionIndex].isOpen = YES;
+            [self openCategory:OAExportSettingsCategory.SETTINGS];
             _shouldOpenSettingsOnInit = NO;
         }
         if (_shouldOpenMyPlacesOnInit)
         {
-            self.data[kMyPlacesSectionIndex].isOpen = YES;
+            [self openCategory:OAExportSettingsCategory.MY_PLACES];
             _shouldOpenMyPlacesOnInit = NO;
         }
         if (_shouldOpenResourcesOnInit)
         {
-            self.data[kResourcesSectionIndex].isOpen = YES;
+            [self openCategory:OAExportSettingsCategory.RESOURCES];
             _shouldOpenResourcesOnInit = NO;
         }
     }
@@ -216,6 +213,13 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
     {
         self.data = @[];
     }
+}
+
+- (void)openCategory:(OAExportSettingsCategory *)category
+{
+    NSUInteger index = [self.itemTypes indexOfObject:category];
+    if (index != NSNotFound && index < self.data.count)
+        self.data[index].isOpen = YES;
 }
 
 - (BOOL)hideFirstHeader

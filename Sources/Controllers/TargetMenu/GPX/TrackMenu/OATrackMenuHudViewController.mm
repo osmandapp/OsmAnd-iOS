@@ -901,6 +901,8 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
+    if (_reopeningState.temporarilyShown && self.isShown && !self.isCurrentTrack)
+        [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
     [self hide];
 }
 
@@ -1305,7 +1307,7 @@
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
         [self.mapViewController updateWpts:existWaypoints ? existWaypoints :waypoints docPath:path updateMap:YES];
     }
-    else if (newGroupColor)
+    else
     {
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1590,6 +1592,7 @@
 
 - (BOOL)changeTrackVisible
 {
+    _reopeningState.temporarilyShown = NO;
     BOOL visible = [super changeTrackVisible];
     [_uiBuilder resetDataInTab:_selectedTab == EOATrackMenuHudOverviewTab ? EOATrackMenuHudActionsTab : EOATrackMenuHudOverviewTab];
     return visible;

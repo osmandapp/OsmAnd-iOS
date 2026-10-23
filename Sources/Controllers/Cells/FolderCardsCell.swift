@@ -214,12 +214,14 @@ import UIKit
         collectionView.register(FolderCardCollectionViewCell.self, forCellWithReuseIdentifier: FolderCardCollectionViewCell.reuseIdentifier)
 
         contentView.addSubview(collectionView)
+        let minimumHeightConstraint = contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.rowHeight)
+        minimumHeightConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            contentView.heightAnchor.constraint(equalToConstant: Layout.rowHeight)
+            minimumHeightConstraint
         ])
     }
 

@@ -1790,8 +1790,12 @@ typedef enum
         {
             [_mapViewController hideContextPinMarker];
             
+            BOOL isPoiWithAddressPlaceholder = [targetPoint.targetObj isKindOfClass:OAPOI.class]
+                && [((OAPOI *)targetPoint.targetObj).type isKindOfClass:OAPOILocationType.class]
+                && [targetPoint.title isEqualToString:OALocalizedString(@"map_no_address")];
             OAPointDescription *pointDescription = nil;
-            if (!isNone)
+            // Let the route helper look up the address instead of saving the placeholder as the name.
+            if (!isNone && !isPoiWithAddressPlaceholder)
                 pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:targetPoint.title];
                 
             if (_activeTargetType == OATargetRouteStartSelection)
@@ -1874,12 +1878,13 @@ typedef enum
     [self closeDashboard];
 
     Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
-    OATargetPoint *targetPoint = [self.mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+
+    OATargetPoint *targetPoint = [self.mapViewController.mapLayers.contextMenuLayer unknownTargetPoint:lat longitude:lon];
     if (title.length > 0)
         targetPoint.title = title;
 
     [self showContextMenu:targetPoint];
-    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
 }
 
 - (void) goToTargetPointDefault
@@ -2863,9 +2868,6 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
-        if (onComplete)
-            onComplete();
-
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -2888,6 +2890,9 @@ typedef enum
         {
             [_hudViewController updateDependentButtonsVisibility];
         }
+
+        if (onComplete)
+            onComplete();
     }];
     
     [_hudViewController updateControlsLayout:YES];
@@ -2956,11 +2961,17 @@ typedef enum
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    if (self.targetMenuView.superview)
+        [self.targetMenuView cancelScrollingForRotation];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [self.targetMenuView.customController viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self.targetMultiMenuView transitionToSize];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (self.targetMenuView.superview)
+        {
+            [self.targetMenuView finishRotation];
+        }
     }];
 }
 
@@ -3184,6 +3195,7 @@ typedef enum
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid openedFromMap:NO];
     state.openedFromTracksList = YES;
     state.openedFromTrackMenu = fromTrackMenu;
+    state.temporarilyShown = !item.isShowCurrentTrack && ![_settings isGpxVisible:item.gpxFilePath];
     state.navControllerHistory = navControllerHistory;
     state.lastSelectedTab = selectedTab;
     [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode state:state];

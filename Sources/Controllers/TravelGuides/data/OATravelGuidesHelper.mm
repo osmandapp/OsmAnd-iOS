@@ -42,7 +42,7 @@
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
     [mapPanel showContextMenu:targetPoint];
 }

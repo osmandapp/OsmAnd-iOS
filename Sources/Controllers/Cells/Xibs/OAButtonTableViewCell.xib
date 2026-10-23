@@ -133,7 +133,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="1Ih-Dx-Tcb" secondAttribute="trailing" id="I13-dj-AaA"/>
                     <constraint firstItem="1Ih-Dx-Tcb" firstAttribute="leading" secondItem="35W-3Q-fof" secondAttribute="leadingMargin" id="KTC-aL-6JC"/>
                     <constraint firstItem="1Ih-Dx-Tcb" firstAttribute="top" secondItem="35W-3Q-fof" secondAttribute="top" id="RBu-Ay-wzg"/>
-                    <constraint firstAttribute="bottom" secondItem="1Ih-Dx-Tcb" secondAttribute="bottom" id="X8a-vF-aTf"/>
+                    <constraint firstAttribute="bottom" secondItem="1Ih-Dx-Tcb" secondAttribute="bottom" priority="999" id="X8a-vF-aTf"/>
                 </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" name="groupBg"/>

@@ -198,7 +198,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="QAR-y1-6vz" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="7eI-pI-TMd"/>
-                    <constraint firstAttribute="bottom" secondItem="QAR-y1-6vz" secondAttribute="bottom" id="EpD-8q-v8K"/>
+                    <constraint firstAttribute="bottom" secondItem="QAR-y1-6vz" secondAttribute="bottom" priority="999" id="EpD-8q-v8K"/>
                     <constraint firstAttribute="trailing" secondItem="QAR-y1-6vz" secondAttribute="trailing" id="Y8E-Uc-b9m"/>
                     <constraint firstItem="QAR-y1-6vz" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="dEg-4k-g33"/>
                 </constraints>

@@ -108,7 +108,9 @@ final class RenderedObjectAmenityProvider: NSObject {
     }
     
     private func actualContentFromIconRes() -> String? {
-        guard let content = renderedObject?.iconRes, !content.isEmpty else { return nil }
+        // a POI target passes its OAPOI here, which has no iconRes or tags
+        guard let renderedObject, renderedObject.isKind(of: OARenderedObject.self),
+              let content = renderedObject.iconRes, !content.isEmpty else { return nil }
         if content == "osmand_steps" {
             return "highway_steps"
         }
@@ -155,7 +157,7 @@ final class RenderedObjectAmenityProvider: NSObject {
             cachedTypeStr = searchObjectNameByIconRes()
         }
         
-        if cachedTypeStr?.isEmpty ?? true {
+        if cachedTypeStr?.isEmpty ?? true, renderedObject.isKind(of: OARenderedObject.self) {
             let additionalInfoKeys = amenity?.getAdditionalInfoKeys()
             cachedTypeStr = searchObjectNameByRawTags(
                 tags: renderedObject.tags as? [String: String],

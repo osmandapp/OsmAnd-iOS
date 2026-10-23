@@ -32,8 +32,7 @@ static NSDictionary *DIACRITIC_REPLACE;
         return NO;
     }
     
-    unichar firstChar = [text characterAtIndex:0];
-    if ([self isArabicCharacter:firstChar]) {
+    if ([self startsWithArabic:text]) {
         for (NSUInteger i = 0; i < text.length; i++) {
             unichar c = [text characterAtIndex:i];
             if ([self isDiacritic:c] || [self isArabicDigit:c] || [self isNeedReplace:c]) {
@@ -75,8 +74,7 @@ static NSDictionary *DIACRITIC_REPLACE;
         return nil;
     }
     
-    unichar firstChar = [text characterAtIndex:0];
-    if (![self isArabicCharacter:firstChar]) {
+    if (![self startsWithArabic:text]) {
         return text;
     }
     
@@ -93,6 +91,11 @@ static NSDictionary *DIACRITIC_REPLACE;
     }
     
     return mutableText;
+}
+
++ (BOOL)startsWithArabic:(NSString *)text {
+    return [self isArabicCharacter:[text characterAtIndex:0]]
+            || (text.length > 1 && [self isArabicCharacter:[text characterAtIndex:1]]);
 }
 
 + (BOOL)isDiacritic:(unichar)c {

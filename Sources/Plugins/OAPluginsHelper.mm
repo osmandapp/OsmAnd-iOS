@@ -65,6 +65,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
         }
         else
         {
+            // Enable plugin profiles here so cold-start initialization preserves the user's selection.
+            for (OAApplicationMode *appMode in [plugin getAddedAppModes])
+            {
+                [OAApplicationMode changeProfileAvailability:appMode isSelected:YES];
+            }
             [plugin setEnabled:YES];
         }
     }

@@ -14,6 +14,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         case point(PlanRoutePoint, color: UIColor)
         case gap(PlanRouteSegmentGap)
         case empty
+        case continueRoute
     }
 
     private struct SectionModel {
@@ -34,6 +35,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     var onPointSelected: ((PlanRoutePoint, PlanRouteProfileGroup, PlanRouteSegment) -> Void)?
     var onChangeRouteType: ((SegmentRouteContext) -> Void)?
     var onSaveSegment: (([Int]) -> Void)?
+    var onContinueRoute: (() -> Void)?
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
@@ -105,6 +107,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.register(PlanRouteSegmentGapCell.self, forCellReuseIdentifier: PlanRouteSegmentGapCell.reuseIdentifier)
         tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(PlanRouteStartSegmentCell.self, forCellReuseIdentifier: PlanRouteStartSegmentCell.reuseIdentifier)
+        tableView.register(PlanRouteActionCell.self, forCellReuseIdentifier: PlanRouteActionCell.reuseIdentifier)
         tableView.register(PlanRouteSegmentHeaderView.self, forHeaderFooterViewReuseIdentifier: PlanRouteSegmentHeaderView.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
@@ -144,7 +147,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             result.append(SectionModel(headerTitle: title,
                                        headerSubtitle: nil,
                                        headerMenu: nil,
-                                       rows: [.empty],
+                                       rows: [.empty, .continueRoute],
                                        isStartNewSegment: false))
         } else if dataSource?.canStartNewSegment ?? false {
             result.append(SectionModel(headerTitle: nil,
@@ -202,7 +205,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             return [SectionModel(headerTitle: title,
                                  headerSubtitle: formattedDistance(segment.distance),
                                  headerMenu: segmentMenu,
-                                 rows: rows,
+                                 rows: routeRows(rows, for: segment),
                                  isStartNewSegment: false)]
         } else {
             let segmentColor = segment.singleMode?.getProfileColor() ?? straightLineColor
@@ -217,13 +220,25 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             return [SectionModel(headerTitle: title,
                                  headerSubtitle: subtitle,
                                  headerMenu: segmentMenu,
-                                 rows: rows,
+                                 rows: routeRows(rows, for: segment),
                                  isStartNewSegment: false)]
         }
     }
 
+    private func routeRows(_ rows: [Row], for segment: PlanRouteSegment) -> [Row] {
+        guard dataSource?.pendingEmptySegmentIndex == nil,
+              segment.index == dataSource?.routeSegments.last?.index else { return rows }
+        return rows + [.continueRoute]
+    }
+
     private func makeSegmentMenu(for segment: PlanRouteSegment) -> UIMenu {
         var children: [UIMenuElement] = []
+        if segment.multiMode {
+            children.append(UIAction(title: localizedString("set_single_mode"),
+                                     image: .icCustomNavigationOutlined) { [weak self] _ in
+                self?.onChangeRouteType?(.wholeSegment(segment))
+            })
+        }
         if !segment.multiMode {
             let modeSubtitle = segment.singleMode?.toHumanString() ?? localizedString("plan_route_straight_line")
             let modeIcon = segment.singleMode?.getIcon() ?? .icCustomStraightLine
@@ -235,7 +250,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         }
         children.append(makeSortMenu(pointIndexes: segment.pointIndexes))
         children.append(UIAction(title: localizedString("plan_route_save_as"),
-                                 image: .icCustomSaveToFile) { [weak self] _ in
+                                 image: .icCustomSaveToFileOutlined) { [weak self] _ in
             self?.onSaveSegment?(segment.pointIndexes)
         })
         children.append(UIAction(title: localizedString("delete_segment"),
@@ -356,6 +371,12 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
             return cell
         }
         switch section.rows[indexPath.row] {
+        case .continueRoute:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
+                return UITableViewCell()
+            }
+            cell.configure(title: localizedString("plan_route_continue_with_different_type"), isDestructive: false, showsDisclosure: true)
+            return cell
         case .empty:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell else {
                 return UITableViewCell()
@@ -381,16 +402,22 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             let nextRowIndex = indexPath.row + 1
-            let showsFullWidthSeparator: Bool
-            if section.rows.indices.contains(nextRowIndex),
-               case .profileGroup = section.rows[nextRowIndex] {
-                showsFullWidthSeparator = true
+            let separatorStyle: PlanRoutePointCell.SeparatorStyle
+            if section.rows.indices.contains(nextRowIndex) {
+                switch section.rows[nextRowIndex] {
+                case .profileGroup:
+                    separatorStyle = .fullWidth
+                case .continueRoute:
+                    separatorStyle = .inset
+                default:
+                    separatorStyle = .textAligned
+                }
             } else {
-                showsFullWidthSeparator = false
+                separatorStyle = .textAligned
             }
             cell.configure(with: point,
                            tintColor: color,
-                           showsFullWidthSeparator: showsFullWidthSeparator)
+                           separatorStyle: separatorStyle)
             cell.onDelete = { [weak self] in
                 self?.deletePoint(at: point.index)
             }
@@ -429,6 +456,8 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
             return
         }
         switch section.rows[indexPath.row] {
+        case .continueRoute:
+            onContinueRoute?()
         case let .point(point, _):
             if let (seg, grp) = findSegmentAndGroup(for: point.index) {
                 onPointSelected?(point, grp, seg)

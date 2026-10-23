@@ -57,11 +57,23 @@ extension FavoriteListViewController {
             if !currentSortMode.isDistanceOriented {
                 favorite.bridgeItem.updateDistanceAndDirection()
             }
-            var content = favoriteContentConfiguration(for: favorite)
+            var content = favoriteContentConfiguration(for: favorite, traitCollection: collectionView.traitCollection)
             content.primaryTextLayoutGuideHandler = { [weak cell] layoutGuide in
                 cell?.setPrimaryTextLayoutGuide(layoutGuide)
             }
             cell.contentConfiguration = content
+            cell.iconUserInterfaceStyle = collectionView.traitCollection.userInterfaceStyle
+            cell.configurationUpdateHandler = favorite.isVisible ? nil : { cell, state in
+                guard let cell = cell as? FavoriteListCell,
+                      state.traitCollection.userInterfaceStyle != cell.iconUserInterfaceStyle,
+                      var content = cell.contentConfiguration as? PointContentConfiguration else {
+                    return
+                }
+
+                content.icon = FavoriteListViewController.favoriteIcon(for: favorite, traitCollection: state.traitCollection)
+                cell.iconUserInterfaceStyle = state.traitCollection.userInterfaceStyle
+                cell.contentConfiguration = content
+            }
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             cell.accessories = [.multiselect()]
             updateVisibleSelectionState(at: indexPath)
@@ -112,8 +124,12 @@ extension FavoriteListViewController {
         }
     }
 
-    private func favoriteContentConfiguration(for favorite: FavoritePointRow) -> PointContentConfiguration {
-        PointContentConfiguration(icon: favorite.bridgeItem.icon(), title: favorite.title, isVisible: favorite.bridgeItem.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
+    private static func favoriteIcon(for favorite: FavoritePointRow, traitCollection: UITraitCollection) -> UIImage {
+        favorite.isVisible ? favorite.bridgeItem.icon() : favorite.bridgeItem.icon(with: UIColor.iconColorSecondary.resolvedColor(with: traitCollection))
+    }
+
+    private func favoriteContentConfiguration(for favorite: FavoritePointRow, traitCollection: UITraitCollection) -> PointContentConfiguration {
+        PointContentConfiguration(icon: FavoriteListViewController.favoriteIcon(for: favorite, traitCollection: traitCollection), title: favorite.title, isVisible: favorite.isVisible, secondaryContent: favoriteSecondaryContent(for: favorite))
     }
 
     private func favoriteSecondaryContent(for favorite: FavoritePointRow) -> PointSecondaryContent {

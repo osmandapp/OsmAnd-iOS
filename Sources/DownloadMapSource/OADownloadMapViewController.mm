@@ -18,7 +18,6 @@
 #import "OAMapCreatorHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAResourcesUIHelper.h"
-#import "OADownloadMapProgressViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAMapSource.h"
@@ -66,7 +65,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     OAMapRendererView *_mapView;
-    NSArray *_data;
+    NSArray<NSArray *> *_data;
     
     int _currentZoom;
     int _minZoom;
@@ -362,7 +361,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 }
 
 - (IBAction) downloadButtonPressed:(id)sender {
-    OADownloadMapProgressViewController *downloadMapProgressVC = [[OADownloadMapProgressViewController alloc] initWithResource:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom numberOfTiles:_numberOfTiles];
+    OAMapTileDownloader *tileDownloader = [[OAMapTileDownloader alloc] initWithItem:[self getCurrentItem] minZoom:_minZoom maxZoom:_maxZoom];
+    DownloadMapProgressViewController *downloadMapProgressVC = [[DownloadMapProgressViewController alloc] initWithDownloader:tileDownloader numberOfTiles:_numberOfTiles];
     [[OARootViewController instance].navigationController pushViewController:downloadMapProgressVC animated:YES];
 }
 
@@ -582,7 +582,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == kZoomSection ? UITableViewAutomaticDimension : 1.0;
+    if (section != kZoomSection)
+        return 1.0;
+
+    CGFloat width = MAX(1.0, CGRectGetWidth(tableView.bounds) - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2);
+    NSString *text = [self tableView:tableView titleForFooterInSection:section];
+    return [OAUtilities calculateTextBounds:text width:floor(width) font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height + kPaddingOnSideOfFooterWithText;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

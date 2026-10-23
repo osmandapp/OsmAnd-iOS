@@ -209,15 +209,11 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self setupBottomButton];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self refreshColorsCollection];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+
+    [self refreshColorsCollection];
 
     [_mapPanel targetUpdateControlsLayout:YES
                      customStatusBarStyle:_settings.isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];

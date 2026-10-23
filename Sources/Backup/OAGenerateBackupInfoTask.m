@@ -72,8 +72,10 @@ static const NSInteger kMaxDeflateRatio = 1032;
 - (void)main
 {
     OABackupInfo *info = [self doInBackground];
+    [_operationLog finishOperation:[info toString]];
+    NSString *subscriptionError = [self checkSubscriptions];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onPostExecute:info];
+        [self onPostExecute:info subscriptionError:subscriptionError];
     });
 }
 
@@ -231,14 +233,18 @@ static const NSInteger kMaxDeflateRatio = 1032;
     return remoteFile.zipSize > 0 && remoteFile.zipSize * kMaxDeflateRatio < remoteFile.filesize;
 }
 
-- (void) onPostExecute:(OABackupInfo *)backupInfo
+- (NSString *) checkSubscriptions
 {
-    [_operationLog finishOperation:[backupInfo toString]];
     __block NSString *subscriptionError = nil;
     [[OABackupHelper sharedInstance] checkSubscriptions:^(NSInteger status, NSString *message, NSString *error) {
         if (error)
             subscriptionError = error;
     }];
+    return subscriptionError;
+}
+
+- (void) onPostExecute:(OABackupInfo *)backupInfo subscriptionError:(NSString *)subscriptionError
+{
     if (_onComplete)
         _onComplete(backupInfo, subscriptionError);
 }

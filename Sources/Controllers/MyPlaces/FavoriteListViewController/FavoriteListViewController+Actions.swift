@@ -105,10 +105,10 @@ extension FavoriteListViewController {
             applySnapshot(animatingDifferences: false)
         }
 
+        configureToolbar()
         navigationController?.setToolbarHidden(!isEditing, animated: true)
         myPlacesDelegate?.updateEditMode(isEditing)
         configureNavigation()
-        configureToolbar()
     }
 
     func showRenameAlert(for folder: FavoriteFolderRow) {

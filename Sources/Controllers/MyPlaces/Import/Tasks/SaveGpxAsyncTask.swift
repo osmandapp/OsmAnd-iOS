@@ -190,8 +190,7 @@ final class SaveGpxAsyncTask: OAAsyncTask {
     }
 
     private func isTempFileToMove(_ path: String) -> Bool {
-        guard let gpxPath = OsmAndApp.swiftInstance()?.gpxPath else { return false }
-        let tempDir = (gpxPath as NSString).appendingPathComponent("temp")
+        let tempDir = (NSTemporaryDirectory() as NSString).appendingPathComponent("temp")
         return (path as NSString).deletingLastPathComponent == tempDir
     }
 }

@@ -21,7 +21,7 @@ final class WidgetPageViewController: UIViewController {
     private var bottomStackViewConstraint: NSLayoutConstraint!
     // swiftlint:enable all
     private var heightStackViewConstraint: NSLayoutConstraint?
-    private var appearanceDividerColor: UIColor?
+    private var panelAppearance: ResolvedWidgetPanelAppearance?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,6 +90,10 @@ final class WidgetPageViewController: UIViewController {
         } else {
             bottomStackViewConstraint.isActive = isHiddenPageControl
             heightStackViewConstraint?.isActive = true
+        }
+
+        if let panelAppearance {
+            applyAppearance(panelAppearance)
         }
     }
     
@@ -165,7 +169,9 @@ final class WidgetPageViewController: UIViewController {
     }
 
     func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
-        appearanceDividerColor = appearance.dividerColor
+        panelAppearance = appearance
+        // Offscreen pages apply their saved appearance after building the widget views.
+        guard isViewLoaded else { return }
         view.backgroundColor = appearance.backgroundColor
         for arrangedSubview in stackView.arrangedSubviews {
             if let widget = arrangedSubview as? OABaseWidgetView {
@@ -240,18 +246,26 @@ extension WidgetPageViewController {
                 widget.showRightSeparator(!widget.isHidden && widget !== lastVisibleWidget)
             }
         }
-        updateHorizontalSeparatorVisibility(for: stackView.subviews)
+        updateHorizontalSeparatorVisibility(for: stackView.arrangedSubviews)
     }
     
-    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> ... [widgetView] -> [horizontalSeparatorView]
+    // Rows and horizontal separators alternate in arrangedSubviews.
     private func updateHorizontalSeparatorVisibility(for views: [UIView]) {
+        for case let row as UIStackView in views {
+            row.isHidden = row.arrangedSubviews.allSatisfy { $0.isHidden }
+        }
+
         guard views.count >= 2 else { return }
-        
+
+        let lastVisibleRowIndex = views.indices.last {
+            $0.isMultiple(of: 2) && !views[$0].isHidden
+        } ?? -1
+
         for i in 1..<views.count where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
-            horizontalSeparatorView.isHidden = views[i - 1].isHidden
+            horizontalSeparatorView.isHidden = views[i - 1].isHidden || i > lastVisibleRowIndex
             if !horizontalSeparatorView.isHidden {
-                horizontalSeparatorView.backgroundColor = appearanceDividerColor
+                horizontalSeparatorView.backgroundColor = panelAppearance?.dividerColor
                     ?? (OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light)
             }
         }

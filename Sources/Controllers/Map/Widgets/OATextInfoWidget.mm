@@ -339,6 +339,7 @@ NSString * const kSizeStylePref = @"simple_widget_size";
     ]];
     
     _imageView = [UIImageView new];
+    _imageView.overrideUserInterfaceStyle = _isNight ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
     UIImage *image = [UIImage imageNamed:_icon];
     if (_iconColor) {
         [self setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];

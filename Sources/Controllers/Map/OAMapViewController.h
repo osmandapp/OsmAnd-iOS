@@ -114,6 +114,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (float) getMapZoom;
 - (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
+- (void)reloadMapSourceIfNightModeChanged;
 - (void)setSingleTapContextMenuGestureEnabled:(BOOL)enabled;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;

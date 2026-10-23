@@ -444,7 +444,7 @@
             if (item[@"img"])
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.leftIconView.tintColor = [item[@"key"] isEqualToString:@"category_name"] ? UIColorFromARGB([item[@"color"] intValue]) : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][[item[@"color"] integerValue]]).color;
+                cell.leftIconView.tintColor = [item[@"key"] isEqualToString:kCategoryName] ? UIColorFromARGB([item[@"color"] intValue]) : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][[item[@"color"] integerValue]]).color;
             }
             else if (isAppearance)
             {
@@ -600,7 +600,7 @@
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"key"] isEqualToString:@"category_name"])
+    if ([item[@"key"] isEqualToString:kCategoryName])
     {
         _groupController = [[OAEditGroupViewController alloc] initWithGroupName:item[@"value"] groups:[self getItemGroups]];
         _groupController.delegate = self;
@@ -1057,7 +1057,7 @@
     NSMutableArray *newItems = [NSMutableArray new];
     for (NSDictionary *item in items)
     {
-        if ([item[@"key"] isEqualToString:@"category_name"] || [item[@"key"] isEqualToString:kAppearance])
+        if ([item[@"key"] isEqualToString:kCategoryName] || [item[@"key"] isEqualToString:kAppearance])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
             [mutableItem setObject:@([color toARGBNumber]) forKey:@"color"];
@@ -1087,7 +1087,7 @@
     NSMutableArray *newItems = [NSMutableArray new];
     for (NSDictionary *item in items)
     {
-        if ([item[@"key"] isEqualToString:@"category_name"])
+        if ([item[@"key"] isEqualToString:kCategoryName])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
             [mutableItem setObject:[OAFavoriteGroup getDisplayName:_groupController.groupName] forKey:@"value"];

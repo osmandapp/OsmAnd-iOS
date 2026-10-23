@@ -24,10 +24,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-static NSString * const kName = @"name";
-static NSString * const kCategoryName = @"category_name";
-static NSString * const kCategoryColor = @"category_color";
-
 static QuickActionType *TYPE;
 
 @implementation OAFavoriteAction

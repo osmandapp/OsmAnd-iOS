@@ -252,9 +252,9 @@
     NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[@"category_name"] ?: @""] trim];
     NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[@"category_color"] integerValue]];
     OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][colorIndex];
-    UIColor *selectedColor = params[@"appearance_color"] ? UIColorFromARGB([params[@"appearance_color"] intValue]) : favCol.color;
-    NSString *iconName = params[@"appearance_icon"];
-    NSString *backgroundIconName = params[@"appearance_background"];
+    UIColor *selectedColor = params[kAppearanceColor] ? UIColorFromARGB([params[kAppearanceColor] intValue]) : favCol.color;
+    NSString *iconName = params[kAppearanceIcon];
+    NSString *backgroundIconName = params[kAppearanceBackground];
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];

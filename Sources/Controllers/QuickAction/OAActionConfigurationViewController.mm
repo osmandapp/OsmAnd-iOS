@@ -435,7 +435,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            BOOL isAppearance = [item[@"key"] isEqualToString:@"appearance"];
+            BOOL isAppearance = [item[@"key"] isEqualToString:kAppearance];
             cell.accessibilityValue = nil;
             [cell leftIconVisibility:item[@"img"] != nil || isAppearance];
             [cell valueVisibility:!isAppearance];
@@ -448,9 +448,9 @@
             }
             else if (isAppearance)
             {
-                cell.leftIconView.image = [OAFavoritesHelper getCompositeIcon:item[@"appearance_icon"] backgroundIcon:item[@"appearance_background"] color:UIColorFromARGB([item[@"color"] intValue])];
-                NSString *iconName = item[@"appearance_icon"] ?: DEFAULT_ICON_NAME_KEY;
-                NSString *backgroundIconName = item[@"appearance_background"] ?: DEFAULT_ICON_SHAPE_KEY;
+                cell.leftIconView.image = [OAFavoritesHelper getCompositeIcon:item[kAppearanceIcon] backgroundIcon:item[kAppearanceBackground] color:UIColorFromARGB([item[@"color"] intValue])];
+                NSString *iconName = item[kAppearanceIcon] ?: DEFAULT_ICON_NAME_KEY;
+                NSString *backgroundIconName = item[kAppearanceBackground] ?: DEFAULT_ICON_SHAPE_KEY;
                 cell.accessibilityValue = [NSString stringWithFormat:@"%@, %@, %@", UIColorFromARGB([item[@"color"] intValue]).accessibilityName, [PoiIconCollectionHandler iconAccessibilityLabel:iconName], OALocalizedString([@"shared_string_" stringByAppendingString:backgroundIconName])];
             }
             cell.valueLabel.text = item[@"value"];
@@ -607,10 +607,10 @@
         [self showViewController:_groupController];
         [self.view endEditing:YES];
     }
-    else if ([item[@"key"] isEqualToString:@"appearance"])
+    else if ([item[@"key"] isEqualToString:kAppearance])
     {
-        NSString *iconName = item[@"appearance_icon"];
-        NSString *backgroundIconName = item[@"appearance_background"];
+        NSString *iconName = item[kAppearanceIcon];
+        NSString *backgroundIconName = item[kAppearanceBackground];
         FavoritesChangeAppearanceViewController *controller = [[FavoritesChangeAppearanceViewController alloc] initWithColor:UIColorFromARGB([item[@"color"] intValue]) iconName:iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY backgroundIconName:backgroundIconName.length > 0 ? backgroundIconName : DEFAULT_ICON_SHAPE_KEY];
         __weak __typeof(self) weakSelf = self;
         controller.onApply = ^(UIColor *color, NSString *selectedIconName, NSString *selectedBackgroundIconName) {
@@ -1057,15 +1057,15 @@
     NSMutableArray *newItems = [NSMutableArray new];
     for (NSDictionary *item in items)
     {
-        if ([item[@"key"] isEqualToString:@"category_name"] || [item[@"key"] isEqualToString:@"appearance"])
+        if ([item[@"key"] isEqualToString:@"category_name"] || [item[@"key"] isEqualToString:kAppearance])
         {
             NSMutableDictionary *mutableItem = [NSMutableDictionary dictionaryWithDictionary:item];
             [mutableItem setObject:@([color toARGBNumber]) forKey:@"color"];
-            if ([item[@"key"] isEqualToString:@"appearance"])
+            if ([item[@"key"] isEqualToString:kAppearance])
             {
-                [mutableItem setObject:@([color toARGBNumber]) forKey:@"appearance_color"];
-                [mutableItem setValue:iconName forKey:@"appearance_icon"];
-                [mutableItem setValue:backgroundIconName forKey:@"appearance_background"];
+                [mutableItem setObject:@([color toARGBNumber]) forKey:kAppearanceColor];
+                [mutableItem setValue:iconName forKey:kAppearanceIcon];
+                [mutableItem setValue:backgroundIconName forKey:kAppearanceBackground];
             }
             [newItems addObject:[NSDictionary dictionaryWithDictionary:mutableItem]];
         }

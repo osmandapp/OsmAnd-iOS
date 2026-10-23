@@ -27,9 +27,6 @@
 static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor = @"category_color";
-static NSString * const kAppearanceColor = @"appearance_color";
-static NSString * const kAppearanceIcon = @"appearance_icon";
-static NSString * const kAppearanceBackground = @"appearance_background";
 
 static QuickActionType *TYPE;
 
@@ -189,7 +186,7 @@ static QuickActionType *TYPE;
     UIColor *color = self.getParams[kAppearanceColor] ? UIColorFromARGB([self.getParams[kAppearanceColor] intValue]) : ((OAFavoriteColor *)[OADefaultFavorite builtinColors][defaultColor]).color;
     NSMutableDictionary *appearanceRow = [@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"key" : @"appearance",
+        @"key" : kAppearance,
         @"title" : OALocalizedString(@"shared_string_appearance"),
         @"color" : @([color toARGBNumber])
     } mutableCopy];
@@ -233,7 +230,7 @@ static QuickActionType *TYPE;
             {
                 [params setValue:item[@"value"] forKey:kCategoryName];
             }
-            else if ([item[@"key"] isEqualToString:@"appearance"])
+            else if ([item[@"key"] isEqualToString:kAppearance])
             {
                 [params setValue:item[kAppearanceColor] forKey:kAppearanceColor];
                 [params setValue:item[kAppearanceIcon] forKey:kAppearanceIcon];

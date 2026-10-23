@@ -11,6 +11,19 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     static var cachedCategories = [IconsAppearanceCategory]()
     static var cachedCategoriesByKeyName = [String: IconsAppearanceCategory]()
     
+    private static let iconLabelsByName: [String: String] = {
+        var labels: [String: String] = [:]
+        for poiType in OAPOIHelper.sharedInstance().poiTypes {
+            if let iconName = poiType.iconName(), labels[iconName] == nil {
+                labels[iconName] = poiType.nameLocalized
+            }
+        }
+        for activity in RouteActivityHelper.shared.getActivities() where labels["mx_" + activity.iconName] == nil {
+            labels["mx_" + activity.iconName] = activity.label
+        }
+        return labels
+    }()
+    
     var isFavoriteList = false
     
     override init() {
@@ -22,6 +35,12 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         super.init()
         self.isFavoriteList = isFavoriteList
         setup()
+    }
+    
+    static func iconAccessibilityLabel(_ iconName: String) -> String {
+        let name = iconName.hasPrefix("mx_") ? String(iconName.dropFirst(3)) : iconName
+        let fallbackName = name.hasPrefix("special_") ? String(name.dropFirst(8)) : name
+        return iconLabelsByName["mx_" + name] ?? OAPOIHelper.sharedInstance().getPhraseByName(fallbackName) ?? fallbackName
     }
     
     override func initIconCategories() {

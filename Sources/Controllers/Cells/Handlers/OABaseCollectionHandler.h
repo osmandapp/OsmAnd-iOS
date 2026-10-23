@@ -17,6 +17,7 @@
 
 @optional
 - (void)reloadCollectionData;
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

@@ -7,7 +7,6 @@
 //
 
 #import "OAEditPointViewController.h"
-#import "OAFavoriteGroupEditorViewController.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
@@ -250,10 +249,12 @@
 
 - (void)applyQuickActionParams:(NSDictionary *)params
 {
-    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[@"category_name"] ?: @""] trim];
-    NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[@"category_color"] integerValue]];
+    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[kCategoryName] ?: @""] trim];
+    NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[kCategoryColor] integerValue]];
     OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][colorIndex];
-    UIColor *selectedColor = favCol.color;
+    UIColor *selectedColor = params[kAppearanceColor] ? UIColorFromARGB([params[kAppearanceColor] intValue]) : favCol.color;
+    NSString *iconName = params[kAppearanceIcon];
+    NSString *backgroundIconName = params[kAppearanceBackground];
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
@@ -261,14 +262,9 @@
             selectedColor = group.color;
 
         if (group.iconName.length > 0)
-        {
-            _selectedIconName = group.iconName;
-            [_poiIconCollectionHandler setIconName:_selectedIconName];
-        }
-        
-        NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
-        if (backgroundIndex != NSNotFound)
-            _selectedBackgroundIndex = backgroundIndex;
+            iconName = group.iconName;
+        if (group.backgroundType.length > 0)
+            backgroundIconName = group.backgroundType;
 
         self.groupTitle = [OAFavoriteGroup getDisplayName:group ? group.name : groupName];
     }
@@ -280,10 +276,20 @@
         OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
         if (group.color != 0)
             selectedColor = UIColorFromARGB(group.color);
+        if (group.iconName.length > 0)
+            iconName = group.iconName;
+        if (group.backgroundType.length > 0)
+            backgroundIconName = group.backgroundType;
 
         _selectedWaypointGroupKey = groupName;
         self.groupTitle = groupName.length > 0 ? groupName : OALocalizedString(@"shared_string_waypoints");
     }
+
+    _selectedIconName = iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY;
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
+
+    NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName ?: @""];
+    _selectedBackgroundIndex = backgroundIndex != NSNotFound ? backgroundIndex : [_backgroundIconNames indexOfObject:DEFAULT_ICON_SHAPE_KEY];
 
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
@@ -476,21 +482,22 @@
 
 - (void)setupIcons
 {
-    NSString *preselectedIconName = [_pointHandler getIcon];
-    if (!preselectedIconName)
-        preselectedIconName = [self defaultIconName];
-    _selectedIconName = preselectedIconName;
+    NSString *pointIconName = [_pointHandler getIcon];
+    _selectedIconName = pointIconName ?: [self defaultIconName];
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0 && (pointIconName.length == 0 || ![selectedGroup.iconName isEqualToString:DEFAULT_ICON_NAME_KEY]))
+        _selectedIconName = selectedGroup.iconName;
+
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
         else if (!_selectedIconName || _selectedIconName.length == 0)
             _selectedIconName = DEFAULT_ICON_NAME_KEY;
     }
+
     [_poiIconCollectionHandler setIconName:_selectedIconName];
-    
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
 
@@ -1221,7 +1228,7 @@
 
 - (void)onAddFolderButtonPressed
 {
-    OAFavoriteGroupEditorViewController *groupEditor = [[OAFavoriteGroupEditorViewController alloc] initWithNew];
+    FavoriteGroupEditorViewController *groupEditor = [[FavoriteGroupEditorViewController alloc] initWithNew];
     groupEditor.delegate = self;
     [self showModalViewController:groupEditor];
 }

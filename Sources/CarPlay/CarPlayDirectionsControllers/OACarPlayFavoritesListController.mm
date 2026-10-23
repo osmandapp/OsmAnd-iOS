@@ -13,6 +13,7 @@
 #import "OAPointDescription.h"
 #import "OAOsmAndFormatter.h"
 #import "OALocationServices.h"
+#import "OAMapUtils.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -56,11 +57,11 @@
                 [self onItemSelected:item completionHandler:completionBlock];
             };
             [listItems addObject:listItem];
-            [lastModifiedList addObjectsFromArray:group.points];
+            [lastModifiedList addObjectsFromArray:points];
         }];
         CPListItem *homeItem = [self createHomeItem];
         NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
-        NSInteger maximumFolderCount = maximumItemCount - 1 - (homeItem ? 1 : 0);
+        NSInteger maximumFolderCount = MAX(0, maximumItemCount - 1 - (homeItem ? 1 : 0));
         if (listItems.count > maximumFolderCount)
             [listItems removeObjectsInRange:NSMakeRange(maximumFolderCount, listItems.count - maximumFolderCount)];
 
@@ -98,10 +99,7 @@
     NSString *distance = nil;
     CLLocation *location = OsmAndApp.instance.locationServices.lastKnownLocation;
     if (location)
-    {
-        CLLocation *homeLocation = [[CLLocation alloc] initWithLatitude:[home getLatitude] longitude:[home getLongitude]];
-        distance = [OAOsmAndFormatter getFormattedDistance:[location distanceFromLocation:homeLocation]];
-    }
+        distance = [OAOsmAndFormatter getFormattedDistance:[OAMapUtils getDistance:location.coordinate second:CLLocationCoordinate2DMake([home getLatitude], [home getLongitude])]];
     CPListItem *homeItem = [[CPListItem alloc] initWithText:[home getDisplayName]
                                                  detailText:distance
                                                       image:[home getCompositeIcon]
@@ -122,10 +120,8 @@
     [favoriteItems sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
         NSDate *date1 = [i1 getTimestamp];
         NSDate *date2 = [i2 getTimestamp];
-        if (!date1 || !date2)
-            return NSOrderedDescending;
-        NSTimeInterval lastTime1 = date1.timeIntervalSince1970;
-        NSTimeInterval lastTime2 = date2.timeIntervalSince1970;
+        NSTimeInterval lastTime1 = date1 ? date1.timeIntervalSince1970 : 0;
+        NSTimeInterval lastTime2 = date2 ? date2.timeIntervalSince1970 : 0;
         return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
     }];
 }

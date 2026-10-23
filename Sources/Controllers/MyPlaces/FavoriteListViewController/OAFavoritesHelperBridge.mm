@@ -1103,6 +1103,9 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
         changed = YES;
     }
 
+    if (changed)
+        [OAFavoritesHelper sortAll];
+
     if (changed && notifyAndSave)
     {
         [OAFavoritesHelper notifyFavoritesStorageChanged];

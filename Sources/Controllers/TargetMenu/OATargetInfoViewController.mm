@@ -1157,6 +1157,32 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
               rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
      onFailureNoCache:(void (^)(void))onFailureNoCache
 {
+    // Pictures referenced by the OSM panoramax=* tag are resolved on the client through the
+    // Panoramax meta-catalog, so the tag is not forwarded to cm_place (same as Android).
+    NSMutableDictionary<NSString *, NSString *> *cmPlaceParams = [imageParams mutableCopy];
+    NSString *panoramaxValue = cmPlaceParams[PANORAMAX_TAG];
+    [cmPlaceParams removeObjectForKey:PANORAMAX_TAG];
+
+    __weak __typeof(self) weakSelf = self;
+    [PanoramaxOsmTagHelper loadCardsWithTagValue:panoramaxValue
+                                         session:[self onlineAndMapillarySession]
+                                      completion:^(NSArray<PanoramaxImageCard *> *panoramaxCards, BOOL failed) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        [cards addObjectsFromArray:panoramaxCards];
+        [strongSelf sendCMPlaceRequest:cmPlaceParams
+                                 cards:cards
+                               rowInfo:nearbyImagesRowInfo
+                      onFailureNoCache:onFailureNoCache];
+    }];
+}
+
+- (void)sendCMPlaceRequest:(NSDictionary<NSString *, NSString *> *)imageParams
+                     cards:(NSMutableArray<AbstractCard *> *)cards
+                   rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
+          onFailureNoCache:(void (^)(void))onFailureNoCache
+{
     NSString *urlString = [self buildCMPlaceURLWithImageParams:imageParams];
     
     NSURL *urlObj = [NSURL URLWithString:urlString];
@@ -1391,6 +1417,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     NSMutableArray *openPlaceCards = [NSMutableArray new];
     NSMutableArray *wikimediaCards = [NSMutableArray new];
     NSMutableArray *mapilaryCards = [NSMutableArray new];
+    NSMutableArray *panoramaxCards = [NSMutableArray new];
     MapillaryContributeCard *mapilaryContributeCard = nil;
 
     for (AbstractCard *card in cards) {
@@ -1398,6 +1425,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             [wikimediaCards addObject:card];
         else if ([card isKindOfClass:MapillaryImageCard.class])
             [mapilaryCards addObject:card];
+        else if ([card isKindOfClass:PanoramaxImageCard.class])
+            [panoramaxCards addObject:card];
         else if ([card isKindOfClass:MapillaryContributeCard.class])
             mapilaryContributeCard = (MapillaryContributeCard *)card;
         else if ([card isKindOfClass:UrlImageCard.class])
@@ -1407,6 +1436,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     NSMutableArray *orderedCards = [NSMutableArray array];
     [orderedCards addObjectsFromArray:wikimediaCards];
     [orderedCards addObjectsFromArray:mapilaryCards];
+    [orderedCards addObjectsFromArray:panoramaxCards];
     [orderedCards addObjectsFromArray:openPlaceCards];
     
     if (mapilaryContributeCard)

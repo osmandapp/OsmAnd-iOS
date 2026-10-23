@@ -1990,6 +1990,7 @@
 		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */; };
 		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */; };
 		FA051A6D2E3B768400BB8E95 /* SafariPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */; };
+		FA7B2A6BEB9D3DB08700C65A /* PanoramaxOsmTagHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7B3D4AAD536782E2125DE9 /* PanoramaxOsmTagHelper.swift */; };
 		FA069C542B9AF61B0007E4DE /* OutlineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */; };
 		FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C682B9F13160007E4DE /* ShadowPathView.swift */; };
 		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
@@ -2058,6 +2059,7 @@
 		FA64086D2D3E6FAF005FD12D /* AbstractCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */; };
 		FA64086F2D3E7D88005FD12D /* ImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64086E2D3E7D88005FD12D /* ImageCard.swift */; };
 		FA6408732D3E7FD1005FD12D /* UrlImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408722D3E7FD1005FD12D /* UrlImageCard.swift */; };
+		FA7B0304CE11A95F30AECD09 /* PanoramaxImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7B564DC1E16152B1BB3CC8 /* PanoramaxImageCard.swift */; };
 		FA6408752D3E8047005FD12D /* WikiImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408742D3E8047005FD12D /* WikiImageCard.swift */; };
 		FA6408772D3E8295005FD12D /* NoImagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408762D3E8295005FD12D /* NoImagesCell.swift */; };
 		FA6408792D3E845A005FD12D /* ImageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408782D3E845A005FD12D /* ImageCardCell.swift */; };
@@ -5516,6 +5518,7 @@
 		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLabelTableViewCell.swift; sourceTree = "<group>"; };
 		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLabelTableViewCell.xib; sourceTree = "<group>"; };
 		FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariPresenter.swift; sourceTree = "<group>"; };
+		FA7B3D4AAD536782E2125DE9 /* PanoramaxOsmTagHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoramaxOsmTagHelper.swift; sourceTree = "<group>"; };
 		FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLabel.swift; sourceTree = "<group>"; };
 		FA069C682B9F13160007E4DE /* ShadowPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPathView.swift; sourceTree = "<group>"; };
 		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -5591,6 +5594,7 @@
 		FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractCards.swift; sourceTree = "<group>"; };
 		FA64086E2D3E7D88005FD12D /* ImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCard.swift; sourceTree = "<group>"; };
 		FA6408722D3E7FD1005FD12D /* UrlImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlImageCard.swift; sourceTree = "<group>"; };
+		FA7B564DC1E16152B1BB3CC8 /* PanoramaxImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanoramaxImageCard.swift; sourceTree = "<group>"; };
 		FA6408742D3E8047005FD12D /* WikiImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageCard.swift; sourceTree = "<group>"; };
 		FA6408762D3E8295005FD12D /* NoImagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoImagesCell.swift; sourceTree = "<group>"; };
 		FA6408782D3E845A005FD12D /* ImageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCardCell.swift; sourceTree = "<group>"; };
@@ -7580,6 +7584,7 @@
 				FA6408762D3E8295005FD12D /* NoImagesCell.swift */,
 				FA6408742D3E8047005FD12D /* WikiImageCard.swift */,
 				FA6408722D3E7FD1005FD12D /* UrlImageCard.swift */,
+				FA7B564DC1E16152B1BB3CC8 /* PanoramaxImageCard.swift */,
 				FA64086C2D3E6FAF005FD12D /* AbstractCards.swift */,
 				FA64086E2D3E7D88005FD12D /* ImageCard.swift */,
 				FA4C57022D48E92F00438A5C /* NoInternetCardCell.xib */,
@@ -10040,6 +10045,7 @@
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				FA051A6C2E3B768400BB8E95 /* SafariPresenter.swift */,
+				FA7B3D4AAD536782E2125DE9 /* PanoramaxOsmTagHelper.swift */,
 				FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
 				325DAE652DFFF07E002CB022 /* AsyncTask */,
@@ -13000,6 +13006,7 @@
 				464BF4AB2C051909000D6908 /* Map3DButtonState.swift in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
 				FA051A6D2E3B768400BB8E95 /* SafariPresenter.swift in Sources */,
+				FA7B2A6BEB9D3DB08700C65A /* PanoramaxOsmTagHelper.swift in Sources */,
 				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
@@ -13096,6 +13103,7 @@
 				3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,
 				FA6408732D3E7FD1005FD12D /* UrlImageCard.swift in Sources */,
+				FA7B0304CE11A95F30AECD09 /* PanoramaxImageCard.swift in Sources */,
 				FA7000012F90000000000001 /* FFCircularProgressView.m in Sources */,
 				FA7000012F90000000000002 /* UIColor+iOS7.m in Sources */,
 				FA7000012F90000000000003 /* TTRangeSlider.m in Sources */,

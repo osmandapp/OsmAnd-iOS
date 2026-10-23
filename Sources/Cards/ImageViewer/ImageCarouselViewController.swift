@@ -153,7 +153,7 @@ final class ImageCarouselViewController: UIPageViewController {
         }
         
         var firstSectionItems = [UIAction]()
-        if card is WikiImageCard {
+        if GalleryContextMenuProvider.hasDetails(card: card) {
             let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { [weak self] _ in
                 guard let self,
                       let card = getCardForIndex(currentIndex),
@@ -212,11 +212,12 @@ final class ImageCarouselViewController: UIPageViewController {
     }
 
     private func updateMetaData(with pageIndex: Int) {
-        guard let card = getCardForIndex(pageIndex) as? WikiImageCard else {
+        guard let card = getCardForIndex(pageIndex),
+              let metadata = GalleryContextMenuProvider.metadata(of: card) else {
             contentMetadataView.updateMetadata(with: nil, imageName: "")
             return
         }
-        contentMetadataView.updateMetadata(with: card.metadata, imageName: card.topIcon)
+        contentMetadataView.updateMetadata(with: metadata, imageName: card.topIcon)
     }
     
     private func getCardForIndex(_ index: Int) -> ImageCard? {
@@ -281,6 +282,12 @@ final class ImageCarouselViewController: UIPageViewController {
                 return
             }
             url = imageURL
+        case let panoramaxCard as PanoramaxImageCard:
+            guard let viewerURL = URL(string: panoramaxCard.url) else {
+                NSLog("Error: Invalid URL: \(panoramaxCard.url)")
+                return
+            }
+            url = viewerURL
         default:
             return
         }

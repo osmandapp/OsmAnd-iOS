@@ -134,12 +134,30 @@ enum GalleryContextMenuProvider {
         UIApplication.shared.open(url)
     }
     
+    /// Cards whose source provides details (date, author, license) to show in the Details sheet.
+    static func hasDetails(card: AbstractCard) -> Bool {
+        card is WikiImageCard || card is PanoramaxImageCard
+    }
+
+    static func metadata(of card: AbstractCard) -> Metadata? {
+        switch card {
+        case let wikiCard as WikiImageCard:
+            return wikiCard.metadata
+        case let panoramaxCard as PanoramaxImageCard:
+            return panoramaxCard.metadata
+        default:
+            return nil
+        }
+    }
+
     static func openDetailsController(card: AbstractCard, rootController: UIViewController) {
-        guard let item = card as? WikiImageCard else { return }
+        guard let item = card as? ImageCard, hasDetails(card: item) else { return }
         let controller = GalleryGridDetailViewController()
         controller.card = item
-        controller.metadata = item.metadata
-        controller.titleString = item.title
+        controller.metadata = metadata(of: item)
+        // Panoramax pictures have no title; name the sheet after the source instead of leaving it blank.
+        controller.titleString = item.title.isEmpty && item is PanoramaxImageCard
+            ? localizedString("panoramax") : item.title
         rootController.showMediumSheetViewController(viewController: controller, isLargeAvailable: false)
     }
 }

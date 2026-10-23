@@ -14,6 +14,7 @@ final class AmenityExtensionsHelper: NSObject {
     private static let wikipedia = "wikipedia"
     private static let wikimediaCommons = "wikimedia_commons"
     private static let mapillary = "mapillary"
+    private static let panoramax = "panoramax"
     private static let image = "image"
     
     private static let osmImageKey = "osm_image"
@@ -21,6 +22,7 @@ final class AmenityExtensionsHelper: NSObject {
     private static let tags = [
         image,
         mapillary,
+        panoramax,
         wikidata,
         wikipedia,
         wikimediaCommons

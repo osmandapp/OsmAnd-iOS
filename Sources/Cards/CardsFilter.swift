@@ -15,7 +15,7 @@ final class CardsFilter: NSObject {
     }()
     
     lazy var mapillaryPhotosSection: [AbstractCard] = {
-        cards.filter { !(type(of: $0) == ImageCard.self || $0 is WikiImageCard || $0 is UrlImageCard) }
+        cards.filter { !(type(of: $0) == ImageCard.self || $0 is WikiImageCard || $0 is UrlImageCard || $0 is PanoramaxImageCard) }
     }()
     
     lazy var mapillaryImageCards: [MapillaryImageCard] = {
@@ -35,7 +35,7 @@ final class CardsFilter: NSObject {
     }()
     
     lazy var hasOnlyOnlinePhotosContent: Bool = {
-        cards.contains { $0 is WikiImageCard || $0 is UrlImageCard || type(of: $0) == ImageCard.self }
+        cards.contains { $0 is WikiImageCard || $0 is UrlImageCard || $0 is PanoramaxImageCard || type(of: $0) == ImageCard.self }
     }()
     
     lazy var hasOnlyMapillaryPhotosContent: Bool = {

@@ -23,6 +23,7 @@
 #import "OACurrentPositionHelper.h"
 #import "MissingMapsCalculator.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 #import "OAMemoryLog.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -216,6 +217,8 @@
                     _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
                     _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
                 }
+                if (newTask.routeCalcErrorShort.length > 0)
+                    [LiveActivityManager.shared refresh];
             }
         }];
         [_tasks addObject:newTask];

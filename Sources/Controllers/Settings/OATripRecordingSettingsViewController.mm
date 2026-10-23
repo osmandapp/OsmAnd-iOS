@@ -29,6 +29,8 @@
 
 #define kCellTypeCheck @"check"
 
+static const CGFloat kOpenSettingsRowHeight = 44.0;
+
 @interface OATripRecordingSettingsViewController ()
 
 @property (nonatomic) NSDictionary *settingItem;
@@ -54,6 +56,12 @@ static NSArray<NSNumber *> *trackPrecisionValues;
 static NSArray<NSNumber *> *minTrackSpeedValues;
 
 #pragma mark - Initialization
+
+- (void)registerNotifications
+{
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+        [self addNotification:LiveActivityManager.authorizationDidChangeNotification selector:@selector(onLiveActivityAuthorizationChanged)];
+}
 
 + (void) initialize
 {
@@ -141,6 +149,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
         [_settings.saveTrackMinSpeed resetModeToDefault:self.appMode];
         [_settings.saveHeadingToGpx resetModeToDefault:self.appMode];
         [_settings.saveTrackToGPX resetModeToDefault:self.appMode];
+        [_settings.recordingLiveActivityEnabled resetModeToDefault:self.appMode];
         [_settings.autoSplitRecording resetModeToDefault:self.appMode];
         [_settings.mapSettingSaveTrackIntervalGlobal resetModeToDefault:self.appMode];
         [_settings.mapSettingSaveTrackInterval resetModeToDefault:self.appMode];
@@ -259,6 +268,30 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : OASwitchTableViewCell.reuseIdentifier }]];
+
+            if (@available(iOS 16.2, *))
+            {
+                BOOL areActivitiesEnabled = LiveActivityManager.shared.areActivitiesEnabled;
+                NSMutableArray *liveActivityRows = [NSMutableArray arrayWithObject:@{
+                    @"name" : @"live_activity",
+                    @"type" : OASwitchTableViewCell.reuseIdentifier,
+                    @"title" : OALocalizedString(@"live_activity"),
+                    @"value" : _settings.recordingLiveActivityEnabled,
+                    @"enabled" : @(areActivitiesEnabled),
+                    @"description" : OALocalizedString(areActivitiesEnabled ? @"recording_live_activity_description" : @"live_activity_system_disabled")
+                }];
+                if (!areActivitiesEnabled)
+                {
+                    [liveActivityRows addObject:@{
+                        @"name" : @"open_live_activity_settings",
+                        @"type" : OASimpleTableViewCell.reuseIdentifier,
+                        @"title" : OALocalizedString(@"ant_plus_open_settings"),
+                        @"titleColor" : [UIColor colorNamed:ACColorNameTextColorActive],
+                        @"height" : @(kOpenSettingsRowHeight)
+                    }];
+                }
+                [dataArr addObject:liveActivityRows];
+            }
 
             NSMutableDictionary *routeActivityDict = [@{
                 @"header": OALocalizedString(@"data_settings"),
@@ -501,6 +534,13 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
     }
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSNumber *height = item[@"height"];
+    return height ? height.doubleValue : UITableViewAutomaticDimension;
+}
+
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -510,11 +550,16 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
     {
         OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASwitchTableViewCell.reuseIdentifier];
         [cell descriptionVisibility:NO];
+        BOOL enabled = !item[@"enabled"] || [item[@"enabled"] boolValue];
+        cell.userInteractionEnabled = enabled;
+        cell.switchView.enabled = enabled;
+        cell.titleLabel.textColor = [UIColor colorNamed:enabled ? ACColorNameTextColorPrimary : ACColorNameTextColorSecondary];
+        cell.switchView.accessibilityLabel = item[@"title"];
+        [cell.switchView removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
         id v = item[@"value"];
         if ([v isKindOfClass:[OACommonBoolean class]])
         {
             OACommonBoolean *value = v;
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = [value get:self.appMode];
         }
         else
@@ -578,9 +623,22 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
         [cell descriptionVisibility:NO];
         [cell setCustomLeftSeparatorInset:YES];
         cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.selectionStyle = item[@"name"] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.accessibilityTraits = item[@"name"] ? UIAccessibilityTraitButton : UIAccessibilityTraitStaticText;
+        cell.titleLabel.attributedText = nil;
+        cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        cell.titleLabel.textColor = item[@"titleColor"] ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
         cell.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        cell.titleLabel.attributedText = item[@"title"];
+        if ([item[@"title"] isKindOfClass:NSAttributedString.class])
+            cell.titleLabel.attributedText = item[@"title"];
+        else
+            cell.titleLabel.text = item[@"title"];
+        if (item[@"height"])
+        {
+            cell.topContentSpaceView.hidden = YES;
+            cell.bottomContentSpaceView.hidden = YES;
+        }
         return cell;
     }
     else if ([type isEqualToString:OARightIconTableViewCell.reuseIdentifier])
@@ -653,6 +711,12 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
 
 #pragma mark - Selectors
 
+- (void)onLiveActivityAuthorizationChanged
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
 - (void)onProButtonTapped
 {
     [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.VEHICLEMETRICS navController:self.navigationController];
@@ -673,7 +737,15 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
         if ([v isKindOfClass:[OACommonBoolean class]])
         {
             OACommonBoolean *value = v;
+            if (value == _settings.recordingLiveActivityEnabled && !LiveActivityManager.shared.areActivitiesEnabled)
+            {
+                sw.on = [value get:self.appMode];
+                [self onLiveActivityAuthorizationChanged];
+                return;
+            }
             [value set:isChecked mode:self.appMode];
+            if (value == _settings.recordingLiveActivityEnabled)
+                [LiveActivityManager.shared refresh];
             if ([name isEqualToString:@"track_during_nav"])
             {
                 [self updateNavigationSection:isChecked];
@@ -742,7 +814,11 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
 - (void) selectGeneral:(NSDictionary *)item
 {
     NSString *name = item[@"name"];
-    if ([@"rec_interval" isEqualToString:name])
+    if ([@"open_live_activity_settings" isEqualToString:name])
+    {
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+    }
+    else if ([@"rec_interval" isEqualToString:name])
     {
         OATripRecordingSettingsViewController* settingsViewController = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenRecInterval applicationMode:self.appMode];
         [self.navigationController pushViewController:settingsViewController animated:YES];

@@ -1,0 +1,153 @@
+# frozen_string_literal: true
+
+require_relative '../Scripts/app_store_metadata/metadata'
+require_relative '../Scripts/app_store_metadata/auth'
+
+default_platform(:ios)
+
+METADATA_APP_ID = 'net.osmand.maps'
+
+UPLOAD_FLAGS = {
+  'Title' => 'UPLOAD_TITLE',
+  'Subtitle' => 'UPLOAD_SUBTITLE',
+  'Promotional Text' => 'UPLOAD_PROMOTIONAL_TEXT',
+  "What's New" => 'UPLOAD_WHATS_NEW',
+  'Description' => 'UPLOAD_DESCRIPTION'
+}.freeze
+
+def selected_metadata_fields
+  UPLOAD_FLAGS.filter_map do |field, variable|
+    value = ENV.fetch(variable, field == "What's New" ? 'true' : 'false')
+    UI.user_error!("#{variable} must be true or false") unless %w[true false].include?(value)
+    field if value == 'true'
+  end
+end
+
+def asc_app
+  values = %w[ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8]
+  missing = values.select { |name| ENV[name].to_s.empty? }
+  UI.user_error!("Missing App Store Connect secrets: #{missing.join(', ')}") unless missing.empty?
+  app_store_connect_api_key(
+    key_id: ENV.fetch('ASC_KEY_ID'),
+    issuer_id: ENV.fetch('ASC_ISSUER_ID'),
+    key_content: AppStoreMetadata.api_key_pem(ENV.fetch('ASC_KEY_P8')),
+    is_key_content_base64: false,
+    in_house: false
+  )
+  app = Spaceship::ConnectAPI::App.find(METADATA_APP_ID)
+  UI.user_error!("#{METADATA_APP_ID} was not found in App Store Connect") unless app
+  app
+end
+
+def metadata_context(app, allow_live: false, require_matching_locales: true)
+  platform = Spaceship::ConnectAPI::Platform::IOS
+  info = app.fetch_edit_app_info
+  version = app.get_edit_app_store_version(platform: platform)
+  if allow_live && (!info || !version)
+    info = app.fetch_live_app_info
+    version = app.get_live_app_store_version(platform: platform)
+  end
+  UI.user_error!('No matching editable App Info and iOS version') unless info && version
+  info_by_locale = info.get_app_info_localizations.to_h { |item| [item.locale, item] }
+  version_by_locale = version.get_app_store_version_localizations.to_h { |item| [item.locale, item] }
+  if require_matching_locales && info_by_locale.keys.sort != version_by_locale.keys.sort
+    UI.user_error!('App Info and App Store version locale lists differ; reconcile them before publishing')
+  end
+  [info, version, info_by_locale, version_by_locale]
+end
+
+platform :ios do
+  desc 'Import current App Store Connect metadata into app-store/metadata.md (one time only)'
+  lane :metadata_bootstrap do
+    app = asc_app
+    _info, _version, infos, versions = metadata_context(app, allow_live: true)
+    path = File.join(AppStoreMetadata::ROOT, 'app-store', 'metadata.md')
+    if File.exist?(path) && !File.read(path, encoding: 'UTF-8').include?(AppStoreMetadata::TEST_MARKER)
+      UI.user_error!("#{path} already exists; refusing to overwrite Marketing edits")
+    end
+    imported = infos.keys.to_h do |locale|
+      UI.user_error!("No .lproj mapping for App Store locale #{locale}") unless AppStoreMetadata::STORE_TO_APP.key?(locale)
+      info = infos.fetch(locale)
+      version = versions.fetch(locale)
+      [locale, {
+        'Title' => info.name.to_s,
+        'Subtitle' => info.subtitle.to_s,
+        'Promotional Text' => version.promotional_text.to_s,
+        'Description' => version.description.to_s
+      }]
+    end
+    document = AppStoreMetadata.render_bootstrap(imported)
+    parsed = AppStoreMetadata.parse(document)
+    imported.each do |locale, fields|
+      fields.each do |name, value|
+        normalized = value.gsub(/\r\n?/, "\n").sub(/\n+\z/, '')
+        UI.user_error!("Bootstrap could not preserve #{locale} #{name}") unless parsed.fetch(locale).fetch(name) == normalized
+      end
+    end
+    FileUtils.mkdir_p(File.dirname(path))
+    File.write(path, document, encoding: 'UTF-8')
+    UI.success("Imported #{imported.length} locales to #{path}. Review before committing.")
+  end
+
+  desc 'Validate, generate, and publish only five managed text fields'
+  lane :metadata_publish do
+    selected_fields = selected_metadata_fields
+    UI.user_error!('Select at least one metadata field') if selected_fields.empty?
+    path = File.join(AppStoreMetadata::ROOT, 'app-store', 'metadata.md')
+    source = File.read(path, encoding: 'UTF-8')
+    UI.user_error!('Test metadata cannot be published; replace it with reviewed App Store copy') if source.include?(AppStoreMetadata::TEST_MARKER)
+    app = asc_app
+    info, version, infos, versions = metadata_context(app, require_matching_locales: false)
+    records = AppStoreMetadata.parse(source)
+    extra_locales = (infos.keys | versions.keys) - records.keys
+    UI.user_error!("App Store Connect has locales absent from metadata.md: #{extra_locales.sort.join(', ')}") unless extra_locales.empty?
+    # Creating a locale requires a name, so validate Title even when its
+    # checkbox is off. Only selected fields are sent to existing locales.
+    validated = AppStoreMetadata.validate(records, expected_locales: records.keys,
+                                                   version: version.version_string,
+                                                   selected_fields: selected_fields | ['Title'])
+    resolved = validated.transform_values { |fields| fields.slice(*selected_fields) }
+    output = File.join(AppStoreMetadata::ROOT, '.generated', 'app-store-metadata')
+    AppStoreMetadata.generate(resolved, output)
+    generated = AppStoreMetadata.read_generated(output, expected_locales: resolved.keys,
+                                                       selected_fields: selected_fields)
+    UI.user_error!('Generated metadata differs from validated values; nothing was uploaded') unless generated == resolved
+    UI.message("Validated #{selected_fields.join(', ')} for #{METADATA_APP_ID} version #{version.version_string} (#{resolved.length} locales); beginning upload")
+
+    # Every write has an explicit allowlist. In particular there is no keywords key,
+    # screenshot upload, IPA upload, version update, or App Review submission.
+    completed = []
+    generated.sort.each do |locale, fields|
+      unless infos.key?(locale)
+        name = validated.fetch(locale).fetch('Title')
+        infos[locale] = info.create_app_info_localization(attributes: { locale: locale, name: name })
+        UI.message("Enabled App Info locale #{locale}")
+        # App Store Connect may create the matching version locale automatically.
+        # Refresh before deciding whether a second create request is needed.
+        versions = version.get_app_store_version_localizations.to_h { |item| [item.locale, item] }
+      end
+      unless versions.key?(locale)
+        versions[locale] = version.create_app_store_version_localization(attributes: { locale: locale })
+        UI.message("Enabled App Store version locale #{locale}")
+      end
+      version_attributes = AppStoreMetadata.version_attributes(fields)
+      info_attributes = AppStoreMetadata.info_attributes(fields)
+      versions.fetch(locale).update(attributes: version_attributes) unless version_attributes.empty?
+      infos.fetch(locale).update(attributes: info_attributes) unless info_attributes.empty?
+      completed << locale
+      UI.message("Updated #{locale}")
+    end
+    if ENV['GITHUB_STEP_SUMMARY']
+      File.open(ENV.fetch('GITHUB_STEP_SUMMARY'), 'a') do |summary|
+        summary.puts "## App Store Metadata\n\nPublished #{METADATA_APP_ID} version #{version.version_string} for #{resolved.length} locales.\n\nFields: #{selected_fields.join(', ')}.\n\nLocales: #{completed.join(', ')}."
+      end
+    end
+  rescue AppStoreMetadata::Error, Errno::ENOENT => e
+    if ENV['GITHUB_STEP_SUMMARY']
+      File.open(ENV.fetch('GITHUB_STEP_SUMMARY'), 'a') do |summary|
+        summary.puts "## App Store Metadata\n\nValidation failed: #{e.message}. Nothing was uploaded."
+      end
+    end
+    UI.user_error!("#{e.message}. Nothing was uploaded.")
+  end
+end

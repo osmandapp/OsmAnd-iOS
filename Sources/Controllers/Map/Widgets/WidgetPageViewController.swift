@@ -71,9 +71,11 @@ final class WidgetPageViewController: UIViewController {
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        let trailingStackViewConstraint = stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        trailingStackViewConstraint.priority = isMultipleWidgetsInRow ? .required : UILayoutPriority(999)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            trailingStackViewConstraint,
             stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
         bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -99,7 +101,8 @@ final class WidgetPageViewController: UIViewController {
         var height: CGFloat = 0
         if isMultipleWidgetsInRow {
             updateSimpleWidget()
-            // Compress optional label widths, but preserve required padding and icon widths.
+            // Measure compressed content; optional padding and icon widths may shrink.
+            // Regular top/bottom panel widths are determined by OAMapInfoController, not this measurement.
             let fittingSize = stackView.systemLayoutSizeFitting(
                 UIView.layoutFittingCompressedSize,
                 withHorizontalFittingPriority: UILayoutPriority(999),

@@ -69,7 +69,6 @@ final class ChangeMapOrientationAction: OASwitchableAction {
         }
         
         OAMapViewTrackingUtilities.instance().switchRotateMapMode(to: Int32(compassMode.value))
-        OAMapButtonsHelper.sharedInstance().refreshQuickActionButtons()
     }
     
     override func getUIModel() -> OrderedDictionary<AnyObject, AnyObject> {

@@ -654,7 +654,7 @@ static char kMapSourceUpdateQueueKey;
                                    _app.initialURLMapState.target31.y);
         OARootViewController *rootViewController = [OARootViewController instance];
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
-        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer unknownTargetPoint:latLon.latitude longitude:latLon.longitude];
         targetPoint.centerMap = YES;
         [rootViewController.mapPanel showContextMenu:targetPoint];
     }
@@ -3465,6 +3465,10 @@ static char kMapSourceUpdateQueueKey;
             [_gpxFilesRec addObject:gpxFile];
             [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
         }
+        else if (refreshData)
+        {
+            _recTrackShowing = NO;
+        }
     }];
 }
 
@@ -3995,6 +3999,25 @@ static char kMapSourceUpdateQueueKey;
 {
     if (items.count == 0)
         return NO;
+
+    if (docPath.length == 0)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+        for (OAGpxWptItem *item in items)
+        {
+            [helper saveWpt:item.point];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
+        }
+
+        if (updateMap)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+            });
+        }
+        return YES;
+    }
 
     BOOL found = NO;
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;

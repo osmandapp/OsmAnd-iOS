@@ -287,6 +287,15 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
+// A copy, so that a listener can add or remove listeners from its callback
+- (NSArray<id<OARouteInformationListener>> *) currentListeners
+{
+    @synchronized (_listeners)
+    {
+        return [_listeners copy];
+    }
+}
+
 - (OABBox) getBBox
 {
     double left = DBL_MAX;
@@ -357,23 +366,11 @@ static BOOL _isDeviatedFromRoute = false;
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @synchronized (_listeners)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<OARouteInformationListener> l in [self currentListeners])
         {
-            NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-            for (id<OARouteInformationListener> l in _listeners)
-            {
-                if (l)
-                {
-                    if ([l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
-                    [l newRouteHasMissingOrOutdatedMaps:missingMaps mapsToUpdate:mapsToUpdate potentiallyUsedMaps:potentiallyUsedMaps];
-                }
-                else
-                {
-                    [inactiveListeners addObject:l];
-                }
-            }
-            [_listeners removeObjectsInArray:inactiveListeners];
+            if ([l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
+                [l newRouteHasMissingOrOutdatedMaps:missingMaps mapsToUpdate:mapsToUpdate potentiallyUsedMaps:potentiallyUsedMaps];
         }
     });
 }
@@ -381,19 +378,9 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) newRouteCalculated:(BOOL)newRoute
 {
     [LiveActivityManager.shared refresh];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @synchronized (_listeners)
-        {
-            NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-            for (id<OARouteInformationListener> l in _listeners)
-            {
-                if (l)
-                    [l newRouteIsCalculated:newRoute];
-                else
-                    [inactiveListeners addObject:l];
-            }
-            [_listeners removeObjectsInArray:inactiveListeners];
-        }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<OARouteInformationListener> l in [self currentListeners])
+            [l newRouteIsCalculated:newRoute];
     });
 }
 
@@ -576,19 +563,9 @@ static BOOL _isDeviatedFromRoute = false;
             if (updateAndNotify)
             {
                 [_route updateCurrentRoute:newCurrentRoute + 1];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    @synchronized (_listeners)
-                    {
-                        NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                        for (id<OARouteInformationListener> l in _listeners)
-                        {
-                            if (l)
-                                [l routeWasUpdated];
-                            else
-                                [inactiveListeners addObject:l];
-                        }
-                        [_listeners removeObjectsInArray:inactiveListeners];
-                    }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    for (id<OARouteInformationListener> l in [self currentListeners])
+                        [l routeWasUpdated];
                 });
             }
 
@@ -987,19 +964,9 @@ static BOOL _isDeviatedFromRoute = false;
 
         [[OAWaypointHelper sharedInstance] setNewRoute:_route];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @synchronized (_listeners)
-            {
-                NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                for (id<OARouteInformationListener> l in _listeners)
-                {
-                    if (l)
-                        [l routeWasCancelled];
-                    else
-                        [inactiveListeners addObject:l];
-                }
-                [_listeners removeObjectsInArray:inactiveListeners];
-            }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (id<OARouteInformationListener> l in [self currentListeners])
+                [l routeWasCancelled];
         });
         _finalLocation = newFinalLocation;
         _lastGoodRouteLocation = nil;
@@ -1024,19 +991,9 @@ static BOOL _isDeviatedFromRoute = false;
 {
     @synchronized (self)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @synchronized (_listeners)
-            {
-                NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                for (id<OARouteInformationListener> l in _listeners)
-                {
-                    if (l)
-                        [l routeWasFinished];
-                    else
-                        [inactiveListeners addObject:l];
-                }
-                [_listeners removeObjectsInArray:inactiveListeners];
-            }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (id<OARouteInformationListener> l in [self currentListeners])
+                [l routeWasFinished];
         });
     }
 }

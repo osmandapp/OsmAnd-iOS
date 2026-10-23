@@ -70,7 +70,8 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     int i = 0;
     for (OAPOIType *poiType in _poiTypes)
     {
-        NSString *title = poiType.nameLocalized;
+        // "Kayaks: yes" -> "Kayaks", like the values of the row
+        NSString *title = _isPoiAdditional ? [PoiAdditionalLabels getGroupValueLabel:poiType] : poiType.nameLocalized;
         OAButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];

@@ -24,6 +24,7 @@
 #import "MissingMapsCalculator.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAMemoryLog.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE 3
@@ -204,6 +205,7 @@
         __weak OARouteRecalculationTask *newTaskRef = newTask;
         __weak __typeof(self) weakSelf = self;
         [newTask setCompletionBlock:^{
+            [OAMemoryLog.sharedInstance onRouteCalculated];
             OARouteRecalculationTask *newTask = newTaskRef;
             if (newTask)
             {

@@ -391,7 +391,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item =  [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"relief3D"] || [item.key isEqualToString:@"modifyPalette"])
+    if (([item.key isEqualToString:@"relief3D"] || [item.key isEqualToString:@"modifyPalette"])
+        && ![item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
         return kRelief3DCellRowHeight;
     return UITableViewAutomaticDimension;
 }

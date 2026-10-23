@@ -19,7 +19,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
-@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter;
+@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter, OASMapPoiTypes;
 
 @protocol OAPOISearchDelegate
 
@@ -37,6 +37,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, readonly) OAPOICategory *otherPoiCategory;
 @property (nonatomic, readonly) OAPOICategory *otherMapCategory;
 @property (nonatomic, readonly) NSArray<OAPOIFilter *> *poiFilters;
+@property (nonatomic, readonly) OASMapPoiTypes *kPoiTypes;
 
 + (nonnull OAPOIHelper *) sharedInstance;
 

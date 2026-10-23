@@ -708,7 +708,7 @@
 "navigate_point_format_unknown" = "Непознат формат";
 "navigate_point_northing" = "Земљописна ширина";
 "navigate_point_easting" = "Земљописна дужина";
-"navigate_point_zone" = "Област";
+"navigate_point_zone" = "Зона";
 "navigate_point_olc" = "Отворени кôд положаја";
 "approximate_file_size" = "Приближна величина датотеке";
 "shared_string_example" = "Пример";
@@ -4356,7 +4356,7 @@
 "ais_antenna_offsets_format" = "прамац %ld, крма %ld, леви бок %ld, десни бок %ld m";
 "ais_draught" = "Нацрт";
 "ais_last_update" = "Последње ажурирање";
-"ais_type_vessel" = "Брод";
+"ais_type_vessel" = "Пловило";
 "ais_type_sport_vessel" = "Спортски брод";
 "ais_type_high_speed_vessel" = "Брод велике брзине";
 "ais_type_passenger_vessel" = "Путнички брод";
@@ -4586,3 +4586,19 @@
 "opening_hours_public_holiday" = "Државни празници";
 "opening_hours_school_holiday" = "Школски распусти";
 "opening_hours_easter" = "Ускрс";
+"keep_screen_on" = "Држи екран укључен";
+"during_navigation" = "Током навигације";
+"coordinate_format_description" = "Жељени формати за брзи приступ из контекстног менија и претраге.";
+"coordinate_format_primary" = "Примарни";
+"coordinate_format_cancel_changes_title" = "Одбацити измене?";
+"coordinate_format_cancel_changes_message" = "Ваше измене жељених формата неће бити сачуване.";
+"coordinate_format_last_item_warning" = "Потребан је бар један формат координата.";
+"coordinate_format_add_title" = "Додај формат";
+"coordinate_format_add_search_hint" = "Претражите ЕПСГ код или назив формата";
+"coordinate_format_add_empty_title" = "Тражите одређени формат?";
+"coordinate_format_add_empty_body" = "Претражите базу података са више од 5.000 локалних и националних ЕПСГ кодова према земљи, називу или ИД.";
+"navigate_point_format_swiss_grid" = "Швајцарска мрежа (CH1903)";
+"navigate_point_format_swiss_grid_plus" = "Швајцарска мрежа (CH1903+)";
+"navigate_point_format_maidenhead" = "Меиденхед";
+"shared_string_recent" = "Недавно";
+"coordinate_format_select_other" = "Изаберите други формат";

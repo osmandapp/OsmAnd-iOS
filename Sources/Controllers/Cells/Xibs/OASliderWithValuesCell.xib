@@ -20,7 +20,7 @@
                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="NAQ-g5-4SF">
                         <rect key="frame" x="14" y="8" width="347" height="31"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="30" id="iGq-zx-xgY"/>
+                            <constraint firstAttribute="height" priority="999" constant="30" id="iGq-zx-xgY"/>
                         </constraints>
                     </slider>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 km/h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTt-t5-0gi">

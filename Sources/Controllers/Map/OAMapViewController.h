@@ -104,6 +104,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 @property (atomic, readonly) BOOL mapViewLoaded;
 @property (nonatomic) BOOL attachedToCarPlayWindow;
+@property (nonatomic, readonly) BOOL recTrackShowing;
 
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;

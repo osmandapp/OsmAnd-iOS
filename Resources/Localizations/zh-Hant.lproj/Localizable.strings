@@ -4213,3 +4213,6 @@
 "ais_nmea_protocol" = "NMEA 資料接收的協定";
 "ais_nmea_protocol_description" = "選取 NMEA 資料接收的協定";
 "ais_address_nmea_server" = "NMEA 資料來源的 IP 位址";
+"opening_hours_public_holiday" = "公共假期";
+"opening_hours_school_holiday" = "學校假期";
+"opening_hours_easter" = "復活節";

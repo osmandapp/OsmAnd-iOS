@@ -194,7 +194,8 @@
 - (void) continueButtonPressed
 {
     NSString *token = [self getTextFieldValue];
-    if ([BackupUtils isTokenValid:token])
+    BOOL digitsOnly = _sourceType == EOACloudScreenSourceDeleteAccount;
+    if (token.length > 0 && (!digitsOnly || [BackupUtils isTokenValid:token]))
     {
         if (_sourceType == EOACloudScreenSourceDeleteAccount)
         {

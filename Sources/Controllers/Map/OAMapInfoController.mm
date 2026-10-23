@@ -519,7 +519,6 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     CGSize topSize = hasTopWidgets ? [_topPanelController calculateContentSize] : CGSizeZero;
     CGSize bottomSize = hasBottomWidgets ? [_bottomPanelController calculateContentSize] : CGSizeZero;
-    BOOL topPanelAboveSidePanels = NO;
 
     BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
     // Device orientation does not describe the window layout of an iPad app running on Mac.
@@ -548,17 +547,10 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
             topRightMargin = MAX(topRightMargin, rightPanelWidth + panelsMargin);
 
         CGFloat bottomHorizontalMargin = MAX(centeredMargin, bottomButtonsMargin);
+        // Keep Compact geometry even when a crowded widget row needs to compress.
         topPanelWidth = MAX(0, availableWidth - topLeftMargin - topRightMargin);
         topPanelCenterX = (topLeftMargin - topRightMargin) / 2;
         bottomPanelWidth = MAX(0, availableWidth - bottomHorizontalMargin * 2);
-        if (hasTopWidgets && topPanelWidth < topSize.width)
-        {
-            topPanelWidth = availableWidth;
-            topPanelCenterX = 0;
-            topPanelAboveSidePanels = YES;
-        }
-        if (hasBottomWidgets && bottomPanelWidth < bottomSize.width)
-            bottomPanelWidth = availableWidth;
     }
     else
     {
@@ -655,7 +647,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
     if (isCompactPortrait)
     {
-        leftRightWidgetsViewTopConstraintConstant = !topPanelAboveSidePanels && _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
+        leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0
             ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant + kWidgetsTopPadding
             : kWidgetsTopPadding;
     }

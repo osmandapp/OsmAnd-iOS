@@ -14,6 +14,7 @@
 - (double) bearingTo:(CLLocation *)location;
 - (BOOL) hasBearing;
 - (BOOL) hasSpeed;
+- (BOOL)hasAltitude;
 - (BOOL) hasAccuracy;
 - (double)haversineDistanceInMetersTo:(CLLocation *)location;
 

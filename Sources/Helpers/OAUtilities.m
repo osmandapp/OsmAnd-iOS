@@ -1319,9 +1319,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         {
             [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
-        else if (remove && [filePath containsString:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR]])
+        else if (remove && [filePath containsString:[NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR]])
         {
-            [NSFileManager.defaultManager removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR] error:nil];
+            [NSFileManager.defaultManager removeItemAtPath:[NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR] error:nil];
         }
         else
         {

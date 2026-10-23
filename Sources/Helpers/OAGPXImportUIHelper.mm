@@ -11,7 +11,6 @@
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
 #import "Localization.h"
 #import "OAGPXAppearanceCollection.h"
@@ -194,93 +193,101 @@ static UIViewController *parentController;
     });
 }
 
-- (void) handleKmzImport
+- (void)handleKmzImport
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    
+
     OsmAnd::ArchiveReader reader(QString::fromNSString(_importUrl.path));
     NSString *tmpKmzPath = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:@"kmzTemp"];
-    BOOL success = reader.extractAllItemsTo(QString::fromNSString(tmpKmzPath));
-    if (success)
+    NSString *kmlPath;
+    bool ok = false;
+    const auto items = reader.getItems(&ok);
+    if (ok)
     {
-        for (NSString *filename in [fileManager contentsOfDirectoryAtPath:tmpKmzPath error:nil])
+        QString kmlItemName;
+        for (const auto& item : constOf(items))
         {
-            if ([filename.pathExtension isEqualToString:@"kml"])
+            NSString *itemName = item.name.toNSString();
+            if (![itemName.pathExtension.lowerCase isEqualToString:KML_EXT] || [itemName.lastPathComponent hasPrefix:@"._"])
+                continue;
+            if (![itemName containsString:@"/"])
             {
-                [self handleKmlImport:[NSData dataWithContentsOfFile:[tmpKmzPath stringByAppendingPathComponent:filename]]];
+                kmlItemName = item.name;
                 break;
             }
+            if (kmlItemName.isEmpty())
+                kmlItemName = item.name;
+        }
+        if (!kmlItemName.isEmpty())
+        {
+            NSString *path = [tmpKmzPath stringByAppendingPathComponent:kmlItemName.toNSString().lastPathComponent];
+            if (reader.extractItemToFile(kmlItemName, QString::fromNSString(path)))
+                kmlPath = path;
         }
     }
-    else
-    {
-        [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
-        _importUrl = nil;
-    }
+    [self handleKmlImport:kmlPath];
     [fileManager removeItemAtPath:tmpKmzPath error:nil];
 }
 
-- (void) handleKmlImport:(NSData *)data
+- (void)handleKmlImport:(NSString *)kmlPath
 {
-    if (data && data.length > 0)
-    {
-        NSString *gpxStr = [OAKml2Gpx toGpx:data];
-        if (gpxStr)
-        {
-            NSString *finalFilePath = [[[_app.gpxPath stringByAppendingPathComponent:TEMP_DIR]
-                                        stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
-            NSError *err;
-            if (![NSFileManager.defaultManager fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:TEMP_DIR]])
-            {
-                [NSFileManager.defaultManager createDirectoryAtPath:[_app.gpxPath stringByAppendingPathComponent:TEMP_DIR]
-                                        withIntermediateDirectories:YES
-                                                         attributes:nil
-                                                              error:&err];
-            }
-            if (!err)
-            {
-                [gpxStr writeToFile:finalFilePath atomically:YES encoding:NSUTF8StringEncoding error:&err];
-                if (err)
-                    NSLog(@"Error creating gpx file");
+    OASGpxFile *gpxFile = kmlPath ? [self convertKmlToGpx:kmlPath] : nil;
+    [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
+    _doc = gpxFile;
+    _importUrl = gpxFile ? [NSURL fileURLWithPath:gpxFile.path] : nil;
+}
 
-                [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
+- (OASGpxFile *)convertKmlToGpx:(NSString *)kmlPath
+{
+    NSError *error;
+    id<OASOkioSource> source = [[[OASKFile alloc] initWithFilePath:kmlPath] sourceAndReturnError:&error];
+    if (!source)
+        return nil;
 
-                _importUrl = [NSURL fileURLWithPath:finalFilePath];
-            }
-            if (![NSFileManager.defaultManager fileExistsAtPath:finalFilePath])
-            {
-                [OAUtilities denyAccessToFile:finalFilePath removeFromInbox:YES];
-                _importUrl = nil;
-                [OARootViewController showInfoAlertWithTitle:OALocalizedString(@"import_failed")
-                                                     message:OALocalizedString(@"import_cannot")
-                                                inController:_hostVC];
-            }
-        }
-    }
-    else
+    OASKotlinPair<OASGpxFile *, OASLong *> *result = [OASImportGpx.shared loadGPXFileFromKmlKml:source error:&error];
+    [source closeAndReturnError:nil];
+    OASGpxFile *gpxFile = result.first;
+    if (!gpxFile || gpxFile.error || ([gpxFile getNonEmptyTracksCount] == 0 && [gpxFile isPointsEmpty]))
     {
-        [OAUtilities denyAccessToFile:_importUrl.path removeFromInbox:YES];
-        _importUrl = nil;
+        NSLog(@"[OAGPXImportUIHelper] -> [ERROR] -> KML conversion failed: %@", gpxFile.error.message ?: error.localizedDescription);
+        return nil;
     }
+
+    NSString *tempPath = [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR];
+    gpxFile.path = [[tempPath stringByAppendingPathComponent:[_importUrl.lastPathComponent stringByDeletingPathExtension]] stringByAppendingPathExtension:GPX_EXT];
+    OASKException *writeError = [OASGpxUtilities.shared writeGpxFileFile:[[OASKFile alloc] initWithFilePath:gpxFile.path] gpxFile:gpxFile];
+    return writeError ? nil : gpxFile;
 }
 
 - (void) processUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
     _importUrl = [url copy];
+    _doc = nil;
     OASGpxDataItem *item;
-    
-    if ([_importUrl.pathExtension isEqualToString:KML_EXT])
-        [self handleKmlImport:[NSData dataWithContentsOfURL:_importUrl]];
-    else if ([_importUrl.pathExtension isEqualToString:KMZ_EXT])
+
+    NSString *ext = _importUrl.pathExtension.lowerCase;
+    if ([ext isEqualToString:KML_EXT])
+        [self handleKmlImport:_importUrl.path];
+    else if ([ext isEqualToString:KMZ_EXT])
         [self handleKmzImport];
     
     // import failed
     if (!_importUrl)
+    {
+        if (showAlerts)
+        {
+            [self showImportGpxAlert:OALocalizedString(@"import_tracks")
+                             message:OALocalizedString(@"gpx_cannot_import")
+                   cancelButtonTitle:OALocalizedString(@"shared_string_ok")
+                   otherButtonTitles:nil
+                         openGpxView:NO];
+        }
         return;
+    }
     
     // Try to import gpx
-    __block OASKFile *file = [[OASKFile alloc] initWithFilePath:_importUrl.path];
-    _doc = [OASGpxUtilities.shared loadGpxFileFile:file];
+    if (!_doc)
+        _doc = [OASGpxUtilities.shared loadGpxFileFile:[[OASKFile alloc] initWithFilePath:_importUrl.path]];
     if (_doc)
     {
         // _2024-07-30_.gpx
@@ -420,13 +427,10 @@ static UIViewController *parentController;
         return filename;
 }
 
-- (void) removeFromDB
+- (void)removeFromDB
 {
-    NSString *gpxFilePath = [_importUrl.path hasPrefix:_app.gpxPath]
-        ? [OAUtilities getGpxShortPath:_importUrl.path]
-        : [_importUrl.path lastPathComponent];
-
-    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] getGPXItemByFileName:gpxFilePath];
+    NSString *gpxFilePath = [_importGpxPath stringByAppendingPathComponent:[self getCorrectedFilename:[_importUrl.path lastPathComponent]]];
+    OASGpxDataItem *item = [[OAGPXDatabase sharedDb] getGPXItem:gpxFilePath];
     if (item)
         [[OAGPXDatabase sharedDb] removeGpxItem:item withLocalRemove:YES];
     else
@@ -456,7 +460,7 @@ static UIViewController *parentController;
         || [ext isEqualToString:KML_EXT]
         || [ext isEqualToString:KMZ_EXT])
     {
-        [self processUrl:url showAlerts:YES openGpxView:NO];
+        [self prepareProcessUrl:url showAlerts:YES openGpxView:NO completion:nil];
     }
 }
 

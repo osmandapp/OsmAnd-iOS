@@ -8,6 +8,8 @@
 
 #import "OASubscriptionBannerCardView.h"
 #import "OAIAPHelper.h"
+#import "OAFreeRegionHelper.h"
+#import "OAWorldRegion.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -67,6 +69,7 @@
 - (void)updateView
 {
     self.freeMapsCount = [OAIAPHelper freeMapsAvailable];
+    self.freeRegionName = [OAFreeRegionHelper getFreeRegion].name;
     self.titleLabel.attributedText = [self getAttributedTitleText:_type freeMapsCount:self.freeMapsCount];
     [self.buttonView setAttributedTitle:[self getAttributedButtonText:_type] forState:UIControlStateNormal];
 
@@ -219,7 +222,9 @@
 {
     BOOL isUpdates = type == EOASubscriptionBannerUpdates;
     NSString *text = isUpdates ? OALocalizedString(@"subscription_banner_osmand_pro_title")
-        : type == EOASubscriptionBannerFree ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMapsCount]
+        : type == EOASubscriptionBannerFree ? (self.freeRegionName
+            ? [NSString stringWithFormat:OALocalizedString(@"free_region_banner_descr"), self.freeRegionName]
+            : OALocalizedString(@"free_region_not_chosen_descr"))
         : OALocalizedString(@"subscription_banner_no_free_maps_title");
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isUpdates ? 23.8 : 20.4;

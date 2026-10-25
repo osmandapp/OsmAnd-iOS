@@ -24,6 +24,7 @@
 #import "OAGPXDatabase.h"
 #import "OAWeatherHelper.h"
 #import "OAWorldRegion.h"
+#import "OAFreeRegionHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ArchiveReader.h>
@@ -331,6 +332,9 @@ NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallin
                         {
                             if (!match || ![match isInPurchasedArea])
                                 [OAIAPHelper decreaseFreeMapsCount];
+                            // the first map chooses the free region
+                            if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                                [OAFreeRegionHelper onMapInstalled:match];
                         }
                     }
                     else if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])

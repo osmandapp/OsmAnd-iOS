@@ -215,7 +215,7 @@ static QuickActionType *TYPE;
             else if ([item[@"key"] isEqualToString:kAppearance])
             {
                 [params setValue:item[kAppearanceColor] forKey:kCategoryColor];
-                [params setValue:item[kAppearanceIcon] forKey:kCategoryIcon];
+                [params setValue:[item[kAppearanceIcon] stringByReplacingOccurrencesOfString:@"mx_" withString:@""] forKey:kCategoryIcon];
                 [params setValue:item[kAppearanceBackground] forKey:kCategoryBackgroundIcon];
             }
         }

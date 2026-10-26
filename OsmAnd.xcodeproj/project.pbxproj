@@ -971,6 +971,7 @@
 		D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
+		D7BF047A2FD2DB4400BABB31 /* TracksIndexingTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */; };
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
 		D7EE6720301782CA0047F171 /* OAReorderSegmentCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
@@ -3710,6 +3711,7 @@
 		D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentGapCell.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
+		D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksIndexingTracker.swift; sourceTree = "<group>"; };
 		D7EE67193017818E0047F171 /* CancelableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTableView.swift; sourceTree = "<group>"; };
 		D7EE671E301782CA0047F171 /* OAReorderSegmentCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAReorderSegmentCommand.h; sourceTree = "<group>"; };
 		D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReorderSegmentCommand.mm; sourceTree = "<group>"; };
@@ -8906,6 +8908,7 @@
 				CE7AC1A72FE02A2600495411 /* Import */,
 				D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */,
 				D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */,
+				D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */,
 				D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */,
 				275ED6502FDC5AA60088D42B /* FavoriteListViewController */,
@@ -12184,6 +12187,7 @@
 				C5C81F922E535061009D3439 /* DriveModeButtonState.swift in Sources */,
 				3239C29C2EFC73FD00D526A8 /* ClickableWayHelper.swift in Sources */,
 				D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */,
+				D7BF047A2FD2DB4400BABB31 /* TracksIndexingTracker.swift in Sources */,
 				FA64086B2D3E6EA5005FD12D /* CollapsableCardsView.swift in Sources */,
 				DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */,
 				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,

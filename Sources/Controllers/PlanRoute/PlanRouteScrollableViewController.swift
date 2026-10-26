@@ -374,8 +374,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.updateLayout(for: size)
         } completion: { [weak self] _ in
             guard let self else { return }
-            transitionTargetSize = nil
             updateLayout(for: view.bounds.size)
+            transitionTargetSize = nil
         }
     }
 
@@ -1157,7 +1157,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             hasAppliedSidePanelViewportXScale = false
         }
         mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
-        if preserveMapPosition {
+        if preserveMapPosition && transitionTargetSize == nil {
             mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
         } else {
             mapViewController.mapRendererView?.mapTargetScreenPoint = screenPoint

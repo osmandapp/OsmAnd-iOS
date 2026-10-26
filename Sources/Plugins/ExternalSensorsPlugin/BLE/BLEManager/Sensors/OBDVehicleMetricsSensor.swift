@@ -15,15 +15,7 @@ final class OBDVehicleMetricsSensor: Sensor {
 
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         guard let data = characteristic.value else { return }
-
-        switch characteristic.uuid {
-        case "2AF0".CBUUIDRepresentation, "2AF1".CBUUIDRepresentation, "FFE1".CBUUIDRepresentation:
-            processReceivedData(data, result: result)
-        case "FFF1".CBUUIDRepresentation:
-            debugPrint("[OBDVehicleMetricsSensor] -> for reading")
-        default:
-            debugPrint("[OBDVehicleMetricsSensor] -> Unhandled Characteristic UUID: \(characteristic.uuid)")
-        }
+        processReceivedData(data, result: result)
     }
 
     func clearBuffer() {

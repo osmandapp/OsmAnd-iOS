@@ -11,7 +11,6 @@
 #import "OASwitchTableViewCell.h"
 #import "OACardTableViewCell.h"
 #import "OANavigationLanguageViewController.h"
-#import "OASpeedLimitToleranceViewController.h"
 #import "OARepeatNavigationInstructionsViewController.h"
 #import "OAArrivalAnnouncementViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
@@ -21,6 +20,7 @@
 #import "OATableCollapsableRowData.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
+#import "OAOsmAndFormatter.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
 #import "OASizes.h"
@@ -264,20 +264,9 @@
     }
     else if ([item.key isEqualToString:@"speedLimitTolerance"])
     {
-        NSArray<NSNumber *> *speedLimitsKm = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
-        if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
-        {
-            value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
-        }
-        else
-        {
-            NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
-            if (index != NSNotFound)
-            {
-                NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
-                value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"mile_per_hour")];
-            }
-        }
+        float selectedValue = [_settings.speedLimitExceedKmh get:self.appMode];
+        EOASpeedConstant speedFormat = [OAOsmAndFormatter speedModeForPaceMode:[_settings.speedSystem get:self.appMode]];
+        value = [OAOsmAndFormatter formattedSpeedTolerance:selectedValue / 3.6f speedSystem:speedFormat hasFastSpeed:[self.appMode isSpeedToleranceBigRange] valueUnitArray:nil];
     }
     else if ([item.key isEqualToString:@"repeatInstructions"])
     {
@@ -432,7 +421,7 @@
     if ([item.key isEqualToString:@"language"])
         settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:self.appMode];
     else if ([item.key isEqualToString:@"speedLimitTolerance"])
-        settingsViewController = [[OASpeedLimitToleranceViewController alloc] initWithAppMode:self.appMode];
+        settingsViewController = [[SpeedLimitToleranceViewController alloc] initWithAppMode:self.appMode];
     else if ([item.key isEqualToString:@"repeatInstructions"])
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
     else if ([item.key isEqualToString:@"arrivalAnnouncement"])
@@ -441,7 +430,10 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        [self showViewController:settingsViewController];
+        if ([item.key isEqualToString:@"speedLimitTolerance"])
+            [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
+        else
+            [self showViewController:settingsViewController];
     }
 }
 

@@ -570,6 +570,7 @@
 "default_speed_system_descr" = "Define unit of speed.";
 "speed_limit_exceed" = "Speed limit tolerance";
 "speed_limit_exceed_message" = "Choose speed limit tolerance margin, above which you will receive a voice warning.";
+"selected_value" = "Selected value";
 "wake_on_voice" = "Turn screen on";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn.";
 "voice_pref_title" = "Voice";

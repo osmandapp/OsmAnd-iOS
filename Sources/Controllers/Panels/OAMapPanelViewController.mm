@@ -139,7 +139,7 @@ typedef enum
     
 } EOATargetMode;
 
-@interface OAMapPanelViewController () <OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate, OAOpenAddTrackDelegate>
+@interface OAMapPanelViewController () <OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate, OAToolbarViewControllerProtocol, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, OARouteInformationListener, OAGpxWptEditingHandlerDelegate, OAOpenAddTrackDelegate, UIAdaptivePresentationControllerDelegate>
 
 @property (nonatomic) OAMapHudViewController *hudViewController;
 @property (nonatomic) OAMapillaryImageViewController *mapillaryController;
@@ -1328,12 +1328,19 @@ typedef enum
     if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
         _isNewContextMenuStillEnabled = YES;
 
+    navController.presentationController.delegate = self;
     [self presentViewController:navController animated:YES completion:nil];
 }
 
 - (void)clearSearchViewController
 {
     _searchViewController = nil;
+    [self onSearchClosed];
+}
+
+- (void)onSearchClosed
+{
+    _isNewContextMenuStillEnabled = NO;
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
@@ -4795,6 +4802,13 @@ typedef enum
     if (gpxFileName && gpxFileName.length > 0)
         fullPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:gpxFileName];
     [self targetPointAddWaypoint:fullPath];
+}
+
+#pragma mark - UIAdaptivePresentationControllerDelegate
+
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
+{
+    [self onSearchClosed];
 }
 
 #pragma mark - UI Tests

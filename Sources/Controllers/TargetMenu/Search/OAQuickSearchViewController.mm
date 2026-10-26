@@ -2148,6 +2148,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
     [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
     [[OARootViewController instance].mapPanel hideToolbar:_searchToolbarViewController];
+    [[OARootViewController instance].mapPanel onSearchClosed];
 }
 
 #pragma mark - OAPOIFiltersRemoveDelegate

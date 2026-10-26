@@ -596,14 +596,12 @@
 
 - (void) showContextMenu:(CLLocation *)latLon pointDescription:(OAPointDescription *)pointDescription object:(id)object selectedObject:(SelectedMapObject *)selectedObject provider:(id<OAContextMenuProvider>)provider touchPointLatLon:(CLLocation *)touchPointLatLon
 {
-    if (![OARootViewController.instance.mapPanel canPresentNewContextMenu])
-        return;
-
     NSLog(@"[ContextMenu] Target point creation BEGIN provider=%@ location=%@",
           provider ? NSStringFromClass([provider class]) : @"none",
           latLon ? @"yes" : @"no");
     CFTimeInterval targetCreationStartTime = CACurrentMediaTime();
-    if (!provider || ![provider showMenuAction:object])
+    BOOL isInMeasurementMode = [self.mapViewController.mapLayers.routePlanningLayer isInMeasurementMode];
+    if (!provider || isInMeasurementMode || ![provider showMenuAction:object])
     {
         OATargetPoint *targetPoint;
         if (provider)

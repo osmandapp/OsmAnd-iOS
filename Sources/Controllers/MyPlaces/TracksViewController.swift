@@ -115,6 +115,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
 
     private var tableData = OATableDataModel()
     private var asyncLoader: TrackFolderLoaderTask?
+    private var loaderRootFolder: TrackFolder?
     private var hasReceivedFirstBatch = false
     private var isLoadingInProgress = false {
         didSet {
@@ -532,6 +533,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         }
         let file = KFile(filePath: OsmAndApp.swiftInstance().gpxPath)
         rootFolder = OsmAndShared.TrackFolder(dirFile: file, parentFolder: nil)
+        loaderRootFolder = rootFolder
         
         let kotlinEmptyArray: KotlinArray<KotlinUnit> = [].toKotlinArray()
         
@@ -2949,6 +2951,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     
     fileprivate func updateHostVCWith(rootFolder: TrackFolder, visibleTracksFolder: TrackFolder) {
         self.rootFolder = rootFolder
+        loaderRootFolder = nil
         self.visibleTracksFolder = visibleTracksFolder
         shouldReload = true
         if let hostVCDelegate {
@@ -3127,7 +3130,7 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
 
     func deferredLoadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
-        guard folder === rootFolder else {
+        guard folder === loaderRootFolder else {
             propagateLoaderRefresh(force: true)
             return
         }
@@ -3140,7 +3143,10 @@ extension TracksViewController: TrackFolderLoaderTaskLoadTracksListener {
     func loadTracksFinished(folder: TrackFolder) {
         debugPrint("function: \(#function)")
         isLoadingInProgress = false
-        guard folder === rootFolder else { return }
+        guard folder === loaderRootFolder else {
+            onRefreshEnd()
+            return
+        }
         hasReceivedFirstBatch = true
         onLoadFinished(folder: folder, endRefresh: true, openSubfolder: true)
         propagateLoaderRefresh(force: true)

@@ -1837,6 +1837,13 @@ includeHidden:(BOOL)includeHidden
         OAResourceItem *item = mutableItems.firstObject;
 
         const auto resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId);
+        if (!resource)
+        {
+            // an item list built before a repository update can hold an id the repository no longer has
+            NSLog(@"[WARNING] startDownloadOfItems: %@ is not in the repository", item.resourceId.toNSString());
+            [mutableItems removeObject:item];
+            continue;
+        }
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
         repositoryItem.resourceId = resource->id;
         repositoryItem.resourceType = resource->type;
@@ -2102,8 +2109,13 @@ includeHidden:(BOOL)includeHidden
 
                 if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
-                
-                [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
+
+                // group items are rebuilt on the main thread
+                OAWorldRegion *region = item.worldRegion;
+                NSNumber *type = [OAResourceType toValue:item.resourceType];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [region.superregion updateGroupItems:region type:type];
+                });
             }
         }
 

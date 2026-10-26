@@ -14,10 +14,15 @@
 #import "OAReversePointsCommand.h"
 #import "OAJoinPointsCommand.h"
 #import "OAPlanningPopupBaseViewController.h"
+#import "OsmAndSharedWrapper.h"
 
 @interface OAMeasurementToolLayer (HistoryTesting)
 - (void)drawRouteSegments;
 - (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center;
+@end
+
+@interface OAMeasurementEditingContext (RouteCalculationTesting)
+- (NSArray<OAWptPtPair *> *)getPointsToCalculate;
 @end
 
 @interface OAPlanRouteEditingBridge (HistoryTouchTesting)
@@ -125,6 +130,134 @@
     [self.bridge redo];
     [self.bridge redo];
     XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+}
+
+- (void)testStraightPairsAreQueuedAfterRoutedPairCompletes
+{
+    XCTAssertEqual(self.context.getPointsToCalculate.count, 0);
+    [self.original[6] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    NSArray<OASWptPt *> *routedPoints = @[self.original[6], self.original[7]];
+    OAWptPtPair *routedPair = [OAWptPtPair pairWithFirst:routedPoints[0] second:routedPoints[1]];
+    XCTAssertEqualObjects(self.context.getPointsToCalculate, @[routedPair]);
+    self.context.roadSegmentData[routedPair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                                start:routedPair.first end:routedPair.second
+                                                                               points:routedPoints segments:@[]];
+    NSArray<OAWptPtPair *> *pendingPairs = self.context.getPointsToCalculate;
+    NSMutableArray<OAWptPtPair *> *expectedPairs = [NSMutableArray array];
+    for (NSInteger index = 0; index < 6; index++)
+        [expectedPairs addObject:[OAWptPtPair pairWithFirst:self.original[index] second:self.original[index + 1]]];
+    XCTAssertEqualObjects(pendingPairs, expectedPairs);
+}
+
+- (void)testMixedRouteDoesNotQueueGapPair
+{
+    [self.original[3] setGap];
+    NSArray<OASWptPt *> *routedPoints = @[self.original[0], self.original[1]];
+    OAWptPtPair *routedPair = [OAWptPtPair pairWithFirst:routedPoints[0] second:routedPoints[1]];
+    self.context.roadSegmentData[routedPair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                                start:routedPair.first end:routedPair.second
+                                                                               points:routedPoints segments:@[]];
+    NSArray<OAWptPtPair *> *pendingPairs = self.context.getPointsToCalculate;
+    XCTAssertEqual(pendingPairs.count, 2);
+    XCTAssertFalse([pendingPairs containsObject:[OAWptPtPair pairWithFirst:self.original[3] second:self.original[4]]]);
+    XCTAssertTrue([pendingPairs containsObject:[OAWptPtPair pairWithFirst:self.original[2] second:self.original[3]]]);
+}
+
+- (void)testUnusedRouteDataDoesNotQueueStraightPairs
+{
+    NSArray<OASWptPt *> *unusedPoints = @[self.original[0], self.original[7]];
+    OAWptPtPair *unusedPair = [OAWptPtPair pairWithFirst:unusedPoints[0] second:unusedPoints[1]];
+    self.context.roadSegmentData[unusedPair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                                start:unusedPair.first end:unusedPair.second
+                                                                               points:unusedPoints segments:@[]];
+    XCTAssertEqual(self.context.getPointsToCalculate.count, 0);
+}
+
+- (void)testWholeTrackStraightModeUndoRedoRestoresCalculationQueue
+{
+    [self.original[6] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    NSArray<OASWptPt *> *routedPoints = @[self.original[6], self.original[7]];
+    OAWptPtPair *routedPair = [OAWptPtPair pairWithFirst:routedPoints[0] second:routedPoints[1]];
+    self.context.roadSegmentData[routedPair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                                start:routedPair.first end:routedPair.second
+                                                                               points:routedPoints segments:@[]];
+    XCTAssertEqual(self.context.getPointsToCalculate.count, 6);
+    [self.bridge applyMode:OAApplicationMode.DEFAULT pointIndex:0 wholeRoute:YES];
+    XCTAssertEqual(self.context.getPointsToCalculate.count, 0);
+    [self.bridge undo];
+    XCTAssertEqual(self.context.getPointsToCalculate.count, 6);
+    [self.bridge redo];
+    XCTAssertEqual(self.context.getPointsToCalculate.count, 0);
+}
+
+- (void)cacheRouteForPair:(OAWptPtPair *)pair mode:(OAApplicationMode *)mode
+{
+    NSArray<OASWptPt *> *points = @[pair.first, pair.second];
+    NSArray<OASKLatLon *> *coordinates = @[
+        [[OASKLatLon alloc] initWithLatitude:pair.first.lat longitude:pair.first.lon],
+        [[OASKLatLon alloc] initWithLatitude:pair.second.lat longitude:pair.second.lon]
+    ];
+    OASRouteSegmentResult *segment = [OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:mode.getDefaultSpeed
+                                                                                                         points:coordinates];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:mode
+                                                                          start:pair.first end:pair.second
+                                                                         points:points segments:@[segment]];
+}
+
+- (void)testMixedSegmentExportContainsStraightAndRoutedLegs
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 3)];
+    [self.context setPoints:points];
+    [points[1] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self cacheRouteForPair:[OAWptPtPair pairWithFirst:points[1] second:points[2]] mode:OAApplicationMode.PEDESTRIAN];
+    NSArray<OAWptPtPair *> *pendingPairs = self.context.getPointsToCalculate;
+    XCTAssertEqualObjects(pendingPairs, (@[[OAWptPtPair pairWithFirst:points[0] second:points[1]]]));
+    for (OAWptPtPair *pair in pendingPairs)
+        [self cacheRouteForPair:pair mode:OAApplicationMode.DEFAULT];
+
+    OASGpxFile *gpx = [self.context exportGpx:@"mixed-route-test"];
+    XCTAssertEqual(gpx.tracks.firstObject.segments.count, 1);
+    OASTrkSegment *segment = gpx.tracks.firstObject.segments.firstObject;
+    XCTAssertEqual(segment.points.count, 4);
+    XCTAssertEqual(segment.routeSegments.count, 2);
+    XCTAssertEqualObjects([self latitudes:segment.points], (@[@(points[0].lat), @(points[1].lat), @(points[1].lat), @(points[2].lat)]));
+    for (OASWptPt *point in points)
+    {
+        XCTAssertGreaterThanOrEqual(point.getTrkPtIndex, 0);
+        XCTAssertLessThan(point.getTrkPtIndex, segment.points.count);
+    }
+}
+
+- (void)testIndependentRecordedSegmentPreservesMetadataOnExport
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 4)];
+    [self.context setPoints:points];
+    for (NSInteger routedSegmentIndex = 0; routedSegmentIndex < 2; routedSegmentIndex++)
+    {
+        [self.context.roadSegmentData removeAllObjects];
+        for (OASWptPt *point in points)
+            [point removeProfileType];
+        [points[1] setGap];
+        NSInteger routedStart = routedSegmentIndex * 2;
+        NSInteger recordedStart = (1 - routedSegmentIndex) * 2;
+        [points[routedStart] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+        points[recordedStart].time = 1700000000000;
+        points[recordedStart + 1].time = 1700000060000;
+        points[recordedStart].speed = 1.5;
+        points[recordedStart + 1].speed = 2.5;
+        [self cacheRouteForPair:[OAWptPtPair pairWithFirst:points[routedStart] second:points[routedStart + 1]] mode:OAApplicationMode.PEDESTRIAN];
+        XCTAssertEqual(self.context.getPointsToCalculate.count, 0);
+
+        OASGpxFile *gpx = [self.context exportGpx:@"recorded-segment-test"];
+        XCTAssertEqual(gpx.tracks.firstObject.segments.count, 2);
+        OASTrkSegment *recordedSegment = gpx.tracks.firstObject.segments[1 - routedSegmentIndex];
+        XCTAssertEqual(recordedSegment.points.count, 2);
+        XCTAssertEqual(recordedSegment.points.firstObject.time, 1700000000000);
+        XCTAssertEqual(recordedSegment.points.lastObject.time, 1700000060000);
+        XCTAssertEqualWithAccuracy(recordedSegment.points.firstObject.speed, 1.5, DBL_EPSILON);
+        XCTAssertEqualWithAccuracy(recordedSegment.points.lastObject.speed, 2.5, DBL_EPSILON);
+        XCTAssertEqualObjects([self latitudes:recordedSegment.points], [self latitudes:[points subarrayWithRange:NSMakeRange(recordedStart, 2)]]);
+    }
 }
 
 - (void)testStartNewSegmentProfileAndGapShareOneHistoryEntry
@@ -480,6 +613,35 @@
     XCTAssertFalse(self.context.getPoints[2].isGap);
     XCTAssertTrue(self.context.getPoints[3].isGap);
     [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)testDeletingFirstSegmentIsOneUndoStep
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    [self.bridge deleteSegmentWithPointIndexes:@[@0, @1, @2, @3]];
+    [self assertFinishedPoints:[self latitudes:[self.original subarrayWithRange:NSMakeRange(4, 4)]]];
+    for (OASWptPt *point in self.context.getPoints)
+        XCTAssertFalse(point.isGap);
+    [self.bridge undo];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    [self assertFinishedPoints:[self latitudes:self.original]];
+    for (NSInteger index = 0; index < self.original.count; index++)
+        XCTAssertEqual(self.context.getPoints[index].isGap, index == 3);
+}
+
+- (void)testDeletingLastSegmentIsOneUndoStep
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    [self.bridge deleteSegmentWithPointIndexes:@[@4, @5, @6, @7]];
+    [self assertFinishedPoints:[self latitudes:[self.original subarrayWithRange:NSMakeRange(0, 4)]]];
+    XCTAssertTrue(self.context.getPoints[3].isGap);
+    [self.bridge undo];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    [self assertFinishedPoints:[self latitudes:self.original]];
+    [self.bridge redo];
+    [self assertFinishedPoints:[self latitudes:[self.original subarrayWithRange:NSMakeRange(0, 4)]]];
 }
 
 - (void)testSplitDuringInsertionUndoDoesNotLoseSuffix

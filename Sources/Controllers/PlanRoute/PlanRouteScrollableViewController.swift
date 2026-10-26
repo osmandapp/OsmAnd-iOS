@@ -108,6 +108,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var navControllerHistory: [UIViewController] = []
     private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
+    private var isClosing = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
@@ -426,6 +427,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
+        isClosing = true
+        view.isUserInteractionEnabled = false
         let dismiss: () -> Void = { [weak self] in
             guard let self else { return }
             setMapHudStatusBarHidden(false)
@@ -469,6 +472,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         updateCrosshair(sheetHeight: approximationHeight ?? pointEditingHeight ?? height(for: sheetState),
                         preserveMapPosition: true)
         refreshMapControls()
+    }
+
+    @objc func suspendMapCursor() {
+        // While a result menu is visible, the route layer follows the map center.
+        dataProvider.setCrosshairPosition(screenPoint: .zero)
     }
 
     private func restorePreviousScreenIfNeeded() {
@@ -1130,14 +1138,17 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {
+        guard let mapPanel = OARootViewController.instance().mapPanel,
+              mapPanel.scrollableHudViewController === self else { return }
         let targetScreenSize = screenSize ?? CGSize(width: view.bounds.width, height: currentScreenHeight)
         let centerY = crosshairCenterY(sheetHeight: sheetHeight, screenHeight: targetScreenSize.height)
         let centerX = mapCenterX(for: targetScreenSize)
         guard centerX > 0, targetScreenSize.height > 0 else { return }
         let screenPoint = CGPoint(x: centerX, y: centerY)
+        
         crosshairCenterXConstraint?.constant = centerX
         crosshairCenterYConstraint?.constant = centerY
-        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewController = mapPanel.mapViewController
         if usesSidePanelLayout {
             mapViewController.viewportXScale = Double(2 * centerX / targetScreenSize.width)
             hasAppliedSidePanelViewportXScale = true
@@ -1335,6 +1346,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleClose() {
+        guard !isClosing, presentedViewController == nil else { return }
         guard dataProvider.hasChanges else {
             hide()
             return

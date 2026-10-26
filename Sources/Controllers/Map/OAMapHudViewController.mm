@@ -102,6 +102,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     NSLayoutConstraint *_leftRulerConstraint;
     
     CLLocation *_previousLocation;
+    dispatch_queue_t _locationAddressQueue;
+    uint64_t _locationAddressRequestId;
     
     NSTimeInterval _lastWidgetsUpdateTime;
     
@@ -139,6 +141,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     _mapHudType = EOAMapHudBrowse;
     _hudButtonsVisible = YES;
+    _locationAddressQueue = dispatch_queue_create("net.osmand.maps.location-address", DISPATCH_QUEUE_SERIAL);
     
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
@@ -1525,11 +1528,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) updateTopButtonsLayoutY
 {
     BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
-    BOOL contextMenuMode = self.contextMenuMode;
     BOOL isSidePanelPlanRoute = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
         && _mapPanelViewController.scrollableHudViewController
         && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
     BOOL shouldIgnoreContextToolbar = isPhoneLandscape && !isSidePanelPlanRoute;
+    BOOL contextMenuMode = self.contextMenuMode || _mapPanelViewController.suspendedPlanRouteController != nil;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
     CGFloat ctxToolbarH = 0.0;
@@ -1537,6 +1540,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         ctxToolbarH = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
     else if ([_mapPanelViewController isTopToolbarActive])
         ctxToolbarH = [_mapPanelViewController getTargetToolbarHeight];
+    else if (_mapPanelViewController.suspendedPlanRouteController)
+        ctxToolbarH = [_mapPanelViewController.suspendedPlanRouteController getNavbarHeight];
     
     BOOL isToolbarVisible = !_mapInfoController.weatherToolbarVisible && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isAllowToolbarsVisible = isToolbarVisible && ([_mapPanelViewController isTopToolbarSearchVisible] || [_mapPanelViewController isTopToolbarDiscountVisible]);
@@ -1664,9 +1669,13 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (CGFloat)hudTopOffset
 {
-    CGFloat contextMenuToolbarHeight = _mapPanelViewController.scrollableHudViewController
-            ? [_mapPanelViewController.scrollableHudViewController getNavbarHeight]
-            : [_mapPanelViewController isTopToolbarActive] ? [_mapPanelViewController getTargetToolbarHeight] : 0.;
+    CGFloat contextMenuToolbarHeight = 0.;
+    if (_mapPanelViewController.scrollableHudViewController)
+        contextMenuToolbarHeight = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
+    else if ([_mapPanelViewController isTopToolbarActive])
+        contextMenuToolbarHeight = [_mapPanelViewController getTargetToolbarHeight];
+    else if (_mapPanelViewController.suspendedPlanRouteController)
+        contextMenuToolbarHeight = [_mapPanelViewController.suspendedPlanRouteController getNavbarHeight];
     CGFloat offset = [OAUtilities isLandscape] && ![OAUtilities isIPad] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
     BOOL isToolbarAllowed = !_mapInfoController.weatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
@@ -1678,7 +1687,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     {
         offset += _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     }
-    else if (!self.contextMenuMode)
+    else if (!self.contextMenuMode && !_mapPanelViewController.suspendedPlanRouteController)
     {
         if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && !_settings.isCompactPanelsLayout)
             offset += self.topWidgetsViewHeightConstraint.constant;
@@ -1787,9 +1796,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + kProgressViewTopMargin, 100.0, 20.0);
 }
 
-- (void) updateCurrentLocationAddress
+- (void)updateCurrentLocationAddress
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(_locationAddressQueue, ^{
         if (UIAccessibilityIsVoiceOverRunning())
         {
             CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
@@ -1798,11 +1807,20 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 if (!_previousLocation || [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters)
                 {
                     _previousLocation = currentLocation;
+                    uint64_t requestId;
+                    @synchronized (self)
+                    {
+                        requestId = ++_locationAddressRequestId;
+                    }
                     [OAReverseGeocoder.instance lookupAddressAtLat:currentLocation.coordinate.latitude
                                                                lon:currentLocation.coordinate.longitude
                                                           objectId:0
                                                         completion:^(NSString *positionAddress) {
-                        _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                        @synchronized (self)
+                        {
+                            if (requestId == _locationAddressRequestId)
+                                _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                        }
                     }];
                 }
             }

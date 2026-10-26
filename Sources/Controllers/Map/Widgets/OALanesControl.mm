@@ -21,6 +21,11 @@
 #import "OATextInfoWidget.h"
 #import "OAOsmAndFormatter.h"
 #import "OAWidgetsVisibilityHelper.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OASwitchTableViewCell.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -331,6 +336,22 @@ static vector<int> toLanes(OASKotlinIntArray *lanes)
         return YES;
     }
     return NO;
+}
+
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams isCreate:(BOOL)isCreate
+{
+    OATableDataModel *data = [OATableDataModel model];
+    OATableSectionData *section = [data createNewSection];
+    section.headerText = OALocalizedString(@"shared_string_settings");
+
+    OATableRowData *row = [section createNewRow];
+    row.cellType = [OASwitchTableViewCell reuseIdentifier];
+    row.title = OALocalizedString(@"show_minor_turns");
+    row.descr = OALocalizedString(@"show_minor_turns_descr");
+    [row setObj:_settings.showMinorTurns forKey:@"pref"];
+    [row setObj:@YES forKey:@"route_setting"];
+
+    return data;
 }
 
 @end

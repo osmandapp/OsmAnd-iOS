@@ -96,13 +96,15 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             outCell = cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
-            cell.descriptionVisibility(false)
+            let hasDescr = !(item.descr ?? "").isEmpty
+            cell.descriptionVisibility(hasDescr)
+            cell.descriptionLabel.text = item.descr
             let hasIcon = item.iconName != nil
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             var selected = false
             if let pref = item.obj(forKey: "pref") as? OACommonBoolean {
-                if !createNew {
+                if !createNew || item.bool(forKey: "route_setting") {
                     selected = pref.get(selectedAppMode)
                 } else {
                     if let value = widgetConfigurationParams?[pref.key] as? Bool {
@@ -461,7 +463,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         let data = tableData.item(for: indexPath)
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
-        if !createNew {
+        let isRouteSetting = data.bool(forKey: "route_setting")
+        if !createNew || isRouteSetting {
             let iconVisibilityChanged = pref.get(selectedAppMode) != sw.isOn
             pref.set(sw.isOn, mode: selectedAppMode)
             if iconVisibilityChanged, pref.key.hasPrefix("simple_widget_show_icon") {
@@ -473,6 +476,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             }
         }
         widgetConfigurationParams?[pref.key] = sw.isOn
+        if isRouteSetting {
+            recalculateRouteIfNeeded()
+        }
         
         if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
             widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
@@ -490,6 +496,13 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         
         return false
+    }
+    
+    private func recalculateRouteIfNeeded() {
+        let routingHelper = OARoutingHelper.sharedInstance()
+        if selectedAppMode == routingHelper.getAppMode() && (routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) {
+            routingHelper.recalculateRouteDueToSettingsChange()
+        }
     }
 }
 

@@ -250,11 +250,13 @@
 - (void)applyQuickActionParams:(NSDictionary *)params
 {
     NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[kCategoryName] ?: @""] trim];
-    NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[kCategoryColor] integerValue]];
-    OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][colorIndex];
-    UIColor *selectedColor = params[kAppearanceColor] ? UIColorFromARGB([params[kAppearanceColor] intValue]) : favCol.color;
-    NSString *iconName = params[kAppearanceIcon];
-    NSString *backgroundIconName = params[kAppearanceBackground];
+    BOOL isFavorite = _editPointType == EOAEditPointTypeFavorite;
+    UIColor *selectedColor = [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[params[kCategoryColor] integerValue]];
+    if (!isFavorite && params[kWptColor])
+        selectedColor = UIColorFromARGB([params[kWptColor] intValue]);
+
+    NSString *iconName = params[isFavorite ? kCategoryIcon : kWptIcon];
+    NSString *backgroundIconName = params[isFavorite ? kCategoryBackgroundIcon : kWptBackgroundType];
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];

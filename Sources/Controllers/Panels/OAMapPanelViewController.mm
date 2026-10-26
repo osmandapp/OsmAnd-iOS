@@ -132,6 +132,14 @@ static float kMaxZoom = 22.0f;
 static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
 
+static NSArray<NSNumber *> * const kNavigationPointSelectionTypes = @[
+    @(OATargetRouteStartSelection),
+    @(OATargetRouteFinishSelection),
+    @(OATargetRouteIntermediateSelection),
+    @(OATargetHomeSelection),
+    @(OATargetWorkSelection)
+];
+
 typedef enum
 {
     EOATargetPoint = 0,
@@ -1432,20 +1440,6 @@ typedef enum
     if (!self.canPresentNewContextMenu)
         return;
 
-    NSArray<NSNumber *> *targetPointTypes = @[
-        @(OATargetRouteStartSelection),
-        @(OATargetRouteFinishSelection),
-        @(OATargetRouteIntermediateSelection),
-        @(OATargetHomeSelection),
-        @(OATargetWorkSelection)
-    ];
-    if ([targetPointTypes containsObject:@(_activeTargetType)] && targetPoints.count == 1)
-    {
-        // Apply the selection before the presentation queue closes its menu and clears the active target.
-        [self processTargetPoint:targetPoints.firstObject];
-        return;
-    }
-
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1771,6 +1765,25 @@ typedef enum
     [self.targetMenuView applyTargetObjectChanges];
     if (targetPoint.centerMap)
         [self goToTargetPointDefault];
+}
+
+- (BOOL)isSelectingNavigationPoint
+{
+    return [kNavigationPointSelectionTypes containsObject:@(_activeTargetType)];
+}
+
+- (BOOL)processNavigationPointSelection:(NSArray<OATargetPoint *> *)targetPoints
+{
+    if (!self.canPresentNewContextMenu)
+        return NO;
+
+    if ([self isSelectingNavigationPoint] && targetPoints.count == 1)
+    {
+        // Apply the selection before the presentation queue closes its menu and clears the active target.
+        [self processTargetPoint:targetPoints.firstObject];
+        return YES;
+    }
+    return NO;
 }
 
 - (BOOL) processTargetPoint:(OATargetPoint *)targetPoint

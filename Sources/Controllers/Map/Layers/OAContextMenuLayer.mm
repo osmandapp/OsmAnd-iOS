@@ -452,15 +452,45 @@
     return targetPoint;
 }
 
+- (OATargetPoint *)favoriteTargetPointAt:(CGPoint)touchPoint
+{
+    OAFavoritesLayer *favoritesLayer = self.mapViewController.mapLayers.favoritesLayer;
+    MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:touchPoint];
+    [favoritesLayer collectObjectsFromPoint:result unknownLocation:NO excludeUntouchableObjects:NO];
+
+    SelectedMapObject *closestFavorite = nil;
+    CLLocationDistance minDistance = DBL_MAX;
+    for (SelectedMapObject *selectedObject in result.allObjects)
+    {
+        CLLocation *location = [favoritesLayer getObjectLocation:selectedObject.object];
+        CLLocationDistance distance = [location distanceFromLocation:result.pointLatLon];
+        if (distance < minDistance)
+        {
+            minDistance = distance;
+            closestFavorite = selectedObject;
+        }
+    }
+
+    return closestFavorite ? [favoritesLayer getTargetPoint:closestFavorite.object touchLocation:result.pointLatLon] : nil;
+}
+
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    if (showUnknownLocation)
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    if (showUnknownLocation || [mapPanel isSelectingNavigationPoint])
     {
-        // A long press selects the touched location, even when a POI icon is underneath.
+        // A tap on a Favorite preserves its name and coordinates when selecting a navigation point.
+        // Long presses and other navigation selections use the touched location for address lookup.
         [OsmAndApp instance].mapMode = OAMapModeFree;
-        CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
-        OATargetPoint *unknownTargetPoint = [self unknownTargetPoint:coord.latitude longitude:coord.longitude];
-        [[OARootViewController instance].mapPanel showContextMenuWithPoints:@[unknownTargetPoint]];
+        OATargetPoint *targetPoint = showUnknownLocation ? nil : [self favoriteTargetPointAt:touchPoint];
+        if (!targetPoint)
+        {
+            CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
+            targetPoint = [self unknownTargetPoint:coord.latitude longitude:coord.longitude];
+        }
+        NSArray<OATargetPoint *> *targetPoints = @[targetPoint];
+        if (![mapPanel processNavigationPointSelection:targetPoints])
+            [mapPanel showContextMenuWithPoints:targetPoints];
         return YES;
     }
 
@@ -565,7 +595,7 @@
             }
         }
     }
-    if (!NSArrayIsEmpty(targetPoints))
+    if (!NSArrayIsEmpty(targetPoints) && ![mapPanel processNavigationPointSelection:targetPoints])
         [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:filteredSelectedObjects touchPointLatLon:touchPointLatLon];
 }
 
@@ -618,7 +648,10 @@
             targetPoint.location = latLon.coordinate;
             targetPoint.shouldFetchAddress = YES;
             
-            [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
+            NSArray<OATargetPoint *> *targetPoints = @[targetPoint];
+            OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+            if (![mapPanel processNavigationPointSelection:targetPoints])
+                [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }
     }
     else

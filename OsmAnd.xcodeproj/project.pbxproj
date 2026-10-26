@@ -1894,6 +1894,7 @@
 		DA7B18E52A1259160029967F /* BatteryWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7B18E42A1259160029967F /* BatteryWidget.swift */; };
 		DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA7FA55D2695DCFB0044F05A /* fi_tts.js */; };
 		DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */; };
+		A1B2C3D4E5F6071829304051 /* OARouteTestingTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6071829304050 /* OARouteTestingTest.mm */; };
 		DA80DABC251E2CB7008E6267 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		DA80DAC1251E2CB8008E6267 /* libQt5Xml.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DABF251E2CB7008E6267 /* libQt5Xml.a */; };
 		DA80DAC2251E2CB8008E6267 /* libQt5Concurrent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */; };
@@ -5390,6 +5391,7 @@
 		DA7B18E42A1259160029967F /* BatteryWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryWidget.swift; sourceTree = "<group>"; };
 		DA7FA55D2695DCFB0044F05A /* fi_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = fi_tts.js; path = ../resources/voice/fi/fi_tts.js; sourceTree = "<group>"; };
 		DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteResultPreparationTest.mm; sourceTree = "<group>"; };
+		A1B2C3D4E5F6071829304050 /* OARouteTestingTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteTestingTest.mm; sourceTree = "<group>"; };
 		DA80DAB5251E2338008E6267 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
 		DA80DABF251E2CB7008E6267 /* libQt5Xml.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Xml.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Xml.a"; sourceTree = "<group>"; };
 		DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Concurrent.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Concurrent.a"; sourceTree = "<group>"; };
@@ -10384,6 +10386,7 @@
 				C1A55E0B77300000000000D2 /* OASharedMissingMapsTest.mm */,
 				C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */,
 				DA80DAA9251E0C37008E6267 /* OARouteResultPreparationTest.mm */,
+				A1B2C3D4E5F6071829304050 /* OARouteTestingTest.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -13828,6 +13831,7 @@
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
 				D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
+				A1B2C3D4E5F6071829304051 /* OARouteTestingTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,

@@ -9,6 +9,8 @@
 #import "OAMeasurementToolLayer.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
@@ -544,6 +546,56 @@
 - (NSUInteger)routeLineCountForTesting
 {
     return _collection ? _collection->getLines().size() : 0;
+}
+
++ (NSDictionary<NSString *, id> *)currentRouteStateForUITesting
+{
+    if (!UITestState.isPlanRouteHistoryEnabled)
+        return nil;
+    OAMeasurementToolLayer *layer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer;
+    if (!layer)
+        return nil;
+    NSMutableArray *points = [NSMutableArray array];
+    for (OASWptPt *point in layer.editingCtx.getAllPoints)
+    {
+        auto position = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.lat, point.lon));
+        CGPoint screenPoint;
+        id screenPosition = NSNull.null;
+        if ([layer.mapView convert:&position toScreen:&screenPoint])
+        {
+            CGPoint windowPoint = [layer.mapView convertPoint:screenPoint toView:nil];
+            screenPosition = @[@(windowPoint.x), @(windowPoint.y)];
+        }
+        [points addObject:@{
+            @"position": @[@(position.x), @(position.y)],
+            @"name": point.name ?: @"",
+            @"screenPosition": screenPosition,
+            @"gap": @(point.isGap)
+        }];
+    }
+    NSMutableArray *lines = [NSMutableArray array];
+    if (layer->_collection)
+    {
+        for (const auto &line : layer->_collection->getLines())
+        {
+            NSMutableArray *positions = [NSMutableArray array];
+            for (const auto &position : line->getPoints())
+                [positions addObject:@[@(position.x), @(position.y)]];
+            const auto color = line->getFillColor();
+            [lines addObject:@{
+                @"id": @(line->lineId),
+                @"positions": positions,
+                @"color": @[@(color.a), @(color.r), @(color.g), @(color.b)]
+            }];
+        }
+    }
+    [lines sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES]]];
+    const auto target = layer.mapView.target31;
+    return @{
+        @"points": points,
+        @"lines": lines,
+        @"viewport": @{@"target": @[@(target.x), @(target.y)], @"zoom": @(layer.mapView.zoom)}
+    };
 }
 #endif
 

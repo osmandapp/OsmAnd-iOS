@@ -45,6 +45,7 @@
 #if DEBUG
 - (void)prepareRouteLinesForTesting;
 - (NSUInteger)routeLineCountForTesting;
++ (NSDictionary<NSString *, id> *)currentRouteStateForUITesting;
 #endif
 
 @end

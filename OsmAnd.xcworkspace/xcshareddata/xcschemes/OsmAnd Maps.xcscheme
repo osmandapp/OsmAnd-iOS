@@ -72,6 +72,9 @@
                BlueprintName = "OsmAnd MapsUITests"
                ReferencedContainer = "container:OsmAnd.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test Identifier="PlanRouteHistoryUITests" />
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

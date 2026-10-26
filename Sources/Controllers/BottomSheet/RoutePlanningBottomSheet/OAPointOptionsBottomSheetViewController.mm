@@ -51,6 +51,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.sectionHeaderHeight = 16.;
+    self.tableView.accessibilityIdentifier = [UITestAccessibilityIdentifier planRoutePointAction:@"menu"];
     [self.rightButton removeFromSuperview];
     self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
@@ -334,6 +335,10 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
+            NSString *actionKey = item[@"key"];
+            if ([actionKey isEqualToString:@"add_points"])
+                actionKey = [item[@"value"] integerValue] == EOAAddPointModeBefore ? @"add_before" : @"add_after";
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier planRoutePointAction:actionKey];
             
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)
@@ -368,6 +373,7 @@
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
             cell.descrView.text = item[@"desc"];
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier planRoutePointAction:item[@"key"]];
             
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)

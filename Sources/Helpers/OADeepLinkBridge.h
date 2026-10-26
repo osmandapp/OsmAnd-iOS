@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OARootViewController, OATargetPoint;
+@class OARootViewController, OATargetPoint, OAMapSource;
 
 @interface OADeepLinkBridge : NSObject
 
@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable UIViewController *)mapsAndResourcesViewController;
 + (nullable UIViewController *)mapsAndResourcesLocalViewController;
 + (nullable UIViewController *)mapsAndResourcesUpdatesViewController;
++ (nullable OAMapSource *)offlineMapSourceWithStyleName:(NSString *)styleName;
 
 @end
 

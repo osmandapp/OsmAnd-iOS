@@ -48,6 +48,18 @@ private enum DeepLinkAppRoute: String {
     case speedometerCar = "settings/profile-settings/configure-screen/speedometer/car"
     case navigationScreenAppMode = "navigation-screen/"
     case tripRecordingExternalSensors = "trip-recording/external-sensors"
+    case search = "search"
+    case searchCategory = "search/"
+    case mapSettingsPopularPlaces = "map-settings/popular-places"
+    case mapSettingsTopography = "map-settings/topography"
+    case mapSettingsContourLines = "map-settings/contour-lines"
+    case mapSettings3DBuildings = "map-settings/3d-buildings"
+    case mapSettingsGlobeView = "map-settings/globe-view"
+    case mapSettingsRoutes = "map-settings/routes"
+    case mapSettingsRouteType = "map-settings/routes/"
+    case mapSettingsMapStyle = "map-settings/map-type/"
+    case mapSettingsPoi = "map-settings/poi"
+    case mapSettingsPoiCategory = "map-settings/poi/"
 }
 
 private enum DeepLinkAppModeKey: String {
@@ -271,6 +283,21 @@ final class DeepLinkParser: NSObject {
             return true
         }
         
+        if let route = DeepLinkAppRoute.parseValueRoute(routeRaw) {
+            switch route.route {
+            case .searchCategory:
+                return router.openSearch(categoryKey: route.value)
+            case .mapSettingsRouteType:
+                return router.openRouteType(key: route.value)
+            case .mapSettingsMapStyle:
+                return router.openMapStyle(key: route.value)
+            case .mapSettingsPoiCategory:
+                return router.openPoiOverlay(categoryKey: route.value)
+            default:
+                return false
+            }
+        }
+        
         guard let route = DeepLinkAppRoute(rawValue: routeRaw) else {
             NSLog("[DeepLinkParser] Unknown /app route: %@ (url=%@)", routeRaw, url.absoluteString)
             return false
@@ -349,7 +376,25 @@ final class DeepLinkParser: NSObject {
             router.openSpeedometerSettings(appMode: OAApplicationMode.car())
         case .tripRecordingExternalSensors:
             router.openExternalSensorsRecording()
-        case .tripRecordingAppMode, .distanceByTapAppMode, .navigationScreenAppMode:
+        case .search:
+            let query = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems?.first { $0.name.lowercased() == "q" }?.value
+            router.openSearch(query: normalizeQueryValue(query))
+        case .mapSettingsPopularPlaces:
+            router.openMapSettings(screen: .wikipedia)
+        case .mapSettingsTopography:
+            router.openTopography()
+        case .mapSettingsContourLines:
+            router.openContourLines()
+        case .mapSettings3DBuildings:
+            router.open3DBuildings()
+        case .mapSettingsGlobeView:
+            router.openGlobeView()
+        case .mapSettingsRoutes:
+            router.openMapSettings(screen: .main)
+        case .mapSettingsPoi:
+            router.openMapSettings(screen: .POI)
+        case .tripRecordingAppMode, .distanceByTapAppMode, .navigationScreenAppMode,
+             .searchCategory, .mapSettingsRouteType, .mapSettingsMapStyle, .mapSettingsPoiCategory:
             return false
         }
         
@@ -783,6 +828,17 @@ final class DeepLinkParser: NSObject {
 }
 
 extension DeepLinkAppRoute {
+    static func parseValueRoute(_ rawValue: String) -> (route: DeepLinkAppRoute, value: String)? {
+        let valueRoutes: [DeepLinkAppRoute] = [.searchCategory, .mapSettingsRouteType, .mapSettingsMapStyle, .mapSettingsPoiCategory]
+        for route in valueRoutes where rawValue.hasPrefix(route.rawValue) {
+            let value = String(rawValue.dropFirst(route.rawValue.count))
+            guard !value.isEmpty, !value.contains("/") else { return nil }
+            return (route, value)
+        }
+        
+        return nil
+    }
+    
     static func parseAppModeRoute(_ rawValue: String) -> (route: DeepLinkAppRoute, appMode: OAApplicationMode)? {
         if let appMode = parseAppMode(rawValue, prefix: DeepLinkAppRoute.tripRecordingAppMode.rawValue, allowBrowse: true) {
             return (.tripRecordingAppMode, appMode)

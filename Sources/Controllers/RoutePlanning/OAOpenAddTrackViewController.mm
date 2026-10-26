@@ -44,6 +44,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
+static const NSInteger kListSection = 0;
+static const NSInteger kSortControlRow = 2;
+
 @interface OAOpenAddTrackViewController() <UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
@@ -59,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     OAFoldersCell *_foldersCell;
     
     BOOL _showCurrentGpx;
+    BOOL _folderChangedSinceLastSort;
 }
 
 #pragma mark - Initialization
@@ -299,6 +303,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
+            cell.segmentControl.selectedSegmentIndex = _sortingMode;
             UIFont *font = [UIFont scaledSystemFontOfSize:14.];
             [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateNormal];
             [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateSelected];
@@ -500,11 +505,33 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             _sortingMode = EOANameAscending;
         else if (segment.selectedSegmentIndex == 2)
             _sortingMode = EOANameDescending;
+
+        NSInteger previousSectionCount = self.tableView.numberOfSections;
+        NSInteger previousTrackRows = previousSectionCount > kListSection
+            ? [self.tableView numberOfRowsInSection:kListSection] : 0;
         [self generateData];
-        
-        NSMutableArray *pathsToReload = [NSMutableArray arrayWithArray:self.tableView.indexPathsForVisibleRows];
-        [pathsToReload removeObjectsInRange:NSMakeRange(0, 3)];
-        [self.tableView reloadRowsAtIndexPaths:pathsToReload withRowAnimation:UITableViewRowAnimationAutomatic];
+        BOOL needsFullReload = _folderChangedSinceLastSort || previousSectionCount != _data.count
+            || _data.count <= kListSection
+            || previousTrackRows != _data[kListSection].count;
+        _folderChangedSinceLastSort = NO;
+        if (needsFullReload)
+        {
+            [self.tableView reloadData];
+            return;
+        }
+
+        NSMutableArray<NSIndexPath *> *pathsToReload = [NSMutableArray array];
+        for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows)
+        {
+            if (indexPath.section == kListSection && indexPath.row > kSortControlRow
+                && indexPath.row < _data[kListSection].count - 1)
+                [pathsToReload addObject:indexPath];
+        }
+        if (pathsToReload.count > 0)
+        {
+            [self.tableView reloadRowsAtIndexPaths:pathsToReload
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
 }
 
@@ -524,6 +551,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void)onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
+    _folderChangedSinceLastSort = YES;
     [self generateData];
     [self.tableView reloadData];
 }

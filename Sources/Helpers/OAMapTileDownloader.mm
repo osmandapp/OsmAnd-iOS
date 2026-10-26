@@ -39,7 +39,7 @@
     int _currY;
     OsmAnd::AreaI _currArea;
     
-    BOOL _cancelled;
+    std::atomic_bool _cancelled;
     
     OASQLiteTileSource *_sqliteSource;
     std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> _onlineSource;
@@ -50,13 +50,14 @@
 {
     self = [super init];
     if (self) {
+        _cancelled = false;
         NSURLSessionConfiguration *backgroundSessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
         backgroundSessionConfiguration.timeoutIntervalForRequest = 300.0;
         backgroundSessionConfiguration.timeoutIntervalForResource = 600.0;
         backgroundSessionConfiguration.HTTPMaximumConnectionsPerHost = 70;
         _urlSession = [NSURLSession sessionWithConfiguration:backgroundSessionConfiguration
                                                                delegate:nil
-                                                          delegateQueue:[NSOperationQueue mainQueue]];
+                                                          delegateQueue:nil];
         _item = item;
         _minZoom = minZoom;
         _maxZoom = maxZoom;
@@ -90,6 +91,13 @@
         }
     }
     return self;
+}
+
+- (OAMapTileDownloader *)downloaderForRetry
+{
+    OAMapTileDownloader *downloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
+    downloader->_areasByZoomIndex = _areasByZoomIndex;
+    return downloader;
 }
 
 - (BOOL) hasNextTileId
@@ -161,11 +169,11 @@
     if (_type == EOATileRequestTypeUndefined)
         return;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [_urlSession.delegateQueue addOperationWithBlock:^{
         for (NSInteger i = 0; i < kMaxRequests; i++) {
             [self startDownloadIfPossible];
         }
-    });
+    }];
 }
 
 - (void) startDownloadIfPossible
@@ -240,10 +248,45 @@
     }
 }
 
+- (BOOL)isSuccessfulResponse:(NSURLResponse *)response location:(NSURL *)location error:(NSError *)error
+{
+    if (error || !location)
+        return NO;
+
+    if ([response isKindOfClass:NSHTTPURLResponse.class])
+    {
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        return statusCode >= 200 && statusCode < 300;
+    }
+
+    return YES;
+}
+
+- (void)onTileFailed
+{
+    if (_cancelled)
+        return;
+
+    if (_delegate)
+        [_delegate onTileFailed];
+
+    _activeDownloads--;
+    [self startDownloadIfPossible];
+}
+
 - (void) downloadTile:(NSURL *)url toPath:(NSString *)path
 {
     _activeDownloads++;
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (_cancelled)
+            return;
+
+        if (![self isSuccessfulResponse:response location:location error:error])
+        {
+            [self onTileFailed];
+            return;
+        }
+
         NSError *err = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *dir = [path stringByDeletingLastPathComponent];
@@ -274,6 +317,15 @@
     [request setHTTPMethod:@"GET"];
     [request addValue:tileSource.userAgent.length > 0 ? tileSource.userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (_cancelled)
+            return;
+
+        if (![self isSuccessfulResponse:response location:location error:error])
+        {
+            [self onTileFailed];
+            return;
+        }
+
         NSData *data = [NSData dataWithContentsOfFile:location.path];
         if (data)
         {
@@ -290,8 +342,10 @@
 
 - (void) cancellAllRequests
 {
-    [_urlSession invalidateAndCancel];
     _cancelled = YES;
+    [_urlSession.delegateQueue addOperationWithBlock:^{
+        [_urlSession invalidateAndCancel];
+    }];
 }
 
 @end

@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAFavoriteGroup.h"
 
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
 
 #define kDefaultCategoryKey @"favorites_item"
 #define kPersonalCategory @"personal"
 
-@class OAObservable, OAFavoriteItem, OAFavoriteGroup, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
+@class OAObservable, OAFavoriteItem, OASpecialPointType, OASGpxFile, OASGpxUtilitiesPointsGroup, OASWptPt;
 
 @interface OAFavoritesHelper : NSObject
 
@@ -130,33 +131,5 @@
 
 + (void) saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file;
 + (void) backup;
-
-@end
-
-@interface OAFavoriteGroup : NSObject
-
-@property (nonatomic) NSString* name;
-@property (nonatomic) UIColor* color;
-@property (nonatomic) BOOL isVisible;
-@property (nonatomic) BOOL isPinned;
-@property (nonatomic) NSString *iconName;
-@property (nonatomic) NSString *backgroundType;
-@property (nonatomic) NSMutableArray<OAFavoriteItem*> *points;
-
-- (instancetype)initWithPoint:(OAFavoriteItem *)point;
-- (instancetype) initWithName:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color;
-- (instancetype) initWithPoints:(NSArray<OAFavoriteItem *> *)points name:(NSString *)name isVisible:(BOOL)isVisible color:(UIColor *)color;
-- (void) addPoint:(OAFavoriteItem *)point;
-- (BOOL)hasColor;
-
-- (BOOL) isPersonal;
-+ (BOOL) isPersonal:(NSString *)name;
-
-+ (BOOL) isPersonalCategoryDisplayName:(NSString *)name;
-+ (NSString *) getDisplayName:(NSString *)name;
-+ (NSString *) convertDisplayNameToGroupIdName:(NSString *)name;
-- (OASGpxUtilitiesPointsGroup *)toPointsGroup;
-+ (OAFavoriteGroup *)fromPointsGroup:(OASGpxUtilitiesPointsGroup *)pointsGroup;
-- (BOOL)isEqual:(id)object;
 
 @end

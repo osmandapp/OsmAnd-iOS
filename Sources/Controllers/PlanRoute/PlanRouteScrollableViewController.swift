@@ -1047,7 +1047,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
-        guard ensureRouteHasPoints() else { return }
+        guard !isClosing, presentedViewController == nil, ensureRouteHasPoints() else { return }
         let fileName: String
         let folder: String?
         switch dataProvider.mode {

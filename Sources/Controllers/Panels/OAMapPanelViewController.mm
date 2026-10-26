@@ -2160,6 +2160,9 @@ typedef enum
 
 - (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
 {
+    if ([self suspendedPlanRouteController])
+        return;
+
     if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen)
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph

@@ -44,13 +44,21 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
 
 - (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL)anonymous
 {
+    return [self commit:point text:text action:action anonymous:anonymous allowUnconfirmedRetry:NO];
+}
+
+- (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL)anonymous allowUnconfirmedRetry:(BOOL)allowUnconfirmedRetry
+{
     @synchronized (self)
     {
-        return [self commitPoint:point text:text action:action anonymous:anonymous];
+        OAOsmBugResult *result = [self commitPoint:point text:text action:action anonymous:anonymous allowUnconfirmedRetry:allowUnconfirmedRetry];
+        NSDictionary *attempt = [_uploadAttempts objectForKey:point];
+        result.requiresUploadConfirmation = action == CREATE && result.warning && attempt && ![attempt[@"confirmed"] boolValue];
+        return result;
     }
 }
 
-- (OAOsmBugResult *)commitPoint:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL)anonymous
+- (OAOsmBugResult *)commitPoint:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL)anonymous allowUnconfirmedRetry:(BOOL)allowUnconfirmedRetry
 {
     NSString *result = @"";
     NSString *msg = @"";
@@ -74,7 +82,7 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
             return loginResult;
     }
     if (action == CREATE)
-        return [self createNote:point text:text url:result anonymous:anonymous];
+        return [self createNote:point text:text url:result anonymous:anonymous allowUnconfirmedRetry:allowUnconfirmedRetry];
     return [self editingPOI:result requestMethod:POST userOperation:msg anonymous:anonymous];
 }
 
@@ -123,7 +131,7 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
         {
             id json = data.length > 0 ? [NSJSONSerialization JSONObjectWithData:data options:0 error:nil] : nil;
             id features = [json isKindOfClass:NSDictionary.class] ? json[@"features"] : nil;
-            if ([features isKindOfClass:NSArray.class] && [features count] < 10000)
+            if ([features isKindOfClass:NSArray.class] && ((NSArray *)features).count < 10000)
                 _notes = features;
             else
                 res.warning = OALocalizedString(@"osm_upload_failed_descr");
@@ -205,7 +213,7 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
     return matchedID;
 }
 
-- (OAOsmBugResult *)createNote:(OAOsmNotePoint *)point text:(NSString *)text url:(NSString *)url anonymous:(BOOL)anonymous
+- (OAOsmBugResult *)createNote:(OAOsmNotePoint *)point text:(NSString *)text url:(NSString *)url anonymous:(BOOL)anonymous allowUnconfirmedRetry:(BOOL)allowUnconfirmedRetry
 {
     OAOsmBugResult *result = [[OAOsmBugResult alloc] init];
     NSDictionary *payload = @{@"lat": [NSString stringWithFormat:@"%.6f", point.getLatitude],
@@ -241,9 +249,18 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
     }
     if (attempt)
     {
-        if (![self matchingNoteInFeatures:_notes attempt:attempt])
+        if ([self matchingNoteInFeatures:_notes attempt:attempt])
+        {
+            NSMutableDictionary *confirmed = [attempt mutableCopy];
+            confirmed[@"confirmed"] = @YES;
+            [_uploadAttempts setObject:confirmed forKey:point];
+            return result;
+        }
+        if (!allowUnconfirmedRetry)
+        {
             result.warning = OALocalizedString(@"osm_upload_failed_descr");
-        return result;
+            return result;
+        }
     }
     [_uploadAttempts setObject:@{@"payload": payload, @"user_id": userID ?: @0, @"previous_ids": previousIDs} forKey:point];
     result = [self editingPOI:url requestMethod:POST userOperation:@"creating bug" anonymous:anonymous];

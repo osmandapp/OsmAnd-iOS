@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) OAOsmNotePoint *localPoint;
 @property (nonatomic) NSString *userName;
 @property (nonatomic) NSString *warning;
+@property (nonatomic) BOOL requiresUploadConfirmation;
 
 @end
 

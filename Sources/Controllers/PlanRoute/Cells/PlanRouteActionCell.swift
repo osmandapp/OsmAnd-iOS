@@ -43,10 +43,10 @@ final class PlanRouteActionCell: UITableViewCell {
         accessibilityTraits = .button
     }
 
-    func configureForContinuation(mode: OAApplicationMode?) {
+    func configureForContinuation(title: String = localizedString("plan_route_continue_with_different_type"), mode: OAApplicationMode?) {
         let modeTitle = mode?.toHumanString() ?? localizedString("plan_route_straight_line")
         let subtitle = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_next"), modeTitle)
-        configure(title: localizedString("plan_route_continue_with_different_type"),
+        configure(title: title,
                   subtitle: subtitle,
                   isDestructive: false,
                   showsDisclosure: true)

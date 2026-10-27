@@ -158,7 +158,7 @@ extension RouteTypeViewController: UITableViewDataSource {
                 return UITableViewCell()
             }
             if case .continueRoute = row {
-                cell.configureForContinuation(mode: continuationMode)
+                cell.configureForContinuation(title: localizedString("plan_route_continue_with_different_route_type"), mode: continuationMode)
             } else {
                 cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false, showsDisclosure: true)
             }

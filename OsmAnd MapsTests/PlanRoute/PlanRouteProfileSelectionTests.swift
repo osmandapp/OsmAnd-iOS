@@ -98,10 +98,12 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
             let picker = try XCTUnwrap(controller.children.first as? RouteTypeViewController)
             let table = try XCTUnwrap(picker.view.subviews.first as? UITableView)
             let continuePath = IndexPath(row: 0, section: 2)
+            let expectedTitle = localizedString("plan_route_continue_with_different_route_type")
             let expectedSubtitle = String(format: localizedString("ltr_or_rtl_combine_via_colon"),
                                           localizedString("shared_string_next"),
                                           continuationMode?.toHumanString() ?? localizedString("plan_route_straight_line"))
             XCTAssertEqual(picker.tableView(table, cellForRowAt: continuePath).accessibilityValue, expectedSubtitle)
+            XCTAssertEqual(picker.tableView(table, cellForRowAt: continuePath).accessibilityLabel, expectedTitle)
             let pedestrianIndex = try XCTUnwrap(source.availableModes.firstIndex { $0.stringKey == OAApplicationMode.pedestrian()?.stringKey })
             picker.tableView(table, didSelectRowAt: IndexPath(row: pedestrianIndex, section: 1))
             XCTAssertEqual(picker.tableView(table, cellForRowAt: continuePath).accessibilityValue, expectedSubtitle)
@@ -113,6 +115,7 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
             let restoredPicker = try XCTUnwrap(controller.children.first as? RouteTypeViewController)
             let restoredTable = try XCTUnwrap(restoredPicker.view.subviews.first as? UITableView)
             XCTAssertEqual(restoredPicker.tableView(restoredTable, cellForRowAt: continuePath).accessibilityValue, expectedSubtitle)
+            XCTAssertEqual(restoredPicker.tableView(restoredTable, cellForRowAt: continuePath).accessibilityLabel, expectedTitle)
             XCTAssertEqual(source.defaultMode?.stringKey, continuationMode?.stringKey)
             XCTAssertNil(source.appliedContext)
             XCTAssertTrue(navigation.topViewController === controller)
@@ -176,6 +179,7 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         controller.reloadData()
         XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), rowCount)
         let cell = controller.tableView(table, cellForRowAt: continuePath)
+        XCTAssertEqual(cell.accessibilityLabel, localizedString("plan_route_continue_with_different_type"))
         XCTAssertEqual(cell.accessibilityValue, String(format: localizedString("ltr_or_rtl_combine_via_colon"),
                                                        localizedString("shared_string_next"),
                                                        try XCTUnwrap(source.defaultMode?.toHumanString())))
@@ -209,6 +213,8 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         controller.loadViewIfNeeded()
         let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
         XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 4)
+        let continueCell = controller.tableView(table, cellForRowAt: IndexPath(row: 3, section: 0))
+        XCTAssertEqual(continueCell.accessibilityLabel, localizedString("plan_route_continue_with_different_type"))
         controller.tableView(table, didSelectRowAt: IndexPath(row: 1, section: 0))
         let settings = try XCTUnwrap(navigation.topViewController as? SegmentRouteSettingsViewController)
         settings.loadViewIfNeeded()

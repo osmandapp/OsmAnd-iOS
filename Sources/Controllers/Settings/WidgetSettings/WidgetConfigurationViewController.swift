@@ -27,7 +27,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    private var routeSettingsInitialValues: [OACommonBoolean: Bool] = [:]
+    private var routeSettingChanged = false
     
     private var appearanceLayoutMode: ScreenLayoutMode? {
         OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
@@ -470,8 +470,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
         let isRouteSetting = data.bool(forKey: "route_setting")
-        if isRouteSetting, routeSettingsInitialValues[pref] == nil {
-            routeSettingsInitialValues[pref] = pref.get(selectedAppMode)
+        if isRouteSetting {
+            routeSettingChanged = true
         }
         if !createNew || isRouteSetting {
             let iconVisibilityChanged = pref.get(selectedAppMode) != sw.isOn
@@ -505,9 +505,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private func recalculateRouteIfNeeded() {
-        let changed = routeSettingsInitialValues.contains { pref, initialValue in pref.get(selectedAppMode) != initialValue }
-        routeSettingsInitialValues.removeAll()
-        guard changed else { return }
+        guard routeSettingChanged else { return }
+        routeSettingChanged = false
         let routingHelper = OARoutingHelper.sharedInstance()
         if selectedAppMode == routingHelper.getAppMode() && (routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) {
             routingHelper.recalculateRouteDueToSettingsChange()

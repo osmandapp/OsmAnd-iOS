@@ -1106,10 +1106,8 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
 {
     // Force hiding opened context menu. (With deleting Temp gpx folder)
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
-    if ([mapPanel.scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
-        [mapPanel.scrollableHudViewController forceHide];
-    else
-        [mapPanel hideScrollableHudViewController];
+    [mapPanel forceHidePlanRouteIfNeeded];
+    [mapPanel hideScrollableHudViewController];
 
     NSString *folderPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:@"Temp"];
     filepath = [folderPath stringByAppendingPathComponent:filepath];

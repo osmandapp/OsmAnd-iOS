@@ -1952,6 +1952,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [self hideToolbar];
     [self dismissViewControllerAnimated:YES completion:nil];
+    [[OARootViewController instance].mapPanel onSearchClosed];
 }
 
 #pragma mark - OAAddressTableDelegate

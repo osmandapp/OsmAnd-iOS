@@ -76,12 +76,13 @@ class OBDVehicleMetricsDevice: Device {
         })
     }
 
+    func isECUReadCharacteristic(_ characteristic: CBCharacteristic) -> Bool {
+        guard let ecuReadCharacteristic else { return false }
+        return characteristic.uuid == ecuReadCharacteristic.uuid
+            && characteristic.service?.uuid == ecuReadCharacteristic.service?.uuid
+    }
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
-        guard let ecuReadCharacteristic,
-              characteristic.uuid == ecuReadCharacteristic.uuid,
-              characteristic.service?.uuid == ecuReadCharacteristic.service?.uuid else {
-            return
-        }
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
     

@@ -14,7 +14,9 @@ final class OBDVehicleMetricsSensor: Sensor {
     private(set) var isReadyBufferResponse = false
 
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
-        guard let data = characteristic.value else { return }
+        guard let obdDevice = device as? OBDVehicleMetricsDevice,
+              obdDevice.isECUReadCharacteristic(characteristic),
+              let data = characteristic.value else { return }
         processReceivedData(data, result: result)
     }
 

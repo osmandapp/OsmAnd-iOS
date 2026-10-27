@@ -23,6 +23,7 @@ final class RouteTypeViewController: UIViewController {
 
     private let context: SegmentRouteContext
     private let availableModes: [OAApplicationMode]
+    private let continuationMode: OAApplicationMode?
     private let canStartNewSegment: Bool
     private let onModeSelected: (OAApplicationMode?) -> Void
     private let onStartNewSegment: () -> Void
@@ -37,6 +38,7 @@ final class RouteTypeViewController: UIViewController {
     init(context: SegmentRouteContext,
          availableModes: [OAApplicationMode],
          selectedMode: OAApplicationMode?,
+         continuationMode: OAApplicationMode? = nil,
          hasSelectedMode: Bool = true,
          canStartNewSegment: Bool,
          showsRecalculationHint: Bool = true,
@@ -46,6 +48,7 @@ final class RouteTypeViewController: UIViewController {
         self.context = context
         self.availableModes = availableModes
         self.selectedMode = selectedMode
+        self.continuationMode = continuationMode
         self.hasSelectedMode = hasSelectedMode
         self.canStartNewSegment = canStartNewSegment
         self.showsRecalculationHint = showsRecalculationHint
@@ -154,13 +157,11 @@ extension RouteTypeViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            let title: String
             if case .continueRoute = row {
-                title = localizedString("plan_route_continue_with_different_route_type")
+                cell.configureForContinuation(mode: continuationMode)
             } else {
-                title = localizedString("gpx_start_new_segment")
+                cell.configure(title: localizedString("gpx_start_new_segment"), isDestructive: false, showsDisclosure: true)
             }
-            cell.configure(title: title, isDestructive: false, showsDisclosure: true)
             return cell
         }
     }

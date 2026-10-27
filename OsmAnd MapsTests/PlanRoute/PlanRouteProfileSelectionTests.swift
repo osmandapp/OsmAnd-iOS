@@ -80,6 +80,45 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         XCTAssertNil(selections[1])
     }
 
+    func testSimpleMenuNextKeepsSavedProfileDuringUnconfirmedSelectionAndTabSwitch() throws {
+        let bicycle = try XCTUnwrap(OAApplicationMode.bicycle())
+        let continuationModes: [OAApplicationMode?] = [nil, bicycle]
+        for continuationMode in continuationModes {
+            let source = PlanRouteProfileTestDataSource()
+            source.defaultMode = continuationMode
+            source.routeSegments = [makeSegment(groups: [
+                PlanRouteProfileGroup(appMode: nil, distance: 175, lastPointIndex: 1,
+                                      points: (0..<2).map { makePoint(index: $0, count: 2) },
+                                      profilePointIndexes: [0, 1])
+            ])]
+            let controller = SegmentRouteSettingsViewController(context: .wholeTrack, dataSource: source)
+            let navigation = UINavigationController(rootViewController: controller)
+            navigation.loadViewIfNeeded()
+            controller.loadViewIfNeeded()
+            let picker = try XCTUnwrap(controller.children.first as? RouteTypeViewController)
+            let table = try XCTUnwrap(picker.view.subviews.first as? UITableView)
+            let continuePath = IndexPath(row: 0, section: 2)
+            let expectedSubtitle = String(format: localizedString("ltr_or_rtl_combine_via_colon"),
+                                          localizedString("shared_string_next"),
+                                          continuationMode?.toHumanString() ?? localizedString("plan_route_straight_line"))
+            XCTAssertEqual(picker.tableView(table, cellForRowAt: continuePath).accessibilityValue, expectedSubtitle)
+            let pedestrianIndex = try XCTUnwrap(source.availableModes.firstIndex { $0.stringKey == OAApplicationMode.pedestrian()?.stringKey })
+            picker.tableView(table, didSelectRowAt: IndexPath(row: pedestrianIndex, section: 1))
+            XCTAssertEqual(picker.tableView(table, cellForRowAt: continuePath).accessibilityValue, expectedSubtitle)
+            let tabs = try XCTUnwrap(controller.view.subviews.compactMap { $0 as? UISegmentedControl }.first)
+            tabs.selectedSegmentIndex = 1
+            tabs.sendActions(for: .valueChanged)
+            tabs.selectedSegmentIndex = 0
+            tabs.sendActions(for: .valueChanged)
+            let restoredPicker = try XCTUnwrap(controller.children.first as? RouteTypeViewController)
+            let restoredTable = try XCTUnwrap(restoredPicker.view.subviews.first as? UITableView)
+            XCTAssertEqual(restoredPicker.tableView(restoredTable, cellForRowAt: continuePath).accessibilityValue, expectedSubtitle)
+            XCTAssertEqual(source.defaultMode?.stringKey, continuationMode?.stringKey)
+            XCTAssertNil(source.appliedContext)
+            XCTAssertTrue(navigation.topViewController === controller)
+        }
+    }
+
     func testContinueOnlyHasNoNewSegmentFooter() throws {
         try verifyActions(canContinue: true, canStartNewSegment: false,
                           expectedActions: ["continue"], expectedFooter: nil)

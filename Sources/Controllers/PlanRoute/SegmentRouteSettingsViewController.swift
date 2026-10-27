@@ -181,6 +181,7 @@ final class SegmentRouteSettingsViewController: UIViewController {
             context: context,
             availableModes: dataSource?.availableModes ?? [],
             selectedMode: selectedMode,
+            continuationMode: dataSource?.defaultMode,
             hasSelectedMode: hasSelectedMode,
             canStartNewSegment: showsContinuationActions && (dataSource?.canStartNewSegment ?? false),
             showsRecalculationHint: futureRouteAction == nil,

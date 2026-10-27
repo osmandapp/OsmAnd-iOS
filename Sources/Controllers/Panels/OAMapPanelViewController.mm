@@ -4866,7 +4866,43 @@ typedef enum
 {
     [self runContextMenuPresentationUITestFixtureIfNeeded];
     [self runGpxWaypointOpenTrackUITestFixtureIfNeeded];
+#if DEBUG
+    [self runPlanRouteHistoryUITestFixtureIfNeeded];
+#endif
 }
+
+#if DEBUG
+- (void)runPlanRouteHistoryUITestFixtureIfNeeded
+{
+    if (![UITestState shouldRunPlanRouteHistoryFixture])
+        return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        static NSString * const fixturePrefix = @"UITest-5782-source-";
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        NSMutableArray<NSString *> *previousFixtures = [NSMutableArray array];
+        for (NSString *filePath in settings.mapSettingVisibleGpx.get)
+        {
+            if ([filePath.lastPathComponent hasPrefix:fixturePrefix])
+                [previousFixtures addObject:filePath];
+        }
+        if (previousFixtures.count > 0)
+            [settings hideGpx:previousFixtures];
+        const auto position = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(52.2335, 21.011));
+        [self.mapViewController goToPosition:[OANativeUtilities convertFromPointI:position] andZoom:15 animated:NO];
+        NSString *fixture = NSProcessInfo.processInfo.environment[@"OSMAND_UI_TEST_PLAN_ROUTE_GPX"];
+        if (fixture.length == 0)
+        {
+            [PlanRouteScrollableViewController showNewRouteWithApplicationMode:OAApplicationMode.DEFAULT];
+            return;
+        }
+        NSString *fileName = [NSString stringWithFormat:@"%@%@.gpx", fixturePrefix, NSUUID.UUID.UUIDString];
+        NSString *path = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName];
+        NSError *error = nil;
+        if ([fixture writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error])
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:path];
+    });
+}
+#endif
 
 - (BOOL)isContextMenuPresentationUITestingEnabled
 {

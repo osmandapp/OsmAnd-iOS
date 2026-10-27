@@ -278,6 +278,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupRouteTypeButton()
         setupCrosshair()
         applyLayoutMode(for: view.bounds.size)
+#if OSMAND_UI_TESTING
+        setupUITestStateIfNeeded()
+#endif
         dayNightObserver = OAAutoObserverProxy(self,
                                                withHandler: #selector(onDayNightModeChanged),
                                                andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
@@ -522,6 +525,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSheet() {
+        sheetView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.sheet
         sheetView.backgroundColor = .viewBg
         sheetView.layer.cornerRadius = Self.sheetCornerRadius
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -568,6 +572,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func setupTopPart() {
         let topContentInset = Self.sidePanelTopContentInset
         let topPartViewHeight = Self.topPartViewHeight
+        topPartView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.summary
         topPartView.onTap = { [weak self] in
             guard let self, !usesSidePanelLayout else { return }
             toggleState()
@@ -945,6 +950,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         infoView.headerViewText = localizedString("move_point_descr")
         leftButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
         rightButton.setTitle(localizedString("shared_string_apply"), for: .normal)
+        leftButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.cancel
+        rightButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.apply
         switch mode {
         case .move:
             leftIconView.image = .icCustomChangeObjectPosition
@@ -1555,6 +1562,32 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
         present(alert, animated: true)
     }
+
+#if OSMAND_UI_TESTING
+    private func setupUITestStateIfNeeded() {
+        guard UITestState.isPlanRouteHistoryEnabled else { return }
+        let stateView = PlanRouteUITestStateView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+        stateView.isAccessibilityElement = true
+        stateView.accessibilityLabel = "Plan Route test state"
+        stateView.isUserInteractionEnabled = false
+        stateView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.state
+        stateView.translatesAutoresizingMaskIntoConstraints = false
+        stateView.snapshot = { [weak self] in
+            guard let self,
+                  var state = OAMeasurementToolLayer.currentRouteStateForUITesting() else { return nil }
+            state["calculating"] = dataProvider.isCalculatingRoute
+            state["editing"] = pointEditingView != nil
+            return state
+        }
+        topToolbar.addSubview(stateView)
+        NSLayoutConstraint.activate([
+            stateView.leadingAnchor.constraint(equalTo: topToolbar.leadingAnchor),
+            stateView.topAnchor.constraint(equalTo: topToolbar.safeAreaLayoutGuide.topAnchor),
+            stateView.widthAnchor.constraint(equalToConstant: 1),
+            stateView.heightAnchor.constraint(equalToConstant: 1)
+        ])
+    }
+#endif
 
     @objc private func onRouteTypeButtonTapped() {
         guard !presentApproximationWarningIfNeeded() else { return }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
+		D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000002 /* PlanRouteHistoryUITests.swift */; };
 		D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C608080000000000000002 /* OAFreeMapsCountTests.m */; };
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
 		D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5848A0000000000000002 /* Model3dHelperTests.swift */; };
@@ -2255,6 +2257,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
+		D57820010000000000000002 /* PlanRouteHistoryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryUITests.swift; sourceTree = "<group>"; };
 		D1C608080000000000000002 /* OAFreeMapsCountTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Helpers/OAFreeMapsCountTests.m; sourceTree = "<group>"; };
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
 		D1C5848A0000000000000002 /* Model3dHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles/Model3dHelperTests.swift; sourceTree = "<group>"; };
@@ -6991,6 +6995,8 @@
 			isa = PBXGroup;
 			children = (
 				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D57820010000000000000004 /* PlanRouteHistoryFixture.swift */,
+				D57820010000000000000002 /* PlanRouteHistoryUITests.swift */,
 				D1C571210000000000000003 /* Info.plist */,
 			);
 			path = "OsmAnd MapsUITests";
@@ -13788,6 +13794,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
+				D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */,
+				D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14527,6 +14535,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) OSMAND_UI_TESTING";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

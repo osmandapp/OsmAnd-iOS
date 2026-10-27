@@ -600,7 +600,8 @@
           provider ? NSStringFromClass([provider class]) : @"none",
           latLon ? @"yes" : @"no");
     CFTimeInterval targetCreationStartTime = CACurrentMediaTime();
-    if (!provider || ![provider showMenuAction:object])
+    BOOL isInMeasurementMode = [self.mapViewController.mapLayers.routePlanningLayer isInMeasurementMode];
+    if (!provider || isInMeasurementMode || ![provider showMenuAction:object])
     {
         OATargetPoint *targetPoint;
         if (provider)

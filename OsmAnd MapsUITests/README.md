@@ -37,7 +37,7 @@ The identifiers match [Testing 2 in #5782](https://github.com/osmandapp/OsmAnd-i
 | TP-01 / TP-02 | Trim before/after, retained coordinates/order, Undo/Redo, exact line geometry after pan/zoom |
 | TP-03 | Two trims and repeated independent six-/four-point history states |
 | TP-04 / TP-05 / TP-06 | One/three/two additions, every Undo/Redo state, final Undo and map gestures |
-| TP-07 | Delete/insert in the middle, original suffix, distinct added point, line color, history |
+| TP-07 | Delete/insert in the middle, exact curved geometry of the unchanged prefix/suffix, distinct added point, line color, history and map gestures |
 | TP-08 | Add one more twice; Apply commits the pending third point; Cancel preserves only the two committed additions; history |
 | TP-09 | Delete segment endpoint; Undo restores the original point and exactly one gap |
 | TP-10 | Repeated Trim/Clear history restores detailed geometry; empty state has no committed lines |
@@ -56,9 +56,9 @@ Both variants have eight named, distinct editable route points (P1–P8), using 
 
 No map download or live road calculation is required. These fixtures test preservation of already loaded geometry. They do **not** validate car/bicycle routing, actual road adherence, online services, in-flight routing cancellation, or recorded-track metadata.
 
-`-ui-testing` plus `-ui-testing-plan-route-history` enables Debug-only fixture preparation and a read-only accessibility state element. The app target's Debug configuration defines `OSMAND_UI_TESTING` for the Swift probe; Release and Nightly omit it. It reads actual editable coordinates/gaps and the measurement layer's live committed `VectorLinesCollection`, including line colors, plus the current map target and zoom. Pan/zoom assertions verify an actual camera change. The runner cannot mutate that state. Other accessibility identifiers identify normal UI controls.
+`-ui-testing` plus `-ui-testing-plan-route-history` enables Debug-only fixture preparation and a read-only accessibility state element. The app target's Debug configuration defines `OSMAND_UI_TESTING` for the Swift probe; Release and Nightly omit it. It reads actual editable coordinates/gaps and both measurement-layer `VectorLinesCollection` instances (committed route and provisional crosshair lines), including line colors, plus the current crosshair, map target and zoom. Pan/zoom assertions verify an actual camera change. The runner cannot mutate that state. Other accessibility identifiers identify normal UI controls.
 
-The geometry assertions detect obsolete committed renderer lines and lost/restored bends. They do **not** inspect GPU pixels or the separate provisional crosshair line. Screenshots are attached for visual review; raster artifacts, theme-specific appearance, landscape/iPad layout and physical-device behavior need separate verification.
+The geometry assertions detect obsolete committed renderer lines and lost/restored bends. Outside an active point edit, state waits also require exactly the current endpoint-to-crosshair line, or no provisional line for an empty route or gap endpoint. This checks `_lastLineCollection` after history and map gestures without treating the legitimate crosshair preview as a stale route line. They do **not** inspect GPU pixels. Screenshots are attached for visual review; raster artifacts, theme-specific appearance, landscape/iPad layout and physical-device behavior need separate verification.
 
 ## Verification status
 

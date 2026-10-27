@@ -87,10 +87,17 @@ struct PlanRouteHistorySnapshot: Decodable {
     let viewport: Viewport
     let points: [Point]
     let lines: [Line]
+    let lastLines: [Line]
+    let crosshair: [Int]
     let calculating: Bool
     let editing: Bool
 
     var positions: [[Int]] { points.map(\.position) }
     var gaps: [Int] { points.indices.filter { points[$0].gap } }
     var geometry: [[[Int]]] { lines.map(\.positions) }
+
+    var hasCurrentLastLine: Bool {
+        guard let endpoint = points.last, !endpoint.gap else { return lastLines.isEmpty }
+        return lastLines.count == 1 && lastLines[0].samples == [endpoint.position, crosshair]
+    }
 }

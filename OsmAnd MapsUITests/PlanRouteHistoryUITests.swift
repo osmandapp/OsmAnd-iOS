@@ -86,11 +86,16 @@ final class PlanRouteHistoryUITests: XCTestCase {
     }
 
     func testTP07DeleteAndInsertPreservesSuffixAndLineColor() throws {
-        let original = try launchFixture()
+        let original = try launchFixture(withGeometry: true)
+        let prefix = try geometry(original, retaining: Array(original.positions.prefix(3)))[0]
+        let suffix = try geometry(original, retaining: Array(original.positions.suffix(4)))[0]
+        XCTAssertGreaterThan(prefix.count, 3)
+        XCTAssertGreaterThan(suffix.count, 4)
         var deleted = original.positions
         deleted.remove(at: 3)
+        let deletedGeometry = [prefix + suffix]
         try pointAction("delete_point", at: 3)
-        try assertRoute(deleted)
+        try assertRoute(deleted, geometry: deletedGeometry)
         try pointAction("add_before", at: 3)
         try moveCrosshair()
         try tap(element(Identifier.apply))
@@ -99,10 +104,11 @@ final class PlanRouteHistoryUITests: XCTestCase {
         XCTAssertEqual(Array(inserted.positions.suffix(4)), Array(original.positions.suffix(4)))
         XCTAssertFalse(original.positions.contains(inserted.positions[3]))
         XCTAssertEqual(inserted.lines.map(\.color), original.lines.map(\.color))
-        try assertRoute(inserted.positions)
-        try history(Identifier.undo, expecting: deleted)
-        try history(Identifier.redo, expecting: inserted.positions)
-        try panAndZoom(expecting: inserted.positions)
+        let insertedGeometry = [prefix + [inserted.positions[3]] + suffix]
+        try assertRoute(inserted.positions, geometry: insertedGeometry)
+        try history(Identifier.undo, expecting: deleted, geometry: deletedGeometry)
+        try history(Identifier.redo, expecting: inserted.positions, geometry: insertedGeometry)
+        try panAndZoom(expecting: inserted.positions, geometry: insertedGeometry)
     }
 
     func testTP08AddOneMoreApplyCommitsThreeInsertions() throws {
@@ -519,7 +525,7 @@ final class PlanRouteHistoryUITests: XCTestCase {
             guard let target = object as? XCUIElement,
                   let value = target.value as? String,
                   let state = try? JSONDecoder().decode(PlanRouteHistorySnapshot.self, from: Data(value.utf8)) else { return false }
-            return !state.calculating && (allowEditing || !state.editing) && predicate(state)
+            return !state.calculating && (allowEditing || (!state.editing && state.hasCurrentLastLine)) && predicate(state)
         }
         let expectation = XCTNSPredicateExpectation(predicate: condition, object: marker)
         XCTAssertEqual(XCTWaiter.wait(for: [expectation], timeout: timeout), .completed, "Unexpected route state: \(marker.value ?? "missing")")

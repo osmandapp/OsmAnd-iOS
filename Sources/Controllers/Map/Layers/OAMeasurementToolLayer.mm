@@ -573,27 +573,45 @@
             @"gap": @(point.isGap)
         }];
     }
-    NSMutableArray *lines = [NSMutableArray array];
-    if (layer->_collection)
-    {
-        for (const auto &line : layer->_collection->getLines())
+    const auto snapshotLines = [](const std::shared_ptr<OsmAnd::VectorLinesCollection> &collection) {
+        NSMutableArray *lines = [NSMutableArray array];
+        if (collection)
         {
-            NSMutableArray *positions = [NSMutableArray array];
-            for (const auto &position : line->getPoints())
-                [positions addObject:@[@(position.x), @(position.y)]];
-            const auto color = line->getFillColor();
-            [lines addObject:@{
-                @"id": @(line->lineId),
-                @"positions": positions,
-                @"color": @[@(color.a), @(color.r), @(color.g), @(color.b)]
-            }];
+            for (const auto &line : collection->getLines())
+            {
+                NSMutableArray *positions = [NSMutableArray array];
+                for (const auto &position : line->getPoints())
+                    [positions addObject:@[@(position.x), @(position.y)]];
+                const auto color = line->getFillColor();
+                [lines addObject:@{
+                    @"id": @(line->lineId),
+                    @"positions": positions,
+                    @"color": @[@(color.a), @(color.r), @(color.g), @(color.b)]
+                }];
+            }
         }
+        [lines sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES]]];
+        return lines;
+    };
+    OAMapRendererView *mapView = layer.mapViewController.mapView;
+    OsmAnd::PointI crosshair;
+    if (!CGPointEqualToPoint(layer.cursorScreenPoint, CGPointZero))
+    {
+        CGFloat scale = mapView.contentScaleFactor;
+        CGPoint pixel = CGPointMake(layer.cursorScreenPoint.x * scale, layer.cursorScreenPoint.y * scale);
+        [mapView convert:pixel toLocation:&crosshair];
     }
-    [lines sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES]]];
+    else
+    {
+        const auto centerPixel = mapView.getCenterPixel;
+        [mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&crosshair];
+    }
     const auto target = layer.mapView.target31;
     return @{
         @"points": points,
-        @"lines": lines,
+        @"lines": snapshotLines(layer->_collection),
+        @"lastLines": snapshotLines(layer->_lastLineCollection),
+        @"crosshair": @[@(crosshair.x), @(crosshair.y)],
         @"viewport": @{@"target": @[@(target.x), @(target.y)], @"zoom": @(layer.mapView.zoom)}
     };
 }

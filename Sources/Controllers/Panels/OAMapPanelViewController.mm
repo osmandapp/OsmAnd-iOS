@@ -2608,6 +2608,7 @@ typedef enum
 {
     NSLog(@"[ContextMenu] Presentation BEGIN targetType=%ld", (long)_targetMenuView.targetPoint.type);
     CFTimeInterval openingStartTime = CACurrentMediaTime();
+    _isNewContextMenuStillEnabled = NO;
     [self.hudViewController hideWeatherToolbarIfNeeded];
     [self hideMultiMenuIfNeeded];
 

@@ -3,7 +3,7 @@ run-name: iOS UI tests (${{ github.ref_name }})
 
 on:
   schedule:
-    - cron: '30 14 * * *'
+    - cron: '15 15 * * *'
       timezone: Europe/Kyiv
   workflow_dispatch:
 
@@ -120,7 +120,7 @@ jobs:
             -resultBundlePath "$UI_RESULT_BUNDLE" \
             | xcpretty
       - name: Upload iOS UI test results
-        if: always()
+        if: ${{ failure() && steps.ui_tests.outcome == 'failure' }}
         uses: actions/upload-artifact@v4
         with:
           name: ios-nightly-ui-tests-xcresult
@@ -135,5 +135,11 @@ jobs:
             echo '## Nightly iOS UI tests'
             echo "- iOS commit: $GITHUB_SHA"
             echo "- UI test step: $TEST_OUTCOME"
-            echo '- Open the workflow run for logs and the xcresult artifact.'
+            if [ "$TEST_OUTCOME" = 'failure' ]; then
+              echo '- Open the logs and download the xcresult artifact if it was produced.'
+            elif [ "$TEST_OUTCOME" = 'success' ]; then
+              echo '- All UI tests passed; no xcresult artifact was uploaded.'
+            else
+              echo '- UI tests did not run; inspect the preceding steps.'
+            fi
           } >> "$GITHUB_STEP_SUMMARY"

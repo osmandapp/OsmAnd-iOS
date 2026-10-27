@@ -50,6 +50,8 @@ static vector<int> toLanes(OASKotlinIntArray *lanes)
 #define kTextViewHeight 20.0
 #define kMinWidth 60.0
 
+static NSString * const kShowMinorTurnsRowKey = @"show_minor_turns";
+
 @interface OALanesControl ()
 
 @property (weak, nonatomic) IBOutlet UIView *lanesView;
@@ -76,6 +78,8 @@ static vector<int> toLanes(OASKotlinIntArray *lanes)
     
     UIFont *_regularFont;
     UIFont *_boldFont;
+
+    NSNumber *_pendingShowMinorTurns;
 }
 
 - (instancetype) init
@@ -346,12 +350,36 @@ static vector<int> toLanes(OASKotlinIntArray *lanes)
 
     OATableRowData *row = [section createNewRow];
     row.cellType = [OASwitchTableViewCell reuseIdentifier];
+    row.key = kShowMinorTurnsRowKey;
     row.title = OALocalizedString(@"show_minor_turns");
     row.descr = OALocalizedString(@"show_minor_turns_descr");
-    [row setObj:_settings.showMinorTurns forKey:@"pref"];
-    [row setObj:@YES forKey:@"route_setting"];
+    [row setObj:_pendingShowMinorTurns ?: @([_settings.showMinorTurns get:appMode]) forKey:@"value"];
 
     return data;
+}
+
+- (BOOL)handleSwitchChanged:(OATableRowData *)item isOn:(BOOL)isOn
+{
+    if (![item.key isEqualToString:kShowMinorTurnsRowKey])
+        return NO;
+
+    _pendingShowMinorTurns = @(isOn);
+    return YES;
+}
+
+- (void)applySettings:(OAApplicationMode *)appMode
+{
+    if (!_pendingShowMinorTurns)
+        return;
+
+    BOOL showMinorTurns = _pendingShowMinorTurns.boolValue;
+    _pendingShowMinorTurns = nil;
+    if ([_settings.showMinorTurns get:appMode] == showMinorTurns)
+        return;
+
+    [_settings.showMinorTurns set:showMinorTurns mode:appMode];
+    if (appMode == [_rh getAppMode] && ([_rh isRouteCalculated] || [_rh isRouteBeingCalculated]))
+        [_rh recalculateRouteDueToSettingsChange];
 }
 
 @end

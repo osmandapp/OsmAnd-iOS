@@ -27,7 +27,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
-    private var routeSettingChanged = false
     
     private var appearanceLayoutMode: ScreenLayoutMode? {
         OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
@@ -50,7 +49,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        recalculateRouteIfNeeded()
+        widgetInfo.applySettings(selectedAppMode)
     }
     
     override func registerCells() {
@@ -110,7 +109,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             var selected = false
             if let pref = item.obj(forKey: "pref") as? OACommonBoolean {
-                if !createNew || item.bool(forKey: "route_setting") {
+                if !createNew {
                     selected = pref.get(selectedAppMode)
                 } else {
                     if let value = widgetConfigurationParams?[pref.key] as? Bool {
@@ -123,6 +122,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
                     widgetConfigurationParams?["isVisibleIcon"] = selected
                 }
+            } else {
+                selected = item.bool(forKey: "value")
             }
             
             cell.switchView.isOn = selected
@@ -467,13 +468,12 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)
+        if widgetInfo.handleSwitchChanged(data, isOn: sw.isOn) {
+            return false
+        }
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
-        let isRouteSetting = data.bool(forKey: "route_setting")
-        if isRouteSetting {
-            routeSettingChanged = true
-        }
-        if !createNew || isRouteSetting {
+        if !createNew {
             let iconVisibilityChanged = pref.get(selectedAppMode) != sw.isOn
             pref.set(sw.isOn, mode: selectedAppMode)
             if iconVisibilityChanged, pref.key.hasPrefix("simple_widget_show_icon") {
@@ -502,15 +502,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         
         return false
-    }
-    
-    private func recalculateRouteIfNeeded() {
-        guard routeSettingChanged else { return }
-        routeSettingChanged = false
-        let routingHelper = OARoutingHelper.sharedInstance()
-        if selectedAppMode == routingHelper.getAppMode() && (routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) {
-            routingHelper.recalculateRouteDueToSettingsChange()
-        }
     }
 }
 

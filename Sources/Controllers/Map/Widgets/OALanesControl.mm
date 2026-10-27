@@ -364,6 +364,7 @@ static NSString * const kShowMinorTurnsRowKey = @"show_minor_turns";
         return NO;
 
     _pendingShowMinorTurns = @(isOn);
+    [item setObj:_pendingShowMinorTurns forKey:@"value"];
     return YES;
 }
 

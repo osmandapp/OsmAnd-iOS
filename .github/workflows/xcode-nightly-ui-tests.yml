@@ -3,8 +3,8 @@ run-name: iOS UI tests (${{ github.ref_name }})
 
 on:
   schedule:
-    - cron: '15 15 * * *'
-      timezone: Europe/Kyiv
+    # Temporary check: 13:55 UTC is 15:55 in Kyiv on 2026-10-27.
+    - cron: '55 13 * * *'
   workflow_dispatch:
 
 jobs:

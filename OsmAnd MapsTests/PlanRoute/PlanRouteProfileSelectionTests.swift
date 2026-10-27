@@ -5,6 +5,13 @@ import XCTest
 @MainActor
 final class PlanRouteProfileSelectionTests: XCTestCase {
 
+    override func setUp() {
+        super.setUp()
+        let initialized = XCTNSPredicateExpectation(predicate: NSPredicate(format: "initialized == YES"),
+                                                    object: OsmAndApp.swiftInstance())
+        XCTAssertEqual(XCTWaiter.wait(for: [initialized], timeout: 30), .completed)
+    }
+
     func testMixedSegmentRequiresExplicitSelection() throws {
         let controller = makeController(mixed: true)
         controller.loadViewIfNeeded()
@@ -221,6 +228,66 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         XCTAssertEqual(target, IndexPath(row: 8, section: 0))
     }
 
+    func testGapEndpointCannotMoveOrReceiveAnotherPoint() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let points = (0..<3).map { makePoint(index: $0, count: 3) }
+        let group = PlanRouteProfileGroup(appMode: nil, distance: 200, lastPointIndex: 2,
+                                          points: points, profilePointIndexes: [0, 1])
+        source.routeSegments = [makeSegment(groups: [group])]
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        let first = IndexPath(row: 0, section: 0)
+        let gap = IndexPath(row: 2, section: 0)
+        XCTAssertFalse(controller.tableView(table, canMoveRowAt: gap))
+        XCTAssertTrue(controller.tableView(table, canMoveRowAt: first))
+        XCTAssertEqual(controller.tableView(table, targetIndexPathForMoveFromRowAt: first,
+                                            toProposedIndexPath: gap), IndexPath(row: 1, section: 0))
+        source.onMove = { _, _ in XCTFail("Moving a gap endpoint must be rejected") }
+        controller.tableView(table, moveRowAt: first, to: gap)
+        controller.tableView(table, moveRowAt: gap, to: first)
+    }
+
+    func testReloadWaitsForTableInteractionToFinish() throws {
+        let source = PlanRouteProfileTestDataSource()
+        source.routeSegments = [makeMixedSegment()]
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        let observer = try XCTUnwrap(table.gestureRecognizers?.first { String(describing: type(of: $0)).contains("InteractionObserver") })
+        let initialCount = table.numberOfRows(inSection: 0)
+        observer.touchesBegan([], with: UIEvent())
+        source.routeSegments = []
+        controller.reloadData()
+        XCTAssertEqual(table.numberOfRows(inSection: 0), initialCount)
+        observer.touchesCancelled([], with: UIEvent())
+        controller.perform(NSSelectorFromString("onTableInteraction:"), with: observer)
+        let reloaded = expectation(description: "Reload resumes after cancelled interaction")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            XCTAssertEqual(table.numberOfRows(inSection: 0), 1)
+            reloaded.fulfill()
+        }
+        wait(for: [reloaded], timeout: 1)
+    }
+
+    func testPointMenuInsertionAndTrimUseTheSelectedBoundaryPoint() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let segment = makeMixedSegment()
+        source.routeSegments = [segment]
+        for group in segment.groups.prefix(2) {
+            let point = try XCTUnwrap(group.points.last)
+            for (section, row, action) in [(1, 0, "addBefore"), (1, 1, "addAfter"), (2, 0, "trimBefore"), (2, 1, "trimAfter")] {
+                let controller = PlanRoutePointMenuViewController(point: point, segment: segment, group: group, dataSource: source)
+                controller.loadViewIfNeeded()
+                let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+                let indexPath = IndexPath(row: row, section: section)
+                XCTAssertTrue(controller.tableView(table, cellForRowAt: indexPath).isUserInteractionEnabled)
+                controller.tableView(table, didSelectRowAt: indexPath)
+                XCTAssertEqual(source.editedPointAction, "\(action):\(point.index)")
+            }
+        }
+    }
+
     private func makeMixedSegment() -> PlanRouteSegment {
         let points = (0..<6).map { makePoint(index: $0, count: 6) }
         return makeSegment(groups: [
@@ -295,6 +362,7 @@ private final class PlanRouteProfileTestDataSource: PlanRoutePointsDataSource {
     var appliedContext: SegmentRouteContext?
     var appliedMode: OAApplicationMode?
     var onMove: ((Int, Int) -> Void)?
+    var editedPointAction: String?
     var routeInfo: PlanRouteInfo { fatalError("Route info is not used by these tests") }
     var pendingEmptySegmentIndex: Int? { nil }
     var isTrackReadyToCalculate: Bool { true }
@@ -327,9 +395,9 @@ private final class PlanRouteProfileTestDataSource: PlanRoutePointsDataSource {
     func saveSegment(pointIndexes: [Int], fileName: String, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {}
     func selectRoutePoint(at index: Int) {}
     func showPointOptions(at index: Int) {}
-    func addPointBefore(index: Int) {}
-    func addPointAfter(index: Int) {}
-    func trimBefore(index: Int) {}
-    func trimAfter(index: Int) {}
+    func addPointBefore(index: Int) { editedPointAction = "addBefore:\(index)" }
+    func addPointAfter(index: Int) { editedPointAction = "addAfter:\(index)" }
+    func trimBefore(index: Int) { editedPointAction = "trimBefore:\(index)" }
+    func trimAfter(index: Int) { editedPointAction = "trimAfter:\(index)" }
     func refreshRoute(for mode: OAApplicationMode) {}
 }

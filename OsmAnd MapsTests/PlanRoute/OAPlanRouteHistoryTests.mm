@@ -130,6 +130,253 @@
     XCTAssertTrue([self.context.commandManager execute:[[OAAddPointCommand alloc] initWithLayer:self.layer coordinate:location]]);
 }
 
+- (NSArray<NSString *> *)profiles:(NSArray<OASWptPt *> *)points
+{
+    NSMutableArray *result = [NSMutableArray array];
+    for (OASWptPt *point in points)
+        [result addObject:point.getProfileType ?: @""];
+    return result;
+}
+
+- (void)testMovingGapOrCrossingSegmentBoundaryDoesNotCreateHistory
+{
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    NSArray *expected = [self latitudes:self.original];
+    for (NSArray<NSNumber *> *move in @[@[@3, @1], @[@0, @3], @[@0, @4], @[@4, @2], @[@-1, @2], @[@0, @99]])
+    {
+        [self.bridge movePointFrom:move[0].integerValue to:move[1].integerValue];
+        [self assertFinishedPoints:expected];
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        XCTAssertEqual(self.segments.count, 2);
+    }
+}
+
+- (void)testReorderKeepsProfilesWithPointsAndUndoRestoresThem
+{
+    [self prepareThreeProfileRoute];
+    NSArray *profiles = [self profiles:self.context.getPoints];
+    NSArray *latitudes = [self latitudes:self.context.getPoints];
+    [self.bridge movePointFrom:0 to:1];
+    XCTAssertEqualObjects(self.context.getPoints[0].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertFalse(self.context.getPoints[1].hasProfile);
+    NSArray *reordered = [self latitudes:self.context.getPoints];
+    for (NSInteger cycle = 0; cycle < 2; cycle++)
+    {
+        [self.bridge undo];
+        [self assertFinishedPoints:latitudes];
+        XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
+        [self.bridge redo];
+        [self assertFinishedPoints:reordered];
+    }
+}
+
+- (void)testSortKeepsGapEndpointAndNeighbourSegmentInPlace
+{
+    self.original[1].lat = 51;
+    self.original[2].lat = 50.0001;
+    self.original[3].lat = 50.00001;
+    [self.original[3] setGap];
+    [self.context updateSegmentsForSnap];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    [self.bridge sortSegmentDoorToDoorWithPointIndexes:@[@0, @1, @2, @3]];
+    XCTAssertEqual(self.context.getPoints[1], self.original[2]);
+    XCTAssertEqual(self.context.getPoints[3], self.original[3]);
+    XCTAssertEqual(self.context.getPoints[4], self.original[4]);
+    XCTAssertEqual(self.segments.count, 2);
+    [self.bridge undo];
+    [self assertFinishedPoints:original];
+    [self.bridge redo];
+    XCTAssertEqual(self.context.getPoints[3], self.original[3]);
+}
+
+- (void)verifyMenuInsertionBefore:(BOOL)before index:(NSInteger)index gap:(BOOL)gap
+{
+    [self prepareThreeProfileRoute];
+    if (gap)
+        [self.original[2] setGap];
+    [self.context updateSegmentsForSnap];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    NSInteger insertionIndex = before ? index : index + 1;
+    OASWptPt *source = self.context.getPoints[index];
+    if (before && index > 0 && !self.context.getPoints[index - 1].isGap)
+        source = self.context.getPoints[index - 1];
+    NSString *expectedProfile = source.getProfileType ?: @"";
+    if (before)
+        [self.bridge addPointBeforeIndex:index];
+    else
+        [self.bridge addPointAfterIndex:index];
+    [self addPointNumber:0];
+    [self.bridge cancelPointEdit];
+    NSArray *inserted = [self latitudes:self.context.getPoints];
+    NSArray *insertedProfiles = [self profiles:self.context.getPoints];
+    XCTAssertEqual(inserted.count, original.count + 1);
+    XCTAssertEqualObjects(insertedProfiles[insertionIndex], expectedProfile);
+    if (gap)
+        XCTAssertEqual(self.segments.count, 2);
+    for (NSInteger cycle = 0; cycle < 2; cycle++)
+    {
+        [self.bridge undo];
+        [self assertFinishedPoints:original];
+        XCTAssertEqualObjects([self profiles:self.context.getPoints], originalProfiles);
+        [self.bridge redo];
+        [self assertFinishedPoints:inserted];
+        XCTAssertEqualObjects([self profiles:self.context.getPoints], insertedProfiles);
+    }
+    [self.bridge undo];
+}
+
+- (void)testAddBeforeAndAfterAtEveryMixedProfileBoundarySupportsRepeatedHistory
+{
+    for (NSInteger index = 0; index < 6; index++)
+    {
+        [self verifyMenuInsertionBefore:YES index:index gap:NO];
+        [self verifyMenuInsertionBefore:NO index:index gap:NO];
+    }
+}
+
+- (void)testAddBeforeAndAfterGapEndpointsPreservesSegmentsAndHistory
+{
+    for (NSInteger index = 2; index <= 3; index++)
+    {
+        [self verifyMenuInsertionBefore:YES index:index gap:YES];
+        [self verifyMenuInsertionBefore:NO index:index gap:YES];
+    }
+}
+
+- (void)testAddAfterSinglePointSegmentMovesOnlyItsGap
+{
+    [self.original[0] setGap];
+    [self.context updateSegmentsForSnap];
+    [self.bridge addPointAfterIndex:0];
+    [self addPointNumber:0];
+    [self.bridge cancelPointEdit];
+    XCTAssertFalse(self.context.getPoints[0].isGap);
+    XCTAssertTrue(self.context.getPoints[1].isGap);
+    XCTAssertEqual(self.segments.count, 2);
+    [self.bridge undo];
+    XCTAssertTrue(self.context.getPoints[0].isGap);
+    [self.bridge redo];
+    XCTAssertFalse(self.context.getPoints[0].isGap);
+    XCTAssertTrue(self.context.getPoints[1].isGap);
+    XCTAssertEqual(self.segments.count, 2);
+}
+
+- (void)testCancellingMenuInsertionWithoutAddingPreservesProfilesAndHistory
+{
+    [self prepareThreeProfileRoute];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    NSArray *profiles = [self profiles:self.context.getPoints];
+    [self.bridge addPointBeforeIndex:1];
+    [self.bridge cancelPointEdit];
+    [self.bridge addPointAfterIndex:2];
+    [self.bridge cancelPointEdit];
+    [self assertFinishedPoints:original];
+    XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
+    XCTAssertFalse(self.context.commandManager.canUndo);
+}
+
+- (void)testTrimAtMixedProfileAndGapBoundariesPreservesRemainingLegTypes
+{
+    for (NSInteger before = 0; before <= 1; before++)
+    {
+        for (NSInteger index = 0; index < 6; index++)
+        {
+            [self prepareThreeProfileRoute];
+            [self.original[2] setGap];
+            [self.context updateSegmentsForSnap];
+            NSArray *original = [self latitudes:self.context.getPoints];
+            NSArray *profiles = [self profiles:self.context.getPoints];
+            NSRange range = before ? NSMakeRange(index, 6 - index) : NSMakeRange(0, index + 1);
+            NSArray *expected = [original subarrayWithRange:range];
+            NSArray *expectedProfiles = [profiles subarrayWithRange:range];
+            if (before)
+                [self.bridge trimBeforeIndex:index];
+            else
+                [self.bridge trimAfterIndex:index];
+            for (NSInteger cycle = 0; cycle < 2; cycle++)
+            {
+                [self assertFinishedPoints:expected];
+                XCTAssertEqualObjects([self profiles:self.context.getPoints], expectedProfiles);
+                for (id<PlanRouteHistorySegmentData> segment in self.segments)
+                {
+                    double sum = 0;
+                    for (id<PlanRouteHistoryGroupData> group in segment.groups)
+                        sum += group.distance;
+                    XCTAssertEqualWithAccuracy(sum, segment.distance, 0.001);
+                }
+                [self.bridge undo];
+                [self assertFinishedPoints:original];
+                XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
+                [self.bridge redo];
+            }
+            [self.bridge undo];
+        }
+    }
+}
+
+- (void)testTrimAfterSynchronizesContinuationWithRemainingEndpointAndHistory
+{
+    for (OAApplicationMode *mode in @[OAApplicationMode.DEFAULT, OAApplicationMode.BICYCLE])
+    {
+        [self prepareThreeProfileRoute];
+        self.context.appMode = OAApplicationMode.PEDESTRIAN;
+        if (mode == OAApplicationMode.DEFAULT)
+            [self.original[0] removeProfileType];
+        else
+            [self.original[0] setProfileTypeProfileType:mode.stringKey];
+        [self.bridge trimAfterIndex:0];
+        for (NSInteger cycle = 0; cycle < 2; cycle++)
+        {
+            XCTAssertEqual(self.context.getPointsCount, 1);
+            XCTAssertEqualObjects(self.context.appMode.stringKey, mode.stringKey);
+            [self addPointNumber:0];
+            XCTAssertEqualObjects([OAApplicationMode valueOfStringKey:self.context.getPoints.lastObject.getProfileType
+                                                                 def:OAApplicationMode.DEFAULT].stringKey, mode.stringKey);
+            [self.bridge undo];
+            [self.bridge undo];
+            XCTAssertEqualObjects(self.context.appMode.stringKey, OAApplicationMode.PEDESTRIAN.stringKey);
+            XCTAssertEqual(self.context.getPointsCount, 6);
+            [self.bridge redo];
+        }
+        [self.bridge undo];
+    }
+}
+
+- (void)testTrimAfterGapPreservesPendingContinuationMode
+{
+    [self prepareThreeProfileRoute];
+    [self.original[2] setGap];
+    self.context.appMode = OAApplicationMode.PEDESTRIAN;
+    [self.bridge trimAfterIndex:2];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqualObjects(self.context.appMode.stringKey, OAApplicationMode.PEDESTRIAN.stringKey);
+    [self.bridge undo];
+    [self.bridge redo];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqualObjects(self.context.appMode.stringKey, OAApplicationMode.PEDESTRIAN.stringKey);
+}
+
+- (void)testChangingWholeSegmentPreservesNeighbourSegmentAndGap
+{
+    [self prepareThreeProfileRoute];
+    [self.original[2] setGap];
+    [self.context updateSegmentsForSnap];
+    NSArray *profiles = [self profiles:self.context.getPoints];
+    [self.bridge applyMode:OAApplicationMode.PEDESTRIAN pointIndexes:@[@0, @1, @2]];
+    XCTAssertEqualObjects(self.original[0].getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+    XCTAssertEqualObjects(self.original[1].getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+    XCTAssertTrue(self.original[2].isGap);
+    XCTAssertEqualObjects([[self profiles:self.context.getPoints] subarrayWithRange:NSMakeRange(3, 3)],
+                          [profiles subarrayWithRange:NSMakeRange(3, 3)]);
+    [self.bridge undo];
+    XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
+    [self.bridge redo];
+    XCTAssertTrue(self.original[2].isGap);
+    XCTAssertEqual(self.segments.count, 2);
+}
+
 - (void)testContinueWithDifferentProfilePreservesExistingLegs
 {
     NSArray<OASWptPt *> *pair = @[self.original[0], self.original[1]];

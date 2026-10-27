@@ -75,8 +75,9 @@ final class PlanRouteActionCell: UITableViewCell {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: contentInsets.leading),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -contentInsets.trailing),
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: contentInsets.top),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -contentInsets.bottom),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: contentInsets.top),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -contentInsets.bottom),
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumHeight)
         ])
     }

@@ -17,12 +17,50 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         case continueRoute
     }
 
+    private final class InteractionObserver: UIGestureRecognizer {
+        private var activeTouches: Set<UITouch> = []
+
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+            activeTouches.formUnion(touches)
+            state = state == .possible ? .began : .changed
+        }
+
+        override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+            state = .changed
+        }
+
+        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+            activeTouches.subtract(touches)
+            if activeTouches.isEmpty {
+                state = .ended
+            }
+        }
+
+        override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+            state = .cancelled
+        }
+
+        override func reset() {
+            super.reset()
+            activeTouches.removeAll()
+        }
+
+        override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
+            false
+        }
+
+        override func canBePrevented(by preventingGestureRecognizer: UIGestureRecognizer) -> Bool {
+            false
+        }
+    }
+
     private struct SectionModel {
         let headerTitle: String?
         let headerSubtitle: String?
         let headerMenu: UIMenu?
         var rows: [Row]
         let isStartNewSegment: Bool
+        var fixedPointIndex: Int?
     }
 
     private static let sectionHorizontalInset: CGFloat = 16
@@ -37,12 +75,15 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     var onSaveSegment: (([Int]) -> Void)?
     var onContinueRoute: (() -> Void)?
 
+    private let interactionObserver = InteractionObserver()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
     private var lastContentSignature: String?
     private var doorToDoorSortedKeys: Set<String> = []
     private var isApplyingDoorToDoorSort = false
     private var isMovingPoint = false
+    private var needsReloadAfterInteraction = false
+    private var isReloadScheduled = false
     private weak var dataSource: PlanRoutePointsDataSource?
 
     init(dataSource: PlanRoutePointsDataSource?) {
@@ -71,6 +112,15 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     func reloadData() {
         guard isViewLoaded, !isMovingPoint else { return }
+        guard interactionObserver.state != .began, interactionObserver.state != .changed else {
+            needsReloadAfterInteraction = true
+            return
+        }
+        guard !tableView.hasUncommittedUpdates else {
+            scheduleReload()
+            return
+        }
+        needsReloadAfterInteraction = false
         let segments = dataSource?.routeSegments ?? []
         let signature = contentSignature(for: segments)
         guard lastContentSignature != signature else { return }
@@ -89,6 +139,11 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.backgroundColor = .viewBg
         tableView.dataSource = self
         tableView.delegate = self
+        interactionObserver.cancelsTouchesInView = false
+        interactionObserver.delaysTouchesBegan = false
+        interactionObserver.delaysTouchesEnded = false
+        interactionObserver.addTarget(self, action: #selector(onTableInteraction(_:)))
+        tableView.addGestureRecognizer(interactionObserver)
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.alwaysBounceVertical = true
@@ -184,6 +239,9 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             ? String(format: localizedString("segments_count"), segment.index + 1)
             : localizedString("route_points")
         let segmentMenu = makeSegmentMenu(for: segment)
+        let fixedPointIndex = segment.groups.last?.points.last.flatMap { point in
+            segment.profileGroup(forLegStartingAt: point.index) == nil ? point.index : nil
+        }
 
         if segment.multiMode {
             var rows: [Row] = []
@@ -196,7 +254,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  headerSubtitle: formattedDistance(segment.distance),
                                  headerMenu: segmentMenu,
                                  rows: routeRows(rows, for: segment),
-                                 isStartNewSegment: false)]
+                                 isStartNewSegment: false,
+                                 fixedPointIndex: fixedPointIndex)]
         } else {
             let segmentColor = segment.singleMode?.getProfileColor() ?? straightLineColor
             var subtitle: String?
@@ -211,7 +270,8 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  headerSubtitle: subtitle,
                                  headerMenu: segmentMenu,
                                  rows: routeRows(rows, for: segment),
-                                 isStartNewSegment: false)]
+                                 isStartNewSegment: false,
+                                 fixedPointIndex: fixedPointIndex)]
         }
     }
 
@@ -338,6 +398,24 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     private func formattedDistance(_ meters: Double) -> String {
         OAOsmAndFormatter.getFormattedDistance(Float(meters)) ?? ""
+    }
+
+    private func scheduleReload() {
+        guard !isReloadScheduled else { return }
+        isReloadScheduled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
+            isReloadScheduled = false
+            reloadData()
+        }
+    }
+
+    @objc private func onTableInteraction(_ recognizer: UIGestureRecognizer) {
+        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
+            if needsReloadAfterInteraction {
+                scheduleReload()
+            }
+        }
     }
 }
 
@@ -468,20 +546,19 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        guard !sections[indexPath.section].isStartNewSegment else { return false }
-        if case .point = sections[indexPath.section].rows[indexPath.row] {
-            return true
-        }
-        return false
+        guard sections.indices.contains(indexPath.section),
+              sections[indexPath.section].rows.indices.contains(indexPath.row),
+              case let .point(point, _) = sections[indexPath.section].rows[indexPath.row] else { return false }
+        return point.index != sections[indexPath.section].fixedPointIndex
     }
 
     func tableView(_ tableView: UITableView,
                    targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         let srcSection = sourceIndexPath.section
-        guard sections.indices.contains(srcSection) else { return sourceIndexPath }
+        guard self.tableView(tableView, canMoveRowAt: sourceIndexPath) else { return sourceIndexPath }
         let rows = sections[srcSection].rows
-        let pointRows = rows.indices.filter { if case .point = rows[$0] { return true } else { return false } }
+        let pointRows = rows.indices.filter { self.tableView(tableView, canMoveRowAt: IndexPath(row: $0, section: srcSection)) }
         guard let firstPoint = pointRows.first, let lastPoint = pointRows.last else { return sourceIndexPath }
 
         if proposedDestinationIndexPath.section != srcSection {
@@ -490,7 +567,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
         }
 
         let proposedRow = proposedDestinationIndexPath.row
-        if rows.indices.contains(proposedRow), case .point = rows[proposedRow] {
+        if pointRows.contains(proposedRow) {
             return proposedDestinationIndexPath
         }
 
@@ -508,7 +585,8 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         guard sourceIndexPath != destinationIndexPath,
               sourceIndexPath.section == destinationIndexPath.section,
-              sections.indices.contains(sourceIndexPath.section) else { return }
+              self.tableView(tableView, canMoveRowAt: sourceIndexPath),
+              self.tableView(tableView, canMoveRowAt: destinationIndexPath) else { return }
         var rows = sections[sourceIndexPath.section].rows
         guard rows.indices.contains(sourceIndexPath.row),
               rows.indices.contains(destinationIndexPath.row),

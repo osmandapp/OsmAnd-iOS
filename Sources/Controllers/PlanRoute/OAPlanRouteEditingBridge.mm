@@ -1102,11 +1102,24 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         self.onChange();
 }
 
+- (BOOL)canMovePointFrom:(NSInteger)from to:(NSInteger)to inContext:(OAMeasurementEditingContext *)ctx
+{
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    if (ctx == nil || from == to || from < 0 || to < 0 || from >= points.count || to >= points.count)
+        return NO;
+    for (NSInteger index = MIN(from, to); index <= MAX(from, to); index++)
+    {
+        if (points[index].isGap)
+            return NO;
+    }
+    return YES;
+}
+
 - (void)movePointFrom:(NSInteger)from to:(NSInteger)to
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || from == to)
+    if (![self canMovePointFrom:from to:to inContext:ctx])
         return;
     [self invalidateTerrainElevationGpx];
     [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to move:YES]];
@@ -2221,10 +2234,22 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || indexes.count < 3)
         return;
-    [self invalidateTerrainElevationGpx];
-
     NSArray<OASWptPt *> *points = ctx.getPoints;
-    NSMutableArray<NSNumber *> *remaining = [NSMutableArray arrayWithArray:[indexes subarrayWithRange:NSMakeRange(1, indexes.count - 1)]];
+    NSInteger baseIndex = indexes.firstObject.integerValue;
+    for (NSInteger offset = 0; offset < indexes.count; offset++)
+    {
+        NSInteger index = indexes[offset].integerValue;
+        if (index != baseIndex + offset || index < 0 || index >= points.count
+            || (points[index].isGap && offset < indexes.count - 1))
+            return;
+    }
+    NSUInteger sortableCount = indexes.count;
+    if (points[indexes.lastObject.integerValue].isGap)
+        sortableCount--;
+    if (sortableCount < 3)
+        return;
+    [self invalidateTerrainElevationGpx];
+    NSMutableArray<NSNumber *> *remaining = [NSMutableArray arrayWithArray:[indexes subarrayWithRange:NSMakeRange(1, sortableCount - 1)]];
     NSMutableArray<NSNumber *> *ordered = [NSMutableArray arrayWithObject:indexes.firstObject];
     NSInteger currentIndex = indexes.firstObject.integerValue;
     while (remaining.count > 0)

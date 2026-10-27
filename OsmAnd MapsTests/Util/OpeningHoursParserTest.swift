@@ -884,6 +884,28 @@ final class OpeningHoursParserTest: XCTestCase {
         assertShortInfo("09.08.2019 15:00", hours: hours, equals: "Mon-Fri")
     }
 
+    func testMonthRangeOffKeepsMonths() {
+        // Month-range "off" rules must retain their months instead of becoming "24/7 off" (#11571).
+        var hours = makeHours("Oct-Mar off")
+        assertAssembled(hours, equals: "Jan-Mar, Oct-Dec Mo-Su off")
+        assertOpened("05.08.2024 12:00", hours: hours, expected: false)
+        assertOpened("05.11.2024 12:00", hours: hours, expected: false)
+
+        hours = makeHours("Jan-Mar off; Mo-Fr 10:00-18:00")
+        assertAssembled(hours, equals: "Jan-Mar Mo-Su off; Mo-Fr 10:00-18:00")
+
+        hours = makeHours("Mo-Fr 10:00-18:00; Oct-Mar off")
+        assertAssembled(hours, equals: "Mo-Fr 10:00-18:00; Jan-Mar, Oct-Dec Mo-Su off")
+    }
+
+    func testMonthRangeOffIsNotOpened24_7() {
+        // A seasonal "off" rule outside its months must not make the info "open 24/7" (#11571).
+        let hours = makeHours("Mo-Fr 10:00-18:00; Oct-Mar off")
+        assertOpened("05.08.2024 12:00", hours: hours, expected: true)
+        XCTAssertFalse(hours.isOpened24_7(at: "05.08.2024 12:00"))
+        assertInfo("05.08.2024 12:00", hours: hours, equals: "Open until 18:00")
+    }
+
     private func configure(localeIdentifier: String?, twelveHour: Bool) {
         OpeningHoursParserTestSupport.configureLocaleIdentifier(localeIdentifier, twelveHourFormattingEnabled: twelveHour)
     }

@@ -27,6 +27,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
+    private var routeSettingsInitialValues: [OACommonBoolean: Bool] = [:]
     
     private var appearanceLayoutMode: ScreenLayoutMode? {
         OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
@@ -45,6 +46,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             widgetConfigurationParams = [:]
         }
         configureNavigationButtons()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        recalculateRouteIfNeeded()
     }
     
     override func registerCells() {
@@ -464,6 +470,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
         let isRouteSetting = data.bool(forKey: "route_setting")
+        if isRouteSetting, routeSettingsInitialValues[pref] == nil {
+            routeSettingsInitialValues[pref] = pref.get(selectedAppMode)
+        }
         if !createNew || isRouteSetting {
             let iconVisibilityChanged = pref.get(selectedAppMode) != sw.isOn
             pref.set(sw.isOn, mode: selectedAppMode)
@@ -476,9 +485,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             }
         }
         widgetConfigurationParams?[pref.key] = sw.isOn
-        if isRouteSetting {
-            recalculateRouteIfNeeded()
-        }
         
         if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
             widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
@@ -499,6 +505,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     }
     
     private func recalculateRouteIfNeeded() {
+        let changed = routeSettingsInitialValues.contains { pref, initialValue in pref.get(selectedAppMode) != initialValue }
+        routeSettingsInitialValues.removeAll()
+        guard changed else { return }
         let routingHelper = OARoutingHelper.sharedInstance()
         if selectedAppMode == routingHelper.getAppMode() && (routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) {
             routingHelper.recalculateRouteDueToSettingsChange()

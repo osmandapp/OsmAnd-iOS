@@ -175,12 +175,12 @@
     _selectedProfileSection = data.count - 1;
 
     NSMutableArray *profilesSection = [NSMutableArray new];
-    for (int i = 0; i < OAApplicationMode.allPossibleValues.count; i++)
+    for (OAApplicationMode *mode in [OAApplicationMode allPossibleValues])
     {
         [profilesSection addObject:@{
             @"name" : @"profile_val",
-            @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? [OASimpleTableViewCell getCellIdentifier] : [OASwitchTableViewCell getCellIdentifier],
+            @"app_mode" : mode,
+            @"type" : mode == OAApplicationMode.DEFAULT ? OASimpleTableViewCell.reuseIdentifier : OASwitchTableViewCell.reuseIdentifier,
             @"isColored" : @NO
         }];
     }

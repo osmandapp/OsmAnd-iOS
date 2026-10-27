@@ -1319,9 +1319,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         {
             [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
-        else if (remove && [filePath containsString:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR]])
+        else if (remove && [filePath.stringByDeletingLastPathComponent isEqualToString:[self importTempPath]])
         {
-            [NSFileManager.defaultManager removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR] error:nil];
+            [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
         else
         {
@@ -1334,6 +1334,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
             }
         }
     }
+}
+
++ (NSString *)importTempPath
+{
+    return [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR];
 }
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion
@@ -1438,6 +1443,8 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
     for (NSString *file in tmpDirectory) {
+        if ([file isEqualToString:TEMP_DIR])
+            continue;
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
     }
 }

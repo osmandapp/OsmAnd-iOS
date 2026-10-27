@@ -404,6 +404,11 @@ typedef enum {
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     OAMarkerCollection *_previewMarker;
+    CLLocation *_previewLocation;
+    float _previewLocationFactor;
+    float _previewCourseFactor;
+    BOOL _previewShowBearing;
+    BOOL _previewVisible;
     CLLocation *_lastLocation;
     CLLocationDirection _lastHeading;
     CLLocationDirection _lastCourse;
@@ -481,7 +486,15 @@ typedef enum {
     courseMarkerBuilder.setBaseOrder(baseOrder);
     courseMarkerBuilder.setIsHidden(true);
     courseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * courseIconScaleFactor * [[UIScreen mainScreen] scale]));
-    
+
+    if (_lastLocation)
+    {
+        const OsmAnd::PointI lastTarget31(OsmAnd::Utilities::get31TileNumberX(_lastLocation.coordinate.longitude),
+                                          OsmAnd::Utilities::get31TileNumberY(_lastLocation.coordinate.latitude));
+        locationMarkerBuilder.setPosition(lastTarget31);
+        courseMarkerBuilder.setPosition(lastTarget31);
+    }
+
     UIColor *iconColor = [mode getProfileColor];
     
     NSString *locationIconName = [mode.getLocationIcon name];
@@ -492,11 +505,21 @@ typedef enum {
     std::shared_ptr<const OsmAnd::Model3D> navigationModelCpp;
     std::shared_ptr<const OsmAnd::Model3D> locationModelCpp;
 
+    __weak OAMyPositionLayer *weakSelf = self;
+    OAModel3dCallback *modelLoadedCallback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
+        if (!model)
+            return;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf refreshMarkersCollectionForMode:mode];
+            [weakSelf refreshPreviewMarkerForMode:mode];
+        });
+    }];
+
     OALocationIcon *navIcon = [OALocationIcon locationIconWithName:navigationIconName];
     navigationIconName = [navIcon iconName];
     if ([navIcon shouldDisplayModel])
     {
-        navigationModel = [Model3dHelper.shared getModelWithModelName:[navIcon modelName] callback:nil];
+        navigationModel = [Model3dHelper.shared getModelWithModelName:[navIcon modelName] callback:modelLoadedCallback];
         if (!navigationModel)
         {
             navIcon = [OALocationIcon MOVEMENT_DEFAULT];
@@ -508,7 +531,7 @@ typedef enum {
     locationIconName = [locIcon iconName];
     if ([locIcon shouldDisplayModel])
     {
-        locationModel = [Model3dHelper.shared getModelWithModelName:[locIcon modelName] callback:nil];
+        locationModel = [Model3dHelper.shared getModelWithModelName:[locIcon modelName] callback:modelLoadedCallback];
         if (!locationModel)
         {
             locIcon = [OALocationIcon DEFAULT];
@@ -716,7 +739,18 @@ typedef enum {
         [self generatePreviewMarkerCollectionFor:locationFactor courseIconScaleFactor:courseFactor];
         [self updateMyPreviewLocationCourseProviderFor:showBearing newLocation:newLocation];
         [self.mapView invalidateFrame];
+        _previewLocation = newLocation;
+        _previewLocationFactor = locationFactor;
+        _previewCourseFactor = courseFactor;
+        _previewShowBearing = showBearing;
+        _previewVisible = YES;
     }];
+}
+
+- (void)refreshPreviewMarkerForMode:(OAApplicationMode *)mode
+{
+    if (_previewVisible && mode == [OAAppSettings sharedManager].applicationMode.get)
+        [self updatePreviewMarker:_previewLocation locationFactor:_previewLocationFactor courseFactor:_previewCourseFactor showBearing:_previewShowBearing];
 }
 
 - (void) onSettingsChanged
@@ -755,6 +789,7 @@ typedef enum {
 
 - (void)hidePreviewMarker
 {
+    _previewVisible = NO;
     OAMarkerCollection *collection = _previewMarker;
     [collection hideMarkers];
     [self.mapView removeKeyedSymbolsProvider:collection.markerCollection];

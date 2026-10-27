@@ -29,7 +29,6 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
-#import "OADiscountHelper.h"
 #import "OALinks.h"
 #import "OADownloadsManager.h"
 #import "OABackupHelper.h"
@@ -54,6 +53,7 @@
 #define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
 
 static const NSTimeInterval kCheckUpdatesInterval = 3600;
+static const NSTimeInterval kTerminationTimeLimit = 4;
 
 NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateStateNotification";
 
@@ -211,6 +211,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
             [self requestUpdatesOnNetworkReachable];
             LogStartup(@"initialize: requested updates on network reachable");
+
+            [InstallAttribution checkAndReport];
 
             _appInitDone = YES;
             _appInitializing = NO;
@@ -426,6 +428,12 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     NSLog(@"OAAppDelegate applicationWillTerminate");
+    // Releasing the renderer and the core waits for their running tasks without a limit
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kTerminationTimeLimit * NSEC_PER_SEC)),
+                   dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, 0), ^{
+        NSLog(@"OAAppDelegate termination did not finish in %.0f s, exiting", kTerminationTimeLimit);
+        _exit(0);
+    });
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];

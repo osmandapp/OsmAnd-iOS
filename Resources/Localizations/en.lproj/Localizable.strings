@@ -687,6 +687,7 @@
 "route_calc_progress" = "Calculating: %d%%";
 "internet_connection_required_for_online_route" = "Online navigation does not work offline.";
 "empty_route_calculated" = "The calculated route is empty.";
+"route_calculation_out_of_memory" = "The route is too long to calculate on this device. Add intermediate points or choose a closer destination.";
 "destination_point" = "Destination %@";
 "intermediate_point" = "Intermediate destination %@";
 "arrived_at_intermediate_point" = "Intermediate destination reached";
@@ -3320,6 +3321,11 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
 "rendering_attr_hideText_name" = "Text";
 "rendering_attr_contourDensity_name" = "Contour line density";
+"rendering_attr_contourLabelDirection_name" = "Label direction";
+"rendering_value_upright_name" = "Upright";
+"rendering_value_uphill_name" = "Uphill";
+"contour_labels" = "Labels";
+"contour_label_direction_descr" = "Uphill: the top of each height number faces higher ground, as on paper topographic maps. The short ticks on the lines point downhill.";
 "rendering_attr_showRunningRoutes_name" = "Running routes";
 "rendering_attr_showRunningRoutes_description" = "Show running routes";
 "rendering_attr_showFitnessTrails_name" = "Fitness trails";

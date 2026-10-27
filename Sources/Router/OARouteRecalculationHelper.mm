@@ -15,6 +15,7 @@
 #import "OAWaypointHelper.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
+#import "OANativeRoutingMemoryGuard.h"
 #import "OARoutingHelperUtils.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -46,6 +47,8 @@
 @end
 
 @interface OARouteRecalculationHelper()
+
+@property (atomic) BOOL memoryLimitExceeded; // the last navigation calculation was stopped by OANativeRoutingMemoryGuard
 
 - (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start;
 
@@ -119,6 +122,7 @@
 - (void) resetEvalWaitInterval
 {
     _evalWaitInterval = 0;
+    self.memoryLimitExceeded = NO;
 }
 
 - (void) setNewRoute:(OARouteCalculationResult *)prevRoute res:(OARouteCalculationResult *)res start:(CLLocation *)start
@@ -295,6 +299,9 @@
     if (!start || !end)
         return;
 
+    if (self.memoryLimitExceeded && onlyStartPointChanged)
+        return; // the same route would be stopped again: wait for the target points or the settings to change
+
     if ((![self isRouteBeingCalculated] && [[NSDate date] timeIntervalSince1970] - _lastTimeEvaluatedRoute > _evalWaitInterval)
         || paramsChanged || !onlyStartPointChanged)
     {
@@ -419,6 +426,7 @@
 - (void) stopCalculation
 {
     _params.calculationProgress.isCancelled = YES;
+    [OANativeRoutingMemoryGuard clearMemoryLimitExceededForProgress:_params.calculationProgress];
 }
 
 - (void) cancel
@@ -433,8 +441,13 @@
     _routeCalcError = nil;
     _routeCalcErrorShort = nil;
     OARouteCalculationResult *res = [_routingHelper.provider calculateRouteImpl:_params];
-    if (_params.calculationProgress.isCancelled)
-        return;
+    BOOL memoryLimitExceeded = [OANativeRoutingMemoryGuard memoryLimitExceededForProgress:_params.calculationProgress];
+    // the guard can set memoryLimitExceeded after a cancel cleared it, so a cancelled operation is checked too
+    if (_params.calculationProgress.isCancelled && (self.isCancelled || !memoryLimitExceeded))
+        return; // stopped by stopCalculation or the caller; a stop by OANativeRoutingMemoryGuard is an error to show
+    // a nested part stopped by the guard can leave a calculated route without that part
+    if (memoryLimitExceeded && [res isCalculated])
+        res = [[OARouteCalculationResult alloc] initWithErrorMessage:OALocalizedString(@"route_calculation_out_of_memory")];
 
     BOOL onlineSourceWithoutInternet = ![res isCalculated] && [OARouteService isOnline:(EOARouteService)_params.mode.getRouterService] && !AFNetworkReachabilityManager.sharedManager.isReachable;
     if (onlineSourceWithoutInternet && _settings.gpxRouteCalcOsmandParts.get)
@@ -453,6 +466,8 @@
         }
         else
         {
+            if (!_params.resultListener) // only the navigation route is recalculated on location updates
+                _recalcHelper.memoryLimitExceeded = memoryLimitExceeded;
             _evalWaitInterval = MAX(3, _evalWaitInterval * 3 / 2); // for Issue #3899
             _evalWaitInterval = MIN(_evalWaitInterval, 120);
         }
@@ -484,6 +499,13 @@
             _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), res.errorMessage];
             _routeCalcErrorShort = OALocalizedString(@"error_calculating_route");
             [self showMessage:_routeCalcError];
+            if (memoryLimitExceeded)
+            {
+                NSString *message = res.errorMessage;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [OAUtilities showToast:OALocalizedString(@"error_calculating_route") details:message duration:4 inView:OARootViewController.instance.view];
+                });
+            }
         }
         else
         {

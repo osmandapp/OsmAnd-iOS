@@ -2158,11 +2158,8 @@ typedef enum
          [_hudViewController.floatingButtonsController hideActionsSheetAnimated:nil];
  }
 
-- (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
+- (void)updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
 {
-    if ([self suspendedPlanRouteController])
-        return;
-
     if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen)
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph
@@ -2172,6 +2169,24 @@ typedef enum
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+
+    if ([self suspendedPlanRouteController])
+    {
+        CGSize mapSize = _mapViewController.view.bounds.size;
+        if (mapSize.width <= 0 || mapSize.height <= 0)
+            return;
+
+        CGFloat leftInset = [self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width : 0;
+        CGFloat bottomInset = [self.targetMenuView isLandscape] ? 0 : height;
+        CGPoint center = CGPointMake((MIN(leftInset, mapSize.width) + mapSize.width) / 2,
+                                     MAX(0, mapSize.height - bottomInset) / 2);
+        [_mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
+        _mapViewController.viewportXScale = 2 * center.x / mapSize.width;
+        _mapViewController.viewportYScale = 2 * center.y / mapSize.height;
+        _mapViewController.mapView.mapTargetScreenPoint = center;
+        [_mapViewController goToPosition:targetPoint31 animated:animated];
+        return;
+    }
     
     [_mapViewController correctPosition:targetPoint31
                        originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]

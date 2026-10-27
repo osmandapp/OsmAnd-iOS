@@ -57,6 +57,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private let tabs = PlanRouteTab.allCases
     private let routeTypeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomQuestionmark)
+    private let savingProgressView = UIActivityIndicatorView(style: .large)
     private var sheetState: EOADraggableMenuState
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
@@ -68,11 +69,14 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
     private var isClosing = false
+    private var isSaving = false
+    private var isMapCursorSuspended = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
     private var pointEditingHeight: CGFloat?
     private var cachedMapTargetScreenPointRatio: CGPoint?
+    private var cachedMapViewportXScale: Double?
     private var cachedMapViewportYScale: Double?
     private var approximationHeight: CGFloat?
     private var approximationPreviousSheetState: EOADraggableMenuState?
@@ -204,6 +208,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             cachedMapTargetScreenPointRatio = CGPoint(x: mapTargetScreenPoint.x / mapViewSize.width,
                                                       y: mapTargetScreenPoint.y / mapViewSize.height)
         }
+        cachedMapViewportXScale = mapViewController.viewportXScale
         cachedMapViewportYScale = mapViewController.viewportYScale
         (view as? OAUserInteractionPassThroughView)?.isScreenClickable = true
         setupSheet()
@@ -254,7 +259,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
             ? -routeTypeButtonBottomInset(for: sheetState)
             : -(height + 12)
-        updateCrosshair(sheetHeight: height, preserveMapPosition: true)
+        updateCrosshair(sheetHeight: height, preserveMapPosition: !isMapCursorSuspended)
+        isMapCursorSuspended = false
         if animated {
             sheetView.transform = CGAffineTransform(translationX: 0, y: height)
             UIView.animate(withDuration: Self.sheetAnimationDuration) {
@@ -376,6 +382,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     @objc func suspendMapCursor() {
+        isMapCursorSuspended = true
         // While a result menu is visible, the route layer follows the map center.
         dataProvider.setCrosshairPosition(screenPoint: .zero)
     }
@@ -847,6 +854,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         guard centerX > 0, targetScreenSize.height > 0 else { return }
         let screenPoint = CGPoint(x: centerX, y: centerY)
         let mapViewController = mapPanel.mapViewController
+        mapViewController.viewportXScale = 1
         mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
         if preserveMapPosition {
             mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
@@ -867,6 +875,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             let mapTargetScreenPoint = CGPoint(x: cachedMapTargetScreenPointRatio.x * mapViewSize.width,
                                                y: cachedMapTargetScreenPointRatio.y * mapViewSize.height)
             mapViewController.mapRendererView?.reanchorMapTarget(mapTargetScreenPoint)
+        }
+        if let cachedMapViewportXScale {
+            self.cachedMapViewportXScale = nil
+            mapViewController.viewportXScale = cachedMapViewportXScale
         }
         if let cachedMapViewportYScale {
             self.cachedMapViewportYScale = nil
@@ -1029,7 +1041,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleClose() {
-        guard !isClosing, presentedViewController == nil else { return }
+        guard !isClosing, !isSaving, presentedViewController == nil else { return }
         guard dataProvider.hasChanges else {
             hide()
             return
@@ -1047,7 +1059,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
-        guard !isClosing, presentedViewController == nil, ensureRouteHasPoints() else { return }
+        guard !isClosing, !isSaving, presentedViewController == nil, ensureRouteHasPoints() else { return }
         let fileName: String
         let folder: String?
         switch dataProvider.mode {
@@ -1058,6 +1070,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             fileName = existingFileName
             folder = dataProvider.editTrackFolder
         }
+        beginSaving()
         dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true, simplified: false) { [weak self] success, filePath in
             self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
@@ -1080,6 +1093,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
+        guard !isClosing, !isSaving, presentedViewController == nil else { return }
         switch action {
         case .saveAs:
             guard ensureRouteHasPoints() else { return }
@@ -1211,7 +1225,24 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         present(alert, animated: true)
     }
 
+    private func beginSaving() {
+        isSaving = true
+        savingProgressView.frame = view.bounds
+        savingProgressView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        savingProgressView.isUserInteractionEnabled = true
+        view.addSubview(savingProgressView)
+        savingProgressView.startAnimating()
+    }
+
+    private func finishSaving() {
+        isSaving = false
+        savingProgressView.stopAnimating()
+        savingProgressView.removeFromSuperview()
+    }
+
     private func handleSaveResult(success: Bool, filePath: String?, fallbackFileName: String) {
+        finishSaving()
+        guard !isClosing else { return }
         guard success else {
             showSaveError()
             return
@@ -1342,6 +1373,8 @@ extension PlanRouteScrollableViewController: OAInfoBottomViewDelegate {
 // MARK: - OASaveTrackViewControllerDelegate
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
+        guard !isClosing, !isSaving else { return }
+        beginSaving()
         let onComplete: (Bool, String?) -> Void = { [weak self] success, filePath in
             self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
@@ -1359,8 +1392,12 @@ extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
 // MARK: - OAOpenAddTrackDelegate
 extension PlanRouteScrollableViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
+        guard !isClosing, !isSaving else { return }
+        beginSaving()
         dataProvider.appendToTrack(filePath: gpxFilePath) { [weak self] success in
             guard let self else { return }
+            finishSaving()
+            guard !isClosing else { return }
             guard success else {
                 showSaveError()
                 return

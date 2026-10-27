@@ -44,6 +44,7 @@
     OAMapViewController *mapVC = mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
+    [mapPanel enableContextMenuOverPlanRouteIfNeeded];
     [mapPanel showContextMenu:targetPoint];
 }
 

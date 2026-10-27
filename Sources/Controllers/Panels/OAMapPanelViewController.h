@@ -53,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 - (void) hideScrollableHudViewController;
 - (void)forceHidePlanRouteIfNeeded;
+- (void)enableContextMenuOverPlanRouteIfNeeded;
 
 - (void) showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller;
 

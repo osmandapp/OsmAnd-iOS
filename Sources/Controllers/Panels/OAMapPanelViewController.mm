@@ -425,6 +425,12 @@ typedef enum
     }
 }
 
+- (void)enableContextMenuOverPlanRouteIfNeeded
+{
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        _isNewContextMenuStillEnabled = YES;
+}
+
 - (void)setupScrollableHud:(OABaseScrollableHudViewController *)controller {
     _scrollableHudViewController = controller;
     _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -1347,8 +1353,7 @@ typedef enum
     navController.navigationBarHidden = YES;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
 
-    if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
-        _isNewContextMenuStillEnabled = YES;
+    [self enableContextMenuOverPlanRouteIfNeeded];
 
     navController.presentationController.delegate = self;
     [self presentViewController:navController animated:YES completion:nil];

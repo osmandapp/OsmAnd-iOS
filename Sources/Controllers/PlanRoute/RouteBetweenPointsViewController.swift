@@ -161,7 +161,8 @@ final class RouteBetweenPointsViewController: UIViewController {
         let group = PlanRouteProfileGroup(appMode: mode,
                                           distance: 0,
                                           lastPointIndex: segments.last?.pointIndexes.last ?? 0,
-                                          points: [])
+                                          points: [],
+                                          profilePointIndexes: [])
         return PlanRouteSegment(index: pendingIndex - 1,
                                 groups: [group],
                                 routed: mode != nil,
@@ -190,7 +191,8 @@ final class RouteBetweenPointsViewController: UIViewController {
                     appMode: last.appMode,
                     distance: last.distance + group.distance,
                     lastPointIndex: group.lastPointIndex,
-                    points: last.points + group.points
+                    points: last.points + group.points,
+                    profilePointIndexes: last.profilePointIndexes + group.profilePointIndexes
                 )
             } else {
                 result.append(group)
@@ -239,7 +241,7 @@ extension RouteBetweenPointsViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            cell.configure(title: localizedString("plan_route_continue_with_different_type"), isDestructive: false, showsDisclosure: true)
+            cell.configureForContinuation(mode: dataSource?.defaultMode)
             return cell
         case .startNewSegment:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {

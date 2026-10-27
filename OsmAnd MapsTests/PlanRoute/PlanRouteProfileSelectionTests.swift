@@ -95,6 +95,156 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
                           expectedActions: [], expectedFooter: nil)
     }
 
+    func testBoundaryPointUsesDifferentGroupsBeforeAndAfter() throws {
+        let segment = makeMixedSegment()
+        XCTAssertEqual(segment.groups[0].points.map(\.index), [0, 1])
+        XCTAssertNil(segment.groups[0].appMode)
+        XCTAssertEqual(segment.profileGroup(forLegStartingAt: 1)?.appMode?.stringKey, OAApplicationMode.bicycle()?.stringKey)
+        XCTAssertEqual(segment.profileGroup(forLegStartingAt: 3)?.appMode?.stringKey, OAApplicationMode.pedestrian()?.stringKey)
+        XCTAssertNil(segment.profileGroup(forLegStartingAt: 6))
+    }
+
+    func testPartialProfileChangeUsesLegStartsWithoutCrossingBoundary() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let segment = makeMixedSegment()
+        let context = SegmentRouteContext.profileGroup(segment.groups[1], segment: segment)
+        let before = SegmentRouteSettingsViewController(context: context, dataSource: source, applyUpToPointIndex: 2)
+        before.loadViewIfNeeded()
+        before.perform(NSSelectorFromString("onConfirmTapped"))
+        XCTAssertEqual(source.appliedPointIndexes, [1])
+        let after = SegmentRouteSettingsViewController(context: context, dataSource: source, applyFromPointIndex: 2)
+        after.loadViewIfNeeded()
+        after.perform(NSSelectorFromString("onConfirmTapped"))
+        XCTAssertEqual(source.appliedPointIndexes, [2])
+    }
+
+    func testContinueSubtitleRefreshesWithoutChangingPointRows() throws {
+        let source = PlanRouteProfileTestDataSource()
+        source.routeSegments = [makeMixedSegment()]
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        let rowCount = controller.tableView(table, numberOfRowsInSection: 0)
+        let continuePath = IndexPath(row: rowCount - 1, section: 0)
+        source.defaultMode = OAApplicationMode.car()
+        controller.reloadData()
+        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), rowCount)
+        let cell = controller.tableView(table, cellForRowAt: continuePath)
+        XCTAssertEqual(cell.accessibilityValue, String(format: localizedString("ltr_or_rtl_combine_via_colon"),
+                                                       localizedString("shared_string_next"),
+                                                       try XCTUnwrap(source.defaultMode?.toHumanString())))
+        source.defaultMode = OAApplicationMode.pedestrian()
+        controller.reloadData()
+        let updated = controller.tableView(table, cellForRowAt: continuePath)
+        XCTAssertEqual(updated.accessibilityValue, String(format: localizedString("ltr_or_rtl_combine_via_colon"),
+                                                          localizedString("shared_string_next"),
+                                                          try XCTUnwrap(source.defaultMode?.toHumanString())))
+    }
+
+    func testChangeTypeAfterDestinationUsesFutureProfile() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let segment = makeMixedSegment()
+        source.routeSegments = [segment]
+        source.defaultMode = OAApplicationMode.car()
+        let context = SegmentRouteContext.profileGroup(segment.groups[2], segment: segment)
+        let settings = SegmentRouteSettingsViewController(context: context, dataSource: source, applyFromPointIndex: 5)
+        settings.loadViewIfNeeded()
+        settings.perform(NSSelectorFromString("onConfirmTapped"))
+        XCTAssertEqual(source.appliedPointIndexes, [5])
+        XCTAssertEqual(source.appliedMode?.stringKey, source.defaultMode?.stringKey)
+    }
+
+    func testComplexRouteSheetUsesSameGroupDistancesAndProfileIndexes() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let segment = makeMixedSegment()
+        source.routeSegments = [segment]
+        let controller = RouteBetweenPointsViewController(dataSource: source)
+        let navigation = UINavigationController(rootViewController: controller)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 4)
+        controller.tableView(table, didSelectRowAt: IndexPath(row: 1, section: 0))
+        let settings = try XCTUnwrap(navigation.topViewController as? SegmentRouteSettingsViewController)
+        settings.loadViewIfNeeded()
+        settings.perform(NSSelectorFromString("onConfirmTapped"))
+        guard case let .profileGroup(selected, _)? = source.appliedContext else {
+            XCTFail("Expected the middle profile group")
+            return
+        }
+        XCTAssertEqual(selected.distance, 1568)
+        XCTAssertEqual(selected.profilePointIndexes, [1, 2])
+    }
+
+    func testMoveDefersRegroupingUntilTableMoveCompletes() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let points = (0..<3).map { makePoint(index: $0, count: 3) }
+        let straight = PlanRouteProfileGroup(appMode: nil, distance: 175, lastPointIndex: 1,
+                                             points: Array(points.prefix(2)), profilePointIndexes: [0])
+        let cycling = PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 368, lastPointIndex: 2,
+                                            points: [points[2]], profilePointIndexes: [1, 2])
+        source.routeSegments = [makeSegment(groups: [straight, cycling])]
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 6)
+        XCTAssertEqual(table.numberOfRows(inSection: 0), 6)
+        source.onMove = { [weak controller, weak source] from, to in
+            XCTAssertEqual(from, 0)
+            XCTAssertEqual(to, 2)
+            let merged = PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 543, lastPointIndex: 2,
+                                               points: points, profilePointIndexes: [0, 1, 2])
+            source?.routeSegments = [self.makeSegment(groups: [merged])]
+            controller?.reloadData()
+        }
+        let from = IndexPath(row: 1, section: 0)
+        let to = IndexPath(row: 4, section: 0)
+        controller.tableView(table, moveRowAt: from, to: to)
+        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 6)
+        table.moveRow(at: from, to: to)
+        let reloaded = expectation(description: "Groups reload after the move")
+        DispatchQueue.main.async {
+            XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 4)
+            reloaded.fulfill()
+        }
+        wait(for: [reloaded], timeout: 1)
+    }
+
+    func testMoveDestinationOutsideRowsIsClampedToPoint() throws {
+        let source = PlanRouteProfileTestDataSource()
+        source.routeSegments = [makeMixedSegment()]
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        let sourcePath = IndexPath(row: 1, section: 0)
+        let target = controller.tableView(table, targetIndexPathForMoveFromRowAt: sourcePath,
+                                          toProposedIndexPath: IndexPath(row: 100, section: 0))
+        XCTAssertEqual(target, IndexPath(row: 8, section: 0))
+    }
+
+    private func makeMixedSegment() -> PlanRouteSegment {
+        let points = (0..<6).map { makePoint(index: $0, count: 6) }
+        return makeSegment(groups: [
+            PlanRouteProfileGroup(appMode: nil, distance: 175, lastPointIndex: 1,
+                                  points: Array(points[0...1]), profilePointIndexes: [0]),
+            PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 1568, lastPointIndex: 3,
+                                  points: Array(points[2...3]), profilePointIndexes: [1, 2]),
+            PlanRouteProfileGroup(appMode: OAApplicationMode.pedestrian(), distance: 1500, lastPointIndex: 5,
+                                  points: Array(points[4...5]), profilePointIndexes: [3, 4, 5])
+        ])
+    }
+
+    private func makePoint(index: Int, count: Int) -> PlanRoutePoint {
+        PlanRoutePoint(index: index, indexInSegment: index, name: "Point \(index + 1)",
+                       distanceFromPrevious: 0, distanceFromStart: 0, bearing: 0,
+                       isStart: index == 0, isDestination: index == count - 1)
+    }
+
+    private func makeSegment(groups: [PlanRouteProfileGroup]) -> PlanRouteSegment {
+        PlanRouteSegment(index: 0, groups: groups, routed: true, multiMode: groups.count > 1,
+                         singleMode: groups.count == 1 ? groups.first?.appMode : nil,
+                         distance: groups.reduce(0) { $0 + $1.distance }, isPendingEmpty: false, gapAfter: nil)
+    }
+
     private func verifyActions(canContinue: Bool,
                                canStartNewSegment: Bool,
                                expectedActions: [String],
@@ -136,4 +286,50 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
                                        gapAfter: nil)
         return SegmentRouteSettingsViewController(context: .wholeSegment(segment), dataSource: nil)
     }
+}
+
+private final class PlanRouteProfileTestDataSource: PlanRoutePointsDataSource {
+    var routeSegments: [PlanRouteSegment] = []
+    var defaultMode: OAApplicationMode?
+    var appliedPointIndexes: [Int] = []
+    var appliedContext: SegmentRouteContext?
+    var appliedMode: OAApplicationMode?
+    var onMove: ((Int, Int) -> Void)?
+    var routeInfo: PlanRouteInfo { fatalError("Route info is not used by these tests") }
+    var pendingEmptySegmentIndex: Int? { nil }
+    var isTrackReadyToCalculate: Bool { true }
+    var isApproximationNeeded: Bool { false }
+    var shouldRequestApproximationBeforeNavigation: Bool { false }
+    var shouldShowApproximationWarning: Bool { false }
+    var approximationWarningViewController: UIViewController? { nil }
+    var canStartNewSegment: Bool { false }
+    var availableModes: [OAApplicationMode] { [OAApplicationMode.bicycle(), OAApplicationMode.pedestrian(), OAApplicationMode.car()].compactMap { $0 } }
+
+    func moveRoutePoint(from: Int, to: Int) { onMove?(from, to) }
+    func applyMode(_ mode: OAApplicationMode, pointIndexes: [Int]) {
+        appliedMode = mode
+        appliedPointIndexes = pointIndexes
+    }
+    func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext) { appliedContext = context }
+    func addRoutePoint() {}
+    func undo() {}
+    func redo() {}
+    func reverseRoute() {}
+    func clearAllPoints() {}
+    func moveSegment(from srcIdx: Int, to dstIdx: Int) {}
+    func deleteRoutePoint(at index: Int) {}
+    func deleteSegment(pointIndexes: [Int]) {}
+    func startNewSegment() {}
+    func startNewSegment(mode: OAApplicationMode?) {}
+    func continueRoute(mode: OAApplicationMode?) {}
+    func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool) {}
+    func sortDoorToDoor(pointIndexes: [Int]) {}
+    func saveSegment(pointIndexes: [Int], fileName: String, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {}
+    func selectRoutePoint(at index: Int) {}
+    func showPointOptions(at index: Int) {}
+    func addPointBefore(index: Int) {}
+    func addPointAfter(index: Int) {}
+    func trimBefore(index: Int) {}
+    func trimAfter(index: Int) {}
+    func refreshRoute(for mode: OAApplicationMode) {}
 }

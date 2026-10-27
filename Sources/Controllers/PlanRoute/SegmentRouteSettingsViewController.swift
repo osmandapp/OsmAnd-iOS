@@ -41,7 +41,10 @@ final class SegmentRouteSettingsViewController: UIViewController {
     private weak var dataSource: PlanRoutePointsDataSource?
 
     private var settingsMode: OAApplicationMode? {
-        selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
+        if let applyFromPointIndex, applyFromPointIndex == dataSource?.routeSegments.last?.pointIndexes.last {
+            return selectedMode ?? OAApplicationMode.default()
+        }
+        return selectedMode ?? context.currentMode ?? dataSource?.defaultMode ?? OAApplicationMode.getFirstAvailableNavigation()
     }
 
     init(context: SegmentRouteContext, dataSource: PlanRoutePointsDataSource?, applyFromPointIndex: Int? = nil, applyUpToPointIndex: Int? = nil, futureRouteAction: FutureRouteAction? = nil) {
@@ -50,7 +53,9 @@ final class SegmentRouteSettingsViewController: UIViewController {
         self.applyUpToPointIndex = applyUpToPointIndex
         self.dataSource = dataSource
         self.futureRouteAction = futureRouteAction
-        if case .wholeTrack = context {
+        if let applyFromPointIndex, applyFromPointIndex == dataSource?.routeSegments.last?.pointIndexes.last {
+            self.selectedMode = dataSource?.defaultMode
+        } else if case .wholeTrack = context {
             self.selectedMode = dataSource?.defaultMode
         } else {
             self.selectedMode = context.currentMode
@@ -248,11 +253,11 @@ final class SegmentRouteSettingsViewController: UIViewController {
         guard hasSelectedMode else { return }
         if let fromIndex = applyFromPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
-            let pointIndexes = group.points.filter { $0.index >= fromIndex }.map(\.index)
+            let pointIndexes = group.profilePointIndexes.filter { $0 >= fromIndex }
             dataSource?.applyMode(mode, pointIndexes: pointIndexes)
         } else if let upToIndex = applyUpToPointIndex, case let .profileGroup(group, _) = context {
             guard let mode = selectedMode ?? OAApplicationMode.default() else { return }
-            let pointIndexes = group.points.filter { $0.index <= upToIndex }.map(\.index)
+            let pointIndexes = group.profilePointIndexes.filter { $0 < upToIndex }
             dataSource?.applyMode(mode, pointIndexes: pointIndexes)
         } else {
             dataSource?.applyModeToContext(selectedMode, context: context)

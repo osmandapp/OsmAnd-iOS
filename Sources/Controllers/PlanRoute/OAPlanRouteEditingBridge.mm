@@ -941,14 +941,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     for (NSNumber *indexNumber in pointIndexes)
     {
         NSInteger index = indexNumber.integerValue;
-        NSString *key = allPoints[index].getProfileType ?: @"";
+        NSInteger profileIndex = index > segmentStartIndex ? index - 1 : index;
+        NSString *key = allPoints[profileIndex].getProfileType ?: @"";
         if (!hasCurrent)
         {
             currentKey = key;
             hasCurrent = YES;
         }
-        BOOL isGap = allPoints[index].isGap;
-        if (!isGap && ![key isEqualToString:currentKey] && currentIndexes.count > 0)
+        if (![key isEqualToString:currentKey] && currentIndexes.count > 0)
         {
             [groups addObject:[self buildGroupWithKey:currentKey
                                               indexes:currentIndexes
@@ -982,7 +982,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             PlanRouteGroupData *merged = [[PlanRouteGroupData alloc] initWithAppMode:last.appMode
                                                                                 distance:last.distance + group.distance
                                                                          lastGlobalIndex:group.lastGlobalIndex
-                                                                                  points:combinedPoints];
+                                                                                  points:combinedPoints
+                                                                     profilePointIndexes:[last.profilePointIndexes arrayByAddingObjectsFromArray:group.profilePointIndexes]];
             [mergedGroups replaceObjectAtIndex:mergedGroups.count - 1 withObject:merged];
         }
         else
@@ -1045,6 +1046,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
 
     NSMutableArray<PlanRoutePointData *> *points = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *profilePointIndexes = [NSMutableArray array];
     double groupDistance = 0;
     for (NSNumber *indexNumber in indexes)
     {
@@ -1060,6 +1062,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             OASWptPt *previous = allPoints[index - 1];
             if (!previous.isGap)
             {
+                [profilePointIndexes addObject:@(index - 1)];
                 legDistance = [self routeDistanceFrom:previous to:point];
                 CLLocation *previousLocation = [[CLLocation alloc] initWithLatitude:previous.lat longitude:previous.lon];
                 CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
@@ -1077,7 +1080,13 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                                               isDestination:isDestination]];
     }
     NSInteger lastIndex = indexes.lastObject.integerValue;
-    return [[PlanRouteGroupData alloc] initWithAppMode:appMode distance:groupDistance lastGlobalIndex:lastIndex points:points];
+    if (lastIndex == (NSInteger)allPoints.count - 1 && !allPoints[lastIndex].isGap)
+        [profilePointIndexes addObject:@(lastIndex)];
+    return [[PlanRouteGroupData alloc] initWithAppMode:appMode
+                                            distance:groupDistance
+                                     lastGlobalIndex:lastIndex
+                                              points:points
+                                 profilePointIndexes:profilePointIndexes];
 }
 
 - (void)deletePointAtIndex:(NSInteger)index

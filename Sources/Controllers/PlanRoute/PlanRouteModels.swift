@@ -147,6 +147,7 @@ struct PlanRouteProfileGroup {
     let distance: Double
     let lastPointIndex: Int
     let points: [PlanRoutePoint]
+    let profilePointIndexes: [Int]
 }
 
 struct PlanRouteSegmentGap {
@@ -166,6 +167,10 @@ struct PlanRouteSegment {
 
     var pointIndexes: [Int] {
         groups.flatMap { $0.points.map { $0.index } }
+    }
+
+    func profileGroup(forLegStartingAt pointIndex: Int) -> PlanRouteProfileGroup? {
+        groups.first { $0.profilePointIndexes.contains(pointIndex) }
     }
 }
 

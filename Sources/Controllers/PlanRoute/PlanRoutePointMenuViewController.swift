@@ -110,14 +110,14 @@ final class PlanRoutePointMenuViewController: UIViewController {
     }
 
     private func buildSections() {
-        let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
-        let prevGroup: PlanRouteProfileGroup? = groupIndex > 0 ? segment.groups[groupIndex - 1] : nil
+        let nextGroup = segment.profileGroup(forLegStartingAt: point.index)
 
         let trimBeforeSubtitle: String? = point.isStart ? localizedString("start_point") : nil
         let trimAfterSubtitle: String? = point.isDestination ? localizedString("route_descr_destination") : formattedDistance(point.distanceFromPrevious)
 
-        let changeTypeBeforeIcon = (prevGroup ?? group).appMode?.getIcon() ?? .icCustomStraightLine
-        let changeTypeAfterIcon = group.appMode?.getIcon() ?? .icCustomStraightLine
+        let changeTypeBeforeIcon = group.appMode?.getIcon() ?? .icCustomStraightLine
+        let nextMode = point.index == dataSource?.routeSegments.last?.pointIndexes.last ? dataSource?.defaultMode : nextGroup?.appMode
+        let changeTypeAfterIcon = nextMode?.getIcon() ?? .icCustomStraightLine
 
         sections = [
             [RowModel(row: .movePoint,
@@ -160,7 +160,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
                       title: localizedString("plan_route_change_route_type_after"),
                       subtitle: nil,
                       icon: changeTypeAfterIcon,
-                      isEnabled: true,
+                      isEnabled: nextGroup != nil,
                       isDestructive: false)],
             [RowModel(row: .delete,
                       title: localizedString("plan_route_delete_point"),
@@ -190,22 +190,14 @@ final class PlanRoutePointMenuViewController: UIViewController {
             dataSource?.trimAfter(index: point.index)
             dismiss(animated: true)
         case .changeTypeBefore:
-            let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
-            if groupIndex > 0 {
-                let prevGroup = segment.groups[groupIndex - 1]
-                let context = SegmentRouteContext.profileGroup(prevGroup, segment: segment)
-                dismiss(animated: true) { [weak self] in
-                    self?.onChangeRouteType?(context, nil, nil)
-                }
-            } else {
-                let context = SegmentRouteContext.profileGroup(group, segment: segment)
-                let upToIndex = point.index
-                dismiss(animated: true) { [weak self] in
-                    self?.onChangeRouteType?(context, nil, upToIndex)
-                }
+            let context = SegmentRouteContext.profileGroup(group, segment: segment)
+            let upToIndex = point.index
+            dismiss(animated: true) { [weak self] in
+                self?.onChangeRouteType?(context, nil, upToIndex)
             }
         case .changeTypeAfter:
-            let context = SegmentRouteContext.profileGroup(group, segment: segment)
+            guard let nextGroup = segment.profileGroup(forLegStartingAt: point.index) else { return }
+            let context = SegmentRouteContext.profileGroup(nextGroup, segment: segment)
             let fromIndex = point.index
             dismiss(animated: true) { [weak self] in
                 self?.onChangeRouteType?(context, fromIndex, nil)

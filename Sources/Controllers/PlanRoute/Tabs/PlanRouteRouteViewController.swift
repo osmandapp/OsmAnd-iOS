@@ -21,7 +21,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         let headerTitle: String?
         let headerSubtitle: String?
         let headerMenu: UIMenu?
-        let rows: [Row]
+        var rows: [Row]
         let isStartNewSegment: Bool
     }
 
@@ -42,6 +42,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private var lastContentSignature: String?
     private var doorToDoorSortedKeys: Set<String> = []
     private var isApplyingDoorToDoorSort = false
+    private var isMovingPoint = false
     private weak var dataSource: PlanRoutePointsDataSource?
 
     init(dataSource: PlanRoutePointsDataSource?) {
@@ -69,7 +70,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     }
 
     func reloadData() {
-        guard isViewLoaded else { return }
+        guard isViewLoaded, !isMovingPoint else { return }
         let segments = dataSource?.routeSegments ?? []
         let signature = contentSignature(for: segments)
         guard lastContentSignature != signature else { return }
@@ -162,6 +163,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     private func contentSignature(for segments: [PlanRouteSegment]) -> String {
         let pendingSignature = (dataSource?.pendingEmptySegmentIndex).map(String.init) ?? "nil"
         let canStartNewSegment = dataSource?.canStartNewSegment ?? false
+        let nextMode = dataSource?.defaultMode?.stringKey ?? "nil"
         let segmentsSignature = segments.map { segment in
             let segmentMode = segment.singleMode?.toHumanString() ?? "nil"
             let groupsSignature = segment.groups.map { group in
@@ -172,7 +174,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             let gapSignature = segment.gapAfter.map { "\(Int($0.distance.rounded())),\(Int($0.bearing))" } ?? "nil"
             return "index=\(segment.index),routed=\(segment.routed),multi=\(segment.multiMode),mode=\(segmentMode),distance=\(Int(segment.distance.rounded())),gap=\(gapSignature),groups=\(groupsSignature)"
         }.joined(separator: "|")
-        return "pending=\(pendingSignature),canStart=\(canStartNewSegment),segments=\(segmentsSignature)"
+        return "pending=\(pendingSignature),canStart=\(canStartNewSegment),nextMode=\(nextMode),segments=\(segmentsSignature)"
     }
 
     private func makeSections(for segment: PlanRouteSegment, multipleSegments: Bool) -> [SectionModel] {
@@ -185,22 +187,10 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
         if segment.multiMode {
             var rows: [Row] = []
-            let allGroups = segment.groups
-            for (i, group) in allGroups.enumerated() {
-                let isLastGroup = i == allGroups.count - 1
-                let isBoundaryMarker = multipleSegments
-                    && isLastGroup
-                    && group.appMode == nil
-                    && group.points.count == 1
-                    && allGroups.count > 1
-                if isBoundaryMarker {
-                    let prevColor = allGroups[i - 1].appMode?.getProfileColor() ?? straightLineColor
-                    rows.append(contentsOf: group.points.map { Row.point($0, color: prevColor) })
-                } else {
-                    let groupColor = group.appMode?.getProfileColor() ?? straightLineColor
-                    rows.append(.profileGroup(group, segment: segment))
-                    rows.append(contentsOf: group.points.map { Row.point($0, color: groupColor) })
-                }
+            for group in segment.groups {
+                let groupColor = group.appMode?.getProfileColor() ?? straightLineColor
+                rows.append(.profileGroup(group, segment: segment))
+                rows.append(contentsOf: group.points.map { Row.point($0, color: groupColor) })
             }
             return [SectionModel(headerTitle: title,
                                  headerSubtitle: formattedDistance(segment.distance),
@@ -375,7 +365,7 @@ extension PlanRouteRouteViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: PlanRouteActionCell.reuseIdentifier, for: indexPath) as? PlanRouteActionCell else {
                 return UITableViewCell()
             }
-            cell.configure(title: localizedString("plan_route_continue_with_different_type"), isDestructive: false, showsDisclosure: true)
+            cell.configureForContinuation(mode: dataSource?.defaultMode)
             return cell
         case .empty:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: HorizontalEmptyCell.reuseIdentifier, for: indexPath) as? HorizontalEmptyCell else {
@@ -489,6 +479,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
                    targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         let srcSection = sourceIndexPath.section
+        guard sections.indices.contains(srcSection) else { return sourceIndexPath }
         let rows = sections[srcSection].rows
         let pointRows = rows.indices.filter { if case .point = rows[$0] { return true } else { return false } }
         guard let firstPoint = pointRows.first, let lastPoint = pointRows.last else { return sourceIndexPath }
@@ -499,7 +490,7 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
         }
 
         let proposedRow = proposedDestinationIndexPath.row
-        if case .point = rows[proposedRow] {
+        if rows.indices.contains(proposedRow), case .point = rows[proposedRow] {
             return proposedDestinationIndexPath
         }
 
@@ -515,12 +506,23 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let rows = sections[sourceIndexPath.section].rows
-        guard case let .point(srcPoint, _) = rows[sourceIndexPath.row],
-              case let .point(dstPoint, _) = rows[destinationIndexPath.row] else {
-            reloadData()
-            return
-        }
+        guard sourceIndexPath != destinationIndexPath,
+              sourceIndexPath.section == destinationIndexPath.section,
+              sections.indices.contains(sourceIndexPath.section) else { return }
+        var rows = sections[sourceIndexPath.section].rows
+        guard rows.indices.contains(sourceIndexPath.row),
+              rows.indices.contains(destinationIndexPath.row),
+              case let .point(srcPoint, _) = rows[sourceIndexPath.row],
+              case let .point(dstPoint, _) = rows[destinationIndexPath.row] else { return }
+        let movedRow = rows.remove(at: sourceIndexPath.row)
+        rows.insert(movedRow, at: destinationIndexPath.row)
+        sections[sourceIndexPath.section].rows = rows
+        isMovingPoint = true
         dataSource?.moveRoutePoint(from: srcPoint.index, to: dstPoint.index)
+        DispatchQueue.main.async {
+            self.isMovingPoint = false
+            self.lastContentSignature = nil
+            self.reloadData()
+        }
     }
 }

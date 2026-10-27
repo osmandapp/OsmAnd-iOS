@@ -1,0 +1,139 @@
+name: Nightly iOS UI tests
+run-name: iOS UI tests (${{ github.ref_name }})
+
+on:
+  schedule:
+    - cron: '30 14 * * *'
+      timezone: Europe/Kyiv
+  workflow_dispatch:
+
+jobs:
+  ui-tests:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout ios
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-iOS
+          ref: ${{ github.sha }}
+          path: ios
+          clean: true
+      - name: Checkout android
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd
+          ref: refs/heads/master
+          path: android
+          clean: false
+      - name: Checkout build
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-build
+          ref: refs/heads/master
+          path: build
+          clean: false
+      - name: Checkout core legacy
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-core-legacy
+          ref: refs/heads/master
+          path: core-legacy
+          clean: false
+      - name: Checkout core
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-core
+          ref: refs/heads/master
+          path: core
+          clean: false
+      - name: Checkout resources
+        uses: actions/checkout@v4
+        with:
+          repository: osmandapp/OsmAnd-resources
+          ref: refs/heads/master
+          path: resources
+          clean: false
+
+      - name: Unlock keychain
+        shell: bash
+        env:
+          USER_KEY: ${{ secrets.USER_KEY }}
+        run: security unlock-keychain -p "$USER_KEY" "$HOME/Library/Keychains/login.keychain-db"
+      - name: Build QtCore and prepare build
+        env:
+          LANG: en_US.UTF-8
+        run: exec ios/prepare.sh --sync_translations
+      - name: Validate synced iOS translations
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            if ! plutil -lint -s "$file"; then
+              relative_file="${file#ios/}"
+              echo "::warning file=$file::Invalid generated strings; restoring the checked-in translation"
+              git -C ios show "HEAD:$relative_file" > "$file"
+              plutil -lint -s "$file"
+            fi
+          done < <(find ios/Resources/Localizations -name Localizable.strings -print0)
+      - name: Configure iOS OsmAndCore
+        env:
+          LANG: en_US.UTF-8
+        working-directory: baked/fat-ios-clang.xcode
+        run: xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release
+      - name: Build iOS OsmAndCore
+        env:
+          LANG: en_US.UTF-8
+        working-directory: baked/fat-ios-clang.xcode
+        run: xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release
+      - name: Enable shared framework checks for CI
+        run: python3 ios/.github/scripts/configure-shared-build-for-ci.py
+
+      - name: Run iOS UI tests
+        id: ui_tests
+        env:
+          LANG: en_US.UTF-8
+          UI_RESULT_BUNDLE: ${{ runner.temp }}/ios-nightly-ui-${{ github.run_id }}-${{ github.run_attempt }}.xcresult
+        run: |
+          set -o pipefail
+
+          SIMULATOR=$(xcrun simctl list devices available | grep iPhone | head -1)
+          SIMULATOR_ID=$(echo "$SIMULATOR" | sed -E 's/.*\(([0-9A-F-]+)\).*/\1/')
+
+          if [ -z "$SIMULATOR_ID" ]; then
+            echo "No available iPhone simulator found"
+            exit 1
+          fi
+
+          echo "Using simulator: $SIMULATOR"
+          echo "Using simulator ID: $SIMULATOR_ID"
+
+          xcrun simctl boot "$SIMULATOR_ID" || true
+          xcrun simctl bootstatus "$SIMULATOR_ID" -b
+
+          xcodebuild test \
+            -workspace ios/OsmAnd.xcworkspace \
+            -scheme "OsmAnd Maps" \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            "-only-testing:OsmAnd MapsUITests" \
+            -testLanguage en \
+            -testRegion US \
+            -resultBundlePath "$UI_RESULT_BUNDLE" \
+            | xcpretty
+      - name: Upload iOS UI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-nightly-ui-tests-xcresult
+          path: ${{ runner.temp }}/ios-nightly-ui-${{ github.run_id }}-${{ github.run_attempt }}.xcresult
+          if-no-files-found: warn
+      - name: Summarize iOS UI test run
+        if: always()
+        env:
+          TEST_OUTCOME: ${{ steps.ui_tests.outcome }}
+        run: |
+          {
+            echo '## Nightly iOS UI tests'
+            echo "- iOS commit: $GITHUB_SHA"
+            echo "- UI test step: $TEST_OUTCOME"
+            echo '- Open the workflow run for logs and the xcresult artifact.'
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -45,7 +45,7 @@
 - (void) deleteCache:(dispatch_block_t)block;
 - (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom;
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath;
-- (void) insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data;
+- (BOOL)insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data;
 - (NSString *) getUrlToLoad:(int) x y:(int) y zoom:(int) zoom;
 - (int) getFileZoom:(int)zoom;
 - (BOOL) isEllipticYTile;

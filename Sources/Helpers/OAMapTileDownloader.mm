@@ -287,22 +287,23 @@
             return;
         }
 
-        NSError *err = nil;
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *dir = [path stringByDeletingLastPathComponent];
         [fileManager createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
         
         NSURL *targetURLDir = [NSURL fileURLWithPath:path];
         
-        if (targetURLDir && location)
+        if ([fileManager moveItemAtURL:location toURL:targetURLDir error:nil] || [fileManager fileExistsAtPath:path])
         {
-            [fileManager moveItemAtURL:location
-                                 toURL:targetURLDir
-                                 error:&err];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
-             _activeDownloads--;
+            
+            _activeDownloads--;
             [self startDownloadIfPossible];
+        }
+        else
+        {
+            [self onTileFailed];
         }
     }];
     [task resume];
@@ -327,14 +328,18 @@
         }
 
         NSData *data = [NSData dataWithContentsOfFile:location.path];
-        if (data)
+        if (data && [tileSource insertImage:x y:y zoom:zoom data:data])
         {
-            [tileSource insertImage:x y:y zoom:zoom data:data];
-            [NSFileManager.defaultManager removeItemAtURL:url error:nil];
+            [NSFileManager.defaultManager removeItemAtURL:location error:nil];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
+            
             _activeDownloads--;
             [self startDownloadIfPossible];
+        }
+        else
+        {
+            [self onTileFailed];
         }
     }];
     [task resume];

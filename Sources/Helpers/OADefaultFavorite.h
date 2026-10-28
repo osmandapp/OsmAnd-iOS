@@ -26,9 +26,9 @@
 
 + (NSArray *)builtinColors;
 
-+ (NSInteger) getValidBuiltInColorNumber:(NSInteger)number;
-
-+ (UIColor *) getDefaultColor;
++ (NSInteger)getValidBuiltInColorNumber:(NSInteger)number;
++ (UIColor *)getColorFromBuiltInNumberOrARGB:(NSInteger)value;
++ (UIColor *)getDefaultColor;
 
 + (OAFavoriteColor *)getFavoriteColor:(UIColor *)color;
 

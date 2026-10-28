@@ -125,6 +125,7 @@ static int TILE_SIZE = 256;
         
         const auto& symbols = [rendererView getSymbolsIn:area strict:NO];
         OAAmenitySearcher *amenitySearcher = [[OAAmenitySearcher alloc] init];
+        BOOL onlyPoints = [mapVc.mapLayers.routePlanningLayer isInMeasurementMode];
 
         for (const auto symbolInfo : symbols)
         {
@@ -197,6 +198,10 @@ static int TILE_SIZE = 256;
 
                         NSString *routeId = tags[ROUTE_ID];
                         BOOL isNewOsmRoute = [self.class isNewOsmRoute:routeId isTravelGpx:isTravelGpx];
+                        BOOL isSpecial = isOldOsmRoute || isNewOsmRoute || isTravelGpx || isClickableWay;
+                        if (onlyPoints && isSpecial)
+                            continue;
+
                         CLLocation *objectLatLon = result.objectLatLon;
 
                         if (isNewOsmRoute || isOldOsmRoute)

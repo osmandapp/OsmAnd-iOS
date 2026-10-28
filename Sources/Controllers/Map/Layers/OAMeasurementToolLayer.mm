@@ -626,6 +626,11 @@
         [self.delegate onTouch:coordinate longPress:longPress];
 }
 
+- (BOOL)isInMeasurementMode
+{
+    return _editingCtx != nil;
+}
+
 - (void) moveMapToPoint:(NSInteger)pos
 {
     if (_editingCtx.getPointsCount > 0)

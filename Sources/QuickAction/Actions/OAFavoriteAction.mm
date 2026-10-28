@@ -24,10 +24,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-static NSString * const kName = @"name";
-static NSString * const kCategoryName = @"category_name";
-static NSString * const kCategoryColor = @"category_color";
-
 static QuickActionType *TYPE;
 
 @implementation OAFavoriteAction
@@ -102,19 +98,7 @@ static QuickActionType *TYPE;
     if (group)
         groupName = group.name;
 
-    UIColor* color;
-    if (self.getParams[kCategoryColor])
-    {
-        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
-        color = favCol.color;
-    }
-    else
-    {
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
-        color = favCol.color;
-    }
-
+    UIColor *color = [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[self.getParams[kCategoryColor] integerValue]];
     if ([group hasColor])
         color = group.color;
 
@@ -123,6 +107,14 @@ static QuickActionType *TYPE;
 
     OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:title category:groupName];
     [point setColor:color];
+    NSString *iconName = group.iconName.length > 0 ? group.iconName : self.getParams[kCategoryIcon];
+    if (iconName.length > 0)
+        [point setIcon:iconName];
+
+    NSString *backgroundIconName = group.backgroundType.length > 0 ? group.backgroundType : self.getParams[kCategoryBackgroundIcon];
+    if (backgroundIconName.length > 0)
+        [point setBackgroundIcon:backgroundIconName];
+
     [OAFavoritesHelper addFavorite:point];
 }
 
@@ -172,24 +164,26 @@ static QuickActionType *TYPE;
                           }
                       ] forKey:kSectionNoName];
     
-    NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-    OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
+    UIColor *color = [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[self.getParams[kCategoryColor] integerValue]];
+    NSMutableDictionary *appearanceRow = [@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"key" : kAppearance,
+        @"title" : OALocalizedString(@"shared_string_appearance"),
+        @"color" : @([color toARGBNumber])
+    } mutableCopy];
+    [appearanceRow setValue:self.getParams[kCategoryColor] ? @([color toARGBNumber]) : nil forKey:kAppearanceColor];
+    [appearanceRow setValue:self.getParams[kCategoryIcon] forKey:kAppearanceIcon];
+    [appearanceRow setValue:self.getParams[kCategoryBackgroundIcon] forKey:kAppearanceBackground];
     
     [data setObject:@[@{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
-                          @"color" : @(defaultColor),
+                          @"color" : @([color toARGBNumber]),
                           @"img" : ACImageNameIcCustomFolder
                           },
-                      @{
-                          @"type" : [OAValueTableViewCell getCellIdentifier],
-                          @"key" : kCategoryColor,
-                          @"title" : OALocalizedString(@"shared_string_color"),
-                          @"value" : color ? color.name : @"",
-                          @"color" : @(defaultColor)
-                          },
+                      appearanceRow,
                       @{
                           @"footer" : OALocalizedString(@"quick_action_select_group")
                           }
@@ -201,6 +195,7 @@ static QuickActionType *TYPE;
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    [params removeObjectsForKeys:@[kAppearanceColor, kAppearanceIcon, kAppearanceBackground]];
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
@@ -216,7 +211,12 @@ static QuickActionType *TYPE;
             else if ([item[@"key"] isEqualToString:kCategoryName])
             {
                 [params setValue:item[@"value"] forKey:kCategoryName];
-                [params setValue:item[@"color"] forKey:kCategoryColor];
+            }
+            else if ([item[@"key"] isEqualToString:kAppearance])
+            {
+                [params setValue:item[kAppearanceColor] forKey:kCategoryColor];
+                [params setValue:[item[kAppearanceIcon] stringByReplacingOccurrencesOfString:@"mx_" withString:@""] forKey:kCategoryIcon];
+                [params setValue:item[kAppearanceBackground] forKey:kCategoryBackgroundIcon];
             }
         }
     }

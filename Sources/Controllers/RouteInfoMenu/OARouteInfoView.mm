@@ -586,6 +586,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     _emission = nil;
     _routingInfoIndexPath = nil;
+    _historySection = -1;
     BOOL isRouteBeingCalculated = (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
         || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]);
 
@@ -984,7 +985,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historyItemsLimit += 10;
     [self updateData];
     [self.tableView reloadData];
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_data[@(_historySection)].count - 1 inSection:_historySection] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if (_historySection < 0)
+        return;
+
+    NSInteger rowCount = _data[@(_historySection)].count;
+    [_tableView layoutIfNeeded];
+    if (_historySection < _tableView.numberOfSections && rowCount > 0
+        && rowCount <= [_tableView numberOfRowsInSection:_historySection])
+    {
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rowCount - 1 inSection:_historySection]
+                          atScrollPosition:UITableViewScrollPositionBottom
+                                  animated:YES];
+    }
 }
 
 - (void) setupButtonLayout:(UIButton *)button

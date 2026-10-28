@@ -412,6 +412,19 @@ typedef enum
     return nil;
 }
 
+- (void)forceHidePlanRouteIfNeeded
+{
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        [_scrollableHudViewController forceHide];
+
+    if ([_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+    {
+        OABaseScrollableHudViewController *planner = _prevScrollableHudViewController;
+        _prevScrollableHudViewController = nil;
+        [planner forceHide];
+    }
+}
+
 - (void)setupScrollableHud:(OABaseScrollableHudViewController *)controller {
     _scrollableHudViewController = controller;
     _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

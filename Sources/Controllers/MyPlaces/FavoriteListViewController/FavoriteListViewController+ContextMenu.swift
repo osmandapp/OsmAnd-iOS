@@ -153,10 +153,10 @@ extension FavoriteListViewController {
         let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [addToMenu])
         menuElements.append(thirdButtonsSection)
 
-        let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
-            self?.openFavoriteItemsAppearance()
-        }
-        if !containsVirtualFolder {
+        if selectedFavoritePointsCount(for: selectedBridgeItems) > 0 {
+            let changeAppearanceAction = UIAction(title: localizedString("change_appearance"), image: .icCustomAppearanceOutlined) { [weak self] _ in
+                self?.openFavoriteItemsAppearance()
+            }
             menuElements.append(UIMenu(title: "", options: .displayInline, children: [changeAppearanceAction]))
         }
 

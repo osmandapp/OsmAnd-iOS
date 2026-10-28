@@ -210,6 +210,19 @@
                 break;
             }
         }
+        if (!originFound)
+        {
+            NSArray<OAFavoriteItem *> *favoritesAtLocation = [[OAFavoritesHelper getFavoriteItems] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAFavoriteItem *point, NSDictionary *bindings) {
+                OsmAnd::LatLon latLon = point.favorite->getLatLon();
+                return [OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude];
+            }]];
+
+            if (favoritesAtLocation.count == 1)
+            {
+                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:favoritesAtLocation.firstObject pushed:NO saveState:NO];
+                originFound = YES;
+            }
+        }
     }
     else if (item.hType == OAHistoryTypeWpt)
     {

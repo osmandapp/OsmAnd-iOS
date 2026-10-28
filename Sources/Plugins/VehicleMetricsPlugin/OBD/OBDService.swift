@@ -63,8 +63,9 @@ final class OBDService: NSObject {
     }
     
     func startDispatcherWhenReady(device: OBDVehicleMetricsDevice) {
-        device.setupOBDChannel { [weak self] isReady in
-            guard isReady else { return }
+        device.setupOBDChannel { [weak self, weak device] isReady in
+            // Notification setup is asynchronous; the adapter may disconnect before it completes.
+            guard isReady, device?.isConnected == true else { return }
             self?.startDispatcher()
         }
     }

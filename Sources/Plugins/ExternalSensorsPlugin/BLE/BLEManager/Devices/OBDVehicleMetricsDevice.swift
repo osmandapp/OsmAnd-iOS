@@ -8,6 +8,8 @@
 
 class OBDVehicleMetricsDevice: Device {
 
+    private typealias OBDChannel = (read: CBCharacteristic, write: CBCharacteristic)
+
     private(set) var ecuWriteCharacteristic: CBCharacteristic?
     private(set) var ecuReadCharacteristic: CBCharacteristic?
 
@@ -41,39 +43,64 @@ class OBDVehicleMetricsDevice: Device {
     // adapters differ in which characteristic notifies and which accepts writes.
     func setupOBDChannel(completion: @escaping (Bool) -> Void) {
         let services = peripheral.services ?? []
-        for serviceUUID in Self.getServicesUUID {
+        let channels: [OBDChannel] = Self.getServicesUUID.compactMap { serviceUUID in
             guard let service = services.first(where: { $0.uuid == CBUUID(string: serviceUUID) }),
                   let characteristics = service.characteristics,
                   let readCharacteristic = characteristics.first(where: { $0.properties.contains(.notify) }),
                   let writeCharacteristic = characteristics.first(where: { $0.properties.contains(.write) || $0.properties.contains(.writeWithoutResponse) }) else {
-                continue
+                return nil
             }
-            ecuReadCharacteristic = readCharacteristic
-            ecuWriteCharacteristic = writeCharacteristic
-            NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel | service: \(service.uuid) | read: \(readCharacteristic.uuid) | write: \(writeCharacteristic.uuid)")
-            setNotifyValue(toEnabled: true, ofCharac: readCharacteristic) { result in
-                switch result {
-                case .success(let isNotifying):
-                    completion(isNotifying)
-                case .failure(let error):
-                    NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel enable notify failure: \(error.localizedDescription)")
-                    completion(false)
-                }
-            }
+            return (readCharacteristic, writeCharacteristic)
+        }
+        guard !channels.isEmpty else {
+            NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel no service with notify and write characteristics | services: \(services.map(\.uuid))")
+            completion(false)
             return
         }
-        NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel no service with notify and write characteristics | services: \(services.map(\.uuid))")
-        completion(false)
+        setupOBDChannel(from: channels[...], completion: completion)
+    }
+
+    private func setupOBDChannel(from channels: ArraySlice<OBDChannel>,
+                                 completion: @escaping (Bool) -> Void) {
+        guard let channel = channels.first else {
+            resetOBDChannel()
+            completion(false)
+            return
+        }
+        ecuReadCharacteristic = channel.read
+        ecuWriteCharacteristic = channel.write
+        NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel | service: \(channel.read.service?.uuid.uuidString ?? "nil") | read: \(channel.read.uuid) | write: \(channel.write.uuid)")
+        setNotifyValue(toEnabled: true, ofCharac: channel.read) { [weak self] result in
+            switch result {
+            case .success(true):
+                completion(true)
+            case .success(false):
+                NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel notify is off, trying next service")
+                self?.setupOBDChannel(from: channels.dropFirst(), completion: completion)
+            case .failure(let error):
+                NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel enable notify failure: \(error.localizedDescription), trying next service")
+                self?.setupOBDChannel(from: channels.dropFirst(), completion: completion)
+            }
+        }
     }
 
     override func disconnect(completion: @escaping DisconnectPeripheralCallback) {
         peripheral.disconnect(completion: { [weak self] result in
             if case .success = result {
-                self?.ecuWriteCharacteristic = nil
-                self?.ecuReadCharacteristic = nil
+                self?.resetOBDChannel()
             }
             completion(result)
         })
+    }
+
+    override func didDisconnectDevice() {
+        resetOBDChannel()
+        super.didDisconnectDevice()
+    }
+
+    private func resetOBDChannel() {
+        ecuWriteCharacteristic = nil
+        ecuReadCharacteristic = nil
     }
 
     func isECUReadCharacteristic(_ characteristic: CBCharacteristic) -> Bool {

@@ -53,8 +53,8 @@ class OBDVehicleMetricsDevice: Device {
             NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel | service: \(service.uuid) | read: \(readCharacteristic.uuid) | write: \(writeCharacteristic.uuid)")
             setNotifyValue(toEnabled: true, ofCharac: readCharacteristic) { result in
                 switch result {
-                case .success:
-                    completion(true)
+                case .success(let isNotifying):
+                    completion(isNotifying)
                 case .failure(let error):
                     NSLog("[OBDVehicleMetricsDevice] -> setupOBDChannel enable notify failure: \(error.localizedDescription)")
                     completion(false)

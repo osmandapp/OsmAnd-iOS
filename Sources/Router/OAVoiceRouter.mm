@@ -596,13 +596,13 @@ std::string preferredLanguage;
 {
     OACommandBuilder *builder = [self getNewCommandPlayerToPlay];
     if (builder != nil) {
-        if (!newRoute)
+        if (newRoute)
         {
-            [[builder routeRecalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
+            [[builder newRouteCalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
         }
         else if ([_settings.speakRouteRecalculation get])
         {
-            [[builder newRouteCalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
+            [[builder routeRecalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
         }
         
     }

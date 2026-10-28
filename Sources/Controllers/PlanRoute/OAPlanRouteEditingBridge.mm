@@ -1112,7 +1112,28 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         if (points[index].isGap)
             return NO;
     }
-    return YES;
+    for (PlanRouteSegmentData *segment in [self buildSegments])
+    {
+        for (PlanRouteGroupData *group in segment.groups)
+        {
+            NSInteger first = group.points.firstObject.globalIndex;
+            NSInteger last = group.points.lastObject.globalIndex;
+            if (from < first || from > last || to < first || to > last)
+                continue;
+            if (![group.profilePointIndexes containsObject:@(from)] || ![group.profilePointIndexes containsObject:@(to)])
+                return NO;
+            NSString *modeKey = (group.appMode ?: OAApplicationMode.DEFAULT).stringKey;
+            for (NSNumber *index in @[@(from), @(to)])
+            {
+                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:points[index.integerValue].getProfileType
+                                                                        def:OAApplicationMode.DEFAULT];
+                if (![mode.stringKey isEqualToString:modeKey])
+                    return NO;
+            }
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (void)movePointFrom:(NSInteger)from to:(NSInteger)to

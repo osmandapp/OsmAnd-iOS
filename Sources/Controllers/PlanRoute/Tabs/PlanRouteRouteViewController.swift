@@ -60,7 +60,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         let headerMenu: UIMenu?
         var rows: [Row]
         let isStartNewSegment: Bool
-        var fixedPointIndex: Int?
+        var pointMoveRanges: [ClosedRange<Int>] = []
     }
 
     private static let sectionHorizontalInset: CGFloat = 16
@@ -239,9 +239,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             ? String(format: localizedString("segments_count"), segment.index + 1)
             : localizedString("route_points")
         let segmentMenu = makeSegmentMenu(for: segment)
-        let fixedPointIndex = segment.groups.last?.points.last.flatMap { point in
-            segment.profileGroup(forLegStartingAt: point.index) == nil ? point.index : nil
-        }
+        let pointMoveRanges = pointMoveRanges(for: segment)
 
         if segment.multiMode {
             var rows: [Row] = []
@@ -255,7 +253,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  headerMenu: segmentMenu,
                                  rows: routeRows(rows, for: segment),
                                  isStartNewSegment: false,
-                                 fixedPointIndex: fixedPointIndex)]
+                                 pointMoveRanges: pointMoveRanges)]
         } else {
             let segmentColor = segment.singleMode?.getProfileColor() ?? straightLineColor
             var subtitle: String?
@@ -271,8 +269,31 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
                                  headerMenu: segmentMenu,
                                  rows: routeRows(rows, for: segment),
                                  isStartNewSegment: false,
-                                 fixedPointIndex: fixedPointIndex)]
+                                 pointMoveRanges: pointMoveRanges)]
         }
+    }
+
+    private func pointMoveRanges(for segment: PlanRouteSegment) -> [ClosedRange<Int>] {
+        let destinationIndex = dataSource?.routeSegments.last?.groups.last?.points.last?.index
+        let nextModeKey = dataSource?.defaultMode?.stringKey ?? OAApplicationMode.default()?.stringKey
+        var row = 0
+        var ranges: [ClosedRange<Int>] = []
+        for group in segment.groups {
+            if segment.multiMode {
+                row += 1
+            }
+            let modeKey = group.appMode?.stringKey ?? OAApplicationMode.default()?.stringKey
+            let profileIndexes = Set(group.profilePointIndexes)
+            let count = group.points.prefix { point in
+                profileIndexes.contains(point.index)
+                    && (point.index != destinationIndex || modeKey == nextModeKey)
+            }.count
+            if count > 1 {
+                ranges.append(row...(row + count - 1))
+            }
+            row += group.points.count
+        }
+        return ranges
     }
 
     private func routeRows(_ rows: [Row], for segment: PlanRouteSegment) -> [Row] {
@@ -546,10 +567,8 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        guard sections.indices.contains(indexPath.section),
-              sections[indexPath.section].rows.indices.contains(indexPath.row),
-              case let .point(point, _) = sections[indexPath.section].rows[indexPath.row] else { return false }
-        return point.index != sections[indexPath.section].fixedPointIndex
+        guard sections.indices.contains(indexPath.section) else { return false }
+        return sections[indexPath.section].pointMoveRanges.contains { $0.contains(indexPath.row) }
     }
 
     func tableView(_ tableView: UITableView,
@@ -557,36 +576,27 @@ extension PlanRouteRouteViewController: UITableViewDelegate {
                    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         let srcSection = sourceIndexPath.section
         guard self.tableView(tableView, canMoveRowAt: sourceIndexPath) else { return sourceIndexPath }
-        let rows = sections[srcSection].rows
-        let pointRows = rows.indices.filter { self.tableView(tableView, canMoveRowAt: IndexPath(row: $0, section: srcSection)) }
-        guard let firstPoint = pointRows.first, let lastPoint = pointRows.last else { return sourceIndexPath }
+        guard let range = sections[srcSection].pointMoveRanges.first(where: { $0.contains(sourceIndexPath.row) }) else {
+            return sourceIndexPath
+        }
 
         if proposedDestinationIndexPath.section != srcSection {
-            let boundary = proposedDestinationIndexPath.section < srcSection ? firstPoint : lastPoint
+            let boundary = proposedDestinationIndexPath.section < srcSection ? range.lowerBound : range.upperBound
             return IndexPath(row: boundary, section: srcSection)
         }
 
-        let proposedRow = proposedDestinationIndexPath.row
-        if pointRows.contains(proposedRow) {
-            return proposedDestinationIndexPath
-        }
-
-        let before = pointRows.filter { $0 < proposedRow }
-        let after = pointRows.filter { $0 > proposedRow }
-        let nearest: Int
-        if proposedRow > sourceIndexPath.row {
-            nearest = after.first ?? before.last ?? firstPoint
-        } else {
-            nearest = before.last ?? after.first ?? lastPoint
-        }
-        return IndexPath(row: nearest, section: srcSection)
+        let row = min(max(proposedDestinationIndexPath.row, range.lowerBound), range.upperBound)
+        return IndexPath(row: row, section: srcSection)
     }
 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         guard sourceIndexPath != destinationIndexPath,
               sourceIndexPath.section == destinationIndexPath.section,
               self.tableView(tableView, canMoveRowAt: sourceIndexPath),
-              self.tableView(tableView, canMoveRowAt: destinationIndexPath) else { return }
+              self.tableView(tableView, canMoveRowAt: destinationIndexPath),
+              sections[sourceIndexPath.section].pointMoveRanges.contains(where: {
+                  $0.contains(sourceIndexPath.row) && $0.contains(destinationIndexPath.row)
+              }) else { return }
         var rows = sections[sourceIndexPath.section].rows
         guard rows.indices.contains(sourceIndexPath.row),
               rows.indices.contains(destinationIndexPath.row),

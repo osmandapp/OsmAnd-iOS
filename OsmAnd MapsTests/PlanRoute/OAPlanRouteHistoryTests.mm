@@ -152,22 +152,92 @@
     }
 }
 
-- (void)testReorderKeepsProfilesWithPointsAndUndoRestoresThem
+- (void)prepareTenPointRoute
 {
-    [self prepareThreeProfileRoute];
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
+    for (NSInteger index = 0; index < 10; index++)
+    {
+        OASWptPt *point = [[OASWptPt alloc] init];
+        point.lat = 50 + index * 0.001;
+        point.lon = 20 + index * 0.002;
+        if (index >= 4)
+            [point setProfileTypeProfileType:OAApplicationMode.BICYCLE.stringKey];
+        [points addObject:point];
+    }
+    [self.context setPoints:points];
+    self.context.appMode = OAApplicationMode.BICYCLE;
+}
+
+- (void)testMovingBetweenProfileGroupsOrTheirBoundariesDoesNotCreateHistory
+{
+    [self prepareTenPointRoute];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    NSArray *profiles = [self profiles:self.context.getPoints];
+    for (NSArray<NSNumber *> *move in @[@[@2, @7], @[@7, @2], @[@3, @5], @[@5, @3], @[@4, @1], @[@1, @4]])
+    {
+        [self.bridge movePointFrom:move[0].integerValue to:move[1].integerValue];
+        [self assertFinishedPoints:original];
+        XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+    }
+}
+
+- (void)testMovingBetweenSeparateGroupsWithSameProfileIsRejected
+{
+    [self prepareTenPointRoute];
+    [self.context.getPoints[7] removeProfileType];
+    [self.context.getPoints[8] removeProfileType];
+    [self.context.getPoints[9] removeProfileType];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    [self.bridge movePointFrom:2 to:8];
+    [self assertFinishedPoints:original];
+    XCTAssertFalse(self.context.commandManager.canUndo);
+    XCTAssertEqual(self.segments.firstObject.groups.count, 3);
+}
+
+- (void)testReorderWithinGroupPreservesBoundariesAndUndoRedo
+{
+    [self prepareTenPointRoute];
     NSArray *profiles = [self profiles:self.context.getPoints];
     NSArray *latitudes = [self latitudes:self.context.getPoints];
-    [self.bridge movePointFrom:0 to:1];
-    XCTAssertEqualObjects(self.context.getPoints[0].getProfileType, OAApplicationMode.BICYCLE.stringKey);
-    XCTAssertFalse(self.context.getPoints[1].hasProfile);
-    NSArray *reordered = [self latitudes:self.context.getPoints];
-    for (NSInteger cycle = 0; cycle < 2; cycle++)
+    for (NSArray<NSNumber *> *move in @[@[@1, @3], @[@3, @1], @[@6, @8], @[@8, @6], @[@9, @6]])
     {
-        [self.bridge undo];
-        [self assertFinishedPoints:latitudes];
+        [self.bridge movePointFrom:move[0].integerValue to:move[1].integerValue];
+        NSArray *reordered = [self latitudes:self.context.getPoints];
+        XCTAssertNotEqualObjects(reordered, latitudes);
         XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
-        [self.bridge redo];
-        [self assertFinishedPoints:reordered];
+        XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+        XCTAssertEqual(self.segments.firstObject.groups[0].points.count, 5);
+        XCTAssertEqual(self.segments.firstObject.groups[1].points.count, 5);
+        for (NSInteger cycle = 0; cycle < 2; cycle++)
+        {
+            [self.bridge undo];
+            [self assertFinishedPoints:latitudes];
+            [self.bridge redo];
+            [self assertFinishedPoints:reordered];
+            XCTAssertEqualObjects([self profiles:self.context.getPoints], profiles);
+        }
+        [self.bridge undo];
+    }
+}
+
+- (void)testMovingDifferentContinuationProfilePreservesRedo
+{
+    [self prepareTenPointRoute];
+    [self.context.getPoints.lastObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    self.context.appMode = OAApplicationMode.PEDESTRIAN;
+    [self.bridge movePointFrom:6 to:7];
+    [self.bridge undo];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    for (NSArray<NSNumber *> *move in @[@[@9, @7], @[@7, @9], @[@2, @7]])
+    {
+        [self.bridge movePointFrom:move[0].integerValue to:move[1].integerValue];
+        [self assertFinishedPoints:original];
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        XCTAssertTrue(self.context.commandManager.canRedo);
+        XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.PEDESTRIAN);
     }
 }
 

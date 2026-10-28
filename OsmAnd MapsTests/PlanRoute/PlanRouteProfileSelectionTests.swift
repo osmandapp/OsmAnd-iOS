@@ -229,48 +229,90 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
 
     func testMoveDefersRegroupingUntilTableMoveCompletes() throws {
         let source = PlanRouteProfileTestDataSource()
-        let points = (0..<3).map { makePoint(index: $0, count: 3) }
-        let straight = PlanRouteProfileGroup(appMode: nil, distance: 175, lastPointIndex: 1,
-                                             points: Array(points.prefix(2)), profilePointIndexes: [0])
-        let cycling = PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 368, lastPointIndex: 2,
-                                            points: [points[2]], profilePointIndexes: [1, 2])
+        let points = (0..<4).map { makePoint(index: $0, count: 4) }
+        let straight = PlanRouteProfileGroup(appMode: nil, distance: 175, lastPointIndex: 2,
+                                             points: Array(points.prefix(3)), profilePointIndexes: [0, 1])
+        let cycling = PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 368, lastPointIndex: 3,
+                                            points: [points[3]], profilePointIndexes: [2, 3])
         source.routeSegments = [makeSegment(groups: [straight, cycling])]
         let controller = PlanRouteRouteViewController(dataSource: source)
         controller.loadViewIfNeeded()
         let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
-        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 6)
-        XCTAssertEqual(table.numberOfRows(inSection: 0), 6)
+        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 7)
+        XCTAssertEqual(table.numberOfRows(inSection: 0), 7)
         source.onMove = { [weak controller, weak source] from, to in
             XCTAssertEqual(from, 0)
-            XCTAssertEqual(to, 2)
-            let merged = PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 543, lastPointIndex: 2,
-                                               points: points, profilePointIndexes: [0, 1, 2])
+            XCTAssertEqual(to, 1)
+            let merged = PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 543, lastPointIndex: 3,
+                                               points: points, profilePointIndexes: [0, 1, 2, 3])
             source?.routeSegments = [self.makeSegment(groups: [merged])]
             controller?.reloadData()
         }
         let from = IndexPath(row: 1, section: 0)
-        let to = IndexPath(row: 4, section: 0)
+        let to = IndexPath(row: 2, section: 0)
         controller.tableView(table, moveRowAt: from, to: to)
-        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 6)
+        XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 7)
         table.moveRow(at: from, to: to)
         let reloaded = expectation(description: "Groups reload after the move")
         DispatchQueue.main.async {
-            XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 4)
+            XCTAssertEqual(controller.tableView(table, numberOfRowsInSection: 0), 5)
             reloaded.fulfill()
         }
         wait(for: [reloaded], timeout: 1)
     }
 
-    func testMoveDestinationOutsideRowsIsClampedToPoint() throws {
+    func testMovesAreClampedToTheirDisplayedProfileGroup() throws {
         let source = PlanRouteProfileTestDataSource()
-        source.routeSegments = [makeMixedSegment()]
+        source.routeSegments = [makeTenPointSegment()]
+        source.defaultMode = OAApplicationMode.bicycle()
         let controller = PlanRouteRouteViewController(dataSource: source)
         controller.loadViewIfNeeded()
         let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
-        let sourcePath = IndexPath(row: 1, section: 0)
-        let target = controller.tableView(table, targetIndexPathForMoveFromRowAt: sourcePath,
-                                          toProposedIndexPath: IndexPath(row: 100, section: 0))
-        XCTAssertEqual(target, IndexPath(row: 8, section: 0))
+        for (from, proposed, expected) in [(3, 9, 4), (9, 3, 7), (2, 100, 4), (9, 0, 7), (2, 3, 3), (9, 8, 8)] {
+            XCTAssertEqual(controller.tableView(table, targetIndexPathForMoveFromRowAt: IndexPath(row: from, section: 0),
+                                                toProposedIndexPath: IndexPath(row: proposed, section: 0)),
+                           IndexPath(row: expected, section: 0))
+        }
+        XCTAssertEqual(controller.tableView(table, targetIndexPathForMoveFromRowAt: IndexPath(row: 3, section: 0),
+                                            toProposedIndexPath: IndexPath(row: 0, section: 1)), IndexPath(row: 4, section: 0))
+        source.onMove = { _, _ in XCTFail("Moving between displayed profile groups must be rejected") }
+        controller.tableView(table, moveRowAt: IndexPath(row: 3, section: 0), to: IndexPath(row: 9, section: 0))
+        controller.tableView(table, moveRowAt: IndexPath(row: 9, section: 0), to: IndexPath(row: 3, section: 0))
+    }
+
+    func testProfileBoundaryAndDifferentNextProfileStayFixed() throws {
+        let source = PlanRouteProfileTestDataSource()
+        source.routeSegments = [makeTenPointSegment()]
+        source.defaultMode = OAApplicationMode.pedestrian()
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        XCTAssertFalse(controller.tableView(table, canMoveRowAt: IndexPath(row: 5, section: 0)))
+        XCTAssertFalse(controller.tableView(table, canMoveRowAt: IndexPath(row: 11, section: 0)))
+        XCTAssertTrue(controller.tableView(table, canMoveRowAt: IndexPath(row: 10, section: 0)))
+        XCTAssertEqual(controller.tableView(table, targetIndexPathForMoveFromRowAt: IndexPath(row: 8, section: 0),
+                                            toProposedIndexPath: IndexPath(row: 11, section: 0)), IndexPath(row: 10, section: 0))
+        source.onMove = { _, _ in XCTFail("Moving a profile boundary must be rejected") }
+        for (from, to) in [(5, 2), (2, 5), (11, 8), (8, 11)] {
+            controller.tableView(table, moveRowAt: IndexPath(row: from, section: 0), to: IndexPath(row: to, section: 0))
+        }
+    }
+
+    func testSinglePointProfileGroupHasNoReorderHandle() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let points = (0..<4).map { makePoint(index: $0, count: 4) }
+        source.routeSegments = [makeSegment(groups: [
+            PlanRouteProfileGroup(appMode: nil, distance: 175, lastPointIndex: 2,
+                                  points: Array(points.prefix(3)), profilePointIndexes: [0, 1]),
+            PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 100, lastPointIndex: 3,
+                                  points: [points[3]], profilePointIndexes: [2, 3])
+        ])]
+        source.defaultMode = OAApplicationMode.bicycle()
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        XCTAssertTrue(controller.tableView(table, canMoveRowAt: IndexPath(row: 1, section: 0)))
+        XCTAssertFalse(controller.tableView(table, canMoveRowAt: IndexPath(row: 5, section: 0)))
     }
 
     func testGapEndpointCannotMoveOrReceiveAnotherPoint() throws {
@@ -331,6 +373,16 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
                 XCTAssertEqual(source.editedPointAction, "\(action):\(point.index)")
             }
         }
+    }
+
+    private func makeTenPointSegment() -> PlanRouteSegment {
+        let points = (0..<10).map { makePoint(index: $0, count: 10) }
+        return makeSegment(groups: [
+            PlanRouteProfileGroup(appMode: nil, distance: 400, lastPointIndex: 4,
+                                  points: Array(points[0...4]), profilePointIndexes: [0, 1, 2, 3]),
+            PlanRouteProfileGroup(appMode: OAApplicationMode.bicycle(), distance: 500, lastPointIndex: 9,
+                                  points: Array(points[5...9]), profilePointIndexes: [4, 5, 6, 7, 8, 9])
+        ])
     }
 
     private func makeMixedSegment() -> PlanRouteSegment {

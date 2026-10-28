@@ -7,6 +7,11 @@ on:
       timezone: Europe/Kyiv
   workflow_dispatch:
 
+concurrency:
+  group: nightly-ios-ui-tests
+  cancel-in-progress: false
+  queue: max
+
 jobs:
   ui-tests:
     runs-on: self-hosted

@@ -2160,7 +2160,8 @@ typedef enum
 
 - (void)updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen)
+    const BOOL isLandscape = [self.targetMenuView isLandscape];
+    if ((!isLandscape && self.targetMenuView.showFullScreen)
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph
         || self.targetMenuView.targetPoint.type == OATargetTransportRouteDetails
@@ -2176,8 +2177,8 @@ typedef enum
         if (mapSize.width <= 0 || mapSize.height <= 0)
             return;
 
-        CGFloat leftInset = [self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width : 0;
-        CGFloat bottomInset = [self.targetMenuView isLandscape] ? 0 : height;
+        CGFloat leftInset = isLandscape ? self.targetMenuView.frame.size.width : 0;
+        CGFloat bottomInset = isLandscape ? 0 : height;
         CGPoint center = CGPointMake((MIN(leftInset, mapSize.width) + mapSize.width) / 2,
                                      MAX(0, mapSize.height - bottomInset) / 2);
         [_mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
@@ -2190,8 +2191,8 @@ typedef enum
     
     [_mapViewController correctPosition:targetPoint31
                        originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
-                              leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0)
-                            bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height)
+                              leftInset:(isLandscape ? self.targetMenuView.frame.size.width + 20.0 : 0.0)
+                            bottomInset:(isLandscape ? 0.0 : height)
                              centerBBox:(_targetMode == EOATargetBBOX)
                                animated:animated];
 }

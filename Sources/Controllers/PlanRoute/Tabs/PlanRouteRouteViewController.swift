@@ -17,43 +17,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         case continueRoute
     }
 
-    private final class InteractionObserver: UIGestureRecognizer {
-        private var activeTouches: Set<UITouch> = []
-
-        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-            activeTouches.formUnion(touches)
-            state = state == .possible ? .began : .changed
-        }
-
-        override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-            state = .changed
-        }
-
-        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-            activeTouches.subtract(touches)
-            if activeTouches.isEmpty {
-                state = .ended
-            }
-        }
-
-        override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
-            state = .cancelled
-        }
-
-        override func reset() {
-            super.reset()
-            activeTouches.removeAll()
-        }
-
-        override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
-            false
-        }
-
-        override func canBePrevented(by preventingGestureRecognizer: UIGestureRecognizer) -> Bool {
-            false
-        }
-    }
-
     private struct SectionModel {
         let headerTitle: String?
         let headerSubtitle: String?
@@ -75,14 +38,12 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
     var onSaveSegment: (([Int]) -> Void)?
     var onContinueRoute: (() -> Void)?
 
-    private let interactionObserver = InteractionObserver()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var sections: [SectionModel] = []
     private var lastContentSignature: String?
     private var doorToDoorSortedKeys: Set<String> = []
     private var isApplyingDoorToDoorSort = false
     private var isMovingPoint = false
-    private var needsReloadAfterInteraction = false
     private var isReloadScheduled = false
     private weak var dataSource: PlanRoutePointsDataSource?
 
@@ -112,15 +73,10 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
 
     func reloadData() {
         guard isViewLoaded, !isMovingPoint else { return }
-        guard interactionObserver.state != .began, interactionObserver.state != .changed else {
-            needsReloadAfterInteraction = true
-            return
-        }
         guard !tableView.hasUncommittedUpdates else {
             scheduleReload()
             return
         }
-        needsReloadAfterInteraction = false
         let segments = dataSource?.routeSegments ?? []
         let signature = contentSignature(for: segments)
         guard lastContentSignature != signature else { return }
@@ -139,11 +95,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         tableView.backgroundColor = .viewBg
         tableView.dataSource = self
         tableView.delegate = self
-        interactionObserver.cancelsTouchesInView = false
-        interactionObserver.delaysTouchesBegan = false
-        interactionObserver.delaysTouchesEnded = false
-        interactionObserver.addTarget(self, action: #selector(onTableInteraction(_:)))
-        tableView.addGestureRecognizer(interactionObserver)
         tableView.isEditing = true
         tableView.allowsSelectionDuringEditing = true
         tableView.alwaysBounceVertical = true
@@ -428,14 +379,6 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             guard let self else { return }
             isReloadScheduled = false
             reloadData()
-        }
-    }
-
-    @objc private func onTableInteraction(_ recognizer: UIGestureRecognizer) {
-        if recognizer.state == .ended || recognizer.state == .cancelled || recognizer.state == .failed {
-            if needsReloadAfterInteraction {
-                scheduleReload()
-            }
         }
     }
 }

@@ -335,28 +335,6 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         controller.tableView(table, moveRowAt: gap, to: first)
     }
 
-    func testReloadWaitsForTableInteractionToFinish() throws {
-        let source = PlanRouteProfileTestDataSource()
-        source.routeSegments = [makeMixedSegment()]
-        let controller = PlanRouteRouteViewController(dataSource: source)
-        controller.loadViewIfNeeded()
-        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
-        let observer = try XCTUnwrap(table.gestureRecognizers?.first { String(describing: type(of: $0)).contains("InteractionObserver") })
-        let initialCount = table.numberOfRows(inSection: 0)
-        observer.touchesBegan([], with: UIEvent())
-        source.routeSegments = []
-        controller.reloadData()
-        XCTAssertEqual(table.numberOfRows(inSection: 0), initialCount)
-        observer.touchesCancelled([], with: UIEvent())
-        controller.perform(NSSelectorFromString("onTableInteraction:"), with: observer)
-        let reloaded = expectation(description: "Reload resumes after cancelled interaction")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            XCTAssertEqual(table.numberOfRows(inSection: 0), 1)
-            reloaded.fulfill()
-        }
-        wait(for: [reloaded], timeout: 1)
-    }
-
     func testPointMenuInsertionAndTrimUseTheSelectedBoundaryPoint() throws {
         let source = PlanRouteProfileTestDataSource()
         let segment = makeMixedSegment()

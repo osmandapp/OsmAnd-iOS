@@ -199,29 +199,29 @@
     }
     else if (item.hType == OAHistoryTypeFavorite)
     {
+        OAFavoriteItem *nameMatch = nil;
+        OAFavoriteItem *locationMatch = nil;
+        NSUInteger nameMatchCount = 0;
+        NSUInteger locationMatchCount = 0;
         for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
         {
             OsmAnd::LatLon latLon = point.favorite->getLatLon();
-            if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude]
-                && ([item.name isEqualToString:[point getName]] || [item.name isEqualToString:[point getDisplayName]]))
+            if (![OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude])
+                continue;
+            
+            locationMatch = point;
+            locationMatchCount++;
+            if ([item.name isEqualToString:[point getName]] || [item.name isEqualToString:[point getDisplayName]])
             {
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:point pushed:NO saveState:NO];
-                originFound = YES;
-                break;
+                nameMatch = point;
+                nameMatchCount++;
             }
         }
-        if (!originFound)
-        {
-            NSArray<OAFavoriteItem *> *favoritesAtLocation = [[OAFavoritesHelper getFavoriteItems] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAFavoriteItem *point, NSDictionary *bindings) {
-                OsmAnd::LatLon latLon = point.favorite->getLatLon();
-                return [OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude];
-            }]];
 
-            if (favoritesAtLocation.count == 1)
-            {
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:favoritesAtLocation.firstObject pushed:NO saveState:NO];
-                originFound = YES;
-            }
+        if (nameMatchCount == 1 || (nameMatchCount == 0 && locationMatchCount == 1))
+        {
+            [[OARootViewController instance].mapPanel openTargetViewWithFavorite:(nameMatch ?: locationMatch) pushed:NO saveState:NO];
+            originFound = YES;
         }
     }
     else if (item.hType == OAHistoryTypeWpt)

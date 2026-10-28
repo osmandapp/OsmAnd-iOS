@@ -256,10 +256,11 @@
     if ([response isKindOfClass:NSHTTPURLResponse.class])
     {
         NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
-        return statusCode >= 200 && statusCode < 300;
+        if (statusCode < 200 || statusCode >= 300)
+            return NO;
     }
 
-    return YES;
+    return [[[NSFileManager defaultManager] attributesOfItemAtPath:location.path error:nil] fileSize] > 0;
 }
 
 - (void)onTileFailed

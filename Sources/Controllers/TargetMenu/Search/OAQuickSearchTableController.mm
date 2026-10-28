@@ -203,7 +203,7 @@
         {
             OsmAnd::LatLon latLon = point.favorite->getLatLon();
             if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude]
-                && [item.name isEqualToString:[point getName]])
+                && ([item.name isEqualToString:[point getName]] || [item.name isEqualToString:[point getDisplayName]]))
             {
                 [[OARootViewController instance].mapPanel openTargetViewWithFavorite:point pushed:NO saveState:NO];
                 originFound = YES;
@@ -391,7 +391,7 @@
                 {
                     latitude = fav.favorite->getLatLon().latitude;
                     longitude = fav.favorite->getLatLon().longitude;
-                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:fav.favorite->getTitle().toNSString()];
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[fav getDisplayName]];
                 }
                 break;
             }

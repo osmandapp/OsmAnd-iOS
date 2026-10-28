@@ -48,6 +48,11 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         categories = categories.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
         categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
     }
+
+    override func updateHostCellIfNeeded() {
+        super.updateHostCellIfNeeded()
+        updateHostCellIfNoIconCategory(isFavoriteList && selectedCatagoryKey == ORIGINAL_KEY)
+    }
     
     override func setIconName(_ iconName: String) {
         if isFavoriteList && iconName.isEmpty {
@@ -55,23 +60,21 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
             return
         }
         guard !iconName.isEmpty else { return }
-        for category in categories {
-            if allIconsVCDelegate == nil && isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
-                setSelectedIndexPath(IndexPath(row: 0, section: 0))
-                selectCategory(category.key)
-                return
-            } else {
-                for j in 0 ..< category.iconKeys.count {
-                    if iconName == category.iconKeys[j] ||
-                        "mx_" + iconName == category.iconKeys[j] {
-                        selectCategory(category.key)
-                        setSelectedIndexPath(IndexPath(row: j, section: 0))
-                        return
-                    }
-                }
-            }
+        if allIconsVCDelegate == nil && isFavoriteList && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
+            setSelectedIndexPath(IndexPath(row: 0, section: 0))
+            selectCategory(ORIGINAL_KEY)
+            return
+        }
+        if let categoryKey = iconCategoryKey(iconName),
+           let category = categoriesByKeyName[categoryKey],
+           let index = category.iconKeys.firstIndex(where: { Self.iconNamesMatch($0, iconName) }) {
+            setSelectedIndexPath(IndexPath(row: index, section: 0))
+            selectCategory(categoryKey)
+            return
         }
         addIconToLastUsed(iconName)
+        initLastUsedCategory()
+        sortCategories()
         setSelectedIndexPath(IndexPath(row: 0, section: 0))
         selectCategory(lastUsedKey)
     }
@@ -99,5 +102,28 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     
     override func lastUsed() -> [String] {
         return OAAppSettings.sharedManager().lastUsedFavIcons.get()
+    }
+
+    func setOriginalIcon(_ iconName: String) {
+        guard !iconName.isEmpty else { return }
+        // Keep the point's Original icon local to this editor, outside the shared category cache.
+        let category = IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [iconName], isTopCategory: true)
+        categories.removeAll { $0.key == ORIGINAL_KEY }
+        categories.insert(category, at: 0)
+        categoriesByKeyName[ORIGINAL_KEY] = category
+    }
+
+    private func iconCategoryKey(_ iconName: String) -> String? {
+        var originalKey: String?
+        for category in categories {
+            if category.iconKeys.contains(where: { Self.iconNamesMatch($0, iconName) }) {
+                if category.key != ORIGINAL_KEY {
+                    return category.key
+                }
+                // The POI icon that is in no other category is shown in Original.
+                originalKey = category.key
+            }
+        }
+        return originalKey
     }
 }

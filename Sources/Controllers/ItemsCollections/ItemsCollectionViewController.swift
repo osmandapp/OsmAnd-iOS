@@ -502,7 +502,10 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
             } else if collectionType == .profileIconCategories {
                 iconHandler = ProfileIconCollectionHandler()
             } else {
-                iconHandler = PoiIconCollectionHandler()
+                let poiIconHandler = PoiIconCollectionHandler()
+                poiIconHandler.categories = iconCategories
+                poiIconHandler.categoriesByKeyName = Dictionary(uniqueKeysWithValues: iconCategories.map { ($0.key, $0) })
+                iconHandler = poiIconHandler
             }
             iconHandler.delegate = self
             iconHandler.hostVC = self
@@ -522,7 +525,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 }
                 iconHandler.selectCategory(poiCategoryKey)
             }
-            if let selectedIconItem, let selectedIndex = iconNames.firstIndex(of: selectedIconItem) {
+            if let selectedIconItem, let selectedIndex = iconNames.firstIndex(where: { IconCollectionHandler.iconNamesMatch($0, selectedIconItem) }) {
                 iconHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
             }
             iconHandler.setCollectionView(cell.collectionView)
@@ -535,7 +538,7 @@ final class ItemsCollectionViewController: OABaseNavbarViewController {
                 iconHandler.selectedIconColor = selectedIconColor
                 iconHandler.regularIconColor = regularIconColor
                 iconHandler.setScrollDirection(.vertical)
-                if let selectedIconItem, let selectedIndex = iconNames.firstIndex(of: selectedIconItem) {
+                if let selectedIconItem, let selectedIndex = iconNames.firstIndex(where: { IconCollectionHandler.iconNamesMatch($0, selectedIconItem) }) {
                     iconHandler.setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
                 }
                 if collectionType == .iconItems {
@@ -788,7 +791,7 @@ extension ItemsCollectionViewController: OACollectionCellDelegate {
                 
                 for handler in baseIconHandlers.values {
                     if !handler.iconNamesData.isEmpty,
-                       let selectedIndex = handler.iconNamesData[0].firstIndex(of: selectedName) {
+                       let selectedIndex = handler.iconNamesData[0].firstIndex(where: { IconCollectionHandler.iconNamesMatch($0, selectedName) }) {
                         let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
                         handler.setSelectedIndexPath(selectedIndexPath)
                     } else {

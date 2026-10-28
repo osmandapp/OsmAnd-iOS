@@ -11,6 +11,8 @@
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
 #import "OAPOI.h"
+#import "OARenderedObject.h"
+#import "OASvgHelper.h"
 #import "OsmAndApp.h"
 #import "OAEntity.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -47,7 +49,18 @@
     {
         [self commonInit];
 
-        _iconName = [self.class getPoiIconName:poi];
+        if (poi)
+        {
+            _iconName = [self.class getPoiIconName:poi];
+        }
+        else if ([targetObject isKindOfClass:OARenderedObject.class])
+        {
+            OARenderedObject *renderedObject = (OARenderedObject *) targetObject;
+            NSString *iconRes = renderedObject.iconRes;
+            // Map symbols use unprefixed names; resolve their mx_ editor icon as well.
+            if ([OASvgHelper hasMxMapImageNamed:iconRes])
+                _iconName = [iconRes hasPrefix:@"mx_"] ? [iconRes substringFromIndex:3] : iconRes;
+        }
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         _favorite = [[OAFavoriteItem alloc] initWithLat:location.latitude
                                                     lon:location.longitude
@@ -149,9 +162,7 @@
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group
 {
     OAFavoriteItem *comparingPoint = [[OAFavoriteItem alloc] initWithLat:_favorite.getLatitude lon:_favorite.getLongitude name:name category:group];
-    NSDictionary *result = [OAFavoritesHelper checkDuplicates:comparingPoint];
-    [OAFavoritesHelper deleteNewFavoriteItem:comparingPoint];
-    return result;
+    return [OAFavoritesHelper checkDuplicates:comparingPoint];
 }
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint

@@ -7,7 +7,6 @@
 //
 
 #import "OAFavoriteGroupEditorViewController.h"
-#import "MBProgressHUD.h"
 #import "OAFavoritesHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
@@ -18,27 +17,9 @@
 @implementation OAFavoriteGroupEditorViewController
 {
     OAFavoriteGroup *_favoriteGroup;
-    MBProgressHUD *_progressHUD;
 }
 
 #pragma mark - Initialization
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (_progressHUD)
-    {
-        UIWindow *window = self.navigationController.view.window ?: self.view.window;
-        _progressHUD.frame = window.bounds;
-        [window addSubview:_progressHUD];
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [_progressHUD removeFromSuperview];
-}
 
 - (void)postInit
 {
@@ -183,12 +164,6 @@
 {
     [self.view endEditing:YES];
 
-    // Cover the navbar without changing the shared navigation controller's interaction state.
-    UIView *containerView = self.view.window ?: self.view;
-    _progressHUD = [MBProgressHUD showHUDAddedTo:containerView animated:NO];
-    _progressHUD.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _progressHUD.accessibilityViewIsModal = YES;
-
     if (![self.editIconName isEqual:_favoriteGroup.iconName] || (updatePoints && self.editIconName.length == 0))
     {
         [OAFavoritesHelper updateGroup:_favoriteGroup
@@ -209,8 +184,6 @@
 - (void)finishSavingGroup:(BOOL)updatePoints updateGroupValues:(BOOL)updateGroupValues
 {
     [self finishEditingPointsGroup:updatePoints updateGroupValues:updateGroupValues];
-    [_progressHUD hide:NO];
-    _progressHUD = nil;
 
     if ([self.delegate respondsToSelector:@selector(onEditorUpdated)])
         [self.delegate onEditorUpdated];

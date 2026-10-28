@@ -11,7 +11,7 @@ on:
 concurrency:
   group: nightly-ios-ui-tests
   cancel-in-progress: false
-  queue: max
+  queue: single
 
 jobs:
   ui-tests:

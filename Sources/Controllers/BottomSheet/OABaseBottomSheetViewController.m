@@ -11,7 +11,6 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.0
-#define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kButtonsHeightWithoutBottomPadding 51.0
 #define kButtonsNoSafeAreaBottomPadding 9.0
 
@@ -36,6 +35,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     CGFloat _initialTouchPoint;
     BOOL _isDragging;
     BOOL _isHiding;
+    CGSize _lastLayoutSize;
 }
 
 - (instancetype) init
@@ -77,6 +77,11 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 - (void) applyLocalization
 {
     
+}
+
+- (BOOL) usesCenteredLayout
+{
+    return ([self.view isLandscapeInScene] || OAUtilities.isIPad) && ![self.view isWindowedInScene];
 }
 
 - (void)viewDidLoad {
@@ -123,6 +128,17 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self show:self.animateShow];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGSize size = self.view.bounds.size;
+    if (!CGSizeEqualToSize(size, _lastLayoutSize))
+    {
+        _lastLayoutSize = size;
+        [self layoutSubviews];
+    }
+}
+
 - (BOOL) animateShow
 {
     return YES;
@@ -138,12 +154,12 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat)initialHeight
 {
-    return DeviceScreenHeight - DeviceScreenHeight / 4;
+    return [self.view sceneLayoutHeight] - [self.view sceneLayoutHeight] / 4;
 }
 
 - (CGFloat) buttonsViewHeight
 {
-    CGFloat bottomPadding = [OAUtilities getBottomMargin];
+    CGFloat bottomPadding = [self.view sceneBottomInset];
     bottomPadding = bottomPadding == 0 ? kButtonsNoSafeAreaBottomPadding : bottomPadding;
     return kButtonsHeightWithoutBottomPadding + bottomPadding;
 }
@@ -154,7 +170,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
         case EOAScrollableMenuStateInitial:
             return self.initialHeight;
         case EOAScrollableMenuStateFullScreen:
-            return DeviceScreenHeight - OAUtilities.getTopMargin;
+            return [self.view sceneLayoutHeight] - self.view.window.safeAreaInsets.top;
         default:
             return 0.0;
     }
@@ -162,17 +178,17 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) getLandscapeHeight
 {
-    return OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
+    return OAUtilities.isIPad ? [self getViewHeight] : [self.view sceneLayoutHeight];
 }
 
 - (void) adjustFrame
 {
     CGRect f = _bottomSheetView.frame;
-    if (OAUtilities.isLandscapeIpadAware)
+    if ([self usesCenteredLayout])
     {
         f.size.height = [self getLandscapeHeight];
-        f.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
-        f.origin = CGPointMake(DeviceScreenWidth/2 - f.size.width / 2, DeviceScreenHeight - f.size.height);
+        f.size.width = OAUtilities.isIPad ? ([self.view sceneLayoutWidth] / 2) : kOABottomSheetWidth;
+        f.origin = CGPointMake(([self.view sceneLayoutWidth] - f.size.width) / 2, [self.view sceneLayoutHeight] - f.size.height);
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.origin.y = f.size.height - self.buttonsViewHeight;
@@ -188,8 +204,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     else
     {
         f.size.height = [self getViewHeight];
-        f.size.width = OAUtilities.isIPad && !OAUtilities.isWindowed ? kOABottomSheetWidthIPad : DeviceScreenWidth;
-        f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
+        f.size.width = [self.view sceneLayoutWidth];
+        f.origin = CGPointMake(0, [self.view sceneLayoutHeight] - f.size.height);
         
         CGRect buttonsFrame = _buttonsView.frame;
         buttonsFrame.size.height = self.buttonsViewHeight;
@@ -238,31 +254,31 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     if (animated)
     {
         CGRect frame = _bottomSheetView.frame;
-        if (OAUtilities.isLandscapeIpadAware)
+        if ([self usesCenteredLayout])
         {
-            frame.origin.x = DeviceScreenWidth/2 - frame.size.width / 2;
-            frame.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
+            frame.origin.x = ([self.view sceneLayoutWidth] - frame.size.width) / 2;
+            frame.size.width = OAUtilities.isIPad ? ([self.view sceneLayoutWidth] / 2) : kOABottomSheetWidth;
         }
         else
         {
             frame.origin.x = 0.0;
-            frame.size.width = DeviceScreenWidth;
+            frame.size.width = [self.view sceneLayoutWidth];
         }
-        frame.origin.y = DeviceScreenHeight + 10;
+        frame.origin.y = [self.view sceneLayoutHeight] + 10;
         _bottomSheetView.frame = frame;
-        frame.origin.y = DeviceScreenHeight - _bottomSheetView.bounds.size.height;
+        frame.origin.y = [self.view sceneLayoutHeight] - _bottomSheetView.bounds.size.height;
         [UIView animateWithDuration:.3 animations:^{
             _bottomSheetView.frame = frame;
             self.view.backgroundColor = [self getBackgroundColor];
+        } completion:^(BOOL finished) {
+            if (finished)
+                [self layoutSubviews];
         }];
     }
     else
     {
         CGRect frame = _bottomSheetView.frame;
-        if (OAUtilities.isLandscape)
-            frame.origin.y = 0.0;
-        else
-            frame.origin.y = DeviceScreenHeight - _bottomSheetView.bounds.size.height;
+        frame.origin.y = [self.view sceneLayoutHeight] - _bottomSheetView.bounds.size.height;
         _bottomSheetView.frame = frame;
     }
 }
@@ -272,7 +288,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     _isHiding = YES;
     
     CGRect frame = _bottomSheetView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
+    frame.origin.y = [self.view sceneLayoutHeight] + 10.0;
     
     if (animated)
     {
@@ -367,7 +383,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGPoint) calculateInitialPoint
 {
-    return CGPointMake(0., DeviceScreenHeight - [self getViewHeight]);
+    return CGPointMake(0., [self.view sceneLayoutHeight] - [self getViewHeight]);
 }
 
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
@@ -382,7 +398,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     CGPoint touchPoint = [recognizer locationInView:self.view];
     CGPoint initialPoint = [self calculateInitialPoint];
     
-    CGFloat fullScreenAnchor = OAUtilities.getStatusBarHeight + 80.;
+    CGFloat fullScreenAnchor = [self.view sceneStatusBarHeight] + 80.;
     
     switch (recognizer.state)
     {
@@ -395,29 +411,27 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
                 return;
             
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if (_bottomSheetView.frame.origin.y > OAUtilities.getStatusBarHeight
+            if (_bottomSheetView.frame.origin.y > [self.view sceneStatusBarHeight]
                 || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
             {
                 [_tableView setContentOffset:CGPointZero];
             }
             
-            if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
+            if (newY <= [self.view sceneStatusBarHeight] || _tableView.contentOffset.y > 0)
             {
-                newY = OAUtilities.getStatusBarHeight;
+                newY = [self.view sceneStatusBarHeight];
                 if (_tableView.contentOffset.y > 0)
                     _initialTouchPoint = [recognizer locationInView:_bottomSheetView].y;
             }
-            else if (DeviceScreenHeight - newY < _buttonsView.frame.size.height)
+            else if ([self.view sceneLayoutHeight] - newY < _buttonsView.frame.size.height)
             {
                 return;
             }
             
             CGRect frame = _bottomSheetView.frame;
-            frame.origin.y = newY < OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
-            frame.size.height = DeviceScreenHeight - newY;
+            frame.origin.y = newY < [self.view sceneStatusBarHeight] ? [self.view sceneStatusBarHeight] : newY;
+            frame.size.height = [self.view sceneLayoutHeight] - newY;
             _bottomSheetView.frame = frame;
-            
-//            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
             
             CGRect buttonsFrame = _buttonsView.frame;
             buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;
@@ -444,7 +458,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
                 [self hide:YES];
                 break;
             }
-            else if (newY > DeviceScreenHeight - (DeviceScreenHeight - DeviceScreenHeight / 4) + _buttonsView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
+            else if (newY > [self.view sceneLayoutHeight] / 4 + _buttonsView.frame.size.height + _tableView.frame.origin.y && !fastUpSlide)
             {
                 _currentState = EOAScrollableMenuStateInitial;
             }

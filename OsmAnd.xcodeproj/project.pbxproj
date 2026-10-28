@@ -2133,6 +2133,7 @@
 		FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */; };
 		FAA650552ADD42C50020DCEA /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503E2ADD42C40020DCEA /* BLEManager.swift */; };
 		FAA650562ADD42C50020DCEA /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */; };
+		FEAB5BD6C3E04BC3BD862B94 /* UIView+SceneLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60DF8960FA8242459FD5DD0A /* UIView+SceneLayout.swift */; };
 		FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */; };
 		FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650422ADD42C40020DCEA /* GattAttributes.swift */; };
 		FAA650592ADD42C50020DCEA /* BLETemperatureDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */; };
@@ -5679,6 +5680,7 @@
 		FAA6503D2ADD42C40020DCEA /* BLEHeartRateSensor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEHeartRateSensor.swift; sourceTree = "<group>"; };
 		FAA6503E2ADD42C40020DCEA /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		60DF8960FA8242459FD5DD0A /* UIView+SceneLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+SceneLayout.swift"; sourceTree = "<group>"; };
 		FAA650412ADD42C40020DCEA /* BLEHeartRateDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEHeartRateDevice.swift; sourceTree = "<group>"; };
 		FAA650422ADD42C40020DCEA /* GattAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GattAttributes.swift; sourceTree = "<group>"; };
 		FAA650432ADD42C40020DCEA /* BLETemperatureDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLETemperatureDevice.swift; sourceTree = "<group>"; };
@@ -10499,6 +10501,7 @@
 				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 				FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */,
 				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
+				60DF8960FA8242459FD5DD0A /* UIView+SceneLayout.swift */,
 				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
@@ -13680,6 +13683,7 @@
 				B0D61DCAA5D5FFE23DCA2303 /* OAEditWaypointsGroupBottomSheetViewController.mm in Sources */,
 				B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */,
 				FAA650562ADD42C50020DCEA /* UIView+Extension.swift in Sources */,
+				FEAB5BD6C3E04BC3BD862B94 /* UIView+SceneLayout.swift in Sources */,
 				B0D61A9D5A74989254593C0B /* OAEditWaypointsGroupOptionsViewController.mm in Sources */,
 				B0D61C5D43831388AD948812 /* OAQuadItemsWithTitleDescIconCell.mm in Sources */,
 				9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */,

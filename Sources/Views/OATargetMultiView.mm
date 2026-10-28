@@ -18,6 +18,7 @@
 #import "OAMapLayers.h"
 #import "OAUtilities.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointViewCellHeight 60.0
@@ -30,6 +31,12 @@
 @end
 
 @implementation OATargetMultiView
+
+- (UIView *)layoutHostView
+{
+    // The map panel owns this view and provides the bounds of the presenting scene.
+    return self.superview ?: self;
+}
 
 - (instancetype) init
 {
@@ -73,7 +80,9 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    if (OAUtilities.isPortrait || OAUtilities.isIPad)
+    UIWindowScene *scene = self.window.windowScene;
+    BOOL isPortrait = scene ? UIInterfaceOrientationIsPortrait(scene.interfaceOrientation) : OAUtilities.isPortrait;
+    if (isPortrait || OAUtilities.isIPad)
         [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     else
         self.layer.mask = nil;
@@ -105,7 +114,7 @@
         cell = (OATargetPointViewCell *)[nib objectAtIndex:0];
     }
     cell.targetPoint = targetPoint;
-    cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 60, 0., 0.);
+    cell.separatorInset = UIEdgeInsetsMake(0., [[self layoutHostView] sceneLeftInset] + 60, 0., 0.);
     return cell;
 }
 
@@ -153,7 +162,7 @@
 
 - (BOOL) isLandscape
 {
-    return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+    return [[self layoutHostView] sceneLayoutWidth] > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
 - (void) transitionToSize
@@ -166,7 +175,7 @@
     CGRect frame = self.frame;
     if ([self isLandscape])
     {
-        frame.size.height = DeviceScreenHeight;
+        frame.size.height = [[self layoutHostView] sceneLayoutHeight];
         frame.size.width = kInfoViewLanscapeWidth;
         frame.origin.x = -self.bounds.size.width;
         frame.origin.y = 0.0;
@@ -176,11 +185,11 @@
     else
     {
         frame.origin.x = 0.0;
-        frame.origin.y = DeviceScreenHeight + 10.0;
-        frame.size.height = (MIN(self.targetPoints.count, kMaxRowCount) + 1) * kOATargetPointViewCellHeight + [OAUtilities getBottomMargin];
-        frame.size.width = DeviceScreenWidth;
+        frame.origin.y = [[self layoutHostView] sceneLayoutHeight] + 10.0;
+        frame.size.height = (MIN(self.targetPoints.count, kMaxRowCount) + 1) * kOATargetPointViewCellHeight + [[self layoutHostView] sceneBottomInset];
+        frame.size.width = [[self layoutHostView] sceneLayoutWidth];
         self.frame = frame;
-        frame.origin.y = DeviceScreenHeight - frame.size.height;
+        frame.origin.y = [[self layoutHostView] sceneLayoutHeight] - frame.size.height;
     }
     return frame;
 }
@@ -210,15 +219,15 @@
         CGRect frame = self.frame;
         if ([self isLandscape])
         {
-            frame.size.height = DeviceScreenHeight;
+            frame.size.height = [[self layoutHostView] sceneLayoutHeight];
             frame.size.width = kInfoViewLanscapeWidth;
             frame.origin.y = 0.0;
         }
         else
         {
             frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
-            frame.size.width = DeviceScreenWidth;
-            frame.origin.y = DeviceScreenHeight - frame.size.height;
+            frame.size.width = [[self layoutHostView] sceneLayoutWidth];
+            frame.origin.y = [[self layoutHostView] sceneLayoutHeight] - frame.size.height;
         }
         
         self.frame = frame;
@@ -239,7 +248,7 @@
         if ([self isLandscape])
             frame.origin.x = -frame.size.width;
         else
-            frame.origin.y = DeviceScreenHeight + 10.0;
+            frame.origin.y = [[self layoutHostView] sceneLayoutHeight] + 10.0;
         
         if (animated && duration > 0.0)
         {

@@ -717,7 +717,7 @@ static int TILE_SIZE = 256;
             return NO;
         }
         [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx
-                                               gpxFileName:[poi getGpxFileName:nil]
+                                               gpxFileName:[travelGpx getGpxFileName]
                                                     latLon:[poi getLocation]
                                          adjustMapPosition:YES];
         return YES;

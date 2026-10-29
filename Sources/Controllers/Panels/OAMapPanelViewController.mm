@@ -200,6 +200,7 @@ typedef enum
     OACarPlayActiveViewController *_carPlayActiveController;
 
     BOOL _isNewContextMenuStillEnabled;
+    BOOL _planRouteSearchResultMenu;
 
     MBProgressHUD *_gpxProgress;
 
@@ -412,6 +413,11 @@ typedef enum
     return nil;
 }
 
+- (BOOL)planRouteSearchResultMenu
+{
+    return _planRouteSearchResultMenu;
+}
+
 - (void)forceHidePlanRouteIfNeeded
 {
     if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
@@ -442,7 +448,10 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
 
     if ([controller isKindOfClass:PlanRouteScrollableViewController.class])
+    {
         _activeTargetType = OATargetRoutePlanning;
+        _planRouteSearchResultMenu = NO;
+    }
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
@@ -1573,6 +1582,10 @@ typedef enum
           (long)targetPoint.type,
           targetPoint.targetObj ? NSStringFromClass([targetPoint.targetObj class]) : @"none");
     CFTimeInterval targetSetupStartTime = CACurrentMediaTime();
+    // Search results replace the visible planner toolbar with a result card.
+    _planRouteSearchResultMenu = _isNewContextMenuStillEnabled
+        && ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class]
+            || [_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class]);
     _isNewContextMenuStillEnabled = NO;
     
     if (targetPoint.type == OATargetMapillaryImage)

@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) OABaseScrollableHudViewController* scrollableHudViewController;
 @property (nonatomic, readonly, nullable) OABaseScrollableHudViewController* prevScrollableHudViewController;
 @property (nonatomic, readonly, nullable) OABaseScrollableHudViewController *suspendedPlanRouteController;
+@property (nonatomic, readonly) BOOL planRouteSearchResultMenu;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
 @property (nonatomic, readonly, nullable) UIView *shadeView;

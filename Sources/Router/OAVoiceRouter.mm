@@ -606,7 +606,7 @@ std::string preferredLanguage;
         }
         else if (player == nil)
         {
-            pendingCommand = [[OAVoiceCommandPending alloc] initWithType:((!newRoute) ? ROUTE_RECALCULATED : ROUTE_CALCULATED) voiceRouter:self];
+            pendingCommand = [[OAVoiceCommandPending alloc] initWithType:(newRoute ? ROUTE_CALCULATED : ROUTE_RECALCULATED) voiceRouter:self];
         }
     }
     if (newRoute)

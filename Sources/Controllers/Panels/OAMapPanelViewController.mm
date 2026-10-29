@@ -1519,6 +1519,10 @@ typedef enum
 
 - (BOOL)canPresentNewContextMenu
 {
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class]
+        && ((PlanRouteScrollableViewController *)_scrollableHudViewController).isSaving)
+        return NO;
+
     return !self.isNewContextMenuDisabled || _activeTargetType == OATargetGPX;
 }
 

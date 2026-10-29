@@ -20,6 +20,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let sheetAnimationDuration: TimeInterval = 0.3
     private static let sheetFlingVelocityThresholdPointsPerSecond: CGFloat = 800
 
+    @objc private(set) var isSaving = false
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
     }
@@ -69,7 +71,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
     private var isClosing = false
-    private var isSaving = false
     private var isMapCursorSuspended = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?

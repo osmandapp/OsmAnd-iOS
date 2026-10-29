@@ -1120,20 +1120,21 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             NSInteger last = group.points.lastObject.globalIndex;
             if (from < first || from > last || to < first || to > last)
                 continue;
-            if (![group.profilePointIndexes containsObject:@(from)] || ![group.profilePointIndexes containsObject:@(to)])
-                return NO;
-            NSString *modeKey = (group.appMode ?: OAApplicationMode.DEFAULT).stringKey;
-            for (NSNumber *index in @[@(from), @(to)])
-            {
-                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:points[index.integerValue].getProfileType
-                                                                        def:OAApplicationMode.DEFAULT];
-                if (![mode.stringKey isEqualToString:modeKey])
-                    return NO;
-            }
-            return YES;
+            return [self canMovePointAtIndex:from inGroup:group points:points]
+                && [self canMovePointAtIndex:to inGroup:group points:points];
         }
     }
     return NO;
+}
+
+- (BOOL)canMovePointAtIndex:(NSInteger)index inGroup:(PlanRouteGroupData *)group points:(NSArray<OASWptPt *> *)points
+{
+    if (points[index].isGap || ![group.profilePointIndexes containsObject:@(index)])
+        return NO;
+    NSString *modeKey = (group.appMode ?: OAApplicationMode.DEFAULT).stringKey;
+    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:points[index].getProfileType
+                                                            def:OAApplicationMode.DEFAULT];
+    return [mode.stringKey isEqualToString:modeKey];
 }
 
 - (void)movePointFrom:(NSInteger)from to:(NSInteger)to
@@ -2264,33 +2265,47 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             || (points[index].isGap && offset < indexes.count - 1))
             return;
     }
-    NSUInteger sortableCount = indexes.count;
-    if (points[indexes.lastObject.integerValue].isGap)
-        sortableCount--;
-    if (sortableCount < 3)
-        return;
-    [self invalidateTerrainElevationGpx];
-    NSMutableArray<NSNumber *> *remaining = [NSMutableArray arrayWithArray:[indexes subarrayWithRange:NSMakeRange(1, sortableCount - 1)]];
-    NSMutableArray<NSNumber *> *ordered = [NSMutableArray arrayWithObject:indexes.firstObject];
-    NSInteger currentIndex = indexes.firstObject.integerValue;
-    while (remaining.count > 0)
+    NSMutableArray<NSNumber *> *ordered = [indexes mutableCopy];
+    NSInteger lastIndex = indexes.lastObject.integerValue;
+    for (PlanRouteSegmentData *segment in [self buildSegments])
     {
-        NSInteger bestPosition = 0;
-        double bestDistance = DBL_MAX;
-        for (NSInteger i = 0; i < (NSInteger) remaining.count; i++)
+        for (PlanRouteGroupData *group in segment.groups)
         {
-            double dist = [self distanceFrom:points[currentIndex] to:points[remaining[i].integerValue]];
-            if (dist < bestDistance)
+            NSMutableArray<NSNumber *> *remaining = [NSMutableArray array];
+            for (PlanRoutePointData *point in group.points)
             {
-                bestDistance = dist;
-                bestPosition = i;
+                NSInteger index = point.globalIndex;
+                if (index > baseIndex && index <= lastIndex
+                    && [self canMovePointAtIndex:index inGroup:group points:points])
+                    [remaining addObject:@(index)];
+            }
+            if (remaining.count < 2)
+                continue;
+            NSInteger target = remaining.firstObject.integerValue - baseIndex;
+            NSInteger currentIndex = remaining.firstObject.integerValue - 1;
+            while (remaining.count > 0)
+            {
+                NSInteger bestPosition = 0;
+                double bestDistance = DBL_MAX;
+                for (NSInteger index = 0; index < (NSInteger)remaining.count; index++)
+                {
+                    double distance = [self distanceFrom:points[currentIndex] to:points[remaining[index].integerValue]];
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestPosition = index;
+                    }
+                }
+                NSNumber *next = remaining[bestPosition];
+                [remaining removeObjectAtIndex:bestPosition];
+                ordered[target++] = next;
+                currentIndex = next.integerValue;
             }
         }
-        NSNumber *next = remaining[bestPosition];
-        [remaining removeObjectAtIndex:bestPosition];
-        [ordered addObject:next];
-        currentIndex = next.integerValue;
     }
+    if ([ordered isEqualToArray:indexes])
+        return;
+    [self invalidateTerrainElevationGpx];
 
     NSInteger base = indexes.firstObject.integerValue;
     NSMutableArray<NSNumber *> *currentOrder = [NSMutableArray arrayWithCapacity:points.count];

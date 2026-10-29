@@ -260,6 +260,110 @@
     XCTAssertEqual(self.context.getPoints[3], self.original[3]);
 }
 
+- (void)verifySortWithProfiles:(NSArray<NSString *> *)profiles
+                    latitudes:(NSArray<NSNumber *> *)latitudes
+                 pointIndexes:(NSArray<NSNumber *> *)pointIndexes
+                expectedOrder:(NSArray<NSNumber *> *)expectedOrder
+{
+    NSMutableArray<OASWptPt *> *points = [NSMutableArray array];
+    NSMutableArray<OASWptPt *> *expected = [NSMutableArray array];
+    for (NSInteger index = 0; index < profiles.count; index++)
+    {
+        OASWptPt *point = [[OASWptPt alloc] init];
+        point.lat = latitudes[index].doubleValue;
+        point.lon = 20;
+        if ([profiles[index] isEqualToString:@"gap"])
+            [point setGap];
+        else
+            [point setProfileTypeProfileType:profiles[index]];
+        [points addObject:point];
+    }
+    for (NSNumber *index in expectedOrder)
+        [expected addObject:points[index.integerValue]];
+    [self.context setPoints:points];
+    NSArray *originalProfiles = [self profiles:points];
+    [self.bridge sortSegmentDoorToDoorWithPointIndexes:pointIndexes];
+    XCTAssertEqualObjects(self.context.getPoints, expected);
+    XCTAssertEqualObjects([self profiles:self.context.getPoints], originalProfiles);
+    for (NSInteger cycle = 0; cycle < 2; cycle++)
+    {
+        for (NSInteger step = 0; step < points.count && self.context.commandManager.canUndo; step++)
+        {
+            [self.bridge undo];
+            XCTAssertEqualObjects([self profiles:self.context.getPoints], originalProfiles);
+        }
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        XCTAssertEqualObjects(self.context.getPoints, points);
+        for (NSInteger step = 0; step < points.count && self.context.commandManager.canRedo; step++)
+        {
+            [self.bridge redo];
+            XCTAssertEqualObjects([self profiles:self.context.getPoints], originalProfiles);
+        }
+        XCTAssertFalse(self.context.commandManager.canRedo);
+        XCTAssertEqualObjects(self.context.getPoints, expected);
+    }
+}
+
+- (void)testSortWithinProfileGroupsKeepsTransitionsAndDifferentNextProfile
+{
+    [self verifySortWithProfiles:@[@"", @"", @"", @"", @"bicycle", @"bicycle", @"bicycle", @"bicycle", @"bicycle", @"pedestrian"]
+                      latitudes:@[@50, @50.03, @50.02, @50.01, @50.04, @50.07, @50.06, @50.05, @50.08, @50.00001]
+                   pointIndexes:@[@0, @1, @2, @3, @4, @5, @6, @7, @8, @9]
+                  expectedOrder:@[@0, @3, @2, @1, @4, @7, @6, @5, @8, @9]];
+    XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+}
+
+- (void)testSortDoesNotCombineSeparateGroupsWithTheSameProfile
+{
+    [self verifySortWithProfiles:@[@"", @"", @"", @"bicycle", @"bicycle", @"bicycle", @"", @"", @"", @""]
+                      latitudes:@[@50, @50.02, @50.01, @50.03, @50.05, @50.04, @50.06, @50.00001, @50.00002, @50.00003]
+                   pointIndexes:@[@0, @1, @2, @3, @4, @5, @6, @7, @8, @9]
+                  expectedOrder:@[@0, @2, @1, @3, @5, @4, @6, @9, @8, @7]];
+    XCTAssertEqual(self.segments.firstObject.groups.count, 3);
+}
+
+- (void)testSortSelectedGroupKeepsItsFirstPointAndOtherGroups
+{
+    [self verifySortWithProfiles:@[@"", @"", @"", @"", @"bicycle", @"bicycle", @"bicycle", @"bicycle", @"bicycle", @"pedestrian"]
+                      latitudes:@[@50, @50.03, @50.02, @50.01, @50.04, @50.05, @50.08, @50.07, @50.06, @50.050001]
+                   pointIndexes:@[@5, @6, @7, @8, @9]
+                  expectedOrder:@[@0, @1, @2, @3, @4, @5, @8, @7, @6, @9]];
+}
+
+- (void)testSortMixedProfileSegmentKeepsGapAndNeighbourSegment
+{
+    [self verifySortWithProfiles:@[@"", @"", @"", @"bicycle", @"bicycle", @"bicycle", @"gap", @"pedestrian", @"pedestrian", @"pedestrian"]
+                      latitudes:@[@50, @50.02, @50.01, @50.03, @50.05, @50.04, @50.00001, @50.00002, @50.00003, @50.00004]
+                   pointIndexes:@[@0, @1, @2, @3, @4, @5, @6]
+                  expectedOrder:@[@0, @2, @1, @3, @5, @4, @6, @7, @8, @9]];
+    XCTAssertEqual(self.segments.count, 2);
+    XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+    XCTAssertTrue(self.context.getPoints[6].isGap);
+}
+
+- (void)testSortSingleProfileCanMoveDestinationWithMatchingNextProfile
+{
+    [self verifySortWithProfiles:@[@"bicycle", @"bicycle", @"bicycle", @"bicycle"]
+                      latitudes:@[@50, @50.03, @50.02, @50.01]
+                   pointIndexes:@[@0, @1, @2, @3]
+                  expectedOrder:@[@0, @3, @2, @1]];
+}
+
+- (void)testSortInvalidRangesAndFixedGroupsPreservesRedo
+{
+    [self prepareTenPointRoute];
+    [self.bridge movePointFrom:1 to:2];
+    [self.bridge undo];
+    NSArray *original = [self latitudes:self.context.getPoints];
+    for (NSArray<NSNumber *> *indexes in @[@[], @[@0, @1], @[@-1, @0, @1], @[@0, @2, @3], @[@7, @8, @99], @[@3, @4, @5]])
+    {
+        [self.bridge sortSegmentDoorToDoorWithPointIndexes:indexes];
+        [self assertFinishedPoints:original];
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        XCTAssertTrue(self.context.commandManager.canRedo);
+    }
+}
+
 - (void)verifyMenuInsertionBefore:(BOOL)before index:(NSInteger)index gap:(BOOL)gap
 {
     [self prepareThreeProfileRoute];

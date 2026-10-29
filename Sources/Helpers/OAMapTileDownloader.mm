@@ -16,6 +16,7 @@
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -260,7 +261,7 @@
             return NO;
     }
 
-    return [[[NSFileManager defaultManager] attributesOfItemAtPath:location.path error:nil] fileSize] > 0;
+    return OsmAnd::SkiaUtilities::createImageFromFile(QFileInfo(QString::fromNSString(location.path))) != nullptr;
 }
 
 - (void)onTileFailed
@@ -278,7 +279,10 @@
 - (void) downloadTile:(NSURL *)url toPath:(NSString *)path
 {
     _activeDownloads++;
-    NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *userAgent = _onlineSource->userAgent.toNSString();
+    [request addValue:userAgent.length > 0 ? userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
+    NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (_cancelled)
             return;
 

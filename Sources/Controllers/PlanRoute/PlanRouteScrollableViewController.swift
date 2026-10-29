@@ -1227,15 +1227,17 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func beginSaving() {
         isSaving = true
+        view.isUserInteractionEnabled = false
         savingProgressView.frame = view.bounds
         savingProgressView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        savingProgressView.isUserInteractionEnabled = true
+        savingProgressView.isUserInteractionEnabled = false
         view.addSubview(savingProgressView)
         savingProgressView.startAnimating()
     }
 
     private func finishSaving() {
         isSaving = false
+        view.isUserInteractionEnabled = !isClosing
         savingProgressView.stopAnimating()
         savingProgressView.removeFromSuperview()
     }

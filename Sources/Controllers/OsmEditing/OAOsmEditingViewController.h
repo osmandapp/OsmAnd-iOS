@@ -49,7 +49,7 @@
          poiData:(OAEditPOIData *)poiData
      editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
   closeChangeSet:(BOOL)closeChangeset
-showContextMenuAfterSave:(BOOL)showContextMenuAfterSave;
+     interactive:(BOOL)interactive;
 
 -(id) initWithLat:(double)latitude lon:(double)longitude;
 -(id) initWithEntity:(OAEntity *)entity;

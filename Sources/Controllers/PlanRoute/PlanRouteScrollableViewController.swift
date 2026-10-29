@@ -692,18 +692,13 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func presentChangeRouteType(before pointIndex: Int) {
         let segments = dataProvider.routeSegments
         guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
-        let groupIndex = segment.groups.firstIndex(where: { $0.lastPointIndex == group.lastPointIndex }) ?? 0
-        if groupIndex > 0 {
-            let prevGroup = segment.groups[groupIndex - 1]
-            presentSettingsForContext(.profileGroup(prevGroup, segment: segment))
-        } else {
-            presentSettingsForContext(.profileGroup(group, segment: segment), applyUpToPointIndex: pointIndex)
-        }
+        presentSettingsForContext(.profileGroup(group, segment: segment), applyUpToPointIndex: pointIndex)
     }
 
     private func presentChangeRouteType(after pointIndex: Int) {
         let segments = dataProvider.routeSegments
-        guard let (segment, group, _) = findPointContext(index: pointIndex, in: segments) else { return }
+        guard let (segment, _, _) = findPointContext(index: pointIndex, in: segments),
+              let group = segment.profileGroup(forLegStartingAt: pointIndex) else { return }
         presentSettingsForContext(.profileGroup(group, segment: segment), applyFromPointIndex: pointIndex)
     }
 

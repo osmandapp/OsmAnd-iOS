@@ -100,6 +100,8 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     NSString *xml = [[OASPlatformUtil.shared getOsmAndContext] getAssetAsStringName:@"poi_types.xml"];
     OASMapPoiTypes *types = [[OASMapPoiTypes alloc] initWithResourceName:nil];
     [types doInitFromStringXml:xml];
+    // the phrases are handed over: this runs inside the first sharedInstance, which the translator cannot call
+    [types setPoiTranslatorPoiTranslator:[[SharedPoiTranslator alloc] initWithPhrases:_phrases enPhrases:_phrasesEN poiTypes:types]];
     [OASMapPoiTypes.companion setDefaultTypes:types];
     _kPoiTypes = types;
 }
@@ -218,7 +220,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     }
 }
 
-- (NSDictionary *) loadPhraseFileForLanguage:(NSString *)langguageCode
++ (NSDictionary<NSString *, NSString *> *) loadPhraseFileForLanguage:(NSString *)langguageCode
 {
     NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:[NSString stringWithFormat:@"phrases/%@", langguageCode]];
 
@@ -236,19 +238,19 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     if (!_phrases)
     {
         NSString *fullLanguageCode = [[NSLocale preferredLanguages] firstObject];
-        _phrases = [self loadPhraseFileForLanguage:fullLanguageCode];
+        _phrases = [self.class loadPhraseFileForLanguage:fullLanguageCode];
         
         if (!_phrases)
         {
             NSLog(@"ERROR: Not found phrases translation file at path: %@", [NSString stringWithFormat:@"phrases/%@/phrases.xml", fullLanguageCode]);
             NSString *primaryLanguageCode = [OAUtilities currentLang];
-            _phrases = [self loadPhraseFileForLanguage:primaryLanguageCode];
+            _phrases = [self.class loadPhraseFileForLanguage:primaryLanguageCode];
         }
     }
     
     if (!_phrasesEN)
     {
-        _phrasesEN = [self loadPhraseFileForLanguage:@"en"];
+        _phrasesEN = [self.class loadPhraseFileForLanguage:@"en"];
     }
 
     if (_phrases.count > 0)

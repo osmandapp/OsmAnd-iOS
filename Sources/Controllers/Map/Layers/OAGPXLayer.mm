@@ -1909,6 +1909,48 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
+// Use displayed track geometry when comparing navigation candidates with POIs and Favorites.
+- (CLLocation *)nearestLocationOnTrack:(id)track toLocation:(CLLocation *)location
+{
+    OASGpxFile *gpxFile = nil;
+    BOOL joinSegments = NO;
+    if ([track isKindOfClass:OASGpxDataItem.class])
+    {
+        OASGpxDataItem *item = track;
+        NSString *path = item.file.absolutePath;
+        gpxFile = _cachedTracks[path][@"gpxFile"] ?: [OASelectedGPXHelper.instance getGpxFileFor:path];
+        joinSegments = item.joinSegments;
+    }
+    else if ([track isKindOfClass:OASGpxFile.class])
+    {
+        gpxFile = track;
+        joinSegments = [OAAppSettings.sharedManager.currentTrackIsJoinSegments get];
+    }
+
+    CLLocation *nearestLocation = nil;
+    CLLocationDistance minDistance = DBL_MAX;
+    for (OASTrkSegment *segment in [gpxFile getPointsToDisplayWithIsJoinSegments:joinSegments])
+    {
+        CLLocation *previousLocation = nil;
+        for (OASWptPt *point in segment.points)
+        {
+            CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
+            if (previousLocation)
+            {
+                CLLocation *projection = [OAMapUtils getProjection:location fromLocation:previousLocation toLocation:pointLocation];
+                CLLocationDistance distance = [projection distanceFromLocation:location];
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestLocation = projection;
+                }
+            }
+            previousLocation = pointLocation;
+        }
+    }
+    return nearestLocation;
+}
+
 - (NSArray<OASWptPt *> *)findLineInPolygon31:(QList<OsmAnd::PointI>)polygon31 points:(NSArray<OASWptPt *> *)points
 {
     if (points.count < 2)

@@ -452,26 +452,57 @@
     return targetPoint;
 }
 
-- (OATargetPoint *)favoriteTargetPointAt:(CGPoint)touchPoint
+- (OATargetPoint *)navigationTargetPointAt:(CGPoint)touchPoint
 {
-    OAFavoritesLayer *favoritesLayer = self.mapViewController.mapLayers.favoritesLayer;
-    MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:touchPoint];
-    [favoritesLayer collectObjectsFromPoint:result unknownLocation:NO excludeUntouchableObjects:NO];
+    MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:NO];
 
-    SelectedMapObject *closestFavorite = nil;
+    OATargetPoint *closestTargetPoint = nil;
     CLLocationDistance minDistance = DBL_MAX;
-    for (SelectedMapObject *selectedObject in result.allObjects)
+    for (SelectedMapObject *selectedObject in [result getProcessedObjects])
     {
-        CLLocation *location = [favoritesLayer getObjectLocation:selectedObject.object];
+        id<OAContextMenuProvider> provider = selectedObject.provider ?: self.mapViewController.mapLayers.poiLayer;
+        // Grouping can assign the POI provider to an unmerged transport stop.
+        if ([selectedObject.object isKindOfClass:OATransportStop.class])
+            provider = self.mapViewController.mapLayers.transportStopsLayer;
+
+        OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object touchLocation:result.pointLatLon];
+        if (!targetPoint || targetPoint.type == OATargetMapDownload)
+            continue;
+
+        CLLocation *location;
+        if (targetPoint.type == OATargetGPX && [provider isKindOfClass:OAGPXLayer.class])
+        {
+            location = [(OAGPXLayer *)provider nearestLocationOnTrack:selectedObject.object toLocation:result.pointLatLon];
+            if (!location)
+                continue;
+        }
+        else
+        {
+            location = [provider getObjectLocation:selectedObject.object];
+        }
+        if (location)
+            targetPoint.location = location.coordinate;
+        else
+            location = [[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude];
+
         CLLocationDistance distance = [location distanceFromLocation:result.pointLatLon];
         if (distance < minDistance)
         {
             minDistance = distance;
-            closestFavorite = selectedObject;
+            closestTargetPoint = targetPoint;
+            if (targetPoint.title.length == 0)
+            {
+                targetPoint.title = [provider getObjectName:selectedObject.object].name;
+                if (targetPoint.title.length == 0 && [selectedObject.object isKindOfClass:OARenderedObject.class])
+                {
+                    RenderedObjectAmenityProvider *amenityProvider = [[RenderedObjectAmenityProvider alloc] initWithDetailsObject:nil renderedObject:selectedObject.object];
+                    targetPoint.title = [amenityProvider nameOnlyString];
+                }
+            }
         }
     }
 
-    return closestFavorite ? [favoritesLayer getTargetPoint:closestFavorite.object touchLocation:result.pointLatLon] : nil;
+    return closestTargetPoint;
 }
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
@@ -479,10 +510,10 @@
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     if (showUnknownLocation || [mapPanel isSelectingNavigationPoint])
     {
-        // A tap on a Favorite preserves its name and coordinates when selecting a navigation point.
-        // Long presses and other navigation selections use the touched location for address lookup.
+        // A tap selects the nearest map object's name and coordinates for navigation.
+        // Long presses and taps on empty map areas use the touched location for address lookup.
         [OsmAndApp instance].mapMode = OAMapModeFree;
-        OATargetPoint *targetPoint = showUnknownLocation ? nil : [self favoriteTargetPointAt:touchPoint];
+        OATargetPoint *targetPoint = showUnknownLocation ? nil : [self navigationTargetPointAt:touchPoint];
         if (!targetPoint)
         {
             CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];

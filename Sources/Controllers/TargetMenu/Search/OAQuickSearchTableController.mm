@@ -218,7 +218,7 @@
             }
         }
 
-        if (nameMatchCount == 1 || (nameMatchCount == 0 && locationMatchCount == 1))
+        if (nameMatchCount == 1 || (nameMatchCount == 0 && locationMatchCount == 1 && [locationMatch isSpecialPoint]))
         {
             [[OARootViewController instance].mapPanel openTargetViewWithFavorite:(nameMatch ?: locationMatch) pushed:NO saveState:NO];
             originFound = YES;

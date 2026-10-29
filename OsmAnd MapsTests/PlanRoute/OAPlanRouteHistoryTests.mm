@@ -10,6 +10,7 @@
 #import "OAAddPointCommand.h"
 #import "OARoadSegmentData.h"
 #import "OARemovePointCommand.h"
+#import "OARemovePointsCommand.h"
 #import "OASplitPointsCommand.h"
 #import "OAReversePointsCommand.h"
 #import "OAJoinPointsCommand.h"
@@ -1198,6 +1199,228 @@
     XCTAssertFalse(self.context.getPoints[2].isGap);
     XCTAssertTrue(self.context.getPoints[3].isGap);
     [self assertFinishedPoints:[self latitudes:self.original]];
+}
+
+- (void)verifyDeletionHistoryWithOriginalPoints:(NSArray<NSNumber *> *)originalPoints
+                                      profiles:(NSArray<NSString *> *)originalProfiles
+                                       appMode:(OAApplicationMode *)originalMode
+{
+    NSArray *deletedPoints = [self latitudes:self.context.getPoints];
+    NSArray *deletedProfiles = [self profiles:self.context.getPoints];
+    OAApplicationMode *deletedMode = self.context.appMode;
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        [self.bridge undo];
+        [self assertFinishedPoints:originalPoints];
+        XCTAssertEqualObjects([self profiles:self.context.getPoints], originalProfiles);
+        XCTAssertEqual(self.context.appMode, originalMode);
+        XCTAssertFalse(self.context.commandManager.canUndo);
+        [self.bridge redo];
+        [self assertFinishedPoints:deletedPoints];
+        XCTAssertEqualObjects([self profiles:self.context.getPoints], deletedProfiles);
+        XCTAssertEqual(self.context.appMode, deletedMode);
+    }
+}
+
+- (void)testDeletingMiddleProfileGroupExtendsPreviousGroup
+{
+    [self prepareThreeProfileRoute];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@2, @3]];
+    [self assertFinishedPoints:@[originalPoints[0], originalPoints[1], originalPoints[4], originalPoints[5]]];
+    XCTAssertEqualObjects([self profiles:self.context.getPoints], (@[@"", @"", OAApplicationMode.PEDESTRIAN.stringKey, OAApplicationMode.CAR.stringKey]));
+    XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+    XCTAssertNil(self.segments.firstObject.groups[0].appMode);
+    XCTAssertEqual(self.segments.firstObject.groups[0].points.count, 3);
+    XCTAssertEqual(self.segments.firstObject.groups[1].appMode, OAApplicationMode.PEDESTRIAN);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingLastProfileGroupUpdatesContinuationAndHistory
+{
+    [self prepareThreeProfileRoute];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@4, @5]];
+    [self assertFinishedPoints:[originalPoints subarrayWithRange:NSMakeRange(0, 4)]];
+    XCTAssertEqualObjects([self profiles:self.context.getPoints], (@[@"", OAApplicationMode.BICYCLE.stringKey, OAApplicationMode.BICYCLE.stringKey, OAApplicationMode.BICYCLE.stringKey]));
+    XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.BICYCLE);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+    [self addPointNumber:0];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqual(self.segments.firstObject.groups.lastObject.appMode, OAApplicationMode.BICYCLE);
+}
+
+- (void)testDeletingFirstProfileGroupPreservesFollowingLegs
+{
+    [self prepareThreeProfileRoute];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@0, @1]];
+    [self assertFinishedPoints:[originalPoints subarrayWithRange:NSMakeRange(2, 4)]];
+    XCTAssertEqualObjects([self profiles:self.context.getPoints], [originalProfiles subarrayWithRange:NSMakeRange(2, 4)]);
+    XCTAssertEqual(self.segments.firstObject.groups.firstObject.appMode, OAApplicationMode.BICYCLE);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingPointsWithoutGroupModePreservesBoundaryProfile
+{
+    [self prepareThreeProfileRoute];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    OARemovePointsCommand *command = [[OARemovePointsCommand alloc] initWithLayer:self.layer positions:@[@2, @3]];
+    XCTAssertTrue([self.context.commandManager execute:command]);
+    XCTAssertEqualObjects(self.context.getPoints[1].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqual(self.segments.firstObject.groups.count, 3);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingPartialLastGroupSynchronizesContinuation
+{
+    [self prepareThreeProfileRoute];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@5]];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.PEDESTRIAN);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+    [self addPointNumber:0];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+}
+
+- (void)testDeletingLastSegmentAfterGapPreservesContinuationAndHistory
+{
+    [self prepareThreeProfileRoute];
+    [self.original[3] setGap];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@4, @5]];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+    [self addPointNumber:0];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.CAR.stringKey);
+    XCTAssertEqual(self.segments.count, 2);
+}
+
+- (void)testDeletingSingleLegProfileGroupRemovesItsType
+{
+    [self prepareThreeProfileRoute];
+    [self.original[2] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@2]];
+    XCTAssertFalse(self.context.getPoints[1].hasProfile);
+    XCTAssertEqual(self.segments.firstObject.groups.count, 2);
+    XCTAssertNil(self.segments.firstObject.groups.firstObject.appMode);
+    XCTAssertEqual(self.segments.firstObject.groups.lastObject.appMode, OAApplicationMode.PEDESTRIAN);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingPointInsideSectionPreservesPreviousOutgoingType
+{
+    [self prepareThreeProfileRoute];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deletePointAtIndex:2];
+    XCTAssertEqualObjects(self.context.getPoints[1].getProfileType, OAApplicationMode.BICYCLE.stringKey);
+    XCTAssertEqual(self.segments.firstObject.groups.count, 3);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingProfileGroupEndingAtGapPreservesSegments
+{
+    [self prepareThreeProfileRoute];
+    [self.original[3] setGap];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@2, @3]];
+    XCTAssertTrue(self.context.getPoints[1].isGap);
+    XCTAssertEqual(self.segments.count, 2);
+    XCTAssertEqual(self.segments.lastObject.groups.firstObject.appMode, OAApplicationMode.PEDESTRIAN);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingFirstProfileGroupAfterGapKeepsPreviousSegment
+{
+    [self prepareThreeProfileRoute];
+    [self.original[1] setGap];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deleteSegmentWithPointIndexes:@[@2, @3]];
+    XCTAssertTrue(self.context.getPoints[1].isGap);
+    XCTAssertFalse(self.context.getPoints[0].hasProfile);
+    XCTAssertEqual(self.segments.count, 2);
+    XCTAssertEqualObjects(self.context.getPoints[2].getProfileType, OAApplicationMode.PEDESTRIAN.stringKey);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+}
+
+- (void)testDeletingDestinationSynchronizesContinuationAndHistory
+{
+    for (OAApplicationMode *mode in @[OAApplicationMode.DEFAULT, OAApplicationMode.BICYCLE])
+    {
+        [self prepareThreeProfileRoute];
+        [self.context setPoints:[self.original subarrayWithRange:NSMakeRange(0, 3)]];
+        if (mode == OAApplicationMode.DEFAULT)
+            [self.original[1] removeProfileType];
+        else
+            [self.original[1] setProfileTypeProfileType:mode.stringKey];
+        [self.original[2] setProfileTypeProfileType:OAApplicationMode.CAR.stringKey];
+        NSArray *originalPoints = [self latitudes:self.context.getPoints];
+        NSArray *originalProfiles = [self profiles:self.context.getPoints];
+        [self.bridge deletePointAtIndex:2];
+        XCTAssertEqual(self.context.appMode, mode);
+        [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+        [self addPointNumber:0];
+        XCTAssertEqual([OAApplicationMode valueOfStringKey:self.context.getPoints.lastObject.getProfileType def:OAApplicationMode.DEFAULT], mode);
+        [self.bridge undo];
+        [self.bridge undo];
+    }
+}
+
+- (void)testDeletingDestinationAfterGapPreservesPendingContinuation
+{
+    [self prepareThreeProfileRoute];
+    [self.context setPoints:[self.original subarrayWithRange:NSMakeRange(0, 3)]];
+    [self.original[1] setGap];
+    [self.original[2] setProfileTypeProfileType:OAApplicationMode.CAR.stringKey];
+    NSArray *originalPoints = [self latitudes:self.context.getPoints];
+    NSArray *originalProfiles = [self profiles:self.context.getPoints];
+    [self.bridge deletePointAtIndex:2];
+    XCTAssertTrue(self.context.getPoints.lastObject.isGap);
+    XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+    [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+    [self addPointNumber:0];
+    XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.CAR.stringKey);
+    XCTAssertEqual(self.segments.count, 2);
+}
+
+- (void)testDeletingAllPointsPreservesContinuation
+{
+    for (BOOL batch : {NO, YES})
+    {
+        [self prepareThreeProfileRoute];
+        [self.context setPoints:@[self.original[5]]];
+        NSArray *originalPoints = [self latitudes:self.context.getPoints];
+        NSArray *originalProfiles = [self profiles:self.context.getPoints];
+        if (batch)
+            [self.bridge deleteSegmentWithPointIndexes:@[@0]];
+        else
+            [self.bridge deletePointAtIndex:0];
+        XCTAssertEqual(self.context.getPointsCount, 0);
+        XCTAssertEqual(self.context.appMode, OAApplicationMode.CAR);
+        [self verifyDeletionHistoryWithOriginalPoints:originalPoints profiles:originalProfiles appMode:OAApplicationMode.CAR];
+        [self addPointNumber:0];
+        XCTAssertEqualObjects(self.context.getPoints.lastObject.getProfileType, OAApplicationMode.CAR.stringKey);
+        [self.bridge undo];
+        [self.bridge undo];
+    }
 }
 
 - (void)testDeletingFirstSegmentIsOneUndoStep

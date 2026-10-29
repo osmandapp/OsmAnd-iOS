@@ -1168,8 +1168,26 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
         return;
+    OAApplicationMode *previousGroupMode = nil;
+    NSSet<NSNumber *> *deletedIndexes = [NSSet setWithArray:indexes];
+    for (PlanRouteSegmentData *segment in [self buildSegments])
+    {
+        for (NSUInteger groupIndex = 1; groupIndex < segment.groups.count; groupIndex++)
+        {
+            PlanRouteGroupData *group = segment.groups[groupIndex];
+            if (group.points.count != deletedIndexes.count)
+                continue;
+            NSUInteger unmatchedPoint = [group.points indexOfObjectPassingTest:^BOOL(PlanRoutePointData *point, NSUInteger index, BOOL *stop) {
+                return ![deletedIndexes containsObject:@(point.globalIndex)];
+            }];
+            if (unmatchedPoint == NSNotFound)
+                previousGroupMode = segment.groups[groupIndex - 1].appMode ?: OAApplicationMode.DEFAULT;
+        }
+    }
     [self invalidateTerrainElevationGpx];
-    [ctx.commandManager execute:[[OARemovePointsCommand alloc] initWithLayer:layer positions:indexes]];
+    [ctx.commandManager execute:[[OARemovePointsCommand alloc] initWithLayer:layer
+                                                               positions:indexes
+                                                       previousGroupMode:previousGroupMode]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();

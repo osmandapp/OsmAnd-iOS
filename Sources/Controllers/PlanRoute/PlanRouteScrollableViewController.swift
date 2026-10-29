@@ -278,7 +278,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupRouteTypeButton()
         setupCrosshair()
         applyLayoutMode(for: view.bounds.size)
-#if OSMAND_UI_TESTING
+#if DEBUG
         setupUITestStateIfNeeded()
 #endif
         dayNightObserver = OAAutoObserverProxy(self,
@@ -1563,7 +1563,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         present(alert, animated: true)
     }
 
-#if OSMAND_UI_TESTING
+#if DEBUG
     private func setupUITestStateIfNeeded() {
         guard UITestState.isPlanRouteHistoryEnabled else { return }
         let stateView = PlanRouteUITestStateView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))

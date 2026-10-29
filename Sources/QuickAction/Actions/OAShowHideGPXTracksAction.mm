@@ -13,6 +13,7 @@
 #import "OAObservable.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -33,7 +34,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"show_gpx")]
                nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
-              iconName:@"ic_custom_trip"]
+              iconName:ACImageNameIcCustomTrip]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }

@@ -33,7 +33,16 @@
 - (void)setUp {
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
-    initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
+    XCTAssertNotNil(obfFilePath, @"Turn_lanes_test.obf is missing from %@", bundle.bundlePath);
+    if (!obfFilePath)
+        return;
+    auto mapFile = initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
+    XCTAssertTrue(mapFile != nullptr, @"Could not open routing fixture at %@", obfFilePath);
+    if (!mapFile)
+        return;
+    for (NSString *path in [bundle pathsForResourcesOfType:@"obf" inDirectory:@"test-resources/turn_lanes"])
+        XCTAssertTrue(initBinaryMapFile(string(path.UTF8String), true, true) != nullptr,
+                      @"Could not open routing fixture at %@", path);
 
     _fe = std::make_shared<RoutePlannerFrontEnd>();
 }
@@ -44,6 +53,8 @@
 
 - (void)testTurnLanes
 {
+    if (!_fe)
+        return; // setUp has already reported the missing fixture
     NSString *jsonFilePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"test_turn_lanes" ofType:@"json" inDirectory:@"test-resources"];
 
     NSError *err = nil;
@@ -71,6 +82,8 @@
 {
     NSLog(@"Testing: %@", testCase[@"testName"]);
     const auto ctx = [self buildRoutingContext:testCase[@"params"]];
+    if (!ctx)
+        return;
     CLLocation *start = [[CLLocation alloc] initWithLatitude:[testCase[@"startPoint"][@"latitude"] doubleValue] longitude:[testCase[@"startPoint"][@"longitude"] doubleValue]];
     CLLocation *end = [[CLLocation alloc] initWithLatitude:[testCase[@"endPoint"][@"latitude"] doubleValue] longitude:[testCase[@"endPoint"][@"longitude"] doubleValue]];
     int startX = get31TileNumberX(start.coordinate.longitude);
@@ -82,6 +95,16 @@
     const auto routeSegments = _fe->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
 
     NSDictionary *expectedResults = testCase[@"expectedResults"];
+    if (routeSegments.empty() && expectedResults.count > 0)
+    {
+        NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+        NSString *mapPath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
+        NSString *routingPath = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
+        NSDictionary *mapAttributes = mapPath ? [NSFileManager.defaultManager attributesOfItemAtPath:mapPath error:nil] : nil;
+        XCTFail(@"No route for %@ (%@ → %@); map=%@ (%@ bytes), routing.xml=%@",
+                testCase[@"testName"], start, end, mapPath, mapAttributes[NSFileSize], routingPath);
+        return;
+    }
     NSMutableSet<NSString *> *reachedSegmentsWithStartPoint = [NSMutableSet new];
     NSMutableDictionary<NSNumber *, NSValue *> *reachedSegments = [NSMutableDictionary new];
     NSMutableSet<NSNumber *> *checkedSegments = [NSMutableSet new];
@@ -215,6 +238,10 @@
 - (std::shared_ptr<RoutingContext>)buildRoutingContext:(NSDictionary<NSString *, NSString *> *)testParams
 {
     auto builder = [self getDefaultRoutingConfig];
+    NSString *routingPath = [[NSBundle mainBundle] pathForResource:@"routing" ofType:@"xml"];
+    XCTAssertTrue(builder != nullptr, @"Could not load routing.xml from %@ (path=%@)", NSBundle.mainBundle.bundlePath, routingPath);
+    if (!builder)
+        return nullptr;
     MAP_STR_STR params;
     for (NSString *key in testParams)
     {

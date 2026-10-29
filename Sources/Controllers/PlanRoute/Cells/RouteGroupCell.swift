@@ -51,18 +51,6 @@ final class RouteGroupCell: UITableViewCell {
         accessibilityLabel = [titleLabel.text, distanceLabel.text].compactMap { $0 }.joined(separator: ", ")
     }
 
-    func configureWholeSegment(segment: PlanRouteSegment) {
-        iconView.isHidden = true
-        titleLabel.text = localizedString("plan_route_change_for_whole_segment")
-        distanceLabel.text = formattedDistance(segment.distance)
-        titleLeadingWithIcon.isActive = false
-        titleLeadingWithoutIcon.isActive = true
-        separatorInset = UIEdgeInsets(top: 0, left: Self.leadingInset, bottom: 0, right: 0)
-        isAccessibilityElement = true
-        accessibilityTraits = .button
-        accessibilityLabel = [titleLabel.text, distanceLabel.text].compactMap { $0 }.joined(separator: ", ")
-    }
-
     private func setupCell() {
         backgroundColor = .groupBg
         accessoryType = .disclosureIndicator

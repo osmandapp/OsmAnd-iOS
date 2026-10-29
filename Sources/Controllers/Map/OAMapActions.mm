@@ -35,6 +35,7 @@
 #import "OAGpxApproximationParams.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
@@ -360,7 +361,7 @@
 - (void) stopNavigationActionConfirm
 {
     [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"cancel_route")
-                                               titleIcon:@"ic_custom_alert"
+                                               titleIcon:ACImageNameIcCustomAlert
                                                  message:OALocalizedString(@"stop_routing_confirm")
                                              cancelTitle:OALocalizedString(@"shared_string_no")
                                                doneTitle:OALocalizedString(@"shared_string_yes")

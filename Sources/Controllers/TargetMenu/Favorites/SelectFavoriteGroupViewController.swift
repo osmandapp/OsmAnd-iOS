@@ -26,6 +26,7 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
 
     private enum ItemKey: String {
         case title
+        case category
         case value
         case description
         case isSelected
@@ -148,12 +149,12 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
 
         if item.key == RowKey.addNewGroup.rawValue {
-            guard let groupEditor = OAFavoriteGroupEditorViewController(new: ()) else { return }
+            guard let groupEditor = FavoriteGroupEditorViewController(new: ()) else { return }
             groupEditor.delegate = self
             showModalViewController(groupEditor)
         } else if item.key == RowKey.group.rawValue {
             let selectedName = item.string(forKey: ItemKey.value.rawValue) ?? item.title ?? ""
-            if !item.bool(forKey: ItemKey.isSelected.rawValue) {
+            if groupedGpxWpts != nil || !item.bool(forKey: ItemKey.isSelected.rawValue) {
                 delegate?.onGroupSelected(selectedName)
             }
             dismiss(animated: true)
@@ -195,11 +196,13 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
     private func addGpxWptGroupRows(to section: OATableSectionData, groups: [[String: String]]) {
         for group in groups {
             let title = group[ItemKey.title.rawValue] ?? ""
+            let category = group[ItemKey.category.rawValue] ?? ""
             addGroupRow(
                 to: section,
                 title: title,
+                value: category,
                 description: String(Int(group["count"] ?? "") ?? 0),
-                isSelected: title == selectedGroupName,
+                isSelected: category == selectedGroupName,
                 color: group[ItemKey.color.rawValue].flatMap { UIColor(argb: Int(UIColor.toNumber(from: $0))) } ?? .iconColorActive
             )
         }

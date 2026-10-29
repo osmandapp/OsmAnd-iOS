@@ -236,7 +236,7 @@
             if (selectedAmount > 0)
                 selectionImage = [UIImage imageNamed:selectedAmount < _items.count ? @"ic_system_checkbox_indeterminate" : @"ic_system_checkbox_selected"];
             else
-                selectionImage = [UIImage imageNamed:@"ic_custom_checkbox_unselected"];
+                selectionImage = [UIImage imageNamed:ACImageNameIcCustomCheckboxUnselected];
             [cell.leftEditButton setImage:selectionImage forState:UIControlStateNormal];
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.leftEditButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];
@@ -263,7 +263,7 @@
             BOOL selected = [_selectedItems containsObject:poiType];
             
             UIColor *selectedColor = selected ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-            cell.leftIconView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage templateImageNamed:@"ic_custom_search_categories"];
+            cell.leftIconView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage imageNamed:ACImageNameIcCustomSearchCategories];
             cell.leftIconView.tintColor = selectedColor;
             if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)
                 cell.leftIconView.contentMode = UIViewContentModeCenter;

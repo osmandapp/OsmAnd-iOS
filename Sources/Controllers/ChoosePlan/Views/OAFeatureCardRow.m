@@ -90,12 +90,12 @@
 
     if (_type == EOAFeatureCardRowPlan)
     {
-        self.imageViewFirstRightIcon.image = [UIImage imageNamed:@"ic_custom_osmand_maps_plus"];
-        self.imageViewSecondRightIcon.image = [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"];
+        self.imageViewFirstRightIcon.image = [UIImage imageNamed:ACImageNameIcCustomOsmandMapsPlus];
+        self.imageViewSecondRightIcon.image = [UIImage imageNamed:ACImageNameIcCustomOsmandProLogoColored];
     }
     else if (_type == EOAFeatureCardRowSubscription || _type == EOAFeatureCardRowSimple)
     {
-        self.imageViewSecondRightIcon.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
+        self.imageViewSecondRightIcon.image = [UIImage imageNamed:ACImageNameIcCheckmarkDefault];
         self.imageViewSecondRightIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     }
     else if (_type == EOAFeatureCardRowInclude)

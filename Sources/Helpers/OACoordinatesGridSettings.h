@@ -20,17 +20,20 @@ typedef struct ZoomRange {
 - (void)toggleEnable;
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)enabled;
-- (int32_t)getGridFormatForAppMode:(OAApplicationMode *)appMode;
-- (void)setGridFormat:(int32_t)format forAppMode:(OAApplicationMode *)appMode;
-- (int)getDayGridColor;
-- (int)getNightGridColor;
+- (NSString *)gridFormatIdForAppMode:(OAApplicationMode *)appMode;
+- (void)setGridFormatId:(NSString *)formatId forAppMode:(OAApplicationMode *)appMode;
+- (NSString *)resolvedGridFormatIdForAppMode:(OAApplicationMode *)appMode;
+- (int)dayGridColor;
+- (int)nightGridColor;
 - (void)setGridColor:(NSInteger)color forAppMode:(OAApplicationMode *)appMode nightMode:(BOOL)nightMode;
-- (int32_t)getGridLabelsPositionForAppMode:(OAApplicationMode *)appMode;
+- (int32_t)gridLabelsPositionForAppMode:(OAApplicationMode *)appMode;
 - (void)setGridLabelsPosition:(int32_t)position forAppMode:(OAApplicationMode *)appMode;
-- (ZoomRange)getSupportedZoomLevels;
-- (ZoomRange)getZoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode;
-- (ZoomRange)getZoomLevels;
+- (ZoomRange)supportedZoomLevels;
+- (ZoomRange)supportedZoomLevelsForFormatId:(NSString *)formatId;
+- (ZoomRange)zoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode;
+- (ZoomRange)zoomLevelsWithRestrictionsForAppMode:(OAApplicationMode *)appMode formatId:(NSString *)formatId;
+- (ZoomRange)zoomLevels;
 - (void)setZoomLevels:(ZoomRange)levels forAppMode:(OAApplicationMode *)appMode;
-- (float)getTextScaleForAppMode:(OAApplicationMode *)appMode;
+- (float)textScaleForAppMode:(OAApplicationMode *)appMode;
 
 @end

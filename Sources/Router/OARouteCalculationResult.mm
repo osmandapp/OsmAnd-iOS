@@ -33,6 +33,22 @@
 
 @end
 
+@implementation OAIntermediatePointInfo
+
+- (instancetype) initWithRoutePointOffset:(int)routePointOffset distance:(int)distance time:(long)time
+{
+    self = [super init];
+    if (self)
+    {
+        _routePointOffset = routePointOffset;
+        _distance = distance;
+        _time = time;
+    }
+    return self;
+}
+
+@end
+
 @implementation OARouteCalculationResult
 {
     // could not be null and immodifiable!
@@ -581,6 +597,23 @@
     return (int)_intermediatePoints.count - _nextIntermediate;
 }
 
+- (NSArray<OAIntermediatePointInfo *> *) getIntermediatePointInfos
+{
+    NSMutableArray<OAIntermediatePointInfo *> *infos = [NSMutableArray array];
+    for (int i = _nextIntermediate; i < _intermediatePoints.count; i++)
+    {
+        int directionIndex = _intermediatePoints[i].intValue;
+        if (directionIndex >= 0 && directionIndex < _directions.count)
+        {
+            int routePointOffset = _directions[directionIndex].routePointOffset;
+            int distance = [self getDistanceToPoint:routePointOffset];
+            long time = [self getLeftTimeToNextIntermediate:nil intermediateIndexOffset:i - _nextIntermediate];
+            [infos addObject:[[OAIntermediatePointInfo alloc] initWithRoutePointOffset:routePointOffset distance:distance time:time]];
+        }
+    }
+    return infos;
+}
+
 - (long) getLeftTime:(CLLocation *)fromLoc
 {
     long time = 0;
@@ -637,10 +670,17 @@
 - (long) getLeftTimeToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset
 {
     int targetIntermediateIndex = _nextIntermediate + intermediateIndexOffset;
-    if (targetIntermediateIndex >= _intermediatePoints.count)
+    if (targetIntermediateIndex >= _intermediatePoints.count || _currentDirectionInfo >= _directions.count)
         return 0;
     
-    return [self getLeftTime:fromLoc] - _directions[_intermediatePoints[targetIntermediateIndex].intValue].afterLeftTime;
+    OARouteDirectionInfo *current = _directions[_currentDirectionInfo];
+    int travelledDistance = [self getListDistance:current.routePointOffset] - [self getListDistance:_currentRoute];
+    if (fromLoc && _currentRoute < _locations.count)
+        travelledDistance -= [fromLoc distanceFromLocation:_locations[_currentRoute]];
+    long leftTime = current.afterLeftTime + [current getExpectedTime] - (int) (travelledDistance / current.averageSpeed);
+
+    OARouteDirectionInfo *direction = _directions[_intermediatePoints[targetIntermediateIndex].intValue];
+    return leftTime - direction.afterLeftTime - [direction getExpectedTime];
 }
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations

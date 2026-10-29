@@ -151,10 +151,6 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.shouldShowApproximationWarning
     }
 
-    var approximationWarningViewController: UIViewController? {
-        bridge.approximationWarningViewController
-    }
-
     var canStartNewSegment: Bool {
         bridge.isAddNewSegmentAllowed
     }
@@ -243,6 +239,10 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         }
     }
 
+    func beginApproximationSession() -> UIViewController? {
+        bridge.beginApproximationSession()
+    }
+
     func startElevationCalculation(useNearbyRoads: Bool) {
         bridge.startElevationCalculation(withNearbyRoads: useNearbyRoads)
     }
@@ -318,12 +318,12 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         bridge.clearAllPoints()
     }
 
-    func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {
-        bridge.save(as: fileName, folder: folder, showOnMap: showOnMap, onComplete: onComplete)
+    func saveAs(fileName: String, folder: String?, showOnMap: Bool, simplified: Bool, onComplete: @escaping (Bool, String?) -> Void) {
+        bridge.save(as: fileName, folder: folder, showOnMap: showOnMap, simplified: simplified, onComplete: onComplete)
     }
 
-    func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {
-        bridge.save(asCopy: fileName, folder: folder, showOnMap: showOnMap, onComplete: onComplete)
+    func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, simplified: Bool, onComplete: @escaping (Bool, String?) -> Void) {
+        bridge.save(asCopy: fileName, folder: folder, showOnMap: showOnMap, simplified: simplified, onComplete: onComplete)
     }
 
     func appendToTrack(filePath: String, onComplete: @escaping (Bool) -> Void) {
@@ -368,6 +368,17 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
 
     func startNewSegment() {
         bridge.startNewSegment()
+    }
+
+    func startNewSegment(mode: OAApplicationMode?) {
+        guard let effectiveMode = mode ?? OAApplicationMode.default() else { return }
+        bridge.startNewSegment(with: effectiveMode)
+    }
+
+    func continueRoute(mode: OAApplicationMode?) {
+        guard let pointIndex = routeSegments.last?.pointIndexes.last,
+              let effectiveMode = mode ?? OAApplicationMode.default() else { return }
+        bridge.apply(effectiveMode, pointIndex: pointIndex, wholeRoute: false)
     }
 
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool) {

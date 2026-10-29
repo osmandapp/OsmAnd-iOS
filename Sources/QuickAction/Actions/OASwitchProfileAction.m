@@ -18,6 +18,7 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kProfiles = @"profiles";
 
@@ -45,8 +46,8 @@ static QuickActionType *TYPE;
                                                  cl:self.class]
                 name:OALocalizedString(@"app_profile")]
                nameAction:OALocalizedString(@"shared_string_change")]
-              iconName:@"ic_custom_manage_profiles"]
-             secondaryIconName:@"ic_custom_compound_action_change"]
+              iconName:ACImageNameIcCustomManageProfiles]
+             secondaryIconName:ACImageNameIcCustomCompoundActionChange]
             category:QuickActionTypeCategorySettings];
 }
 

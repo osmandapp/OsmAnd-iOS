@@ -41,6 +41,8 @@
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     NSString *obfFilePath = [bundle pathForResource:@"Turn_lanes_test" ofType:@"obf" inDirectory:@"test-resources"];
     initBinaryMapFile(string(obfFilePath.UTF8String), true, true);
+    for (NSString *path in [bundle pathsForResourcesOfType:@"obf" inDirectory:@"test-resources/turn_lanes"])
+        initBinaryMapFile(string(path.UTF8String), true, true);
 
     _fe = std::make_shared<RoutePlannerFrontEnd>();
     _comparedSegments = 0;

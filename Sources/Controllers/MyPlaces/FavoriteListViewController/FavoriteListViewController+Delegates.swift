@@ -147,7 +147,10 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
             hideSearchController()
         }
         configureNavigationButtons()
-        configureToolbar()
+        if collectionView.isEditing {
+            configureToolbar()
+        }
+
         navigationController?.setToolbarHidden(!collectionView.isEditing, animated: true)
         applySnapshot(animatingDifferences: false)
         lastAppliedSearchState = (isActive: false, text: searchBar.searchTextField.text ?? "")
@@ -160,24 +163,6 @@ extension FavoriteListViewController: MyPlacesSearchable, UISearchResultsUpdatin
             guard !searchController.searchBar.isFirstResponder else { return }
             searchController.searchBar.becomeFirstResponder()
         }
-    }
-}
-
-extension FavoriteListViewController: OAEditColorViewControllerDelegate {
-    func colorChanged() {
-        guard let colorController else { return }
-        defer {
-            self.colorController = nil
-        }
-
-        let selectedItems = bridgeItems(for: selectionManager.selectedItems)
-        guard !selectedItems.isEmpty else { return }
-        if colorController.saveChanges {
-            OAFavoritesHelperBridge.shared().changeFavoriteItems(selectedItems, colorIndex: colorController.colorIndex)
-        }
-
-        setEditing(false)
-        applySnapshot(animatingDifferences: true)
     }
 }
 

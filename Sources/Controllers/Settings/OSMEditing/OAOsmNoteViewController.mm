@@ -162,7 +162,7 @@
             {
                 [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
                 [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
-                [accountCell setIconName:@"ic_custom_user_profile"];
+                [accountCell setIconName:ACImageNameIcCustomUserProfile];
                 [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive]) forKey:@"title_color"];
                 [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
                 [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
@@ -173,7 +173,7 @@
                 [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
                 [accountCell setTitle: OALocalizedString(@"shared_string_update_required")];
                 [accountCell setDescr: OALocalizedString(@"osm_login_needs_ios_16_4")];
-                [accountCell setIconName:@"ic_custom_alert"];
+                [accountCell setIconName:ACImageNameIcCustomAlert];
                 [accountCell setIconTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
                 [accountCell setObj:[UIColor colorNamed:ACColorNameTextColorPrimary] forKey:@"title_color"];
                 [accountCell setObj:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular] forKey:@"title_font"];

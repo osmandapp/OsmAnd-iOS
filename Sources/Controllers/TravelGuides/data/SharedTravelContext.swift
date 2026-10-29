@@ -118,6 +118,38 @@ enum SharedTravelArticles {
         return article
     }
 
+    // MARK: - Identifiers and search results
+
+    static func toShared(_ identifier: TravelArticleIdentifier) -> OsmAndShared.TravelArticleIdentifier {
+        OsmAndShared.TravelArticleIdentifier(file: sharedFile(named: identifier.file),
+                                             lat: identifier.lat,
+                                             lon: identifier.lon,
+                                             title: identifier.title,
+                                             routeId: identifier.routeId,
+                                             routeSource: identifier.routeSource)
+    }
+
+    static func toApp(_ identifier: OsmAndShared.TravelArticleIdentifier) -> TravelArticleIdentifier {
+        TravelArticleIdentifier(file: identifier.file?.name(),
+                                lat: identifier.lat,
+                                lon: identifier.lon,
+                                title: identifier.title,
+                                routeId: identifier.routeId,
+                                routeSource: identifier.routeSource)
+    }
+
+    static func toApp(_ result: OsmAndShared.WikivoyageSearchResult) -> TravelSearchResult {
+        let converted = TravelSearchResult(routeId: result.getArticleRouteId() ?? "",
+                                           articleTitle: result.getArticleTitle() ?? "",
+                                           isPartOf: result.isPartOf,
+                                           imageTitle: result.imageTitle,
+                                           langs: result.langs)
+        converted.articleId = toApp(result.articleId)
+        return converted
+    }
+
+    // MARK: - Private helpers
+
     private static func remember(app: TravelArticle, shared: OsmAndShared.TravelArticle) {
         app.sharedArticle = shared
         lock.lock()
@@ -197,8 +229,8 @@ enum SharedTravelArticles {
         article.content = shared.content
         article.isPartOf = shared.isPartOf
         article.isParentOf = shared.isParentOf
-        article.lat = shared.lat
-        article.lon = shared.lon
+        article.lat = shared.getLat()
+        article.lon = shared.getLon()
         article.imageTitle = shared.imageTitle
         article.routeId = shared.routeId
         article.ref = shared.ref
@@ -214,36 +246,6 @@ enum SharedTravelArticles {
         return article
     }
 
-    // MARK: - Identifiers and search results
-
-    static func toShared(_ identifier: TravelArticleIdentifier) -> OsmAndShared.TravelArticleIdentifier {
-        OsmAndShared.TravelArticleIdentifier(file: sharedFile(named: identifier.file),
-                                             lat: identifier.lat,
-                                             lon: identifier.lon,
-                                             title: identifier.title,
-                                             routeId: identifier.routeId,
-                                             routeSource: identifier.routeSource)
-    }
-
-    static func toApp(_ identifier: OsmAndShared.TravelArticleIdentifier) -> TravelArticleIdentifier {
-        TravelArticleIdentifier(file: identifier.file?.name(),
-                                lat: identifier.lat,
-                                lon: identifier.lon,
-                                title: identifier.title,
-                                routeId: identifier.routeId,
-                                routeSource: identifier.routeSource)
-    }
-
-    static func toApp(_ result: OsmAndShared.WikivoyageSearchResult) -> TravelSearchResult {
-        let converted = TravelSearchResult(routeId: result.getArticleRouteId() ?? "",
-                                           articleTitle: result.getArticleTitle() ?? "",
-                                           isPartOf: result.isPartOf,
-                                           imageTitle: result.imageTitle,
-                                           langs: result.langs)
-        converted.articleId = toApp(result.articleId)
-        return converted
-    }
-
     /// The installed file that carries this name, by full path. An uninstalled one keeps its bare
     /// name: nothing will be found in it either way, and a saved article has to hold on to the name
     /// its database row was written with.
@@ -257,24 +259,8 @@ enum SharedTravelArticles {
 @objcMembers
 final class SharedTravel: NSObject {
 
-    /// Reads poi_types.xml into the shared registry. The obf reader needs it to name the amenities
-    /// it decodes, and the travel code needs it to read an activity back out of a route's subtype.
-    /// `OAPOIHelper` parses the same file for the app's own model; the two live side by side until
-    /// the search moves to OsmAndShared.
-    static func initPoiTypes() {
-        guard !MapPoiTypes.companion.getDefaultNoInit().isInit() else { return }
-        guard let xml = PlatformUtil.shared.getOsmAndContext().getAssetAsString(name: "poi_types.xml") else {
-            NSLog("SharedTravel: poi_types.xml is not in the bundle, travel search will not work")
-            return
-        }
-        let types = MapPoiTypes(resourceName: nil)
-        types.doInitFromString(xml: xml)
-        MapPoiTypes.companion.setDefault(types: types)
-    }
-
     static let helper: OsmAndShared.TravelObfHelper = {
-        initPoiTypes()
-        return OsmAndShared.TravelObfHelper(context: SharedTravelContext.shared,
-                                            bookmarks: SharedTravelBookmarks.shared)
+        OsmAndShared.TravelObfHelper(context: SharedTravelContext.shared,
+                                     bookmarks: SharedTravelBookmarks.shared)
     }()
 }

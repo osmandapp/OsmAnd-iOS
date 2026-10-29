@@ -20,7 +20,7 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pHC-aF-H9Q">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_mapillary_color_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="OKS-FL-Rwe" userLabel="Logo Image View">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_mapillary_color_logo" translatesAutoresizingMaskIntoConstraints="NO" id="OKS-FL-Rwe" userLabel="Logo Image View">
                         <rect key="frame" x="10" y="10" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="21t-3F-9bX"/>
@@ -58,7 +58,7 @@
     </objects>
     <resources>
         <image name="ic_custom_download_offline_with_bg" width="30" height="30"/>
-        <image name="ic_custom_mapillary_color_logo.png" width="30" height="30"/>
+        <image name="ic_custom_mapillary_color_logo" width="30" height="30"/>
         <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

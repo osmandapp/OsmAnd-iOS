@@ -30,6 +30,7 @@
 #include <SkImage.h>
 #include <SkData.h>
 #include <SkPaint.h>
+#import "GeneratedAssetSymbols.h"
 
 #define EXTENT 4096.0
 #define LINE_WIDTH 3.0f
@@ -46,7 +47,7 @@ OAMapillaryTilesProvider::OAMapillaryTilesProvider(const float displayDensityFac
 , _displayDensityFactor(displayDensityFactor)
 , _physicalMemory(physicalMemory)
 , _mvtReader(new OsmAnd::MvtReader())
-, _image([OANativeUtilities skImageFromPngResource:@"map_mapillary_photo_dot"])
+, _image([OANativeUtilities skImageFromAssetNamed:ACImageNameMapMapillaryPhotoDot])
 , _linePaint(new SkPaint())
 {
     if (physicalMemory > (unsigned long long) 2 << 30)

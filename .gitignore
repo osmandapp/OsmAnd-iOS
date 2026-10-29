@@ -9,11 +9,12 @@ DerivedData/*
 /.idea
 
 /Libraries/Charts/build
-/Packages/BRCybertron/Sources/BRCybertron/libxslt/libxslt
-/Packages/BRCybertron/Sources/BRCybertron/libxslt/libexslt
+/Packages/BRCybertron/
 
 *.xcscmblueprint
 /build
+.generated/app-store-metadata/
+/.env.appstore
 qt-ios-prebuilt.zip*
 
 # Prebuilt ANGLE frameworks and the upstream Khronos/ANGLE headers they go with -

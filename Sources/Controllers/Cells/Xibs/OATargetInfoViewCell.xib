@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_working_time.png" translatesAutoresizingMaskIntoConstraints="NO" id="oVD-Us-vNC">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_working_time" translatesAutoresizingMaskIntoConstraints="NO" id="oVD-Us-vNC">
                         <rect key="frame" x="16" y="15" width="20" height="20"/>
                         <color key="tintColor" name="iconColorDefault"/>
                         <constraints>
@@ -53,7 +53,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_working_time.png" width="20" height="20"/>
+        <image name="ic_working_time" width="20" height="20"/>
         <namedColor name="iconColorDefault">
             <color red="0.74509803921568629" green="0.72549019607843135" blue="0.77254901960784317" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

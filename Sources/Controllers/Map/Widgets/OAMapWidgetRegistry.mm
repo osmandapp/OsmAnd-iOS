@@ -68,11 +68,22 @@
 
 - (void)populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(WidgetsPanel *)widgetPanel
 {
+    [self populateControlsContainer:stack
+                               mode:mode
+                        widgetPanel:widgetPanel
+                   screenLayoutMode:[ScreenLayoutModeWrapper defaultForAppMode:mode]];
+}
+
+- (void)populateControlsContainer:(OAWidgetPanelViewController *)stack
+                              mode:(OAApplicationMode *)mode
+                       widgetPanel:(WidgetsPanel *)widgetPanel
+                  screenLayoutMode:(NSInteger)screenLayoutModeValue
+{
     NSMutableArray<NSMutableArray<OABaseWidgetView *> *> *widgetsToShow = [NSMutableArray array];
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
 
-    ScreenLayoutMode screenLayoutMode = [ScreenLayoutModeWrapper defaultForAppMode:mode];
+    ScreenLayoutMode screenLayoutMode = (ScreenLayoutMode)screenLayoutModeValue;
     NSArray<NSString *> *widgetsVisibility = [self widgetsVisibilityForAppMode:mode
                                                               screenLayoutMode:screenLayoutMode];
     NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self pagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels) screenLayoutMode:screenLayoutMode];

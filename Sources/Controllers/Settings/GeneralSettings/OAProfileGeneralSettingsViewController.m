@@ -12,11 +12,11 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
-#import "OACoordinatesFormatViewController.h"
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAProfileGeneralSettingsViewController
 {
@@ -26,6 +26,7 @@
     int _sectionUnitsAndFormats;
     int _sectionOther;
     int _sectionAnimateMyPosition;
+    NSInteger _displayedRotateMap;
 }
 
 #pragma mark - Initialization
@@ -43,6 +44,11 @@
 {
     [self.tableView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:OAValueTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAValueTableViewCell.reuseIdentifier];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 #pragma mark - UIViewController
@@ -76,40 +82,58 @@
     if ([_settings.appearanceProfileTheme get:self.appMode] == ThemeLight)
     {
         appThemeValue = OALocalizedString(@"shared_string_light");
-        appThemeIcon = @"ic_custom_sun";
+        appThemeIcon = ACImageNameIcCustomSun;
     }
     else if ([_settings.appearanceProfileTheme get:self.appMode] == ThemeDark)
     {
         appThemeValue = OALocalizedString(@"shared_string_dark");
-        appThemeIcon = @"ic_custom_moon";
+        appThemeIcon = ACImageNameIcCustomMoon;
     }
     else
     {
         appThemeValue = OALocalizedString(@"shared_string_system_default");
-        appThemeIcon = @"ic_custom_device";
+        appThemeIcon = ACImageNameIcCustomDevice;
+    }
+
+    EOAKeepScreenOnMode keepScreenOnMode = [_settings.keepScreenOn get:self.appMode];
+
+    NSString *keepScreenOnValue;
+    switch (keepScreenOnMode)
+    {
+        case EOAKeepScreenOnModeDuringNavigation:
+            keepScreenOnValue = OALocalizedString(@"during_navigation");
+            break;
+        case EOAKeepScreenOnModeAlways:
+            keepScreenOnValue = OALocalizedString(@"shared_string_always");
+            break;
+        case EOAKeepScreenOnModeSystemDefault:
+        default:
+            keepScreenOnValue = OALocalizedString(@"shared_string_system_default");
+            break;
     }
     
     NSString *rotateMapValue;
     NSString *rotateMapIcon;
+    _displayedRotateMap = [_settings.rotateMap get:self.appMode];
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
-        rotateMapIcon = @"ic_custom_direction_bearing_day";
+        rotateMapIcon = ACImageNameIcCustomDirectionBearingDay;
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_COMPASS)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
-        rotateMapIcon = @"ic_custom_direction_compass_day";
+        rotateMapIcon = ACImageNameIcCustomDirectionCompassDay;
     }
     else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_MANUAL)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_manual_opt");
-        rotateMapIcon = @"ic_custom_direction_manual_day";
+        rotateMapIcon = ACImageNameIcCustomDirectionManualDay;
     }
     else
     {
         rotateMapValue = OALocalizedString(@"rotate_map_north_opt");
-        rotateMapIcon = @"ic_custom_direction_north_day";
+        rotateMapIcon = ACImageNameIcCustomDirectionNorthDay;
     }
 
     NSString *rotateScreenValue;
@@ -118,17 +142,17 @@
     if (mapScreenOrientation == EOAScreenOrientationPortrait)
     {
         rotateScreenValue = OALocalizedString(@"map_orientation_portrait");
-        rotateScreenIcon = @"ic_custom_iphone_portrait";
+        rotateScreenIcon = ACImageNameIcCustomIphonePortrait;
     }
     else if (mapScreenOrientation == EOAScreenOrientationLandscape)
     {
         rotateScreenValue = OALocalizedString(@"map_orientation_landscape");
-        rotateScreenIcon = @"ic_custom_iphone_landscape";
+        rotateScreenIcon = ACImageNameIcCustomIphoneLandscape;
     }
     else
     {
         rotateScreenValue = OALocalizedString(@"map_orientation_default");
-        rotateScreenIcon = @"ic_custom_iphone_portrait_settings";
+        rotateScreenIcon = ACImageNameIcCustomIphonePortraitSettings;
     }
     
     NSString *drivingRegionValue;
@@ -202,30 +226,7 @@
     
     NSString *volumeSystemValue = [OAVolumeConstant toHumanString:[_settings.volumeUnits get:self.appMode]];
     NSString *tempSystemValue = [OATemperatureConstant toHumanString:[_settings.temperatureUnits get:self.appMode]];
-    NSString *geoFormatValue;
-    switch ([_settings.settingGeoFormat get:self.appMode]) {
-        case MAP_GEO_FORMAT_DEGREES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-        case MAP_GEO_FORMAT_MINUTES:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DM");
-            break;
-        case MAP_GEO_FORMAT_SECONDS:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_DMS");
-            break;
-        case MAP_GEO_UTM_FORMAT:
-            geoFormatValue = @"UTM";
-            break;
-        case MAP_GEO_OLC_FORMAT:
-            geoFormatValue = @"OLC";
-            break;
-        case MAP_GEO_MGRS_FORMAT:
-            geoFormatValue = @"MGRS";
-            break;
-        default:
-            geoFormatValue = OALocalizedString(@"navigate_point_format_D");
-            break;
-    }
+    NSString *geoFormatValue = [CoordinateFormatBridge primaryFormatTitleWithMode:self.appMode];
     
     NSString *angularUnitsValue = @"";
     switch ([_settings.angularUnits get:self.appMode])
@@ -282,60 +283,67 @@
             @"key" : @"screenOrientation"
         }];
     }
+    [appearanceArr addObject:@{
+        @"type" : OAValueTableViewCell.reuseIdentifier,
+        @"title" : OALocalizedString(@"keep_screen_on"),
+        @"value" : keepScreenOnValue,
+        @"icon" : ACImageNameIcCustomDisplayLight,
+        @"key" : @"keep_screen_on"
+    }];
     [regionsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"driving_region"),
         @"value" : drivingRegionValue,
-        @"icon" : @"ic_profile_car",
+        @"icon" : ACImageNameIcProfileCar,
         @"key" : @"drivingRegion"
     }];
     [unitsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"routing_attr_length_name"),
         @"value" : metricSystemValue,
-        @"icon" : @"ic_custom_units_length",
+        @"icon" : ACImageNameIcCustomUnitsLength,
         @"key" : @"lengthUnits"
     }];
     [unitsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"altitude"),
         @"value" : [altitudeUnitSystemValue capitalizedString],
-        @"icon" : @"ic_custom_units_altitude",
+        @"icon" : ACImageNameIcCustomUnitsAltitude,
         @"key" : @"altitudeUnits"
     }];
     [unitsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"shared_string_speed"),
         @"value" : speedSystemValue,
-        @"icon" : @"ic_action_speed",
+        @"icon" : ACImageNameIcActionSpeed,
         @"key" : @"speedUnits"
     }];
     [unitsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"shared_string_volume"),
         @"value" : volumeSystemValue,
-        @"icon" : @"ic_custom_obd_fuel_tank",
+        @"icon" : ACImageNameIcCustomObdFuelTank,
         @"key" : @"volumeUnits"
     }];
     [unitsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"map_settings_weather_temp"),
         @"value" : tempSystemValue,
-        @"icon" : @"ic_custom_thermometer",
+        @"icon" : ACImageNameIcCustomThermometer,
         @"key" : @"tempUnits"
     }];
     [formatsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"coords_format"),
         @"value" : geoFormatValue,
-        @"icon" : @"ic_custom_coordinates",
+        @"icon" : ACImageNameIcCustomCoordinates,
         @"key" : @"coordsFormat"
     }];
     [formatsArr addObject:@{
         @"type" : OAValueTableViewCell.reuseIdentifier,
         @"title" : OALocalizedString(@"angular_measurment_units"),
         @"value" : angularUnitsValue,
-        @"icon" : @"ic_custom_angular_unit",
+        @"icon" : ACImageNameIcCustomAngularUnit,
         @"key" : @"angulerMeasurmentUnits"
     }];
     [formatsArr addObject:@{
@@ -449,6 +457,8 @@
     OABaseSettingsViewController* settingsViewController = nil;
     if ([itemKey isEqualToString:@"app_theme"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAppTheme applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"keep_screen_on"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsKeepScreenOn applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsMapOrientation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"screenOrientation"])
@@ -466,7 +476,7 @@
     else if ([itemKey isEqualToString:@"tempUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfTemp applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
+        settingsViewController = [[CoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
@@ -476,9 +486,9 @@
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"keep_screen_on"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"] || [itemKey isEqualToString:@"volumeUnits"] || [itemKey isEqualToString:@"tempUnits"] || [itemKey isEqualToString:@"altitudeUnits"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
-        else if ([itemKey isEqualToString:@"externalImputDevice"])
+        else if ([itemKey isEqualToString:@"externalImputDevice"] || [itemKey isEqualToString:@"coordsFormat"])
             [self showViewController:settingsViewController];
         else
             [self showModalViewController:settingsViewController];
@@ -490,6 +500,16 @@
 - (void)onRotation
 {
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:_settings.rotateMap.key] && [_settings.rotateMap get:self.appMode] != _displayedRotateMap)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)applyParameter:(id)sender

@@ -33,7 +33,7 @@
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection sync:(BOOL)sync;
 
-- (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
+- (sk_sp<SkImage>)directionArrowBitmapForColor:(UIColor *)color;
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
 - (sk_sp<SkImage>) walkBitmapWithColor:(OsmAnd::ColorARGB)color lineWidth:(CGFloat)lineWidth;
 

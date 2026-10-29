@@ -29,6 +29,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAVoicePromptsViewController () <OAUninstallSpeedCamerasDelegate, OASettingsDataDelegate>
 
@@ -91,7 +92,7 @@
     languageItem.key = @"language";
     languageItem.cellType = [OAValueTableViewCell getCellIdentifier];
     languageItem.title = OALocalizedString(@"shared_string_language");
-    languageItem.iconName = @"ic_custom_map_languge";
+    languageItem.iconName = ACImageNameIcCustomMapLanguge;
     [self generateValueForItem:languageItem];
     [voicePromptsSection addRow:languageItem];
 
@@ -141,7 +142,7 @@
             kCellTypeKey : [OACardTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"speed_cameras_alert"),
             kCellKeyKey : @"speed_cameras_read_more",
-            kCellIconNameKey : @"ic_custom_alert_color",
+            kCellIconNameKey : ACImageNameIcCustomAlertColor,
             @"buttonTitle" : OALocalizedString(@"shared_string_read_more"),
         }];
         NSIndexPath *speedCamerasAlertIndexPath = [NSIndexPath indexPathForRow:[announceSecondSection rowCount] - 1 inSection:[_data sectionCount] - 1];

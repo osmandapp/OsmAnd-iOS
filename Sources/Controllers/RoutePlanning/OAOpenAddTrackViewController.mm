@@ -61,6 +61,7 @@ static const NSInteger kSegmentRow = 0;
     OAFoldersCell *_foldersCell;
     
     BOOL _showCurrentGpx;
+    BOOL _folderChangedSinceLastSort;
 }
 
 #pragma mark - Initialization
@@ -213,7 +214,7 @@ static const NSInteger kSegmentRow = 0;
     {
         [folderButtonsData addObject:@{
             @"title" : folderNames[i],
-            @"img" : @"ic_custom_folder"
+            @"img" : ACImageNameIcCustomFolder
         }];
     }
     return folderButtonsData;
@@ -311,6 +312,7 @@ static const NSInteger kSegmentRow = 0;
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
+            cell.segmentControl.selectedSegmentIndex = _sortingMode;
             UIFont *font = [UIFont scaledSystemFontOfSize:14.];
             [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateNormal];
             [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateSelected];
@@ -501,9 +503,21 @@ static const NSInteger kSegmentRow = 0;
             _sortingMode = EOANameAscending;
         else if (segment.selectedSegmentIndex == 2)
             _sortingMode = EOANameDescending;
+
+        NSInteger previousSectionCount = self.tableView.numberOfSections;
+        NSInteger previousTrackRows = previousSectionCount > kTracksSection
+            ? [self.tableView numberOfRowsInSection:kTracksSection] : 0;
         [self generateData];
-        
-        
+        BOOL needsFullReload = _folderChangedSinceLastSort || previousSectionCount != _data.count
+            || _data.count <= kTracksSection
+            || previousTrackRows != _data[kTracksSection].count;
+        _folderChangedSinceLastSort = NO;
+        if (needsFullReload)
+        {
+            [self.tableView reloadData];
+            return;
+        }
+
         NSMutableArray<NSIndexPath *> *pathsToReload = [NSMutableArray array];
         for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows)
         {
@@ -537,6 +551,7 @@ static const NSInteger kSegmentRow = 0;
 - (void)onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
+    _folderChangedSinceLastSort = YES;
     [self generateData];
     [self.tableView reloadData];
 }

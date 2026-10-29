@@ -12,6 +12,7 @@
 #import "OAIndexConstants.h"
 
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OALocationIcon()
 
@@ -106,7 +107,20 @@ static NSString * const kMovementIconPrefix = @"MOVEMENT_";
             return icon;
         }
     }
+
+    // custom models installed by the 3D plugin are saved as "model_<dir name>"
+    if ([self isModel:name] && [self isModelInstalled:name])
+        return [OALocationIcon withModelName:name];
+
     return defaultIcon;
+}
+
++ (BOOL)isModelInstalled:(NSString *)modelName
+{
+    NSString *dirName = [modelName substringFromIndex:MODEL_NAME_PREFIX.length];
+    if (dirName.length == 0)
+        return NO;
+    return [Model3dHelper isModelExistWithDir:[Model3dHelper getModelPathWithModelName:dirName]];
 }
 
 + (OALocationIcon *) DEFAULT
@@ -207,9 +221,9 @@ static NSString * const kMovementIconPrefix = @"MOVEMENT_";
     }
     else
     {
-        bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
-        centerImage = [UIImage imageNamed:@"map_location_default_center"];
-        topImage = [UIImage imageNamed:@"map_location_default_top"];
+        bottomImage = [UIImage imageNamed:ACImageNameMapLocationDefaultBottom];
+        centerImage = [UIImage imageNamed:ACImageNameMapLocationDefaultCenter];
+        topImage = [UIImage imageNamed:ACImageNameMapLocationDefaultTop];
     }
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
@@ -229,25 +243,35 @@ static NSString * const kMovementIconPrefix = @"MOVEMENT_";
     else if ([self isModel])
     {
         // for models from 3D plugin show preview image from plugin folder
-        return [self getModelPreviewDrawable];
+        UIImage *preview = [self getModelPreviewDrawable];
+        if (preview)
+            return preview;
     }
+    // model without a preview image, show the default 2D icon
+    return [self.class getIcon:_DEFAULT.iconName color:color scaleFactor:1];
 }
 
-- (UIImage *) getModelPreviewDrawable
+- (nullable UIImage *) getModelPreviewDrawable
 {
     NSString *shortIconName = [_modelName substringFromIndex:MODEL_NAME_PREFIX.length];
     NSString *modelDirPath = [Model3dHelper getModelPathWithModelName:shortIconName];
     NSString *iconFilePath = [Model3dHelper getModelIconFilePathWithDirPath:modelDirPath];
     if ([NSFileManager.defaultManager fileExistsAtPath:iconFilePath])
-    {
-        return [UIImage imageNamed:iconFilePath];
-    }
+        return [UIImage imageWithContentsOfFile:iconFilePath];
     return nil;
 }
 
 + (BOOL) isModel:(NSString *)modelName
 {
     return modelName && [modelName hasPrefix:MODEL_NAME_PREFIX];
+}
+
++ (BOOL)isCustomModel:(id)name
+{
+    return [name isKindOfClass:NSString.class]
+        && [self isModel:name]
+        && [name length] > MODEL_NAME_PREFIX.length
+        && ![[self defaultIconModels] containsObject:name];
 }
 
 - (BOOL) isModel

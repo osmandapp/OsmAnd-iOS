@@ -29,7 +29,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" image="img_empty_state_terrain.png">
+                                <state key="normal" image="img_empty_state_terrain">
                                     <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -72,7 +72,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" image="img_empty_state_terrain.png">
+                                <state key="normal" image="img_empty_state_terrain">
                                     <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -134,6 +134,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="img_empty_state_terrain.png" width="343" height="120"/>
+        <image name="img_empty_state_terrain" width="343" height="120"/>
     </resources>
 </document>

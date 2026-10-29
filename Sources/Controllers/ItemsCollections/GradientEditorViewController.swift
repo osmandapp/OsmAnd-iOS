@@ -219,7 +219,7 @@ final class GradientEditorViewController: OABaseNavbarViewController {
             cell.selectionStyle = .none
             cell.rightActionButtonVisibility(true)
             cell.rightActionDividerVisibility(true)
-            cell.rightActionButton.setImage(UIImage.templateImageNamed("ic_custom_add"), for: .normal)
+            cell.rightActionButton.setImage(.icCustomAdd, for: .normal)
             cell.rightActionButton.accessibilityLabel = localizedString("shared_string_add_color")
             cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)
             cell.rightActionButton.addTarget(self, action: #selector(onColorCellButtonPressed(_:)), for: .touchUpInside)

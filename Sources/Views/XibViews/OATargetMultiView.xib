@@ -36,7 +36,7 @@
                             </constraints>
                             <color key="tintColor" name="iconColorSecondary"/>
                             <state key="normal" title="Button"/>
-                            <buttonConfiguration key="configuration" style="plain" image="ic_custom_close.png"/>
+                            <buttonConfiguration key="configuration" style="plain" image="ic_custom_close"/>
                             <connections>
                                 <action selector="onCloseButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="GkH-SY-0uu"/>
                             </connections>
@@ -99,7 +99,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_close.png" width="30" height="30"/>
+        <image name="ic_custom_close" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

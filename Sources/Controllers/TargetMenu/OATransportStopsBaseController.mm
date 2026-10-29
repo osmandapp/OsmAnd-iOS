@@ -119,7 +119,7 @@ static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::Trans
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const int zoomShift = 31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM;
     auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> zoomShift, bbox31.left() >> zoomShift, bbox31.bottom() >> zoomShift, bbox31.right() >> zoomShift);
-    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
+    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport), false);
     if (self.transportStop.transportStopAggregated)
     {
         NSMutableArray<OATransportStop *> *localStops = self.transportStop.transportStopAggregated.localTransportStops;
@@ -257,19 +257,21 @@ static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::Trans
 // adds, so every distinct route is read once instead of once per file.
 - (NSMutableArray<OATransportStop *> *) searchTransportStopsIn:(const OsmAnd::AreaI &)bbox31
 {
-    const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria> searchCriteria(new OsmAnd::TransportStopsInAreaSearch::Criteria);
-    searchCriteria->bbox31 = bbox31;
-
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
-    const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
+    const int zoomShift = 31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM;
+    const auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> zoomShift, bbox31.left() >> zoomShift, bbox31.bottom() >> zoomShift, bbox31.right() >> zoomShift);
+    // Same query as TransportStopsInAreaSearch, but the menu does not wait for a map being installed or updated
+    const auto stopsDataInterface = obfsCollection->obtainDataInterface(nullptr, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport), false);
 
     QList< std::shared_ptr<const OsmAnd::TransportStop> > foundStops;
-    search->performSearch(*searchCriteria,
-                          [&foundStops]
-                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                          {
-        foundStops.push_back(((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop);
+    OsmAnd::ObfSectionInfo::StringTable stringTable;
+    stopsDataInterface->searchTransportIndex(nullptr, &tbbox31, &stringTable,
+                                        [&foundStops]
+                                        (const std::shared_ptr<const OsmAnd::TransportStop>& transportStop) -> bool
+                                        {
+        foundStops.push_back(transportStop);
+        return true;
     });
 
     // Files come back in QHash order, which is arbitrary, so the copy that ends up representing a
@@ -282,9 +284,7 @@ static QString transportSectionSortKey(const std::shared_ptr<const OsmAnd::Trans
         return transportSectionSortKey(l) > transportSectionSortKey(r);
     });
 
-    const int zoomShift = 31 - OsmAnd::TransportStopsInAreaSearch::TRANSPORT_STOP_ZOOM;
-    const auto tbbox31 = OsmAnd::AreaI(bbox31.top() >> zoomShift, bbox31.left() >> zoomShift, bbox31.bottom() >> zoomShift, bbox31.right() >> zoomShift);
-    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
+    const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport), false);
 
     QList<uint64_t> stopIds;
     QHash<uint64_t, OATransportStop *> stopsById;

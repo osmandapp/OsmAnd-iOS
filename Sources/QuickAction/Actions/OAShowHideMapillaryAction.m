@@ -13,6 +13,7 @@
 #import "OAProducts.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -30,7 +31,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"mapillary")]
               nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
-              iconName:@"ic_custom_mapillary_symbol"]
+              iconName:ACImageNameIcCustomMapillarySymbol]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
@@ -46,7 +47,7 @@ static QuickActionType *TYPE;
 
 - (NSString *)getIconResName
 {
-    return @"ic_custom_mapillary_symbol";
+    return ACImageNameIcCustomMapillarySymbol;
 }
 
 - (NSString *)getActionText

@@ -12,6 +12,7 @@
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -29,8 +30,8 @@ static QuickActionType *TYPE;
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_remove_next_destination")]
                nameAction:OALocalizedString(@"shared_string_remove")]
-               iconName:@"ic_action_intermediate"]
-              secondaryIconName:@"ic_custom_compound_action_remove"] 
+               iconName:ACImageNameIcActionIntermediate]
+              secondaryIconName:ACImageNameIcCustomCompoundActionRemove] 
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
@@ -50,7 +51,7 @@ static QuickActionType *TYPE;
 
 - (NSString *)getIconResName
 {
-    return @"ic_action_intermediate";
+    return ACImageNameIcActionIntermediate;
 }
 
 - (NSString *)getActionText

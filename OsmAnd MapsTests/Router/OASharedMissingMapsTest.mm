@@ -20,6 +20,7 @@
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
 #import "OAApplicationMode.h"
+#import "OAAppSettings.h"
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
@@ -53,6 +54,8 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     MissingMapsCalculator *_calculator;
     NSString *_mapsDirectory;
     NSMutableArray<OASBinaryMapIndexReader *> *_readers;
+    NSString *_storedCarRoutingProfile;
+    BOOL _didOverrideCarRoutingProfile;
 }
 
 - (void)setUp
@@ -63,6 +66,12 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     while (![OsmAndApp instance].initialized && deadline.timeIntervalSinceNow > 0)
         [NSRunLoop.currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
     XCTAssertTrue([OsmAndApp instance].initialized, @"the app did not finish starting");
+    if ([[OAApplicationMode CAR] getRoutingProfile].length == 0)
+    {
+        _didOverrideCarRoutingProfile = YES;
+        _storedCarRoutingProfile = [[NSUserDefaults standardUserDefaults] stringForKey:@"routingProfile_car"];
+        [OAAppSettings.sharedManager.routingProfile set:@"car" mode:OAApplicationMode.CAR];
+    }
     XCTAssertGreaterThan([OsmAndApp.instance.worldRegion getWorldRegionsAtWithoutSort:kRouteStart.latitude
                                                                            longitude:kRouteStart.longitude].count,
                          0, @"the region index has no region where the route runs");
@@ -80,6 +89,12 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     for (OASBinaryMapIndexReader *reader in _readers)
         [reader close];
     [NSFileManager.defaultManager removeItemAtPath:_mapsDirectory error:nil];
+    if (_didOverrideCarRoutingProfile)
+    {
+        [OAAppSettings.sharedManager.routingProfile set:_storedCarRoutingProfile ?: @"" mode:OAApplicationMode.CAR];
+        if (!_storedCarRoutingProfile)
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"routingProfile_car"];
+    }
 }
 
 - (void)testTheRegionUnderTheRouteIsNotMissingWithItsMap
@@ -123,7 +138,8 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
 
     OASRoutingConfigurationBuilder *builder = [OsmAndApp.instance getSharedRoutingConfigForMode:params.mode];
     OASGeneralRouter *generalRouter = [OsmAndApp.instance getSharedRouter:builder mode:params.mode];
-    XCTAssertNotNil(generalRouter);
+    XCTAssertNotNil(generalRouter, @"No shared router for profile=%@; builder=%d",
+                    [params.mode getRoutingProfile], builder != nil);
     OASRoutingConfiguration *cf = [_provider buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
 
     OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];

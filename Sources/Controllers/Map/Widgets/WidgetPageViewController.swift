@@ -21,6 +21,7 @@ final class WidgetPageViewController: UIViewController {
     private var bottomStackViewConstraint: NSLayoutConstraint!
     // swiftlint:enable all
     private var heightStackViewConstraint: NSLayoutConstraint?
+    private var panelAppearance: ResolvedWidgetPanelAppearance?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,9 @@ final class WidgetPageViewController: UIViewController {
                         $0.isFullRow = false
                         configureSimple(widget: $0)
                         multipleWidgetsInRowStackView.addArrangedSubview($0)
+                        // Pixel rounding can overlap adjacent widgets. Keep each trailing
+                        // separator above the next widget without changing arranged order.
+                        multipleWidgetsInRowStackView.sendSubviewToBack($0)
                     }
                     stackView.addArrangedSubview(multipleWidgetsInRowStackView)
                 } else {
@@ -49,7 +53,7 @@ final class WidgetPageViewController: UIViewController {
                         stackView.addArrangedSubview(widget)
                     }
                 }
-                if index != simpleWidgetViews.count {
+                if index < simpleWidgetViews.count - 1 {
                     stackView.addSeparators(at: [stackView.subviews.count])
                 }
             }
@@ -70,9 +74,11 @@ final class WidgetPageViewController: UIViewController {
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
+        let trailingStackViewConstraint = stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        trailingStackViewConstraint.priority = isMultipleWidgetsInRow ? .required : UILayoutPriority(999)
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            trailingStackViewConstraint,
             stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
         bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -84,6 +90,10 @@ final class WidgetPageViewController: UIViewController {
         } else {
             bottomStackViewConstraint.isActive = isHiddenPageControl
             heightStackViewConstraint?.isActive = true
+        }
+
+        if let panelAppearance {
+            applyAppearance(panelAppearance)
         }
     }
     
@@ -98,7 +108,14 @@ final class WidgetPageViewController: UIViewController {
         var height: CGFloat = 0
         if isMultipleWidgetsInRow {
             updateSimpleWidget()
-            let fittingSize = stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+            // Measure compressed content; optional padding and icon widths may shrink.
+            // Regular top/bottom panel widths are determined by OAMapInfoController, not this measurement.
+            let fittingSize = stackView.systemLayoutSizeFitting(
+                UIView.layoutFittingCompressedSize,
+                withHorizontalFittingPriority: UILayoutPriority(999),
+                verticalFittingPriority: .fittingSizeLevel
+            )
+            width = fittingSize.width
             height = fittingSize.height
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
@@ -149,6 +166,27 @@ final class WidgetPageViewController: UIViewController {
         }
         heightStackViewConstraint?.constant = height
         return (width, height)
+    }
+
+    func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
+        panelAppearance = appearance
+        // Offscreen pages apply their saved appearance after building the widget views.
+        guard isViewLoaded else { return }
+        view.backgroundColor = appearance.backgroundColor
+        for arrangedSubview in stackView.arrangedSubviews {
+            if let widget = arrangedSubview as? OABaseWidgetView {
+                widget.backgroundColor = appearance.backgroundColor
+                widget.updatesSeparatorsColor(appearance.dividerColor)
+            } else if let row = arrangedSubview as? UIStackView {
+                row.backgroundColor = appearance.backgroundColor
+                for case let widget as OABaseWidgetView in row.arrangedSubviews {
+                    widget.backgroundColor = appearance.backgroundColor
+                    widget.updatesSeparatorsColor(appearance.dividerColor)
+                }
+            } else {
+                arrangedSubview.backgroundColor = appearance.dividerColor
+            }
+        }
     }
 }
 
@@ -203,23 +241,32 @@ extension WidgetPageViewController {
                 }
             }
             // show right separator
-            items.enumerated().forEach { idx, widget in
-                widget.showRightSeparator(idx != items.count - 1)
+            let lastVisibleWidget = visibleWidgets.last
+            items.forEach { widget in
+                widget.showRightSeparator(!widget.isHidden && widget !== lastVisibleWidget)
             }
         }
-        updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
+        updateHorizontalSeparatorVisibility(for: stackView.arrangedSubviews)
     }
     
-    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> ... [widgetView] -> [horizontalSeparatorView]
-    private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
+    // Rows and horizontal separators alternate in arrangedSubviews.
+    private func updateHorizontalSeparatorVisibility(for views: [UIView]) {
+        for case let row as UIStackView in views {
+            row.isHidden = row.arrangedSubviews.allSatisfy { $0.isHidden }
+        }
+
         guard views.count >= 2 else { return }
-        
+
+        let lastVisibleRowIndex = views.indices.last {
+            $0.isMultiple(of: 2) && !views[$0].isHidden
+        } ?? -1
+
         for i in 1..<views.count where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
-            horizontalSeparatorView.isHidden = views[i - 1].isHidden
+            horizontalSeparatorView.isHidden = views[i - 1].isHidden || i > lastVisibleRowIndex
             if !horizontalSeparatorView.isHidden {
-                // update color for horizontal separator
-                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light
+                horizontalSeparatorView.backgroundColor = panelAppearance?.dividerColor
+                    ?? (OAAppSettings.sharedManager().isAppMapNightMode ? .widgetSeparator.dark : .widgetSeparator.light)
             }
         }
     }

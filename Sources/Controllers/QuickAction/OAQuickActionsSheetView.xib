@@ -39,7 +39,7 @@
                             <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="35" maxY="0.0"/>
-                            <state key="normal" title="Previous" image="ic_custom_arrow_back.png">
+                            <state key="normal" title="Previous" image="ic_custom_arrow_back">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                             <connections>
@@ -52,7 +52,7 @@
                             <color key="backgroundColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                             <inset key="imageEdgeInsets" minX="70" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Next" image="ic_custom_arrow_forward.png"/>
+                            <state key="normal" title="Next" image="ic_custom_arrow_forward"/>
                             <connections>
                                 <action selector="controlNextPressed:" destination="TCB-f3-a1o" eventType="touchUpInside" id="hUq-HP-7Nc"/>
                             </connections>
@@ -103,7 +103,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_arrow_back.png" width="30" height="30"/>
-        <image name="ic_custom_arrow_forward.png" width="30" height="30"/>
+        <image name="ic_custom_arrow_back" width="30" height="30"/>
+        <image name="ic_custom_arrow_forward" width="30" height="30"/>
     </resources>
 </document>

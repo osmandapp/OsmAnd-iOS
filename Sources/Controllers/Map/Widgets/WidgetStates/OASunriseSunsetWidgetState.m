@@ -13,6 +13,7 @@
 #import "OAApplicationMode.h"
 #import "OASunriseSunsetWidget.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OASunriseSunsetWidgetState
 {
@@ -101,9 +102,9 @@
 - (NSString *) getMenuIconId
 {
     if ([self isSunriseMode])
-        return @"widget_sunrise";
+        return ACImageNameWidgetSunrise;
     else
-        return @"widget_sunset";
+        return ACImageNameWidgetSunset;
 }
 
 - (NSString *)getSettingsIconId:(BOOL)nightMode

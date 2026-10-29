@@ -41,6 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIImage *) getPreviewIconWithColor:(UIColor *)color;
 
 + (BOOL) isModel:(NSString *)modelName;
++ (BOOL)isCustomModel:(nullable id)name;
 - (BOOL) isModel;
 - (BOOL) shouldDisplayModel;
 

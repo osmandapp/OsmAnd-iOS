@@ -19,6 +19,7 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kLayerOsmVector = @"LAYER_OSM_VECTOR";
 static NSString * const kSource = @"source";
@@ -47,8 +48,8 @@ static QuickActionType *TYPE;
                                                  cl:self.class]
                 name:OALocalizedString(@"map_source")]
                nameAction:OALocalizedString(@"shared_string_change")]
-              iconName:@"ic_custom_show_on_map"]
-             secondaryIconName:@"ic_custom_compound_action_change"]
+              iconName:ACImageNameIcCustomShowOnMap]
+             secondaryIconName:ACImageNameIcCustomCompoundActionChange]
             category:QuickActionTypeCategoryConfigureMap];
 }
 
@@ -190,7 +191,7 @@ static QuickActionType *TYPE;
                          @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : source.lastObject,
                          @"value" : source.firstObject,
-                         @"img" : @"ic_custom_map_style"
+                         @"img" : ACImageNameIcCustomMapStyle
                          }];
     }
     [arr addObject:@{

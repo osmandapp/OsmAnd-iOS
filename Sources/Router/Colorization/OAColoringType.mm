@@ -20,6 +20,7 @@
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
+#import "GeneratedAssetSymbols.h"
 
 static OAColoringType * DEFAULT;
 static OAColoringType * CUSTOM_COLOR;
@@ -49,7 +50,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!DEFAULT)
     {
-        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_widget_renderer") iconName:@"ic_custom_map_style"];
+        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_widget_renderer") iconName:ACImageNameIcCustomMapStyle];
     }
     return DEFAULT;
 }
@@ -58,7 +59,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!CUSTOM_COLOR)
     {
-        CUSTOM_COLOR = [[OAColoringType alloc] initWithName:@"custom_color" title:OALocalizedString(@"shared_string_custom") iconName:@"ic_custom_settings"];
+        CUSTOM_COLOR = [[OAColoringType alloc] initWithName:@"custom_color" title:OALocalizedString(@"shared_string_custom") iconName:ACImageNameIcCustomSettings];
     }
     return CUSTOM_COLOR;
 }
@@ -77,7 +78,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!SPEED)
     {
-        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"shared_string_speed") iconName:@"ic_action_max_speed"];
+        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"shared_string_speed") iconName:ACImageNameIcActionMaxSpeed];
     }
     return SPEED;
 }
@@ -86,7 +87,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!ALTITUDE)
     {
-        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"altitude") iconName:@"ic_action_altitude"];
+        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"altitude") iconName:ACImageNameIcActionAltitude];
     }
     return ALTITUDE;
 }
@@ -95,7 +96,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
    if (!SLOPE)
    {
-       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"shared_string_slope") iconName:@"ic_custom_altitude_and_slope"];
+       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"shared_string_slope") iconName:ACImageNameIcCustomAltitudeAndSlope];
    }
     return SLOPE;
 }
@@ -104,7 +105,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!ATTRIBUTE)
     {
-        ATTRIBUTE = [[OAColoringType alloc] initWithName:@"attribute" title:OALocalizedString(@"attribute") iconName:@"ic_action_altitude"];
+        ATTRIBUTE = [[OAColoringType alloc] initWithName:@"attribute" title:OALocalizedString(@"attribute") iconName:ACImageNameIcActionAltitude];
     }
     return ATTRIBUTE;
 }

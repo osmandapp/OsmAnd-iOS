@@ -16,6 +16,7 @@
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OADestinationCell
 {
@@ -195,7 +196,7 @@
         _btnClose.opaque = YES;
         _btnClose.tintColor = UIColorFromRGB(0x5081a6);
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
-        [_btnClose setImage:[UIImage imageNamed:@"ic_navbar_list"] forState:UIControlStateNormal];
+        [_btnClose setImage:[UIImage imageNamed:ACImageNameIcNavbarList] forState:UIControlStateNormal];
         [_btnClose addTarget:self action:@selector(openDestinationViewController:) forControlEvents:UIControlEventTouchUpInside];
         
         if (self.btnClose)
@@ -210,7 +211,7 @@
         _btnOK.opaque = YES;
         _btnOK.tintColor = UIColorFromRGB(0xffffff);
         [_btnOK setTitle:@"" forState:UIControlStateNormal];
-        [_btnOK setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+        [_btnOK setImage:[UIImage imageNamed:ACImageNameIcTripVisitedpoint] forState:UIControlStateNormal];
         [_btnOK addTarget:self action:@selector(buttonOKClicked) forControlEvents:UIControlEventTouchUpInside];
         _btnOK.hidden = YES;
         [_contentView addSubview:self.btnOK];
@@ -281,7 +282,7 @@
 {
     if (arrow)
     {
-        [_markerImage setImage:[UIImage imageNamed:@"destination_map_center"]];
+        [_markerImage setImage:[UIImage imageNamed:ACImageNameDestinationMapCenter]];
         if (!_markerView.superview)
             [_directionsView addSubview:self.markerView];
     }
@@ -387,9 +388,9 @@
             case 0:
                 
                 if (_firstRow)
-                    self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
+                    self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcDestinationArrow] color:destination.color];
                 else
-                    self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow_small"] color:destination.color];
+                    self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcDestinationArrowSmall] color:destination.color];
                 
                 [self updateMapCenterArrow:self.mapCenterArrow];
 

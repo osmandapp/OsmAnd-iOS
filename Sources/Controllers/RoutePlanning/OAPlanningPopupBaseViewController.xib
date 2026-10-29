@@ -46,7 +46,7 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MBb-eo-8Tb">
                                     <rect key="frame" x="0.0" y="10" width="414" height="46.5"/>
                                     <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_copy.png" translatesAutoresizingMaskIntoConstraints="NO" id="A82-Si-Nre">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_copy" translatesAutoresizingMaskIntoConstraints="NO" id="A82-Si-Nre">
                                             <rect key="frame" x="16" y="3.5" width="30" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="RBr-Z6-Jbc"/>
@@ -67,7 +67,7 @@
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="UZ5-3w-sw0"/>
                                                 <constraint firstAttribute="width" constant="30" id="yMo-Bl-V6a"/>
                                             </constraints>
-                                            <state key="normal" image="ic_custom_close.png"/>
+                                            <state key="normal" image="ic_custom_close"/>
                                             <connections>
                                                 <action selector="closeButtonPressed:" destination="-1" eventType="touchUpInside" id="hxb-Ma-ARv"/>
                                             </connections>
@@ -188,8 +188,8 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_close.png" width="30" height="30"/>
-        <image name="ic_custom_copy.png" width="30" height="30"/>
+        <image name="ic_custom_close" width="30" height="30"/>
+        <image name="ic_custom_copy" width="30" height="30"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

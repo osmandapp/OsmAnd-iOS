@@ -313,6 +313,7 @@ static inline double normalizeDouble(double v)
 
 + (BOOL) getAccessToFile:(NSString *)filePath;
 + (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
++ (NSString *)importTempPath;
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL) iosVersionIsExactly:(NSString*)testVersion;
@@ -348,7 +349,7 @@ static inline double normalizeDouble(double v)
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 
-+ (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url;
++ (NSDictionary<NSString *, NSString *> *)parseUrlQuery:(nullable NSURL *)url;
 + (CLLocation *)parseLatLon:(NSString *)latLon;
 + (BOOL) isOsmAndMapUrl:(NSURL *)url;
 + (BOOL) isOsmAndGoUrl:(NSURL *)url;

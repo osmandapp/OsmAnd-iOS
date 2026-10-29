@@ -45,7 +45,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                             <color key="tintColor" name="navBarTextColorPrimary"/>
-                            <state key="normal" image="ic_close.png">
+                            <state key="normal" image="ic_close">
                                 <color key="titleColor" name="navBarTextColorPrimary"/>
                             </state>
                             <connections>
@@ -91,7 +91,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
-                                    <state key="normal" image="position_track_map_mode_button.png"/>
+                                    <state key="normal" image="position_track_map_mode_button"/>
                                     <connections>
                                         <action selector="btnMyLocationClicked:" destination="-1" eventType="touchUpInside" id="AT3-gi-o9P"/>
                                     </connections>
@@ -113,7 +113,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
-                                    <state key="normal" image="ic_close.png"/>
+                                    <state key="normal" image="ic_close"/>
                                     <connections>
                                         <action selector="barActionLeftImgButtonPress:" destination="-1" eventType="touchUpInside" id="Vn6-zh-Pjq"/>
                                     </connections>
@@ -134,7 +134,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
-                                    <state key="normal" image="position_track_map_mode_button.png"/>
+                                    <state key="normal" image="position_track_map_mode_button"/>
                                     <connections>
                                         <action selector="barActionImgButtonPress:" destination="-1" eventType="touchUpInside" id="qCS-wy-eXU"/>
                                     </connections>
@@ -175,7 +175,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                             <color key="tintColor" name="buttonTextColorPrimary"/>
-                            <state key="normal" image="ic_close.png"/>
+                            <state key="normal" image="ic_close"/>
                             <connections>
                                 <action selector="bottomImageButtonPress:" destination="-1" eventType="touchUpInside" id="AVo-b0-oEE"/>
                             </connections>
@@ -201,8 +201,8 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_close.png" width="10" height="10"/>
-        <image name="position_track_map_mode_button.png" width="22" height="22"/>
+        <image name="ic_close" width="10" height="10"/>
+        <image name="position_track_map_mode_button" width="22" height="22"/>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

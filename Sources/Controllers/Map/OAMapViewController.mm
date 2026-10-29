@@ -153,6 +153,7 @@ static char kMapSourceUpdateQueueKey;
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
+@property (atomic) BOOL renderedNightMode;
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable;
 - (void)updateMapLocaleLanguageForEnvironment:(const std::shared_ptr<OsmAnd::MapPresentationEnvironment>&)mapPresentationEnvironment
@@ -215,6 +216,7 @@ static char kMapSourceUpdateQueueKey;
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
     OAAutoObserverProxy* _framePreparedObserver;
+    OAAutoObserverProxy* _displayLinkFrameRateObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
     
@@ -365,6 +367,8 @@ static char kMapSourceUpdateQueueKey;
     
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
+    _displayLinkFrameRateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDisplayLinkFrameRateChanged)];
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
@@ -534,6 +538,7 @@ static char kMapSourceUpdateQueueKey;
     [_stateObserver observe:_mapView.stateObservable];
     [_settingsObserver observe:_mapView.settingsObservable];
     [_framePreparedObserver observe:_mapView.framePreparedObservable];
+    [_displayLinkFrameRateObserver observe:_mapView.displayLinkFrameRateObservable];
     _mapView.rendererDelegate = self;
 
     self.mapViewLoaded = YES;
@@ -650,7 +655,7 @@ static char kMapSourceUpdateQueueKey;
                                    _app.initialURLMapState.target31.y);
         OARootViewController *rootViewController = [OARootViewController instance];
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(centerPoint);
-        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
+        OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer unknownTargetPoint:latLon.latitude longitude:latLon.longitude];
         targetPoint.centerMap = YES;
         [rootViewController.mapPanel showContextMenu:targetPoint];
     }
@@ -1793,6 +1798,7 @@ static char kMapSourceUpdateQueueKey;
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated:nil];
+        [mapPanel disablePlanRouteSearchContextMenuForMapGesture];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events
@@ -1877,6 +1883,11 @@ static char kMapSourceUpdateQueueKey;
 - (void) onMapRendererFramePrepared
 {
     [_framePreparedObservable notifyEvent];
+}
+
+- (void) onDisplayLinkFrameRateChanged
+{
+    [self applyFrameRefreshRateLimit];
 }
 
 @synthesize zoomObservable = _zoomObservable;
@@ -2280,10 +2291,18 @@ static char kMapSourceUpdateQueueKey;
             _mapSourceInvalidated = YES;
             return;
         }
-        
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self updateCurrentMapSource];
         });
+    });
+}
+
+- (void)reloadMapSourceIfNightModeChanged
+{
+    dispatch_async(_mapSourceUpdateQueue, ^{
+        if (self.renderedNightMode != [OAAppSettings sharedManager].isCurrentMapNightMode)
+            [self reloadMapSourceForDayNightModeChange];
     });
 }
 
@@ -2585,6 +2604,7 @@ static char kMapSourceUpdateQueueKey;
         return;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL nightMode = settings.isCurrentMapNightMode;
     const auto screenTileSize = 256 * displayDensityFactor;
     double mapDensity = [settings.mapDensity get];
     double mapDensityAligned;
@@ -2663,7 +2683,7 @@ static char kMapSourceUpdateQueueKey;
             NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
             newSettings[@"baseAppMode"] = baseMode;
 
-            if (settings.isCurrentMapNightMode)
+            if (nightMode)
                 newSettings[@"nightMode"] = @"true";
             shouldSetSkyFog = YES;
 
@@ -2802,7 +2822,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (enabledSrtmPlugin && [enabledSrtmPlugin isTerrainLayerEnabled] && [enabledSrtmPlugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -2819,10 +2839,7 @@ static char kMapSourceUpdateQueueKey;
     }
 
     [self runWithRenderSync:^{
-        if ([settings.batterySavingMode get])
-            [_mapView limitFrameRefreshRate];
-        else
-            [_mapView restoreFrameRefreshRate];
+        [self applyFrameRefreshRateLimit];
 
         _mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
         self.referenceTileSizeRasterOrigInPixels = rasterTileSizeOrig;
@@ -2861,8 +2878,7 @@ static char kMapSourceUpdateQueueKey;
             [_mapView setVisualZoomShift:mapDensity];
         if (shouldSetSkyFog)
         {
-            BOOL mapNightMode = settings.isCurrentMapNightMode;
-            if (mapNightMode)
+            if (nightMode)
             {
                 [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
                 [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
@@ -2911,6 +2927,7 @@ static char kMapSourceUpdateQueueKey;
         [_mapLayers updateLayers];
         [_mapView setFlatEarth:![settings.sphericalMap get]];
     }];
+    self.renderedNightMode = nightMode;
 
     [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:[[OAMapPresentationEnvironment alloc] initWithEnvironment:mapPresentationEnvironment]];
     if (shouldApplyWeatherBandSettings)
@@ -3014,7 +3031,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (plugin && [plugin isTerrainLayerEnabled] && [plugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -3095,6 +3112,23 @@ static char kMapSourceUpdateQueueKey;
         commit();
     else
         dispatch_sync(dispatch_get_main_queue(), commit);
+}
+
+- (void) setAttachedToCarPlayWindow:(BOOL)attachedToCarPlayWindow
+{
+    _attachedToCarPlayWindow = attachedToCarPlayWindow;
+    [self applyFrameRefreshRateLimit];
+}
+
+- (void) applyFrameRefreshRateLimit
+{
+    if (!self.mapViewLoaded)
+        return;
+
+    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
+        [_mapView limitFrameRefreshRate];
+    else
+        [_mapView restoreFrameRefreshRate];
 }
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable
@@ -3441,6 +3475,10 @@ static char kMapSourceUpdateQueueKey;
             [_gpxFilesRec removeAllObjects];
             [_gpxFilesRec addObject:gpxFile];
             [_mapLayers.gpxRecMapLayer refreshGpxTracks:[gpxFilesDic copy] reset:NO];
+        }
+        else if (refreshData)
+        {
+            _recTrackShowing = NO;
         }
     }];
 }
@@ -3972,6 +4010,25 @@ static char kMapSourceUpdateQueueKey;
 {
     if (items.count == 0)
         return NO;
+
+    if (docPath.length == 0)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+        for (OAGpxWptItem *item in items)
+        {
+            [helper saveWpt:item.point];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
+        }
+
+        if (updateMap)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+            });
+        }
+        return YES;
+    }
 
     BOOL found = NO;
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;

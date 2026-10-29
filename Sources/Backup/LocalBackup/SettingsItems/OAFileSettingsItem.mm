@@ -19,6 +19,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapCreatorHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAFileSettingsItemFileSubtype
 
@@ -237,30 +238,30 @@
         case EOAFileSettingsItemFileSubtypeObfMap:
         case EOAFileSettingsItemFileSubtypeTilesMap:
         case EOAFileSettingsItemFileSubtypeRoadMap:
-            return @"ic_custom_map";
+            return ACImageNameIcCustomMap;
         case EOAFileSettingsItemFileSubtypeSrtmMap:
-            return @"ic_custom_contour_lines";
+            return ACImageNameIcCustomContourLines;
         case EOAFileSettingsItemFileSubtypeTerrainMap:
-            return @"ic_custom_terrain";
+            return ACImageNameIcCustomTerrain;
         case EOAFileSettingsItemFileSubtypeNauticalDepth:
-            return @"ic_custom_nautical_depth";
+            return ACImageNameIcCustomNauticalDepth;
         case EOAFileSettingsItemFileSubtypeWikiMap:
-            return @"ic_custom_wikipedia";
+            return ACImageNameIcCustomWikipedia;
         case EOAFileSettingsItemFileSubtypeGpx:
-            return @"ic_custom_trip";
+            return ACImageNameIcCustomTrip;
         case EOAFileSettingsItemFileSubtypeVoice:
-            return @"ic_custom_sound";
+            return ACImageNameIcCustomSound;
         case EOAFileSettingsItemFileSubtypeTravel:
-            return @"ic_custom_wikipedia";
+            return ACImageNameIcCustomWikipedia;
         case EOAFileSettingsItemFileSubtypeRoutingConfig:
-            return @"ic_custom_route";
+            return ACImageNameIcCustomRoute;
         case EOAFileSettingsItemFileSubtypeRenderingStyle:
-            return @"ic_custom_map_style";
+            return ACImageNameIcCustomMapStyle;
         case EOAFileSettingsItemFileSubtypeColorPalette:
-            return @"ic_custom_file_color_palette";
+            return ACImageNameIcCustomFileColorPalette;
             
         default:
-            return @"ic_custom_save_as_new_file";
+            return ACImageNameIcCustomSaveAsNewFile;
     }
 }
 
@@ -499,11 +500,11 @@
     switch (self.subtype)
     {
         case EOAFileSettingsItemFileSubtypeWikiMap:
-            return @"ic_custom_wikipedia";
+            return ACImageNameIcCustomWikipedia;
         case EOAFileSettingsItemFileSubtypeSrtmMap:
-            return @"ic_custom_contour_lines";
+            return ACImageNameIcCustomContourLines;
         default:
-            return @"ic_custom_show_on_map";
+            return ACImageNameIcCustomShowOnMap;
     }
 }
 

@@ -139,8 +139,8 @@
     rightBtnFrame.size.width = leftBtnFrame.size.width;
     _selectButton.frame = rightBtnFrame;
     
-    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:[UIColor colorNamed:ACColorNameButtonTextColorSecondary]];
-    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
+    [self setupButtonAppearance:_clearAllButton iconName:ACImageNameIcCustomClearList color:[UIColor colorNamed:ACColorNameButtonTextColorSecondary]];
+    [self setupButtonAppearance:_selectButton iconName:ACImageNameIcCustomAdd color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
@@ -311,7 +311,7 @@
         
         if (cell)
         {
-            cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_alert_color"];
+            cell.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomAlertColor];
             [cell descriptionVisibility:value || value.length != 0];
             cell.descriptionLabel.text = value;
             [cell.titleLabel setText:text];

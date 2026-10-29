@@ -20,11 +20,11 @@ final class BLERunningSCDDevice: Device {
     }
     
     override var getServiceConnectedImage: UIImage? {
-        UIImage(named: "widget_sensor_speed")
+        .widgetSensorSpeed
     }
     
     override var getServiceDisconnectedImage: UIImage? {
-        UIImage(named: "ic_custom_sensor_speed_outlined")
+        .icCustomSensorSpeedOutlined
     }
     
     override var getDataFields: [[String: String]]? {

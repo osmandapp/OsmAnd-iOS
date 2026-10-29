@@ -505,11 +505,11 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
     {
         shouldUseSystemBackButton = NO;
         if (!leftNavbarButtonCustomIcon)
-            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+            leftNavbarButtonCustomIcon = [UIImage imageNamed:ACImageNameIcNavbarChevron];
     }
     
     if (!leftNavbarButtonCustomIcon && !shouldUseSystemBackButton && ((isModalController && isRootController && !leftButtonTitle) || (!isModalController && leftButtonTitle && leftButtonTitle.length == 0)))
-        leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+        leftNavbarButtonCustomIcon = [UIImage imageNamed:ACImageNameIcNavbarChevron];
 
     CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
     CGFloat freeSpaceForNavbarButton = freeSpaceForTitle;
@@ -565,7 +565,7 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             [leftButton setTitle:isLongTitle ? nil : leftButtonTitle forState:UIControlStateNormal];
             if (isLongTitle && !leftNavbarButtonCustomIcon)
             {
-                leftNavbarButtonCustomIcon = [UIImage templateImageNamed:ACImageNameIcNavbarChevron];
+                leftNavbarButtonCustomIcon = [UIImage imageNamed:ACImageNameIcNavbarChevron];
                 freeSpaceForNavbarButton = 30.;
                 leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
                 leftButton.contentEdgeInsets = UIEdgeInsetsMake(0., 4., 0., -4.);
@@ -574,7 +574,9 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
             leftButton.translatesAutoresizingMaskIntoConstraints = NO;
-            [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
+            NSLayoutConstraint *leftButtonMaxWidthConstraint = [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton];
+            leftButtonMaxWidthConstraint.priority = 999;
+            leftButtonMaxWidthConstraint.active = YES;
             
             _leftButtonLongTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftNavbarButtonLongtapPressed:)];
             [leftButton addGestureRecognizer:_leftButtonLongTapRecognizer];

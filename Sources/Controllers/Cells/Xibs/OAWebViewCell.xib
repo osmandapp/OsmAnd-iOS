@@ -33,7 +33,7 @@
                             <wkPreferences key="preferences"/>
                         </wkWebViewConfiguration>
                     </wkWebView>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="vOc-FK-tAD">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer" translatesAutoresizingMaskIntoConstraints="NO" id="vOc-FK-tAD">
                         <rect key="frame" x="291" y="101" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="21" id="eYe-VE-r53"/>
@@ -63,7 +63,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="menu_cell_pointer.png" width="6" height="10.5"/>
+        <image name="menu_cell_pointer" width="6" height="10.5"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

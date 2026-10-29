@@ -21,6 +21,7 @@
 #include <OsmAndCore/Map/MapStyleEvaluationResult.h>
 #include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
 #include <OsmAndCore/Data/MapObject.h>
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOAContourValueType)
 {
@@ -290,16 +291,16 @@ static NSString *kPrecipContourStyleName;
     switch (self.bandIndex)
     {
         case WEATHER_BAND_CLOUD:
-            return @"ic_custom_clouds";
+            return ACImageNameIcCustomClouds;
         case WEATHER_BAND_TEMPERATURE:
-            return @"ic_custom_thermometer";
+            return ACImageNameIcCustomThermometer;
         case WEATHER_BAND_PRESSURE:
-            return @"ic_custom_air_pressure";
+            return ACImageNameIcCustomAirPressure;
         case WEATHER_BAND_WIND_ANIMATION:
         case WEATHER_BAND_WIND_SPEED:
-            return @"ic_custom_wind";
+            return ACImageNameIcCustomWind;
         case WEATHER_BAND_PRECIPITATION:
-            return @"ic_custom_precipitation";
+            return ACImageNameIcCustomPrecipitation;
         case WEATHER_BAND_NOTHING:
             return nil;
     }

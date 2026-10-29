@@ -2943,3 +2943,6 @@
 "crash_report_prompt_description" = "请您发送崩溃报告，帮助我们改进应用。您的崩溃报告将帮助我们识别并修复问题。";
 "shared_string_send" = "发送";
 "send_current_app_log" = "发送当前应用程序日志";
+"opening_hours_public_holiday" = "公共假期";
+"opening_hours_school_holiday" = "学校假期";
+"opening_hours_easter" = "复活节";

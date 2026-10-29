@@ -31,7 +31,7 @@
                                 <color key="textColor" name="textColorActive"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_action_osmand_logo_banner.png" translatesAutoresizingMaskIntoConstraints="NO" id="s8Q-yH-SlA" userLabel="Icon">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_action_osmand_logo_banner" translatesAutoresizingMaskIntoConstraints="NO" id="s8Q-yH-SlA" userLabel="Icon">
                                 <rect key="frame" x="60" y="1" width="20" height="20"/>
                                 <color key="tintColor" name="iconColorSecondary"/>
                                 <constraints>
@@ -101,7 +101,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="ic_action_osmand_logo_banner.png" width="28" height="28"/>
+        <image name="ic_action_osmand_logo_banner" width="28" height="28"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

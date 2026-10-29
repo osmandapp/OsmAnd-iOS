@@ -71,6 +71,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     BOOL _isAddingNewPOI;
     BOOL _isOnScreenSwitching;
+    BOOL _pageTransitionInProgress;
 }
 
 -(id) initWithLat:(double)latitude lon:(double)longitude
@@ -181,7 +182,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
         [backButton setTintColor:[UIColor colorNamed:ACColorNameNavBarTextColorPrimary]];
     }
-    [backButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [backButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [backButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [backButton addTarget:self action:@selector(onBackPressed) forControlEvents:UIControlEventTouchUpInside];
     _backButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -281,22 +282,31 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender
 {
+    if (_pageTransitionInProgress)
+    {
+        _segmentControl.selectedSegmentIndex = _pageController.viewControllers.firstObject == _basicEditingController ? BASIC : ADVANCED;
+        return;
+    }
+
+    UIViewController *targetController = sender.selectedSegmentIndex == BASIC ? _basicEditingController : _advancedEditingController;
+    if (_pageController.viewControllers.firstObject == targetController)
+        return;
+
     _isOnScreenSwitching = YES;
     [self.view endEditing:YES];
-    
-    switch (_segmentControl.selectedSegmentIndex)
-    {
-        case 0:
-        {
-            [_pageController setViewControllers:@[_basicEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-            break;
-        }
-        case 1:
-        {
-            [_pageController setViewControllers:@[_advancedEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-            break;
-        }
-    }
+
+    _pageTransitionInProgress = YES;
+    _segmentControl.enabled = NO;
+    _pageController.view.userInteractionEnabled = NO;
+    UIPageViewControllerNavigationDirection direction = sender.selectedSegmentIndex == BASIC
+        ? UIPageViewControllerNavigationDirectionReverse
+        : UIPageViewControllerNavigationDirectionForward;
+    [_pageController setViewControllers:@[targetController] direction:direction animated:YES completion:^(BOOL finished) {
+        self->_pageTransitionInProgress = NO;
+        self->_segmentControl.enabled = YES;
+        self->_pageController.view.userInteractionEnabled = YES;
+        self->_segmentControl.selectedSegmentIndex = self->_pageController.viewControllers.firstObject == self->_basicEditingController ? BASIC : ADVANCED;
+    }];
 }
 
 - (IBAction)deletePressed:(id)sender
@@ -546,8 +556,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 #pragma mark - UIPageViewControllerDelegate
 
+- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewControllers
+{
+    _pageTransitionInProgress = YES;
+    _segmentControl.enabled = NO;
+}
+
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
+    _pageTransitionInProgress = NO;
+    _segmentControl.enabled = YES;
     if (pageViewController.viewControllers[0] == _basicEditingController)
         _segmentControl.selectedSegmentIndex = BASIC;
     else

@@ -338,7 +338,7 @@
         kCellKeyKey: deleteOperation ? @"deleteItem" : @"uploadLocal",
         kCellTitleKey: title,
         kCellDescrKey: description,
-        kCellSecondaryIconName: @"ic_custom_cloud_upload_outline",
+        kCellSecondaryIconName: ACImageNameIcCustomCloudUploadOutline,
         kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
         @"enabled": @(enabled)
     }];
@@ -394,7 +394,7 @@
         kCellKeyKey: deleteOperation ? @"deleteItem" : @"downloadCloud",
         kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
         kCellDescrKey: description,
-        kCellSecondaryIconName: @"ic_custom_cloud_download_outline",
+        kCellSecondaryIconName: ACImageNameIcCustomCloudDownloadOutline,
         kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
         @"enabled": @(enabled)
     }];

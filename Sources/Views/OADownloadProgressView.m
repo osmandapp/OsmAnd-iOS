@@ -7,6 +7,7 @@
 //
 
 #import "OADownloadProgressView.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OADownloadProgressView()
 
@@ -92,12 +93,12 @@ typedef enum {
 
 -(void)setButtonStatePause {
     self.buttonState = kDownloadProgressButtonStatePause;
-    [self.startStopButtonView setImage:[UIImage imageNamed:@"ic_custom_pause"] forState:UIControlStateNormal];
+    [self.startStopButtonView setImage:[UIImage imageNamed:ACImageNameIcCustomPause] forState:UIControlStateNormal];
 }
 
 -(void)setButtonStateResume {
     self.buttonState = kDownloadProgressButtonStateResume;
-    [self.startStopButtonView setImage:[UIImage imageNamed:@"ic_custom_play"] forState:UIControlStateNormal];
+    [self.startStopButtonView setImage:[UIImage imageNamed:ACImageNameIcCustomPlay] forState:UIControlStateNormal];
 }
 
 

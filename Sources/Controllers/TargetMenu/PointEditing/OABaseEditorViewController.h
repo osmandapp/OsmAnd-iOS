@@ -48,9 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
                                              text:(NSString *)text
                                               tag:(NSInteger)tag;
 - (BOOL)isAppearanceChanged;
+- (BOOL)isIconNameChanged:(nullable NSString *)iconName;
+- (BOOL)isBackgroundIconNameChanged:(nullable NSString *)backgroundIconName;
+- (void)changeSaveButtonAvailabilityWithGroup;
 - (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
-- (BOOL)allowsExistingGroupFor:(NSString *)name group:(nullable OAFavoriteGroup *)group;
 - (BOOL)allowsValidationForGroupName;
+- (void)generateActionSection;
 
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler;
 

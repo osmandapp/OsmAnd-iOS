@@ -50,7 +50,7 @@
                             <constraint firstAttribute="height" constant="30" id="xbx-ol-61Y"/>
                         </constraints>
                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="16" maxY="0.0"/>
-                        <state key="normal" image="ic_custom_overflow_menu.png"/>
+                        <state key="normal" image="ic_custom_overflow_menu"/>
                     </button>
                 </subviews>
                 <constraints>
@@ -92,7 +92,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_overflow_menu.png" width="30" height="30"/>
+        <image name="ic_custom_overflow_menu" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -504,10 +504,14 @@
 
 - (void) adjustViewSize
 {
+    if (_isPanelVertical || self.isSimpleLayout || self.isVerticalStackImageTitleSubtitleLayout)
+        return;
+
     [super adjustViewSize];
     self.topTextAnchor.constant = _horisontalMini ? 5 : self.topView.frame.size.height + 5;
     CGRect rect = self.frame;
-    rect.size.height += self.textView.frame.origin.y - 5;
+    // The label's frame may still contain its position from the previous layout pass.
+    rect.size.height += self.topTextAnchor.constant - 5;
     self.frame = rect;
 }
 
@@ -572,12 +576,10 @@
 {
     [super updateColors:textState];
     UIColor *valueTextColor = self.valueTextColor;
-    UIColor *textColorSecondary = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    UIColor *borderColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
     _distanceLabel.textColor = valueTextColor;
     _exitLabel.textColor = valueTextColor;
-    _exitLabel.borderColor = self.isNightMode ? borderColor.dark : borderColor.light;
-    _streetLabel.textColor = self.isNightMode ? textColorSecondary.dark : textColorSecondary.light;
+    _exitLabel.borderColor = textState.dividerColor;
+    _streetLabel.textColor = textState.unitColor;
     [self updateTextWitState:textState];
     [self applyOutlineIfNeededToLabel:_distanceLabel];
     [self applyOutlineIfNeededToLabel:_exitLabel];

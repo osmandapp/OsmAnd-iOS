@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 
 extension FavoriteListViewController {
     func openFavoriteGroupAppearance(_ groupName: String) {
-        guard let viewController = OAFavoriteGroupEditorViewController(group: OAFavoritesHelperBridge.shared().pointsGroup(forGroupName: groupName)) else { return }
+        guard let viewController = FavoriteGroupEditorViewController(group: OAFavoritesHelperBridge.shared().pointsGroup(forGroupName: groupName)) else { return }
         favoriteGroupAppearanceGroupName = groupName
         favoriteGroupAppearanceEditor = viewController
         viewController.delegate = self
@@ -105,10 +105,10 @@ extension FavoriteListViewController {
             applySnapshot(animatingDifferences: false)
         }
 
+        configureToolbar()
         navigationController?.setToolbarHidden(!isEditing, animated: true)
         myPlacesDelegate?.updateEditMode(isEditing)
         configureNavigation()
-        configureToolbar()
     }
 
     func showRenameAlert(for folder: FavoriteFolderRow) {
@@ -237,10 +237,27 @@ extension FavoriteListViewController {
         }
 
         guard let navigationController else { return }
-        let colorController = OAEditColorViewController()
-        colorController.delegate = self
-        self.colorController = colorController
-        let modalNavigationController = UINavigationController(rootViewController: colorController)
+        var identifiers = Set<String>()
+        let points = bridgeItems(for: selectionManager.selectedItems).flatMap { item -> [OAFavoritePointBridgeItem] in
+            if let point = item as? OAFavoritePointBridgeItem { return [point] }
+            if let folderPath = item as? String {
+                return favoritePointRows(inFolder: folderPath).map { $0.bridgeItem }
+            }
+            return []
+        }.filter { identifiers.insert($0.identifier).inserted }
+        guard !points.isEmpty else { return }
+        let controller = FavoritesChangeAppearanceViewController(points: points)
+        controller.onApply = { color, iconName, backgroundIconName in
+            OAFavoritesHelperBridge.shared().changeFavoritePoints(points, color: color, iconName: iconName, backgroundIconName: backgroundIconName)
+        }
+        controller.onClose = { [weak self] in
+            guard let self else { return }
+            self.setEditing(false)
+            self.applySnapshot(animatingDifferences: true)
+        }
+        
+        let modalNavigationController = UINavigationController(rootViewController: controller)
+        modalNavigationController.modalPresentationStyle = .fullScreen
         navigationController.present(modalNavigationController, animated: true)
     }
     
@@ -342,11 +359,8 @@ extension FavoriteListViewController {
         }
     }
 
-    @objc func shareButtonClicked(_ sender: Any) {
-        let sourceView = sender as? UIView ?? collectionView
-        shareItems(for: sourceView)
-        setEditing(false)
-        applySnapshot()
+    @objc func shareButtonClicked(_ sender: UIBarButtonItem) {
+        shareItems(from: sender)
     }
 
     @objc func moveButtonClicked(_ sender: Any) {
@@ -423,9 +437,8 @@ extension FavoriteListViewController {
     }
     
     private func openNewFavoriteGroupEditor() {
-        guard let navigationController, let viewController = OAFavoriteGroupEditorViewController(new: ()) else { return }
+        guard let navigationController, let viewController = FavoriteGroupEditorViewController(new: ()) else { return }
         viewController.parentGroupName = parentGroupName
-        viewController.validatesGroupUniqueness = true
         viewController.delegate = self
         let modalNavigationController = UINavigationController(rootViewController: viewController)
         navigationController.present(modalNavigationController, animated: true)
@@ -482,7 +495,7 @@ extension FavoriteListViewController {
         }
     }
     
-    private func shareItems(for sourceView: UIView) {
+    private func shareItems(from barButtonItem: UIBarButtonItem) {
         let selectedBridgeItems = bridgeItems(for: selectionManager.selectedItems)
         guard !selectedBridgeItems.isEmpty else {
             let alert = UIAlertController(
@@ -505,10 +518,14 @@ extension FavoriteListViewController {
         guard let favoritesUrl = OAFavoritesHelperBridge.shared().shareFavoriteItems(selectedBridgeItems) else { return }
         showActivity(
             [favoritesUrl],
-            sourceView: sourceView,
-            barButtonItem: nil,
-            completionWithItemsHandler: {
+            sourceView: collectionView,
+            barButtonItem: barButtonItem,
+            completionHandler: { [weak self] completed in
                 try? FileManager.default.removeItem(at: favoritesUrl)
+                if completed {
+                    self?.setEditing(false)
+                    self?.applySnapshot()
+                }
             }
         )
     }

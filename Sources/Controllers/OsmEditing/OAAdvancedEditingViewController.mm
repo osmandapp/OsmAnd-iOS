@@ -23,7 +23,8 @@
 #import "OAKeyboardHintBar.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kVerticalMargin 8.
+static const CGFloat kTextFieldTopInset = 8.0;
+static const CGFloat kTextFieldBottomInset = 0.0;
 
 @interface OAAdvancedEditingViewController () <UITextViewDelegate, UIGestureRecognizerDelegate, MDCMultilineTextInputLayoutDelegate, OAKeyboardHintBarDelegate>
 
@@ -107,7 +108,12 @@
     }
     
     resultCell.fieldLabel.text = item[@"hint"];
+    // Preserve the previous 8pt of cell padding in addition to the Material field's own insets.
+    resultCell.textFieldTopConstraint.constant = kTextFieldTopInset;
+    resultCell.textFieldBottomConstraint.constant = kTextFieldBottomInset;
     MDCMultilineTextField *textField = resultCell.textField;
+    // Let the table measure the configured cell at its actual width without forcing nested layout.
+    textField.useConstraintsForIntrinsicContentSize = YES;
     textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     textField.underline.hidden = YES;
     textField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -120,8 +126,8 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.clearButton.imageView.tintColor =  [UIColor colorNamed:ACColorNameIconColorDefault];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-    [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateNormal];
+    [textField.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomClearField] forState:UIControlStateHighlighted];
     
     return resultCell;
 }
@@ -142,7 +148,7 @@
         [cell titleVisibility:NO];
         [cell descriptionVisibility:NO];
         cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_plus"];
+        cell.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomPlus];
     }
     return cell;
 }
@@ -216,7 +222,7 @@
                                          @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
                                          @"hint" : OALocalizedString(@"osm_tag"),
                                          @"value" : key,
-                                         @"img" : @"ic_custom_delete"
+                                         @"img" : ACImageNameIcCustomDelete
                                          },
                                      @{
                                          @"type" : [OATextInputFloatingCellWithIcon getCellIdentifier],
@@ -247,7 +253,7 @@
 - (void) addTagPair:(NSInteger)index
 {
     [_fieldPairs insertObject:@[
-                                [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_tag") value:nil image:@"ic_custom_delete"],
+                                [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_tag") value:nil image:ACImageNameIcCustomDelete],
                                 [self getDictionary:[OATextInputFloatingCellWithIcon getCellIdentifier] hint:OALocalizedString(@"osm_value") value:nil image:nil]
                                 ] atIndex:index];
 }
@@ -283,12 +289,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
-    if ([cell isKindOfClass:OATextInputFloatingCellWithIcon.class])
-    {
-        return ((OATextInputFloatingCellWithIcon *)cell).textField.intrinsicContentSize.height + kVerticalMargin;
-    }
-    
     return UITableViewAutomaticDimension;
 }
 
@@ -321,7 +321,7 @@
             
             [_fieldPairs setObject:@[
                                      [self getDictionary:tagCellInfo[@"type"]
-                                                    hint:tagCellInfo[@"hint"] value:textView.text image:@"ic_custom_delete"], valueCellInfo
+                                                    hint:tagCellInfo[@"hint"] value:textView.text image:ACImageNameIcCustomDelete], valueCellInfo
                                      ] atIndexedSubscript:indexPath.section];
             if (userInput)
                 [self updateTagHintsSet:textView.text];
@@ -356,6 +356,33 @@
 - (void)multilineTextField:(id<MDCMultilineTextInput> _Nonnull)multilineTextField
       didChangeContentSize:(CGSize)size
 {
+    MDCMultilineTextField *textField = (MDCMultilineTextField *)multilineTextField;
+    UIButton *clearButton = textField.clearButton;
+    BOOL isClearButtonVisible = clearButton.alpha > 0;
+    BOOL textWidthChanged = isClearButtonVisible != (CGRectGetWidth(clearButton.bounds) > 0);
+    // Apply the pending width change only when the clear button appears or disappears.
+    if (textWidthChanged)
+        [textField layoutIfNeeded];
+
+    UITextView *textView = textField.textView;
+    CGFloat textWidth = CGRectGetWidth(textView.bounds);
+    if (textWidth <= 0)
+        return;
+
+    // With constraint-based sizing, the callback's height is UIViewNoIntrinsicMetric.
+    // Check UIKit's cached height before measuring, unless the text width has just changed.
+    CGFloat scale = MAX(textField.traitCollection.displayScale, 1.0);
+    CGFloat minimumHeight = ceil(textView.font.lineHeight * scale) / scale * textField.minimumLines;
+    UIEdgeInsets insets = textField.textInsets;
+    CGFloat requiredHeight = MAX(textView.contentSize.height, minimumHeight) + insets.top + insets.bottom;
+    if (!textWidthChanged && fabs(requiredHeight - CGRectGetHeight(textField.bounds)) < 1.0 / scale)
+        return;
+
+    CGFloat textHeight = [textView sizeThatFits:CGSizeMake(textWidth, CGFLOAT_MAX)].height;
+    requiredHeight = MAX(textHeight, minimumHeight) + insets.top + insets.bottom;
+    if (fabs(requiredHeight - CGRectGetHeight(textField.bounds)) < 1.0 / scale)
+        return;
+
     [self.tableView beginUpdates];
     [self.tableView endUpdates];
 }
@@ -430,7 +457,7 @@
     if (clearedTag)
     {
         _fieldPairs[indexPath.section] = @[
-                                           [self getDictionary:tagCellInfo[@"type"] hint:tagCellInfo[@"hint"] value:nil image:@"ic_custom_delete"],
+                                           [self getDictionary:tagCellInfo[@"type"] hint:tagCellInfo[@"hint"] value:nil image:ACImageNameIcCustomDelete],
                                            valueInfo
                                            ];
     }

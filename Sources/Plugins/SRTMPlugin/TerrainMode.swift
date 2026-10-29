@@ -95,7 +95,16 @@ final class TerrainMode: NSObject {
         let settings = OAAppSettings.sharedManager()
         minZoomPref = settings.registerIntPreference(type.name + "_min_zoom", defValue: Int32(terrainMinSupportedZoom)).makeProfile()
         maxZoomPref = settings.registerIntPreference(type.name + "_max_zoom", defValue: Int32(terrainMaxSupportedZoom)).makeProfile()
-        transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(type == .hillshade || type == .terrainShadows ? hillshadeDefaultTrasparency : defaultTrasparency)).makeProfile()
+        transparencyPref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(Self.defaultTransparency(type))).makeProfile()
+    }
+
+    // Transparency is stored as 0-255 alpha, like on Android
+    static func defaultTransparency(_ type: TerrainType) -> Int {
+        switch type {
+        case .hillshade: hillshadeDefaultTrasparency
+        case .terrainShadows: 255
+        default: defaultTrasparency
+        }
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
@@ -246,7 +255,7 @@ final class TerrainMode: NSObject {
     func setZoomValues(minZoom: Int32, maxZoom: Int32, mode: OAApplicationMode) {
         self.minZoomPref.set(minZoom, mode: mode)
         self.maxZoomPref.set(maxZoom, mode: mode)
-        self.minZoomPref.getProfileDefaultValue(mode)
+        self.minZoomPref.profileDefaultValue(mode)
     }
 
     func setTransparency(_ transparency: Int32) {
@@ -259,6 +268,19 @@ final class TerrainMode: NSObject {
 
     func getTransparency() -> Int32 {
         transparencyPref.get()
+    }
+
+    var alpha: Double {
+        get { Double(transparencyPref.get()) / 255.0 }
+        set { transparencyPref.set(Int32((newValue * 255.0).rounded())) }
+    }
+
+    var defaultAlpha: Double {
+        Double(transparencyPref.defValue) / 255.0
+    }
+
+    var transparencyPercent: Int32 {
+        Int32((alpha * 100.0).rounded())
     }
 
     func resetZoomsToDefault() {

@@ -1135,6 +1135,7 @@ typedef enum
     [self removeGestureRecognizers];
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
+    [self.targetMultiMenuView hide:NO duration:0 onComplete:nil];
 
     if (self.targetMenuView.superview)
     {
@@ -1774,16 +1775,25 @@ typedef enum
 
 - (BOOL)processNavigationPointSelection:(NSArray<OATargetPoint *> *)targetPoints
 {
-    if (!self.canPresentNewContextMenu)
+    if (!self.canPresentNewContextMenu || ![self isSelectingNavigationPoint] || targetPoints.count == 0)
         return NO;
 
-    if ([self isSelectingNavigationPoint] && targetPoints.count == 1)
+    // Consume taps while Select on map is closing instead of opening a new picker or context menu.
+    if ([self.targetMenuView isHiding])
+        return YES;
+
+    if (targetPoints.count == 1)
     {
         // Apply the selection before the presentation queue closes its menu and clears the active target.
         [self processTargetPoint:targetPoints.firstObject];
-        return YES;
     }
-    return NO;
+    else
+    {
+        for (OATargetPoint *targetPoint in targetPoints)
+            [self applyTargetPointController:targetPoint];
+        [self showMultiContextMenu:nil points:targetPoints selectedObjects:nil];
+    }
+    return YES;
 }
 
 - (BOOL) processTargetPoint:(OATargetPoint *)targetPoint
@@ -2794,7 +2804,8 @@ typedef enum
     if (_dashboard)
         [self closeDashboard];
     
-    if (self.targetMenuView.superview)
+    // Keep Select on map active underneath the picker so closing it allows another selection.
+    if (self.targetMenuView.superview && ![self isSelectingNavigationPoint])
         [self hideTargetPointMenu];
     
     CGRect frame = self.targetMultiMenuView.frame;
@@ -2805,7 +2816,6 @@ typedef enum
     if ([self.view.subviews containsObject:self.targetMultiMenuView])
         [self.targetMultiMenuView removeFromSuperview];
     
-    [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
     [self.targetMultiMenuView setSelectedMapObjects:selectedObjects];
     [self.targetMultiMenuView setTouchPoint:touchPointLatLon];

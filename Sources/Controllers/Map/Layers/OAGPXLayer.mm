@@ -1847,6 +1847,7 @@ colorizationScheme:(int)colorizationScheme
     if (touchPolygon31.isEmpty())
         return;
 
+    BOOL findClosest = [OARootViewController.instance.mapPanel isSelectingNavigationPoint];
     NSMutableDictionary<NSString *, OASGpxFile *> *activeGpx = [OASelectedGPXHelper.instance.activeGpx mutableCopy];
     OASGpxFile *currentTrackGpxFile = [OASavingTrackHelper sharedInstance].currentTrack;
     if (currentTrackGpxFile && self.mapViewController.recTrackShowing)
@@ -1896,93 +1897,65 @@ colorizationScheme:(int)colorizationScheme
         }
         // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
         [document recalculateProcessPoint];
-        NSArray<OASWptPt *> *points;
-        for (OASTrkSegment *segment in [document getPointsToDisplayWithIsJoinSegments:isJointSegments])
-        {
-            points = [self findLineInPolygon31:touchPolygon31 points:[segment points]];
-            if (points)
-                break;
-        }
-        
-        if (points)
-            [result collect:gpxDataItem ? : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
+        CLLocation *selectionLocation = [self trackLocationInPolygon31:touchPolygon31
+                                                             segments:[document getPointsToDisplayWithIsJoinSegments:isJointSegments]
+                                                        touchLocation:result.pointLatLon
+                                                          findClosest:findClosest];
+        if (selectionLocation)
+            [result collect:gpxDataItem ?: currentTrackGpxFile provider:self selectionLocation:selectionLocation];
     }
 }
 
-// Use displayed track geometry when comparing navigation candidates with POIs and Favorites.
-- (CLLocation *)nearestLocationOnTrack:(id)track toLocation:(CLLocation *)location
+- (CLLocation *)trackLocationInPolygon31:(QList<OsmAnd::PointI>)polygon31
+                               segments:(NSArray<OASTrkSegment *> *)segments
+                          touchLocation:(CLLocation *)touchLocation
+                            findClosest:(BOOL)findClosest
 {
-    OASGpxFile *gpxFile = nil;
-    BOOL joinSegments = NO;
-    if ([track isKindOfClass:OASGpxDataItem.class])
-    {
-        OASGpxDataItem *item = track;
-        NSString *path = item.file.absolutePath;
-        gpxFile = _cachedTracks[path][@"gpxFile"] ?: [OASelectedGPXHelper.instance getGpxFileFor:path];
-        joinSegments = item.joinSegments;
-    }
-    else if ([track isKindOfClass:OASGpxFile.class])
-    {
-        gpxFile = track;
-        joinSegments = [OAAppSettings.sharedManager.currentTrackIsJoinSegments get];
-    }
+    if (!touchLocation)
+        return nil;
 
-    CLLocation *nearestLocation = nil;
+    CLLocation *closestLocation = nil;
     CLLocationDistance minDistance = DBL_MAX;
-    for (OASTrkSegment *segment in [gpxFile getPointsToDisplayWithIsJoinSegments:joinSegments])
+    for (OASTrkSegment *segment in segments)
     {
-        CLLocation *previousLocation = nil;
-        for (OASWptPt *point in segment.points)
+        NSArray<OASWptPt *> *points = segment.points;
+        if (points.count < 2)
+            continue;
+
+        OASWptPt *previousPoint = points.firstObject;
+        OsmAnd::PointI previousPoint31 = [OANativeUtilities getPoint31FromLatLon:previousPoint.lat lon:previousPoint.lon];
+        BOOL previousInside = [OANativeUtilities isPointInsidePolygonLat:previousPoint.lat lon:previousPoint.lon polygon31:polygon31];
+
+        for (NSInteger i = 1; i < points.count; i++)
         {
-            CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
-            if (previousLocation)
+            OASWptPt *currentPoint = points[i];
+            OsmAnd::PointI currentPoint31 = [OANativeUtilities getPoint31FromLatLon:currentPoint.lat lon:currentPoint.lon];
+            BOOL currentInside = [OANativeUtilities isPointInsidePolygonLat:currentPoint.lat lon:currentPoint.lon polygon31:polygon31];
+
+            // Project only segments under the tap; navigation needs the closest hit across the whole track.
+            if (previousInside || currentInside || [OANativeUtilities isSegmentCrossingPolygon:previousPoint31 end31:currentPoint31 polygon31:polygon31])
             {
-                CLLocation *projection = [OAMapUtils getProjection:location fromLocation:previousLocation toLocation:pointLocation];
-                CLLocationDistance distance = [projection distanceFromLocation:location];
+                CLLocation *projection = [OAMapUtils getProjection:touchLocation
+                                                    fromLocation:[[CLLocation alloc] initWithLatitude:previousPoint.lat longitude:previousPoint.lon]
+                                                      toLocation:[[CLLocation alloc] initWithLatitude:currentPoint.lat longitude:currentPoint.lon]];
+                if (!findClosest)
+                    return projection;
+
+                CLLocationDistance distance = [projection distanceFromLocation:touchLocation];
                 if (distance < minDistance)
                 {
                     minDistance = distance;
-                    nearestLocation = projection;
+                    closestLocation = projection;
                 }
             }
-            previousLocation = pointLocation;
+
+            previousPoint = currentPoint;
+            previousPoint31 = currentPoint31;
+            previousInside = currentInside;
         }
     }
-    return nearestLocation;
-}
 
-- (NSArray<OASWptPt *> *)findLineInPolygon31:(QList<OsmAnd::PointI>)polygon31 points:(NSArray<OASWptPt *> *)points
-{
-    if (points.count < 2)
-        return nil;
-
-    OASWptPt *firstPoint = points.firstObject;
-
-    if ([OANativeUtilities isPointInsidePolygonLat:firstPoint.lat lon:firstPoint.lon polygon31:polygon31])
-    {
-        OASWptPt *secondPoint = points[1];
-        return @[firstPoint, secondPoint];
-    }
-    OsmAnd::PointI previousPoint31 = [OANativeUtilities getPoint31FromLatLon:firstPoint.lat lon:firstPoint.lon];
-
-    for (NSInteger i = 1; i < points.count; i++)
-    {
-        OASWptPt *currentPoint = points[i];
-        OsmAnd::PointI currentPoint31 = [OANativeUtilities getPoint31FromLatLon:currentPoint.lat lon:currentPoint.lon];
-
-        BOOL lineInside = [OANativeUtilities isPointInsidePolygonLat:currentPoint.lat lon:currentPoint.lon polygon31:polygon31]
-        || [OANativeUtilities isSegmentCrossingPolygon:previousPoint31 end31:currentPoint31 polygon31:polygon31];
-
-        if (lineInside)
-        {
-            OASWptPt *previousPoint = points[i - 1];
-            return @[previousPoint, currentPoint];
-        }
-
-        previousPoint31 = currentPoint31;
-    }
-
-    return nil;
+    return closestLocation;
 }
 
 

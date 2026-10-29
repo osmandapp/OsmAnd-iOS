@@ -1089,6 +1089,11 @@ static const NSInteger _buttonsCount = 4;
     [self stopLocationUpdate];
 }
 
+- (BOOL)isHiding
+{
+    return _hiding;
+}
+
 - (BOOL) preHide
 {
     if (self.customController)

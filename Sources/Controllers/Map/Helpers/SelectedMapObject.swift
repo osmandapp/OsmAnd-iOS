@@ -10,6 +10,8 @@
 final class SelectedMapObject: NSObject {
     var object: Any
     private(set) var provider: OAContextMenuProvider?
+    // Hit location on geometry such as a track, which has no single object coordinate.
+    var selectionLocation: CLLocation?
     
     init(mapObject: Any, provider: OAContextMenuProvider?) {
         self.object = mapObject

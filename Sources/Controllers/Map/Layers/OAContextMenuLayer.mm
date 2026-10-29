@@ -452,12 +452,11 @@
     return targetPoint;
 }
 
-- (OATargetPoint *)navigationTargetPointAt:(CGPoint)touchPoint
+- (NSArray<OATargetPoint *> *)navigationTargetPointsAt:(CGPoint)touchPoint
 {
     MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:NO];
 
-    OATargetPoint *closestTargetPoint = nil;
-    CLLocationDistance minDistance = DBL_MAX;
+    NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray array];
     for (SelectedMapObject *selectedObject in [result getProcessedObjects])
     {
         id<OAContextMenuProvider> provider = selectedObject.provider ?: self.mapViewController.mapLayers.poiLayer;
@@ -469,40 +468,23 @@
         if (!targetPoint || targetPoint.type == OATargetMapDownload)
             continue;
 
-        CLLocation *location;
-        if (targetPoint.type == OATargetGPX && [provider isKindOfClass:OAGPXLayer.class])
-        {
-            location = [(OAGPXLayer *)provider nearestLocationOnTrack:selectedObject.object toLocation:result.pointLatLon];
-            if (!location)
-                continue;
-        }
-        else
-        {
-            location = [provider getObjectLocation:selectedObject.object];
-        }
+        CLLocation *location = selectedObject.selectionLocation ?: [provider getObjectLocation:selectedObject.object];
         if (location)
             targetPoint.location = location.coordinate;
-        else
-            location = [[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude];
 
-        CLLocationDistance distance = [location distanceFromLocation:result.pointLatLon];
-        if (distance < minDistance)
+        if (targetPoint.title.length == 0)
         {
-            minDistance = distance;
-            closestTargetPoint = targetPoint;
-            if (targetPoint.title.length == 0)
+            targetPoint.title = [provider getObjectName:selectedObject.object].name;
+            if (targetPoint.title.length == 0 && [selectedObject.object isKindOfClass:OARenderedObject.class])
             {
-                targetPoint.title = [provider getObjectName:selectedObject.object].name;
-                if (targetPoint.title.length == 0 && [selectedObject.object isKindOfClass:OARenderedObject.class])
-                {
-                    RenderedObjectAmenityProvider *amenityProvider = [[RenderedObjectAmenityProvider alloc] initWithDetailsObject:nil renderedObject:selectedObject.object];
-                    targetPoint.title = [amenityProvider nameOnlyString];
-                }
+                RenderedObjectAmenityProvider *amenityProvider = [[RenderedObjectAmenityProvider alloc] initWithDetailsObject:nil renderedObject:selectedObject.object];
+                targetPoint.title = [amenityProvider nameOnlyString];
             }
         }
+        [targetPoints addObject:targetPoint];
     }
 
-    return closestTargetPoint;
+    return targetPoints;
 }
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
@@ -510,16 +492,15 @@
     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
     if (showUnknownLocation || [mapPanel isSelectingNavigationPoint])
     {
-        // A tap selects the nearest map object's name and coordinates for navigation.
+        // A tap selects a map object, asking the user to choose when several objects overlap.
         // Long presses and taps on empty map areas use the touched location for address lookup.
         [OsmAndApp instance].mapMode = OAMapModeFree;
-        OATargetPoint *targetPoint = showUnknownLocation ? nil : [self navigationTargetPointAt:touchPoint];
-        if (!targetPoint)
+        NSArray<OATargetPoint *> *targetPoints = showUnknownLocation ? nil : [self navigationTargetPointsAt:touchPoint];
+        if (targetPoints.count == 0)
         {
             CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
-            targetPoint = [self unknownTargetPoint:coord.latitude longitude:coord.longitude];
+            targetPoints = @[[self unknownTargetPoint:coord.latitude longitude:coord.longitude]];
         }
-        NSArray<OATargetPoint *> *targetPoints = @[targetPoint];
         if (![mapPanel processNavigationPointSelection:targetPoints])
             [mapPanel showContextMenuWithPoints:targetPoints];
         return YES;

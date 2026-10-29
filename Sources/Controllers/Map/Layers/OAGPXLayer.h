@@ -24,6 +24,5 @@
 - (void)refreshGpxWaypoints;
 - (CGFloat)getLineWidth:(NSString *)gpxWidth;
 - (void)updateCachedGpxItem:(NSString *)filePath;
-- (CLLocation *)nearestLocationOnTrack:(id)track toLocation:(CLLocation *)location;
 
 @end

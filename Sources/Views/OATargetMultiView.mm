@@ -11,7 +11,6 @@
 #import "OATargetPointViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OATargetPointsHelper.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"
@@ -112,15 +111,9 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATargetPoint *targetPoint = self.targetPoints[indexPath.row];
-    
-    if (_activeTargetType == OATargetRouteIntermediateSelection)
-    {
-        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoint.pointDescription];
-        [self hide:YES duration:0.2 onComplete:^{
-            [[[OARootViewController instance] mapPanel] showRouteInfo];
-        }];
-    }
-    else
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+
+    if (![mapPanel processNavigationPointSelection:@[targetPoint]])
     {
         if (_selectedMapObjects && _selectedMapObjects.count > indexPath.row)
         {
@@ -130,7 +123,7 @@
         }
         else
         {
-            [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
+            [mapPanel showContextMenu:targetPoint];
         }
     }
 }
@@ -139,11 +132,6 @@
 {
     _targetPoints = targetPoints;
     [self.tableView reloadData];
-}
-
--(void) setActiveTargetType:(OATargetPointType)activeTargetType
-{
-    _activeTargetType = activeTargetType;
 }
 
 - (BOOL) isLandscapeSupported
@@ -248,8 +236,9 @@
                 self.frame = frame;
                 
             } completion:^(BOOL finished) {
-                
-                [self removeFromSuperview];
+                // An interrupted hide must not remove a picker that has been shown again.
+                if (finished)
+                    [self removeFromSuperview];
                 
                 if (onComplete)
                     onComplete();

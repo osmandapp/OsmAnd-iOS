@@ -25,6 +25,7 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     }()
     
     var isFavoriteList = false
+    private var selectedIconKey: String?
     
     override init() {
         super.init()
@@ -72,8 +73,32 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         super.updateHostCellIfNeeded()
         updateHostCellIfNoIconCategory(isFavoriteList && selectedCatagoryKey == ORIGINAL_KEY)
     }
+
+    override func getSelectedItem() -> Any {
+        isFavoriteList ? selectedIconKey ?? "" : super.getSelectedItem()
+    }
+
+    override func selectCategory(_ categoryKey: String) {
+        if isFavoriteList, let category = categoriesByKeyName[categoryKey] {
+            let selectedIndex = selectedIconKey.flatMap { iconKey in
+                category.iconKeys.firstIndex(where: { Self.iconNamesMatch($0, iconKey) })
+            } ?? NSNotFound
+            setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+        }
+        super.selectCategory(categoryKey)
+    }
+
+    override func onItemSelected(_ indexPath: IndexPath, collectionView: UICollectionView) {
+        if isFavoriteList,
+           iconNamesData.indices.contains(indexPath.section),
+           iconNamesData[indexPath.section].indices.contains(indexPath.row) {
+            selectedIconKey = iconNamesData[indexPath.section][indexPath.row]
+        }
+        super.onItemSelected(indexPath, collectionView: collectionView)
+    }
     
     override func setIconName(_ iconName: String) {
+        selectedIconKey = iconName.isEmpty ? nil : iconName
         if isFavoriteList && iconName.isEmpty {
             selectCategory(ORIGINAL_KEY)
             return

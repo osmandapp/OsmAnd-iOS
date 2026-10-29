@@ -33,6 +33,7 @@
 - (instancetype)initWithData:(NSArray<NSArray<OASPaletteItemSolid *> *> *)data isFavoriteList:(BOOL)isFavoriteList;
 
 - (void)setupDefaultCategory;
+- (BOOL)isOriginalSelected;
 - (void)addColor:(NSIndexPath *)indexPath newItem:(OASPaletteItemSolid *)newItem;
 - (void)addAndSelectColor:(NSIndexPath *)indexPath newItem:(OASPaletteItemSolid *)newItem;
 - (void)changeColorItem:(OASPaletteItemSolid *)colorItem withColor:(UIColor *)color;

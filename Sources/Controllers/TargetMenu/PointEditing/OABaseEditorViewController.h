@@ -50,6 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isAppearanceChanged;
 - (BOOL)isIconNameChanged:(nullable NSString *)iconName;
 - (BOOL)isBackgroundIconNameChanged:(nullable NSString *)backgroundIconName;
+- (nullable UIColor *)appearanceColor;
+- (NSString *)appearanceIconName;
+- (nullable NSString *)appearanceBackgroundIconName;
 - (void)changeSaveButtonAvailabilityWithGroup;
 - (nullable OAFavoriteGroup *)existingGroupFor:(nullable NSString *)name;
 - (BOOL)allowsValidationForGroupName;

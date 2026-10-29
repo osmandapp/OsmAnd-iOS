@@ -97,7 +97,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
             return
         }
 
-        if isExistingPointsAppearanceChanged() && (favoriteGroup?.points?.count ?? 0) > 0 {
+        if (favoriteGroup?.points?.count ?? 0) > 0 {
             editPointsGroup(true, updateGroupValues: false)
         }
     }
@@ -126,7 +126,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
     }
     
     override func onLeftNavbarButtonPressed() {
-        if isNewItem || !isExistingPointsAppearanceChanged() {
+        if isNewItem || !hasUnsavedAppearanceChanges() {
             super.onLeftNavbarButtonPressed()
         } else {
             let alert = UIAlertController(title: localizedString("exit_without_saving"), message: localizedString("unsaved_changes_will_be_lost"), preferredStyle: .actionSheet)
@@ -143,7 +143,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
     
     private func updateApplyToExistingCell(_ cell: OASearchMoreCell?) {
         guard let cell else { return }
-        let enabled = isExistingPointsAppearanceChanged() && (favoriteGroup?.points?.count ?? 0) > 0
+        let enabled = (favoriteGroup?.points?.count ?? 0) > 0
         cell.selectionStyle = enabled ? .default : .none
         cell.textView.textColor = enabled ? .textColorActive : .textColorSecondary
         cell.isAccessibilityElement = true
@@ -152,9 +152,19 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         cell.accessibilityTraits = enabled ? .button : [.button, .notEnabled]
     }
     
-    private func isExistingPointsAppearanceChanged() -> Bool {
-        guard let lastAppliedColor else { return isAppearanceChanged() }
-        return editColor != lastAppliedColor || isIconNameChanged(lastAppliedIconName) || editBackgroundIconName != lastAppliedBackgroundIconName
+    private func hasUnsavedAppearanceChanges() -> Bool {
+        guard let favoriteGroup else { return false }
+        if let color = appearanceColor(), color != (lastAppliedColor ?? favoriteGroup.color) {
+            return true
+        }
+        let iconName = appearanceIconName()
+        if !iconName.isEmpty && !IconCollectionHandler.iconNamesMatch(iconName, lastAppliedIconName ?? favoriteGroup.iconName ?? "") {
+            return true
+        }
+        if appearanceBackgroundIconName() != nil && isBackgroundIconNameChanged(lastAppliedBackgroundIconName ?? favoriteGroup.backgroundType) {
+            return true
+        }
+        return false
     }
     
     private func targetGroupName(for name: String?) -> String {
@@ -176,21 +186,20 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
     
     private func editPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
         view.endEditing(true)
-        if isIconNameChanged(favoriteGroup?.iconName) || (updatePoints && editIconName.isEmpty) || (updatePoints && lastAppliedIconName != nil && isIconNameChanged(lastAppliedIconName)) {
-            OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: editIconName, updatePoints: updatePoints, updateGroupIcon: updateGroupValues, saveImmediately: false) {
-                self.finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
-            }
-        } else {
-            finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
+        OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: appearanceIconName(), updatePoints: updatePoints, updateGroupIcon: updateGroupValues, saveImmediately: false) {
+            self.finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
         }
     }
     
     private func finishSavingGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
         finishEditingPointsGroup(updatePoints, updateGroupValues: updateGroupValues)
         if updatePoints {
-            lastAppliedColor = editColor
-            lastAppliedIconName = editIconName
-            lastAppliedBackgroundIconName = editBackgroundIconName
+            lastAppliedColor = appearanceColor() ?? lastAppliedColor
+            let iconName = appearanceIconName()
+            if !iconName.isEmpty {
+                lastAppliedIconName = iconName
+            }
+            lastAppliedBackgroundIconName = appearanceBackgroundIconName() ?? lastAppliedBackgroundIconName
             changeSaveButtonAvailabilityWithGroup()
         }
         
@@ -205,13 +214,13 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
     }
     
     private func finishEditingPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
-        getPoiIconCollectionHandler().addIconToLastUsed(editIconName)
-        if editColor != favoriteGroup?.color || (updatePoints && lastAppliedColor != nil && editColor != lastAppliedColor) {
-            OAFavoritesHelperBridge.shared().update(favoriteGroup, color: editColor, updatePoints: updatePoints, updateGroupColor: updateGroupValues, saveImmediately: false)
+        getPoiIconCollectionHandler().addIconToLastUsed(appearanceIconName())
+        if let color = appearanceColor() {
+            OAFavoritesHelperBridge.shared().update(favoriteGroup, color: color, updatePoints: updatePoints, updateGroupColor: updateGroupValues, saveImmediately: false)
         }
 
-        if isBackgroundIconNameChanged(favoriteGroup?.backgroundType) || (updatePoints && lastAppliedBackgroundIconName != nil && editBackgroundIconName != lastAppliedBackgroundIconName) {
-            OAFavoritesHelperBridge.shared().update(favoriteGroup, backgroundIconName: editBackgroundIconName, updatePoints: updatePoints, updateGroupShape: updateGroupValues, saveImmediately: false)
+        if let backgroundIconName = appearanceBackgroundIconName() {
+            OAFavoritesHelperBridge.shared().update(favoriteGroup, backgroundIconName: backgroundIconName, updatePoints: updatePoints, updateGroupShape: updateGroupValues, saveImmediately: false)
         }
 
         OAFavoritesHelperBridge.shared().update(favoriteGroup, newName: editName, saveImmediately: false)

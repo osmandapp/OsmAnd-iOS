@@ -1356,6 +1356,15 @@ typedef enum
 - (void)clearSearchViewController
 {
     _searchViewController = nil;
+    _isNewContextMenuStillEnabled = NO;
+}
+
+- (void)disablePlanRouteSearchContextMenuForMapGesture
+{
+    // Search may leave its one-time context-menu permission set after dismissal.
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class]
+        || [_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        _isNewContextMenuStillEnabled = NO;
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription

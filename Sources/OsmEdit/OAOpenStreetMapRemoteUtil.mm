@@ -278,13 +278,16 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 - (void)closeChangeSet
 {
-    if (_changeSetId != NO_CHANGESET_ID)
+    @synchronized (self)
     {
-        NSString *response = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/close"]
-                                requestMethod:@"PUT" requestBody:@"" userOperation:OALocalizedString(@"closing_changeset")
-                                doAuthenticate:YES];
-        NSLog(@"Response: %@", response);
-        _changeSetId = NO_CHANGESET_ID;
+        if (_changeSetId != NO_CHANGESET_ID)
+        {
+            NSString *response = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/close"]
+                                    requestMethod:@"PUT" requestBody:@"" userOperation:OALocalizedString(@"closing_changeset")
+                                    doAuthenticate:YES];
+            NSLog(@"Response: %@", response);
+            _changeSetId = NO_CHANGESET_ID;
+        }
     }
 }
 
@@ -312,53 +315,56 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
 
 - (OAEntity *)commitEntityImpl:(EOAAction)action entity:(OAEntity *)entity entityInfo:(OAEntityInfo *)info comment:(NSString *)comment closeChangeSet:(BOOL)closeChangeSet changedTags:(NSSet<NSString *> *)changedTags
 {
-    if ([self isNewChangesetRequired])
+    @synchronized (self)
     {
-        _changeSetId = [self openChangeSet:comment];
-        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
-    }
-    if (_changeSetId < 0)
-        return nil;
+        if ([self isNewChangesetRequired])
+        {
+            _changeSetId = [self openChangeSet:comment];
+            _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+        }
+        if (_changeSetId < 0)
+            return nil;
 
-    OAEntity *newEntity = entity;
-    NSString *xmlString = [self createChangeXmlString:action entity:entity info:info];
+        OAEntity *newEntity = entity;
+        NSString *xmlString = [self createChangeXmlString:action entity:entity info:info];
     
-    NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/upload"]
-                       requestMethod:@"POST" requestBody:xmlString userOperation:OALocalizedString(@"commiting_node")
-                      doAuthenticate:YES];
-    NSLog(@"Response: %@", res);
-    if (res) {
-        if (CREATE == action) {
-            long long newId = [entity getId];
-            NSString *searchKeyword = @"new_id=\"";
-            NSRange range = [res rangeOfString:searchKeyword];
+        NSString *res = [self sendRequest:[NSString stringWithFormat:@"%@%@%ld%@", BASE_URL, @"api/0.6/changeset/", _changeSetId, @"/upload"]
+                           requestMethod:@"POST" requestBody:xmlString userOperation:OALocalizedString(@"commiting_node")
+                          doAuthenticate:YES];
+        NSLog(@"Response: %@", res);
+        if (res) {
+            if (CREATE == action) {
+                long long newId = [entity getId];
+                NSString *searchKeyword = @"new_id=\"";
+                NSRange range = [res rangeOfString:searchKeyword];
             
-            if(range.location != NSNotFound)
-            {
-                NSUInteger startPoint = range.location + range.length;
-                res = [res substringWithRange:NSMakeRange(startPoint, res.length - 1 - startPoint)];
-                range = [res rangeOfString:@"\""];
-                if (range.location != NSNotFound)
+                if(range.location != NSNotFound)
                 {
-                    res = [res substringToIndex:range.location];
-                    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
-                    [f setNumberStyle:NSNumberFormatterDecimalStyle];
-                    newId = [f numberFromString:res].longLongValue;
-                    if ([entity isKindOfClass:OANode.class])
-                        newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:newId];
-                    else if ([entity isKindOfClass:OAWay.class])
-                        newEntity = [[OAWay alloc] initWithId:newId latitude:[entity getLatitude] longitude:[entity getLongitude] ids:[((OAWay *)entity) getNodeIds]];
+                    NSUInteger startPoint = range.location + range.length;
+                    res = [res substringWithRange:NSMakeRange(startPoint, res.length - 1 - startPoint)];
+                    range = [res rangeOfString:@"\""];
+                    if (range.location != NSNotFound)
+                    {
+                        res = [res substringToIndex:range.location];
+                        NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+                        [f setNumberStyle:NSNumberFormatterDecimalStyle];
+                        newId = [f numberFromString:res].longLongValue;
+                        if ([entity isKindOfClass:OANode.class])
+                            newEntity = [[OANode alloc] initWithNode:(OANode *)entity identifier:newId];
+                        else if ([entity isKindOfClass:OAWay.class])
+                            newEntity = [[OAWay alloc] initWithId:newId latitude:[entity getLatitude] longitude:[entity getLongitude] ids:[((OAWay *)entity) getNodeIds]];
+                    }
                 }
             }
+            _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
+            if (closeChangeSet)
+                [self closeChangeSet];
+            return newEntity;
         }
-        _changeSetTimeStamp = [[NSDate date] timeIntervalSince1970];
         if (closeChangeSet)
             [self closeChangeSet];
-        return newEntity;
+        return nil;
     }
-    if (closeChangeSet)
-        [self closeChangeSet];
-    return nil;
 }
 
 - (OAEntityInfo *)getEntityInfo:(long long)identifier {

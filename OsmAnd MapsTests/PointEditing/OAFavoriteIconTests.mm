@@ -1,6 +1,7 @@
 #import <XCTest/XCTest.h>
 #import "OAEditPointViewController.h"
 #import "OACollectionSingleLineTableViewCell.h"
+#import "OAIconsPaletteCell.h"
 #import "OAFavoriteEditingHandler.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
@@ -13,16 +14,15 @@
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 
-@interface OAEditPointViewController (FavoriteIconRegressionTesting)
+@interface OAEditPointViewController (FavoriteIconTesting)
 - (void)onGroupSelected:(NSString *)name;
-- (void)onIconSelectedFromPalette:(NSString *)iconName;
 @end
 
-@interface OAFavoriteIconRegressionTests : XCTestCase
+@interface OAFavoriteIconTests : XCTestCase
 @property(nonatomic) NSMutableArray<UITableViewCell *> *boundIconCells;
 @end
 
-@implementation OAFavoriteIconRegressionTests
+@implementation OAFavoriteIconTests
 
 - (void)tearDown
 {
@@ -46,7 +46,7 @@
 
 - (void)setUpWithCompletionHandler:(void (^)(NSError *))completion
 {
-    __weak OAFavoriteIconRegressionTests *weakSelf = self;
+    __weak OAFavoriteIconTests *weakSelf = self;
     [super setUpWithCompletionHandler:^(NSError *error) {
         if (error)
             completion(error);
@@ -59,15 +59,23 @@
 {
     if ([OsmAndApp instance].initialized)
     {
+        NSError *storageError = [self isolateFavoritesStorage];
+        if (storageError)
+        {
+            completion(storageError);
+            return;
+        }
         OAAppSettings *settings = OAAppSettings.sharedManager;
         NSString *lastGroup = settings.lastFavCategoryEntered.get;
         NSArray *lastIcons = settings.lastUsedFavIcons.get;
+        BOOL showFavorites = settings.mapSettingShowFavorites.get;
         OAGPXAppearanceCollection *appearance = OAGPXAppearanceCollection.sharedInstance;
         NSArray<OASPaletteItemSolid *> *colors = [appearance getAvailableColorsSortingByLastUsed];
         NSSet *colorIds = [NSSet setWithArray:[colors valueForKey:@"id"]];
         [self addTeardownBlock:^{
             [settings.lastFavCategoryEntered set:lastGroup];
             [settings.lastUsedFavIcons set:lastIcons];
+            [settings setShowFavorites:showFavorites];
             for (OASPaletteItemSolid *color in [appearance getAvailableColorsSortingByLastUsed])
             {
                 if (![colorIds containsObject:color.id])
@@ -80,7 +88,7 @@
     }
     else if (deadline.timeIntervalSinceNow <= 0)
     {
-        completion([NSError errorWithDomain:@"FavoriteIconRegressionTests" code:1
+        completion([NSError errorWithDomain:@"FavoriteIconTests" code:1
                                   userInfo:@{NSLocalizedDescriptionKey: @"Application initialization timed out"}]);
     }
     else
@@ -91,9 +99,50 @@
     }
 }
 
+- (NSError *)isolateFavoritesStorage
+{
+    // Setup runs after synchronous favorites initialization; each test completes its saves in teardown.
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSString *originalFavoritesPath = app.favoritesPath;
+    NSString *originalBackupPath = app.favoritesBackupPath;
+    NSString *root = [NSTemporaryDirectory() stringByAppendingPathComponent:
+                     [@"FavoriteIconTests-" stringByAppendingString:NSUUID.UUID.UUIDString]];
+    NSString *favoritesPath = [root stringByAppendingPathComponent:@"favorites"];
+    NSString *backupPath = [root stringByAppendingPathComponent:@"favorites_backup"];
+    NSFileManager *files = NSFileManager.defaultManager;
+    NSError *error;
+    if (![files createDirectoryAtPath:favoritesPath withIntermediateDirectories:YES attributes:nil error:&error]
+        || ![files createDirectoryAtPath:backupPath withIntermediateDirectories:YES attributes:nil error:&error])
+    {
+        if ([files fileExistsAtPath:root])
+            [files removeItemAtPath:root error:nil];
+        return error;
+    }
+
+    // Registered before the per-test cleanup, so it runs after fixture groups are removed.
+    [self addTeardownBlock:^{
+        // Complete the serial save queue while both paths still point to temporary storage.
+        // This runs after the test assertions and fixture cleanup, not as part of the Save check.
+        [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+        [(NSObject *)app setValue:originalFavoritesPath forKey:@"favoritesPath"];
+        [(NSObject *)app setValue:originalBackupPath forKey:@"favoritesBackupPath"];
+        XCTAssertEqualObjects(app.favoritesPath, originalFavoritesPath);
+        XCTAssertEqualObjects(app.favoritesBackupPath, originalBackupPath);
+        NSError *cleanupError;
+        XCTAssertTrue([files removeItemAtPath:root error:&cleanupError], @"%@", cleanupError);
+        XCTAssertFalse([files fileExistsAtPath:root]);
+    }];
+    // KVC overrides the app's backing ivars only for this test, including filename helpers.
+    [(NSObject *)app setValue:favoritesPath forKey:@"favoritesPath"];
+    [(NSObject *)app setValue:backupPath forKey:@"favoritesBackupPath"];
+    XCTAssertEqualObjects(app.favoritesPath, favoritesPath);
+    XCTAssertEqualObjects(app.favoritesBackupPath, backupPath);
+    return nil;
+}
+
 - (OAFavoriteGroup *)groupWithIcon:(NSString *)icon pointIcons:(NSArray<NSString *> *)icons
 {
-    NSString *name = [@"Favorite icon regression " stringByAppendingString:NSUUID.UUID.UUIDString];
+    NSString *name = [@"Favorite icon test " stringByAppendingString:NSUUID.UUID.UUIDString];
     OAFavoriteGroup *group = [[OAFavoriteGroup alloc] initWithName:name isVisible:YES color:UIColor.blueColor];
     group.iconName = icon;
     group.backgroundType = @"square";
@@ -112,6 +161,48 @@
     [OAFavoritesHelper getGroups][name] = group;
     [self addTeardownBlock:^{ [[OAFavoritesHelper getGroups] removeObjectForKey:name]; }];
     return group;
+}
+
+- (OAFavoriteGroup *)storedGroupWithIcon:(NSString *)icon pointIcons:(NSArray<NSString *> *)icons
+{
+    OAFavoriteGroup *fixture = [self groupWithIcon:icon pointIcons:icons];
+    // Register through the production API so editor Save includes this folder in storage.
+    [OAFavoritesHelper addFavoriteGroup:fixture.name color:fixture.color iconName:fixture.iconName backgroundIconName:fixture.backgroundType];
+    OAFavoriteGroup *group = [OAFavoritesHelper getGroups][fixture.name];
+    [self addTeardownBlock:^{
+        [OAFavoritesHelper deleteFavoriteGroups:@[group] andFavoritesItems:nil isNewFavorite:YES];
+        [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+        XCTAssertFalse([NSFileManager.defaultManager fileExistsAtPath:[[OsmAndApp instance] favoritesStorageFilename:group.name]]);
+    }];
+    if (fixture.points.count > 0)
+    {
+        for (OAFavoriteItem *point in fixture.points)
+            [point setAltitude:1];
+        XCTAssertTrue([OAFavoritesHelper addFavorites:fixture.points lookupAddress:NO sortAndSave:NO pointsGroup:nil]);
+    }
+    [OAFavoritesHelper saveCurrentPointsIntoFile:NO];
+    return group;
+}
+
+- (OAFavoriteGroup *)loadStoredGroup:(OAFavoriteGroup *)group
+{
+    NSString *path = [[OsmAndApp instance] favoritesStorageFilename:group.name];
+    XCTAssertTrue([NSFileManager.defaultManager fileExistsAtPath:path]);
+    NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary new];
+    [OAFavoritesHelper loadFileGroups:path groups:groups];
+    XCTAssertNotNil(groups[group.name]);
+    return groups[group.name];
+}
+
+- (void)tapIcon:(NSString *)icon inPointEditor:(OAEditPointViewController *)editor
+{
+    PoiIconCollectionHandler *icons = [editor valueForKey:@"poiIconCollectionHandler"];
+    [icons setIconName:icon];
+    OAIconsPaletteCell *cell = icons.hostCell;
+    XCTAssertNotNil(cell);
+    XCTAssertNotNil([icons getSelectedIndexPath]);
+    // Use the same cell delegate entry point as a user's palette tap.
+    [cell collectionView:cell.collectionView didSelectItemAtIndexPath:[icons getSelectedIndexPath]];
 }
 
 - (OAEditPointViewController *)newPointEditorInGroup:(OAFavoriteGroup *)group fromPOI:(BOOL)fromPOI
@@ -235,9 +326,7 @@
     [self assertPointEditor:editor icon:@"special_heart" group:concrete];
     [editor onGroupSelected:original.name];
     [self assertPointEditor:editor icon:@"shop_supermarket" group:original];
-    PoiIconCollectionHandler *icons = [editor valueForKey:@"poiIconCollectionHandler"];
-    [icons setIconName:@"special_bicycle"];
-    [icons selectIconName:@"special_bicycle"];
+    [self tapIcon:@"special_bicycle" inPointEditor:editor];
     [editor onGroupSelected:concrete.name];
     [self assertPointEditor:editor icon:@"special_bicycle" group:concrete];
     [editor onGroupSelected:original.name];
@@ -258,9 +347,7 @@
 {
     OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:@[]];
     OAEditPointViewController *editor = [self newPointEditorInGroup:group fromPOI:NO];
-    PoiIconCollectionHandler *icons = [editor valueForKey:@"poiIconCollectionHandler"];
-    [icons setIconName:@"special_bicycle"];
-    [icons selectIconName:@"special_bicycle"];
+    [self tapIcon:@"special_bicycle" inPointEditor:editor];
     OAFavoriteEditingHandler *handler = [editor valueForKey:@"pointHandler"];
 
     // Save checks for duplicate names before inserting the first point into the folder.
@@ -344,17 +431,51 @@
 
 - (void)testExistingFavoriteKeepsIconWhenMovedToConcreteOrOriginalFolder
 {
-    OAFavoriteGroup *source = [self groupWithIcon:@"special_heart" pointIcons:@[@"special_bicycle"]];
-    OAEditPointViewController *editor = [[OAEditPointViewController alloc] initWithFavorite:source.points.firstObject];
-    [editor loadViewIfNeeded];
-    [self bindPointIconCell:editor];
     for (NSString *icon in @[@"special_heart", @""])
     {
-        OAFavoriteGroup *destination = [self groupWithIcon:icon pointIcons:@[]];
+        OAFavoriteGroup *source = [self storedGroupWithIcon:@"special_heart" pointIcons:@[@"special_bicycle"]];
+        OAFavoriteGroup *destination = [self storedGroupWithIcon:icon pointIcons:@[]];
+        OAFavoriteItem *point = source.points.firstObject;
+        OAEditPointViewController *editor = [[OAEditPointViewController alloc] initWithFavorite:point];
+        [editor loadViewIfNeeded];
+        [self bindPointIconCell:editor];
         [editor onGroupSelected:destination.name];
         [self assertPointEditor:editor icon:@"special_bicycle" group:destination];
+        [editor onRightNavbarButtonPressed];
+
+        XCTAssertEqual(source.points.count, 0u);
+        XCTAssertEqual(destination.points.count, 1u);
+        XCTAssertEqual(destination.points.firstObject, point);
+        XCTAssertEqualObjects(point.getCategory, destination.name);
+        XCTAssertEqualObjects(point.getIcon, @"special_bicycle");
+
+        // Wait for the editor's asynchronous save without issuing a second save from the test.
+        NSPredicate *moveIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+            NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary new];
+            [OAFavoritesHelper loadFileGroups:[[OsmAndApp instance] favoritesStorageFilename:source.name] groups:groups];
+            [OAFavoritesHelper loadFileGroups:[[OsmAndApp instance] favoritesStorageFilename:destination.name] groups:groups];
+            return groups[source.name] != nil && groups[source.name].points.count == 0
+                && groups[destination.name].points.count == 1
+                && [groups[destination.name].points.firstObject.getCategory isEqualToString:destination.name];
+        }];
+        XCTNSPredicateExpectation *saved = [[XCTNSPredicateExpectation alloc] initWithPredicate:moveIsStored object:nil];
+        [self waitForExpectations:@[saved] timeout:10];
+        XCTAssertEqual([self loadStoredGroup:source].points.count, 0u);
+        OAFavoriteGroup *storedDestination = [self loadStoredGroup:destination];
+        XCTAssertEqual(storedDestination.points.count, 1u);
+        OAFavoriteItem *storedPoint = storedDestination.points.firstObject;
+        XCTAssertEqualObjects(storedPoint.getCategory, destination.name);
+        XCTAssertEqualObjects(storedPoint.getIcon, @"special_bicycle");
+        XCTAssertEqualObjects(storedPoint.getColor, destination.color);
+        XCTAssertEqualObjects(storedPoint.getBackgroundIcon, destination.backgroundType);
+        if (storedPoint)
+        {
+            OAEditPointViewController *reopened = [[OAEditPointViewController alloc] initWithFavorite:storedPoint];
+            [reopened loadViewIfNeeded];
+            [self bindPointIconCell:reopened];
+            [self assertPointEditor:reopened icon:@"special_bicycle" group:destination];
+        }
     }
-    XCTAssertEqualObjects(source.points.firstObject.getIcon, @"special_bicycle");
 }
 
 - (void)checkUpdateWithIcon:(NSString *)icon points:(BOOL)updatePoints defaults:(BOOL)updateDefaults

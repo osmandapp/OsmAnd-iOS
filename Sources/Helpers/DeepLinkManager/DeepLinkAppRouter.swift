@@ -12,6 +12,10 @@ import UIKit
 final class DeepLinkAppRouter: NSObject {
     private let root: OARootViewController
     
+    private var srtmPlugin: OASRTMPlugin? {
+        OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin
+    }
+    
     init(rootViewController: OARootViewController) {
         self.root = rootViewController
         super.init()
@@ -311,12 +315,196 @@ final class DeepLinkAppRouter: NSObject {
         }
     }
     
-    private func openMapSettingsDashboard(screen: EMapSettingsScreen, mapPanel: OAMapPanelViewController) {
-        guard (mapPanel.children.last as? OAMapSettingsViewController)?.settingsScreen != screen else { return }
+    func openSearch(query: String?) {
+        guard let mapPanel = root.mapPanel else { return }
+        dismissAndPopToRoot()
+        mapPanel.openSearch(nil, location: nil, searchQuery: query)
+    }
+    
+    func openSearch(categoryKey: String) -> Bool {
+        guard let mapPanel = root.mapPanel, let filter = poiFilter(forKey: categoryKey, onlyTopDefined: false) else {
+            NSLog("[DeepLinkAppRouter] Unknown search category: %@", categoryKey)
+            return false
+        }
+        
+        dismissAndPopToRoot()
+        mapPanel.openSearch(filter, location: nil)
+        return true
+    }
+    
+    func openPoiOverlay(categoryKey: String) -> Bool {
+        guard let filter = poiFilter(forKey: categoryKey, onlyTopDefined: true) else {
+            NSLog("[DeepLinkAppRouter] Unknown POI overlay category: %@", categoryKey)
+            return false
+        }
+        
+        switchToBrowseProfile()
+        guard let filtersHelper = OAPOIFiltersHelper.sharedInstance() else { return false }
+        if !filtersHelper.isPoiFilterSelected(filter) {
+            if filter.isStandardFilter {
+                filter.removeUnsavedFilterByName()
+            }
+            filtersHelper.addSelectedPoiFilter(filter)
+            root.mapPanel?.mapViewController.updatePoiLayer()
+        }
+        showMapSettings(screen: .POI)
+        return true
+    }
+    
+    func openTopography() {
+        guard activateProduct(OAIAPHelper.sharedInstance().srtm) else { return }
+        switchToBrowseProfile()
+        if let plugin = srtmPlugin, !plugin.isTerrainLayerEnabled() {
+            plugin.setTerrainLayerEnabled(true)
+        }
+        showMapSettings(screen: .terrain)
+    }
+    
+    func openContourLines() {
+        guard activateProduct(OAIAPHelper.sharedInstance().srtm) else { return }
+        switchToBrowseProfile()
+        if let styleSettings = OAMapStyleSettings.sharedInstance(),
+           let parameter = styleSettings.getParameter(CONTOUR_LINES),
+           parameter.value.isEmpty || parameter.value == "disabled" {
+            parameter.value = OAAppSettings.sharedManager().contourLinesZoom.get()
+            styleSettings.save(parameter)
+        }
+        showMapSettings(screen: .contourLines)
+    }
+    
+    func open3DBuildings() {
+        switchToBrowseProfile()
+        if let plugin = srtmPlugin, !plugin.is3dMapObjectsEnabled() {
+            plugin.set3dMapObjectsEnabled(true)
+        }
+        showMapSettings(screen: .buildings3DVisibility)
+    }
+    
+    func openGlobeView() {
+        switchToBrowseProfile()
+        let settings = OAAppSettings.sharedManager()
+        if !settings.sphericalMap.get() {
+            settings.sphericalMap.set(true)
+            OsmAndApp.swiftInstance()?.mapSettingsChangeObservable.notifyEvent()
+        }
+        showMapSettings(screen: .main)
+    }
+    
+    func openRouteType(key: String) -> Bool {
+        guard let routeType = DeepLinkRouteType(rawValue: key) else {
+            NSLog("[DeepLinkAppRouter] Unknown route type: %@", key)
+            return false
+        }
+        
+        if routeType == .ski {
+            guard activateProduct(OAIAPHelper.sharedInstance().skiMap) else { return true }
+        }
+        switchToBrowseProfile()
+        if let requiredStyle = routeType.requiredStyle(styleSettings: OAMapStyleSettings.sharedInstance()) {
+            guard applyMapStyle(name: requiredStyle) else { return false }
+        }
+        routeType.enable()
+        if let detailsParameter = routeType.detailsParameter {
+            showMapSettings(screen: .routes, param: detailsParameter)
+        } else {
+            showMapSettings(screen: .main)
+        }
+        return true
+    }
+    
+    func openMapStyle(key: String) -> Bool {
+        guard let mapStyle = DeepLinkMapStyle(rawValue: key) else {
+            NSLog("[DeepLinkAppRouter] Unknown map style: %@", key)
+            return false
+        }
+        
+        if let product = mapStyle.requiredProduct {
+            guard activateProduct(product) else { return true }
+        }
+        switchToBrowseProfile()
+        guard applyMapStyle(name: mapStyle.styleName) else { return false }
+        showMapSettings(screen: .mapType)
+        return true
+    }
+    
+    private func poiFilter(forKey key: String, onlyTopDefined: Bool) -> OAPOIUIFilter? {
+        guard let filtersHelper = OAPOIFiltersHelper.sharedInstance() else { return nil }
+        if key == "all" {
+            return filtersHelper.getShowAllPOIFilter()
+        }
+        
+        var poiKey = key.replacingOccurrences(of: "-", with: "_")
+        // The POI type key is misspelled in poi_types.xml, keep the URL spelled correctly
+        if poiKey == "accommodation" {
+            poiKey = "accomodation"
+        }
+        let filterId = STD_PREFIX + poiKey
+        if onlyTopDefined {
+            return filtersHelper.getTopDefinedPoiFilters().first { $0.filterId == filterId }
+        }
+        return filtersHelper.getFilterById(filterId)
+    }
+    
+    private func activateProduct(_ product: OAProduct?) -> Bool {
+        guard let product else { return false }
+        guard product.isPurchased() else {
+            if let nav = dismissAndPopToRoot() {
+                OAChoosePlanHelper.showChoosePlanScreen(with: product, navController: nav)
+            }
+            return false
+        }
+        
+        if product.disabled {
+            OAIAPHelper.sharedInstance().enableProduct(product.productIdentifier)
+        }
+        return true
+    }
+    
+    private func switchToBrowseProfile() {
+        let settings = OAAppSettings.sharedManager()
+        guard settings.applicationMode.get().stringKey != OAApplicationMode.default().stringKey else { return }
+        settings.setApplicationModePref(OAApplicationMode.default())
+    }
+    
+    private func applyMapStyle(name: String) -> Bool {
+        guard let appData = OsmAndApp.swiftInstance()?.data,
+              let mapSource = OADeepLinkBridge.offlineMapSource(withStyleName: name) else {
+            NSLog("[DeepLinkAppRouter] Map style is not available: %@", name)
+            return false
+        }
+        
+        guard appData.lastMapSource != mapSource else { return true }
+        if !mapSource.resourceId.hasPrefix("skimap"),
+           let styleSettings = OAMapStyleSettings.sharedInstance(),
+           let pisteRoutes = styleSettings.getParameter(PISTE_ROUTES_ATTR),
+           pisteRoutes.value != "false" {
+            pisteRoutes.value = "false"
+            styleSettings.save(pisteRoutes)
+        }
+        appData.lastMapSource = mapSource
+        appData.prevOfflineSource = mapSource
+        OAAppSettings.sharedManager().renderer.set(mapSource.name)
+        return true
+    }
+    
+    private func showMapSettings(screen: EMapSettingsScreen, param: String? = nil) {
+        guard let mapPanel = root.mapPanel else { return }
+        if param == nil, let current = mapPanel.children.last as? OAMapSettingsViewController, current.settingsScreen == screen {
+            current.screenObj.setupView()
+            current.screenObj.tblView?.reloadData()
+            return
+        }
+        
+        openMapSettingsDashboard(screen: screen, param: param, mapPanel: mapPanel)
+    }
+    
+    private func openMapSettingsDashboard(screen: EMapSettingsScreen, param: String? = nil, mapPanel: OAMapPanelViewController) {
+        guard param != nil || (mapPanel.children.last as? OAMapSettingsViewController)?.settingsScreen != screen else { return }
         dismissAndPopToRoot()
         mapPanel.mapSettingsButtonClick("")
         guard screen != .main else { return }
-        guard let current = mapPanel.children.last as? OAMapSettingsViewController, let parent = current.parent, let controller = OAMapSettingsViewController(settingsScreen: screen) else { return }
+        let controller = param.flatMap { OAMapSettingsViewController(settingsScreen: screen, param: $0) } ?? OAMapSettingsViewController(settingsScreen: screen)
+        guard let current = mapPanel.children.last as? OAMapSettingsViewController, let parent = current.parent, let controller else { return }
         controller.show(parent, parentViewController: current, animated: true)
     }
     
@@ -346,5 +534,151 @@ final class DeepLinkAppRouter: NSObject {
     
     private func selectMyPlacesTab(_ tab: MyPlacesContainerViewController.Tab, in controller: MyPlacesContainerViewController) {
         controller.selectedTab = tab
+    }
+}
+
+private enum DeepLinkRouteType: String {
+    case cycle
+    case mtb
+    case hiking
+    case alpineHiking = "alpine-hiking"
+    case travel
+    case ski
+    case horse
+    case whitewater
+    case running
+    case fitness
+    case dirtbike
+    case climbing
+    
+    var detailsParameter: String? {
+        switch self {
+        case .cycle:
+            return SHOW_CYCLE_ROUTES_ATTR
+        case .mtb:
+            return SHOW_MTB_ROUTES
+        case .hiking:
+            return HIKING_ROUTES_OSMC_ATTR
+        case .alpineHiking:
+            return SHOW_ALPINE_HIKING_SCALE_SCHEME_ROUTES
+        case .travel:
+            return TRAVEL_ROUTES
+        default:
+            return nil
+        }
+    }
+    
+    private var booleanParameter: String? {
+        switch self {
+        case .alpineHiking:
+            return ALPINE_HIKING_ATTR
+        case .ski:
+            return PISTE_ROUTES_ATTR
+        case .whitewater:
+            return WHITE_WATER_SPORTS_ATTR
+        case .fitness:
+            return SHOW_FITNESS_TRAILS_ATTR
+        case .dirtbike:
+            return DIRTBIKE_ROUTES_ATTR
+        case .climbing:
+            return CLIMBING_ROUTES
+        default:
+            return nil
+        }
+    }
+    
+    private var quickAction: BaseRouteQuickAction? {
+        switch self {
+        case .cycle:
+            return ShowHideCycleRoutesAction()
+        case .mtb:
+            return ShowHideMtbRoutesAction()
+        case .hiking:
+            return ShowHideHikingRoutesAction()
+        case .horse:
+            return ShowHideHorseRoutesAction()
+        case .running:
+            return ShowHideRunningRoutesAction()
+        default:
+            return nil
+        }
+    }
+    
+    // Name of the map style to switch to when the current style can't show this route type
+    func requiredStyle(styleSettings: OAMapStyleSettings?) -> String? {
+        switch self {
+        case .ski:
+            let resourceId = OsmAndApp.swiftInstance()?.data.lastMapSource?.resourceId ?? ""
+            return resourceId.hasPrefix("skimap") ? nil : WINTER_SKI_RENDER
+        case .alpineHiking:
+            return styleSettings?.getParameter(ALPINE_HIKING_ATTR) == nil ? DEFAULT_RENDER : nil
+        default:
+            return nil
+        }
+    }
+    
+    func enable() {
+        if let action = quickAction {
+            if !action.isEnabled() {
+                action.execute()
+            }
+            return
+        }
+        
+        guard let booleanParameter,
+              let styleSettings = OAMapStyleSettings.sharedInstance(),
+              let parameter = styleSettings.getParameter(booleanParameter),
+              parameter.value != "true" else { return }
+        parameter.value = "true"
+        styleSettings.save(parameter)
+    }
+}
+
+private enum DeepLinkMapStyle: String {
+    case `default`
+    case touring
+    case topo
+    case offroad
+    case osmCarto = "osm-carto"
+    case unirs
+    case lightrs
+    case nautical
+    case marine
+    case desert
+    case snowmobile
+    case winterSki = "winter-ski"
+    
+    var styleName: String {
+        switch self {
+        case .default:
+            return DEFAULT_RENDER
+        case .touring:
+            return TOURING_VIEW
+        case .topo:
+            return TOPO_RENDER
+        case .offroad:
+            return OFFROAD_RENDER
+        case .osmCarto:
+            return OSM_CARTO_RENDER
+        case .unirs:
+            return UNIRS_RENDER
+        case .lightrs:
+            return LIGHTRS_RENDER
+        case .nautical:
+            return NAUTICAL_RENDER
+        case .marine:
+            return MARINE_RENDER
+        case .desert:
+            return DESERT_RENDER
+        case .snowmobile:
+            return SNOWMOBILE_RENDER
+        case .winterSki:
+            return WINTER_SKI_RENDER
+        }
+    }
+    
+    // Same rule as the Map type screen: only Winter and ski is hidden without its plugin
+    var requiredProduct: OAProduct? {
+        self == .winterSki ? OAIAPHelper.sharedInstance().skiMap : nil
     }
 }

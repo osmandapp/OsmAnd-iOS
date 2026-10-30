@@ -19,6 +19,7 @@ enum PlanRouteHistoryFixture {
             return "<rtept \(point.attributes)><name>P\(index + 1)</name><extensions><osmand:profile>default</osmand:profile>\(trackIndex)</extensions></rtept>"
         }.joined(separator: "\n")
         let track = withGeometry ? trackGeometry(points: points) : ""
+        // swiftlint:disable force_https
         return """
         <?xml version="1.0" encoding="UTF-8"?>
         <gpx version="1.1" creator="OsmAndRouterV2" xmlns="http://www.topografix.com/GPX/1/1" xmlns:osmand="https://osmand.net/docs/technical/osmand-file-formats/osmand-gpx">
@@ -26,6 +27,7 @@ enum PlanRouteHistoryFixture {
           \(track)
         </gpx>
         """
+        // swiftlint:enable force_https
     }
 
     private static func trackGeometry(points: [Coordinate]) -> String {

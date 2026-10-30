@@ -160,11 +160,11 @@ final class PlanRouteHistoryUITests: XCTestCase {
         let original = try launchFixture(withGeometry: true)
         try menuAction("Reverse route")
         let reversed = Array(original.positions.reversed())
-        try waitForPositions(reversed)
+        let reversedGeometry = [reversed]
+        try assertRoute(reversed, geometry: reversedGeometry)
         for _ in 0..<3 {
             try history(Identifier.undo, expecting: original.positions, geometry: original.geometry)
-            try tap(element(Identifier.redo))
-            try waitForPositions(reversed)
+            try history(Identifier.redo, expecting: reversed, geometry: reversedGeometry)
         }
         try history(Identifier.undo, expecting: original.positions, geometry: original.geometry)
         try saveAndReopen(expecting: original.positions, geometry: original.geometry)
@@ -555,6 +555,7 @@ final class PlanRouteHistoryUITests: XCTestCase {
         let state = try waitForState { $0.positions == positions && $0.gaps == gaps && $0.geometry == expectedLines }
         XCTAssertEqual(state.positions, positions)
         XCTAssertEqual(state.gaps, gaps)
+        XCTAssertEqual(state.lines.count, expectedLines?.count)
         XCTAssertEqual(state.geometry, expectedLines)
         XCTAssertEqual(app.state, .runningForeground)
     }

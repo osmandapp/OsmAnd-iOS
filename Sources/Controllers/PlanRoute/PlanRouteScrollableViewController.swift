@@ -279,7 +279,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupCrosshair()
         applyLayoutMode(for: view.bounds.size)
 #if DEBUG
-        setupUITestStateIfNeeded()
+        setupUITestStateIfNeeded(in: topToolbar) { [weak self] in
+            guard let self else { return nil }
+            return (dataProvider.isCalculatingRoute, pointEditingView != nil)
+        }
 #endif
         dayNightObserver = OAAutoObserverProxy(self,
                                                withHandler: #selector(onDayNightModeChanged),
@@ -1562,32 +1565,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default))
         present(alert, animated: true)
     }
-
-#if DEBUG
-    private func setupUITestStateIfNeeded() {
-        guard UITestState.isPlanRouteHistoryEnabled else { return }
-        let stateView = PlanRouteUITestStateView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
-        stateView.isAccessibilityElement = true
-        stateView.accessibilityLabel = "Plan Route test state"
-        stateView.isUserInteractionEnabled = false
-        stateView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.state
-        stateView.translatesAutoresizingMaskIntoConstraints = false
-        stateView.snapshot = { [weak self] in
-            guard let self,
-                  var state = OAMeasurementToolLayer.currentRouteStateForUITesting() else { return nil }
-            state["calculating"] = dataProvider.isCalculatingRoute
-            state["editing"] = pointEditingView != nil
-            return state
-        }
-        topToolbar.addSubview(stateView)
-        NSLayoutConstraint.activate([
-            stateView.leadingAnchor.constraint(equalTo: topToolbar.leadingAnchor),
-            stateView.topAnchor.constraint(equalTo: topToolbar.safeAreaLayoutGuide.topAnchor),
-            stateView.widthAnchor.constraint(equalToConstant: 1),
-            stateView.heightAnchor.constraint(equalToConstant: 1)
-        ])
-    }
-#endif
 
     @objc private func onRouteTypeButtonTapped() {
         guard !presentApproximationWarningIfNeeded() else { return }

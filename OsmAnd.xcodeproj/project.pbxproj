@@ -962,6 +962,7 @@
 		D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */; };
 		D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */; };
 		D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */; };
+		ED6086000000000000000003 /* PlanRouteScrollableViewController+UITesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */; };
 		ED6086000000000000000001 /* PlanRouteUITestStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000002 /* PlanRouteUITestStateView.swift */; };
 		D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */; };
 		D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */; };
@@ -3702,6 +3703,7 @@
 		D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiState.swift; sourceTree = "<group>"; };
 		D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteScrollableViewController.swift; sourceTree = "<group>"; };
 		D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteToolbarsView.swift; sourceTree = "<group>"; };
+		ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlanRouteScrollableViewController+UITesting.swift"; sourceTree = "<group>"; };
 		ED6086000000000000000002 /* PlanRouteUITestStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteUITestStateView.swift; sourceTree = "<group>"; };
 		D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTopPartView.swift; sourceTree = "<group>"; };
 		D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBetweenPointsViewController.swift; sourceTree = "<group>"; };
@@ -7069,6 +7071,7 @@
 				D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */,
 				D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */,
 				ED6086000000000000000002 /* PlanRouteUITestStateView.swift */,
+				ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */,
 				D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */,
 				D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */,
 				D7210163301B768C003CECB8 /* RouteTypeViewController.swift */,
@@ -12451,6 +12454,7 @@
 				D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */,
 				D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */,
 				ED6086000000000000000001 /* PlanRouteUITestStateView.swift in Sources */,
+				ED6086000000000000000003 /* PlanRouteScrollableViewController+UITesting.swift in Sources */,
 				D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */,
 				D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */,
 				D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */,

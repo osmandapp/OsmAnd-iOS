@@ -62,6 +62,14 @@ final class OBDService: NSObject {
         }
     }
     
+    func startDispatcherWhenReady(device: OBDVehicleMetricsDevice) {
+        device.setupOBDChannel { [weak self, weak device] isReady in
+            // Notification setup is asynchronous; the adapter may disconnect before it completes.
+            guard isReady, device?.isConnected == true else { return }
+            self?.startDispatcher()
+        }
+    }
+
     func stopDispatcher() {
         NSLog("[OBDService] -> stopDispatcher")
         self.obdDispatcher?.setReadStatusListener(listener: nil)
@@ -94,7 +102,7 @@ final class OBDService: NSObject {
             return false
         }
         NSLog("[OBDService] -> send command: \(command)")
-        device.peripheral.writeValue(ofCharac: ecuWriteCharacteristic, value: data, completion: { result in
+        device.peripheral.writeValue(ofCharac: ecuWriteCharacteristic, value: data, type: device.ecuWriteType, completion: { result in
             switch result {
             case .success:
                 NSLog("[OBDService] -> peripheral writeValue success | command: \(command)")

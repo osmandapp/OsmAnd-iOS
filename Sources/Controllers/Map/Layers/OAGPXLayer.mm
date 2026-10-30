@@ -1912,8 +1912,12 @@ colorizationScheme:(int)colorizationScheme
                           touchLocation:(CLLocation *)touchLocation
                             findClosest:(BOOL)findClosest
 {
-    if (!touchLocation)
+    if (!touchLocation || polygon31.isEmpty())
         return nil;
+
+    OsmAnd::AreaI touchBounds31(polygon31.first(), polygon31.first());
+    for (const auto& point31 : polygon31)
+        touchBounds31.enlargeToInclude(point31);
 
     CLLocation *closestLocation = nil;
     CLLocationDistance minDistance = DBL_MAX;
@@ -1925,16 +1929,22 @@ colorizationScheme:(int)colorizationScheme
 
         OASWptPt *previousPoint = points.firstObject;
         OsmAnd::PointI previousPoint31 = [OANativeUtilities getPoint31FromLatLon:previousPoint.lat lon:previousPoint.lon];
-        BOOL previousInside = [OANativeUtilities isPointInsidePolygonLat:previousPoint.lat lon:previousPoint.lon polygon31:polygon31];
+        BOOL previousInside = touchBounds31.contains(previousPoint31)
+            && [OANativeUtilities isPointInsidePolygonLat:previousPoint.lat lon:previousPoint.lon polygon31:polygon31];
 
         for (NSInteger i = 1; i < points.count; i++)
         {
             OASWptPt *currentPoint = points[i];
             OsmAnd::PointI currentPoint31 = [OANativeUtilities getPoint31FromLatLon:currentPoint.lat lon:currentPoint.lon];
-            BOOL currentInside = [OANativeUtilities isPointInsidePolygonLat:currentPoint.lat lon:currentPoint.lon polygon31:polygon31];
+            BOOL currentInside = touchBounds31.contains(currentPoint31)
+                && [OANativeUtilities isPointInsidePolygonLat:currentPoint.lat lon:currentPoint.lon polygon31:polygon31];
 
-            // Project only segments under the tap; navigation needs the closest hit across the whole track.
-            if (previousInside || currentInside || [OANativeUtilities isSegmentCrossingPolygon:previousPoint31 end31:currentPoint31 polygon31:polygon31])
+            OsmAnd::AreaI segmentBounds31(previousPoint31, previousPoint31);
+            segmentBounds31.enlargeToInclude(currentPoint31);
+            // Reject distant edges cheaply, but keep crossings whose endpoints are both outside the tap area.
+            if (previousInside || currentInside
+                || (touchBounds31.intersects(segmentBounds31)
+                    && [OANativeUtilities isSegmentCrossingPolygon:previousPoint31 end31:currentPoint31 polygon31:polygon31]))
             {
                 CLLocation *projection = [OAMapUtils getProjection:touchLocation
                                                     fromLocation:[[CLLocation alloc] initWithLatitude:previousPoint.lat longitude:previousPoint.lon]

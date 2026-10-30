@@ -111,7 +111,87 @@
             //            else
             // Failed to upate database
         }
+        if (sqlite3_open(dbpath, &osmBugsDB) == SQLITE_OK)
+        {
+            sqlite3_stmt *statement = NULL;
+            BOOL hasUploadAttempt = NO;
+            if (sqlite3_prepare_v2(osmBugsDB, "PRAGMA table_info(osmbugs)", -1, &statement, NULL) == SQLITE_OK)
+            {
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    const char *name = (const char *)sqlite3_column_text(statement, 1);
+                    if (name && strcmp(name, "upload_attempt") == 0)
+                        hasUploadAttempt = YES;
+                }
+            }
+            sqlite3_finalize(statement);
+            if (!hasUploadAttempt)
+                sqlite3_exec(osmBugsDB, "ALTER TABLE osmbugs ADD COLUMN upload_attempt BLOB", NULL, NULL, NULL);
+            sqlite3_close(osmBugsDB);
+        }
     });
+}
+
+- (BOOL)readUploadAttemptForPoint:(OAOsmNotePoint *)point attempt:(NSDictionary **)attempt
+{
+    __block BOOL success = NO;
+    __block NSDictionary *storedAttempt = nil;
+    dispatch_sync(dbQueue, ^{
+        if (sqlite3_open(self.dbFilePath.UTF8String, &osmBugsDB) == SQLITE_OK)
+        {
+            sqlite3_stmt *statement = NULL;
+            if (sqlite3_prepare_v2(osmBugsDB, "SELECT upload_attempt FROM osmbugs WHERE id = ?", -1, &statement, NULL) == SQLITE_OK)
+            {
+                sqlite3_bind_int64(statement, 1, point.getId);
+                if (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    if (sqlite3_column_type(statement, 0) == SQLITE_NULL)
+                        success = YES;
+                    else
+                    {
+                        NSData *data = [NSData dataWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_bytes(statement, 0)];
+                        id value = [NSPropertyListSerialization propertyListWithData:data options:NSPropertyListImmutable format:nil error:nil];
+                        if ([value isKindOfClass:NSDictionary.class] && [value[@"payload"] isKindOfClass:NSDictionary.class]
+                            && [value[@"user_id"] isKindOfClass:NSNumber.class] && [value[@"previous_ids"] isKindOfClass:NSArray.class])
+                        {
+                            storedAttempt = value;
+                            success = YES;
+                        }
+                    }
+                }
+            }
+            sqlite3_finalize(statement);
+            sqlite3_close(osmBugsDB);
+        }
+    });
+    *attempt = storedAttempt;
+    return success;
+}
+
+- (BOOL)saveUploadAttempt:(NSDictionary *)attempt forPoint:(OAOsmNotePoint *)point
+{
+    NSData *data = attempt ? [NSPropertyListSerialization dataWithPropertyList:attempt format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil] : nil;
+    if (attempt && !data)
+        return NO;
+    __block BOOL success = NO;
+    dispatch_sync(dbQueue, ^{
+        if (sqlite3_open(self.dbFilePath.UTF8String, &osmBugsDB) == SQLITE_OK)
+        {
+            sqlite3_stmt *statement = NULL;
+            if (sqlite3_prepare_v2(osmBugsDB, "UPDATE osmbugs SET upload_attempt = ? WHERE id = ?", -1, &statement, NULL) == SQLITE_OK)
+            {
+                if (data)
+                    sqlite3_bind_blob(statement, 1, data.bytes, (int)data.length, SQLITE_TRANSIENT);
+                else
+                    sqlite3_bind_null(statement, 1);
+                sqlite3_bind_int64(statement, 2, point.getId);
+                success = sqlite3_step(statement) == SQLITE_DONE && sqlite3_changes(osmBugsDB) == 1;
+            }
+            sqlite3_finalize(statement);
+            sqlite3_close(osmBugsDB);
+        }
+    });
+    return success;
 }
 
 - (long)getLastModifiedTime

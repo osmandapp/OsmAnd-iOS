@@ -9,6 +9,7 @@
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmNotePoint.h"
 #import "OAOsmBugResult.h"
+#import "OAOsmBugsDBHelper.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -31,7 +32,7 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
     NSArray *_notes;
     NSError *_requestError;
     NSInteger _statusCode;
-    NSMapTable<OAOsmNotePoint *, NSDictionary *> *_uploadAttempts;
+    NSDictionary *_uploadAttempt;
 }
 
 - (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action {
@@ -49,11 +50,21 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
 
 - (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL)anonymous allowUnconfirmedRetry:(BOOL)allowUnconfirmedRetry
 {
-    @synchronized (self)
+    @synchronized ([OAOsmBugsDBHelper sharedDatabase])
     {
+        if (action == CREATE)
+        {
+            NSDictionary *attempt = nil;
+            if (![[OAOsmBugsDBHelper sharedDatabase] readUploadAttemptForPoint:point attempt:&attempt])
+            {
+                OAOsmBugResult *result = [[OAOsmBugResult alloc] init];
+                result.warning = OALocalizedString(@"osm_upload_failed_descr");
+                return result;
+            }
+            _uploadAttempt = attempt;
+        }
         OAOsmBugResult *result = [self commitPoint:point text:text action:action anonymous:anonymous allowUnconfirmedRetry:allowUnconfirmedRetry];
-        NSDictionary *attempt = [_uploadAttempts objectForKey:point];
-        result.requiresUploadConfirmation = action == CREATE && result.warning && attempt && ![attempt[@"confirmed"] boolValue];
+        result.requiresUploadConfirmation = action == CREATE && result.warning && _uploadAttempt && ![_uploadAttempt[@"confirmed"] boolValue];
         return result;
     }
 }
@@ -88,7 +99,7 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
 
 - (OAOsmBugResult *)validateLoginDetails
 {
-    @synchronized (self)
+    @synchronized ([OAOsmBugsDBHelper sharedDatabase])
     {
         _userID = nil;
         return [self editingPOI:[NSString stringWithFormat:@"%@", USERS_API_BASE_URL] requestMethod:GET userOperation:@"validate_login" anonymous:NO];
@@ -213,15 +224,21 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
     return matchedID;
 }
 
+- (BOOL)saveUploadAttempt:(NSDictionary *)attempt forPoint:(OAOsmNotePoint *)point
+{
+    if (![[OAOsmBugsDBHelper sharedDatabase] saveUploadAttempt:attempt forPoint:point])
+        return NO;
+    _uploadAttempt = attempt;
+    return YES;
+}
+
 - (OAOsmBugResult *)createNote:(OAOsmNotePoint *)point text:(NSString *)text url:(NSString *)url anonymous:(BOOL)anonymous allowUnconfirmedRetry:(BOOL)allowUnconfirmedRetry
 {
     OAOsmBugResult *result = [[OAOsmBugResult alloc] init];
     NSDictionary *payload = @{@"lat": [NSString stringWithFormat:@"%.6f", point.getLatitude],
                               @"lon": [NSString stringWithFormat:@"%.6f", point.getLongitude], @"text": text};
     NSNumber *userID = anonymous ? @0 : _userID;
-    if (!_uploadAttempts)
-        _uploadAttempts = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsWeakMemory | NSPointerFunctionsObjectPointerPersonality valueOptions:NSPointerFunctionsStrongMemory];
-    NSDictionary *attempt = [_uploadAttempts objectForKey:point];
+    NSDictionary *attempt = _uploadAttempt;
     if (attempt && (![attempt[@"payload"] isEqual:payload] || ![attempt[@"user_id"] isEqual:userID]))
     {
         result.warning = OALocalizedString(@"osm_upload_failed_descr");
@@ -253,7 +270,8 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
         {
             NSMutableDictionary *confirmed = [attempt mutableCopy];
             confirmed[@"confirmed"] = @YES;
-            [_uploadAttempts setObject:confirmed forKey:point];
+            if (![self saveUploadAttempt:confirmed forPoint:point])
+                result.warning = OALocalizedString(@"osm_upload_failed_descr");
             return result;
         }
         if (!allowUnconfirmedRetry)
@@ -262,7 +280,11 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
             return result;
         }
     }
-    [_uploadAttempts setObject:@{@"payload": payload, @"user_id": userID ?: @0, @"previous_ids": previousIDs} forKey:point];
+    if (![self saveUploadAttempt:@{@"payload": payload, @"user_id": userID ?: @0, @"previous_ids": previousIDs} forPoint:point])
+    {
+        result.warning = OALocalizedString(@"osm_upload_failed_descr");
+        return result;
+    }
     result = [self editingPOI:url requestMethod:POST userOperation:@"creating bug" anonymous:anonymous];
     if (!result.warning && _noteID.longLongValue <= 0)
         result.warning = OALocalizedString(@"osm_upload_failed_descr");
@@ -271,12 +293,13 @@ static NSString * const USERS_API_BASE_URL = @"https://api.openstreetmap.org/api
             || _requestError.code == NSURLErrorCannotConnectToHost);
     if (!result.warning)
     {
-        NSMutableDictionary *confirmed = [[_uploadAttempts objectForKey:point] mutableCopy];
+        NSMutableDictionary *confirmed = [_uploadAttempt mutableCopy];
         confirmed[@"confirmed"] = @YES;
-        [_uploadAttempts setObject:confirmed forKey:point];
+        if (![self saveUploadAttempt:confirmed forPoint:point])
+            result.warning = OALocalizedString(@"osm_upload_failed_descr");
     }
     if (notSent || (!_requestError && _statusCode >= 400 && _statusCode < 500 && _statusCode != 408))
-        [_uploadAttempts removeObjectForKey:point];
+        [self saveUploadAttempt:nil forPoint:point];
     return result;
 }
 

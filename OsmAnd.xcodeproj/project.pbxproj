@@ -1884,6 +1884,7 @@
 		DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */; };
 		DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB942508F44900851313 /* SearchUICoreTest.mm */; };
 		BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */; };
+		EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */; };
 		DA73EF7429A3B5410071935D /* publictransportroutes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */; };
 		DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */; };
 		DA775B8A27E6109F0081B9C1 /* OALocalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8927E6109F0081B9C1 /* OALocalFile.m */; };
@@ -5370,6 +5371,7 @@
 		DA72AB8D2508F41000851313 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA72AB942508F44900851313 /* SearchUICoreTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SearchUICoreTest.mm; sourceTree = "<group>"; };
 		74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchContextTest.mm; sourceTree = "<group>"; };
+		C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileListOrderTest.mm; sourceTree = "<group>"; };
 		DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publictransportroutes.addon.render.xml; path = ../resources/rendering_styles/publictransportroutes.addon.render.xml; sourceTree = "<group>"; };
 		DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemoteFile.h; sourceTree = "<group>"; };
 		DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARemoteFile.m; sourceTree = "<group>"; };
@@ -10353,6 +10355,7 @@
 			children = (
 				DA72AB942508F44900851313 /* SearchUICoreTest.mm */,
 				74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */,
+				C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -13823,6 +13826,7 @@
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 				BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */,
+				EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
 				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,

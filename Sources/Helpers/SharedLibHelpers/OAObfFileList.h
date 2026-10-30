@@ -37,10 +37,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSString *> *)searchFilePathsIncludingTravel:(BOOL)includeTravel;
 
 /**
- Resource ids of obf files in the order `OAQuickSearchHelper` has handed them to the search: the live
- update of a region before the region.
+ Resource ids of obf files in the order the search reads them: regions by name, each after its live
+ updates, the newest update first. The same order whatever order the ids come in.
  */
 + (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds;
+
+/**
+ The same files nearest first, for a search around a point: by `distance`, each region still right after
+ its live updates, the newest first. Updates whose region is not among the files come last.
+ */
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds distance:(double (^)(NSString *resourceId))distance;
 
 /**
  The installed file with this name, by full path, or nil when it is not installed.

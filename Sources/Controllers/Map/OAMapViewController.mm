@@ -832,6 +832,16 @@ static char kMapSourceUpdateQueueKey;
     [self setViewportScaleY:y];
 }
 
+- (double)viewportXScale
+{
+    return _mapView.viewportXScale;
+}
+
+- (void)setViewportXScale:(double)viewportXScale
+{
+    [self setViewportScaleX:viewportXScale];
+}
+
 - (double)viewportYScale
 {
     return _mapView.viewportYScale;

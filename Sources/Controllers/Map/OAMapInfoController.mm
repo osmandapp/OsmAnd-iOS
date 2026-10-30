@@ -537,7 +537,9 @@
     }
     
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive && ![mapPanel.scrollableHudViewController shouldIgnoreTopBottomOffsets])
+    if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive
+        && ![mapPanel.scrollableHudViewController shouldIgnoreTopBottomOffsets]
+        && ![mapPanel.suspendedPlanRouteController shouldIgnoreTopBottomOffsets])
     {
         OAMapRendererView *mapView = mapPanel.mapViewController.mapView;
         CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;

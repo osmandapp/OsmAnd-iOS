@@ -7,9 +7,7 @@
 //
 
 #import "OAMeasurementToolLayer.h"
-#import "OARootViewController.h"
 #import "OAMapViewController.h"
-#import "OAMapPanelViewController.h"
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
@@ -579,72 +577,14 @@
     return _collection ? _collection->getLines().size() : 0;
 }
 
-+ (NSDictionary<NSString *, id> *)currentRouteStateForUITesting
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)routeLineCollectionForUITesting
 {
-    if (!UITestState.isPlanRouteHistoryEnabled)
-        return nil;
-    OAMeasurementToolLayer *layer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.routePlanningLayer;
-    if (!layer)
-        return nil;
-    NSMutableArray *points = [NSMutableArray array];
-    for (OASWptPt *point in layer.editingCtx.getAllPoints)
-    {
-        auto position = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.lat, point.lon));
-        CGPoint screenPoint;
-        id screenPosition = NSNull.null;
-        if ([layer.mapView convert:&position toScreen:&screenPoint])
-        {
-            CGPoint windowPoint = [layer.mapView convertPoint:screenPoint toView:nil];
-            screenPosition = @[@(windowPoint.x), @(windowPoint.y)];
-        }
-        [points addObject:@{
-            @"position": @[@(position.x), @(position.y)],
-            @"name": point.name ?: @"",
-            @"screenPosition": screenPosition,
-            @"gap": @(point.isGap)
-        }];
-    }
-    const auto snapshotLines = [](const std::shared_ptr<OsmAnd::VectorLinesCollection> &collection) {
-        NSMutableArray *lines = [NSMutableArray array];
-        if (collection)
-        {
-            for (const auto &line : collection->getLines())
-            {
-                NSMutableArray *positions = [NSMutableArray array];
-                for (const auto &position : line->getPoints())
-                    [positions addObject:@[@(position.x), @(position.y)]];
-                const auto color = line->getFillColor();
-                [lines addObject:@{
-                    @"id": @(line->lineId),
-                    @"positions": positions,
-                    @"color": @[@(color.a), @(color.r), @(color.g), @(color.b)]
-                }];
-            }
-        }
-        [lines sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"id" ascending:YES]]];
-        return lines;
-    };
-    OAMapRendererView *mapView = layer.mapViewController.mapView;
-    OsmAnd::PointI crosshair;
-    if (!CGPointEqualToPoint(layer.cursorScreenPoint, CGPointZero))
-    {
-        CGFloat scale = mapView.contentScaleFactor;
-        CGPoint pixel = CGPointMake(layer.cursorScreenPoint.x * scale, layer.cursorScreenPoint.y * scale);
-        [mapView convert:pixel toLocation:&crosshair];
-    }
-    else
-    {
-        const auto centerPixel = mapView.getCenterPixel;
-        [mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&crosshair];
-    }
-    const auto target = layer.mapView.target31;
-    return @{
-        @"points": points,
-        @"lines": snapshotLines(layer->_collection),
-        @"lastLines": snapshotLines(layer->_lastLineCollection),
-        @"crosshair": @[@(crosshair.x), @(crosshair.y)],
-        @"viewport": @{@"target": @[@(target.x), @(target.y)], @"zoom": @(layer.mapView.zoom)}
-    };
+    return _collection;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)previewLineCollectionForUITesting
+{
+    return _lastLineCollection;
 }
 #endif
 

@@ -46,7 +46,6 @@
 - (void)prepareRouteLinesForTesting;
 - (NSUInteger)routeLineCountForTesting;
 - (NSUInteger)centerLineCountForTesting;
-+ (NSDictionary<NSString *, id> *)currentRouteStateForUITesting;
 #endif
 
 @end

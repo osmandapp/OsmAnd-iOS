@@ -1634,6 +1634,7 @@
 		DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EDB26C563A400F274C7 /* OARulerByTapControlLayer.mm */; };
 		DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */; };
 		DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */; };
+		ED6086000000000000000005 /* OAMeasurementToolLayer+UITesting.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */; };
 		DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */; };
 		DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE426C563A400F274C7 /* OAGPXRecLayer.mm */; };
 		DA5A845B26C563A900F274C7 /* OADestinationsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE626C563A400F274C7 /* OADestinationsLayer.mm */; };
@@ -4890,6 +4891,8 @@
 		DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapLayers.h; sourceTree = "<group>"; };
 		DA5A7EDD26C563A400F274C7 /* OAGPXRecLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXRecLayer.h; sourceTree = "<group>"; };
 		DA5A7EDE26C563A400F274C7 /* OAFavoritesLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoritesLayer.h; sourceTree = "<group>"; };
+		ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "OAMeasurementToolLayer+UITesting.mm"; sourceTree = "<group>"; };
+		ED6086000000000000000007 /* OAMeasurementToolLayer+UITesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMeasurementToolLayer+UITesting.h"; sourceTree = "<group>"; };
 		DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementToolLayer.h; sourceTree = "<group>"; };
 		DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmBugsLayer.mm; sourceTree = "<group>"; };
 		DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOverlayMapLayer.mm; sourceTree = "<group>"; };
@@ -9391,6 +9394,8 @@
 				DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */,
 				DA5A7ED626C563A400F274C7 /* OAMapLayers.mm */,
 				DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */,
+				ED6086000000000000000007 /* OAMeasurementToolLayer+UITesting.h */,
+				ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */,
 				DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */,
 				DA5A7EF326C563A400F274C7 /* OAMyPositionLayer.h */,
 				DA5A7ED326C563A400F274C7 /* OAMyPositionLayer.mm */,
@@ -13222,6 +13227,7 @@
 				275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */,
 				0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */,
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
+				ED6086000000000000000005 /* OAMeasurementToolLayer+UITesting.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,

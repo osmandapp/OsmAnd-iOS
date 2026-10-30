@@ -452,15 +452,57 @@
     return targetPoint;
 }
 
+- (NSArray<OATargetPoint *> *)navigationTargetPointsAt:(CGPoint)touchPoint
+{
+    MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:NO];
+
+    NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray array];
+    for (SelectedMapObject *selectedObject in [result getProcessedObjects])
+    {
+        id<OAContextMenuProvider> provider = selectedObject.provider ?: self.mapViewController.mapLayers.poiLayer;
+        // Grouping can assign the POI provider to an unmerged transport stop.
+        if ([selectedObject.object isKindOfClass:OATransportStop.class])
+            provider = self.mapViewController.mapLayers.transportStopsLayer;
+
+        OATargetPoint *targetPoint = [provider getTargetPoint:selectedObject.object touchLocation:result.pointLatLon];
+        if (!targetPoint || targetPoint.type == OATargetMapDownload)
+            continue;
+
+        CLLocation *location = selectedObject.selectionLocation ?: [provider getObjectLocation:selectedObject.object];
+        if (location)
+            targetPoint.location = location.coordinate;
+
+        if (targetPoint.title.length == 0)
+        {
+            targetPoint.title = [provider getObjectName:selectedObject.object].name;
+            if (targetPoint.title.length == 0 && [selectedObject.object isKindOfClass:OARenderedObject.class])
+            {
+                RenderedObjectAmenityProvider *amenityProvider = [[RenderedObjectAmenityProvider alloc] initWithDetailsObject:nil renderedObject:selectedObject.object];
+                targetPoint.title = [amenityProvider nameOnlyString];
+            }
+        }
+        [targetPoints addObject:targetPoint];
+    }
+
+    return targetPoints;
+}
+
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide
 {
-    if (showUnknownLocation)
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+    if (showUnknownLocation || [mapPanel isSelectingNavigationPoint])
     {
-        // A long press selects the touched location, even when a POI icon is underneath.
+        // A tap selects a map object, asking the user to choose when several objects overlap.
+        // Long presses and taps on empty map areas use the touched location for address lookup.
         [OsmAndApp instance].mapMode = OAMapModeFree;
-        CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
-        OATargetPoint *unknownTargetPoint = [self unknownTargetPoint:coord.latitude longitude:coord.longitude];
-        [[OARootViewController instance].mapPanel showContextMenuWithPoints:@[unknownTargetPoint]];
+        NSArray<OATargetPoint *> *targetPoints = showUnknownLocation ? nil : [self navigationTargetPointsAt:touchPoint];
+        if (targetPoints.count == 0)
+        {
+            CLLocationCoordinate2D coord = [self touchPointCoord:touchPoint];
+            targetPoints = @[[self unknownTargetPoint:coord.latitude longitude:coord.longitude]];
+        }
+        if (![mapPanel processNavigationPointSelection:targetPoints])
+            [mapPanel showContextMenuWithPoints:targetPoints];
         return YES;
     }
 
@@ -565,7 +607,7 @@
             }
         }
     }
-    if (!NSArrayIsEmpty(targetPoints))
+    if (!NSArrayIsEmpty(targetPoints) && ![mapPanel processNavigationPointSelection:targetPoints])
         [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:filteredSelectedObjects touchPointLatLon:touchPointLatLon];
 }
 
@@ -619,7 +661,10 @@
             targetPoint.location = latLon.coordinate;
             targetPoint.shouldFetchAddress = YES;
             
-            [OARootViewController.instance.mapPanel showContextMenuWithPoints:@[targetPoint] selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
+            NSArray<OATargetPoint *> *targetPoints = @[targetPoint];
+            OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+            if (![mapPanel processNavigationPointSelection:targetPoints])
+                [mapPanel showContextMenuWithPoints:targetPoints selectedObjects:@[selectedObject] touchPointLatLon:touchPointLatLon];
         }
     }
     else

@@ -68,36 +68,83 @@
     return resourceIds;
 }
 
+// The key a file is ordered by: its region, 0 for a live update of it and 1 for anything else, and the
+// date of the update. "germany_berlin_europe_25_10_28.live.obf" is (germany_berlin_europe, 0, 25_10_28).
+static NSArray *orderKey(NSString *resourceId)
+{
+    NSString *name = [[resourceId stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
+                                  stringByReplacingOccurrencesOfString:@".obf" withString:@""];
+    NSRange date = [name rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
+    if (date.location != NSNotFound && date.location > 0)
+        return @[[name substringToIndex:date.location - 1], @0, [name substringFromIndex:date.location]];
+    return @[name, @1, @""];
+}
+
 + (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds
 {
+    // one key per id, so that the order is the same whatever order the ids come in: the region, its
+    // live updates before it, the newest of them first. The first file to give a poi claims its id,
+    // so an update that removed the poi has to be read before the region and the older updates
+    NSMutableDictionary<NSString *, NSArray *> *keys = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in resourceIds)
+        keys[resourceId] = orderKey(resourceId);
+
     return [resourceIds sortedArrayUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
-        first = [[first stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
-                        stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-        second = [[second stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
-                          stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-
-        NSRange rangeFirst  = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-        NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-
-        if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)
-        {
-            if (rangeFirst.location == 0)
-                return [first compare:second];
-
-            NSString *base = [first substringToIndex:rangeFirst.location - 1];
-            return [base isEqualToString:second] ? NSOrderedAscending : [second compare:base];
-        }
-        else if (rangeFirst.location == NSNotFound && rangeSecond.location != NSNotFound)
-        {
-            if (rangeSecond.location == 0)
-                return [first compare:second];
-            
-            NSString *base = [second substringToIndex:rangeSecond.location - 1];
-            return [base isEqualToString:first] ? NSOrderedDescending : [base compare:first];
-        }
-
-        return [first compare:second];
+        NSArray *a = keys[first];
+        NSArray *b = keys[second];
+        NSComparisonResult result = [a[0] compare:b[0]];
+        if (result == NSOrderedSame)
+            result = [a[1] compare:b[1]];
+        if (result == NSOrderedSame)
+            result = [b[2] compare:a[2]];
+        return result == NSOrderedSame ? [first compare:second] : result;
     }];
+}
+
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds distance:(double (^)(NSString *resourceId))distance
+{
+    NSArray<NSString *> *sorted = [self sortedForSearch:resourceIds];
+    NSMutableDictionary<NSString *, NSMutableArray<NSString *> *> *updatesByRegion = [NSMutableDictionary dictionary];
+    NSMutableArray<NSString *> *files = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSNumber *> *distances = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in sorted)
+    {
+        NSArray *key = orderKey(resourceId);
+        if ([key[1] isEqual:@0])
+        {
+            NSMutableArray<NSString *> *updates = updatesByRegion[key[0]] ?: (updatesByRegion[key[0]] = [NSMutableArray array]);
+            [updates addObject:resourceId];
+        }
+        else
+        {
+            [files addObject:resourceId];
+            distances[resourceId] = @(distance(resourceId));
+        }
+    }
+    // stable: files as far away keep the order by name
+    [files sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(NSString *first, NSString *second) {
+        return [distances[first] compare:distances[second]];
+    }];
+
+    NSMutableArray<NSString *> *result = [NSMutableArray arrayWithCapacity:sorted.count];
+    for (NSString *file in files)
+    {
+        NSString *region = orderKey(file)[0];
+        NSArray<NSString *> *updates = updatesByRegion[region];
+        if (updates)
+        {
+            [result addObjectsFromArray:updates];
+            [updatesByRegion removeObjectForKey:region];
+        }
+        [result addObject:file];
+    }
+    // updates of a region that is not among the files are still read, after the rest
+    for (NSString *resourceId in sorted)
+    {
+        if (updatesByRegion[orderKey(resourceId)[0]] && [orderKey(resourceId)[1] isEqual:@0])
+            [result addObject:resourceId];
+    }
+    return result;
 }
 
 + (NSString *)pathForFileName:(NSString *)fileName

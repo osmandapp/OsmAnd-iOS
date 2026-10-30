@@ -247,6 +247,7 @@
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAMeasurementToolLayer.h"
+#import "OAMeasurementToolLayer+UITesting.h"
 #import "OAMeasurementModeCommand.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "OAOsmNoteViewController.h"

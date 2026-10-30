@@ -286,12 +286,12 @@
     [self insertImage:x y:y zoom:zoom data:data];
 }
 
-- (void) insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data
+- (BOOL)insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data
 {
-    _db->storeTileData(OsmAnd::TileId::fromXY(x, y),
-                       (OsmAnd::ZoomLevel) zoom,
-                       qMove(QByteArray::fromNSData(data)),
-                       (int64_t) (_timeSupported ? [[NSDate date] timeIntervalSince1970] * 1000.0 : 0));
+    return _db->storeTileData(OsmAnd::TileId::fromXY(x, y),
+                              (OsmAnd::ZoomLevel) zoom,
+                              qMove(QByteArray::fromNSData(data)),
+                              (int64_t) (_timeSupported ? [[NSDate date] timeIntervalSince1970] * 1000.0 : 0));
 }
 
 - (void) updateInfo:(long)expireTimeMillis url:(NSString *)url minZoom:(int)minZoom maxZoom:(int)maxZoom isEllipticYTile:(BOOL)isEllipticYTile title:(NSString *)title

@@ -21,7 +21,8 @@ typedef NS_ENUM (NSInteger, EOATileRequestType)
 
 @protocol OATileDownloadDelegate <NSObject>
 
-- (void) onTileDownloaded:(BOOL)updateUI;
+- (void)onTileDownloaded:(BOOL)updateUI;
+- (void)onTileFailed;
 
 @end
 
@@ -31,8 +32,9 @@ typedef NS_ENUM (NSInteger, EOATileRequestType)
 
 - (instancetype) initWithItem:(OAResourceItem *)item minZoom:(int)minZoom maxZoom:(int)maxZoom;
 
-- (void) startDownload;
-- (void) cancellAllRequests;
+- (OAMapTileDownloader *)downloaderForRetry;
+- (void)startDownload;
+- (void)cancellAllRequests;
 
 @end
 

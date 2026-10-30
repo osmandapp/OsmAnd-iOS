@@ -172,6 +172,11 @@ static NSString * const kSolidColorKey = @"solid_color";
     }
 }
 
+- (BOOL)isOriginalSelected
+{
+    return [_selectedCategoryKey isEqualToString:kOriginalKey];
+}
+
 - (void)updateHostCellIfNeeded
 {
     [self updateTopButtonName];

@@ -2241,6 +2241,10 @@ typedef enum
     {
         poi = self.targetMenuView.targetPoint.targetObj;
     }
+    else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    {
+        poi = ((BaseDetailsObject *) self.targetMenuView.targetPoint.targetObj).syntheticAmenity;
+    }
     else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OATransportStop.class])
     {
         OATransportStop *transportStop = self.targetMenuView.targetPoint.targetObj;

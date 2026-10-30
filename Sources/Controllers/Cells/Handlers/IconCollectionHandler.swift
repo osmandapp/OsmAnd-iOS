@@ -31,6 +31,10 @@ class IconCollectionHandler: OABaseCollectionHandler {
     private var iconBackgroundSize: Double?
     private var iconSize: Double?
     private var iconSpacing: Double?
+
+    static func iconNamesMatch(_ first: String, _ second: String) -> Bool {
+        first.removePrefix("mx_") == second.removePrefix("mx_")
+    }
     
     func setItemSize(size: CGFloat) {
         cellSize = size
@@ -183,7 +187,7 @@ extension IconCollectionHandler: IconsCollectionViewControllerDelegate {
     
     func selectIconName(_ iconName: String) {
         guard let iconNames = iconNamesData.first,
-              let selectedIndex = iconNames.firstIndex(of: iconName) else { return }
+              let selectedIndex = iconNames.firstIndex(where: { Self.iconNamesMatch($0, iconName) }) else { return }
         let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
         setSelectedIndexPath(selectedIndexPath)
         getCollectionView()?.reloadData()

@@ -47,6 +47,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         configureNavigationButtons()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        widgetInfo.applySettings(selectedAppMode)
+    }
+    
     override func registerCells() {
         addCell(OASimpleTableViewCell.reuseIdentifier)
         addCell(OASwitchTableViewCell.reuseIdentifier)
@@ -96,7 +101,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             outCell = cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
-            cell.descriptionVisibility(false)
+            let hasDescr = !(item.descr ?? "").isEmpty
+            cell.descriptionVisibility(hasDescr)
+            cell.descriptionLabel.text = item.descr
             let hasIcon = item.iconName != nil
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
@@ -115,6 +122,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? ""), pref.key.hasPrefix("simple_widget_show_icon") {
                     widgetConfigurationParams?["isVisibleIcon"] = selected
                 }
+            } else {
+                selected = item.bool(forKey: "value")
             }
             
             cell.switchView.isOn = selected
@@ -459,6 +468,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)
+        if widgetInfo.handleSwitchChanged(data, isOn: sw.isOn) {
+            return false
+        }
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
         if !createNew {

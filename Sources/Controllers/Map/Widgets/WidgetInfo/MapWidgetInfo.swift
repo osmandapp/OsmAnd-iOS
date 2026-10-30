@@ -282,6 +282,14 @@ class MapWidgetInfo: NSObject, Comparable {
         return widget.handleRowSelected(item, viewController: viewController)
     }
     
+    func handleSwitchChanged(_ item: OATableRowData, isOn: Bool) -> Bool {
+        return widget.handleSwitchChanged(item, isOn: isOn)
+    }
+    
+    func applySettings(_ appMode: OAApplicationMode) {
+        widget.applySettings(appMode)
+    }
+    
     func enableDisableForMode(_ appMode: OAApplicationMode, enabled: NSNumber?) {
         let screenLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
             ? NSNumber(value: self.screenLayoutMode.rawValue)

@@ -62,6 +62,9 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (nullable NSString *) getPoiAdditionalCategoryIcon:(nullable NSString *)category;
 - (NSString *) replaceDeprecatedSubtype:(NSString *)subtype;
 
+/** The phrases of a language, `poi_<key>` to the name and its synonyms, or nil when the app has none for it. */
++ (nullable NSDictionary<NSString *, NSString *> *) loadPhraseFileForLanguage:(NSString *)languageCode;
+
 - (nullable NSString *) getPhraseByName:(NSString *)name;
 - (nullable NSString *) getPhraseByName:(NSString *)name withDefatultValue:(BOOL)withDefatultValue;
 - (NSString *) getPhraseENByName:(NSString *)name;

@@ -28,6 +28,21 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSArray<NSString *> *)travelAndMapFilePaths;
 
 /**
+ What the search reads, by resource id: map regions, their wikipedia and live update files, and travel
+ files if asked for. In the order of `sortedForSearch:`.
+ */
++ (NSArray<NSString *> *)searchResourceIdsIncludingTravel:(BOOL)includeTravel;
+
+/** The same files as `searchResourceIdsIncludingTravel:`, by full path, those that are on disk. */
++ (NSArray<NSString *> *)searchFilePathsIncludingTravel:(BOOL)includeTravel;
+
+/**
+ Resource ids of obf files in the order `OAQuickSearchHelper` has handed them to the search: the live
+ update of a region before the region.
+ */
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds;
+
+/**
  The installed file with this name, by full path, or nil when it is not installed.
 
  The saved articles keep the bare file name, the obf readers are keyed by path, so the two are

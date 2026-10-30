@@ -16,8 +16,8 @@ import OsmAndShared
 /// a reader be replaced underneath work that is already holding a repository.
 ///
 /// Closing a reader that a background build is still reading through throws inside OsmAndShared,
-/// where the exception cannot be caught, so a reader whose file went away is only closed once no
-/// travel work is in flight.
+/// where the exception cannot be caught, so the readers a change of the installed maps retires are
+/// only closed once no work is in flight.
 final class SharedObfReaders: NSObject {
 
     static let shared = SharedObfReaders()
@@ -30,7 +30,7 @@ final class SharedObfReaders: NSObject {
     /// One repository per file path, long lived: it outlives the reader it reads through.
     private var repositoriesByPath: [String: BinaryAmenityIndexRepository] = [:]
 
-    /// Readers of files that are no longer installed, waiting for the work using them to finish.
+    /// Readers retired by a change of the installed maps, waiting for the work using them to finish.
     private var staleReaders: [BinaryMapIndexReader] = []
 
     /// How many searches or builds are holding repositories right now.
@@ -117,22 +117,25 @@ final class SharedObfReaders: NSObject {
     }
 
     @objc private func onLocalResourcesChanged(observer: Any, key: Any, value: Any) {
-        forgetUninstalledFiles()
+        retireReaders()
     }
 
-    private func forgetUninstalledFiles() {
+    /// Every open reader goes: an update puts the new file at the same path, and a reader opened
+    /// before it would go on reading the old one. The next request opens the file again; the
+    /// repositories of files still installed stay, as they ask for their reader on every call.
+    private func retireReaders() {
         lock.lock()
         let installed = Set(OAObfFileList.travelAndMapFilePaths())
-        var closable: [BinaryMapIndexReader] = []
-        for (path, reader) in readersByPath where !installed.contains(path) {
-            readersByPath.removeValue(forKey: path)
+        for path in repositoriesByPath.keys where !installed.contains(path) {
             repositoriesByPath.removeValue(forKey: path)
-            if inFlight == 0 {
-                closable.append(reader)
-            } else {
-                staleReaders.append(reader)
-            }
         }
+        var closable: [BinaryMapIndexReader] = []
+        if inFlight == 0 {
+            closable = Array(readersByPath.values)
+        } else {
+            staleReaders.append(contentsOf: readersByPath.values)
+        }
+        readersByPath.removeAll()
         lock.unlock()
 
         for reader in closable {

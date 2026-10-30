@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAWorldRegion.h"
+#import "OAObfFileList.h"
 #import "OASearchUICore.h"
 #import "OALocationServices.h"
 #import "OASearchPhrase.h"
@@ -737,51 +738,8 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 - (void) setResourcesForSearchUICore
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    NSMutableArray<NSString *> *resIds = [NSMutableArray array];
     BOOL isCarPlayAppActive = UIApplication.sharedApplication.isCarPlayAppActive;
-    
-    for (const auto& resource : app.resourcesManager->getLocalResources())
-    {
-        BOOL isAllowedType = (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion ||
-                              resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion ||
-                              resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion);
-
-        if (resource->type == OsmAnd::ResourcesManager::ResourceType::Travel && !isCarPlayAppActive)
-            isAllowedType = YES;
-        
-        if (isAllowedType)
-            [resIds addObject:resource->id.toNSString()];
-    }
-
-    [resIds sortUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
-        first = [[first stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
-                        stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-        second = [[second stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
-                          stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-
-        NSRange rangeFirst  = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-        NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-
-        if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)
-        {
-            if (rangeFirst.location == 0)
-                return [first compare:second];
-
-            NSString *base = [first substringToIndex:rangeFirst.location - 1];
-            return [base isEqualToString:second] ? NSOrderedAscending : [second compare:base];
-        }
-        else if (rangeFirst.location == NSNotFound && rangeSecond.location != NSNotFound)
-        {
-            if (rangeSecond.location == 0)
-                return [first compare:second];
-            
-            NSString *base = [second substringToIndex:rangeSecond.location - 1];
-            return [base isEqualToString:first] ? NSOrderedDescending : [base compare:first];
-        }
-
-        return [first compare:second];
-    }];
-    [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
+    [[_core getSearchSettings] setOfflineIndexes:[OAObfFileList searchResourceIdsIncludingTravel:!isCarPlayAppActive]];
     [[_core getSearchSettings] setRegions:app.worldRegion];
 }
 

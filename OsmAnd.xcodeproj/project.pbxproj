@@ -492,6 +492,7 @@
 		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
 		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
 		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
+		9B118248E51854AF8B1C6E10 /* SharedPoiTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */; };
 		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
 		54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955032F4E950100549501 /* WidgetPanelAppearance.swift */; };
 		54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */; };
@@ -1887,6 +1888,7 @@
 		DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA69ED5B2A385B1B001022C7 /* OAWidgetPanelViewController.xib */; };
 		DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */; };
 		DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB942508F44900851313 /* SearchUICoreTest.mm */; };
+		BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */; };
 		DA73EF7429A3B5410071935D /* publictransportroutes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */; };
 		DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */; };
 		DA775B8A27E6109F0081B9C1 /* OALocalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8927E6109F0081B9C1 /* OALocalFile.m */; };
@@ -2326,6 +2328,7 @@
 		148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverter.mm; sourceTree = "<group>"; };
 		153B5979A977684A360DBEE5 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nb; path = nb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfReaders.swift; sourceTree = "<group>"; };
+		0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPoiTranslator.swift; sourceTree = "<group>"; };
 		180F303DB967BA6C58C6A762 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = is; path = is.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		18D8B041AE3F505150D22288 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		21D6D5267C249A7783FE069E /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tt; path = tt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -5377,6 +5380,7 @@
 		DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA72AB8D2508F41000851313 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA72AB942508F44900851313 /* SearchUICoreTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SearchUICoreTest.mm; sourceTree = "<group>"; };
+		74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchContextTest.mm; sourceTree = "<group>"; };
 		DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publictransportroutes.addon.render.xml; path = ../resources/rendering_styles/publictransportroutes.addon.render.xml; sourceTree = "<group>"; };
 		DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemoteFile.h; sourceTree = "<group>"; };
 		DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARemoteFile.m; sourceTree = "<group>"; };
@@ -10365,6 +10369,7 @@
 			isa = PBXGroup;
 			children = (
 				DA72AB942508F44900851313 /* SearchUICoreTest.mm */,
+				74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -10795,6 +10800,7 @@
 				9C102C0285A946359E1BE6A4 /* OAObfFileList.h */,
 				731A97689A654400B3FE08E0 /* OAObfFileList.mm */,
 				17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */,
+				0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */,
 			);
 			path = SharedLibHelpers;
 			sourceTree = "<group>";
@@ -12604,6 +12610,7 @@
 				05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */,
 				F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */,
 				6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */,
+				9B118248E51854AF8B1C6E10 /* SharedPoiTranslator.swift in Sources */,
 				50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
@@ -13837,6 +13844,7 @@
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
+				BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
 				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,

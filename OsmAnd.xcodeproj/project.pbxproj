@@ -1160,6 +1160,7 @@
 		DA5A81A926C563A700F274C7 /* OAAbbreviations.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3426C563A000F274C7 /* OAAbbreviations.mm */; };
 		DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3526C563A000F274C7 /* OASearchSettings.mm */; };
 		DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3B26C563A000F274C7 /* OAQuickSearchHelper.mm */; };
+		9E5CEDCDF8EB26CAB2F729E4 /* OASharedSearchObjects.mm in Sources */ = {isa = PBXBuildFile; fileRef = 131B21973693155434C4DE9A /* OASharedSearchObjects.mm */; };
 		DA5A81AC26C563A700F274C7 /* OASearchUICore.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3D26C563A000F274C7 /* OASearchUICore.mm */; };
 		DA5A81AD26C563A700F274C7 /* OASearchPhrase.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A4026C563A000F274C7 /* OASearchPhrase.mm */; };
 		DA5A81AE26C563A700F274C7 /* OASearchResultMatcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A4326C563A000F274C7 /* OASearchResultMatcher.mm */; };
@@ -1884,6 +1885,7 @@
 		DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */; };
 		DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB942508F44900851313 /* SearchUICoreTest.mm */; };
 		BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */; };
+		EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */; };
 		DA73EF7429A3B5410071935D /* publictransportroutes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */; };
 		DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */; };
 		DA775B8A27E6109F0081B9C1 /* OALocalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8927E6109F0081B9C1 /* OALocalFile.m */; };
@@ -4088,6 +4090,8 @@
 		DA5A7A3926C563A000F274C7 /* OASearchCoreFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchCoreFactory.h; sourceTree = "<group>"; };
 		DA5A7A3A26C563A000F274C7 /* OASearchWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchWord.h; sourceTree = "<group>"; };
 		DA5A7A3B26C563A000F274C7 /* OAQuickSearchHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchHelper.mm; sourceTree = "<group>"; };
+		0D69D31BCDA6B29D8F31126C /* OASharedSearchObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchObjects.h; sourceTree = "<group>"; };
+		131B21973693155434C4DE9A /* OASharedSearchObjects.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchObjects.mm; sourceTree = "<group>"; };
 		DA5A7A3C26C563A000F274C7 /* OASearchUICore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchUICore.h; sourceTree = "<group>"; };
 		DA5A7A3D26C563A000F274C7 /* OASearchUICore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchUICore.mm; sourceTree = "<group>"; };
 		DA5A7A3E26C563A000F274C7 /* OASearchResultMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchResultMatcher.h; sourceTree = "<group>"; };
@@ -5370,6 +5374,7 @@
 		DA72AB8D2508F41000851313 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA72AB942508F44900851313 /* SearchUICoreTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SearchUICoreTest.mm; sourceTree = "<group>"; };
 		74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchContextTest.mm; sourceTree = "<group>"; };
+		B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchModelsTest.mm; sourceTree = "<group>"; };
 		DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publictransportroutes.addon.render.xml; path = ../resources/rendering_styles/publictransportroutes.addon.render.xml; sourceTree = "<group>"; };
 		DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemoteFile.h; sourceTree = "<group>"; };
 		DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARemoteFile.m; sourceTree = "<group>"; };
@@ -7845,6 +7850,8 @@
 				DA5A7A3226C563A000F274C7 /* OAObjectType.m */,
 				DA5A7A2F26C563A000F274C7 /* OAQuickSearchHelper.h */,
 				DA5A7A3B26C563A000F274C7 /* OAQuickSearchHelper.mm */,
+				0D69D31BCDA6B29D8F31126C /* OASharedSearchObjects.h */,
+				131B21973693155434C4DE9A /* OASharedSearchObjects.mm */,
 				DA5A7A4226C563A000F274C7 /* OASearchCoreAPI.h */,
 				DA5A7A3126C563A000F274C7 /* OASearchCoreAPI.mm */,
 				DA5A7A3926C563A000F274C7 /* OASearchCoreFactory.h */,
@@ -10353,6 +10360,7 @@
 			children = (
 				DA72AB942508F44900851313 /* SearchUICoreTest.mm */,
 				74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */,
+				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -13388,6 +13396,7 @@
 				CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */,
 				C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */,
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
+				9E5CEDCDF8EB26CAB2F729E4 /* OASharedSearchObjects.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
@@ -13823,6 +13832,7 @@
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
 				BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */,
+				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
 				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,

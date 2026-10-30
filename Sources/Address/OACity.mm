@@ -9,6 +9,7 @@
 #import "OACity.h"
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 @interface OACity ()
 
@@ -37,6 +38,17 @@
     {
         self.city = city;
         _type = (EOACityType)city->type;
+    }
+    return self;
+}
+
+- (instancetype)initWithSharedCity:(OASCity *)city
+{
+    self = [super initWithSharedAddress:city type:ADDRESS_TYPE_CITY];
+    if (self)
+    {
+        _sharedCity = city;
+        _type = [OACity getType:[city getType].name.lowercaseString];
     }
     return self;
 }

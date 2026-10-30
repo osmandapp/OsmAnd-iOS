@@ -126,7 +126,10 @@
             }
             sqlite3_finalize(statement);
             if (!hasUploadAttempt)
-                sqlite3_exec(osmBugsDB, "ALTER TABLE osmbugs ADD COLUMN upload_attempt BLOB", NULL, NULL, NULL);
+            {
+                if (sqlite3_exec(osmBugsDB, "ALTER TABLE osmbugs ADD COLUMN upload_attempt BLOB", NULL, NULL, NULL) != SQLITE_OK)
+                    OALog(@"Failed to add upload_attempt column to osmbugs: %s", sqlite3_errmsg(osmBugsDB));
+            }
             sqlite3_close(osmBugsDB);
         }
     });

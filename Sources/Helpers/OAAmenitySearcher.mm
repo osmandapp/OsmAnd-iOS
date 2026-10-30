@@ -35,6 +35,7 @@
 #import "OANativeUtilities.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 #import <QuartzCore/QuartzCore.h>
 
 
@@ -905,6 +906,105 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     }
     poi.localizedNames = names;
     poi.regionName = amenity->regionName.toNSString();
+    return poi;
+}
+
++ (nullable OAPOIType *) parsePOITypeBySharedAmenity:(OASAmenity *)amenity
+{
+    NSString *subType = [amenity getSubType];
+    if (subType.length == 0 || [[OAAppSettings sharedManager] isTypeDisabled:subType])
+        return nil;
+
+    NSString *category = [amenity getType].keyName;
+    NSString *subCategory = nil;
+    for (NSString *part in [subType componentsSeparatedByString:@";"])
+    {
+        if (part.length > 0)
+        {
+            subCategory = part;
+            break;
+        }
+    }
+    if (category.length == 0 || subCategory.length == 0)
+        return nil;
+
+    OAPOIHelper *helper = [OAPOIHelper sharedInstance];
+    OAPOIType *type = [helper getPoiTypeByCategory:category name:subCategory];
+    if (!type)
+    {
+        OAPOICategory *c = [[OAPOICategory alloc] initWithName:category];
+        type = [[OAPOIType alloc] initWithName:subCategory category:c];
+        type.nameLocalized = [helper getPhrase:type];
+        type.nameLocalizedEN = [helper getPhraseEN:type];
+    }
+    return type;
+}
+
++ (nullable OAPOI *) parsePOIBySharedAmenity:(OASAmenity *)amenity
+{
+    OAPOIType *type = [self.class parsePOITypeBySharedAmenity:amenity];
+    if (!type || type.mapOnly)
+        return nil;
+
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+    OASKLatLon *location = [amenity getLocation];
+
+    OAPOI *poi = [[OAPOI alloc] init];
+    poi.obfId = (unsigned long long) amenity.id.longLongValue;
+    poi.latitude = location.latitude;
+    poi.longitude = location.longitude;
+    poi.name = [amenity getName];
+    poi.cityName = [amenity getCityFromTagGroupsLang:lang] ?: @"";
+
+    // the names go through the same processing as the C++ ones
+    QHash<QString, QString> localizedNames;
+    NSDictionary<NSString *, NSString *> *sharedNames = [amenity getNamesMapIncludeEn:YES];
+    for (NSString *key in sharedNames)
+        localizedNames.insert(QString::fromNSString(key), QString::fromNSString(sharedNames[key]));
+    NSMutableDictionary *names = [NSMutableDictionary dictionary];
+    NSString *nameLocalized = [OAPOIHelper processLocalizedNames:localizedNames nativeName:QString::fromNSString(poi.name) names:names];
+    if (nameLocalized.length > 0)
+        poi.nameLocalized = nameLocalized;
+
+    // content:<lang> is the article in that language, the rest are the tags
+    MutableOrderedDictionary *content = [MutableOrderedDictionary new];
+    MutableOrderedDictionary *values = [MutableOrderedDictionary new];
+    for (NSString *key in [amenity getAdditionalInfoKeys])
+    {
+        NSString *value = [amenity getAdditionalInfoKey:key];
+        if (!value)
+            continue;
+        NSString *tag = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+        if ([tag hasPrefix:@"content"])
+            [content setObject:value forKey:tag.length > 8 ? [[tag substringFromIndex:8] lowercaseString] : @""];
+        else
+            [values setObject:value forKey:tag];
+    }
+    poi.values = values;
+    poi.localizedContent = content;
+
+    if (!poi.nameLocalized)
+        poi.nameLocalized = poi.name;
+
+    poi.type = type;
+    poi.subType = [amenity getSubType];
+
+    if (poi.name.length == 0)
+        poi.name = type.nameLocalized;
+    if (poi.nameLocalized.length == 0)
+        poi.nameLocalized = type.nameLocalized;
+    if (poi.enName.length == 0)
+        poi.enName = type.nameLocalizedEN;
+
+    if (names.count == 0)
+    {
+        NSString *transliterated = type.nameLocalized.length > 0 ? OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() : @"";
+        [names setObject:transliterated forKey:@""];
+        [names setObject:type.nameLocalized forKey:lang ? lang : @""];
+        [names setObject:type.nameLocalizedEN forKey:@"en"];
+    }
+    poi.localizedNames = names;
+    poi.regionName = [amenity getRegionName] ?: @"";
     return poi;
 }
 

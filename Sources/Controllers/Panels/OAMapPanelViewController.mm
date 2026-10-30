@@ -4888,7 +4888,74 @@ typedef enum
 {
     [self runContextMenuPresentationUITestFixtureIfNeeded];
     [self runGpxWaypointOpenTrackUITestFixtureIfNeeded];
+#if DEBUG
+    [self runPlanRouteHistoryUITestFixtureIfNeeded];
+#endif
 }
+
+#if DEBUG
+- (void)runPlanRouteHistoryUITestFixtureIfNeeded
+{
+    if (![UITestState shouldRunPlanRouteHistoryFixture])
+        return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        static NSString * const fixturePrefix = @"UITest-5782-source-";
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        NSMutableArray<NSString *> *previousFixtures = [NSMutableArray array];
+        for (NSString *filePath in settings.mapSettingVisibleGpx.get)
+        {
+            if ([filePath.lastPathComponent hasPrefix:fixturePrefix])
+                [previousFixtures addObject:filePath];
+        }
+        if (previousFixtures.count > 0)
+            [settings hideGpx:previousFixtures];
+        NSString *gpxPath = OsmAndApp.instance.gpxPath;
+        NSFileManager *fileManager = NSFileManager.defaultManager;
+        NSError *cleanupError = nil;
+        NSArray<NSString *> *fileNames = [fileManager contentsOfDirectoryAtPath:gpxPath error:&cleanupError];
+        if (!fileNames)
+        {
+            OALog(@"Failed to list Plan Route UI test fixtures: %@", cleanupError);
+            return;
+        }
+        for (NSString *fileName in fileNames)
+        {
+            if (![fileName hasPrefix:fixturePrefix] || ![fileName.pathExtension isEqualToString:@"gpx"])
+                continue;
+            NSString *path = [gpxPath stringByAppendingPathComponent:fileName];
+            NSDictionary<NSFileAttributeKey, id> *attributes = [fileManager attributesOfItemAtPath:path error:&cleanupError];
+            if (!attributes)
+            {
+                OALog(@"Failed to inspect Plan Route UI test fixture %@: %@", fileName, cleanupError);
+                return;
+            }
+            if (![attributes[NSFileType] isEqualToString:NSFileTypeRegular])
+                continue;
+            if (![fileManager removeItemAtPath:path error:&cleanupError])
+            {
+                OALog(@"Failed to remove Plan Route UI test fixture %@: %@", fileName, cleanupError);
+                return;
+            }
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+            [OASGpxDbHelper.shared removeFile:file];
+            [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:file];
+        }
+        const auto position = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(52.2335, 21.011));
+        [self.mapViewController goToPosition:[OANativeUtilities convertFromPointI:position] andZoom:15 animated:NO];
+        NSString *fixture = NSProcessInfo.processInfo.environment[@"OSMAND_UI_TEST_PLAN_ROUTE_GPX"];
+        if (fixture.length == 0)
+        {
+            [PlanRouteScrollableViewController showNewRouteWithApplicationMode:OAApplicationMode.DEFAULT];
+            return;
+        }
+        NSString *fileName = [NSString stringWithFormat:@"%@%@.gpx", fixturePrefix, NSUUID.UUID.UUIDString];
+        NSString *path = [gpxPath stringByAppendingPathComponent:fileName];
+        NSError *error = nil;
+        if ([fixture writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error])
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:path];
+    });
+}
+#endif
 
 - (BOOL)isContextMenuPresentationUITestingEnabled
 {

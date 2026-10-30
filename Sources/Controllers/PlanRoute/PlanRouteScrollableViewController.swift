@@ -278,6 +278,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupRouteTypeButton()
         setupCrosshair()
         applyLayoutMode(for: view.bounds.size)
+#if DEBUG
+        setupUITestStateIfNeeded(in: topToolbar) { [weak self] in
+            guard let self else { return nil }
+            return (dataProvider.isCalculatingRoute, pointEditingView != nil)
+        }
+#endif
         dayNightObserver = OAAutoObserverProxy(self,
                                                withHandler: #selector(onDayNightModeChanged),
                                                andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
@@ -522,6 +528,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSheet() {
+        sheetView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.sheet
         sheetView.backgroundColor = .viewBg
         sheetView.layer.cornerRadius = Self.sheetCornerRadius
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -568,6 +575,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func setupTopPart() {
         let topContentInset = Self.sidePanelTopContentInset
         let topPartViewHeight = Self.topPartViewHeight
+        topPartView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.summary
         topPartView.onTap = { [weak self] in
             guard let self, !usesSidePanelLayout else { return }
             toggleState()
@@ -945,6 +953,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         infoView.headerViewText = localizedString("move_point_descr")
         leftButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
         rightButton.setTitle(localizedString("shared_string_apply"), for: .normal)
+        leftButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.cancel
+        rightButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.apply
         switch mode {
         case .move:
             leftIconView.image = .icCustomChangeObjectPosition

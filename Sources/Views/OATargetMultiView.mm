@@ -257,7 +257,7 @@
 }
 
 - (IBAction)onCloseButtonClicked:(id)sender {
-    [self hide:YES duration:0.2 onComplete:nil];
+    [[[OARootViewController instance] mapPanel] hideTargetPointMenu];
 }
 
 @end

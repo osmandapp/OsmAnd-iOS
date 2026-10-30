@@ -20,6 +20,7 @@
 #import "OAJoinPointsCommand.h"
 #import "OASplitPointsCommand.h"
 #import "OARemovePointCommand.h"
+#import "OARemovePointsCommand.h"
 #import "OAReorderPointCommand.h"
 #import "OAReorderSegmentCommand.h"
 #import "OAChangeRouteModeCommand.h"
@@ -1125,11 +1126,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    NSArray<NSNumber *> *sorted = [indexes sortedArrayUsingComparator:^NSComparisonResult(NSNumber *a, NSNumber *b) {
-        return [b compare:a];
-    }];
-    for (NSNumber *indexNumber in sorted)
-        [ctx.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:layer position:indexNumber.integerValue]];
+    [ctx.commandManager execute:[[OARemovePointsCommand alloc] initWithLayer:layer positions:indexes]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();

@@ -413,6 +413,26 @@ typedef enum
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
+- (OABaseScrollableHudViewController *)suspendedPlanRouteController
+{
+    if (!_scrollableHudViewController && [_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        return _prevScrollableHudViewController;
+    return nil;
+}
+
+- (void)forceHidePlanRouteIfNeeded
+{
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        [_scrollableHudViewController forceHide];
+
+    if ([_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+    {
+        OABaseScrollableHudViewController *planner = _prevScrollableHudViewController;
+        _prevScrollableHudViewController = nil;
+        [planner forceHide];
+    }
+}
+
 - (void)setupScrollableHud:(OABaseScrollableHudViewController *)controller {
     _scrollableHudViewController = controller;
     _scrollableHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -452,6 +472,8 @@ typedef enum
 - (void) hideScrollableHudViewController
 {
     self.sidePanelController.recognizesPanGesture = YES;
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        [(PlanRouteScrollableViewController *)_scrollableHudViewController suspendMapCursor];
     if (_scrollableHudViewController != nil && self.view == _scrollableHudViewController.view.superview)
     {
         [_scrollableHudViewController.view removeFromSuperview];
@@ -1343,6 +1365,15 @@ typedef enum
 - (void)clearSearchViewController
 {
     _searchViewController = nil;
+    _isNewContextMenuStillEnabled = NO;
+}
+
+- (void)disablePlanRouteSearchContextMenuForMapGesture
+{
+    // Search may leave its one-time context-menu permission set after dismissal.
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class]
+        || [_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        _isNewContextMenuStillEnabled = NO;
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
@@ -1914,12 +1945,13 @@ typedef enum
     [self closeDashboard];
 
     Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+
     OATargetPoint *targetPoint = [self.mapViewController.mapLayers.contextMenuLayer unknownTargetPoint:lat longitude:lon];
     if (title.length > 0)
         targetPoint.title = title;
 
     [self showContextMenu:targetPoint];
-    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
 }
 
 - (void) goToTargetPointDefault
@@ -2544,8 +2576,11 @@ typedef enum
 {
     CLLocationCoordinate2D initialPoint = CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude);
     [self targetHideContextPinMarker];
-    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
-    [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:^{
+        // Closing the result card restores any suspended planner before this callback.
+        if (![_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+            [PlanRouteScrollableViewController showNewRouteWithInitialPoint:initialPoint];
+    }];
 }
 
 - (void) targetGoToPoint
@@ -2876,7 +2911,18 @@ typedef enum
     if (self.targetMultiMenuView.superview)
     {
         [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
-            [_hudViewController updateDependentButtonsVisibility];
+            if (_prevScrollableHudViewController && !hideActiveTarget)
+            {
+                OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+                _prevScrollableHudViewController = nil;
+                [self showScrollableHudViewController:controller];
+            }
+            else
+            {
+                [_hudViewController updateDependentButtonsVisibility];
+            }
+            if (onComplete)
+                onComplete();
         }];
         return;
     }
@@ -2902,7 +2948,11 @@ typedef enum
     if (_targetMenuView.needsManualContextMode)
         [self restoreFromContextMenuMode];
     
+    BOOL completeAfterChangePositionCleanup = hideActiveTarget && _activeTargetType == OATargetChangePosition;
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
+        if (onComplete && !completeAfterChangePositionCleanup)
+            onComplete();
+
         if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
@@ -2916,17 +2966,18 @@ typedef enum
             }
         }
         
-        if (_prevScrollableHudViewController)
+        if (_prevScrollableHudViewController && !hideActiveTarget)
         {
-            [self showScrollableHudViewController:_prevScrollableHudViewController];
+            OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
             _prevScrollableHudViewController = nil;
+            [self showScrollableHudViewController:controller];
         }
         else
         {
             [_hudViewController updateDependentButtonsVisibility];
         }
 
-        if (onComplete)
+        if (onComplete && completeAfterChangePositionCleanup)
             onComplete();
     }];
     
@@ -2942,7 +2993,17 @@ typedef enum
 {
     if (self.targetMultiMenuView.superview)
     {
-        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:onComplete];
+        [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
+            if (_prevScrollableHudViewController)
+            {
+                OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+                _prevScrollableHudViewController = nil;
+                [self showScrollableHudViewController:controller];
+            }
+            if (onComplete)
+                onComplete();
+            [_hudViewController updateDependentButtonsVisibility];
+        }];
         return;
     }
 
@@ -2973,6 +3034,12 @@ typedef enum
                 [self restoreActiveTargetMenu];
 
             _activeTargetChildPushed = NO;
+        }
+        if (_prevScrollableHudViewController)
+        {
+            OABaseScrollableHudViewController *controller = _prevScrollableHudViewController;
+            _prevScrollableHudViewController = nil;
+            [self showScrollableHudViewController:controller];
         }
         if (onComplete)
             onComplete();
@@ -3230,6 +3297,7 @@ typedef enum
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:kCLLocationCoordinate2DInvalid openedFromMap:NO];
     state.openedFromTracksList = YES;
     state.openedFromTrackMenu = fromTrackMenu;
+    state.temporarilyShown = !item.isShowCurrentTrack && ![_settings isGpxVisible:item.gpxFilePath];
     state.navControllerHistory = navControllerHistory;
     state.lastSelectedTab = selectedTab;
     [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode state:state];
@@ -3268,6 +3336,9 @@ typedef enum
                      analysis:(nullable OASGpxTrackAnalysis *)analysis;
 {
     BOOL shouldClearNavControllerHistory = _scrollableHudViewController != nil && !state.openedFromTrackMenu;
+    // A GPX HUD replaces the planner instead of suspending it in showTargetPointMenu.
+    // Let the presentation coordinator close the editor before attaching the track HUD.
+    _isNewContextMenuStillEnabled = NO;
     __weak __typeof(self) weakSelf = self;
     [self enqueueContextMenuPresentation:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -3276,6 +3347,14 @@ typedef enum
 
         if (shouldClearNavControllerHistory)
             state.navControllerHistory = nil;
+
+        // A result card may have already suspended the planner before GPX was selected.
+        if ([strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+        {
+            OABaseScrollableHudViewController *planner = strongSelf->_prevScrollableHudViewController;
+            strongSelf->_prevScrollableHudViewController = nil;
+            [planner forceHide];
+        }
 
         [strongSelf doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode analysis:analysis];
     }];
@@ -3296,6 +3375,12 @@ typedef enum
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
 
+            // Search results temporarily hide the planner in showTargetPointMenu.
+            // Force hiding it here would discard the route editing context.
+            if (strongSelf->_isNewContextMenuStillEnabled
+                && [strongSelf->_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+                return NO;
+
             [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
             return YES;
         }],
@@ -3312,7 +3397,9 @@ typedef enum
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
 
-            strongSelf->_prevScrollableHudViewController = nil;
+            // Keep the planner suspended when replacing a search result menu.
+            if (![strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
+                strongSelf->_prevScrollableHudViewController = nil;
             [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
             return YES;
         }],
@@ -4798,8 +4885,6 @@ typedef enum
 - (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
-    if (updateMap && docPath.length == 0)
-        [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     [self.targetMenuView applyTargetObjectChanges];
 }
 
@@ -4839,7 +4924,74 @@ typedef enum
 {
     [self runContextMenuPresentationUITestFixtureIfNeeded];
     [self runGpxWaypointOpenTrackUITestFixtureIfNeeded];
+#if DEBUG
+    [self runPlanRouteHistoryUITestFixtureIfNeeded];
+#endif
 }
+
+#if DEBUG
+- (void)runPlanRouteHistoryUITestFixtureIfNeeded
+{
+    if (![UITestState shouldRunPlanRouteHistoryFixture])
+        return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        static NSString * const fixturePrefix = @"UITest-5782-source-";
+        OAAppSettings *settings = OAAppSettings.sharedManager;
+        NSMutableArray<NSString *> *previousFixtures = [NSMutableArray array];
+        for (NSString *filePath in settings.mapSettingVisibleGpx.get)
+        {
+            if ([filePath.lastPathComponent hasPrefix:fixturePrefix])
+                [previousFixtures addObject:filePath];
+        }
+        if (previousFixtures.count > 0)
+            [settings hideGpx:previousFixtures];
+        NSString *gpxPath = OsmAndApp.instance.gpxPath;
+        NSFileManager *fileManager = NSFileManager.defaultManager;
+        NSError *cleanupError = nil;
+        NSArray<NSString *> *fileNames = [fileManager contentsOfDirectoryAtPath:gpxPath error:&cleanupError];
+        if (!fileNames)
+        {
+            OALog(@"Failed to list Plan Route UI test fixtures: %@", cleanupError);
+            return;
+        }
+        for (NSString *fileName in fileNames)
+        {
+            if (![fileName hasPrefix:fixturePrefix] || ![fileName.pathExtension isEqualToString:@"gpx"])
+                continue;
+            NSString *path = [gpxPath stringByAppendingPathComponent:fileName];
+            NSDictionary<NSFileAttributeKey, id> *attributes = [fileManager attributesOfItemAtPath:path error:&cleanupError];
+            if (!attributes)
+            {
+                OALog(@"Failed to inspect Plan Route UI test fixture %@: %@", fileName, cleanupError);
+                return;
+            }
+            if (![attributes[NSFileType] isEqualToString:NSFileTypeRegular])
+                continue;
+            if (![fileManager removeItemAtPath:path error:&cleanupError])
+            {
+                OALog(@"Failed to remove Plan Route UI test fixture %@: %@", fileName, cleanupError);
+                return;
+            }
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+            [OASGpxDbHelper.shared removeFile:file];
+            [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:file];
+        }
+        const auto position = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(52.2335, 21.011));
+        [self.mapViewController goToPosition:[OANativeUtilities convertFromPointI:position] andZoom:15 animated:NO];
+        NSString *fixture = NSProcessInfo.processInfo.environment[@"OSMAND_UI_TEST_PLAN_ROUTE_GPX"];
+        if (fixture.length == 0)
+        {
+            [PlanRouteScrollableViewController showNewRouteWithApplicationMode:OAApplicationMode.DEFAULT];
+            return;
+        }
+        NSString *fileName = [NSString stringWithFormat:@"%@%@.gpx", fixturePrefix, NSUUID.UUID.UUIDString];
+        NSString *path = [gpxPath stringByAppendingPathComponent:fileName];
+        NSError *error = nil;
+        if ([fixture writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error])
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:path];
+    });
+}
+#endif
 
 - (BOOL)isContextMenuPresentationUITestingEnabled
 {

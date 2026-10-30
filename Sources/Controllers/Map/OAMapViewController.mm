@@ -153,6 +153,7 @@ static char kMapSourceUpdateQueueKey;
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
+@property (atomic) BOOL renderedNightMode;
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable;
 - (void)updateMapLocaleLanguageForEnvironment:(const std::shared_ptr<OsmAnd::MapPresentationEnvironment>&)mapPresentationEnvironment
@@ -1797,6 +1798,7 @@ static char kMapSourceUpdateQueueKey;
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated:nil];
+        [mapPanel disablePlanRouteSearchContextMenuForMapGesture];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events
@@ -2289,10 +2291,18 @@ static char kMapSourceUpdateQueueKey;
             _mapSourceInvalidated = YES;
             return;
         }
-        
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self updateCurrentMapSource];
         });
+    });
+}
+
+- (void)reloadMapSourceIfNightModeChanged
+{
+    dispatch_async(_mapSourceUpdateQueue, ^{
+        if (self.renderedNightMode != [OAAppSettings sharedManager].isCurrentMapNightMode)
+            [self reloadMapSourceForDayNightModeChange];
     });
 }
 
@@ -2594,6 +2604,7 @@ static char kMapSourceUpdateQueueKey;
         return;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL nightMode = settings.isCurrentMapNightMode;
     const auto screenTileSize = 256 * displayDensityFactor;
     double mapDensity = [settings.mapDensity get];
     double mapDensityAligned;
@@ -2672,7 +2683,7 @@ static char kMapSourceUpdateQueueKey;
             NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
             newSettings[@"baseAppMode"] = baseMode;
 
-            if (settings.isCurrentMapNightMode)
+            if (nightMode)
                 newSettings[@"nightMode"] = @"true";
             shouldSetSkyFog = YES;
 
@@ -2811,7 +2822,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (enabledSrtmPlugin && [enabledSrtmPlugin isTerrainLayerEnabled] && [enabledSrtmPlugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -2867,8 +2878,7 @@ static char kMapSourceUpdateQueueKey;
             [_mapView setVisualZoomShift:mapDensity];
         if (shouldSetSkyFog)
         {
-            BOOL mapNightMode = settings.isCurrentMapNightMode;
-            if (mapNightMode)
+            if (nightMode)
             {
                 [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
                 [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
@@ -2917,6 +2927,7 @@ static char kMapSourceUpdateQueueKey;
         [_mapLayers updateLayers];
         [_mapView setFlatEarth:![settings.sphericalMap get]];
     }];
+    self.renderedNightMode = nightMode;
 
     [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:[[OAMapPresentationEnvironment alloc] initWithEnvironment:mapPresentationEnvironment]];
     if (shouldApplyWeatherBandSettings)
@@ -3020,7 +3031,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (plugin && [plugin isTerrainLayerEnabled] && [plugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -3999,6 +4010,25 @@ static char kMapSourceUpdateQueueKey;
 {
     if (items.count == 0)
         return NO;
+
+    if (docPath.length == 0)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+        for (OAGpxWptItem *item in items)
+        {
+            [helper saveWpt:item.point];
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
+        }
+
+        if (updateMap)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+            });
+        }
+        return YES;
+    }
 
     BOOL found = NO;
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;

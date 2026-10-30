@@ -26,10 +26,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-static NSString * const kName = @"name";
-static NSString * const kCategoryName = @"category_name";
-static NSString * const kCategoryColor =  @"category_color";
-
 static QuickActionType *TYPE;
 
 @implementation OAGPXAction
@@ -101,18 +97,7 @@ static QuickActionType *TYPE;
     if ([groupName isEqualToString:OALocalizedString(@"shared_string_waypoints")])
         groupName = @"";
 
-    UIColor* color;
-    if (self.getParams[kCategoryColor])
-    {
-        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
-        color = favCol.color;
-    }
-    else
-    {
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
-        color = favCol.color;
-    }
+    UIColor *color = self.getParams[kWptColor] ? UIColorFromARGB([self.getParams[kWptColor] intValue]) : [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[self.getParams[kCategoryColor] integerValue]];
 
     OASGpxUtilitiesPointsGroup *group = [OASavingTrackHelper sharedInstance].currentTrack.pointsGroups[groupName];
     if (group.color != 0)
@@ -125,6 +110,14 @@ static QuickActionType *TYPE;
     p.lon = lon;
     p.category = groupName;
     p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
+    NSString *iconName = group.iconName.length > 0 ? group.iconName : self.getParams[kWptIcon];
+    if (iconName.length > 0)
+        [p setIconNameIconName:iconName];
+
+    NSString *backgroundIconName = group.backgroundType.length > 0 ? group.backgroundType : self.getParams[kWptBackgroundType];
+    if (backgroundIconName.length > 0)
+        [p setBackgroundTypeBackType:backgroundIconName];
+
     wpt.point = p;
     wpt.color = color;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -184,24 +177,26 @@ static QuickActionType *TYPE;
                           }
                       ] forKey:kSectionNoName];
     
-    NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
-    OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
+    UIColor *color = self.getParams[kWptColor] ? UIColorFromARGB([self.getParams[kWptColor] intValue]) : [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[self.getParams[kCategoryColor] integerValue]];
+    NSMutableDictionary *appearanceRow = [@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"key" : kAppearance,
+        @"title" : OALocalizedString(@"shared_string_appearance"),
+        @"color" : @([color toARGBNumber])
+    } mutableCopy];
+    [appearanceRow setValue:(self.getParams[kWptColor] || self.getParams[kCategoryColor]) ? @([color toARGBNumber]) : nil forKey:kAppearanceColor];
+    [appearanceRow setValue:self.getParams[kWptIcon] forKey:kAppearanceIcon];
+    [appearanceRow setValue:self.getParams[kWptBackgroundType] forKey:kAppearanceBackground];
     
     [data setObject:@[@{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
                           @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
-                          @"color" : @(defaultColor),
+                          @"color" : @([color toARGBNumber]),
                           @"img" : ACImageNameIcCustomFolder
                           },
-                      @{
-                          @"type" : [OAValueTableViewCell getCellIdentifier],
-                          @"key" : kCategoryColor,
-                          @"title" : OALocalizedString(@"shared_string_color"),
-                          @"value" : color ? color.name : @"",
-                          @"color" : @(defaultColor)
-                          },
+                      appearanceRow,
                       @{
                           @"footer" : OALocalizedString(@"quick_action_select_group")
                           }
@@ -213,6 +208,10 @@ static QuickActionType *TYPE;
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
+    [params removeObjectsForKeys:@[kAppearanceColor, kAppearanceIcon, kAppearanceBackground]];
+    if (params[kCategoryColor])
+        params[kCategoryColor] = @([[OADefaultFavorite getColorFromBuiltInNumberOrARGB:[params[kCategoryColor] integerValue]] toARGBNumber]);
+
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
@@ -224,7 +223,12 @@ static QuickActionType *TYPE;
             else if ([item[@"key"] isEqualToString:kCategoryName])
             {
                 [params setValue:item[@"value"] forKey:kCategoryName];
-                [params setValue:item[@"color"] forKey:kCategoryColor];
+            }
+            else if ([item[@"key"] isEqualToString:kAppearance])
+            {
+                [params setValue:item[kAppearanceColor] forKey:kWptColor];
+                [params setValue:[item[kAppearanceIcon] stringByReplacingOccurrencesOfString:@"mx_" withString:@""] forKey:kWptIcon];
+                [params setValue:item[kAppearanceBackground] forKey:kWptBackgroundType];
             }
         }
     }

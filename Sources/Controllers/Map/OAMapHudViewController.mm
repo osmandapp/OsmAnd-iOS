@@ -52,6 +52,7 @@ static const float kButtonOffset = 16.0;
 static const float kWidgetsOffset = 3.0;
 static const float kDistanceMeters = 100.0;
 static const float kGridCellWidthPt = 8.0;
+static const CGFloat kProgressViewTopMargin = 12.0;
 static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 
@@ -101,6 +102,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     NSLayoutConstraint *_leftRulerConstraint;
     
     CLLocation *_previousLocation;
+    dispatch_queue_t _locationAddressQueue;
+    uint64_t _locationAddressRequestId;
     
     NSTimeInterval _lastWidgetsUpdateTime;
     
@@ -138,6 +141,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     _mapHudType = EOAMapHudBrowse;
     _hudButtonsVisible = YES;
+    _locationAddressQueue = dispatch_queue_create("net.osmand.maps.location-address", DISPATCH_QUEUE_SERIAL);
     
     _app = [OsmAndApp instance];
     _settings = [OAAppSettings sharedManager];
@@ -419,6 +423,24 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             CGFloat w = x2 - x1;
             CGFloat h = [_overlayUnderlayView getHeight:w];
             _overlayUnderlayView.frame = CGRectMake(x1, CGRectGetMinY(_driveModeButton.frame) - 16. - h, w, h);
+        }
+    }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+
+    if (_downloadView)
+    {
+        CGRect frame = [self getDownloadViewFrame];
+        if (!CGRectEqualToRect(_downloadView.frame, frame))
+            _downloadView.frame = frame;
+        if (_routingProgressView)
+        {
+            CGRect routingFrame = [self getRoutingProgressViewFrame];
+            if (!CGRectEqualToRect(_routingProgressView.frame, routingFrame))
+                _routingProgressView.frame = routingFrame;
         }
     }
 }
@@ -1124,6 +1146,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             buttonState.quickActionsPref
         ]]];
     }
+    if (_settings.rotateMap.key.length > 0)
+        [keys addObject:_settings.rotateMap.key];
     return [keys copy];
 }
 
@@ -1504,11 +1528,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) updateTopButtonsLayoutY
 {
     BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
-    BOOL contextMenuMode = self.contextMenuMode;
     BOOL isSidePanelPlanRoute = _mapPanelViewController.activeTargetType == OATargetRoutePlanning
         && _mapPanelViewController.scrollableHudViewController
         && [_mapPanelViewController.scrollableHudViewController isLeftSidePresentation];
     BOOL shouldIgnoreContextToolbar = isPhoneLandscape && !isSidePanelPlanRoute;
+    BOOL contextMenuMode = self.contextMenuMode || _mapPanelViewController.suspendedPlanRouteController != nil;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
     CGFloat ctxToolbarH = 0.0;
@@ -1516,6 +1540,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         ctxToolbarH = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
     else if ([_mapPanelViewController isTopToolbarActive])
         ctxToolbarH = [_mapPanelViewController getTargetToolbarHeight];
+    else if (_mapPanelViewController.suspendedPlanRouteController)
+        ctxToolbarH = [_mapPanelViewController.suspendedPlanRouteController getNavbarHeight];
     
     BOOL isToolbarVisible = !_mapInfoController.weatherToolbarVisible && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isAllowToolbarsVisible = isToolbarVisible && ([_mapPanelViewController isTopToolbarSearchVisible] || [_mapPanelViewController isTopToolbarDiscountVisible]);
@@ -1641,11 +1667,15 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     return self.statusBarViewHeightConstraint.constant;
 }
 
-- (CGFloat) getHudTopOffset
+- (CGFloat)hudTopOffset
 {
-    CGFloat contextMenuToolbarHeight = _mapPanelViewController.scrollableHudViewController
-            ? [_mapPanelViewController.scrollableHudViewController getNavbarHeight]
-            : [_mapPanelViewController isTopToolbarActive] ? [_mapPanelViewController getTargetToolbarHeight] : 0.;
+    CGFloat contextMenuToolbarHeight = 0.;
+    if (_mapPanelViewController.scrollableHudViewController)
+        contextMenuToolbarHeight = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
+    else if ([_mapPanelViewController isTopToolbarActive])
+        contextMenuToolbarHeight = [_mapPanelViewController getTargetToolbarHeight];
+    else if (_mapPanelViewController.suspendedPlanRouteController)
+        contextMenuToolbarHeight = [_mapPanelViewController.suspendedPlanRouteController getNavbarHeight];
     CGFloat offset = [OAUtilities isLandscape] && ![OAUtilities isIPad] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
     BOOL isToolbarAllowed = !_mapInfoController.weatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
@@ -1657,7 +1687,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     {
         offset += _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     }
-    else if (!self.contextMenuMode)
+    else if (!self.contextMenuMode && !_mapPanelViewController.suspendedPlanRouteController)
     {
         if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && !_settings.isCompactPanelsLayout)
             offset += self.topWidgetsViewHeightConstraint.constant;
@@ -1709,10 +1739,50 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (CGRect) getDownloadViewFrame
 {
-    CGFloat y = [self getHudTopOffset];
-    CGFloat leftMargin = _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets] ? _mapInfoController.leftPanelController.view.bounds.size.width + kButtonOffset : self.searchButton.frame.origin.x + kButtonWidth + kButtonOffset;
-    CGFloat rightMargin = _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets] ? _mapInfoController.rightPanelController.view.bounds.size.width + kButtonOffset : kButtonOffset;
-    return CGRectMake(leftMargin, y + 12.0, self.view.bounds.size.width - leftMargin - rightMargin, 28.0);
+    CGFloat y = [self hudTopOffset] + kProgressViewTopMargin;
+    UIView *topPanelView = _mapInfoController.topPanelController.viewIfLoaded;
+    if ([_mapInfoController.topPanelController hasWidgets] && topPanelView.superview && !topPanelView.hidden && topPanelView.alpha > 0)
+    {
+        CGRect panelFrame = [topPanelView convertRect:topPanelView.bounds toView:self.view];
+        y = MAX(y, CGRectGetMaxY(panelFrame) + kProgressViewTopMargin);
+    }
+
+    CGFloat leftMargin = self.view.safeAreaInsets.left + kButtonOffset;
+    CGFloat rightMargin = self.view.safeAreaInsets.right + kButtonOffset;
+    CGFloat availableWidth = CGRectGetWidth(self.view.bounds);
+    CGRect frame = CGRectMake(leftMargin, y, MAX(0, availableWidth - leftMargin - rightMargin), 28.0);
+
+    // Side panels may already be above the progress banner, including in Compact.
+    // Only reserve horizontal space for views that actually overlap its row.
+    UIView *leftPanelView = [_mapInfoController.leftPanelController hasWidgets] ? _mapInfoController.leftPanelController.viewIfLoaded : nil;
+    UIView *rightPanelView = [_mapInfoController.rightPanelController hasWidgets] ? _mapInfoController.rightPanelController.viewIfLoaded : nil;
+    NSMutableArray<UIView *> *viewsToAvoid = [NSMutableArray array];
+    if (leftPanelView)
+        [viewsToAvoid addObject:leftPanelView];
+    if (rightPanelView)
+        [viewsToAvoid addObject:rightPanelView];
+    
+    for (UIView *subview in self.view.subviews)
+    {
+        if ([subview isKindOfClass:OAHudButton.class])
+            [viewsToAvoid addObject:subview];
+    }
+    
+    for (UIView *view in viewsToAvoid)
+    {
+        if (!view.superview || view.hidden || view.alpha <= 0)
+            continue;
+        CGRect viewFrame = [view convertRect:view.bounds toView:self.view];
+        if (!CGRectIntersectsRect(frame, viewFrame))
+            continue;
+        BOOL isOnRightSide = view == rightPanelView || (view != leftPanelView && [self.mapHudLayout isOnRightSide:viewFrame]);
+        if (isOnRightSide)
+            rightMargin = MAX(rightMargin, availableWidth - CGRectGetMinX(viewFrame) + kButtonOffset);
+        else
+            leftMargin = MAX(leftMargin, CGRectGetMaxX(viewFrame) + kButtonOffset);
+    }
+
+    return CGRectMake(leftMargin, y, MAX(0, availableWidth - leftMargin - rightMargin), frame.size.height);
 }
 
 - (CGRect) getRoutingProgressViewFrame
@@ -1721,14 +1791,14 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (_downloadView)
         y = _downloadView.frame.origin.y + _downloadView.frame.size.height;
     else
-        y = [self getHudTopOffset];
+        y = [self hudTopOffset];
     
-    return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + 12.0, 100.0, 20.0);
+    return CGRectMake(self.view.bounds.size.width / 2.0 - 50.0, y + kProgressViewTopMargin, 100.0, 20.0);
 }
 
-- (void) updateCurrentLocationAddress
+- (void)updateCurrentLocationAddress
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(_locationAddressQueue, ^{
         if (UIAccessibilityIsVoiceOverRunning())
         {
             CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
@@ -1737,11 +1807,20 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
                 if (!_previousLocation || [currentLocation distanceFromLocation:_previousLocation] > kDistanceMeters)
                 {
                     _previousLocation = currentLocation;
+                    uint64_t requestId;
+                    @synchronized (self)
+                    {
+                        requestId = ++_locationAddressRequestId;
+                    }
                     [OAReverseGeocoder.instance lookupAddressAtLat:currentLocation.coordinate.latitude
                                                                lon:currentLocation.coordinate.longitude
                                                           objectId:0
                                                         completion:^(NSString *positionAddress) {
-                        _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                        @synchronized (self)
+                        {
+                            if (requestId == _locationAddressRequestId)
+                                _mapModeButton.accessibilityValue = positionAddress.length > 0 ? positionAddress : OALocalizedString(@"shared_string_location_unknown");
+                        }
                     }];
                 }
             }
@@ -1766,7 +1845,6 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         if (!_downloadView)
         {
             self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
-            _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
             _downloadView.layer.cornerRadius = 5.0;
             [_downloadView.layer setShadowColor:[UIColor blackColor].CGColor];

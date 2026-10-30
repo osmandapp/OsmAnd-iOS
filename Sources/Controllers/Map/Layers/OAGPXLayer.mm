@@ -9,6 +9,7 @@
 #import "OAGPXLayer.h"
 #import "OAAppData.h"
 #import "OAMapViewController.h"
+#import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
@@ -2176,7 +2177,7 @@ colorizationScheme:(int)colorizationScheme
         return;
     
     [self collectWptFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:excludeUntouchableObjects];
-    if (!excludeUntouchableObjects)
+    if (!excludeUntouchableObjects && ![self.mapViewController.mapLayers.routePlanningLayer isInMeasurementMode])
         [self collectTracksFromPoint:result showTrackPointMenu:NO];
 }
 

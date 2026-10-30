@@ -98,7 +98,7 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
 - (BOOL)endDocumentAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("endDocument()")))
 {
     _writer.writeEndDocument();
-    return YES;
+    return [self flushAndReturnError:error];
 }
 
 - (BOOL)setPrefixPrefix:(NSString *)prefix namespace:(NSString *)namespace_ error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setPrefix(prefix:namespace:)")))

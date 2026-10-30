@@ -57,6 +57,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
+    private var panelAppearance: ResolvedWidgetPanelAppearance?
     @nonobjc private var appearanceModeContext: (panel: WidgetsPanel,
                                                    appMode: OAApplicationMode,
                                                    layoutMode: ScreenLayoutMode?)?
@@ -185,6 +186,12 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pages.append(UIViewController())
         }
 
+        if let panelAppearance {
+            for case let page as WidgetPageViewController in pages {
+                page.applyAppearance(panelAppearance)
+            }
+        }
+
         // Set up the page control before calculating the selected page size.
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = currentIndex
@@ -230,6 +237,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     }
 
     func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
+        panelAppearance = appearance
         specialPanelController?.applyAppearance(appearance)
         setupPageControl()
         pageContainerView.backgroundColor = appearance.backgroundColor
@@ -419,12 +427,6 @@ extension WidgetPanelViewController {
     }
     
     func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) {
-        // For side-panel medium and large simple-layout widgets, force an immediate layout pass so updateWidgetSizes() uses correct dimensions
-        if !isHorizontal, let textWidget = widget as? OATextInfoWidget, textWidget.isSidePanelSimpleLayoutMode {
-            widget.setNeedsLayout()
-            widget.layoutIfNeeded()
-        }
-        
         updateWidgetSizes()
     }
     

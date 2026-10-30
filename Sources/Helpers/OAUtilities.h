@@ -313,6 +313,7 @@ static inline double normalizeDouble(double v)
 
 + (BOOL) getAccessToFile:(NSString *)filePath;
 + (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
++ (NSString *)importTempPath;
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL) iosVersionIsExactly:(NSString*)testVersion;

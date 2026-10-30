@@ -61,145 +61,154 @@ QByteArray OAWebClient::downloadData(
     IWebClient::DataRequest& dataRequest,
     const QString& userAgent /* QString()*/) const
 {
-    QByteArray res;
-    if (url != nullptr && !url.isEmpty())
+    // core threads never drain their autorelease pool, so every request would leave its objects there
+    @autoreleasepool
     {
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
-        [request addValue:(userAgent.isNull() || userAgent.isEmpty()) ? OAAppVersion.getVersionForUrl : userAgent.toNSString() forHTTPHeaderField:@"User-Agent"];
-
-        unsigned int responseCode = 0;
-        NSURLResponse __block *response = nil;
-        NSError __block *error = nil;
-        NSData __block *data = nil;
-        
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:nil delegateQueue:nil];
-        NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error) {
-            response = _response;
-            data = _data;
-            error = _error;
-            dispatch_semaphore_signal(semaphore);
-        }];
-        [task resume];
-        
-        if (dataRequest.queryController)
+        QByteArray res;
+        if (url != nullptr && !url.isEmpty())
         {
-            while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+            [request addValue:(userAgent.isNull() || userAgent.isEmpty()) ? OAAppVersion.getVersionForUrl : userAgent.toNSString() forHTTPHeaderField:@"User-Agent"];
+
+            unsigned int responseCode = 0;
+            NSURLResponse __block *response = nil;
+            NSError __block *error = nil;
+            NSData __block *data = nil;
+        
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+            NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:nil delegateQueue:nil];
+            NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error) {
+                response = _response;
+                data = _data;
+                error = _error;
+                dispatch_semaphore_signal(semaphore);
+            }];
+            [task resume];
+            [session finishTasksAndInvalidate];
+        
+            if (dataRequest.queryController)
             {
-                if (dataRequest.queryController->isAborted())
+                while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
                 {
-                    [task cancel];
+                    if (dataRequest.queryController->isAborted())
+                    {
+                        [task cancel];
 
-                    dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+                        dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-                    return QByteArray();
+                        return QByteArray();
+                    }
                 }
             }
-        }
-        else
-        {
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        }
+            else
+            {
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            }
         
-        if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
-            responseCode = (unsigned int) ((NSHTTPURLResponse *) response).statusCode;
+            if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
+                responseCode = (unsigned int) ((NSHTTPURLResponse *) response).statusCode;
         
-        if (!response || error)
-        {
-            dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+            if (!response || error)
+            {
+                dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-            return QByteArray();
-        }
+                return QByteArray();
+            }
         
-        res = QByteArray::fromNSData(data);
+            res = QByteArray::fromNSData(data);
 
-        dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
+            dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
+        }
+        return res;
     }
-    return res;
 }
 
 QString OAWebClient::downloadString(
     const QString& url,
     IWebClient::DataRequest& dataRequest) const
 {
-    if (url != nullptr && !url.isEmpty())
+    @autoreleasepool
     {
-        NSURLRequest *request = [NSURLRequest requestWithURL:
-                                 [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+        if (url != nullptr && !url.isEmpty())
+        {
+            NSURLRequest *request = [NSURLRequest requestWithURL:
+                                     [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
 
-        unsigned int responseCode = 0;
-        NSURLResponse __block *response = nil;
-        NSError __block *error = nil;
-        NSData __block *data = nil;
+            unsigned int responseCode = 0;
+            NSURLResponse __block *response = nil;
+            NSError __block *error = nil;
+            NSData __block *data = nil;
         
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:nil delegateQueue:nil];
-        NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error) {
-            response = _response;
-            data = _data;
-            error = _error;
-            dispatch_semaphore_signal(semaphore);
-        }];
-        [task resume];
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+            NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:nil delegateQueue:nil];
+            NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error) {
+                response = _response;
+                data = _data;
+                error = _error;
+                dispatch_semaphore_signal(semaphore);
+            }];
+            [task resume];
+            [session finishTasksAndInvalidate];
         
-        if (dataRequest.queryController)
-        {
-            while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
+            if (dataRequest.queryController)
             {
-                if (dataRequest.queryController->isAborted())
+                while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
                 {
-                    [task cancel];
-                    
-                    dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
-
-                    return QString();
-                }
-            }
-        }
-        else
-        {
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        }
-        
-        QString charset = QString();
-        if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
-        {
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-            responseCode = (unsigned int) httpResponse.statusCode;
-            
-            id contentType = [httpResponse.allHeaderFields objectForKey:@"Content-Type"];
-            if (contentType)
-            {
-                NSArray *params = [((NSString *) contentType) componentsSeparatedByString:@";"];
-                for (NSString *p in params)
-                {
-                    NSString *trimmed = [[p stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
-                    if ([[trimmed substringToIndex:8] isEqualToString:@"charset="])
+                    if (dataRequest.queryController->isAborted())
                     {
-                        charset = QString::fromNSString([[trimmed substringFromIndex:8] lowercaseString]);
-                        break;
+                        [task cancel];
+                    
+                        dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+
+                        return QString();
                     }
                 }
             }
-        }
+            else
+            {
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            }
         
-        if (!response || error)
-        {
-            dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+            QString charset = QString();
+            if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
+            {
+                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+                responseCode = (unsigned int) httpResponse.statusCode;
+            
+                id contentType = [httpResponse.allHeaderFields objectForKey:@"Content-Type"];
+                if (contentType)
+                {
+                    NSArray *params = [((NSString *) contentType) componentsSeparatedByString:@";"];
+                    for (NSString *p in params)
+                    {
+                        NSString *trimmed = [[p stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] lowercaseString];
+                        if ([[trimmed substringToIndex:8] isEqualToString:@"charset="])
+                        {
+                            charset = QString::fromNSString([[trimmed substringFromIndex:8] lowercaseString]);
+                            break;
+                        }
+                    }
+                }
+            }
+        
+            if (!response || error)
+            {
+                dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-            return QString();
-        }
+                return QString();
+            }
         
-        dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
+            dataRequest.requestResult.reset(new OAHttpRequestResult(true, responseCode));
         
-        if (!charset.isNull() && charset.contains(QLatin1String("utf-8")))
-            return QString::fromUtf8(QByteArray::fromNSData(data));
+            if (!charset.isNull() && charset.contains(QLatin1String("utf-8")))
+                return QString::fromUtf8(QByteArray::fromNSData(data));
 
-        return QString::fromLocal8Bit(QByteArray::fromNSData(data));
+            return QString::fromLocal8Bit(QByteArray::fromNSData(data));
+        }
+        return QString();
     }
-    return QString();
 }
 
 long long OAWebClient::downloadFile(
@@ -208,72 +217,76 @@ long long OAWebClient::downloadFile(
     const long long lastTime,
     IWebClient::DataRequest& dataRequest) const
 {
-    long long result = -1;
-    BOOL success = false;
-    if (url != nullptr && !url.isEmpty() && fileName != nullptr && !fileName.isEmpty())
+    @autoreleasepool
     {
-        NSURLRequest *request = [NSURLRequest requestWithURL:
-                                 [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
-
-        unsigned int responseCode = 0;
-        NSURLResponse __block *response = nil;
-        NSError __block *error = nil;
-        NSData __block *data = nil;
-        
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-        NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:nil delegateQueue:nil];
-        NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error) {
-            response = _response;
-            data = _data;
-            error = _error;
-            dispatch_semaphore_signal(semaphore);
-        }];
-        [task resume];
-        
-        if (dataRequest.queryController)
+        long long result = -1;
+        BOOL success = false;
+        if (url != nullptr && !url.isEmpty() && fileName != nullptr && !fileName.isEmpty())
         {
-            while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
+            NSURLRequest *request = [NSURLRequest requestWithURL:
+                                     [NSURL URLWithString:url.toNSString()] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+
+            unsigned int responseCode = 0;
+            NSURLResponse __block *response = nil;
+            NSError __block *error = nil;
+            NSData __block *data = nil;
+        
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+            NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:nil delegateQueue:nil];
+            NSURLSessionDataTask* task = [session dataTaskWithRequest:request completionHandler:^(NSData *_data, NSURLResponse *_response, NSError *_error) {
+                response = _response;
+                data = _data;
+                error = _error;
+                dispatch_semaphore_signal(semaphore);
+            }];
+            [task resume];
+            [session finishTasksAndInvalidate];
+        
+            if (dataRequest.queryController)
             {
-                if (dataRequest.queryController->isAborted())
+                while (dispatch_semaphore_wait(semaphore, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC))))
                 {
-                    [task cancel];
+                    if (dataRequest.queryController->isAborted())
+                    {
+                        [task cancel];
 
-                    dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+                        dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-                    return result;
+                        return result;
+                    }
                 }
             }
-        }
-        else
-        {
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        }
+            else
+            {
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            }
         
-        if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
-            responseCode = (unsigned int) ((NSHTTPURLResponse *) response).statusCode;
+            if (response && [response isKindOfClass:[NSHTTPURLResponse class]])
+                responseCode = (unsigned int) ((NSHTTPURLResponse *) response).statusCode;
 
-        if (!response || error)
-        {
-            dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
+            if (!response || error)
+            {
+                dataRequest.requestResult.reset(new OAHttpRequestResult(false, responseCode));
 
-            return result;
+                return result;
+            }
+
+            NSString *name = fileName.toNSString();
+            NSFileManager *manager = [NSFileManager defaultManager];
+            if (![manager fileExistsAtPath:[name stringByDeletingLastPathComponent]])
+                success = [manager createDirectoryAtPath:[name stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+            else
+                success = YES;
+        
+            if (success)
+                success = [data writeToFile:name atomically:YES];
+        
+            dataRequest.requestResult.reset(new OAHttpRequestResult(success, responseCode));
+        
+            if (success)
+                result = 1;
         }
-
-        NSString *name = fileName.toNSString();
-        NSFileManager *manager = [NSFileManager defaultManager];
-        if (![manager fileExistsAtPath:[name stringByDeletingLastPathComponent]])
-            success = [manager createDirectoryAtPath:[name stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
-        else
-            success = YES;
-        
-        if (success)
-            success = [data writeToFile:name atomically:YES];
-        
-        dataRequest.requestResult.reset(new OAHttpRequestResult(success, responseCode));
-        
-        if (success)
-            result = 1;
+        return result;
     }
-    return result;
 }

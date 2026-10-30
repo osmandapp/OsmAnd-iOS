@@ -30,7 +30,12 @@ final class WikiImage: NSObject {
     }
     
     func getUrlWithCommonAttributions() -> String {
-        "\(WIKIMEDIA_COMMONS_URL)\(WIKIMEDIA_FILE)\(wikiMediaTag)"
+        let decodedTag = wikiMediaTag.removingPercentEncoding ?? wikiMediaTag
+        var allowedCharacters = CharacterSet.urlPathAllowed
+        allowedCharacters.remove(charactersIn: "/?#")
+        let pathComponent = "\(WIKIMEDIA_FILE)\(decodedTag)"
+            .addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? ""
+        return "\(WIKIMEDIA_COMMONS_URL)\(pathComponent)"
     }
     
     func parseMetaData(with dic: [String: Any]) {
@@ -53,12 +58,19 @@ final class WikiImage: NSObject {
     }
     
     func applyDescription(from dic: [String: Any]) {
-        guard
-            let jsonString = dic["description"] as? String,
-            let data = jsonString.data(using: .utf8),
-            let descriptions = try? JSONSerialization.jsonObject(with: data) as? [String: String],
-            !descriptions.isEmpty
-        else {
+        guard let jsonString = dic["description"] as? String, !jsonString.isEmpty else {
+            return
+        }
+
+        let trimmedDescription = jsonString.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedDescription.hasPrefix("{") else {
+            metadata?.description = trimmedDescription.replacingOccurrences(of: "\n", with: "")
+            return
+        }
+
+        guard let data = trimmedDescription.data(using: .utf8),
+              let descriptions = try? JSONSerialization.jsonObject(with: data) as? [String: String],
+              !descriptions.isEmpty else {
             return
         }
 

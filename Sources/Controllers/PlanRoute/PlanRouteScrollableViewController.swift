@@ -108,6 +108,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var navControllerHistory: [UIViewController] = []
     private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
+    private var isClosing = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
@@ -277,6 +278,12 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         setupRouteTypeButton()
         setupCrosshair()
         applyLayoutMode(for: view.bounds.size)
+#if DEBUG
+        setupUITestStateIfNeeded(in: topToolbar) { [weak self] in
+            guard let self else { return nil }
+            return (dataProvider.isCalculatingRoute, pointEditingView != nil)
+        }
+#endif
         dayNightObserver = OAAutoObserverProxy(self,
                                                withHandler: #selector(onDayNightModeChanged),
                                                andObserve: OsmAndApp.swiftInstance().dayNightModeObservable)
@@ -373,8 +380,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             self?.updateLayout(for: size)
         } completion: { [weak self] _ in
             guard let self else { return }
-            transitionTargetSize = nil
             updateLayout(for: view.bounds.size)
+            transitionTargetSize = nil
         }
     }
 
@@ -426,6 +433,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func hide(_ animated: Bool, duration: TimeInterval, onComplete: (() -> Void)?) {
+        isClosing = true
+        view.isUserInteractionEnabled = false
         let dismiss: () -> Void = { [weak self] in
             guard let self else { return }
             setMapHudStatusBarHidden(false)
@@ -471,6 +480,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         refreshMapControls()
     }
 
+    @objc func suspendMapCursor() {
+        // While a result menu is visible, the route layer follows the map center.
+        dataProvider.setCrosshairPosition(screenPoint: .zero)
+    }
+
     private func restorePreviousScreenIfNeeded() {
         if isForceHiding {
             let hasNavHistory = !navControllerHistory.isEmpty
@@ -514,6 +528,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func setupSheet() {
+        sheetView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.sheet
         sheetView.backgroundColor = .viewBg
         sheetView.layer.cornerRadius = Self.sheetCornerRadius
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -560,6 +575,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private func setupTopPart() {
         let topContentInset = Self.sidePanelTopContentInset
         let topPartViewHeight = Self.topPartViewHeight
+        topPartView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.summary
         topPartView.onTap = { [weak self] in
             guard let self, !usesSidePanelLayout else { return }
             toggleState()
@@ -937,6 +953,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         infoView.headerViewText = localizedString("move_point_descr")
         leftButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
         rightButton.setTitle(localizedString("shared_string_apply"), for: .normal)
+        leftButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.cancel
+        rightButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.apply
         switch mode {
         case .move:
             leftIconView.image = .icCustomChangeObjectPosition
@@ -1130,14 +1148,17 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func updateCrosshair(sheetHeight: CGFloat, screenSize: CGSize? = nil, preserveMapPosition: Bool = false) {
+        guard let mapPanel = OARootViewController.instance().mapPanel,
+              mapPanel.scrollableHudViewController === self else { return }
         let targetScreenSize = screenSize ?? CGSize(width: view.bounds.width, height: currentScreenHeight)
         let centerY = crosshairCenterY(sheetHeight: sheetHeight, screenHeight: targetScreenSize.height)
         let centerX = mapCenterX(for: targetScreenSize)
         guard centerX > 0, targetScreenSize.height > 0 else { return }
         let screenPoint = CGPoint(x: centerX, y: centerY)
+        
         crosshairCenterXConstraint?.constant = centerX
         crosshairCenterYConstraint?.constant = centerY
-        let mapViewController = OARootViewController.instance().mapPanel.mapViewController
+        let mapViewController = mapPanel.mapViewController
         if usesSidePanelLayout {
             mapViewController.viewportXScale = Double(2 * centerX / targetScreenSize.width)
             hasAppliedSidePanelViewportXScale = true
@@ -1146,7 +1167,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             hasAppliedSidePanelViewportXScale = false
         }
         mapViewController.viewportYScale = Double(2 * centerY / targetScreenSize.height)
-        if preserveMapPosition {
+        if preserveMapPosition && transitionTargetSize == nil {
             mapViewController.mapRendererView?.reanchorMapTarget(screenPoint)
         } else {
             mapViewController.mapRendererView?.mapTargetScreenPoint = screenPoint
@@ -1335,6 +1356,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleClose() {
+        guard !isClosing, presentedViewController == nil else { return }
         guard dataProvider.hasChanges else {
             hide()
             return

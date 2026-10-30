@@ -270,7 +270,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     
     NSTimeInterval now = [[NSDate date] timeIntervalSince1970];
     // changeset is idle for more than 30 minutes (1 hour according specification)
-    if (now - _changeSetTimeStamp > 30 * 60 * 1000) {
+    if (now - _changeSetTimeStamp > 30 * 60) {
         return YES;
     }
     return NO;

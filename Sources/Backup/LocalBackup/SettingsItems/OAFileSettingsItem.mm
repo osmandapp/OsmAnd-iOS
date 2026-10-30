@@ -489,7 +489,7 @@
     while (true)
     {
         number++;
-        NSString *newFilePath = [NSString stringWithFormat:@"%@_%d%@", prefix, number, suffix];
+        NSString *newFilePath = [BackupUtils appendToFileName:prefix tail:[NSString stringWithFormat:@"_%d%@", number, suffix]];
         if (![fileManager fileExistsAtPath:newFilePath])
             return newFilePath;
     }

@@ -3593,6 +3593,7 @@
 "shared_string_original" = "Original";
 
 "settings_item_read_error" = "Could not read from \'%@\'.";
+"cloud_file_name_too_long" = "File name is too long for this device, rename it in OsmAnd Cloud: %@";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";
 "app_mode_bicycle" = "Cycling";

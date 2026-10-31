@@ -4899,6 +4899,7 @@
 "astro_offline_knowledge_base_description" = "Download the extended database to access Wikipedia articles and deep sky catalogs offline.";
 "astro_today_visibility" = "Today visibility";
 "astro_visibility_show_today" = "Show today visibility";
+"astro_city_time_utc_offset" = "%1$@ time (%2$@)";
 "astro_schedule_show_current_week" = "Show current week";
 "astro_schedule_next_day_note" = "⁺¹ Next day.";
 "astro_rise" = "Rise";

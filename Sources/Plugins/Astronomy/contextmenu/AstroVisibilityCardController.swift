@@ -21,6 +21,7 @@ final class AstroVisibilityCardController {
     private(set) var culminationTime: String?
     private(set) var setTime: String?
     private(set) var locationText = ""
+    private(set) var timeZoneText = ""
     private(set) var culminationColor = UIColor.clear
     private(set) var titleText = localizedString("astro_today_visibility")
     private(set) var showResetButton = false
@@ -64,6 +65,7 @@ final class AstroVisibilityCardController {
             culminationTime = nil
             setTime = nil
             locationText = ""
+            timeZoneText = ""
             lastLocationKey = nil
             culminationColor = .clear
             graphSnapshot = nil
@@ -91,6 +93,7 @@ final class AstroVisibilityCardController {
         culminationTime = culmination.time.map { timeFormatter.string(from: $0) }
         setTime = riseSet.set.map { timeFormatter.string(from: $0) }
         culminationColor = AstroChartColorPalette().colorForObjectAltitude(culmination.altitude ?? 0.0)
+        timeZoneText = AstroUtils.formatTimeZone(timeZone, at: startLocal)
         maybeRecomputeGraph(skyObject: skyObject, observer: observer, date: self.date, timeZone: timeZone)
 
         let location = resolveLocationTarget(observer: observer)
@@ -113,6 +116,7 @@ final class AstroVisibilityCardController {
                                        culminationTime: culminationTime,
                                        setTime: setTime,
                                        locationText: locationText,
+                                       timeZoneText: timeZoneText,
                                        culminationColor: culminationColor,
                                        titleText: titleText,
                                        showResetButton: showResetButton)

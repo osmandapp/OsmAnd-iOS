@@ -303,6 +303,20 @@ enum AstroUtils {
         return formatter.string(from: date)
     }
 
+    static func formatTimeZone(_ timeZone: TimeZone, at date: Date) -> String {
+        let offset = formatUtcOffset(seconds: timeZone.secondsFromGMT(for: date))
+        let identifier = timeZone.identifier
+        guard identifier.contains("/"), !identifier.hasPrefix("Etc/") else {
+            return offset
+        }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "VVV"
+        formatter.timeZone = timeZone
+        return String(format: localizedString("astro_city_time_utc_offset"),
+                      formatter.string(from: date),
+                      offset)
+    }
+
     static func bodyName(_ body: Body) -> String {
         bodyDisplayName(body)
     }
@@ -465,6 +479,15 @@ enum AstroUtils {
         return formatter.string(from: date)
     }
     
+    private static func formatUtcOffset(seconds: Int) -> String {
+        let sign = seconds < 0 ? "-" : "+"
+        let hours = abs(seconds) / 3600
+        let minutes = abs(seconds) % 3600 / 60
+        return minutes == 0
+            ? "UTC\(sign)\(hours)"
+            : String(format: "UTC%@%d:%02d", sign, hours, minutes)
+    }
+
     private static func filterRiseSetDate(_ date: Date?, windowStart: Date?, windowEnd: Date?) -> Date? {
         guard let date else {
             return nil

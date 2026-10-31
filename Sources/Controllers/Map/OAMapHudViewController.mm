@@ -141,6 +141,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     _mapHudType = EOAMapHudBrowse;
     _hudButtonsVisible = YES;
+    _topControlsVisible = YES;
     _locationAddressQueue = dispatch_queue_create("net.osmand.maps.location-address", DISPATCH_QUEUE_SERIAL);
     
     _app = [OsmAndApp instance];
@@ -1934,6 +1935,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
     BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
     _hudButtonsVisible = isButtonsVisible;
+    _topControlsVisible = isButtonsVisible && !isTargetBackButtonVisible;
 
     void (^mainBlock)(void) = ^{
         _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;

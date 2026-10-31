@@ -6,6 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAObjectType.h"
+
+@class OASObjectType, OACustomSearchPoiFilter;
+@protocol OASCustomSearchPoiFilter, OASResultMatcher;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,6 +30,27 @@ NS_ASSUME_NONNULL_BEGIN
  object the app can show, so it is left out.
  */
 + (nullable id)appObjectFor:(nullable id)sharedObject;
+
+/**
+ The object the shared search takes for one the app puts into a result it makes itself: a poi category,
+ filter or type the shared one of the same key, a poi filter of the app one the shared search can call,
+ a CLLocation a point, and a city, street or house made of the shared search its own shared object.
+ nil when the shared search has no counterpart, as for a top index filter the app made.
+ */
++ (nullable id)sharedObjectFor:(nullable id)appObject;
+
+/** The poi filter of the app as the shared search calls it, the same one for the same filter. */
++ (id<OASCustomSearchPoiFilter>)sharedPoiFilterFor:(OACustomSearchPoiFilter *)filter;
+
++ (EOAObjectType)appObjectType:(nullable OASObjectType *)type;
++ (nullable OASObjectType *)sharedObjectType:(EOAObjectType)type;
+
+@end
+
+/** A matcher of the shared search that runs the blocks it is given. */
+@interface OASharedBlockResultMatcher : NSObject
+
++ (id<OASResultMatcher>)matcherWithPublish:(BOOL (^)(id _Nullable object))publish cancelled:(BOOL (^)(void))cancelled;
 
 @end
 

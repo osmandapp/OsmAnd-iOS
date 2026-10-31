@@ -36,6 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** The same files as `searchResourceIdsIncludingTravel:`, by full path, those that are on disk. */
 + (NSArray<NSString *> *)searchFilePathsIncludingTravel:(BOOL)includeTravel;
 
+/** The installed files of these resources by full path, keyed by resource id; those not installed are left out. */
++ (NSDictionary<NSString *, NSString *> *)pathsByResourceIdFor:(NSArray<NSString *> *)resourceIds;
+
 /**
  Resource ids of obf files in the order `OAQuickSearchHelper` has handed them to the search: the live
  update of a region before the region.

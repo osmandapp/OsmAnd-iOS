@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *openingHoursView;
 @property (weak, nonatomic) IBOutlet UIImageView *directionImageView;
 @property (weak, nonatomic) IBOutlet UILabel *distanceView;
+// the address of a poi on a line of its own under the distance; empty, it takes no height
+@property (weak, nonatomic) IBOutlet UILabel *addressView;
 @property (weak, nonatomic) IBOutlet UIView *cellView;
 @property (weak, nonatomic) IBOutlet UIImageView *timeIcon;
 @property (nonatomic) IBOutlet NSLayoutConstraint *distanceViewLeadingOutlet;

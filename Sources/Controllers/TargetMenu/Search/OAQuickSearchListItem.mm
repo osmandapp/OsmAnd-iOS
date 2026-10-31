@@ -250,6 +250,42 @@
         return ACImageNameIcActionStreetName;
 }
 
++ (NSString *) getPoiTypeName:(OASearchResult *)searchResult withAddress:(BOOL)withAddress
+{
+    NSString *result = @"";
+    OAPOI *poi = (OAPOI *) searchResult.object;
+    
+    NSString *typeName = [poi getMainSubtypeStr];
+    NSString *alternateName = searchResult.alternateName;
+    NSString *address = withAddress ? searchResult.addressName : nil;
+    NSString *city = withAddress ? poi.cityName : nil;
+    NSString *distance = @"";
+    
+    if ([poi isRouteTrack])
+    {
+        typeName = [poi getRouteActivityType];
+        distance = [OAPOIHelper.sharedInstance getAmenityDistanceFormatted:poi];
+    }
+
+    result = typeName;
+    if (!NSStringIsEmpty(distance))
+        result = [result stringByAppendingFormat:@" • %@", distance];
+    
+    if (!NSStringIsEmpty(alternateName))
+        result = [result stringByAppendingFormat:@" • %@", alternateName];
+    else if (!NSStringIsEmpty(address))
+        result = [result stringByAppendingFormat:@" • %@", address];
+    else if (!NSStringIsEmpty(city))
+        result = [result stringByAppendingFormat:@" • %@", city];
+    
+    return [[self.class getName:searchResult] isEqualToString:result] ? @"" : result;
+}
+
++ (NSString *) getPoiTypeNameWithoutAddress:(OASearchResult *)searchResult
+{
+    return [self getPoiTypeName:searchResult withAddress:NO];
+}
+
 + (NSString *) getTypeName:(OASearchResult *)searchResult
 {
     switch (searchResult.objectType)
@@ -359,30 +395,7 @@
         }
         case EOAObjectTypePoi:
         {
-            NSString *result = @"";
-            OAPOI *poi = (OAPOI *) searchResult.object;
-            
-            NSString *typeName = [poi getMainSubtypeStr];
-            NSString *alternateName = searchResult.alternateName;
-            NSString *city = poi.cityName;
-            NSString *distance = @"";
-            
-            if ([poi isRouteTrack])
-            {
-                typeName = [poi getRouteActivityType];
-                distance = [OAPOIHelper.sharedInstance getAmenityDistanceFormatted:poi];
-            }
-        
-            result = typeName;
-            if (!NSStringIsEmpty(distance))
-                result = [result stringByAppendingFormat:@" • %@", distance];
-            
-            if (!NSStringIsEmpty(alternateName))
-                result = [result stringByAppendingFormat:@" • %@", alternateName];
-            else if (!NSStringIsEmpty(city))
-                result = [result stringByAppendingFormat:@" • %@", city];
-            
-            return [[self.class getName:searchResult] isEqualToString:result] ? @"" : result;
+            return [self getPoiTypeName:searchResult withAddress:YES];
         }
         case EOAObjectTypeLocation:
         {

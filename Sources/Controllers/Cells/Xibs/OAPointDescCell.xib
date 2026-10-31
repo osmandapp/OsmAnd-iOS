@@ -36,7 +36,7 @@
                                 <color key="textColor" name="textColorSecondary"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpT-Mz-o9v">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FpT-Mz-o9v">
                                 <rect key="frame" x="46" y="2" width="35.5" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="21" id="uJc-KQ-FGS"/>
@@ -79,11 +79,20 @@
                                     <constraint firstAttribute="width" constant="12" id="p88-Bl-qmX"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Adr-sL-a0V">
+                                <rect key="frame" x="46" y="63" width="226" height="0.0"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                <color key="textColor" name="textColorSecondary"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstItem="Fh0-qX-kCt" firstAttribute="leading" secondItem="YCJ-00-gnu" secondAttribute="trailing" constant="16" id="13p-NE-rTU"/>
-                            <constraint firstAttribute="bottom" secondItem="i56-bD-Brz" secondAttribute="bottom" constant="5" id="6kK-1u-Jwf"/>
+                            <constraint firstAttribute="bottom" secondItem="Adr-sL-a0V" secondAttribute="bottom" constant="5" id="6kK-1u-Jwf"/>
+                            <constraint firstItem="Adr-sL-a0V" firstAttribute="top" secondItem="i56-bD-Brz" secondAttribute="bottom" id="Adr-tP-i56"/>
+                            <constraint firstItem="Adr-sL-a0V" firstAttribute="leading" secondItem="YCJ-00-gnu" secondAttribute="trailing" constant="16" id="Adr-lD-YCJ"/>
+                            <constraint firstAttribute="trailing" secondItem="Adr-sL-a0V" secondAttribute="trailing" id="Adr-tR-fPw"/>
                             <constraint firstAttribute="trailing" secondItem="IIy-sY-CST" secondAttribute="trailing" id="A9S-Hq-518"/>
                             <constraint firstItem="1Cf-n5-MS3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="i56-bD-Brz" secondAttribute="trailing" constant="3" id="AgU-oo-ALr"/>
                             <constraint firstItem="i56-bD-Brz" firstAttribute="top" secondItem="FpT-Mz-o9v" secondAttribute="bottom" id="Aui-Nv-bmP"/>
@@ -114,6 +123,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" name="groupBg"/>
             <connections>
+                <outlet property="addressView" destination="Adr-sL-a0V" id="Adr-oU-tLt"/>
                 <outlet property="cellView" destination="fPw-My-pBG" id="Vq7-3K-3YI"/>
                 <outlet property="descView" destination="5F1-dQ-ckE" id="Pkw-E9-UEd"/>
                 <outlet property="directionImageView" destination="Fh0-qX-kCt" id="F1f-c1-UQM"/>

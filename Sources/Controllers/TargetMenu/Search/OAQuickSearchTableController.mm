@@ -813,7 +813,9 @@
                             cell.titleIcon.image = shieldIcon;
                     }
                     
-                    [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                    NSString *address = res.addressName;
+                    [cell.descView setText:address.length > 0 ? [OAQuickSearchListItem getPoiTypeNameWithoutAddress:res] : [OAQuickSearchListItem getTypeName:res]];
+                    cell.addressView.text = address;
                     if (poi.hasOpeningHours)
                     {
                         [cell.openingHoursView setText:poi.openingHours];

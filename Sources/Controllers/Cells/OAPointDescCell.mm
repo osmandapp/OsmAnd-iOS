@@ -30,6 +30,12 @@
     self.titleView.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
+- (void)prepareForReuse
+{
+    [super prepareForReuse];
+    _addressView.text = nil;
+}
+
 - (void) updateOpeningTimeInfo:(OAPOI *)poi
 {
     if (_openingHoursView.text.length == 0)

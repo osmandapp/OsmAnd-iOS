@@ -35,10 +35,12 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAPOIType.h"
+#import "OAPOI.h"
 #import "OAResultMatcher.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAResourcesUIHelper.h"
 #import "OAManageResourcesViewController.h"
+#import "OASharedSearchUICore.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -640,7 +642,9 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        _core = [[OASearchUICore alloc] initWithLang:lang ?: @"" transliterate:transliterate];
+        // read once: the results of one search cannot go to the other
+        Class coreClass = [[OAAppSettings sharedManager].useSharedSearch get] ? OASharedSearchUICore.class : OASearchUICore.class;
+        _core = [[coreClass alloc] initWithLang:lang ?: @"" transliterate:transliterate];
 
         _searchCitiesSerialQueue = dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL);
         _searchCitiesGroup = dispatch_group_create();
@@ -689,7 +693,21 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 - (void) initSearchUICore
 {
     [self setResourcesForSearchUICore];
-    [_core initApi];
+    if ([_core isKindOfClass:OASharedSearchUICore.class])
+    {
+        // made again when the spatial search is switched
+        OASharedSearchUICore *core = (OASharedSearchUICore *) _core;
+        [core.shared clearAPIs];
+        [core.shared resetSearch];
+        _resultCollection = nil;
+        // the rules files rules*.xml of resources/abbr
+        NSString *searchRulesDir = [NSBundle.mainBundle pathForResource:@"abbr" ofType:nil];
+        [core initApiUseSpatialSearch:[[OAAppSettings sharedManager].useSpatialTextSearch get] searchRulesDir:searchRulesDir ?: @""];
+    }
+    else
+    {
+        [_core initApi];
+    }
     // Register map search api
     [_core registerAPI:[[SearchIndexItemAPI alloc] init]];
     
@@ -748,6 +766,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     if (!OsmAndApp.instance.isInBackground && _resourcesInvalidated)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self retireSharedSearchReaders];
             [self setResourcesForSearchUICore];
             _resourcesInvalidated = NO;
         });
@@ -763,8 +782,16 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self retireSharedSearchReaders];
         [self setResourcesForSearchUICore];
     });
+}
+
+// an update puts the new file at the path of the old one, which an open reader goes on reading
+- (void) retireSharedSearchReaders
+{
+    if ([_core isKindOfClass:OASharedSearchUICore.class])
+        [OASharedSearchReaders.shared retireReadersAfter:((OASharedSearchUICore *) _core).shared];
 }
 
 - (void)cancelSearchCities
@@ -817,16 +844,19 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
                            text:text
                         matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
         OASearchResult *searchResult = *object;
+        // the C++ search gives its amenity, with no poi for a place that is map only; the shared search gives
+        // only the poi made of its amenity
         std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
-        if (!amenity)
+        OAPOI *poi = !amenity && [searchResult.object isKindOfClass:OAPOI.class] ? (OAPOI *) searchResult.object : nil;
+        if (!amenity && !poi)
             return NO;
 
         if (count++ > cityLimit || (isCancelled && isCancelled()))
             return NO;
 
         NSArray<NSString *> *otherNames = searchResult.otherNames;
-        NSString *localeName = amenity->getName(QString(lang.UTF8String), transliterate).toNSString();
-        NSString *subType = amenity->subType.toNSString();
+        NSString *localeName = amenity ? amenity->getName(QString(lang.UTF8String), transliterate).toNSString() : [poi getName:lang transliterate:transliterate];
+        NSString *subType = amenity ? amenity->subType.toNSString() : poi.subType;
 
         if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
             return NO;

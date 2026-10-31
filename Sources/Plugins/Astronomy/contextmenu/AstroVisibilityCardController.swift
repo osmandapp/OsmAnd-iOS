@@ -21,6 +21,7 @@ final class AstroVisibilityCardController {
     private(set) var culminationTime: String?
     private(set) var setTime: String?
     private(set) var locationText = ""
+    private(set) var timeZoneText = ""
     private(set) var culminationColor = UIColor.clear
     private(set) var titleText = localizedString("astro_today_visibility")
     private(set) var showResetButton = false
@@ -38,6 +39,11 @@ final class AstroVisibilityCardController {
     private lazy var titleDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.setLocalizedDateFormatFromTemplate("EEEEMMMMd")
+        return formatter
+    }()
+    private lazy var timeZoneCityFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "VVV"
         return formatter
     }()
 
@@ -64,6 +70,7 @@ final class AstroVisibilityCardController {
             culminationTime = nil
             setTime = nil
             locationText = ""
+            timeZoneText = ""
             lastLocationKey = nil
             culminationColor = .clear
             graphSnapshot = nil
@@ -91,6 +98,7 @@ final class AstroVisibilityCardController {
         culminationTime = culmination.time.map { timeFormatter.string(from: $0) }
         setTime = riseSet.set.map { timeFormatter.string(from: $0) }
         culminationColor = AstroChartColorPalette().colorForObjectAltitude(culmination.altitude ?? 0.0)
+        timeZoneText = formatTimeZone(timeZone, at: startLocal)
         maybeRecomputeGraph(skyObject: skyObject, observer: observer, date: self.date, timeZone: timeZone)
 
         let location = resolveLocationTarget(observer: observer)
@@ -113,6 +121,7 @@ final class AstroVisibilityCardController {
                                        culminationTime: culminationTime,
                                        setTime: setTime,
                                        locationText: locationText,
+                                       timeZoneText: timeZoneText,
                                        culminationColor: culminationColor,
                                        titleText: titleText,
                                        showResetButton: showResetButton)
@@ -200,6 +209,27 @@ final class AstroVisibilityCardController {
                       latDir,
                       abs(longitude),
                       lonDir)
+    }
+
+    private func formatTimeZone(_ timeZone: TimeZone, at date: Date) -> String {
+        let offset = formatUtcOffset(seconds: timeZone.secondsFromGMT(for: date))
+        let identifier = timeZone.identifier
+        guard identifier.contains("/"), !identifier.hasPrefix("Etc/") else {
+            return offset
+        }
+        timeZoneCityFormatter.timeZone = timeZone
+        return String(format: localizedString("astro_city_time_utc_offset"),
+                      timeZoneCityFormatter.string(from: date),
+                      offset)
+    }
+
+    private func formatUtcOffset(seconds: Int) -> String {
+        let sign = seconds < 0 ? "-" : "+"
+        let hours = abs(seconds) / 3600
+        let minutes = abs(seconds) % 3600 / 60
+        return minutes == 0
+            ? "UTC\(sign)\(hours)"
+            : String(format: "UTC%@%d:%02d", sign, hours, minutes)
     }
 
     private func createTimeFormatter(timeZone: TimeZone) -> DateFormatter {

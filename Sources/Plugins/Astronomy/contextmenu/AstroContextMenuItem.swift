@@ -125,6 +125,7 @@ struct AstroVisibilityCardItem: AstroContextMenuItem {
     let culminationTime: String?
     let setTime: String?
     let locationText: String
+    let timeZoneText: String
     let culminationColor: UIColor
     let titleText: String
     let showResetButton: Bool

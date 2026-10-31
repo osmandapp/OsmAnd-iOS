@@ -288,7 +288,7 @@ typedef enum
     }
 
     // Setup target point menu
-    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:self.view.bounds];
     self.targetMenuView.accessibilityIdentifier = UITestAccessibilityIdentifier.contextMenuContainer;
     self.targetMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
     self.targetMenuView.menuViewDelegate = self;
@@ -299,7 +299,7 @@ typedef enum
     [self resetActiveTargetMenu];
 
     // Setup target multi menu
-    self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
+    self.targetMultiMenuView = [[OATargetMultiView alloc] initWithFrame:CGRectMake(0.0, 0.0, CGRectGetWidth(self.view.bounds), 140.0)];
     self.targetMultiMenuView.accessibilityIdentifier = UITestAccessibilityIdentifier.multiContextMenuContainer;
     self.targetMultiMenuView.isAccessibilityElement = [self isContextMenuPresentationUITestingEnabled];
 
@@ -2764,7 +2764,7 @@ typedef enum
           controller ? NSStringFromClass([controller class]) : @"none");
     
     CGRect frame = self.targetMenuView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
+    frame.origin.y = CGRectGetHeight(self.view.bounds) + 10.0;
     self.targetMenuView.frame = frame;
     
     [self.targetMenuView.layer removeAllAnimations];
@@ -2807,7 +2807,7 @@ typedef enum
         [self hideTargetPointMenu];
     
     CGRect frame = self.targetMultiMenuView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
+    frame.origin.y = CGRectGetHeight(self.view.bounds) + 10.0;
     self.targetMultiMenuView.frame = frame;
     
     [self.targetMultiMenuView.layer removeAllAnimations];

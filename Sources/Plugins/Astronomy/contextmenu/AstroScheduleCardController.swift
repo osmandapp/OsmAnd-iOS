@@ -19,6 +19,7 @@ final class AstroScheduleCardController {
     private(set) var timeZone: TimeZone = .current
     private(set) var periodStart: Date = Date()
     private(set) var rangeLabel = ""
+    private(set) var timeZoneText = ""
     private(set) var days: [AstroScheduleDayItem] = []
     private(set) var showResetPeriodButton = false
 
@@ -55,6 +56,7 @@ final class AstroScheduleCardController {
         guard let skyObject, let observer else {
             computeWorkItem?.cancel()
             rangeLabel = ""
+            timeZoneText = ""
             days = []
             lastObjectId = nil
             lastObserverLat = .nan
@@ -72,6 +74,8 @@ final class AstroScheduleCardController {
                                       value: Self.periodDays - 1,
                                       to: self.periodStart) ?? self.periodStart
         rangeLabel = rangeFormatter.string(from: self.periodStart, to: periodEnd).replacingOccurrences(of: "—", with: " - ")
+        let periodStartNoon = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: self.periodStart) ?? self.periodStart
+        timeZoneText = AstroUtils.formatTimeZone(timeZone, at: periodStartNoon)
         let computationMatchesState =
             lastObjectId == skyObject.id &&
             lastObserverLat == observer.latitude &&
@@ -127,6 +131,7 @@ final class AstroScheduleCardController {
         }
         return AstroScheduleCardItem(periodStart: periodStart,
                                      rangeLabel: rangeLabel,
+                                     timeZoneText: timeZoneText,
                                      days: days,
                                      showResetPeriodButton: showResetPeriodButton)
     }

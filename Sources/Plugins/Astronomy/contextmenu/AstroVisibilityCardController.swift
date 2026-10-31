@@ -41,11 +41,6 @@ final class AstroVisibilityCardController {
         formatter.setLocalizedDateFormatFromTemplate("EEEEMMMMd")
         return formatter
     }()
-    private lazy var timeZoneCityFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "VVV"
-        return formatter
-    }()
 
     func update(skyObject: SkyObject?,
                 observer: Observer?,
@@ -98,7 +93,7 @@ final class AstroVisibilityCardController {
         culminationTime = culmination.time.map { timeFormatter.string(from: $0) }
         setTime = riseSet.set.map { timeFormatter.string(from: $0) }
         culminationColor = AstroChartColorPalette().colorForObjectAltitude(culmination.altitude ?? 0.0)
-        timeZoneText = formatTimeZone(timeZone, at: startLocal)
+        timeZoneText = AstroUtils.formatTimeZone(timeZone, at: startLocal)
         maybeRecomputeGraph(skyObject: skyObject, observer: observer, date: self.date, timeZone: timeZone)
 
         let location = resolveLocationTarget(observer: observer)
@@ -209,27 +204,6 @@ final class AstroVisibilityCardController {
                       latDir,
                       abs(longitude),
                       lonDir)
-    }
-
-    private func formatTimeZone(_ timeZone: TimeZone, at date: Date) -> String {
-        let offset = formatUtcOffset(seconds: timeZone.secondsFromGMT(for: date))
-        let identifier = timeZone.identifier
-        guard identifier.contains("/"), !identifier.hasPrefix("Etc/") else {
-            return offset
-        }
-        timeZoneCityFormatter.timeZone = timeZone
-        return String(format: localizedString("astro_city_time_utc_offset"),
-                      timeZoneCityFormatter.string(from: date),
-                      offset)
-    }
-
-    private func formatUtcOffset(seconds: Int) -> String {
-        let sign = seconds < 0 ? "-" : "+"
-        let hours = abs(seconds) / 3600
-        let minutes = abs(seconds) % 3600 / 60
-        return minutes == 0
-            ? "UTC\(sign)\(hours)"
-            : String(format: "UTC%@%d:%02d", sign, hours, minutes)
     }
 
     private func createTimeFormatter(timeZone: TimeZone) -> DateFormatter {

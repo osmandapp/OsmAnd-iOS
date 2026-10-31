@@ -148,6 +148,7 @@ struct AstroScheduleDayItem {
 struct AstroScheduleCardItem: AstroContextMenuItem {
     let periodStart: Date
     let rangeLabel: String
+    let timeZoneText: String
     let days: [AstroScheduleDayItem]
     let showResetPeriodButton: Bool
     let key: AstroContextCardKey = .schedule

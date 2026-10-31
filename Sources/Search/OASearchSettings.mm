@@ -10,6 +10,7 @@
 #import "OAObjectType.h"
 #import "OAMapUtils.h"
 #import "OARegionPriorityProvider.h"
+#import "OASharedSearchUICore.h"
 
 #define MIN_DISTANCE_REGION_LANG_RECALC 10000.0
 
@@ -50,6 +51,10 @@
 
 - (instancetype)initWithSettings:(OASearchSettings *)s
 {
+    // a copy of settings of the shared search is one as well
+    if ([s isKindOfClass:OASharedSearchSettings.class])
+        return [[OASharedSearchSettings alloc] initWithSettings:s];
+
     self = [self init];
     if (self)
     {

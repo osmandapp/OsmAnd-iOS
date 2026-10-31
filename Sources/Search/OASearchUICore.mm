@@ -28,6 +28,7 @@
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMemoryLog.h"
+#import "OASharedSearchUICore.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -259,6 +260,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (instancetype)initWithPhrase:(OASearchPhrase *)phrase
 {
+    // a collection of results of the shared search is one as well
+    if (![self isKindOfClass:OASharedSearchResultCollection.class] && [phrase isKindOfClass:OASharedSearchPhrase.class])
+        return [[OASharedSearchResultCollection alloc] initWithPhrase:phrase];
+
     self = [super init];
     if (self)
     {
@@ -541,7 +546,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
     for (OASearchResult *s in _searchResults) {
         const auto amenity = std::dynamic_pointer_cast<const OsmAnd::Amenity>(s.amenity);
-        if (!amenity || (s.alternateName && s.alternateName.length > 0)) {
+        if (!amenity || s.addressName.length > 0) {
             continue;
         }
         [OASearchResultCollection updateSearchResultAddress:s amenity:amenity dominatedCity:dominatedCity];
@@ -721,7 +726,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     QString qStreetName = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_street"];
     if (qStreetName.isEmpty())
     {
-        s.alternateName = city;
+        s.addressName = city;
     }
     else
     {
@@ -733,7 +738,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             addr = [NSString stringWithFormat:@"%@ %@", streetName, hno];
         }
-        s.alternateName = [self createAddressString:s.cityName mainCity:mainCity dominatedCity:dominatedCity addr:addr];
+        s.addressName = [self createAddressString:s.cityName mainCity:mainCity dominatedCity:dominatedCity addr:addr];
     }
 }
 

@@ -42,6 +42,8 @@
 #import "OAResourcesUIHelper.h"
 #import "OAManageResourcesViewController.h"
 #import "OASharedSearchUICore.h"
+#import "OASharedSearchObjects.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -536,6 +538,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     OAAutoObserverProxy* _localResourcesChangedObserver;
 
     OAAtomicInteger *_searchRequestsCount;
+    dispatch_queue_t _searchCitiesQueue;
     
     BOOL _resourcesInvalidated;
     OAAutoObserverProxy *_backgroundStateObserver;
@@ -564,6 +567,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         _core = [[coreClass alloc] initWithLang:lang ?: @"" transliterate:transliterate];
 
         _searchRequestsCount = [OAAtomicInteger atomicInteger:0];
+        _searchCitiesQueue = dispatch_queue_create("net.osmand.downloadCities", DISPATCH_QUEUE_SERIAL);
 
         _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onBackgroundStateChanged)
@@ -707,93 +711,93 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     [_searchRequestsCount incrementAndGet];
 }
 
-- (void)searchCities:(NSString *)text
-                                    searchLocation:(CLLocation *)searchLocation
+- (id<OASAmenityIndexRepository>)citySearchRepository
+{
+    for (NSString *resourceId in @[@kWorldBasemapKey, kWorldMiniBasemapKey.lowercaseString])
+    {
+        id<OASAmenityIndexRepository> candidate = [OASharedObfResources.shared amenityRepositoryForResourceId:resourceId];
+        if (candidate && [[candidate getFile] exists])
+            return candidate;
+    }
+    return nil;
+}
+
+- (OASSearchRequest<OASAmenity *> *)citySearchRequest:(NSString *)text
+                                       allowedTypes:(NSArray<NSString *> *)allowedTypes
+                                          cityLimit:(NSInteger)cityLimit
+                                        isCancelled:(BOOL (^)(void))isCancelled
+                                             cities:(NSMutableArray<OASearchResult *> *)cities
+{
+    OASSearchSettings *settings = [[OASSearchSettings alloc] initWithS:nil];
+    // The search origin supplies the regional abbreviation rules, not a distance limit.
+    CLLocation *location = [[_core getSearchSettings] getOriginalLocation];
+    if (location)
+    {
+        [settings setRegionsRegions:[OASOsmandRegions.companion getDefault]];
+        settings = [settings setOriginalLocationL:[[OASKLatLon alloc] initWithLatitude:location.coordinate.latitude longitude:location.coordinate.longitude]];
+    }
+    OASNameStringMatcher *matcher = [[[OASSearchPhrase.companion emptyPhraseSettings:settings] generateNewPhraseText:text settings:settings] getFirstUnknownNameStringMatcher];
+    NSString *lang = [OAAppSettings.sharedManager.settingPrefMapLanguage get];
+    BOOL transliterate = [OAAppSettings.sharedManager.settingMapLanguageTranslit get];
+    __block NSInteger count = 0;
+    id<OASResultMatcher> resultMatcher = [OASharedBlockResultMatcher matcherWithPublish:^BOOL(OASAmenity *amenity) {
+        if (count++ > cityLimit || (isCancelled && isCancelled()))
+            return NO;
+        NSString *localeName = [amenity getNameLang:lang transliterate:transliterate];
+        if (![allowedTypes containsObject:[amenity getSubType] ?: @""]
+            || (![matcher matchesName:localeName] && ![matcher matchesMap:[amenity getOtherNamesTransliterate:YES]]))
+            return NO;
+        OASKLatLon *location = [amenity getLocation];
+        if (!location)
+            return NO;
+        OASearchResult *city = [[OASearchResult alloc] initWithPhrase:nil];
+        city.object = amenity;
+        city.localeName = localeName;
+        city.location = [[CLLocation alloc] initWithLatitude:location.latitude longitude:location.longitude];
+        [cities addObject:city];
+        return NO;
+    } cancelled:^BOOL{
+        return count > cityLimit || (isCancelled && isCancelled());
+    }];
+    return [OASSearchRequest.companion buildSearchPoiRequestX:0 y:0 nameFilter:text
+                                                                                        sleft:INT_MIN sright:INT_MAX stop:INT_MIN sbottom:INT_MAX
+                                                                                poiTypeFilter:nil resultMatcher:resultMatcher rawDataCollector:nil];
+}
+
+// Searches the world basemap independently of the main search engine and its selected phrase.
+- (NSMutableArray<OASearchResult *> *)searchCities:(NSString *)text
                                       allowedTypes:(NSArray<NSString *> *)allowedTypes
                                          cityLimit:(NSInteger)cityLimit
                                        isCancelled:(BOOL (^)(void))isCancelled
-                                        completion:(void (^)(NSMutableArray<OASearchResult *> *))completion
 {
-    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
-    NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
-    BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
-    NSMutableArray<OASearchResult *> *amenities = [NSMutableArray array];
-
-    OASearchUICore *searchUICore = [self getCore];
-    OASearchSettings *settings = [[OASearchSettings alloc] initWithSettings:[searchUICore getSearchSettings]];
-    NSMutableArray<NSString *> *resIds = [NSMutableArray array];
-
-    for (const auto& resource : OsmAndApp.instance.resourcesManager->getLocalResources())
-    {
-        if (resource->id.compare(QString(kWorldBasemapKey)) == 0)
-        {
-            [resIds addObject:resource->id.toNSString()];
-            break;
-        }
-    }
-
-    if (resIds.count == 0)
-        [resIds addObject:[kWorldMiniBasemapKey lowerCase]];
-
-    [settings setOfflineIndexes:[resIds copy]];
-    settings = [settings setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
-    settings = [settings setLang:lang ?: @"" transliterateIfMissing:transliterate];
-    settings = [settings setSortByName:NO];
-    settings = [settings setAddressSearch:YES];
-    settings = [settings setEmptyQueryAllowed:YES];
-    settings = [settings setOriginalLocation:searchLocation];
-    settings = [settings setSearchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]];
-
-    int __block count = 0;
-    BOOL (^isSearchCancelled)(void) = ^BOOL{
-        return count > cityLimit || (isCancelled && isCancelled());
-    };
-
-    [searchUICore shallowSearchAsync:OASearchAmenityByNameAPI.class
-                           text:text
-                        matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
-        OASearchResult *searchResult = *object;
-        // the C++ search gives its amenity, with no poi for a place that is map only; the shared search gives
-        // only the poi made of its amenity
-        std::shared_ptr<const OsmAnd::Amenity> amenity = searchResult.amenity;
-        OAPOI *poi = !amenity && [searchResult.object isKindOfClass:OAPOI.class] ? (OAPOI *) searchResult.object : nil;
-        if (!amenity && !poi)
-            return NO;
-
-        if (count++ > cityLimit || (isCancelled && isCancelled()))
-            return NO;
-
-        NSArray<NSString *> *otherNames = searchResult.otherNames;
-        NSString *localeName = amenity ? amenity->getName(QString(lang.UTF8String), transliterate).toNSString() : [poi getName:lang transliterate:transliterate];
-        NSString *subType = amenity ? amenity->subType.toNSString() : poi.subType;
-
-        if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
-            return NO;
-
-        [amenities addObject:searchResult];
-        return NO;
-    } cancelledFunc:^BOOL{
-        return isSearchCancelled();
-    }] resortAll:YES removeDuplicates:YES searchSettings:settings completion:^(OASearchResultCollection *collection) {
-        completion(amenities);
-    }];
+    NSMutableArray<OASearchResult *> *cities = [NSMutableArray array];
+    if (isCancelled && isCancelled())
+        return cities;
+    id<OASAmenityIndexRepository> repository = [self citySearchRepository];
+    if (!repository)
+        return cities;
+    OASSearchRequest<OASAmenity *> *request = [self citySearchRequest:text allowedTypes:allowedTypes cityLimit:cityLimit isCancelled:isCancelled cities:cities];
+    [repository searchPoiByNameSearchRequest:request];
+    return cities;
 }
 
 - (void)searchCitiesAsync:(NSString *)text
-           searchLocation:(CLLocation *)searchLocation
              allowedTypes:(NSArray<NSString *> *)allowedTypes
                 cityLimit:(NSInteger)cityLimit
                onComplete:(void (^)(NSMutableArray *amenities))onComplete
 {
     int request = [_searchRequestsCount incrementAndGet];
-    [self searchCities:text searchLocation:searchLocation allowedTypes:allowedTypes cityLimit:cityLimit isCancelled:^BOOL{
-        return [_searchRequestsCount get] != request;
-    } completion:^(NSMutableArray<OASearchResult *> *amenities) {
+    text = [text copy];
+    allowedTypes = [allowedTypes copy];
+    dispatch_async(_searchCitiesQueue, ^{
+        NSMutableArray<OASearchResult *> *cities = [self searchCities:text allowedTypes:allowedTypes cityLimit:cityLimit isCancelled:^BOOL{
+            return [_searchRequestsCount get] != request;
+        }];
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([_searchRequestsCount get] == request && onComplete)
-                onComplete(amenities);
+                onComplete(cities);
         });
-    }];
+    });
 }
 
 - (void) searchCityLocations:(NSString *)text

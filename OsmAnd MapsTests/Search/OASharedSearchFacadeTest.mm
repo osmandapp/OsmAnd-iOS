@@ -18,6 +18,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOI.h"
 #import "OASearchCoreFactory.h"
+#import "OASearchCoreAPI.h"
 #import "QuadRect.h"
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
@@ -27,11 +28,34 @@
 
 #include <OsmAndCore/ArchiveReader.h>
 
+@interface OAFailingShallowSearchTestAPI : OASearchCoreAPI
+@end
+
+@implementation OAFailingShallowSearchTestAPI
+- (BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    [NSException raise:@"TestSearchFailure" format:@"Deliberate shallow search failure"];
+    return NO;
+}
+@end
+
 @interface OASharedSearchFacadeTest : XCTestCase
 
 @end
 
 @implementation OASharedSearchFacadeTest
+
+- (NSArray<OASearchResult *> *)search:(Class)api text:(NSString *)text core:(OASharedSearchUICore *)core
+{
+    XCTestExpectation *finished = [self expectationWithDescription:@"shallow search finished"];
+    __block NSArray<OASearchResult *> *results;
+    [core shallowSearchAsync:api text:text matcher:nil completion:^(OASearchResultCollection *collection) {
+        results = collection.getCurrentSearchResults;
+        [finished fulfill];
+    }];
+    [self waitForExpectations:@[finished] timeout:60];
+    return results;
+}
 
 // a map of the search tests, unpacked and installed; its resource id is its file name in lower case
 - (NSString *)installTestMap:(NSString *)name
@@ -43,6 +67,7 @@
     const auto items = archive.getItems(&ok, true);
     XCTAssertTrue(ok && items.size() > 0 && archive.extractItemToFile(items.first().name, QString::fromNSString(obf), true));
     XCTAssertTrue([OsmAndApp.instance installTestResource:obf]);
+    [OASharedObfResources.shared refreshFiles];
     return obf;
 }
 
@@ -235,7 +260,14 @@
     OASharedSearchSettings *ofPhrase = [[OASharedSearchSettings alloc] initWithShared:[[OASSearchSettings alloc] initWithS:settings.shared]];
     XCTAssertEqual([[ofPhrase sharedWithCurrentReaders] getOfflineIndexes].firstObject, before, @"the readers are current");
 
-    [OASharedSearchReaders.shared retireReadersAfter:core.shared];
+    [OASharedObfResources.shared refreshFiles];
+    XCTAssertEqual([[ofPhrase sharedWithCurrentReaders] getOfflineIndexes].firstObject, before,
+                   @"refreshing unchanged files must retain their handles");
+    NSString *installedPath = [[before getFile] path];
+    NSDictionary *attributes = [NSFileManager.defaultManager attributesOfItemAtPath:installedPath error:nil];
+    NSDate *changedTime = [attributes[NSFileModificationDate] dateByAddingTimeInterval:5];
+    XCTAssertTrue([NSFileManager.defaultManager setAttributes:@{NSFileModificationDate:changedTime} ofItemAtPath:installedPath error:nil]);
+    [OASharedObfResources.shared refreshFiles];
     // made after the change, of settings made before it
     OASharedSearchSettings *madeAfter = [[OASharedSearchSettings alloc] initWithShared:[[OASSearchSettings alloc] initWithS:settings.shared]];
     OASBinaryMapIndexReader *after = [[madeAfter sharedWithCurrentReaders] getOfflineIndexes].firstObject;
@@ -243,13 +275,7 @@
     XCTAssertNotEqual(after, before, @"a retired reader is not read again");
     XCTAssertEqual([[ofPhrase sharedWithCurrentReaders] getOfflineIndexes].firstObject, after);
 
-    // once the retired reader is closed, after the searches of the core, its map is still known
-    XCTestExpectation *searchesEnded = [self expectationWithDescription:@"searches ended"];
-    [core.shared runAfterSearchTask:^{
-        [searchesEnded fulfill];
-    }];
-    [self waitForExpectations:@[searchesEnded] timeout:10];
-    XCTAssertEqualObjects([OASharedSearchReaders.shared resourceIdsOf:@[before]], @[resourceId]);
+    XCTAssertEqualObjects([OASharedObfResources.shared resourceIdsOf:@[before]], @[resourceId]);
     [NSFileManager.defaultManager removeItemAtPath:obf error:nil];
 }
 
@@ -264,7 +290,7 @@
     result.priorityDistance = 0;
     result.objectType = EOAObjectTypePoiType;
     [core selectSearchResult:result];
-    return [[core shallowSearch:OASearchAmenityByTypeAPI.class text:[[core getPhrase] getText:YES] matcher:nil resortAll:YES removeDuplicates:YES] getCurrentSearchResults];
+    return [self search:OASearchAmenityByTypeAPI.class text:[[core getPhrase] getText:YES] core:core];
 }
 
 - (NSArray<NSString *> *)namesOf:(NSArray<OASearchResult *> *)results
@@ -299,7 +325,7 @@
 
     // the type of the most poi of the map named so, that the lists to compare are not of one
     NSCountedSet<OAPOIType *> *types = [NSCountedSet set];
-    for (OASearchResult *result in [[classic shallowSearch:OASearchAmenityByNameAPI.class text:@"Union Turnpike" matcher:nil] getCurrentSearchResults])
+    for (OASearchResult *result in [self search:OASearchAmenityByNameAPI.class text:@"Union Turnpike" core:classic])
     {
         if ([result.object isKindOfClass:OAPOI.class] && ((OAPOI *) result.object).type)
             [types addObject:((OAPOI *) result.object).type];
@@ -329,6 +355,143 @@
         XCTAssertEqualObjects(((OAPOI *) result.object).type.name, type.name, @"%@", result.localeName);
     NSLog(@"OASharedSearchFacadeTest: %@ %lu poi of the category, %lu of the type %@", type.category.name, (unsigned long) ofCategory.count, (unsigned long) results.count, type.name);
     [NSFileManager.defaultManager removeItemAtPath:obf error:nil];
+}
+
+- (void)testShallowSearchUsesTheSharedSearchQueue
+{
+    OASharedSearchUICore *core = [[OASharedSearchUICore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApi];
+    XCTestExpectation *entered = [self expectationWithDescription:@"queue entered"];
+    XCTestExpectation *finished = [self expectationWithDescription:@"queued searches finished"];
+    dispatch_semaphore_t gate = dispatch_semaphore_create(0);
+    NSMutableArray<NSString *> *order = [NSMutableArray array];
+    [core.shared runAfterSearchTask:^{
+        [entered fulfill];
+        dispatch_semaphore_wait(gate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+    }];
+    [self waitForExpectations:@[entered] timeout:5];
+    [core shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *result) {
+        XCTAssertFalse(NSThread.isMainThread);
+        XCTAssertNotNil(result);
+        [order addObject:@"first"];
+    }];
+    [core.shared runAfterSearchTask:^{ [order addObject:@"between"]; }];
+    [core shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *result) {
+        XCTAssertNotNil(result);
+        [order addObject:@"second"];
+        [finished fulfill];
+    }];
+    XCTAssertEqual(order.count, 0, @"no shallow search may bypass the occupied queue");
+    dispatch_semaphore_signal(gate);
+    [self waitForExpectations:@[finished] timeout:30];
+    XCTAssertEqualObjects(order, (@[@"first", @"between", @"second"]));
+}
+
+- (void)testMissingShallowApiStillCompletes
+{
+    OASharedSearchUICore *core = [[OASharedSearchUICore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApi];
+    XCTestExpectation *finished = [self expectationWithDescription:@"missing API completed"];
+    [core shallowSearchAsync:NSObject.class text:@"" matcher:nil completion:^(OASearchResultCollection *result) {
+        XCTAssertFalse(NSThread.isMainThread);
+        XCTAssertNil(result);
+        [finished fulfill];
+    }];
+    [self waitForExpectations:@[finished] timeout:10];
+}
+
+- (void)testCppShallowFailureCompletesAndDoesNotStopTheQueue
+{
+    OASearchUICore *core = [[OASearchUICore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApi];
+    [core registerAPI:[OAFailingShallowSearchTestAPI new]];
+    XCTestExpectation *failed = [self expectationWithDescription:@"failed search completed"];
+    XCTestExpectation *next = [self expectationWithDescription:@"next search completed"];
+    [core shallowSearchAsync:OAFailingShallowSearchTestAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *result) {
+        XCTAssertFalse(NSThread.isMainThread);
+        XCTAssertNil(result);
+        [failed fulfill];
+    }];
+    [core shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *result) {
+        XCTAssertNotNil(result);
+        [next fulfill];
+    }];
+    [self waitForExpectations:@[failed, next] timeout:10 enforceOrder:YES];
+}
+
+- (void)testReaderReuseAcrossConsumersBenchmark
+{
+    NSString *path = [self installTestMap:@"kiev"];
+    NSArray<OASBinaryMapReaderResourceType *> *types = @[OASBinaryMapReaderResourceType.quickSearch,
+        OASBinaryMapReaderResourceType.poi, OASBinaryMapReaderResourceType.routing];
+    NSMutableArray<NSNumber *> *separateTimes = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *registryTimes = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *reuseTimes = [NSMutableArray array];
+    for (NSInteger round = 0; round < 8; round++)
+    {
+        for (NSInteger phase = 0; phase < 2; phase++)
+        {
+            @autoreleasepool {
+                BOOL useRegistry = (round + phase) % 2 == 0;
+                CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+                if (useRegistry)
+                {
+                    OASObfReaderRegistry *registry = [[OASObfReaderRegistry alloc] init];
+                    @try {
+                        [registry setFilesFiles:@[[[OASObfReaderRegistryObfFile alloc] initWithPath:path useForRouting:YES useForPublicTransport:NO]]];
+                        OASBinaryMapReaderResource *resource = [registry getFileReaderPath:path];
+                        NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray array];
+                        for (OASBinaryMapReaderResourceType *type in types)
+                        {
+                            OASBinaryMapIndexReader *reader = [resource getReaderType:type];
+                            XCTAssertNotNil(reader);
+                            if (reader)
+                                [readers addObject:reader];
+                        }
+                        if (readers.count != types.count)
+                            return;
+                        CFAbsoluteTime opened = CFAbsoluteTimeGetCurrent();
+                        for (NSInteger i = 0; i < types.count; i++)
+                            XCTAssertEqual([resource getReaderType:types[i]], readers[i]);
+                        CFAbsoluteTime reused = CFAbsoluteTimeGetCurrent();
+                        XCTAssertNotEqual(readers[0], readers[1]);
+                        XCTAssertNotEqual(readers[0], readers[2]);
+                        if (round > 0)
+                        {
+                            [registryTimes addObject:@((opened - start) * 1000)];
+                            [reuseTimes addObject:@((reused - opened) * 1000)];
+                        }
+                    } @finally {
+                        [registry close];
+                    }
+                }
+                else
+                {
+                    NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray array];
+                    @try {
+                        for (NSInteger i = 0; i < types.count; i++)
+                            [readers addObject:[[OASBinaryMapIndexReader alloc] initWithFilePath:path]];
+                        if (round > 0)
+                            [separateTimes addObject:@((CFAbsoluteTimeGetCurrent() - start) * 1000)];
+                    } @finally {
+                        for (OASBinaryMapIndexReader *reader in readers)
+                            [reader close];
+                    }
+                }
+            }
+        }
+    }
+    NSNumber *(^median)(NSArray<NSNumber *> *) = ^NSNumber *(NSArray<NSNumber *> *times) {
+        return [times sortedArrayUsingSelector:@selector(compare:)][times.count / 2];
+    };
+    NSString *measurement = [NSString stringWithFormat:@"OBF three-consumer benchmark, 7 rounds after warm-up, median ms: separate=%@ registry=%@ reuse=%@",
+        median(separateTimes), median(registryTimes), median(reuseTimes)];
+    printf("%s\n", measurement.UTF8String);
+    XCTAttachment *attachment = [XCTAttachment attachmentWithString:measurement];
+    attachment.lifetime = XCTAttachmentLifetimeKeepAlways;
+    [self addAttachment:attachment];
+    [NSFileManager.defaultManager removeItemAtPath:path error:nil];
+    [OASharedObfResources.shared refreshFiles];
 }
 
 @end

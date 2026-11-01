@@ -90,20 +90,20 @@
 - (OASSearchSettings *)sharedWithCurrentReaders
 {
     // settings made of the shared ones, as those of a phrase, may hold readers of any time before
-    if (![OASharedSearchReaders.shared areCurrent:[_shared getOfflineIndexes]])
+    if (![OASharedObfResources.shared areCurrentSearchReaders:[_shared getOfflineIndexes]])
         [self setOfflineIndexes:[self getOfflineIndexes]];
     return _shared;
 }
 
 - (NSArray<NSString *> *)getOfflineIndexes
 {
-    return _resourceIds ?: [OASharedSearchReaders.shared resourceIdsOf:[_shared getOfflineIndexes]];
+    return _resourceIds ?: [OASharedObfResources.shared resourceIdsOf:[_shared getOfflineIndexes]];
 }
 
 - (void)setOfflineIndexes:(NSArray<NSString *> *)resourceIds
 {
     _resourceIds = [resourceIds copy] ?: @[];
-    [_shared setOfflineIndexesOfflineIndexes:[OASharedSearchReaders.shared readersForResourceIds:_resourceIds]];
+    [_shared setOfflineIndexesOfflineIndexes:[OASharedObfResources.shared searchReadersForResourceIds:_resourceIds]];
 }
 
 - (int)getRadiusLevel
@@ -298,7 +298,7 @@
 
 - (NSArray<NSString *> *)getOfflineIndexes
 {
-    return [OASharedSearchReaders.shared resourceIdsOf:[_shared getOfflineIndexes]];
+    return [OASharedObfResources.shared resourceIdsOf:[_shared getOfflineIndexes]];
 }
 
 - (NSString *)getText:(BOOL)includeUnknownPart
@@ -471,7 +471,7 @@
     result.impreciseCoordinates = [shared hasImpreciseCoordinates];
 
     if (shared.file)
-        result.resourceId = [OASharedSearchReaders.shared resourceIdsOf:@[shared.file]].firstObject;
+        result.resourceId = [OASharedObfResources.shared resourceIdsOf:@[shared.file]].firstObject;
     NSString *resource = [shared getResourceType].name;
     if ([resource isEqualToString:@"DETAILED"])
         result.searchResultResource = EOASearchResultResourceDetailed;
@@ -724,32 +724,28 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     }];
 }
 
-- (OASearchResultCollection *)shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
-{
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES];
-}
-
-- (OASearchResultCollection *)shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
-{
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:[self getSearchSettings]];
-}
-
-- (OASearchResultCollection *)shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings completion:(void (^)(OASearchResultCollection *))completion
 {
     id<OASSearchCoreAPI> api = [self sharedApiFor:cl];
     if (!api)
-        return nil;
+    {
+        [_shared runAfterSearchTask:^{
+            if (completion)
+                completion(nil);
+        }];
+        return;
+    }
 
     OASharedSearchSettings *settings = [searchSettings isKindOfClass:OASharedSearchSettings.class]
         ? (OASharedSearchSettings *) searchSettings : (OASharedSearchSettings *) [self getSearchSettings];
-    // it runs on the caller's thread, which the core does not wait for: its readers are held until it ends
-    OASSearchSettings *shared = [[OASSearchSettings alloc] initWithS:settings.shared];
-    [shared setOfflineIndexesOfflineIndexes:[OASharedSearchReaders.shared beginShallowSearchWithResourceIds:[settings getOfflineIndexes]]];
-    OASSearchUICoreSearchResultCollection *collection = [_shared shallowSearchApi:api text:text
-                                                                         matcher:[self sharedMatcherFor:matcher cancelledBySearch:NO]
-                                                                       resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:shared];
-    [OASharedSearchReaders.shared endShallowSearch];
-    return [[OASharedSearchResultCollection alloc] initWithShared:collection];
+    OASSearchSettings *shared = [[OASSearchSettings alloc] initWithS:[settings sharedWithCurrentReaders]];
+    [_shared shallowSearchAsyncApi:api text:text matcher:[self sharedMatcherFor:matcher cancelledBySearch:NO]
+                        resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:shared
+                         callback:^OASBoolean *(OASSearchUICoreSearchResultCollection *collection) {
+        if (completion)
+            completion(collection ? [[OASharedSearchResultCollection alloc] initWithShared:collection] : nil);
+        return [OASBoolean numberWithBool:YES];
+    }];
 }
 
 - (void)clearCustomSearchPoiFilters

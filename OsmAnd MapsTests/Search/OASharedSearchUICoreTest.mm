@@ -18,6 +18,7 @@
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ArchiveReader.h>
@@ -63,6 +64,7 @@
             [obfFiles addObject:obfFile];
         }
     }
+    [OASharedObfResources.shared refreshFiles];
     return obfFiles;
 }
 
@@ -143,6 +145,7 @@
     NSInteger cases = 0, phrasesCount = 0, compared = 0, notExpected = 0;
     double sharedMillis = 0, cppMillis = 0;
     NSMutableArray<NSString *> *differences = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSNumber *> *differenceCounts = [NSMutableDictionary dictionary];
     for (NSString *path in [paths sortedArrayUsingSelector:@selector(compare:)])
     {
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:NSJSONReadingAllowFragments error:nil];
@@ -171,6 +174,8 @@
         NSString *settingsText = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:settingsJson options:0 error:nil] encoding:NSUTF8StringEncoding];
         OASharedSearchSettings *settings = [OASharedSearchSettings settingsOfJSON:settingsText];
         [settings setOfflineIndexes:resourceIds];
+        XCTAssertEqual([settings.shared getOfflineIndexes].count, resourceIds.count,
+                       @"every requested fixture must be connected: %@", path.lastPathComponent);
         OASharedSearchUICore *core = [[OASharedSearchUICore alloc] initWithLang:@"en" transliterate:NO];
         if (spatial)
             [core initApiUseSpatialSearch:YES searchRulesDir:searchRulesDir];
@@ -258,6 +263,7 @@
                 if (![expectedResult isEqualToString:present])
                 {
                     notExpected++;
+                    differenceCounts[path.lastPathComponent] = @([differenceCounts[path.lastPathComponent] integerValue] + 1);
                     [differences addObject:[NSString stringWithFormat:@"%@ '%@' %lu: expected '%@', found '%@'", path.lastPathComponent, text, (unsigned long) i + 1, expectedResult, present]];
                 }
             }
@@ -268,8 +274,24 @@
             [NSFileManager.defaultManager removeItemAtPath:obfFile error:nil];
     }
 
-    NSLog(@"OASharedSearchUICoreTest%@: %ld cases, %ld phrases, %ld results compared, %ld not the ones expected; shared %.0f ms, C++ %.0f ms (without the POI_TYPE phrases)\n%@",
-          spatial ? @" (spatial)" : @"", (long) cases, (long) phrasesCount, (long) compared, (long) notExpected, sharedMillis, cppMillis, [differences componentsJoinedByString:@"\n"]);
+    NSString *summary = [NSString stringWithFormat:@"OASharedSearchUICoreTest%@: %ld cases, %ld phrases, %ld results compared, %ld not the ones expected; shared %.0f ms, C++ %.0f ms (without the POI_TYPE phrases)\n%@",
+        spatial ? @" (spatial)" : @"", (long) cases, (long) phrasesCount, (long) compared, (long) notExpected, sharedMillis, cppMillis, [differences componentsJoinedByString:@"\n"]];
+    printf("%s\n", summary.UTF8String);
+    XCTAttachment *attachment = [XCTAttachment attachmentWithString:summary];
+    attachment.lifetime = XCTAttachmentLifetimeKeepAlways;
+    [self addAttachment:attachment];
+    if (!spatial)
+    {
+        // The NC-42 differences predate this adapter. The other fixtures preserve their JSON file
+        // order, whereas installed resources use the shared file-version order for duplicate cities.
+        NSDictionary<NSString *, NSNumber *> *knownDifferences = @{
+            @"Issue-16715-geo-NC-42.json": @16,
+            @"american_obfs.json": @1,
+            @"penn1.json": @1,
+            @"w_farm_williams.json": @1
+        };
+        XCTAssertEqualObjects(differenceCounts, knownDifferences, @"unexpected changes against the fixture baseline");
+    }
     XCTAssertGreaterThan(cases, 0);
 }
 

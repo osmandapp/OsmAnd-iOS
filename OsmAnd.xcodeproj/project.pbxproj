@@ -920,6 +920,7 @@
 		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
 		D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000010 /* AmenityCardRowsTests.swift */; };
+		A26820000000000000000011 /* MapHudRulerPlacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26820000000000000000010 /* MapHudRulerPlacementTests.swift */; };
 		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */; };
@@ -3661,6 +3662,7 @@
 		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
 		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
 		D1C571200000000000000010 /* AmenityCardRowsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityCardRowsTests.swift; sourceTree = "<group>"; };
+		A26820000000000000000010 /* MapHudRulerPlacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapHudRulerPlacementTests.swift; sourceTree = "<group>"; };
 		D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationUITests.swift; sourceTree = "<group>"; };
 		D1C571210000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6992,6 +6994,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C571200000000000000010 /* AmenityCardRowsTests.swift */,
+				A26820000000000000000010 /* MapHudRulerPlacementTests.swift */,
 				D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */,
 				D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */,
 			);
@@ -13848,6 +13851,7 @@
 				D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */,
 				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 				D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */,
+				A26820000000000000000011 /* MapHudRulerPlacementTests.swift in Sources */,
 				D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

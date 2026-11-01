@@ -48,9 +48,10 @@ typedef void (^OASearchUICoreRunnable)();
 
 - (OASearchCoreAPI *) getApiByClass:(Class)cl;
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher;
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings;
+/** Runs on the engine's serial search queue. Completion is called on that queue, including when no API matches. */
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher completion:(void (^)(OASearchResultCollection *))completion;
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates completion:(void (^)(OASearchResultCollection *))completion;
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings completion:(void (^)(OASearchResultCollection *))completion;
 
 - (void) initApi;
 

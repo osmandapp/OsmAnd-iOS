@@ -58,6 +58,8 @@ typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
 
 @interface OASearchUICore ()
 
+- (OASearchResultCollection *)performShallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings;
+
 @end
 
 const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
@@ -787,17 +789,35 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     return nil;
 }
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher completion:(void (^)(OASearchResultCollection *))completion
 {
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES];
+    [self shallowSearchAsync:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES completion:completion];
 }
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates completion:(void (^)(OASearchResultCollection *))completion
 {
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:_searchSettings];
+    [self shallowSearchAsync:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:[self getSearchSettings] completion:completion];
 }
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings completion:(void (^)(OASearchResultCollection *))completion
+{
+    OASearchSettings *settings = [[OASearchSettings alloc] initWithSettings:searchSettings];
+    dispatch_async(_taskQueue, ^{
+        OASearchResultCollection *collection = nil;
+        @try
+        {
+            collection = [self performShallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:settings];
+        }
+        @catch (NSException *error)
+        {
+            NSLog(@"OASearchUICore.shallowSearchAsync error %@", error);
+        }
+        if (completion)
+            completion(collection);
+    });
+}
+
+- (OASearchResultCollection *) performShallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
 {
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)

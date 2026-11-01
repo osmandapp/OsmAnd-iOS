@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OASObfReaderRegistryObfFile;
+
 /**
  The installed obf files the shared travel code reads, by full path.
 
@@ -17,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
  route, so it has to be the same on both platforms.
  */
 @interface OAObfFileList : NSObject
+
+/** Installed OBF paths and routing eligibility, keyed by the app's resource identifiers. */
++ (NSDictionary<NSString *, OASObfReaderRegistryObfFile *> *)filesForSharedRegistry;
 
 /** Wikivoyage: the installed `.travel.obf` files. */
 + (NSArray<NSString *> *)travelFilePaths;

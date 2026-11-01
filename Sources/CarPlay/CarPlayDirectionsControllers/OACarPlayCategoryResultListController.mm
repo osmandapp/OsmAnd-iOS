@@ -34,7 +34,7 @@
     OASearchUICore *_searchUICore;
     OAQuickSearchHelper *_searchHelper;
     
-    dispatch_queue_t _searchQueue;
+    NSUInteger _searchRequest;
 }
 
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController searchResult:(OASearchResult *)sr
@@ -48,8 +48,6 @@
 
 - (void) commonInit
 {
-    _searchQueue = dispatch_queue_create("carPlay_categorySearchQueue", DISPATCH_QUEUE_SERIAL);
-    
     _searchHelper = OAQuickSearchHelper.instance;
     _searchUICore = _searchHelper.getCore;
     
@@ -110,12 +108,13 @@
     if ([settings getRadiusLevel] != 1)
         [_searchUICore updateSettings:[settings setRadiusLevel:1]];
     
-    dispatch_async(_searchQueue, ^{
-        OASearchResultCollection *result = [_searchUICore shallowSearch:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES];
+    NSUInteger request = ++_searchRequest;
+    [_searchUICore shallowSearchAsync:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES completion:^(OASearchResultCollection *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateSearchResult:result];
+            if (request == _searchRequest)
+                [self updateSearchResult:result];
         });
-    });
+    }];
 }
 
 - (void) updateSearchResult:(OASearchResultCollection *)res

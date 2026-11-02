@@ -12,7 +12,8 @@ import Foundation
 @objcMembers
 final class InclinometerWidgetState: OAWidgetState {
 
-    static let thresholdAngles: [Int] = Array(stride(from: 5, through: 60, by: 5))
+    static let minThresholdAngle = 0
+    static let maxThresholdAngle = 60
 
     private static let percentUnitsSuffix = "_percent_units"
     private static let warningAngleSuffix = "_warning_angle"

@@ -5124,4 +5124,3 @@
 "inclinometer_reset_calibration" = "Reset calibration";
 "inclinometer_calibration_saved" = "Calibration saved";
 "inclinometer_sensor_unavailable" = "Tilt sensor is not available on this device.";
-"ltr_or_rtl_combine_via_bold_point" = "%@ • %@";

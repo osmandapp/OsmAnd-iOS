@@ -1095,9 +1095,28 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         openPlaceReviewsTagContent = @(poi.obfId >> 1).stringValue;
     }
     
-    NSDictionary<NSString *, NSString *> *extensions = [self additionalCardParams];
+    NSMutableDictionary<NSString *, NSString *> *extensions = [[self additionalCardParams] mutableCopy];
+    NSString *mapillaryKey = extensions[MAPILLARY_TAG];
+    [extensions removeObjectForKey:MAPILLARY_TAG];
     _otherCardsReady = NO;
-    [self addOtherCards:extensions cards:cards rowInfo:_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
+    if (mapillaryKey.length == 0)
+    {
+        [self addOtherCards:extensions cards:cards rowInfo:_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
+        return;
+    }
+
+    __weak __typeof(self) weakSelf = self;
+    [OAMapillaryOsmTagHelper downloadImageByKey:mapillaryKey
+                                        session:[self onlineAndMapillarySession]
+                               onDataDownloaded:^(NSDictionary *result) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || !strongSelf->_onlinePhotoCardsRowInfo)
+            return;
+
+        if (result)
+            [cards addObject:[[MapillaryAmenityImageCard alloc] initWithData:result]];
+        [strongSelf addOtherCards:extensions cards:cards rowInfo:strongSelf->_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
+    }];
 }
 
 - (NSDictionary<NSString *, NSString *> *)additionalCardParams
@@ -1392,9 +1411,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     NSMutableArray *wikimediaCards = [NSMutableArray new];
     NSMutableArray *mapilaryCards = [NSMutableArray new];
     MapillaryContributeCard *mapilaryContributeCard = nil;
+    MapillaryAmenityImageCard *mapillaryAmenityCard = nil;
 
     for (AbstractCard *card in cards) {
-        if ([card isKindOfClass:WikiImageCard.class])
+        if ([card isKindOfClass:MapillaryAmenityImageCard.class])
+            mapillaryAmenityCard = (MapillaryAmenityImageCard *)card;
+        else if ([card isKindOfClass:WikiImageCard.class])
             [wikimediaCards addObject:card];
         else if ([card isKindOfClass:MapillaryImageCard.class])
             [mapilaryCards addObject:card];
@@ -1405,6 +1427,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
 
     NSMutableArray *orderedCards = [NSMutableArray array];
+    if (mapillaryAmenityCard)
+        [orderedCards addObject:mapillaryAmenityCard];
     [orderedCards addObjectsFromArray:wikimediaCards];
     [orderedCards addObjectsFromArray:mapilaryCards];
     [orderedCards addObjectsFromArray:openPlaceCards];

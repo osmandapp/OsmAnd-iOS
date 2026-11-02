@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)downloadImageByKey:(NSString *)key
                    session:(nullable NSURLSession *)session
-          onDataDownloaded:(void (^)(NSDictionary *data))onDataDownloaded;
+          onDataDownloaded:(void (^)(NSDictionary * _Nullable data))onDataDownloaded;
 
 @end
 

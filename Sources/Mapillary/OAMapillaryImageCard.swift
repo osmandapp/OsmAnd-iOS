@@ -22,3 +22,11 @@ final class MapillaryImageCard: ImageCard {
         OAMapillaryImageCardWrapper.onCardPressed(mapPanel, latitude: latitude, longitude: longitude, ca: ca, key: key)
     }
 }
+
+@objcMembers
+final class MapillaryAmenityImageCard: ImageCard {
+
+    override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
+        OAMapillaryImageCardWrapper.onCardPressed(mapPanel, latitude: latitude, longitude: longitude, ca: ca, key: key)
+    }
+}

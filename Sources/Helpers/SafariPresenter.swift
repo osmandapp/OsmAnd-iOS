@@ -14,6 +14,8 @@ struct SafariPresenter {
             urlString = wikiCard.urlWithCommonAttributions
         } else if let imageCard = card as? UrlImageCard {
             urlString = imageCard.imageUrl
+        } else if let mapillaryCard = card as? MapillaryAmenityImageCard {
+            urlString = mapillaryCard.url
         } else {
             return
         }

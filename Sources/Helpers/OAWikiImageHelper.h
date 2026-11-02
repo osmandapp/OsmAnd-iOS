@@ -39,8 +39,7 @@ static const BOOL USE_OSMAND_WIKI_API = YES;
 - (void)sendNearbyWikiImagesRequest:(OAAmenityInfoRow *)nearbyImagesRowInfo
                           targetObj:(id)targetObj
                             session:(nullable NSURLSession *)session
-           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete
-                   onFailureNoCache:(void (^)(void))onFailureNoCache;
+           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed))addOtherImagesOnComplete;
 
 @end
 

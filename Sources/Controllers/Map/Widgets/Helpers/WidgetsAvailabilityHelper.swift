@@ -17,6 +17,11 @@ class WidgetsAvailabilityHelper: NSObject {
     private static var widgetsVisibilityMap = [String: Set<OAApplicationMode>]()
     private static var widgetsAvailabilityMap = [String: Set<OAApplicationMode>]()
     
+    // Installs before this date got the old route widgets (distance/time to destination and intermediate) by default
+    static func hadLegacyRouteWidgets() -> Bool {
+        UserDefaults.standard.double(forKey: "kAppInstalledDate") < routeWidgetsV2IntroTimeInSeconds
+    }
+    
     static func isWidgetAvailable(widgetId: String, appMode: OAApplicationMode) -> Bool {
 //        if app.getAppCustomization().areWidgetsCustomized() {
 //            return app.getAppCustomization().isWidgetAvailable(widgetId: widgetId, appMode: appMode)
@@ -35,8 +40,6 @@ class WidgetsAvailabilityHelper: NSObject {
     }
     
     static func initRegVisibility() {
-        let installDate = UserDefaults.standard.double(forKey: "kAppInstalledDate")
-        let enableWidgetsV2 = installDate >= Self.routeWidgetsV2IntroTimeInSeconds
         let exceptDefault: [OAApplicationMode] = [.car(), .bicycle(), .pedestrian(), .public_TRANSPORT(), .boat(), .aircraft(), .ski(), .truck(), .motorcycle(), .horse(), .moped(), .train()]
         
         // left
@@ -52,14 +55,7 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetAvailability(widgetType: .secondNextTurn, appModes: exceptDefault)
         
         // right
-        if !enableWidgetsV2 {
-            regWidgetVisibility(widgetType: .intermediateDestination)
-            regWidgetVisibility(widgetType: .distanceToDestination)
-            regWidgetVisibility(widgetType: .timeToIntermediate)
-            regWidgetVisibility(widgetType: .timeToDestination)
-        } else {
-            regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault)
-        }
+        regWidgetVisibility(widgetType: .routeInfo, appModes: exceptDefault)
         
         regWidgetVisibility(widgetType: .currentSpeed, appModes: [.bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .horse(), .train()])
         regWidgetVisibility(widgetType: .maxSpeed, appModes: [])

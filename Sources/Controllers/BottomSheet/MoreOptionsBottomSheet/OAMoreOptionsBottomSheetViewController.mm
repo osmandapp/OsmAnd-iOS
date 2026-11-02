@@ -271,9 +271,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = [SeparatorAppearance color];
-            CGFloat leftInset = [cell isDirectionRTL] ? 0 : 70.0;
-            CGFloat rightInset = [cell isDirectionRTL] ? 70.0 : 0;
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0);
             cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;

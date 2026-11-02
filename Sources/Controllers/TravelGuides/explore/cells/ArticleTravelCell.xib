@@ -77,7 +77,7 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="mHV-wI-dNE" secondAttribute="bottom" constant="12" id="7BD-bD-8ae"/>
+                    <constraint firstAttribute="bottom" secondItem="mHV-wI-dNE" secondAttribute="bottom" constant="12" priority="999" id="7BD-bD-8ae"/>
                     <constraint firstItem="mHV-wI-dNE" firstAttribute="top" secondItem="jag-1I-n5h" secondAttribute="bottom" constant="10" id="BdC-7k-xWj"/>
                     <constraint firstItem="jag-1I-n5h" firstAttribute="top" secondItem="Yki-Io-ywM" secondAttribute="top" constant="16" id="BtD-nZ-NZs"/>
                     <constraint firstItem="LK7-5G-l79" firstAttribute="centerX" secondItem="ef8-uX-9Nt" secondAttribute="centerX" id="WHm-Gj-oIr"/>

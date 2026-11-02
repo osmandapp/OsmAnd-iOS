@@ -597,6 +597,8 @@
         else if ([item.key isEqualToString:@"do_not_send_anonymous_data"])
         {
             [_settings.sendAnonymousAppUsageData set:isChecked];
+            if (isChecked)
+                [InstallAttribution checkAndReport];
         }
         else if ([item.key isEqualToString:@"download_map_dialog"])
         {

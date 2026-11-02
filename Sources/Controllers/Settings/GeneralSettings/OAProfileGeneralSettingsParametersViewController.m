@@ -30,6 +30,7 @@
     UIView *_tableHeaderView;
     BOOL _openFromMap;
     BOOL _isEditMode;
+    NSInteger _displayedRotateMap;
 }
 
 #pragma mark - Initialization
@@ -117,6 +118,12 @@
 - (void)registerCells
 {
     [self.tableView registerNib:[UINib nibWithNibName:OASimpleTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASimpleTableViewCell.reuseIdentifier];
+}
+
+- (void)registerNotifications
+{
+    if (_settingsType == EOAProfileGeneralSettingsMapOrientation)
+        [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 #pragma mark - UIViewController
@@ -249,6 +256,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
+    _displayedRotateMap = rotateMap;
     NSInteger screenOrientation = [_settings.mapScreenOrientation get:self.appMode];
     Theme appTheme = [_settings.appearanceProfileTheme get:self.appMode];
     EOAKeepScreenOnMode keepScreenOnMode = [_settings.keepScreenOn get:self.appMode];
@@ -846,6 +854,16 @@
 }
 
 #pragma mark - Selectors
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:_settings.rotateMap.key] && [_settings.rotateMap get:self.appMode] != _displayedRotateMap)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
+}
 
 - (void)selectMapOrientation:(NSString *)name
 {

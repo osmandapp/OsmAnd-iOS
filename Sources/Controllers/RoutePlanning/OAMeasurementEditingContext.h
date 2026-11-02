@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 @property (nonatomic) OASWptPt *originalPointToMove;
 
 @property (nonatomic) BOOL inAddPointMode;
-@property (nonatomic) BOOL inApproximationMode;
+@property (nonatomic) BOOL approximationSessionActive;
 
 @property (nonatomic) OAGpxData *gpxData;
 @property (nonatomic) NSInteger selectedSegment;
@@ -131,6 +131,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer;
 
 - (void) updateSegmentsForSnap;
+- (void) updateSegmentsForSnap:(BOOL)both;
 
 - (void) cancelSnapToRoad;
 

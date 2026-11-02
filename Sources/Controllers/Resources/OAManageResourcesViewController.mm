@@ -158,7 +158,6 @@ static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
     UISearchController *_searchController;
     
     uint64_t _totalInstalledSize;
-    uint64_t _liveUpdatesInstalledSize;
 
     MBProgressHUD *_refreshRepositoryProgressHUD;
     
@@ -207,6 +206,9 @@ static NSMutableArray *_searchableWorldwideRegionItems;
 
 static BOOL _lackOfResources = NO;
 static BOOL _repositoryUpdated = NO;
+
+// posted after updateRepository rebuilt the group items, which visible region lists hold copies of
+static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsRebuiltNotification";
 
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
@@ -324,7 +326,7 @@ static BOOL _repositoryUpdated = NO;
     [self obtainDataAndItems];
     [self prepareContent];
 
-    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
+    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0)];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -394,6 +396,7 @@ static BOOL _repositoryUpdated = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRepositoryUpdateFinished:) name:OARepositoryUpdateFinishedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceGroupsRebuilt:) name:kResourceGroupsRebuiltNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
@@ -659,6 +662,11 @@ static BOOL _repositoryUpdated = NO;
     }
 
     [_subscriptionBannerView updateView];
+}
+
+- (void) resourceGroupsRebuilt:(NSNotification *)notification
+{
+    [self updateContent];
 }
 
 - (void) resourceInstallationFailed:(NSNotification *)notification
@@ -1402,8 +1410,6 @@ static BOOL _repositoryUpdated = NO;
     }
 
     // Local Resources
-    _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
-    
     _totalInstalledSize = 0;
     for (const auto& localResource : _localResources)
     {
@@ -1980,7 +1986,7 @@ static BOOL _repositoryUpdated = NO;
     [self updateRepositoryUpdateIndicator];
     [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-            // Reloading the region tree drops the group items built on startup, so do it only when regions.ocbf changed.
+            // The region tree is reread only when regions.ocbf changed.
             // The tree is read here but published on the main thread: self.region, the region-keyed resource cache and
             // the section layout are all compared against _app.worldRegion by identity.
             OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
@@ -1992,7 +1998,8 @@ static BOOL _repositoryUpdated = NO;
                     self.region = _app.worldRegion;
                 }
                 [self updateContent];
-                [_app.worldRegion buildResourceGroupItem];
+                [_app.worldRegion rebuildResourceGroupItem];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kResourceGroupsRebuiltNotification object:self];
                 _refreshingRepository = NO;
                 [self updateRepositoryUpdateIndicator];
             });

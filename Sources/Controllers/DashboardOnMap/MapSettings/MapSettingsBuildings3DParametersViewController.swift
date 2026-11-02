@@ -42,6 +42,21 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     @IBOutlet private var backButtonLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private var resetButtonTrailingConstraint: NSLayoutConstraint!
     
+    weak var delegate: Buildings3DParametersDelegate?
+
+    override var initialMenuHeight: CGFloat {
+        let divider: CGFloat = settingsType == .visibility ? 3.0 : 2.0
+        return (OAUtilities.calculateScreenHeight() / divider) + OAUtilities.getBottomMargin()
+    }
+
+    override var supportsFullScreen: Bool {
+        false
+    }
+
+    override var useGestureRecognizer: Bool {
+        false
+    }
+
     private let settingsType: Buildings3DSettingsType
     private let plugin: OASRTMPlugin? = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
@@ -62,21 +77,6 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     private var currentBuildings3DColorStyle = 0
     private var isNightColorMode = false
     private var isValueChange = false
-    
-    weak var delegate: Buildings3DParametersDelegate?
-    
-    override var initialMenuHeight: CGFloat {
-        let divider: CGFloat = settingsType == .visibility ? 3.0 : 2.0
-        return (OAUtilities.calculateScreenHeight() / divider) + OAUtilities.getBottomMargin()
-    }
-    
-    override var supportsFullScreen: Bool {
-        false
-    }
-    
-    override var useGestureRecognizer: Bool {
-        false
-    }
     
     init(settingsType: Buildings3DSettingsType) {
         self.settingsType = settingsType
@@ -101,21 +101,12 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
         setupBottomButton()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        refreshColorsCollection()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        refreshColorsCollection()
         let statusBarStyle: UIStatusBarStyle = settings.isAppMapNightMode ? .lightContent : .default
         mapPanel.targetUpdateControlsLayout(true, customStatusBarStyle: statusBarStyle)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -173,25 +164,6 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             
             mapPanel.hideScrollableHudViewController()
             onComplete?()
-        }
-    }
-    
-    @IBAction private func backButtonPressed(_: UIButton) {
-        hide()
-    }
-    
-    @IBAction private func resetButtonPressed(_: UIButton) {
-        let wasReset: Bool
-        switch settingsType {
-        case .visibility:
-            wasReset = resetVisibilityValues()
-        case .color:
-            wasReset = resetBuildings3DColor()
-        }
-        
-        if wasReset {
-            generateData()
-            tableView.reloadData()
         }
     }
     
@@ -518,6 +490,29 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
             self.generateData()
             self.tableView.reloadData()
         }
+    }
+
+    @IBAction private func backButtonPressed(_: UIButton) {
+        hide()
+    }
+
+    @IBAction private func resetButtonPressed(_: UIButton) {
+        let wasReset: Bool
+        switch settingsType {
+        case .visibility:
+            wasReset = resetVisibilityValues()
+        case .color:
+            wasReset = resetBuildings3DColor()
+        }
+
+        if wasReset {
+            generateData()
+            tableView.reloadData()
+        }
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

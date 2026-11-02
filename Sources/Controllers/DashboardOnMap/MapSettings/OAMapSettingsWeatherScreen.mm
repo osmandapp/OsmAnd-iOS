@@ -39,7 +39,7 @@
     OAAppSettings *_settings;
     OAMapStyleSettings *_styleSettings;
     
-    NSArray *_data;
+    NSArray<NSArray *> *_data;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -212,6 +212,16 @@
     if (section == kContoursSection)
         return OALocalizedString(@"weather_cloud_data_description");
     return @"";
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (section != kContoursSection)
+        return 0.01;
+
+    CGFloat width = MAX(1.0, CGRectGetWidth(tableView.bounds) - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2);
+    NSString *text = [self tableView:tableView titleForFooterInSection:section];
+    return [OAUtilities calculateTextBounds:text width:floor(width) font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]].height + kPaddingOnSideOfFooterWithText;
 }
 
 - (void) tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section

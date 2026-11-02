@@ -52,6 +52,8 @@
 - (void) prepare;
 - (void) prepareNoInit;
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
+- (void) cancelScrollingForRotation;
+- (void) finishRotation;
 - (void) updateColors;
 
 - (void) showTopToolbarWithAnimation:(BOOL)animated forceToShowIfTypeFloating:(BOOL)forceToShowIfTypeFloating;

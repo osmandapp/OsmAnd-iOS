@@ -38,6 +38,7 @@
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
     double _area; // negative until calculated
+    NSArray<OAWorldRegion *> *_subregionsWithoutDuplicates; // nil until calculated
 }
 
 - (instancetype) initWorld
@@ -319,6 +320,7 @@
 
     NSMutableArray<OAWorldRegion *> *subregions = (NSMutableArray<OAWorldRegion *> *)_subregions;
     [subregions addObject:subregion];
+    _subregionsWithoutDuplicates = nil;
 
     [self propagateSubregionToFlattenedHierarchy:subregion];
 }
@@ -832,9 +834,26 @@
     }
 }
 
+// group items hold resource ids of the repository they were built from
+- (void)rebuildResourceGroupItem
+{
+    self.groupItem = nil;
+    for (OAWorldRegion *subregion in self.flattenedSubregions)
+        subregion.groupItem = nil;
+    [self buildResourceGroupItem];
+}
+
+// removeDuplicates: compares subregion polygons point by point, most of the cost of a group build
+- (NSArray<OAWorldRegion *> *)subregionsWithoutDuplicates
+{
+    if (!_subregionsWithoutDuplicates)
+        _subregionsWithoutDuplicates = [self.class removeDuplicates:self.subregions];
+    return _subregionsWithoutDuplicates;
+}
+
 - (void)buildResourceGroupItem
 {
-    NSArray<OAWorldRegion *> *subregions = [self.class removeDuplicates:self.subregions];
+    NSArray<OAWorldRegion *> *subregions = [self subregionsWithoutDuplicates];
     if (!subregions || subregions.count == 0)
         return;
 

@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAReverseGeocoder *)instance;
 
+- (void)stop;
+
 - (void)lookupAddressAtLat:(double)lat
                        lon:(double)lon
                   objectId:(uint64_t)objectId

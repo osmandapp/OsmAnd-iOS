@@ -10,6 +10,4 @@
 
 @interface OAFreeMemoryView : UIView
 
-- (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize;
-
 @end

@@ -103,43 +103,34 @@ final class TouchIndicatorController: NSObject, UIGestureRecognizerDelegate {
 
         private var activeTouches: Set<ObjectIdentifier> = []
 
-        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-            for touch in touches {
-                activeTouches.insert(ObjectIdentifier(touch))
-            }
-
-            overlay?.handle(touches)
-            state = state == .possible ? .began : .changed
-        }
-
-        override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
-            overlay?.handle(touches)
-            state = .changed
-        }
-
-        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-            overlay?.handle(touches)
-            removeActiveTouches(touches)
-            state = activeTouches.isEmpty ? .ended : .changed
-        }
-
-        override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
-            overlay?.handle(touches)
-            state = .cancelled
-        }
-
         override func reset() {
             super.reset()
             activeTouches.removeAll()
         }
 
-        override func canPrevent(_ preventedGestureRecognizer: UIGestureRecognizer) -> Bool {
-            false
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+            activeTouches.formUnion(touches.map(ObjectIdentifier.init))
+            overlay?.handle(touches)
         }
 
-        private func removeActiveTouches(_ touches: Set<UITouch>) {
-            for touch in touches {
-                activeTouches.remove(ObjectIdentifier(touch))
+        override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+            overlay?.handle(touches)
+        }
+
+        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+            overlay?.handle(touches)
+            finishTouches(touches)
+        }
+
+        override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+            overlay?.handle(touches)
+            finishTouches(touches)
+        }
+
+        private func finishTouches(_ touches: Set<UITouch>) {
+            activeTouches.subtract(touches.map(ObjectIdentifier.init))
+            if activeTouches.isEmpty {
+                state = .failed
             }
         }
     }

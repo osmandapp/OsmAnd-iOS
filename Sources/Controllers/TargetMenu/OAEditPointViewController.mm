@@ -7,7 +7,6 @@
 //
 
 #import "OAEditPointViewController.h"
-#import "OAFavoriteGroupEditorViewController.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
@@ -87,6 +86,8 @@
     NSArray<NSString *> *_backgroundContourIconNames;
     
     NSArray<NSString *> *_groupNames;
+    NSArray<NSString *> *_waypointGroupKeys;
+    NSString *_selectedWaypointGroupKey;
     NSArray<NSNumber *> *_groupSizes;
     NSArray<UIColor *> *_groupColors;
     NSArray<NSNumber *> *_groupHidden;
@@ -162,6 +163,7 @@
         _pointHandler = [[OAGpxWptEditingHandler alloc] initWithItem:gpxWpt];
         self.name = gpxWpt.point.name;
         _waypoint = gpxWpt;
+        _selectedWaypointGroupKey = gpxWpt.point.category ?: @"";
         self.desc = gpxWpt.point.desc;
         self.address = [gpxWpt.point getAddress];
         self.groupTitle = [self getGroupTitle]/*gpxWpt.point.type*/;
@@ -247,10 +249,14 @@
 
 - (void)applyQuickActionParams:(NSDictionary *)params
 {
-    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[@"category_name"] ?: @""] trim];
-    NSInteger colorIndex = [OADefaultFavorite getValidBuiltInColorNumber:[params[@"category_color"] integerValue]];
-    OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][colorIndex];
-    UIColor *selectedColor = favCol.color;
+    NSString *groupName = [[OAFavoriteGroup convertDisplayNameToGroupIdName:params[kCategoryName] ?: @""] trim];
+    BOOL isFavorite = _editPointType == EOAEditPointTypeFavorite;
+    UIColor *selectedColor = [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[params[kCategoryColor] integerValue]];
+    if (!isFavorite && params[kWptColor])
+        selectedColor = UIColorFromARGB([params[kWptColor] intValue]);
+
+    NSString *iconName = params[isFavorite ? kCategoryIcon : kWptIcon];
+    NSString *backgroundIconName = params[isFavorite ? kCategoryBackgroundIcon : kWptBackgroundType];
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
@@ -258,14 +264,9 @@
             selectedColor = group.color;
 
         if (group.iconName.length > 0)
-        {
-            _selectedIconName = group.iconName;
-            [_poiIconCollectionHandler setIconName:_selectedIconName];
-        }
-        
-        NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
-        if (backgroundIndex != NSNotFound)
-            _selectedBackgroundIndex = backgroundIndex;
+            iconName = group.iconName;
+        if (group.backgroundType.length > 0)
+            backgroundIconName = group.backgroundType;
 
         self.groupTitle = [OAFavoriteGroup getDisplayName:group ? group.name : groupName];
     }
@@ -277,9 +278,20 @@
         OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
         if (group.color != 0)
             selectedColor = UIColorFromARGB(group.color);
+        if (group.iconName.length > 0)
+            iconName = group.iconName;
+        if (group.backgroundType.length > 0)
+            backgroundIconName = group.backgroundType;
 
+        _selectedWaypointGroupKey = groupName;
         self.groupTitle = groupName.length > 0 ? groupName : OALocalizedString(@"shared_string_waypoints");
     }
+
+    _selectedIconName = iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY;
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
+
+    NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName ?: @""];
+    _selectedBackgroundIndex = backgroundIndex != NSNotFound ? backgroundIndex : [_backgroundIconNames indexOfObject:DEFAULT_ICON_SHAPE_KEY];
 
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
@@ -289,7 +301,9 @@
 - (void)postInit
 {
     _initialName = self.name;
-    _initialGroupName = self.groupTitle;
+    if (_editPointType == EOAEditPointTypeWaypoint && !_selectedWaypointGroupKey)
+        _selectedWaypointGroupKey = @"";
+    _initialGroupName = _editPointType == EOAEditPointTypeWaypoint ? _selectedWaypointGroupKey : self.groupTitle;
 
     _nameTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_name") text:(self.name ? self.name : @"") tag:0 isEditable:![_pointHandler isSpecialPoint]];
     _descTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_description") text:(self.desc ? self.desc : @"") tag:1 isEditable:YES];
@@ -425,6 +439,7 @@
 - (void) setupGroups
 {
     NSMutableArray *names = [NSMutableArray new];
+    NSMutableArray *waypointKeys = [NSMutableArray new];
     NSMutableArray *sizes = [NSMutableArray new];
     NSMutableArray *colors = [NSMutableArray new];
     NSMutableArray *hidden = [NSMutableArray new];
@@ -453,6 +468,7 @@
         for (NSDictionary<NSString *, NSString *> *group in [(OAGpxWptEditingHandler *) _pointHandler getGroups])
         {
             [names addObject:group[@"title"]];
+            [waypointKeys addObject:group[@"category"]];
             [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : [UIColor colorNamed:ACColorNameIconColorActive]];
             [sizes addObject:@(group[@"count"].intValue)];
             [hidden addObject:@(group[@"hidden"].boolValue)];
@@ -460,6 +476,7 @@
     }
 
     _groupNames = [NSArray arrayWithArray:names];
+    _waypointGroupKeys = [waypointKeys copy];
     _groupSizes = [NSArray arrayWithArray:sizes];
     _groupColors = [NSArray arrayWithArray:colors];
     _groupHidden = [NSArray arrayWithArray:hidden];
@@ -467,21 +484,22 @@
 
 - (void)setupIcons
 {
-    NSString *preselectedIconName = [_pointHandler getIcon];
-    if (!preselectedIconName)
-        preselectedIconName = [self defaultIconName];
-    _selectedIconName = preselectedIconName;
+    NSString *pointIconName = [_pointHandler getIcon];
+    _selectedIconName = pointIconName ?: [self defaultIconName];
     
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
     OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0 && (pointIconName.length == 0 || ![selectedGroup.iconName isEqualToString:DEFAULT_ICON_NAME_KEY]))
+        _selectedIconName = selectedGroup.iconName;
+
     if (!_selectedIconName) {
         if (_isNewItemAdding && selectedGroup)
             _selectedIconName = selectedGroup.iconName;
         else if (!_selectedIconName || _selectedIconName.length == 0)
             _selectedIconName = DEFAULT_ICON_NAME_KEY;
     }
+
     [_poiIconCollectionHandler setIconName:_selectedIconName];
-    
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
 
@@ -546,7 +564,9 @@
     }];
     _selectCategoryLabelRowIndex = section.count -1;
 
-    NSUInteger selectedGroupIndex = [_groupNames indexOfObject:self.groupTitle];
+    NSUInteger selectedGroupIndex = _editPointType == EOAEditPointTypeWaypoint
+        ? [_waypointGroupKeys indexOfObject:_selectedWaypointGroupKey]
+        : [_groupNames indexOfObject:self.groupTitle];
     if (selectedGroupIndex == NSNotFound)
         selectedGroupIndex = 0;
     [section addObject:@{
@@ -770,7 +790,6 @@
         [cell.bottomButton setTitle:item[@"descr"] forState:UIControlStateNormal];
         cell.collectionView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
         [cell.collectionView reloadData];
-        [cell layoutIfNeeded];
         return cell;
     }
     else if ([cellType isEqualToString:[OAShapesTableViewCell getCellIdentifier]])
@@ -859,7 +878,6 @@
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [_colorCollectionHandler setSelectionItem:_selectedColorItem];
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
             
             if (_needToScrollToSelectedColor)
             {
@@ -912,7 +930,7 @@
         if (_editPointType == EOAEditPointTypeFavorite)
             selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle];
         else if (_editPointType == EOAEditPointTypeWaypoint)
-            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:self.groupTitle gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
+            selectGroupController = [[SelectFavoriteGroupViewController alloc] initWithSelectedGroupName:_selectedWaypointGroupKey gpxWptGroups:[(OAGpxWptEditingHandler *)_pointHandler getGroups]];
 
         selectGroupController.delegate = self;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:selectGroupController];
@@ -1078,11 +1096,11 @@
         {
             if (!_pointHandler.gpxWptDelegate)
                 _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-            if ([savingGroup isEqualToString:OALocalizedString(@"shared_string_waypoints")])
-                savingGroup = @"";
+            savingGroup = _selectedWaypointGroupKey;
         }
 
-        if (_isNewItemAdding || ![self.name isEqualToString:_initialName] || ([self.name isEqualToString:_initialName] && ![self.groupTitle isEqualToString:_initialGroupName]))
+        NSString *currentGroupName = _editPointType == EOAEditPointTypeWaypoint ? _selectedWaypointGroupKey : self.groupTitle;
+        if (_isNewItemAdding || ![self.name isEqualToString:_initialName] || ([self.name isEqualToString:_initialName] && ![currentGroupName isEqualToString:_initialGroupName]))
         {
             NSString *savingName = [self.name trim];
             NSDictionary *checkingResult = [_pointHandler checkDuplicates:savingName group:savingGroup];
@@ -1207,12 +1225,12 @@
 
 - (void)onItemSelected:(NSInteger)index
 {
-    [self onGroupChanged:_groupNames[index]];
+    [self onGroupChanged:_editPointType == EOAEditPointTypeWaypoint ? _waypointGroupKeys[index] : _groupNames[index]];
 }
 
 - (void)onAddFolderButtonPressed
 {
-    OAFavoriteGroupEditorViewController *groupEditor = [[OAFavoriteGroupEditorViewController alloc] initWithNew];
+    FavoriteGroupEditorViewController *groupEditor = [[FavoriteGroupEditorViewController alloc] initWithNew];
     groupEditor.delegate = self;
     [self showModalViewController:groupEditor];
 }
@@ -1224,7 +1242,9 @@
     [self onGroupChanged:selectedGroupName];
     NSIndexPath *groupsIndexPath = [NSIndexPath indexPathForRow:_selectCategoryCardsRowIndex inSection:_selectCategorySectionIndex];
     FolderCardsCell *colorCell = [self.tableView cellForRowAtIndexPath:groupsIndexPath];
-    NSInteger selectedIndex = [_groupNames indexOfObject:selectedGroupName];
+    NSInteger selectedIndex = _editPointType == EOAEditPointTypeWaypoint
+        ? [_waypointGroupKeys indexOfObject:selectedGroupName]
+        : [_groupNames indexOfObject:selectedGroupName];
     [colorCell setSelectedIndex:selectedIndex];
 
     NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
@@ -1326,6 +1346,7 @@
         if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
         [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
+        _selectedWaypointGroupKey = editedGroupName;
     }
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName];
@@ -1350,7 +1371,9 @@
                         }
                         completion:^(BOOL finished)
          {
-            NSInteger selectedIndex = [_groupNames indexOfObject:editedGroupName];
+            NSInteger selectedIndex = _editPointType == EOAEditPointTypeWaypoint
+                ? [_waypointGroupKeys indexOfObject:_selectedWaypointGroupKey]
+                : [_groupNames indexOfObject:editedGroupName];
             NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForRow:selectedIndex inSection:0];
             if (selectedIndexPath.row != NSNotFound
                 && ![groupCell.collectionView.indexPathsForVisibleItems containsObject:selectedIndexPath]
@@ -1600,7 +1623,18 @@
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
-        _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:[(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName]]];
+        _selectedWaypointGroupKey = groupName;
+        self.groupTitle = groupName.length > 0 ? groupName : OALocalizedString(@"shared_string_waypoints");
+        NSString *color = [(OAGpxWptEditingHandler *) _pointHandler getGroupsWithColors][groupName];
+        if (color)
+        {
+            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[UIColor toNumberFromString:color]];
+            if ([_appearanceCollection indexOfColorItem:_selectedColorItem items:_sortedColorItems] == NSNotFound)
+            {
+                _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
+                [_colorCollectionHandler generateData:@[_sortedColorItems]];
+            }
+        }
     }
 
     if ([self.groupTitle isEqualToString:@""])

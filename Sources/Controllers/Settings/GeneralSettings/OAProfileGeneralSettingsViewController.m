@@ -26,6 +26,7 @@
     int _sectionUnitsAndFormats;
     int _sectionOther;
     int _sectionAnimateMyPosition;
+    NSInteger _displayedRotateMap;
 }
 
 #pragma mark - Initialization
@@ -43,6 +44,11 @@
 {
     [self.tableView registerNib:[UINib nibWithNibName:OASwitchTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OASwitchTableViewCell.reuseIdentifier];
     [self.tableView registerNib:[UINib nibWithNibName:OAValueTableViewCell.reuseIdentifier bundle:nil] forCellReuseIdentifier:OAValueTableViewCell.reuseIdentifier];
+}
+
+- (void)registerNotifications
+{
+    [self addNotification:kNotificationSetProfileSetting selector:@selector(onProfileSettingSet:)];
 }
 
 #pragma mark - UIViewController
@@ -108,6 +114,7 @@
     
     NSString *rotateMapValue;
     NSString *rotateMapIcon;
+    _displayedRotateMap = [_settings.rotateMap get:self.appMode];
     if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_BEARING)
     {
         rotateMapValue = OALocalizedString(@"rotate_map_bearing_opt");
@@ -493,6 +500,16 @@
 - (void)onRotation
 {
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:_settings.rotateMap.key] && [_settings.rotateMap get:self.appMode] != _displayedRotateMap)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)applyParameter:(id)sender

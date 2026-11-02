@@ -30,6 +30,7 @@
 #import "OANativeUtilities.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -88,9 +89,19 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         [self updateReferences];
         [self updatePhrases];
         [self sortPoiCategories];
+        [self readKPoiTypes];
         _isInit = YES;
     }
     return self;
+}
+
+- (void)readKPoiTypes
+{
+    NSString *xml = [[OASPlatformUtil.shared getOsmAndContext] getAssetAsStringName:@"poi_types.xml"];
+    OASMapPoiTypes *types = [[OASMapPoiTypes alloc] initWithResourceName:nil];
+    [types doInitFromStringXml:xml];
+    [OASMapPoiTypes.companion setDefaultTypes:types];
+    _kPoiTypes = types;
 }
 
 - (BOOL) isInit

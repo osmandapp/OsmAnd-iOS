@@ -18,6 +18,8 @@
 #import "OAMapStyleAction.h"
 #import "OAIndexConstants.h"
 #import "OAMapSource.h"
+#import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -36,6 +38,7 @@
     
     OASwitchableAction *_action;
     EOAQASelectionType _type;
+    OAAutoObserverProxy *_appModeObserver;
 }
 
 @synthesize tableData, tblView;
@@ -62,8 +65,52 @@
     [self initData];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)deinitView
+{
+    [self removeOrientationObservers];
+}
+
+- (void)removeOrientationObservers
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationSetProfileSetting object:nil];
+    [_appModeObserver detach];
+    _appModeObserver = nil;
+}
+
+- (void)updateOrientationObserver
+{
+    [self removeOrientationObservers];
+    if (vwController.type == EOAQASelectionTypeOrientation)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+        _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onApplicationModeChanged)
+                                                      andObserve:_app.applicationModeChangedObservable];
+    }
+}
+
+- (void)onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [tblView reloadData];
+    });
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:[OAAppSettings sharedManager].rotateMap.key])
+        [tblView reloadData];
+}
+
 - (void) setupView
 {
+    [self updateOrientationObserver];
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     NSArray *params = _action.loadListFromParams;

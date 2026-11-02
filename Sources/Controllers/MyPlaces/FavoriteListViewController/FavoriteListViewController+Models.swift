@@ -160,6 +160,8 @@ struct FavoritePointRow: Hashable, FavoriteSortablePoint {
 
     var title: String { bridgeItem.title }
 
+    var isVisible: Bool { bridgeItem.isVisible }
+
     var distance: CLLocationDistance? { bridgeItem.distance?.doubleValue }
 
     var lastModified: Date? { bridgeItem.timestampDate }
@@ -193,6 +195,7 @@ struct FavoriteFolderStats: Hashable {
 
 final class FavoriteListCell: UICollectionViewListCell {
     private static let rowHeight: CGFloat = 68.0
+    var iconUserInterfaceStyle: UIUserInterfaceStyle?
     private var separatorConstraint: NSLayoutConstraint?
     private weak var primaryTextLayoutGuide: UILayoutGuide?
 
@@ -207,6 +210,12 @@ final class FavoriteListCell: UICollectionViewListCell {
         let contentHeight = textContentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel).height
         attributes.frame.size.height = ceil(max(Self.rowHeight, max(attributes.frame.height, contentHeight)))
         return attributes
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard configurationUpdateHandler != nil, traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle else { return }
+        setNeedsUpdateConfiguration()
     }
 
     func setPrimaryTextLayoutGuide(_ layoutGuide: UILayoutGuide?) {

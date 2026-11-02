@@ -106,7 +106,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
         let iconSize = getIconSize()
         
         cell.cellWidthConstraint.constant = itemSize.width
-        cell.cellWidthConstraint.constant = itemSize.height
+        cell.cellHeightConstraint.constant = itemSize.height
         cell.iconBackgroundWidthConstraint.constant = backgroundIconSize
         cell.iconBackgroundHeightConstraint.constant = backgroundIconSize
         cell.iconWidthConstraint.constant = iconSize

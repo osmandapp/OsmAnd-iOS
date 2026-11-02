@@ -29,6 +29,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OAReverseGeocoder.h"
 #import "OADiscountHelper.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -1423,6 +1424,8 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
 - (void) shutdown
 {
+    [[OAReverseGeocoder instance] stop];
+
     if (_initialized)
     {
         [OAQuickSearchHelper.instance cancelSearch:YES];
@@ -1569,6 +1572,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
 - (void) onApplicationWillEnterForeground
 {
+    [InstallAttribution checkAndReport];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

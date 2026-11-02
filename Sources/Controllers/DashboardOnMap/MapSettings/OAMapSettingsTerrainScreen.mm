@@ -189,7 +189,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : ACImageNameIcCustomVisibility,
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : [NSString stringWithFormat:@"%d%%", [_terrainMode getTransparency]]
+            @"value" : [NSString stringWithFormat:@"%d%%", _terrainMode.transparencyPercent]
         }];
         if (!isTerrainShadows)
         {
@@ -391,7 +391,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item =  [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"relief3D"] || [item.key isEqualToString:@"modifyPalette"])
+    if (([item.key isEqualToString:@"relief3D"] || [item.key isEqualToString:@"modifyPalette"])
+        && ![item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
         return kRelief3DCellRowHeight;
     return UITableViewAutomaticDimension;
 }

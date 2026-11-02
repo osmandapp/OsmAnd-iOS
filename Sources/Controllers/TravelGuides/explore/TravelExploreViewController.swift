@@ -428,6 +428,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 }
                 
                 let hideSeparator = item.bool(forKey: "kHideSeparator")
+                cell.setCustomLeftSeparatorInset(hideSeparator)
                 if hideSeparator {
                     cell.separatorInset = UIEdgeInsets(top: 0, left: CGFloat.greatestFiniteMagnitude, bottom: 0, right: 0)
                 } else {

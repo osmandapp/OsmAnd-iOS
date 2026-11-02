@@ -574,7 +574,9 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
             [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
             leftButton.translatesAutoresizingMaskIntoConstraints = NO;
-            [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
+            NSLayoutConstraint *leftButtonMaxWidthConstraint = [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton];
+            leftButtonMaxWidthConstraint.priority = 999;
+            leftButtonMaxWidthConstraint.active = YES;
             
             _leftButtonLongTapRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLeftNavbarButtonLongtapPressed:)];
             [leftButton addGestureRecognizer:_leftButtonLongTapRecognizer];

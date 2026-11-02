@@ -7,8 +7,8 @@
 //
 
 #import "OAMeasurementToolLayer.h"
-#import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
@@ -479,9 +479,6 @@
 
 - (void) drawBeforeAfterPath
 {
-    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
-    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
-
     OsmAnd::PointI center;
     if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
     {
@@ -494,6 +491,21 @@
         auto centerPixel = self.mapViewController.mapView.getCenterPixel;
         [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
     }
+    [self drawBeforeAfterPath:center];
+}
+
+- (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center
+{
+    if (_editingCtx.approximationSessionActive)
+    {
+        _lastLineCollection->removeAllLines();
+        _selectedMarkerCollection->removeAllMarkers();
+        _cachedCenter = OsmAnd::PointI(-1, -1);
+        return;
+    }
+
+    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
+    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
     if (center == _cachedCenter)
         return;
 
@@ -551,11 +563,28 @@
 - (void)prepareRouteLinesForTesting
 {
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _lastLineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+}
+
+- (NSUInteger)centerLineCountForTesting
+{
+    return _lastLineCollection ? _lastLineCollection->getLines().size() : 0;
 }
 
 - (NSUInteger)routeLineCountForTesting
 {
     return _collection ? _collection->getLines().size() : 0;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)routeLineCollectionForUITesting
+{
+    return _collection;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)previewLineCollectionForUITesting
+{
+    return _lastLineCollection;
 }
 #endif
 
@@ -605,6 +634,11 @@
 {
     if (self.isVisible && self.delegate)
         [self.delegate onTouch:coordinate longPress:longPress];
+}
+
+- (BOOL)isInMeasurementMode
+{
+    return _editingCtx != nil;
 }
 
 - (void) moveMapToPoint:(NSInteger)pos

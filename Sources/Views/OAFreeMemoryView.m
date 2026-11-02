@@ -11,6 +11,11 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+static const CGFloat kContentHorizontalInset = 15.0;
+static const CGFloat kLabelTopInset = 10.0;
+static const CGFloat kLabelInitialWidth = 240.0;
+static const CGFloat kLabelInitialHeight = 20.0;
+
 @implementation OAFreeMemoryView
 {
     UILabel *_titleLabel;
@@ -20,24 +25,21 @@
     double _appVal;
     double _freeVal;
 
-    unsigned long long _localResourcesSize;
     unsigned long long _deviceMemoryCapacity;
     unsigned long long _deviceMemoryAvailable;
     unsigned long long _documentsSize;
+    BOOL _hasValues;
     NSUInteger _updateGeneration;
 
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
-- (instancetype) initWithFrame:(CGRect)frame localResourcesSize:(unsigned long long)localResourcesSize
+- (instancetype) initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self)
-    {
-        _localResourcesSize = localResourcesSize;
         [self commonInit];
-    }
     return self;
 }
 
@@ -46,7 +48,12 @@
 - (UIEdgeInsets) contentInsets
 {
     UIEdgeInsets safeArea = self.safeAreaInsets;
-    return UIEdgeInsetsMake(0.0, 15.0 + safeArea.left, 0.0, 15.0 + safeArea.right);
+    return UIEdgeInsetsMake(0.0, kContentHorizontalInset + safeArea.left, 0.0, kContentHorizontalInset + safeArea.right);
+}
+
+- (BOOL)isRTL
+{
+    return self.effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft;
 }
 
 - (void) layoutSubviews
@@ -57,8 +64,10 @@
     [_titleLabel sizeToFit];
     [_freeMemLabel sizeToFit];
 
-    _titleLabel.frame = CGRectMake(insets.left, 10.0, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
-    _freeMemLabel.frame = CGRectMake(self.bounds.size.width - _freeMemLabel.bounds.size.width - insets.right, 10.0, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
+    BOOL isRTL = [self isRTL];
+    CGFloat rightEdge = self.bounds.size.width - insets.right;
+    _titleLabel.frame = CGRectMake(isRTL ? rightEdge - _titleLabel.bounds.size.width : insets.left, kLabelTopInset, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
+    _freeMemLabel.frame = CGRectMake(isRTL ? insets.left : rightEdge - _freeMemLabel.bounds.size.width, kLabelTopInset, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
     [self setNeedsDisplay];
 }
 
@@ -67,6 +76,15 @@
     [super safeAreaInsetsDidChange];
     [self setNeedsLayout];
     [self setNeedsDisplay];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+
+    if (![self.traitCollection.preferredContentSizeCategory isEqualToString:previousTraitCollection.preferredContentSizeCategory]
+        || self.traitCollection.layoutDirection != previousTraitCollection.layoutDirection)
+        [self setNeedsLayout];
 }
 
 - (void) commonInit
@@ -83,7 +101,7 @@
     _deviceMemoryAvailable = 0;
     _documentsSize = 0;
     
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContentHorizontalInset, kLabelTopInset, kLabelInitialWidth, kLabelInitialHeight)];
     _titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
     _titleLabel.adjustsFontForContentSizeCategory = YES;
@@ -91,7 +109,7 @@
     _titleLabel.text = OALocalizedString(@"device_memory");
     [self addSubview:_titleLabel];
     
-    _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
+    _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContentHorizontalInset, kLabelTopInset, kLabelInitialWidth, kLabelInitialHeight)];
     _freeMemLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _freeMemLabel.font = [UIFont scaledSystemFontOfSize:14.0];
     _freeMemLabel.adjustsFontForContentSizeCategory = YES;
@@ -115,75 +133,69 @@
     }
 }
 
-- (void) setLocalResourcesSize:(unsigned long long)size
-{
-    _localResourcesSize = size;
-}
-
 - (void) update
 {
-    NSError *error = nil;
-
-    unsigned long long deviceMemoryCapacity = 1;
-    unsigned long long deviceMemoryAvailable = 0;
-    
-    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
-    if (dictionary && !error)
-    {
-        NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
-        deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
-        if (deviceMemoryCapacity <= 0)
-        {
-            NSLog(@"Error obtaining dvice memory capacity");
-            deviceMemoryCapacity = 1;
-        }
-        
-        NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
-        NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
-        if (results)
-            deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
-
-        if (deviceMemoryAvailable == 0)
-        {
-            NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
-            deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
-        }
-    }
-    else
-    {
-        NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
-    }
-
-    _deviceMemoryCapacity = deviceMemoryCapacity;
-    _deviceMemoryAvailable = deviceMemoryAvailable;
-    [self applyValues];
-
-    NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
-    _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
-    [_freeMemLabel sizeToFit];
-    [self setNeedsLayout];
-
-    // Walking the whole Documents folder (maps, tiles, tracks) takes seconds on a full device,
-    // so it runs off the main thread and the bar is redrawn when the size is known
+    // The free space query and the walk over the whole Documents folder (maps, tiles, tracks) can take
+    // seconds on a full device, so both run off the main thread and the bar is redrawn when they are known
     NSUInteger generation = ++_updateGeneration;
-    unsigned long long localResourcesSize = _localResourcesSize;
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *hiddenMapsPath = [OsmAndApp instance].hiddenMapsPath;
     __weak __typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
-        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + localResourcesSize;
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSError *error = nil;
+
+        unsigned long long deviceMemoryCapacity = 1;
+        unsigned long long deviceMemoryAvailable = 0;
+
+        NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
+        if (dictionary && !error)
+        {
+            NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
+            deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
+            if (deviceMemoryCapacity <= 0)
+            {
+                NSLog(@"Error obtaining dvice memory capacity");
+                deviceMemoryCapacity = 1;
+            }
+
+            NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
+            NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
+            if (results)
+                deviceMemoryAvailable = [results[NSURLVolumeAvailableCapacityForImportantUsageKey] unsignedLongLongValue];
+
+            if (deviceMemoryAvailable == 0)
+            {
+                NSNumber *fileSystemFreeSizeInBytes = [dictionary objectForKey: NSFileSystemFreeSize];
+                deviceMemoryAvailable = [fileSystemFreeSizeInBytes unsignedLongLongValue];
+            }
+        }
+        else
+        {
+            NSLog(@"Error Obtaining File System Info: Domain = %@, Code = %ld", [error domain], (long)[error code]);
+        }
+
+        // Installed maps are in Documents/Resources, hidden maps are in Library/Hidden
+        unsigned long long docSize = [OAUtilities folderSize:documentsPath] + [OAUtilities folderSize:hiddenMapsPath];
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || strongSelf->_updateGeneration != generation)
                 return;
 
+            strongSelf->_deviceMemoryCapacity = deviceMemoryCapacity;
+            strongSelf->_deviceMemoryAvailable = deviceMemoryAvailable;
             strongSelf->_documentsSize = docSize;
+            strongSelf->_hasValues = YES;
             [strongSelf applyValues];
+
+            NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
+            strongSelf->_freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free"), deviceMemoryAvailableStr];
+            [strongSelf->_freeMemLabel sizeToFit];
+            [strongSelf setNeedsLayout];
             [strongSelf setNeedsDisplay];
         });
     });
 }
 
-// Until the Documents size is known the app share is 0 and everything used counts as system
 - (void) applyValues
 {
     unsigned long long capValue = _deviceMemoryCapacity;
@@ -207,17 +219,30 @@
 - (void) drawRect:(CGRect)rect
 {
     double treshold = 2.0;
+    double radius = 3.0f;
     UIEdgeInsets insets = [self contentInsets];
     CGRect frame = CGRectMake(insets.left, 35, self.bounds.size.width - insets.left - insets.right, 20);
     // The shrink loop below never takes a segment under treshold + 0.1, so it would not end on a narrower bar
     if (frame.size.width < 3 * (treshold + 0.1))
         return;
 
+    if (!_hasValues)
+    {
+        [[UIColor colorNamed:ACColorNameFreeSpaceBgColor] setFill];
+        [[UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:radius] fill];
+        return;
+    }
+
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    if ([self isRTL])
+    {
+        // Mirror inside the bar's bounds to preserve asymmetric safe-area insets.
+        CGContextTranslateCTM(context, CGRectGetMinX(frame) + CGRectGetMaxX(frame), 0.0);
+        CGContextScaleCTM(context, -1.0, 1.0);
+    }
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
-    
-    double radius = 3.0f;
-    
+
     /*
     CGFloat compShadow[4] = { 0.2, 0.2, 0.2, 0.9 };
     CGColorRef shadowColor = CGColorCreate(rgbColorspace, compShadow);
@@ -337,6 +362,7 @@
     CGGradientRelease(glossGradientApp);
     CGGradientRelease(glossGradientFree);
     CGColorSpaceRelease(rgbColorspace);
+    CGContextRestoreGState(context);
 }
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key

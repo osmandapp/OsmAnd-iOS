@@ -19,6 +19,8 @@
     NSInteger _pointPosition;
     NSInteger _splitPointPosition;
     NSString *_pointProfileType;
+    OAApplicationMode *_oldMode;
+    OAApplicationMode *_newMode;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer after:(BOOL)after
@@ -39,7 +41,18 @@
     return self;
 }
 
-- (BOOL) execute
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer after:(BOOL)after appMode:(OAApplicationMode *)appMode
+{
+    self = [self initWithLayer:measurementLayer after:after];
+    if (self)
+    {
+        _oldMode = self.getEditingCtx.appMode;
+        _newMode = appMode;
+    }
+    return self;
+}
+
+- (BOOL)execute
 {
     [self executeCommand];
     return YES;
@@ -48,6 +61,8 @@
 - (void) executeCommand
 {
     OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
+    if (_newMode != nil)
+        editingCtx.appMode = _newMode;
     _points = [editingCtx.getAllPoints copy];
     _roadSegmentData = [editingCtx.roadSegmentData mutableCopy];
     _splitPointPosition = _after ? _pointPosition : _pointPosition - 1;
@@ -61,6 +76,9 @@
 - (void) undo
 {
     OAMeasurementEditingContext *editingCtx = [self getEditingCtx];
+    [editingCtx cancelSnapToRoad];
+    if (_newMode != nil)
+        editingCtx.appMode = _oldMode;
     [editingCtx clearSegments];
     if (_splitPointPosition >= 0 && _splitPointPosition < (NSInteger)_points.count)
     {
@@ -77,6 +95,7 @@
 
 - (void) redo
 {
+    [self.getEditingCtx cancelSnapToRoad];
     [self executeCommand];
 }
 

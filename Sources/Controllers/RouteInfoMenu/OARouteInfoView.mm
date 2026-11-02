@@ -531,7 +531,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 }
 
 - (void)addPedestrianRouteWarningIfNeeded:(NSMutableDictionary *)dictionary section:(NSMutableArray *)section sectionIndex:(int &)sectionIndex {
-    const auto route = _transportHelper.getRoutes[0];
+    const auto routes = _transportHelper.getRoutes;
+    if (routes.empty())
+        return;
+
+    const auto route = routes[0];
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:route->segments];
     NSInteger walkTimePT = (NSInteger) route->getWalkTime();
     NSInteger walkTime = walkTimeReal > 0 ? walkTimeReal : walkTimePT;
@@ -582,6 +586,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     _emission = nil;
     _routingInfoIndexPath = nil;
+    _historySection = -1;
     BOOL isRouteBeingCalculated = (![_routingHelper isRouteCalculated] && [_routingHelper isRouteBeingCalculated])
         || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]);
 
@@ -980,7 +985,18 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _historyItemsLimit += 10;
     [self updateData];
     [self.tableView reloadData];
-    [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_data[@(_historySection)].count - 1 inSection:_historySection] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if (_historySection < 0)
+        return;
+
+    NSInteger rowCount = _data[@(_historySection)].count;
+    [_tableView layoutIfNeeded];
+    if (_historySection < _tableView.numberOfSections && rowCount > 0
+        && rowCount <= [_tableView numberOfRowsInSection:_historySection])
+    {
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rowCount - 1 inSection:_historySection]
+                          atScrollPosition:UITableViewScrollPositionBottom
+                                  animated:YES];
+    }
 }
 
 - (void) setupButtonLayout:(UIButton *)button
@@ -1721,9 +1737,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerColor = [SeparatorAppearance color];
-            CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
-            CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
-            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
+            cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., 62.0, 0., 0.) : UIEdgeInsetsZero;
             cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;

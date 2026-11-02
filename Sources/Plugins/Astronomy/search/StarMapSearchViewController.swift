@@ -274,6 +274,10 @@ final class StarMapSearchViewController: UIViewController {
         super.viewDidLayoutSubviews()
 
         updateTableHeader()
+        let emptyTop = filtersHeaderView.frame.height + Layout.contentPadding
+        if !emptyView.isHidden, emptyTopConstraint?.constant != emptyTop {
+            emptyTopConstraint?.constant = emptyTop
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -425,9 +429,7 @@ final class StarMapSearchViewController: UIViewController {
     private func updateSearchFiltersHeaderVisibility() {
         let isExplore = currentMode == .EXPLORE
         sortFilterChipsView.isHidden = isExplore
-        
         filtersHeaderView.setNeedsLayout()
-        filtersHeaderView.layoutIfNeeded()
     }
 
     private func updateNavigationBar() {
@@ -529,6 +531,7 @@ final class StarMapSearchViewController: UIViewController {
     }
     
     private func updateTableHeader() {
+        guard searchRecycler.bounds.width > 0 else { return }
         if currentMode == .EXPLORE, !searchState.recentChips.isEmpty {
             let width = searchRecycler.bounds.width
             

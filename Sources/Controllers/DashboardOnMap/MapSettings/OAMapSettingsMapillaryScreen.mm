@@ -341,7 +341,7 @@ static const NSInteger panoImageFilterSection = 2;
             cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"description"];
             cell.descriptionLabel.text = desc;
-            [cell descriptionVisibility:desc && desc.length == 0];
+            [cell descriptionVisibility:desc.length > 0];
 
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"mapillary_enabled"])
@@ -574,7 +574,10 @@ static const NSInteger panoImageFilterSection = 2;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]]
+        || [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]]
+        || [item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]]
+        || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }

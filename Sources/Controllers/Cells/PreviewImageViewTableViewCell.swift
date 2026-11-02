@@ -24,9 +24,11 @@ final class PreviewImageViewTableViewCell: UITableViewCell {
     
     private func setupPreviewImageView() {
         contentView.addSubview(previewImageView)
+        let bottomConstraint = previewImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        bottomConstraint.priority = UILayoutPriority(999)
         NSLayoutConstraint.activate([
             previewImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            previewImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            bottomConstraint,
             previewImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }

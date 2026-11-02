@@ -142,18 +142,14 @@ final class CoordinatesFormatEditViewController: OABaseSettingsViewController {
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
         cell.descriptionLabel.numberOfLines = 1
 
-        if isAddRow {
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = item.title
-            cell.accessibilityTraits = .button
-        } else {
-            cell.isAccessibilityElement = true
-            cell.accessibilityLabel = item.title
-            cell.accessibilityValue = item.descr
-            cell.accessibilityTraits = .staticText
-            cell.accessibilityHint = localizedString("shared_string_move")
-        }
-        
+        cell.isAccessibilityElement = isAddRow
+        cell.accessibilityLabel = item.title
+        cell.accessibilityTraits = isAddRow ? .button : .none
+        cell.contentView.isAccessibilityElement = !isAddRow
+        cell.contentView.accessibilityLabel = isAddRow ? nil : item.title
+        cell.contentView.accessibilityValue = isAddRow ? nil : item.descr
+        cell.contentView.accessibilityTraits = .staticText
+
         return cell
     }
 

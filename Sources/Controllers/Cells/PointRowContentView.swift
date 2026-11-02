@@ -86,7 +86,7 @@ struct PointContentConfiguration: UIContentConfiguration {
     fileprivate static let directionIconSize: CGFloat = 18
     fileprivate static let secondaryTextSize: CGFloat = 15
 
-    let icon: UIImage?
+    var icon: UIImage?
     let title: String
     let isVisible: Bool
 

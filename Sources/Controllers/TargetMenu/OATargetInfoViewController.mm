@@ -122,6 +122,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 @property (nonatomic) BOOL wikiCardsReady;
 @property (nonatomic, strong) NSURLSession *onlineAndMapillarySession;
 
+- (NoInternetCard *)createOnlinePhotosNoInternetCard;
+
 @end
 
 @implementation OATargetInfoViewController
@@ -137,6 +139,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     OAAmenityInfoRow *_mapillaryCardsRowInfo;
 
     BOOL _otherCardsReady;
+    BOOL _wikiCardsRequestFailed;
+    BOOL _cmPlaceRequestFailed;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
 }
@@ -835,9 +839,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     if (_calculatedWidth != width)
     {
         [self calculateRowsHeight:width];
-        [self calculateContentHeight];
         _calculatedWidth = width;
     }
+    // Cell configuration can update row heights without changing the width.
+    [self calculateContentHeight];
     return _contentHeight;
 }
 
@@ -845,9 +850,18 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     CGFloat h = 0;
     for (OAAmenityInfoRow *row in _rows)
-        h += row.height;
+        h += [self heightForInfoRow:row];
 
     _contentHeight = h;
+}
+
+- (CGFloat)heightForInfoRow:(OAAmenityInfoRow *)info
+{
+    if ([info.typeName isEqualToString:kGroupRowType])
+        return info.height + 16;
+    if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
+        return info.height + OAUtilities.getBottomMargin;
+    return info.height;
 }
 
 - (void)cancelPressed
@@ -891,9 +905,16 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     __weak __typeof(self) weakSelf = self;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [weakSelf.tableView reloadData];
-    } completion:nil];
+    [coordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        // Reload at the final width, then update the outer scroll extent using the laid-out rows.
+        [strongSelf contentHeight:strongSelf.tableView.bounds.size.width];
+        [strongSelf.tableView reloadData];
+        [strongSelf.tableView layoutIfNeeded];
+        [strongSelf.delegate contentHeightChanged];
+    }];
 }
 
 - (void)updateNavBarSubviewsLayout
@@ -1171,7 +1192,14 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             }
             else
             {
-                if (onFailureNoCache)
+                if (newCards.count > 0)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        strongSelf->_cmPlaceRequestFailed = YES;
+                        [strongSelf onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
+                    });
+                }
+                else if (onFailureNoCache)
                 {
                     dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
                 }
@@ -1328,28 +1356,33 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 - (void)updateDisplayingCards:(NSMutableArray<AbstractCard *> *)cards
 {
-    if (_otherCardsReady && _wikiCardsReady)
+    if (_otherCardsReady && (_wikiCardsReady || _wikiCardsRequestFailed))
     {
         CardsFilter *filter = [[CardsFilter alloc] initWithCards:cards];
         
         if (cards.count > 1)
             [self reorderCards:cards];
-        
+
         // After forming the list of cards, fill the collection
         if (_onlinePhotoCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
-            collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
             
-            [collapsableView setCards:cards];
+            // Keep content and error states exclusive, without hiding available photos.
+            NSArray<AbstractCard *> *displayCards = _wikiCardsRequestFailed && !filter.hasOnlyOnlinePhotosContent
+                ? @[[self createOnlinePhotosNoInternetCard]] : cards;
+            [collapsableView setCards:displayCards];
+            collapsableView.isLoading = NO;
         }
         if (_mapillaryCardsRowInfo)
         {
             CollapsableCardsView *collapsableView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;
-            collapsableView.isLoading = NO;
             collapsableView.placeholderImage = [self targetImage];
-            [collapsableView setCards:cards];
+            NSArray<AbstractCard *> *displayCards = _cmPlaceRequestFailed && !filter.hasOnlyMapillaryPhotosContent
+                ? @[[self createOnlinePhotosNoInternetCard]] : cards;
+            [collapsableView setCards:displayCards];
+            collapsableView.isLoading = NO;
         }
     }
 }
@@ -1840,14 +1873,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
-    if ([info.typeName isEqualToString:kGroupRowType])
-        return info.height + 16;
-    if ([info.typeName isEqualToString:kDescriptionRowType])
-        return info.height;
-    else if ([info.typeName isEqualToString:kCollapseDetailsRowType] && !self.delegate.isInFullMode && !OAUtilities.isLandscape)
-        return info.height + OAUtilities.getBottomMargin;
-    else
-        return info.height;
+    return [self heightForInfoRow:info];
 }
 
 - (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -2056,6 +2082,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
  
     _wikiCardsReady = NO;
+    _wikiCardsRequestFailed = NO;
+    _cmPlaceRequestFailed = NO;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
     if (_mapillaryCardsRowInfo)
@@ -2072,27 +2100,52 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     
     __weak __typeof(self) weakSelf = self;
     void (^onFailureNoCache)(void) = ^{
-        onlinePhotoCardsView.isLoading = NO;
-        NoInternetCard *noInternetCard = [NoInternetCard new];
-        noInternetCard.onTryAgainAction = ^{
-            if (AFNetworkReachabilityManager.sharedManager.isReachable)
-            {
-                [weakSelf startLoadingImages];
-            }
-        };
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        strongSelf->_cmPlaceRequestFailed = YES;
+        NoInternetCard *noInternetCard = [strongSelf createOnlinePhotosNoInternetCard];
         [onlinePhotoCardsView setCards:@[noInternetCard]];
+        onlinePhotoCardsView.isLoading = NO;
         if (mapillaryCardsView)
         {
-            mapillaryCardsView.isLoading = NO;
             [mapillaryCardsView setCards:@[noInternetCard]];
+            mapillaryCardsView.isLoading = NO;
         }
     };
     
     mapillaryCardsView.isLoading = YES;
-    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards) {
-        weakSelf.wikiCardsReady = YES;
-        [weakSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
-    } onFailureNoCache:onFailureNoCache];
+    [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        strongSelf.wikiCardsReady = !requestFailed;
+        strongSelf->_wikiCardsRequestFailed = requestFailed;
+        [strongSelf sendNearbyOtherImagesRequest:cards onFailureNoCache:onFailureNoCache];
+    }];
+}
+
+- (NoInternetCard *)createOnlinePhotosNoInternetCard
+{
+    NoInternetCard *noInternetCard = [NoInternetCard new];
+    __weak __typeof(self) weakSelf = self;
+    noInternetCard.onTryAgainAction = ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+
+        if (AFNetworkReachabilityManager.sharedManager.isReachable)
+        {
+            strongSelf.wikiCardsReady = NO;
+            strongSelf->_otherCardsReady = NO;
+            strongSelf->_wikiCardsRequestFailed = NO;
+            strongSelf->_cmPlaceRequestFailed = NO;
+            [strongSelf startLoadingImages];
+        }
+    };
+    return noInternetCard;
 }
 
 - (NSURLSession *)onlineAndMapillarySession

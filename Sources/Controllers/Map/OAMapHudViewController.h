@@ -106,7 +106,7 @@
 - (void) updateBottomContolMarginsForHeight;
 
 - (CGFloat) getHudMinTopOffset;
-- (CGFloat) getHudTopOffset;
+- (CGFloat)hudTopOffset;
 - (CGFloat) getHudMinBottomOffset;
 - (CGFloat) getHudBottomOffset;
 

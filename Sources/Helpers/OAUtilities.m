@@ -1319,9 +1319,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         {
             [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
-        else if (remove && [filePath containsString:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR]])
+        else if (remove && [filePath.stringByDeletingLastPathComponent isEqualToString:[self importTempPath]])
         {
-            [NSFileManager.defaultManager removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR] error:nil];
+            [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
         else
         {
@@ -1334,6 +1334,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
             }
         }
     }
+}
+
++ (NSString *)importTempPath
+{
+    return [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR];
 }
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion
@@ -1438,6 +1443,8 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
     for (NSString *file in tmpDirectory) {
+        if ([file isEqualToString:TEMP_DIR])
+            continue;
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
     }
 }
@@ -1553,20 +1560,22 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
-+ (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url
++ (NSDictionary<NSString *, NSString *> *)parseUrlQuery:(NSURL *)url
 {
-    NSMutableDictionary<NSString *, NSString *> *queryStrings = [[NSMutableDictionary alloc] init];
-    for (NSString *qs in [url.query componentsSeparatedByString:@"&"]) {
-        // Get the parameter name
-        NSString *key = [[qs componentsSeparatedByString:@"="] objectAtIndex:0];
-        // Get the parameter value
-        NSString *value = [[qs componentsSeparatedByString:@"="] objectAtIndex:1];
-        value = [value stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-        value = [value stringByRemovingPercentEncoding];
-        
-        queryStrings[key] = value;
+    if (!url) return @{};
+
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+    // Replace '+' with '%20' so that NSURLComponents decodes them as spaces
+    components.percentEncodedQuery = [components.percentEncodedQuery stringByReplacingOccurrencesOfString:@"+" withString:@"%20"];
+
+    NSMutableDictionary<NSString *, NSString *> *queryStrings = [NSMutableDictionary dictionary];
+    for (NSURLQueryItem *item in components.queryItems)
+    {
+        if (item.name.length > 0 && item.value != nil)
+            queryStrings[item.name] = item.value;
     }
-    return [NSDictionary dictionaryWithDictionary:queryStrings];
+
+    return [queryStrings copy];
 }
 
 + (CLLocation *)parseLatLon:(NSString *)latLon

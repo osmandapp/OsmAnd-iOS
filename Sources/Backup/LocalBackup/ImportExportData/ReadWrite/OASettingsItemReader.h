@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithItem:(ObjectType)item;
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error;
 
++ (void) performPreferenceWrites:(void (^)(void))writes;
+
 @end
 
 NS_ASSUME_NONNULL_END

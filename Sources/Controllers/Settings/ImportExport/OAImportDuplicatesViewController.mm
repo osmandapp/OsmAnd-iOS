@@ -252,6 +252,15 @@
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
+                else if ([currentItem isKindOfClass:QuickActionButtonState.class])
+                {
+                    QuickActionButtonState *buttonState = (QuickActionButtonState *)currentItem;
+                    item[@"label"] = [buttonState getName];
+                    item[@"icon"] = [buttonState getIcon];
+                    item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorActive];
+                    item[@"description"] = @"";
+                    item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
+                }
                 else if ([currentItem isKindOfClass:OAPOIUIFilter.class])
                 {
                     OAPOIUIFilter *filter = (OAPOIUIFilter *)currentItem;
@@ -474,7 +483,7 @@
 {
     NSMutableArray<NSMutableArray *> *duplicates = [NSMutableArray array];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickAction *> *actions = [NSMutableArray array];
+    NSMutableArray *actions = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSources = [NSMutableArray array];
     NSMutableArray<NSString *> *renderFilesList = [NSMutableArray array];
@@ -491,8 +500,8 @@
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
             [profiles addObject: (OAApplicationModeBean *)object];
-        else if ([object isKindOfClass:OAQuickAction.class])
-            [actions addObject: (OAQuickAction *)object];
+        else if ([object isKindOfClass:OAQuickAction.class] || [object isKindOfClass:QuickActionButtonState.class])
+            [actions addObject:object];
         if ([object isKindOfClass:OAPOIUIFilter.class])
             [filters addObject: (OAPOIUIFilter *)object];
         else if ([object isKindOfClass:OATileSource.class])

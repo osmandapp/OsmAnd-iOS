@@ -95,7 +95,7 @@ final class SharedTravelBookmarks: NSObject, TravelBookmarks {
 enum SharedTravelArticles {
 
     private static let appBySharedArticle =
-        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>.weakToWeakObjects()
+        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>(keyOptions: [.weakMemory, .objectPointerPersonality], valueOptions: .weakMemory)
     private static let lock = NSLock()
 
     // MARK: - Articles

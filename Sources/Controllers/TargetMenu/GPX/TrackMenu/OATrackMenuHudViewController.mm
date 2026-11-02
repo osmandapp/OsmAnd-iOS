@@ -637,18 +637,25 @@
                 [[[NSURLSession sharedSession] dataTaskWithURL:imageURL
                                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
                 {
+                    if (!weakSelf)
+                        return;
+
                     BOOL successfulResponse = ![response isKindOfClass:NSHTTPURLResponse.class]
                         || (((NSHTTPURLResponse *)response).statusCode >= 200 && ((NSHTTPURLResponse *)response).statusCode < 300);
                     UIImage *image = !error && successfulResponse ? [UIImage imageWithData:data] : nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        weakSelf.isImageDownloadFinished = YES;
-                        weakSelf.isImageDownloadSucceed = image != nil;
-                        if (!weakSelf.isViewVisible)
+                        __strong __typeof(weakSelf) strongSelf = weakSelf;
+                        if (!strongSelf)
+                            return;
+
+                        strongSelf.isImageDownloadFinished = YES;
+                        strongSelf.isImageDownloadSucceed = image != nil;
+                        if (!strongSelf.isViewVisible)
                         {
-                            weakSelf.cachedImage = image;
+                            strongSelf.cachedImage = image;
                             NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:[sectionData.subjects indexOfObject:cellData]
-                                                                             inSection:[weakSelf.tableData.subjects indexOfObject:sectionData]];
-                            [weakSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
+                                                                             inSection:[strongSelf.tableData.subjects indexOfObject:sectionData]];
+                            [strongSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
                                                       withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                     });

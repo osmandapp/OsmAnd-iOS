@@ -325,6 +325,9 @@ extension WidgetType {
     static let tripRecordingMovingTime = WidgetType(ordinal: 70, id: "trip_recording_moving_time", title: localizedString("trip_recording_moving_time"), descr: localizedString("trip_recording_moving_time_widget_description"), iconName: "widget_track_recording_moving_time", group: .tripRecording, defaultPanel: .rightPanel)
     static let OBDAltBatteryVoltage = WidgetType(ordinal: 71, id: "obd_battery_voltage_adapter", title: localizedString("obd_alt_battery_voltage"), descr: localizedString("obd_alt_battery_voltage_desc"), iconName: "widget_obd_adapter_voltage", group: .vehicleMetrics, defaultPanel: .rightPanel)
     
+    static let inclinometerPitch = WidgetType(ordinal: 72, id: "inclinometer_pitch", title: localizedString("inclinometer_pitch"), descr: localizedString("map_widget_inclinometer_pitch_desc"), iconName: "widget_inclinometer_pitch", group: .inclinometer, defaultPanel: .rightPanel)
+    static let inclinometerRoll = WidgetType(ordinal: 73, id: "inclinometer_roll", title: localizedString("inclinometer_roll"), descr: localizedString("map_widget_inclinometer_roll_desc"), iconName: "widget_inclinometer_roll", group: .inclinometer, defaultPanel: .rightPanel)
+    
     static let values = [nextTurn,
                          smallNextTurn,
                          secondNextTurn,
@@ -410,6 +413,8 @@ extension WidgetType {
                          tripRecordingAverageSlope,
                          tripRecordingMaxSpeed,
                          tripRecordingMovingTime,
-                         OBDAltBatteryVoltage
+                         OBDAltBatteryVoltage,
+                         inclinometerPitch,
+                         inclinometerRoll
     ]
 }

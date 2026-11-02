@@ -95,6 +95,8 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         addWidgetInfo(.sunset)
         addWidgetInfo(.glideTarget)
         addWidgetInfo(.glideAverage)
+        addWidgetInfo(.inclinometerPitch)
+        addWidgetInfo(.inclinometerRoll)
     }
     
     private func addWidgetInfo(_ widgetType: WidgetType) {

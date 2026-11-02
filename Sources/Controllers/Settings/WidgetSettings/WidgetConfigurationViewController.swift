@@ -176,6 +176,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             slider.numberFormatterOverride = formatter
             slider.selectedMinimum = Float(item.integer(forKey: InclinometerWidget.minValueKey))
             slider.selectedMaximum = Float(item.integer(forKey: InclinometerWidget.maxValueKey))
+            // OARangeSliderCell mirrors the whole slider for RTL, so mirror the value labels back to keep the text readable
+            let labelTransform = slider.isDirectionRTL() ? CATransform3DMakeScale(-1, 1, 1) : CATransform3DIdentity
+            for labelKey in ["minLabel", "maxLabel"] {
+                (slider.value(forKey: labelKey) as? CALayer)?.transform = labelTransform
+            }
             outCell = cell
         } else if item.cellType == InclinometerThresholdsLegendCell.cellIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: InclinometerThresholdsLegendCell.cellIdentifier, for: indexPath) as! InclinometerThresholdsLegendCell

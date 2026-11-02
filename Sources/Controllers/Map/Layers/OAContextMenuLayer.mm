@@ -484,7 +484,7 @@
         [targetPoints addObject:targetPoint];
     }
 
-    return targetPoints;
+    return [targetPoints copy];
 }
 
 - (BOOL) showContextMenu:(CGPoint)touchPoint showUnknownLocation:(BOOL)showUnknownLocation forceHide:(BOOL)forceHide

@@ -22,6 +22,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoriteGroup.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OAPOIHistoryType.h"
@@ -610,6 +611,27 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 [self showToolbar:filter];
                 [self dismissViewControllerAnimated:YES completion:nil];
             }
+            else if ([searchPhrase isLastWord:EOAObjectTypeFavoriteGroup])
+            {
+                OAFavoriteGroup *group = (OAFavoriteGroup *)[searchPhrase getLastSelectedWord].result.object;
+                if (group.points.count == 0)
+                    return;
+                CLLocationCoordinate2D topLeft = CLLocationCoordinate2DMake(-90, 180);
+                CLLocationCoordinate2D bottomRight = CLLocationCoordinate2DMake(90, -180);
+                for (OAFavoriteItem *point in group.points)
+                {
+                    const auto location = point.favorite->getLatLon();
+                    topLeft.latitude = MAX(topLeft.latitude, location.latitude);
+                    topLeft.longitude = MIN(topLeft.longitude, location.longitude);
+                    bottomRight.latitude = MIN(bottomRight.latitude, location.latitude);
+                    bottomRight.longitude = MAX(bottomRight.longitude, location.longitude);
+                }
+                OAMapPanelViewController *map = OARootViewController.instance.mapPanel;
+                [self dismissViewControllerAnimated:YES completion:^{
+                    [map displayAreaOnMap:topLeft bottomRight:bottomRight maxZoom:PREFERRED_FAVORITE_ZOOM
+                               screenBBox:map.view.bounds.size bottomInset:0 leftInset:0 topInset:0];
+                }];
+            }
             else
             {
                 OASearchWord *word = [searchPhrase getLastSelectedWord];
@@ -748,7 +770,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
         if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
         {
-            barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != EOAObjectTypePoiType);
+            barActionButtonVisible = barActionButtonVisible && (word && word.result && word.getType != EOAObjectTypePoiType
+                && word.getType != EOAObjectTypeFavoriteGroup);
         }
         if (barActionButtonVisible)
         {

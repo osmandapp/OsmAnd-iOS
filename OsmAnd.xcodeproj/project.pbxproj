@@ -2214,6 +2214,8 @@
 		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
 		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
 		D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */; };
+		D609152ABC68498BBF4CC2FE /* OASharedSearchAppAPIs.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */; };
+		D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5777,6 +5779,9 @@
 		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
 		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
 		D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPanelMenuRestorationTests.mm; sourceTree = "<group>"; };
+		77CF376424AD4290B198F52E /* OASharedSearchAppAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchAppAPIs.h; sourceTree = "<group>"; };
+		B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIs.mm; sourceTree = "<group>"; };
+		CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIsTest.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -7866,6 +7871,8 @@
 				131B21973693155434C4DE9A /* OASharedSearchObjects.mm */,
 				EC1120949C22910240627B12 /* OASharedSearchUICore.h */,
 				EF3256B89A6764BD72367316 /* OASharedSearchUICore.mm */,
+				B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */,
+				77CF376424AD4290B198F52E /* OASharedSearchAppAPIs.h */,
 				DA5A7A4226C563A000F274C7 /* OASearchCoreAPI.h */,
 				DA5A7A3126C563A000F274C7 /* OASearchCoreAPI.mm */,
 				DA5A7A3926C563A000F274C7 /* OASearchCoreFactory.h */,
@@ -10377,6 +10384,7 @@
 				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
 				EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */,
 				5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */,
+				CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */,
 				B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */,
 			);
 			path = Search;
@@ -13416,6 +13424,7 @@
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
 				9E5CEDCDF8EB26CAB2F729E4 /* OASharedSearchObjects.mm in Sources */,
 				33884E8AFB7A506793AB8824 /* OASharedSearchUICore.mm in Sources */,
+				D609152ABC68498BBF4CC2FE /* OASharedSearchAppAPIs.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
@@ -13854,6 +13863,7 @@
 				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
 				A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */,
 				5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */,
+				D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */,
 				0D8544693BE51C1DE2A67275 /* OASharedSearchUICoreTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,

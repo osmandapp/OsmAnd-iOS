@@ -58,10 +58,12 @@ final class DownloadingListHelper: NSObject, DownloadingCellResourceHelperDelega
         cell.imgView.image = UIImage.templateImageNamed("ic_custom_multi_download")
         cell.imgView.tintColor = .iconColorActive
         
-        var title = localizedString("downloading") + ": "
+        var title = localizedString("downloading")
         let tasks = getDownloadingTasks()
-        if let downloadingTask = tasks.first(where: { $0.state == .running }) {
-            title += downloadingTask.title
+        if let downloadingTask = tasks.first(where: { $0.state == .running }),
+           let taskTitle = downloadingTask.title,
+           !taskTitle.isEmpty {
+            title += ": " + taskTitle
         }
         cell.textView.text = title
         

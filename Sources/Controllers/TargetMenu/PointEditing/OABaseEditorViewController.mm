@@ -441,8 +441,8 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     // An empty icon means Original, including the initial selection for a new folder.
     _selectedIconName = self.editIconName ?: @"";
     self.editIconName = _selectedIconName;
+    // Mixed point icons may display Original without changing the folder's saved default.
     [_poiIconCollectionHandler setIconName:_selectedIconName];
-    self.editIconName = [self appearanceIconName];
 }
 
 - (void)setupBackgroundIcons

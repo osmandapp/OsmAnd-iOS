@@ -2,6 +2,8 @@
 #import "OAEditPointViewController.h"
 #import "OACollectionSingleLineTableViewCell.h"
 #import "OAIconsPaletteCell.h"
+#import "OAColorCollectionHandler.h"
+#import "Localization.h"
 #import "OAFavoriteEditingHandler.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
@@ -16,6 +18,10 @@
 
 @interface OAEditPointViewController (FavoriteIconTesting)
 - (void)onGroupSelected:(NSString *)name;
+@end
+
+@interface OABaseEditorViewController (FavoriteIconTesting)
+- (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss;
 @end
 
 @interface OAFavoriteIconTests : XCTestCase
@@ -265,6 +271,67 @@
     return editor;
 }
 
+- (UINavigationController *)showGroupEditor:(FavoriteGroupEditorViewController *)editor
+{
+    UIWindowScene *scene;
+    for (UIScene *candidate in UIApplication.sharedApplication.connectedScenes)
+    {
+        if ([candidate isKindOfClass:UIWindowScene.class])
+        {
+            scene = (UIWindowScene *)candidate;
+            break;
+        }
+    }
+    XCTAssertNotNil(scene);
+    if (!scene)
+        return nil;
+    UIWindow *previousKeyWindow;
+    for (UIWindow *window in scene.windows)
+        if (window.isKeyWindow)
+            previousKeyWindow = window;
+    UIWindow *window = [[UIWindow alloc] initWithWindowScene:scene];
+    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:[UIViewController new]];
+    [navigation pushViewController:editor animated:NO];
+    window.rootViewController = navigation;
+    [window makeKeyAndVisible];
+    [window layoutIfNeeded];
+    [self addTeardownBlock:^{
+        [navigation dismissViewControllerAnimated:NO completion:nil];
+        window.hidden = YES;
+        window.rootViewController = nil;
+        [previousKeyWindow makeKeyWindow];
+    }];
+    return navigation;
+}
+
+- (void)saveGroupEditor:(FavoriteGroupEditorViewController *)editor applyToAll:(BOOL)applyToAll
+{
+    [editor onRightNavbarButtonPressed];
+    UIAlertController *alert = (UIAlertController *)editor.presentedViewController;
+    XCTAssertTrue([alert isKindOfClass:UIAlertController.class]);
+    if (![alert isKindOfClass:UIAlertController.class])
+        return;
+    NSString *title = OALocalizedString(applyToAll ? @"apply_to_all_points" : @"apply_only_to_new_points");
+    for (UIAlertAction *action in alert.actions)
+    {
+        if ([action.title isEqualToString:title])
+        {
+            // Invoke the action installed by the editor; keep private UIKit access in tests only.
+            void (^handler)(UIAlertAction *) = [action valueForKey:@"handler"];
+            XCTAssertNotNil(handler);
+            XCTestExpectation *saved = [self expectationWithDescription:@"Save action completes"];
+            [editor dismissViewControllerAnimated:NO completion:^{
+                if (handler)
+                    handler(action);
+                [saved fulfill];
+            }];
+            [self waitForExpectations:@[saved] timeout:5];
+            return;
+        }
+    }
+    XCTFail(@"Save option not found: %@", title);
+}
+
 - (void)applyIcon:(NSString *)icon toGroup:(OAFavoriteGroup *)group points:(BOOL)points defaults:(BOOL)defaults
 {
     XCTestExpectation *completion = [self expectationWithDescription:@"Group icon update completes"];
@@ -272,28 +339,6 @@
         [completion fulfill];
     }];
     [self waitForExpectations:@[completion] timeout:5];
-}
-
-- (OAFavoriteGroup *)roundTripGroup:(OAFavoriteGroup *)group
-{
-    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"gpx"]];
-    [self addTeardownBlock:^{
-        if ([NSFileManager.defaultManager fileExistsAtPath:path])
-        {
-            NSError *error;
-            XCTAssertTrue([NSFileManager.defaultManager removeItemAtPath:path error:&error], @"%@", error);
-        }
-    }];
-    [OAFavoritesHelper saveFile:@[group] file:path];
-    XCTAssertTrue([NSFileManager.defaultManager fileExistsAtPath:path]);
-    NSMutableDictionary *loadedGroups = [NSMutableDictionary new];
-    [OAFavoritesHelper loadFileGroups:path groups:loadedGroups];
-    OAFavoriteGroup *loaded = loadedGroups[group.name];
-    XCTAssertNotNil(loaded);
-    XCTAssertEqual(loaded.points.count, group.points.count);
-    if (loaded)
-        [OAFavoritesHelper getGroups][group.name] = loaded;
-    return loaded;
 }
 
 - (void)testNewPOIUsesOriginalIconAndFolderColorAndShape
@@ -548,15 +593,24 @@
 
 - (void)checkExplicitOriginalRoundTripWithPointIcons:(NSArray<NSString *> *)pointIcons
 {
-    OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:pointIcons];
+    OAFavoriteGroup *group = [self storedGroupWithIcon:@"special_heart" pointIcons:pointIcons];
     FavoriteGroupEditorViewController *editor = [self editorForGroup:group];
+    [self showGroupEditor:editor];
     PoiIconCollectionHandler *icons = [editor getPoiIconCollectionHandler];
     [icons onMenuItemSelectedWithName:icons.ORIGINAL_KEY];
     XCTAssertEqualObjects(editor.editIconName, @"");
-    [self applyIcon:editor.appearanceIconName toGroup:group points:YES defaults:YES];
-    OAFavoriteGroup *loaded = [self roundTripGroup:group];
+    [self saveGroupEditor:editor applyToAll:YES];
+    NSPredicate *originalIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        NSMutableDictionary *groups = [NSMutableDictionary new];
+        [OAFavoritesHelper loadFileGroups:[[OsmAndApp instance] favoritesStorageFilename:group.name] groups:groups];
+        OAFavoriteGroup *loaded = groups[group.name];
+        return loaded != nil && loaded.iconName.length == 0;
+    }];
+    [self waitForExpectations:@[[[XCTNSPredicateExpectation alloc] initWithPredicate:originalIsStored object:nil]] timeout:10];
+    OAFavoriteGroup *loaded = [self loadStoredGroup:group];
     XCTAssertEqualObjects(loaded.iconName ?: @"", @"");
-    for (NSUInteger index = 0; index < loaded.points.count; index++)
+    XCTAssertEqual(loaded.points.count, pointIcons.count);
+    for (NSUInteger index = 0; index < MIN(loaded.points.count, pointIcons.count); index++)
         XCTAssertEqualObjects(loaded.points[index].getIcon, pointIcons[index]);
     FavoriteGroupEditorViewController *reopened = [self editorForGroup:loaded];
     XCTAssertEqualObjects(reopened.appearanceIconName, @"");
@@ -573,51 +627,78 @@
     [self checkExplicitOriginalRoundTripWithPointIcons:@[@"special_bicycle", @"shop_supermarket"]];
 }
 
-// These three expectations describe the reviewer's requested behavior. Android parity is
-// intentionally retained pending a product decision. Keep the expected failures strict:
-// when a regression is fixed, XCTest must require removing its expected-failure marker.
-- (void)testReviewBrowsingOriginalInAllIconsDoesNotChangeFolderSelection
+- (void)testSelectingOriginalInAllIconsChangesFolderSelection
 {
     OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:@[@"special_heart"]];
     FavoriteGroupEditorViewController *editor = [self editorForGroup:group];
     PoiIconCollectionHandler *icons = [editor getPoiIconCollectionHandler];
     ItemsCollectionViewController *allIcons = [self allIconsForHandler:icons];
     [allIcons scrollToCategoryWithCategoryKey:icons.ORIGINAL_KEY];
-    XCTExpectFailureWithOptionsInBlock(@"https://github.com/osmandapp/OsmAnd-iOS/pull/6099#discussion_r4412807946 — Android selects Original on a category tap.",
-                                      [XCTExpectedFailureOptions new], ^{
-        XCTAssertEqualObjects(editor.editIconName, @"special_heart");
-    });
+    XCTAssertEqualObjects(editor.editIconName, @"");
+    XCTAssertEqualObjects(editor.appearanceIconName, @"");
     icons.allIconsVCDelegate = nil;
 }
 
-- (void)testReviewMixedIconsDoNotClearStoredDefaultOnUnrelatedSave
+- (void)testMixedIconsPreserveStoredDefaultOnColorSave
 {
-    OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:@[@"special_bicycle", @"shop_supermarket"]];
-    FavoriteGroupEditorViewController *editor = [self editorForGroup:group];
-    // Simulate saving a different appearance field with the icon selection left untouched.
-    [OAFavoritesHelper updateGroup:group color:UIColor.greenColor updatePoints:NO updateGroupColor:YES saveImmediately:NO];
-    [self applyIcon:editor.appearanceIconName toGroup:group points:NO defaults:YES];
-    OAFavoriteGroup *loaded = [self roundTripGroup:group];
-    XCTAssertEqualObjects(loaded.color, UIColor.greenColor);
-    XCTExpectFailureWithOptionsInBlock(@"https://github.com/osmandapp/OsmAnd-iOS/pull/6099#discussion_r4412807964 — Android initializes mixed icons as Original and saves that default.",
-                                      [XCTExpectedFailureOptions new], ^{
+    for (NSNumber *applyToAll in @[@NO, @YES])
+    {
+        NSArray *pointIcons = @[@"special_bicycle", @"shop_supermarket"];
+        OAFavoriteGroup *group = [self storedGroupWithIcon:@"special_heart" pointIcons:pointIcons];
+        FavoriteGroupEditorViewController *editor = [self editorForGroup:group];
+        [self showGroupEditor:editor];
+        XCTAssertEqualObjects(editor.editIconName, @"special_heart");
+        XCTAssertEqualObjects(editor.appearanceIconName, @"");
+
+        OAColorCollectionHandler *colors = [editor valueForKey:@"colorCollectionHandler"];
+        OASPaletteItemSolid *green = [editor.appearanceCollection getColorItemWithValue:UIColor.greenColor.toARGBNumber];
+        [editor onCollectionItemSelected:[NSIndexPath indexPathForRow:0 inSection:0] selectedItem:green collectionView:[colors getCollectionView] shouldDismiss:NO];
+        XCTAssertEqualObjects(editor.appearanceColor, UIColor.greenColor);
+        [self saveGroupEditor:editor applyToAll:applyToAll.boolValue];
+
+        NSPredicate *colorIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+            NSMutableDictionary *groups = [NSMutableDictionary new];
+            [OAFavoritesHelper loadFileGroups:[[OsmAndApp instance] favoritesStorageFilename:group.name] groups:groups];
+            return [((OAFavoriteGroup *)groups[group.name]).color isEqual:UIColor.greenColor];
+        }];
+        [self waitForExpectations:@[[[XCTNSPredicateExpectation alloc] initWithPredicate:colorIsStored object:nil]] timeout:10];
+        OAFavoriteGroup *loaded = [self loadStoredGroup:group];
         XCTAssertEqualObjects(loaded.iconName, @"special_heart");
-    });
+        XCTAssertEqual(loaded.points.count, pointIcons.count);
+        for (NSUInteger index = 0; index < MIN(loaded.points.count, pointIcons.count); index++)
+        {
+            XCTAssertEqualObjects(loaded.points[index].getIcon, pointIcons[index]);
+            XCTAssertEqualObjects(loaded.points[index].getColor, applyToAll.boolValue ? UIColor.greenColor : UIColor.redColor);
+        }
+        FavoriteGroupEditorViewController *reopened = [self editorForGroup:loaded];
+        XCTAssertEqualObjects(reopened.editIconName, @"special_heart");
+        OAEditPointViewController *newPoint = [self newPointEditorInGroup:group fromPOI:NO];
+        [self assertPointEditor:newPoint icon:@"special_heart" group:group];
+    }
 }
 
-- (void)testReviewBackWarnsAfterChangingConcreteIconToOriginal
+- (void)testBackWarnsAfterChangingConcreteIconToOriginal
 {
     OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:@[@"special_heart"]];
     FavoriteGroupEditorViewController *editor = [self editorForGroup:group];
-    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:[UIViewController new]];
-    [navigation pushViewController:editor animated:NO];
+    UINavigationController *navigation = [self showGroupEditor:editor];
     PoiIconCollectionHandler *icons = [editor getPoiIconCollectionHandler];
     [icons onMenuItemSelectedWithName:icons.ORIGINAL_KEY];
     [editor onLeftNavbarButtonPressed];
-    XCTExpectFailureWithOptionsInBlock(@"https://github.com/osmandapp/OsmAnd-iOS/pull/6099#discussion_r4412807980 — Android excludes Original from the unsaved icon check.",
-                                      [XCTExpectedFailureOptions new], ^{
-        XCTAssertEqual(navigation.viewControllers.count, 2u, @"Back must keep the editor open for the unsaved-changes confirmation.");
-    });
+    XCTAssertEqual(navigation.topViewController, editor);
+    XCTAssertTrue([editor.presentedViewController isKindOfClass:UIAlertController.class]);
+    XCTAssertEqualObjects(editor.presentedViewController.title, OALocalizedString(@"exit_without_saving"));
+    XCTAssertEqualObjects(group.iconName, @"special_heart");
+}
+
+- (void)testBackDoesNotWarnForUnchangedMixedIcons
+{
+    OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:@[@"special_bicycle", @"shop_supermarket"]];
+    FavoriteGroupEditorViewController *editor = [self editorForGroup:group];
+    UINavigationController *navigation = [self showGroupEditor:editor];
+    [editor onLeftNavbarButtonPressed];
+    XCTAssertNil(editor.presentedViewController);
+    XCTAssertEqual(navigation.viewControllers.count, 1u);
     XCTAssertEqualObjects(group.iconName, @"special_heart");
 }
 

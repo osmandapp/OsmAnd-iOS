@@ -157,8 +157,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         if let color = appearanceColor(), color != (lastAppliedColor ?? favoriteGroup.color) {
             return true
         }
-        let iconName = appearanceIconName()
-        if !iconName.isEmpty && !IconCollectionHandler.iconNamesMatch(iconName, lastAppliedIconName ?? favoriteGroup.iconName ?? "") {
+        if isIconNameChanged(lastAppliedIconName ?? favoriteGroup.iconName) {
             return true
         }
         if appearanceBackgroundIconName() != nil && isBackgroundIconNameChanged(lastAppliedBackgroundIconName ?? favoriteGroup.backgroundType) {
@@ -186,7 +185,8 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
     
     private func editPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
         view.endEditing(true)
-        OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: appearanceIconName(), updatePoints: updatePoints, updateGroupIcon: updateGroupValues, saveImmediately: false) {
+        let updateGroupIcon = updateGroupValues && isIconNameChanged(favoriteGroup?.iconName)
+        OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: appearanceIconName(), updatePoints: updatePoints, updateGroupIcon: updateGroupIcon, saveImmediately: false) {
             self.finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
         }
     }

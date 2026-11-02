@@ -279,6 +279,7 @@
 #import "OATitleIconProgressbarCell.h"
 #import "OAIconsCollectionViewCell.h"
 #import "OARangeSlider.h"
+#import "OARangeSliderCell.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OARouteStatisticsModeCell.h"
 #import "OARouteInfoCell.h"

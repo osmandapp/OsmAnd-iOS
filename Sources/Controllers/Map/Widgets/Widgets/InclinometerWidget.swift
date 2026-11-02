@@ -14,6 +14,15 @@ import AudioToolbox
 final class InclinometerWidget: OASimpleWidget, InclinometerListener {
 
     static let calibrationRowKey = "inclinometer_calibration"
+    // Thresholds slider row and its legend row, rendered by WidgetConfigurationViewController
+    static let thresholdsRowKey = "inclinometer_thresholds"
+    static let legendRowKey = "inclinometer_thresholds_legend"
+    static let minPrefKey = "min_pref"
+    static let maxPrefKey = "max_pref"
+    static let minValueKey = "min_value"
+    static let maxValueKey = "max_value"
+    static let rangeMinKey = "range_min"
+    static let rangeMaxKey = "range_max"
 
     private static let noValue = "—"
     private static let zoneHysteresisDegrees: Float = 1
@@ -25,7 +34,7 @@ final class InclinometerWidget: OASimpleWidget, InclinometerListener {
     private static let arrowRight = "\u{25B6}"
     private static let arrowLeft = "\u{25C0}"
 
-    private enum TiltZone: Int, Comparable {
+    enum TiltZone: Int, Comparable {
         case safe, warning, critical
 
         var color: UIColor {
@@ -243,10 +252,23 @@ final class InclinometerWidget: OASimpleWidget, InclinometerListener {
         let alertsSection = data.createNewSection()
         alertsSection.headerText = localizedString("shared_string_alerts")
         alertsSection.footerText = localizedString("inclinometer_sound_alert_desc")
-        addAngleRow(to: alertsSection, title: localizedString("inclinometer_warning_angle"), pref: widgetState.warningAnglePref,
-                    appMode: appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
-        addAngleRow(to: alertsSection, title: localizedString("inclinometer_critical_angle"), pref: widgetState.criticalAnglePref,
-                    appMode: appMode, widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
+        let warningAngle = angleValue(widgetState.warningAnglePref, appMode: appMode,
+                                      widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate)
+        let criticalAngle = max(warningAngle, angleValue(widgetState.criticalAnglePref, appMode: appMode,
+                                                         widgetConfigurationParams: widgetConfigurationParams, isCreate: isCreate))
+        // one slider with two thumbs, the legend row below shows the picked angles
+        let sliderRow = alertsSection.createNewRow()
+        sliderRow.cellType = OARangeSliderCell.getIdentifier()
+        sliderRow.key = Self.thresholdsRowKey
+        sliderRow.setObj(widgetState.warningAnglePref, forKey: Self.minPrefKey)
+        sliderRow.setObj(widgetState.criticalAnglePref, forKey: Self.maxPrefKey)
+        sliderRow.setObj(warningAngle, forKey: Self.minValueKey)
+        sliderRow.setObj(criticalAngle, forKey: Self.maxValueKey)
+        sliderRow.setObj(InclinometerWidgetState.minThresholdAngle, forKey: Self.rangeMinKey)
+        sliderRow.setObj(InclinometerWidgetState.maxThresholdAngle, forKey: Self.rangeMaxKey)
+        let legendRow = alertsSection.createNewRow()
+        legendRow.cellType = InclinometerThresholdsLegendCell.cellIdentifier
+        legendRow.key = Self.legendRowKey
         let soundRow = alertsSection.createNewRow()
         soundRow.cellType = OASwitchTableViewCell.getIdentifier()
         soundRow.title = localizedString("inclinometer_sound_alert")
@@ -268,32 +290,13 @@ final class InclinometerWidget: OASimpleWidget, InclinometerListener {
         guard item.key == Self.calibrationRowKey else {
             return false
         }
-        let sheet = UIAlertController(title: localizedString("inclinometer_calibration"),
-                                      message: localizedString("inclinometer_calibration_desc"),
-                                      preferredStyle: .actionSheet)
-        sheet.addAction(UIAlertAction(title: localizedString(sensor.isCalibrated ? "inclinometer_recalibrate" : "inclinometer_calibrate"),
-                                      style: .default) { [weak self, weak viewController] _ in
-            guard let self, let viewController else { return }
-            // the settings screen may be the only reader of the sensor, give it a moment to deliver a value
-            self.sensor.requestUpdates(self)
-            let saved = self.sensor.calibrate()
-            OAUtilities.showToast(localizedString(saved ? "inclinometer_calibration_saved" : "inclinometer_sensor_unavailable"),
-                                  details: nil, duration: 2, in: viewController.view)
-            viewController.onWidgetStateChanged()
-        })
-        if sensor.isCalibrated {
-            sheet.addAction(UIAlertAction(title: localizedString("inclinometer_reset_calibration"), style: .destructive) { [weak self, weak viewController] _ in
-                self?.sensor.resetCalibration()
-                viewController?.onWidgetStateChanged()
-            })
+        guard let calibrationViewController = InclinometerCalibrationViewController() else {
+            return true
         }
-        sheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        if let popover = sheet.popoverPresentationController {
-            popover.sourceView = viewController.view
-            popover.sourceRect = CGRect(x: viewController.view.bounds.midX, y: viewController.view.bounds.midY, width: 0, height: 0)
-            popover.permittedArrowDirections = []
+        calibrationViewController.onCalibrationChanged = { [weak viewController] in
+            viewController?.onWidgetStateChanged()
         }
-        viewController.present(sheet, animated: true)
+        viewController.navigationController?.pushViewController(calibrationViewController, animated: true)
         return true
     }
 
@@ -302,13 +305,7 @@ final class InclinometerWidget: OASimpleWidget, InclinometerListener {
         if !sensor.isSensorAvailable {
             return localizedString("inclinometer_sensor_unavailable")
         }
-        guard let offset = sensor.calibrationOffset else {
-            return localizedString("inclinometer_not_calibrated")
-        }
-        let offsetText = String(format: localizedString("inclinometer_calibration_offset"),
-                                formatOffset(offset.pitch), formatOffset(offset.roll))
-        return String(format: localizedString("ltr_or_rtl_combine_via_bold_point"),
-                      localizedString("inclinometer_calibrated"), offsetText)
+        return localizedString(sensor.isCalibrated ? "inclinometer_calibrated" : "inclinometer_not_calibrated")
     }
 
     static func formatOffset(_ degrees: Float) -> String {
@@ -316,35 +313,17 @@ final class InclinometerWidget: OASimpleWidget, InclinometerListener {
         return String(format: "%.1f°", rounded)
     }
 
-    private func addAngleRow(to section: OATableSectionData, title: String, pref: OACommonLong, appMode: OAApplicationMode,
-                             widgetConfigurationParams: [String: Any]?, isCreate: Bool) {
-        let row = section.createNewRow()
-        row.cellType = OAValueTableViewCell.getIdentifier()
-        row.key = "value_pref"
-        row.title = title
-        row.setObj(pref, forKey: "pref")
-        var currentValue = Int(pref.defValue)
+    private func angleValue(_ pref: OACommonLong, appMode: OAApplicationMode,
+                            widgetConfigurationParams: [String: Any]?, isCreate: Bool) -> Int {
         if let param = Self.widgetParam(widgetConfigurationParams, pref: pref) {
             if let value = param as? Int {
-                currentValue = value
-            } else if let string = param as? String, let value = Int(string) {
-                currentValue = value
+                return value
             }
-        } else if !isCreate {
-            currentValue = pref.get(appMode)
+            if let string = param as? String, let value = Int(string) {
+                return value
+            }
         }
-        row.setObj(Self.formatThreshold(currentValue), forKey: "value")
-
-        let sliderRow = OATableRowData()
-        sliderRow.key = "values"
-        sliderRow.cellType = OASegmentSliderTableViewCell.getIdentifier()
-        sliderRow.title = title
-        var values = [Int: String]()
-        for angle in InclinometerWidgetState.thresholdAngles {
-            values[angle] = Self.formatThreshold(angle)
-        }
-        sliderRow.setObj(values, forKey: "values")
-        row.setObj([sliderRow], forKey: "possible_values")
+        return isCreate ? Int(pref.defValue) : pref.get(appMode)
     }
 
     private func unitsPossibleValues() -> [OATableRowData] {
@@ -380,7 +359,7 @@ final class InclinometerWidget: OASimpleWidget, InclinometerListener {
         return widgetConfigurationParams[key]
     }
 
-    private static func formatThreshold(_ degrees: Int) -> String {
+    static func formatThreshold(_ degrees: Int) -> String {
         "\(degrees)°"
     }
 }

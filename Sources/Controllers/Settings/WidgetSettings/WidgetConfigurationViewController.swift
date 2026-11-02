@@ -52,6 +52,8 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
         addCell(OAButtonTableViewCell.reuseIdentifier)
+        addCell(OARangeSliderCell.reuseIdentifier)
+        tableView.register(InclinometerThresholdsLegendCell.self, forCellReuseIdentifier: InclinometerThresholdsLegendCell.cellIdentifier)
     }
     
     override func generateData() {
@@ -144,6 +146,46 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 cell.leftIconVisibility(false)
             }
             cell.titleLabel.text = item.title
+            outCell = cell
+        } else if item.cellType == OARangeSliderCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OARangeSliderCell.reuseIdentifier, for: indexPath) as! OARangeSliderCell
+            cell.selectionStyle = .none
+            let rangeMin = item.integer(forKey: InclinometerWidget.rangeMinKey)
+            let rangeMax = item.integer(forKey: InclinometerWidget.rangeMaxKey)
+            cell.minLabel.text = nil
+            cell.maxLabel.text = nil
+            cell.minValueLabel.text = InclinometerWidget.formatThreshold(rangeMin)
+            cell.maxValueLabel.text = InclinometerWidget.formatThreshold(rangeMax)
+            let slider = cell.rangeSlider!
+            slider.delegate = self
+            slider.tag = indexPath.section << 10 | indexPath.row
+            slider.minValue = Float(rangeMin)
+            slider.maxValue = Float(rangeMax)
+            slider.enableStep = true
+            slider.step = 1
+            slider.hideLabels = false
+            slider.labelPosition = .above
+            slider.minLabelFont = UIFont.preferredFont(forTextStyle: .footnote)
+            slider.maxLabelFont = UIFont.preferredFont(forTextStyle: .footnote)
+            slider.minLabelColour = .textColorPrimary
+            slider.maxLabelColour = .textColorPrimary
+            slider.tintColorBetweenHandles = .iconColorActive
+            let formatter = NumberFormatter()
+            formatter.maximumFractionDigits = 0
+            formatter.positiveSuffix = "°"
+            slider.numberFormatterOverride = formatter
+            slider.selectedMinimum = Float(item.integer(forKey: InclinometerWidget.minValueKey))
+            slider.selectedMaximum = Float(item.integer(forKey: InclinometerWidget.maxValueKey))
+            outCell = cell
+        } else if item.cellType == InclinometerThresholdsLegendCell.cellIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: InclinometerThresholdsLegendCell.cellIdentifier, for: indexPath) as! InclinometerThresholdsLegendCell
+            let (warning, critical) = inclinometerThresholds(inSection: indexPath.section)
+            cell.configure(warningTitle: localizedString("inclinometer_warning_angle"),
+                           warningValue: InclinometerWidget.formatThreshold(warning),
+                           warningColor: InclinometerWidget.TiltZone.warning.color,
+                           criticalTitle: localizedString("inclinometer_critical_angle"),
+                           criticalValue: InclinometerWidget.formatThreshold(critical),
+                           criticalColor: InclinometerWidget.TiltZone.critical.color)
             outCell = cell
         } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
@@ -589,5 +631,57 @@ extension WidgetConfigurationViewController {
         attributedString.insert(attachmentString, at: 0)
         
         return attributedString
+    }
+}
+
+// MARK: Thresholds range slider
+extension WidgetConfigurationViewController: TTRangeSliderDelegate {
+
+    func rangeSlider(_ sender: TTRangeSlider!, didChangeSelectedMinimumValue selectedMinimum: Float, andMaximumValue selectedMaximum: Float) {
+        let indexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
+        let item = tableData.item(for: indexPath)
+        guard item.key == InclinometerWidget.thresholdsRowKey,
+              let minPref = item.obj(forKey: InclinometerWidget.minPrefKey) as? OACommonLong,
+              let maxPref = item.obj(forKey: InclinometerWidget.maxPrefKey) as? OACommonLong else {
+            return
+        }
+        let minValue = Int(selectedMinimum.rounded())
+        let maxValue = Int(selectedMaximum.rounded())
+        item.setObj(minValue, forKey: InclinometerWidget.minValueKey)
+        item.setObj(maxValue, forKey: InclinometerWidget.maxValueKey)
+        if !createNew {
+            minPref.set(minValue, mode: selectedAppMode)
+            maxPref.set(maxValue, mode: selectedAppMode)
+        }
+        widgetConfigurationParams?[minPref.key] = String(minValue)
+        widgetConfigurationParams?[maxPref.key] = String(maxValue)
+
+        // the legend follows the slider
+        for row in 0..<Int(tableData.rowCount(UInt(indexPath.section))) {
+            let legendIndexPath = IndexPath(row: row, section: indexPath.section)
+            if tableData.item(for: legendIndexPath).key == InclinometerWidget.legendRowKey,
+               let cell = tableView.cellForRow(at: legendIndexPath) as? InclinometerThresholdsLegendCell {
+                cell.updateValues(warning: InclinometerWidget.formatThreshold(minValue),
+                                  critical: InclinometerWidget.formatThreshold(maxValue))
+            }
+        }
+    }
+
+    // The angles picked on the thresholds slider of the same section
+    private func inclinometerThresholds(inSection section: Int) -> (Int, Int) {
+        for row in 0..<Int(tableData.rowCount(UInt(section))) {
+            let item = tableData.item(for: IndexPath(row: row, section: section))
+            if item.key == InclinometerWidget.thresholdsRowKey {
+                return (item.integer(forKey: InclinometerWidget.minValueKey), item.integer(forKey: InclinometerWidget.maxValueKey))
+            }
+        }
+        return (0, 0)
+    }
+
+    func didEndTouches(in sender: TTRangeSlider!) {
+        if !createNew {
+            widgetInfo.widget.updateInfo()
+            onWidgetStateChangedAction?()
+        }
     }
 }

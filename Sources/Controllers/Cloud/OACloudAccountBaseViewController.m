@@ -69,7 +69,8 @@
     _tapRecognizer.numberOfTapsRequired = 1;
     [self setupTableFooterView];
     [self applyLocalization];
-    _inputText = [OAAppSettings.sharedManager.backupUserEmail get];
+    if ([self needEmailValidation])
+        _inputText = [OAAppSettings.sharedManager.backupUserEmail get];
     [self generateData];
     
     self.tableView.dataSource = self;

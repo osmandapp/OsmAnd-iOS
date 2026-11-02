@@ -153,6 +153,7 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
 
 - (void)sceneWillEnterForeground:(UIScene *)scene
 {
+    [self moveRootViewControllerToWindowIfNeeded];
     [[self appDelegate] applicationWillEnterForeground];
 }
 
@@ -217,6 +218,19 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
 
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
+}
+
+// All window scenes share one root controller: it lives in the window that came to the foreground last
+- (void)moveRootViewControllerToWindowIfNeeded
+{
+    OAAppDelegate *appDelegate = [self appDelegate];
+    OARootViewController *rootViewController = appDelegate.rootViewController;
+    if (appDelegate.appLaunchEvent != AppLaunchEventSetupRoot
+        || !rootViewController.isViewLoaded
+        || rootViewController.view.window == _window)
+        return;
+
+    [self configureLaunchEventSetupRootState];
 }
 
 - (void)configureServices

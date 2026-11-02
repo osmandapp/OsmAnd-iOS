@@ -41,6 +41,20 @@ final class InclinometerCalibrationViewController: OABaseButtonsViewController, 
         sensor.removeListener(self)
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            updateBottomButtons()
+            tableView.reloadData()
+        }
+    }
+
+    // iPhone in landscape: a smaller level and the buttons in one row, so that the level,
+    // the live values and the buttons fit on the screen together
+    private var isCompactHeight: Bool {
+        traitCollection.verticalSizeClass == .compact
+    }
+
     // MARK: - Base UI
 
     override func getTitle() -> String {
@@ -109,6 +123,7 @@ final class InclinometerCalibrationViewController: OABaseButtonsViewController, 
             cell.selectionStyle = .none
             cell.backgroundColor = .clear
             cell.levelView.setInclination(pitch: currentPitch, roll: currentRoll)
+            cell.setCompact(isCompactHeight)
             return cell
         } else if item.cellType == OAValueTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
@@ -136,7 +151,7 @@ final class InclinometerCalibrationViewController: OABaseButtonsViewController, 
     // MARK: - Bottom buttons
 
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
-        .vertical
+        isCompactHeight ? .horizontal : .vertical
     }
 
     override func getTopButtonTitle() -> String? {
@@ -144,7 +159,11 @@ final class InclinometerCalibrationViewController: OABaseButtonsViewController, 
     }
 
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        sensor.isSensorAvailable ? .purple : .inactive
+        guard sensor.isSensorAvailable else {
+            return .inactive
+        }
+        // buttons in a row are drawn as text buttons on a clear background
+        return isCompactHeight ? .graySimple : .purple
     }
 
     override func getBottomButtonTitle() -> String? {
@@ -220,21 +239,36 @@ final class InclinometerLevelCell: UITableViewCell {
 
     static let cellIdentifier = "InclinometerLevelCell"
     private static let levelSize: CGFloat = 200
+    private static let compactLevelSize: CGFloat = 120
+    private static let padding: CGFloat = 16
+    private static let compactPadding: CGFloat = 8
 
     let levelView = InclinometerLevelView()
+    private var sizeConstraint: NSLayoutConstraint!
+    private var topConstraint: NSLayoutConstraint!
+    private var bottomConstraint: NSLayoutConstraint!
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .clear
         levelView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(levelView)
+        sizeConstraint = levelView.widthAnchor.constraint(equalToConstant: Self.levelSize)
+        topConstraint = levelView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.padding)
+        bottomConstraint = levelView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Self.padding)
         NSLayoutConstraint.activate([
-            levelView.widthAnchor.constraint(equalToConstant: Self.levelSize),
-            levelView.heightAnchor.constraint(equalToConstant: Self.levelSize),
+            sizeConstraint,
+            levelView.heightAnchor.constraint(equalTo: levelView.widthAnchor),
             levelView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            levelView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            levelView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            topConstraint,
+            bottomConstraint
         ])
+    }
+
+    func setCompact(_ compact: Bool) {
+        sizeConstraint.constant = compact ? Self.compactLevelSize : Self.levelSize
+        topConstraint.constant = compact ? Self.compactPadding : Self.padding
+        bottomConstraint.constant = -(compact ? Self.compactPadding : Self.padding)
     }
 
     required init?(coder: NSCoder) {

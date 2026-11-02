@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
  made by OASharedSearchObjects.
 
  The app picks it at start with the useSharedSearch setting, and the spatial search or the classic one
- with useSpatialTextSearch. The search apis of the app (favorites, history, gpx and the rest) are not
- registered with it yet.
+ with useSpatialTextSearch. App sources (favorites, history, GPX and downloadable regions)
+ register their shared implementations through the same facade.
  */
 @interface OASharedSearchUICore : OASearchUICore
 

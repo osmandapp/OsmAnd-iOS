@@ -426,6 +426,8 @@
             OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
             return item.typeName && item.name ? item.typeName : OALocalizedString(@"shared_string_history");
         }
+        case EOAObjectTypeFavoriteGroup:
+            return OALocalizedString(@"shared_string_favorites");
         case EOAObjectTypeWpt:
         {
             return searchResult.localeRelatedObjectName;

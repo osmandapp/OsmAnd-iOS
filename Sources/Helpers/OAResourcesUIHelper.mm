@@ -729,6 +729,61 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 @implementation OAResourcesUIHelper
 
++ (nullable OARepositoryResourceItem *)uninstalledMapFromResourceIds:(NSArray<NSString *> *)ids
+                                                              region:(OAWorldRegion *)region
+{
+    for (NSString *resourceId in ids)
+    {
+        const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
+            if (!isInstalled)
+            {
+                NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                    inRegion:region
+                                                              withRegionName:YES
+                                                            withResourceType:NO];
+                NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                         inRegion:region.superregion
+                                                                   withRegionName:YES
+                                                                 withResourceType:NO];
+                NSString *composeTitle = [self composeSearchMapTitleWithPart:regionTitle andPart:superregionTitle];
+                return [self createSearchMapItemWithResource:resource region:region title:composeTitle];
+            }
+        }
+    }
+    return nil;
+}
+
++ (NSString *)composeSearchMapTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2
+{
+    if (part1.length > 0 && part2.length > 0)
+    {
+        return [NSString stringWithFormat:@"%@, %@", part1, part2];
+    }
+    return part1.length > 0 ? part1 : part2;
+}
+
++ (OARepositoryResourceItem *)createSearchMapItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
+                                                                region:(OAWorldRegion *)region
+                                                                 title:(NSString *)title
+{
+    OARepositoryResourceItem *item = [OARepositoryResourceItem new];
+    item.resourceId = resource->id;
+    item.resourceType = resource->type;
+    item.title = title;
+    item.resource = resource;
+    NSString *downloadKey = [@"resource:" stringByAppendingString:resource->id.toNSString()];
+    item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:downloadKey] firstObject];
+    item.size = resource->size;
+    item.sizePkg = resource->packageSize;
+    item.worldRegion = region;
+    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+    return item;
+}
+
+
 + (NSString *)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
                      inRegion:(OAWorldRegion *)region
                withRegionName:(BOOL)includeRegionName

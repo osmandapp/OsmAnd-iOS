@@ -9,6 +9,8 @@
 #import "OAFavoritesHelper.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAAppSettings.h"
+#import "OAAppDelegate.h"
+#import "OARootViewController.h"
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
@@ -26,6 +28,7 @@
 
 @interface OAFavoriteIconTests : XCTestCase
 @property(nonatomic) NSMutableArray<UITableViewCell *> *boundIconCells;
+@property(nonatomic) UINavigationController *groupNavigationController;
 @end
 
 @implementation OAFavoriteIconTests
@@ -33,6 +36,7 @@
 - (void)tearDown
 {
     self.boundIconCells = nil;
+    self.groupNavigationController = nil;
     [super tearDown];
 }
 
@@ -63,7 +67,17 @@
 
 - (void)waitForApplicationUntil:(NSDate *)deadline completion:(void (^)(NSError *))completion
 {
-    if ([OsmAndApp instance].initialized)
+    UIApplication *application = UIApplication.sharedApplication;
+    OAAppDelegate *appDelegate = (OAAppDelegate *)application.delegate;
+    UIWindow *window = application.mainWindow;
+    UIViewController *root = window.rootViewController;
+    BOOL hasApplicationRoot = appDelegate.rootViewController != nil
+        && (root == appDelegate.rootViewController
+            || ([root isKindOfClass:UINavigationController.class]
+                && [((UINavigationController *)root).viewControllers containsObject:appDelegate.rootViewController]));
+    if ([OsmAndApp instance].initialized && !appDelegate.isAppInitializing
+        && window != nil && window.windowScene == application.mainScene && hasApplicationRoot
+        && root.viewIfLoaded.window == window && root.transitionCoordinator == nil)
     {
         NSError *storageError = [self isolateFavoritesStorage];
         if (storageError)
@@ -95,7 +109,7 @@
     else if (deadline.timeIntervalSinceNow <= 0)
     {
         completion([NSError errorWithDomain:@"FavoriteIconTests" code:1
-                                  userInfo:@{NSLocalizedDescriptionKey: @"Application initialization timed out"}]);
+                                  userInfo:@{NSLocalizedDescriptionKey: @"Application main window initialization timed out"}]);
     }
     else
     {
@@ -271,65 +285,65 @@
     return editor;
 }
 
-- (UINavigationController *)showGroupEditor:(FavoriteGroupEditorViewController *)editor
+- (void)waitForTransitionOfViewController:(UIViewController *)controller
 {
-    UIWindowScene *scene;
-    for (UIScene *candidate in UIApplication.sharedApplication.connectedScenes)
+    id<UIViewControllerTransitionCoordinator> transition = controller.transitionCoordinator;
+    if (transition)
     {
-        if ([candidate isKindOfClass:UIWindowScene.class])
-        {
-            scene = (UIWindowScene *)candidate;
-            break;
-        }
+        XCTestExpectation *completed = [self expectationWithDescription:@"View controller transition completed"];
+        [transition animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+            [completed fulfill];
+        }];
+        [self waitForExpectations:@[completed] timeout:5];
     }
-    XCTAssertNotNil(scene);
-    if (!scene)
-        return nil;
-    UIWindow *previousKeyWindow;
-    for (UIWindow *window in scene.windows)
-        if (window.isKeyWindow)
-            previousKeyWindow = window;
-    UIWindow *window = [[UIWindow alloc] initWithWindowScene:scene];
-    UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:[UIViewController new]];
-    [navigation pushViewController:editor animated:NO];
-    window.rootViewController = navigation;
-    [window makeKeyAndVisible];
-    [window layoutIfNeeded];
-    [self addTeardownBlock:^{
-        [navigation dismissViewControllerAnimated:NO completion:nil];
-        window.hidden = YES;
-        window.rootViewController = nil;
-        [previousKeyWindow makeKeyWindow];
-    }];
-    return navigation;
 }
 
-- (void)saveGroupEditor:(FavoriteGroupEditorViewController *)editor applyToAll:(BOOL)applyToAll
+- (UINavigationController *)showGroupEditor:(FavoriteGroupEditorViewController *)editor
 {
-    [editor onRightNavbarButtonPressed];
-    UIAlertController *alert = (UIAlertController *)editor.presentedViewController;
-    XCTAssertTrue([alert isKindOfClass:UIAlertController.class]);
-    if (![alert isKindOfClass:UIAlertController.class])
-        return;
-    NSString *title = OALocalizedString(applyToAll ? @"apply_to_all_points" : @"apply_only_to_new_points");
-    for (UIAlertAction *action in alert.actions)
+    UIWindow *window = UIApplication.sharedApplication.mainWindow;
+    XCTAssertNotNil(window);
+    XCTAssertEqual(window.windowScene, UIApplication.sharedApplication.mainScene);
+    if (!window)
+        return nil;
+    if (!self.groupNavigationController)
     {
-        if ([action.title isEqualToString:title])
-        {
-            // Invoke the action installed by the editor; keep private UIKit access in tests only.
-            void (^handler)(UIAlertAction *) = [action valueForKey:@"handler"];
-            XCTAssertNotNil(handler);
-            XCTestExpectation *saved = [self expectationWithDescription:@"Save action completes"];
-            [editor dismissViewControllerAnimated:NO completion:^{
-                if (handler)
-                    handler(action);
-                [saved fulfill];
-            }];
-            [self waitForExpectations:@[saved] timeout:5];
-            return;
-        }
+        UIViewController *root = window.rootViewController;
+        XCTAssertNotNil(root);
+        UIViewController *presenter = root;
+        while (presenter.presentedViewController)
+            presenter = presenter.presentedViewController;
+        [self waitForTransitionOfViewController:presenter];
+        UINavigationController *navigation = [[UINavigationController alloc] initWithRootViewController:[UIViewController new]];
+        navigation.modalPresentationStyle = UIModalPresentationFullScreen;
+        [navigation pushViewController:editor animated:NO];
+        // Present in the main window without replacing its application root or key window.
+        [self addTeardownBlock:^{
+            [self waitForTransitionOfViewController:navigation];
+            [self waitForTransitionOfViewController:navigation.presentedViewController];
+            if (navigation.presentingViewController)
+            {
+                XCTestExpectation *dismissed = [self expectationWithDescription:@"Editor presentation dismissed"];
+                [presenter dismissViewControllerAnimated:NO completion:^{ [dismissed fulfill]; }];
+                [self waitForExpectations:@[dismissed] timeout:5];
+            }
+            XCTAssertNil(navigation.presentingViewController);
+            XCTAssertNil(presenter.presentedViewController);
+            XCTAssertEqual(window.rootViewController, root);
+            XCTAssertEqual(UIApplication.sharedApplication.mainWindow, window);
+        }];
+        self.groupNavigationController = navigation;
+        XCTestExpectation *presented = [self expectationWithDescription:@"Editor presented in main window"];
+        [presenter presentViewController:navigation animated:NO completion:^{ [presented fulfill]; }];
+        [self waitForExpectations:@[presented] timeout:5];
     }
-    XCTFail(@"Save option not found: %@", title);
+    else
+    {
+        [self waitForTransitionOfViewController:self.groupNavigationController];
+        [self.groupNavigationController setViewControllers:@[[UIViewController new], editor] animated:NO];
+    }
+    [window layoutIfNeeded];
+    XCTAssertEqual(editor.view.window, window);
+    return self.groupNavigationController;
 }
 
 - (void)applyIcon:(NSString *)icon toGroup:(OAFavoriteGroup *)group points:(BOOL)points defaults:(BOOL)defaults
@@ -599,7 +613,7 @@
     PoiIconCollectionHandler *icons = [editor getPoiIconCollectionHandler];
     [icons onMenuItemSelectedWithName:icons.ORIGINAL_KEY];
     XCTAssertEqualObjects(editor.editIconName, @"");
-    [self saveGroupEditor:editor applyToAll:YES];
+    [editor editPointsGroup:YES updateGroupValues:YES];
     NSPredicate *originalIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
         NSMutableDictionary *groups = [NSMutableDictionary new];
         [OAFavoritesHelper loadFileGroups:[[OsmAndApp instance] favoritesStorageFilename:group.name] groups:groups];
@@ -654,7 +668,7 @@
         OASPaletteItemSolid *green = [editor.appearanceCollection getColorItemWithValue:UIColor.greenColor.toARGBNumber];
         [editor onCollectionItemSelected:[NSIndexPath indexPathForRow:0 inSection:0] selectedItem:green collectionView:[colors getCollectionView] shouldDismiss:NO];
         XCTAssertEqualObjects(editor.appearanceColor, UIColor.greenColor);
-        [self saveGroupEditor:editor applyToAll:applyToAll.boolValue];
+        [editor editPointsGroup:applyToAll.boolValue updateGroupValues:YES];
 
         NSPredicate *colorIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
             NSMutableDictionary *groups = [NSMutableDictionary new];

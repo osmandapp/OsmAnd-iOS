@@ -183,7 +183,7 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         delegate?.addNewItem(withName: editName, iconName: editIconName, color: editColor, backgroundIconName: editBackgroundIconName)
     }
     
-    private func editPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
+    @objc func editPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
         view.endEditing(true)
         let updateGroupIcon = updateGroupValues && isIconNameChanged(favoriteGroup?.iconName)
         OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: appearanceIconName(), updatePoints: updatePoints, updateGroupIcon: updateGroupIcon, saveImmediately: false) {

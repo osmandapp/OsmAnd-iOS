@@ -298,13 +298,28 @@ static int TILE_SIZE = 256;
         {
             [renderedObject setIconRes:symbolIcon->content.toNSString()];
         }
-        if (symbolCaption != nullptr)
-        {
-            [renderedObject setName:symbolCaption->content.toNSString()];
-        }
+        BOOL stubCaption = NO;
         for (NSString *key in tags)
         {
             renderedObject.tags[key] = tags[key];
+            if ([key hasPrefix:@"osmand_"] && [key hasSuffix:@"_stub"])
+                stubCaption = YES;
+        }
+        if (symbolCaption != nullptr)
+        {
+            if (stubCaption)
+            {
+                const auto names = obfMapObject->getCaptionsInAllLanguages();
+                for (const auto& name : OsmAnd::rangeOf(OsmAnd::constOf(names)))
+                {
+                    [renderedObject setName:name.key().toNSString() name:name.value().toNSString()];
+                }
+                [renderedObject setName:obfMapObject->getCaptionInNativeLanguage().toNSString()];
+            }
+            else
+            {
+                [renderedObject setName:symbolCaption->content.toNSString()];
+            }
         }
         return renderedObject;
     }

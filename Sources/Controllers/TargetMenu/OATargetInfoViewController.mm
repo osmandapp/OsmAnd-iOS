@@ -174,8 +174,8 @@ static const NSInteger kOrderCoordinatesRow = 20000;
 {
     [self sortInfoRows];
     _calculatedWidth = 0;
-    [self.tableView reloadData];
     [self contentHeight:self.tableView.bounds.size.width];
+    [self.tableView reloadData];
 }
 
 - (BOOL) needBuildCoordinatesRow
@@ -808,6 +808,17 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         CGFloat rowHeight;
         if ([row.typeName isEqualToString:kCollapseDetailsRowType])
             continue;
+        if ([row.typeName isEqualToString:kShortDescriptionRowType])
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[_rows indexOfObjectIdenticalTo:row] inSection:0];
+            UITableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
+            cell.bounds = CGRectMake(0, 0, width - [OAUtilities getLeftMargin], cell.bounds.size.height);
+            [cell setNeedsLayout];
+            [cell layoutIfNeeded];
+            CGSize size = [cell.contentView systemLayoutSizeFittingSize:CGSizeMake(cell.contentView.bounds.size.width, UILayoutFittingCompressedSize.height) withHorizontalFittingPriority:UILayoutPriorityRequired verticalFittingPriority:UILayoutPriorityFittingSizeLevel];
+            row.height = ceil(size.height);
+            continue;
+        }
         if (row.isHtml)
         {
             rowHeight = 230.0;
@@ -910,6 +921,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         if (!strongSelf)
             return;
         // Reload at the final width, then update the outer scroll extent using the laid-out rows.
+        strongSelf->_calculatedWidth = 0;
         [strongSelf contentHeight:strongSelf.tableView.bounds.size.width];
         [strongSelf.tableView reloadData];
         [strongSelf.tableView layoutIfNeeded];
@@ -1866,17 +1878,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAAmenityInfoRow *info = _rows[indexPath.row];
-    if ([info.typeName isEqualToString:kShortDescriptionRowType] && info.height != ceil(cell.bounds.size.height))
-    {
-        info.height = ceil(cell.bounds.size.height);
-        [self calculateContentHeight];
-        [self.delegate contentHeightChanged];
-    }
-}
-
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
@@ -1890,9 +1891,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
-    if ([info.typeName isEqualToString:kShortDescriptionRowType])
-        return UITableViewAutomaticDimension;
-
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     return [self heightForInfoRow:info];
 }
@@ -1903,7 +1901,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     if (info.collapsable)
         [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
 
-    return [info.typeName isEqualToString:kShortDescriptionRowType] ? MAX(48.0, info.height) : info.height;
+    return info.height;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -22,6 +22,7 @@ final class SharedObfResources: NSObject {
     private var resourceIdsByPath: [String: String] = [:]
     private var useLiveForRouting = false
     private var cachedAmenitySearcher: AmenitySearcher?
+    private var generation: UInt64 = 0
     private var resourcesObserver: OAAutoObserverProxy?
 
     private override init() {
@@ -50,6 +51,7 @@ final class SharedObfResources: NSObject {
         }
         useLiveForRouting = OAAppSettings.sharedManager().useOsmLiveForRouting
         registry.setFiles(files: Array(files.values))
+        generation &+= 1
         cachedAmenitySearcher = nil
     }
 
@@ -86,6 +88,17 @@ final class SharedObfResources: NSObject {
             refreshFiles()
         }
         return registry.getRoutingMapFiles()
+    }
+
+    @objc func geocodingService() -> GeocodingService {
+        registry.getGeocodingService()
+    }
+
+    /// Changes after the registry has processed a resource refresh, independently of observer order.
+    @objc func currentGeneration() -> UInt64 {
+        lock.lock()
+        defer { lock.unlock() }
+        return generation
     }
 
     /// Returns the persistent POI repository for a registered resource.

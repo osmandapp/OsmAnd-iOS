@@ -149,7 +149,7 @@ final class SelectFavoriteGroupViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
 
         if item.key == RowKey.addNewGroup.rawValue {
-            guard let groupEditor = OAFavoriteGroupEditorViewController(new: ()) else { return }
+            guard let groupEditor = FavoriteGroupEditorViewController(new: ()) else { return }
             groupEditor.delegate = self
             showModalViewController(groupEditor)
         } else if item.key == RowKey.group.rawValue {

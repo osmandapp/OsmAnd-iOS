@@ -54,7 +54,7 @@
             if (listItems.count >= maximumItemCount)
                 break;
 
-            CPListItem *listItem = [[CPListItem alloc] initWithText:favoriteItem.favorite->getTitle().toNSString()
+            CPListItem *listItem = [[CPListItem alloc] initWithText:[favoriteItem getDisplayName]
                                                          detailText:[self calculateDistanceToItem:favoriteItem]
                                                               image:[favoriteItem getCompositeIcon]
                                                      accessoryImage:nil
@@ -98,7 +98,7 @@
             completionBlock();
         return;
     }
-    OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favoritePoint getName]];
+    OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[favoritePoint getDisplayName]];
     [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude] historyName:historyName];
     [self safePopToRootTemplateAnimated:YES];
 

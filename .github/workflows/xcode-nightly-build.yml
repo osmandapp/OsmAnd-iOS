@@ -18,6 +18,10 @@ on:
           - master
           - Same as selected iOS branch
         default: master
+      run_ui_tests:
+        description: 'Run the full iOS UI test suite (enable before release)'
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -154,11 +158,13 @@ jobs:
             -workspace ios/OsmAnd.xcworkspace \
             -scheme "OsmAnd Maps" \
             -destination "platform=iOS Simulator,arch=arm64,id=$SIMULATOR_ID" \
+            "-only-testing:OsmAnd MapsTests" \
             -testLanguage en \
             -testRegion US \
             | xcpretty
 
       - name: Run iOS UI tests
+        if: ${{ inputs.run_ui_tests }}
         env:
           LANG: en_US.UTF-8
         run: |

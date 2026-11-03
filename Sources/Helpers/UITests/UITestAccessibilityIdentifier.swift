@@ -9,11 +9,25 @@
 @objcMembers
 final class UITestAccessibilityIdentifier: NSObject {
 
-    enum ContextMenu {
-        static let container = "context_menu_container"
-        static let multiContainer = "multi_context_menu_container"
-        static let presentationState = "context_menu_presentation_test_state"
+    enum PlanRoute {
+        static let state = "plan_route_test_state"
+        static let sheet = "plan_route_sheet"
+        static let summary = "plan_route_summary"
+        static let points = "plan_route_points"
+        static let undo = "plan_route_undo"
+        static let redo = "plan_route_redo"
+        static let add = "plan_route_add"
+        static let close = "plan_route_close"
+        static let options = "plan_route_options"
+        static let apply = "plan_route_apply"
+        static let cancel = "plan_route_cancel"
 
+        static func point(_ index: Int) -> String {
+            "plan_route_point_\(index)"
+        }
+    }
+
+    enum ContextMenu {
         enum GPX {
             static let trackMenuTitle = "gpx_track_menu_title"
             static let waypointPrefix = "gpx_track_menu_waypoint_"
@@ -23,6 +37,10 @@ final class UITestAccessibilityIdentifier: NSObject {
                 waypointPrefix + title
             }
         }
+
+        static let container = "context_menu_container"
+        static let multiContainer = "multi_context_menu_container"
+        static let presentationState = "context_menu_presentation_test_state"
     }
 
     static var contextMenuContainer: String {
@@ -51,5 +69,9 @@ final class UITestAccessibilityIdentifier: NSObject {
 
     static func gpxTrackMenuWaypoint(_ title: String) -> String {
         ContextMenu.GPX.waypoint(title)
+    }
+
+    static func planRoutePointAction(_ key: String) -> String {
+        "plan_route_point_action_" + key
     }
 }

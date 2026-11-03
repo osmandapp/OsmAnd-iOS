@@ -83,6 +83,10 @@ NSString *normalizeString(const std::string &value) {
     return _hours->isOpenedForTimeV2(dateTime, OpeningHoursParser::OpeningHours::ALL_SEQUENCES);
 }
 
+- (BOOL)isOpened24_7At:(NSString *)dateTimeString {
+    return _hours->getCombinedInfo(parseDateTimeString(dateTimeString))->opened24_7;
+}
+
 - (NSString *)infoAt:(NSString *)dateTimeString {
     return [self infoAt:dateTimeString sequenceIndex:OpeningHoursParser::OpeningHours::ALL_SEQUENCES];
 }

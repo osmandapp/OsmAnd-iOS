@@ -2071,7 +2071,7 @@
 		FA6408792D3E845A005FD12D /* ImageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408782D3E845A005FD12D /* ImageCardCell.swift */; };
 		FA64087B2D3E88C0005FD12D /* MapillaryContributeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */; };
 		FA64087D2D3E8B96005FD12D /* MapillaryContributeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */; };
-		FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */; };
+		FA64087F2D3E8EDA005FD12D /* MapillaryImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */; };
 		FA6408872D3E908F005FD12D /* OAMapillaryImageCardWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6408862D3E908F005FD12D /* OAMapillaryImageCardWrapper.m */; };
 		FA64173B2CA5A57500982297 /* SharedLibExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64173A2CA5A57500982297 /* SharedLibExtension.swift */; };
 		FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */; };
@@ -5613,7 +5613,7 @@
 		FA6408782D3E845A005FD12D /* ImageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCardCell.swift; sourceTree = "<group>"; };
 		FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryContributeCard.swift; sourceTree = "<group>"; };
 		FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryContributeCell.swift; sourceTree = "<group>"; };
-		FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAMapillaryImageCard.swift; sourceTree = "<group>"; };
+		FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryImageCard.swift; sourceTree = "<group>"; };
 		FA6408852D3E908F005FD12D /* OAMapillaryImageCardWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryImageCardWrapper.h; sourceTree = "<group>"; };
 		FA6408862D3E908F005FD12D /* OAMapillaryImageCardWrapper.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = OAMapillaryImageCardWrapper.m; sourceTree = "<group>"; };
 		FA64173A2CA5A57500982297 /* SharedLibExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLibExtension.swift; sourceTree = "<group>"; };
@@ -10245,7 +10245,7 @@
 		DA5A80EC26C563A600F274C7 /* Mapillary */ = {
 			isa = PBXGroup;
 			children = (
-				FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */,
+				FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */,
 				DA5A80EE26C563A600F274C7 /* OAMapillaryImage.h */,
 				DA5A80F126C563A600F274C7 /* OAMapillaryImage.mm */,
 				CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */,
@@ -12947,7 +12947,7 @@
 				DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */,
 				FAAAADD82F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift in Sources */,
 				CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */,
-				FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */,
+				FA64087F2D3E8EDA005FD12D /* MapillaryImageCard.swift in Sources */,
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
 				2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */,
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,

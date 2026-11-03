@@ -9,8 +9,7 @@ DerivedData/*
 /.idea
 
 /Libraries/Charts/build
-/Packages/BRCybertron/Sources/BRCybertron/libxslt/libxslt
-/Packages/BRCybertron/Sources/BRCybertron/libxslt/libexslt
+/Packages/BRCybertron/
 
 *.xcscmblueprint
 /build

@@ -298,7 +298,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
             continue;
 
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = [point getName];
+        sr.localeName = [point getDisplayName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_OBJECT_PRIORITY;
         sr.objectType = EOAObjectTypeFavorite;
@@ -345,7 +345,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
             continue;
 
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = [point getName];
+        sr.localeName = [point getDisplayName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_CATEGORY_PRIORITY;
         sr.objectType = EOAObjectTypeFavorite;

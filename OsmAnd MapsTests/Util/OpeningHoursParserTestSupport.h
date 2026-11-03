@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSInteger)weekdayForDate:(NSDate *)date NS_SWIFT_NAME(weekday(for:));
 
 - (BOOL)isOpenedAt:(NSString *)dateTimeString;
+- (BOOL)isOpened24_7At:(NSString *)dateTimeString NS_SWIFT_NAME(isOpened24_7(at:));
 - (NSString *)infoAt:(NSString *)dateTimeString;
 - (NSString *)shortInfoAt:(NSString *)dateTimeString;
 - (NSString *)infoAt:(NSString *)dateTimeString sequenceIndex:(NSInteger)sequenceIndex;

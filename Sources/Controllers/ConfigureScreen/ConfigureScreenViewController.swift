@@ -78,7 +78,7 @@ class ConfigureScreenViewController: OABaseNavbarSubviewViewController, AppModeS
     override func createSubview() -> UIView {
         let segmentedControl = UISegmentedControl(items: ScreenLayoutMode.allCases.map { $0.title })
         let titleAttributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.scaledSystemFont(ofSize: 15, weight: .medium)
+            .font: UIFont.scaledSystemFont(ofSize: 15, weight: .medium, maximumSize: 20)
         ]
         segmentedControl.setTitleTextAttributes(titleAttributes, for: .normal)
         segmentedControl.selectedSegmentIndex = Int(screenLayoutMode.rawValue)

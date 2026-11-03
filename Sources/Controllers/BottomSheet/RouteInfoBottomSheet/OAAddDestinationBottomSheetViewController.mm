@@ -114,7 +114,7 @@
     for (OAFavoriteItem *item in favorites)
     {
         [arr addObject:@{
-            @"title" : [item getName],
+            @"title" : [item getDisplayName],
             @"descr" : [OAFavoriteGroup getDisplayName:[item getCategory]],
             @"color" : [item getColor],
             @"img" : ACImageNameIcCustomFavorites,
@@ -155,7 +155,7 @@
 - (NSArray<OAFavoriteItem *> *) getSortedFavorites
 {
     NSArray *sortedArray = [[OAFavoritesHelper getFavoriteItems] sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return [[obj1 getName].lowercaseString compare:[obj2 getName].lowercaseString];
+        return [[obj1 getDisplayName].lowercaseString compare:[obj2 getDisplayName].lowercaseString];
     }];
     return sortedArray;
 }
@@ -530,7 +530,7 @@
 {
     double latitude = item.favorite->getLatLon().latitude;
     double longitude = item.favorite->getLatLon().longitude;
-    NSString *title = item.favorite->getTitle().toNSString();
+    NSString *title = [item getDisplayName];
     
     if (_type == EOADestinationTypeStart)
         [_pointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:NO name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];

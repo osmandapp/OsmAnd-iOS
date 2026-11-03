@@ -594,21 +594,20 @@ std::string preferredLanguage;
 
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
-    OACommandBuilder *builder = [self getNewCommandPlayerToPlay];
-    if (builder != nil) {
-        if (!newRoute)
-        {
-            [[builder routeRecalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
-        }
-        else if ([_settings.speakRouteRecalculation get])
-        {
-            [[builder newRouteCalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
-        }
-        
-    }
-    else if (player == nil && (newRoute || [_settings.speakRouteRecalculation get]))
+    if (newRoute || [_settings.speakRouteRecalculation get])
     {
-        pendingCommand = [[OAVoiceCommandPending alloc] initWithType:((!newRoute) ? ROUTE_RECALCULATED : ROUTE_CALCULATED) voiceRouter:self];
+        OACommandBuilder *builder = [self getNewCommandPlayerToPlay];
+        if (builder != nil)
+        {
+            if (newRoute)
+                [[builder newRouteCalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
+            else
+                [[builder routeRecalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
+        }
+        else if (player == nil)
+        {
+            pendingCommand = [[OAVoiceCommandPending alloc] initWithType:(newRoute ? ROUTE_CALCULATED : ROUTE_RECALCULATED) voiceRouter:self];
+        }
     }
     if (newRoute)
     {

@@ -131,6 +131,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 - (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer;
 
 - (void) updateSegmentsForSnap;
+- (void) updateSegmentsForSnap:(BOOL)both;
 
 - (void) cancelSnapToRoad;
 

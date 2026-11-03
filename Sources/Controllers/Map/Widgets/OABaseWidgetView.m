@@ -18,6 +18,7 @@ NSString * const kWidgetPanelKey = @"widgetPanel";
     BOOL _nightMode;
     UIView *_separatorBottomView;
     UIView *_separatorRightView;
+    UIColor *_separatorColor;
     NSLayoutConstraint *_heightConstraint;
 }
 
@@ -45,6 +46,7 @@ NSString * const kWidgetPanelKey = @"widgetPanel";
 {
     _separatorBottomView = [[UIView alloc] init];
     _separatorBottomView.hidden = YES;
+    _separatorBottomView.backgroundColor = _separatorColor;
     [self addSubview:_separatorBottomView];
     
     _separatorBottomView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -57,6 +59,7 @@ NSString * const kWidgetPanelKey = @"widgetPanel";
     
     _separatorRightView = [UIView new];
     _separatorRightView.hidden = YES;
+    _separatorRightView.backgroundColor = _separatorColor;
     [self addSubview:_separatorRightView];
     
     _separatorRightView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -70,6 +73,7 @@ NSString * const kWidgetPanelKey = @"widgetPanel";
 
 - (void)updatesSeparatorsColor:(UIColor *)color
 {
+    _separatorColor = color;
     _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
 }
 

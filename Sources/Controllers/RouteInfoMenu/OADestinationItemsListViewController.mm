@@ -173,7 +173,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         }
 
         NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-            return [[obj1 getName].lowercaseString compare:[obj2 getName].lowercaseString];
+            return [[obj1 getDisplayName].lowercaseString compare:[obj2 getDisplayName].lowercaseString];
         }];
         [itemData.groupItems setArray:sortedArrayItems];
 
@@ -192,7 +192,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     [_sortedByDistFavoriteItems setArray:sortedArray];
 
     sortedArray = [_sortedByNameFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return [[obj1 getName] compare:[obj2 getName]];
+        return [[obj1 getDisplayName] compare:[obj2 getDisplayName]];
     }];
     [_sortedByNameFavoriteItems setArray:sortedArray];
 }
@@ -293,7 +293,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         if (cell)
         {
             OAFavoriteItem* item = [self getSortedFavoriteItem:indexPath];
-            [cell.titleView setText:item.favorite->getTitle().toNSString()];
+            [cell.titleView setText:[item getDisplayName]];
             cell.titleIcon.image = item.getCompositeIcon;
             
             [cell.distanceView setText:item.distance];
@@ -316,7 +316,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     if (cell)
     {
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-        [cell.titleView setText:item.favorite->getTitle().toNSString()];
+        [cell.titleView setText:[item getDisplayName]];
         cell.titleIcon.image = item.getCompositeIcon;
         
         [cell.distanceView setText:item.distance];
@@ -531,7 +531,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                 {
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
-                    [c.titleView setText:item.favorite->getTitle().toNSString()];
+                    [c.titleView setText:[item getDisplayName]];
                     c.titleIcon.image = item.getCompositeIcon;
                     
                     [c.distanceView setText:item.distance];

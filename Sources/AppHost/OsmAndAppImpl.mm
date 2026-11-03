@@ -1572,6 +1572,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
 - (void) onApplicationWillEnterForeground
 {
+    [InstallAttribution checkAndReport];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

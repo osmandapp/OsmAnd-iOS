@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) double longitude;
 @property (nonatomic, readonly, nullable) NSDate *timestampDate;
 @property (nonatomic, readonly) BOOL isVisible;
+@property (nonatomic, readonly) UIColor *color;
+@property (nonatomic, readonly) NSString *iconName;
+@property (nonatomic, readonly) NSString *backgroundIconName;
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
 - (UIImage *)icon;

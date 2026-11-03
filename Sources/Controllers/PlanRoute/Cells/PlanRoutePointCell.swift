@@ -55,6 +55,7 @@ final class PlanRoutePointCell: UITableViewCell {
         numberLabel.text = "\(point.indexInSegment + 1)"
         numberContainer.backgroundColor = tintColor
         titleLabel.text = point.name
+        titleLabel.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.point(point.index)
         subtitleLabel.text = subtitle(for: point)
         numberLabel.isAccessibilityElement = false
         subtitleLabel.isAccessibilityElement = false

@@ -525,6 +525,21 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     return unique;
 }
 
+- (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults
+{
+    return [self getCurrentSearchResults];
+}
+
+- (BOOL)hasMoreSpatialSearchResults
+{
+    return NO;
+}
+
+- (BOOL)showMoreSpatialSearchResults
+{
+    return NO;
+}
+
 - (NSArray<OASearchResult *> *) getCurrentSearchResults
 {
     return [NSArray arrayWithArray:_searchResults];
@@ -883,6 +898,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     [_apis addObject:api];
 }
 
+
+- (OASearchResultCollection *)createResultCollectionForPhrase:(OASearchPhrase *)phrase api:(id)api
+{
+    return [[OASearchResultCollection alloc] initWithPhrase:phrase];
+}
 
 - (OASearchResultCollection *) getCurrentSearchResult
 {

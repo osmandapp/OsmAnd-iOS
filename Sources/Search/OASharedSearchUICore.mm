@@ -599,6 +599,40 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     return [[self getCurrentSearchResults] mutableCopy];
 }
 
+- (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults
+{
+    @synchronized (self)
+    {
+        if (![_shared isSkipSorting])
+            return [self getCurrentSearchResults];
+        [self getCurrentSearchResults];
+        NSMutableArray<OASearchResult *> *results = [NSMutableArray array];
+        for (OASSearchResult *shared in [_shared getVisibleSpatialSearchResults])
+        {
+            OASearchResult *result = [_appResults objectForKey:shared];
+            if (result)
+                [results addObject:result];
+        }
+        return results;
+    }
+}
+
+- (BOOL)hasMoreSpatialSearchResults
+{
+    @synchronized (self)
+    {
+        return [_shared hasMoreSpatialSearchResults];
+    }
+}
+
+- (BOOL)showMoreSpatialSearchResults
+{
+    @synchronized (self)
+    {
+        return [_shared showMoreSpatialSearchResults];
+    }
+}
+
 - (OASearchResultCollection *)addSearchResults:(NSArray<OASearchResult *> *)sr resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
 {
     NSMutableArray<OASSearchResult *> *shared = [NSMutableArray arrayWithCapacity:sr.count];
@@ -620,10 +654,24 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
 
 - (OASearchResultCollection *)combineWithCollection:(OASearchResultCollection *)collection resort:(BOOL)resort removeDuplicates:(BOOL)removeDuplicates
 {
+    OASharedSearchResultCollection *other;
+    if ([collection isKindOfClass:OASharedSearchResultCollection.class])
+    {
+        other = (OASharedSearchResultCollection *)collection;
+    }
+    else
+    {
+        other = [[OASharedSearchResultCollection alloc] initWithPhrase:self.phrase];
+        [other addSearchResults:[collection getCurrentSearchResults] resortAll:NO removeDuplicates:NO];
+    }
     OASharedSearchResultCollection *combined = [[OASharedSearchResultCollection alloc] initWithShared:
-        [[OASSearchUICoreSearchResultCollection alloc] initWithPhrase:_shared.getPhrase]];
-    [combined addSearchResults:[self getCurrentSearchResults] resortAll:NO removeDuplicates:NO];
-    [combined addSearchResults:[collection getCurrentSearchResults] resortAll:resort removeDuplicates:removeDuplicates];
+        [_shared combineWithCollectionCollection:other.shared resort:resort removeDuplicates:removeDuplicates]];
+    for (OASearchResult *result in [[self getCurrentSearchResults] arrayByAddingObjectsFromArray:[collection getCurrentSearchResults]])
+    {
+        OASSearchResult *shared = [result toSharedResult];
+        if (![combined->_appResults objectForKey:shared])
+            [combined->_appResults setObject:result forKey:shared];
+    }
     return combined;
 }
 
@@ -788,6 +836,13 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
 - (void)setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrders
 {
     [_shared setActivePoiFiltersByOrderFilterOrders:filterOrders];
+}
+
+- (OASearchResultCollection *)createResultCollectionForPhrase:(OASearchPhrase *)phrase api:(id)api
+{
+    return [[OASharedSearchResultCollection alloc] initWithShared:
+        [[OASSearchUICoreSearchResultCollection alloc] initWithPhrase:((OASharedSearchPhrase *)phrase).shared
+                                                       skipSorting:[api isKindOfClass:OASSpatialTextSearchAPI.class]]];
 }
 
 - (OASearchResultCollection *)getCurrentSearchResult

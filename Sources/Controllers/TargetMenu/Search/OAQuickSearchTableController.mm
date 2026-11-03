@@ -670,6 +670,13 @@
     {
         switch (res.objectType)
         {
+            case EOAObjectTypeSuggestion:
+            {
+                OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:[item getName]
+                    tableView:tableView typeName:@"" icon:[UIImage templateImageNamed:[OAQuickSearchListItem getIconName:res]]];
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+                return cell;
+            }
             case EOAObjectTypeLocation:
             case EOAObjectTypeGpxTrack:
             {

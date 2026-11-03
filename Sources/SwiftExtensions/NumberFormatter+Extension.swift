@@ -25,14 +25,13 @@ extension NumberFormatter {
         return formatter
     }()
 
-    static func speedToleranceFormatter(for speed: Float) -> NumberFormatter {
+    static func speedToleranceFormatter(decimalPlaces: Int) -> NumberFormatter {
         let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.locale = Locale(identifier: OAUtilities.currentLang() ?? Locale.current.identifier)
         formatter.numberStyle = .decimal
         formatter.usesGroupingSeparator = false
-        formatter.maximumFractionDigits = 0
-        // Match Math.round: halfway values round toward positive infinity.
-        formatter.roundingMode = speed < 0 ? .halfDown : .halfUp
+        formatter.minimumFractionDigits = decimalPlaces
+        formatter.maximumFractionDigits = decimalPlaces
         return formatter
     }
 

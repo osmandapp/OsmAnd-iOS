@@ -31,10 +31,7 @@ final class SpeedLimitToleranceViewController: OABaseSettingsViewController {
         selectedValue = settings.speedLimitExceedKmh.get(appMode)
         let speeds = [appMode.minSpeedToleranceLimit(), appMode.maxSpeedToleranceLimit(), Float(selectedValue) / 3.6]
         let convertedValues = speeds.map { speed -> Float in
-            let valueUnitArray = NSMutableArray()
-            OAOsmAndFormatter.formattedSpeedTolerance(speed, speedSystem: speedFormat, hasFastSpeed: isSpeedToleranceBigRange, valueUnitArray: valueUnitArray)
-            let value = (valueUnitArray.firstObject as? String ?? "").replacingOccurrences(of: " ", with: "")
-            return NumberFormatter.localizedNumberFormatter.number(from: value)?.floatValue ?? 0
+            OAOsmAndFormatter.formattedSpeedToleranceValue(speed, speedSystem: speedFormat, hasFastSpeed: isSpeedToleranceBigRange).valueSrc
         }
         convertedLimitFrom = convertedValues[0]
         convertedLimitTo = convertedValues[1]
@@ -133,7 +130,7 @@ final class SpeedLimitToleranceViewController: OABaseSettingsViewController {
 
     private func formatValue(_ value: Float) -> String {
         let metersPerSecond = OAOsmAndFormatter.mpS(fromFormattedValue: value, speedSystem: speedFormat)
-        return OAOsmAndFormatter.formattedSpeedTolerance(metersPerSecond, speedSystem: speedFormat, hasFastSpeed: appMode.isSpeedToleranceBigRange(), valueUnitArray: nil)
+        return OAOsmAndFormatter.speedToleranceString(metersPerSecond, speedSystem: speedFormat, hasFastSpeed: appMode.isSpeedToleranceBigRange(), valueUnitArray: nil)
     }
 
     @objc private func onSliderChanged(_ slider: UISlider) {

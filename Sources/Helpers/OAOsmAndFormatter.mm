@@ -18,6 +18,28 @@
 
 static const int kSecondsInHour = 3600;
 
+@interface OASpeedToleranceValue : NSObject
+
+@property (nonatomic, readonly) float value;
+@property (nonatomic, readonly) NSInteger decimalPlaces;
+
+@end
+
+@implementation OASpeedToleranceValue
+
+- (instancetype)initWithValue:(float)value decimalPlaces:(NSInteger)decimalPlaces
+{
+    self = [super init];
+    if (self)
+    {
+        _value = value;
+        _decimalPlaces = decimalPlaces;
+    }
+    return self;
+}
+
+@end
+
 @implementation OAOsmAndFormatter
 
 static NSString * const _unitsKm = OALocalizedString(@"km");
@@ -531,12 +553,33 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
 }
 
-+ (NSString *)formattedSpeedTolerance:(float)metersperseconds
-                          speedSystem:(EOASpeedConstant)speedSystem
-                         hasFastSpeed:(BOOL)hasFastSpeed
-                       valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray
++ (NSString *)speedToleranceString:(float)metersperseconds
+                       speedSystem:(EOASpeedConstant)speedSystem
+                      hasFastSpeed:(BOOL)hasFastSpeed
+                    valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray
+{
+    FormattedValue *formattedValue = [self formattedSpeedToleranceValue:metersperseconds speedSystem:speedSystem hasFastSpeed:hasFastSpeed];
+    [valueUnitArray addObject:formattedValue.value];
+    [valueUnitArray addObject:formattedValue.unit];
+    return [OAUtilities formattedValue:formattedValue.value unit:formattedValue.unit];
+}
+
++ (FormattedValue *)formattedSpeedToleranceValue:(float)metersperseconds
+                                   speedSystem:(EOASpeedConstant)speedSystem
+                                  hasFastSpeed:(BOOL)hasFastSpeed
 {
     speedSystem = [self speedModeForPaceMode:speedSystem];
+    OASpeedToleranceValue *tolerance = [self calculateSpeedTolerance:metersperseconds speedSystem:speedSystem hasFastSpeed:hasFastSpeed];
+    NSNumberFormatter *formatter = [NSNumberFormatter speedToleranceFormatterWithDecimalPlaces:tolerance.decimalPlaces];
+    NSString *value = [formatter stringFromNumber:@(tolerance.value)];
+    NSString *unit = speedSystem == FEET_PER_SECOND ? _unitsfts : [OASpeedConstant toShortString:speedSystem];
+    return [[FormattedValue alloc] initWithValueSrc:tolerance.value value:value unit:unit];
+}
+
++ (OASpeedToleranceValue *)calculateSpeedTolerance:(float)metersperseconds
+                                     speedSystem:(EOASpeedConstant)speedSystem
+                                    hasFastSpeed:(BOOL)hasFastSpeed
+{
     float kmh = metersperseconds * 3.6f;
     float speed;
     switch (speedSystem)
@@ -562,27 +605,12 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         : speed >= 20 || hasFastSpeed;
     float roundingMultiplier = shouldRoundToInteger ? 1.f : 10.f;
 
-    NSNumberFormatter *formatter = [NSNumberFormatter speedToleranceFormatterFor:speed];
-    int roundedSpeed = [formatter stringFromNumber:@(speed * roundingMultiplier)].intValue;
-    float value = roundedSpeed / roundingMultiplier;
-
-    NSMutableArray<NSString *> *formattedValueAndUnit = [NSMutableArray array];
-    NSString *result = [self getFormattedSpeed:[self mpSFromFormattedValue:value speedSystem:speedSystem]
-                                  speedSystem:speedSystem
-                                        drive:hasFastSpeed
-                               valueUnitArray:formattedValueAndUnit];
-    if (!shouldRoundToInteger)
-    {
-        formatter.locale = [NSLocale localeWithLocaleIdentifier:OAUtilities.currentLang];
-        NSString *decimalSeparator = formatter.decimalSeparator;
-        if (![formattedValueAndUnit.firstObject containsString:decimalSeparator])
-        {
-            formattedValueAndUnit[0] = [formattedValueAndUnit.firstObject stringByAppendingFormat:@"%@%@", decimalSeparator, [formatter stringFromNumber:@0]];
-            result = [OAUtilities formattedValue:formattedValueAndUnit.firstObject unit:formattedValueAndUnit.lastObject];
-        }
-    }
-    [valueUnitArray addObjectsFromArray:formattedValueAndUnit];
-    return result;
+    float scaledSpeed = speed * roundingMultiplier;
+    float lowerInteger = floorf(scaledSpeed);
+    float upperInteger = ceilf(scaledSpeed);
+    // Choose the nearest integer; on a tie, choose the greater one, as Android Math.round does.
+    int roundedSpeed = scaledSpeed - lowerInteger < upperInteger - scaledSpeed ? lowerInteger : upperInteger;
+    return [[OASpeedToleranceValue alloc] initWithValue:roundedSpeed / roundingMultiplier decimalPlaces:shouldRoundToInteger ? 0 : 1];
 }
 
 + (EOASpeedConstant)speedModeForPaceMode:(EOASpeedConstant)speedSystem

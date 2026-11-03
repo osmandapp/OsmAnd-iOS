@@ -482,10 +482,7 @@ static NSDictionary *platformCompatibilityKeysDictionary = @{
         OACommonPreference *setting = [prefs objectForKey:key];
         if (setting && !setting.global && [setting isSetForMode:self.appMode])
         {
-            // Preserve the Float precision used by Android and the speed tolerance limits.
-            NSString *stringValue = setting == settings.defaultSpeed
-                ? [NSString stringWithFormat:@"%.9g", (float)[settings.defaultSpeed get:self.appMode]]
-                : [setting toStringValue:self.appMode];
+            NSString *stringValue = [setting toStringValue:self.appMode];
             if (stringValue)
             {
                 if (![self updateJSONWithPlatformCompatibilityKeys:json key:key value:stringValue])

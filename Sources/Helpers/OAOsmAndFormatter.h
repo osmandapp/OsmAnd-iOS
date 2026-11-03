@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OAAppSettings.h"
 
-@class OsmAndFormatterParams;
+@class OsmAndFormatterParams, FormattedValue;
 
 static const NSInteger METERS_IN_KILOMETER = 1000;
 static const CGFloat METERS_IN_ONE_MILE = 1609.344f;
@@ -63,7 +63,8 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
 + (NSString *)getFormattedSpeed:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem;
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
-+ (NSString *)formattedSpeedTolerance:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem hasFastSpeed:(BOOL)hasFastSpeed valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray;
++ (NSString *)speedToleranceString:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem hasFastSpeed:(BOOL)hasFastSpeed valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray;
++ (FormattedValue *)formattedSpeedToleranceValue:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem hasFastSpeed:(BOOL)hasFastSpeed;
 + (EOASpeedConstant)speedModeForPaceMode:(EOASpeedConstant)speedSystem;
 + (float)mpSFromFormattedValue:(float)value speedSystem:(EOASpeedConstant)speedSystem;
 + (NSString *)getFormattedAlt:(double)alt;

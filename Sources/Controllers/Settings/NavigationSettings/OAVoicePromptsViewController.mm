@@ -266,7 +266,7 @@
     {
         float selectedValue = [_settings.speedLimitExceedKmh get:self.appMode];
         EOASpeedConstant speedFormat = [OAOsmAndFormatter speedModeForPaceMode:[_settings.speedSystem get:self.appMode]];
-        value = [OAOsmAndFormatter formattedSpeedTolerance:selectedValue / 3.6f speedSystem:speedFormat hasFastSpeed:[self.appMode isSpeedToleranceBigRange] valueUnitArray:nil];
+        value = [OAOsmAndFormatter speedToleranceString:selectedValue / 3.6f speedSystem:speedFormat hasFastSpeed:[self.appMode isSpeedToleranceBigRange] valueUnitArray:nil];
     }
     else if ([item.key isEqualToString:@"repeatInstructions"])
     {

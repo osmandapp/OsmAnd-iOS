@@ -72,6 +72,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** The shared search's amenity as the app's model, field for field as parsePOIByAmenity makes it from the C++ one. */
 + (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity;
 
+/** Details can also represent objects without a searchable POI type. */
++ (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity filterTypes:(BOOL)filterTypes;
+
 - (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId;
 - (NSDictionary<NSString *, NSArray<OAPOI *> *> *)searchRouteMembers:(NSString *)multipleSearch;
 

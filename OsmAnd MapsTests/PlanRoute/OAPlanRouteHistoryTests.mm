@@ -197,7 +197,7 @@
         [[OASKLatLon alloc] initWithLatitude:pair.first.lat longitude:pair.first.lon],
         [[OASKLatLon alloc] initWithLatitude:pair.second.lat longitude:pair.second.lon]
     ];
-    OASRouteSegmentResult *segment = [OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:mode.getDefaultSpeed
+    OASRouteSegmentResult *segment = [OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[mode defaultSpeed]
                                                                                                          points:coordinates];
     self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:mode
                                                                           start:pair.first end:pair.second

@@ -286,6 +286,39 @@ static NSString *kPrecipContourStyleName;
     }
 }
 
+- (NSUnit *)getBandUnit:(OAApplicationMode *)mode
+{
+    if (mode == [OAAppSettings sharedManager].applicationMode.get)
+        return [self getBandUnit];
+
+    return [self isBandUnitAuto:mode] ? [self getDefaultBandUnit] : [_app.data getWeatherUnit:self.bandIndex mode:mode];
+}
+
+- (BOOL)setBandUnit:(NSUnit *)unit mode:(OAApplicationMode *)mode
+{
+    if (mode == [OAAppSettings sharedManager].applicationMode.get)
+        return [self setBandUnit:unit];
+
+    if (![[self getAvailableBandUnits] containsObject:unit])
+        return NO;
+
+    [_app.data setWeatherUnit:unit band:self.bandIndex mode:mode];
+    return YES;
+}
+
+- (BOOL)isBandUnitAuto:(OAApplicationMode *)mode
+{
+    return [_app.data getWeatherUnitAuto:self.bandIndex mode:mode];
+}
+
+- (void)setBandUnitAuto:(BOOL)unitAuto mode:(OAApplicationMode *)mode
+{
+    if (mode == [OAAppSettings sharedManager].applicationMode.get)
+        [self setBandUnitAuto:unitAuto];
+    else
+        [_app.data setWeatherUnitAuto:unitAuto band:self.bandIndex mode:mode];
+}
+
 - (NSString *)getIcon
 {
     switch (self.bandIndex)

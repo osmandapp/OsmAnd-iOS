@@ -33,7 +33,8 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     }
     
     var wheelSizeInMillimeters: Float?
-    
+    var appMode: OAApplicationMode?
+
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
     }()
@@ -96,7 +97,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 }
             }
             // Received Data
-            if let receivedData = device.getDataFields, !receivedData.isEmpty {
+            if let receivedData = device.getDataFields(appMode: appMode), !receivedData.isEmpty {
                 let receivedDataSection = tableData.createNewSection()
                 receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
                 receivedDataSection.key = SectionKey.receivedData.rawValue
@@ -254,7 +255,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
               !sensor.hasActualData(for: widgetType),
               let dataList = sensor.getLastSensorDataList(for: widgetType),
               let field = dataList.lazy.compactMap({ $0.getWidgetField(fieldType: widgetType) }).first,
-              let unit = field.getFormattedValue()?.unit,
+              let unit = field.getFormattedValue(appMode: appMode)?.unit,
               !unit.isEmpty else {
             return value
         }

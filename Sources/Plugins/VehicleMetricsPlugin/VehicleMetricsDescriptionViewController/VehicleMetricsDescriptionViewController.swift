@@ -21,6 +21,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     
     var startBehavior: TableViewStartBehavior = .normal
     
+    var appMode: OAApplicationMode?
+
     var hasWidgetItem = false
     
     // swiftlint:disable all
@@ -274,7 +276,8 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
     }
     
     private func fuelConsumptionRate() -> OBDDataComputer.OBDTypeWidget {
-        OAAppSettings.sharedManager().volumeUnits.get() == .LITRES ? .fuelConsumptionRateLiterKm : .fuelConsumptionRateMPerLiter
+        let settings = OAAppSettings.sharedManager()
+        return settings.volumeUnits.get(appMode ?? settings.applicationMode.get()) == .LITRES ? .fuelConsumptionRateLiterKm : .fuelConsumptionRateMPerLiter
     }
     
     private func description(for widget: OBDDataComputer.OBDComputerWidget) -> String {
@@ -286,13 +289,13 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             return Self.placeholderTextNA
         }
         
-        let value = plugin?.getWidgetValue(computerWidget: widgetItem) ?? Self.placeholderTextNA
+        let value = plugin?.getWidgetValue(computerWidget: widgetItem, appMode: appMode) ?? Self.placeholderTextNA
         
         guard value != Self.placeholderTextNA && value != "-" else {
             return value
         }
         
-        let unit = plugin?.getWidgetUnit(widgetItem.type)
+        let unit = plugin?.getWidgetUnit(widgetItem.type, appMode: appMode)
         let description = (unit?.isEmpty ?? true) ? value : "\(value) \(unit ?? "")"
 
         if widget.type == .vin {

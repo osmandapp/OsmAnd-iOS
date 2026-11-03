@@ -9,11 +9,16 @@
 #import "OAMeasurementModeCommand.h"
 
 @class OAMeasurementToolLayer;
+@class OAApplicationMode;
 
 // Removes several points as one undo step
 @interface OARemovePointsCommand : OAMeasurementModeCommand
 
 - (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
                     positions:(NSArray<NSNumber *> *)positions;
+
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
+                    positions:(NSArray<NSNumber *> *)positions
+            previousGroupMode:(OAApplicationMode *)previousGroupMode;
 
 @end

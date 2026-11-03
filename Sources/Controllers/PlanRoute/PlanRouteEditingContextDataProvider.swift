@@ -395,7 +395,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
             guard let pointIndex = routeSegments.last?.pointIndexes.last else { return }
             bridge.apply(effectiveMode, pointIndex: pointIndex, wholeRoute: false)
         } else if case let .profileGroup(group, _) = context {
-            applyMode(effectiveMode, pointIndexes: group.points.map(\.index))
+            applyMode(effectiveMode, pointIndexes: group.profilePointIndexes)
         } else if case let .wholeSegment(segment) = context {
             let pointIndexes = segment.groups.flatMap { $0.points.map(\.index) }
             applyMode(effectiveMode, pointIndexes: pointIndexes)
@@ -588,7 +588,8 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         return PlanRouteProfileGroup(appMode: group.appMode,
                                      distance: group.distance,
                                      lastPointIndex: group.lastGlobalIndex,
-                                     points: points)
+                                     points: points,
+                                     profilePointIndexes: group.profilePointIndexes.map(\.intValue))
     }
 
     private func mapPoint(_ point: PlanRoutePointData, distanceFromStart: Double) -> PlanRoutePoint {

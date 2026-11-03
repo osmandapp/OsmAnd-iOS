@@ -26,6 +26,18 @@
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss;
 @end
 
+@interface OAFavoriteIconTestPointEditor : OAEditPointViewController
+@end
+
+@implementation OAFavoriteIconTestPointEditor
+
+- (void)dismissViewController
+{
+    // Keep the real Save path, but do not open the map context menu from a headless test.
+}
+
+@end
+
 @interface OAFavoriteIconTests : XCTestCase
 @property(nonatomic) NSMutableArray<UITableViewCell *> *boundIconCells;
 @property(nonatomic) UINavigationController *groupNavigationController;
@@ -243,7 +255,7 @@
 - (OAEditPointViewController *)newPointEditorInGroup:(OAFavoriteGroup *)group poi:(OAPOI *)poi
 {
     [OAAppSettings.sharedManager.lastFavCategoryEntered set:group.name];
-    OAEditPointViewController *editor = [[OAEditPointViewController alloc] initWithLocation:CLLocationCoordinate2DMake(48.45, 35.05)
+    OAEditPointViewController *editor = [[OAFavoriteIconTestPointEditor alloc] initWithLocation:CLLocationCoordinate2DMake(48.45, 35.05)
                                                                                    title:@"Test favorite" address:@"" customParam:nil
                                                                                pointType:EOAEditPointTypeFavorite targetMenuState:nil poi:poi targetObject:nil];
     [editor loadViewIfNeeded];
@@ -283,6 +295,40 @@
     // Bind the real icon cell so category changes use the same callback as the inline menu.
     [self retainIconCell:[editor getRow:[NSIndexPath indexPathForRow:0 inSection:1]]];
     return editor;
+}
+
+- (void)saveNewPointEditor:(OAEditPointViewController *)editor inGroup:(OAFavoriteGroup *)group expectedIcon:(NSString *)icon
+{
+    XCTAssertEqual(group.points.count, 0u);
+    NSString *expectedGroupIcon = group.iconName ?: @"";
+    UIColor *expectedColor = group.color;
+    NSString *expectedShape = group.backgroundType;
+    OAFavoriteEditingHandler *handler = [editor valueForKey:@"pointHandler"];
+    NSString *expectedName = handler.getFavoriteItem.getName;
+    [editor onRightNavbarButtonPressed];
+
+    // Wait for the editor's save; do not issue another save that could hide a regression.
+    NSString *path = [[OsmAndApp instance] favoritesStorageFilename:group.name];
+    NSPredicate *pointIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary new];
+        [OAFavoritesHelper loadFileGroups:path groups:groups];
+        OAFavoriteGroup *loaded = groups[group.name];
+        return loaded.points.count == 1 && [loaded.points.firstObject.getName isEqualToString:expectedName];
+    }];
+    [self waitForExpectations:@[[[XCTNSPredicateExpectation alloc] initWithPredicate:pointIsStored object:nil]] timeout:10];
+
+    OAFavoriteGroup *loaded = [self loadStoredGroup:group];
+    XCTAssertEqualObjects(loaded.iconName ?: @"", expectedGroupIcon);
+    XCTAssertEqualObjects(loaded.color, expectedColor);
+    XCTAssertEqualObjects(loaded.backgroundType, expectedShape);
+    XCTAssertEqual(loaded.points.count, 1u);
+    OAFavoriteItem *point = loaded.points.firstObject;
+    XCTAssertNotNil(point);
+    XCTAssertEqualObjects(point.getName, expectedName);
+    XCTAssertEqualObjects(point.getCategory, group.name);
+    XCTAssertEqualObjects(point.getIcon, icon);
+    XCTAssertEqualObjects(point.getColor, expectedColor);
+    XCTAssertEqualObjects(point.getBackgroundIcon, expectedShape);
 }
 
 - (void)waitForTransitionOfViewController:(UIViewController *)controller
@@ -357,21 +403,31 @@
 
 - (void)testNewPOIUsesOriginalIconAndFolderColorAndShape
 {
-    OAFavoriteGroup *group = [self groupWithIcon:@"" pointIcons:@[]];
+    OAFavoriteGroup *group = [self storedGroupWithIcon:@"" pointIcons:@[]];
     OAEditPointViewController *editor = [self newPointEditorInGroup:group fromPOI:YES];
     [self assertPointEditor:editor icon:@"shop_supermarket" group:group];
     PoiIconCollectionHandler *icons = [editor valueForKey:@"poiIconCollectionHandler"];
     XCTAssertEqualObjects(icons.categoriesByKeyName[icons.ORIGINAL_KEY].iconKeys, (@[@"shop_supermarket"]));
+    [self saveNewPointEditor:editor inGroup:group expectedIcon:@"shop_supermarket"];
+}
+
+- (void)testNewPOIUsesConcreteFolderAppearanceAfterSaving
+{
+    OAFavoriteGroup *group = [self storedGroupWithIcon:@"special_heart" pointIcons:@[]];
+    OAEditPointViewController *editor = [self newPointEditorInGroup:group fromPOI:YES];
+    [self assertPointEditor:editor icon:@"special_heart" group:group];
+    [self saveNewPointEditor:editor inGroup:group expectedIcon:@"special_heart"];
 }
 
 - (void)testConcreteFolderIconOverridesPOIAndOriginalRestoresIt
 {
-    OAFavoriteGroup *group = [self groupWithIcon:@"special_heart" pointIcons:@[]];
+    OAFavoriteGroup *group = [self storedGroupWithIcon:@"special_heart" pointIcons:@[]];
     OAEditPointViewController *editor = [self newPointEditorInGroup:group fromPOI:YES];
     [self assertPointEditor:editor icon:@"special_heart" group:group];
     PoiIconCollectionHandler *icons = [editor valueForKey:@"poiIconCollectionHandler"];
     [icons onMenuItemSelectedWithName:icons.ORIGINAL_KEY];
     [self assertPointEditor:editor icon:@"shop_supermarket" group:group];
+    [self saveNewPointEditor:editor inGroup:group expectedIcon:@"shop_supermarket"];
 }
 
 - (void)testNewPOIFollowsFolderUntilAnIconIsManuallySelected

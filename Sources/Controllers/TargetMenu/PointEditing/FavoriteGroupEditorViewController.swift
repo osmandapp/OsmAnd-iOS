@@ -141,6 +141,14 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
         }
     }
     
+    @objc func editPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
+        view.endEditing(true)
+        let updateGroupIcon = updateGroupValues && isIconNameChanged(favoriteGroup?.iconName)
+        OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: appearanceIconName(), updatePoints: updatePoints, updateGroupIcon: updateGroupIcon, saveImmediately: false) {
+            self.finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
+        }
+    }
+    
     private func updateApplyToExistingCell(_ cell: OASearchMoreCell?) {
         guard let cell else { return }
         let enabled = (favoriteGroup?.points?.count ?? 0) > 0
@@ -181,14 +189,6 @@ final class FavoriteGroupEditorViewController: OAGroupEditorViewController {
     private func addPointsGroup() {
         dismiss()
         delegate?.addNewItem(withName: editName, iconName: editIconName, color: editColor, backgroundIconName: editBackgroundIconName)
-    }
-    
-    @objc func editPointsGroup(_ updatePoints: Bool, updateGroupValues: Bool) {
-        view.endEditing(true)
-        let updateGroupIcon = updateGroupValues && isIconNameChanged(favoriteGroup?.iconName)
-        OAFavoritesHelperBridge.shared().update(favoriteGroup, iconName: appearanceIconName(), updatePoints: updatePoints, updateGroupIcon: updateGroupIcon, saveImmediately: false) {
-            self.finishSavingGroup(updatePoints, updateGroupValues: updateGroupValues)
-        }
     }
     
     private func finishSavingGroup(_ updatePoints: Bool, updateGroupValues: Bool) {

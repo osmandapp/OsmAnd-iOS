@@ -57,6 +57,17 @@ final class BLEHeartRateSensor: Sensor {
 
     private(set) var lastHeartRateData: HeartRateData?
 
+    override var dataFields: [[String: String]]? {
+        if let lastHeartRateData {
+            return [[localizedString("map_widget_ant_heart_rate"):
+                        lastHeartRateData.heartRate == 0
+                    ? "-"
+                    : String(lastHeartRateData.heartRate) + " " + localizedString("beats_per_minute_short")]]
+        } else {
+            return [[localizedString("map_widget_ant_heart_rate"): "-"]]
+        }
+    }
+
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_HEART_RATE_MEASUREMENT.CBUUIDRepresentation:

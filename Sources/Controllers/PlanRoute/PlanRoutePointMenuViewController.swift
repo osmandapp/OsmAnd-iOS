@@ -160,7 +160,7 @@ final class PlanRoutePointMenuViewController: UIViewController {
                       title: localizedString("plan_route_change_route_type_after"),
                       subtitle: nil,
                       icon: changeTypeAfterIcon,
-                      isEnabled: nextGroup != nil,
+                      isEnabled: !point.isDestination && nextGroup != nil,
                       isDestructive: false)],
             [RowModel(row: .delete,
                       title: localizedString("plan_route_delete_point"),

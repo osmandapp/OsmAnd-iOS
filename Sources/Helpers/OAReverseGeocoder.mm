@@ -9,6 +9,10 @@
 #import "OAReverseGeocoder.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAAutoObserverProxy.h"
+#import "OASharedSearchObjects.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Search/ReverseGeocoder.h>
 #include <OsmAndCore/RoadLocator.h>
@@ -26,6 +30,18 @@
 
 #include <atomic>
 
+@interface OAReverseGeocodingRequest : NSObject
+@property (nonatomic) double latitude;
+@property (nonatomic) double longitude;
+@property (nonatomic, copy) NSString *language;
+@property (nonatomic) BOOL transliterate;
+@property (nonatomic) BOOL useShared;
+@property (nonatomic, copy) NSString *cacheKey;
+@end
+
+@implementation OAReverseGeocodingRequest
+@end
+
 @interface OAReverseGeocoder ()
 
 @property (nonatomic, strong) NSCache<NSString *, NSString *> *addressCache;
@@ -37,6 +53,8 @@
 @implementation OAReverseGeocoder
 {
     std::atomic<bool> _stopping;
+    NSUInteger _cacheGeneration;
+    OAAutoObserverProxy *_resourcesObserver;
 }
 
 + (OAReverseGeocoder *)instance
@@ -63,6 +81,9 @@
         _lookupQueue.name = @"net.osmand.reverse-geocoder";
         _lookupQueue.maxConcurrentOperationCount = 5;
         _lookupQueue.qualityOfService = NSQualityOfServiceUserInitiated;
+
+        _resourcesObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(clearCache)
+            andObserve:OsmAndApp.instance.localResourcesChangedObservable];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(clearCache)
@@ -74,19 +95,31 @@
 
 - (void)clearCache
 {
-    [self.addressCache removeAllObjects];
+    @synchronized (self)
+    {
+        _cacheGeneration++;
+        [self.addressCache removeAllObjects];
+    }
 }
 
-- (NSString *)lookupKeyAtLat:(double)lat lon:(double)lon objectId:(uint64_t)objectId
+- (OAReverseGeocodingRequest *)requestAtLat:(double)lat lon:(double)lon objectId:(uint64_t)objectId
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
-    BOOL transliterate = settings.settingMapLanguageTranslit.get;
-
-    if (objectId != 0)
-        return [NSString stringWithFormat:@"id:%llu:%@:%d", objectId, prefLang, transliterate];
-
-    return [NSString stringWithFormat:@"ll:%.7f:%.7f:%@:%d", lat, lon, prefLang, transliterate];
+    OAReverseGeocodingRequest *request = [[OAReverseGeocodingRequest alloc] init];
+    request.latitude = lat;
+    request.longitude = lon;
+    request.language = settings.settingPrefMapLanguage.get ?: @"";
+    request.transliterate = settings.settingMapLanguageTranslit.get;
+    request.useShared = settings.useSharedSearch.get;
+    uint64_t sharedGeneration = request.useShared ? OASharedObfResources.shared.currentGeneration : 0;
+    NSString *point = objectId != 0 ? [NSString stringWithFormat:@"id:%llu", objectId]
+        : [NSString stringWithFormat:@"ll:%.7f:%.7f", lat, lon];
+    @synchronized (self)
+    {
+        request.cacheKey = [NSString stringWithFormat:@"%@:%@:%d:%d:%lu:%llu", point, request.language,
+            request.transliterate, request.useShared, (unsigned long)_cacheGeneration, sharedGeneration];
+    }
+    return request;
 }
 
 - (NSString *)cachedAddressForKey:(NSString *)cacheKey
@@ -105,7 +138,8 @@
                   objectId:(uint64_t)objectId
                 completion:(void (^)(NSString *address))completion
 {
-    NSString *lookupKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
+    OAReverseGeocodingRequest *request = [self requestAtLat:lat lon:lon objectId:objectId];
+    NSString *lookupKey = request.cacheKey;
     NSString *cachedAddress = nil;
 
     BOOL shouldStartLookup = NO;
@@ -146,7 +180,7 @@
     [self.lookupQueue addOperationWithBlock:^{
         @autoreleasepool
         {
-            NSString *address = [self performLookupAddressAtLat:lat lon:lon objectId:objectId];
+            NSString *address = [self performLookup:request];
             NSArray *completions;
             @synchronized (self)
             {
@@ -172,12 +206,17 @@
                                     lon:(double)lon
                                objectId:(uint64_t)objectId
 {
-    NSString *cacheKey = [self lookupKeyAtLat:lat lon:lon objectId:objectId];
+    return [self performLookup:[self requestAtLat:lat lon:lon objectId:objectId]];
+}
+
+- (NSString *)performLookup:(OAReverseGeocodingRequest *)request
+{
+    NSString *cacheKey = request.cacheKey;
     NSString *cachedAddress = [self cachedAddressForKey:cacheKey];
     if (cachedAddress)
         return cachedAddress;
 
-    NSString *address = _stopping ? @"" : [self geocodeAddressAtLat:lat lon:lon];
+    NSString *address = _stopping ? @"" : [self geocodeRequest:request];
 
     [self cacheAddress:address forKey:cacheKey];
 
@@ -186,8 +225,15 @@
 
 - (NSString *)geocodeAddressAtLat:(double)lat lon:(double)lon
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefLang = settings.settingPrefMapLanguage.get ?: @"";
+    return [self geocodeRequest:[self requestAtLat:lat lon:lon objectId:0]];
+}
+
+- (NSString *)geocodeRequest:(OAReverseGeocodingRequest *)request
+{
+    if (request.useShared)
+        return [self geocodeSharedRequest:request];
+
+    NSString *prefLang = request.language;
 
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -197,7 +243,7 @@
         std::make_shared<OsmAnd::RoadLocator>(obfsCollection));
     
     const auto geoCriteria = std::make_shared<OsmAnd::ReverseGeocoder::Criteria>();
-    geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(request.latitude, request.longitude));
     const auto queryController = std::make_shared<OsmAnd::FunctorQueryController>(
         [self]
         (const OsmAnd::FunctorQueryController* const) -> bool
@@ -217,7 +263,7 @@
     if (object)
     {
         QString lang = QString::fromNSString(prefLang);
-        bool transliterate = settings.settingMapLanguageTranslit.get;
+        bool transliterate = request.transliterate;
         
         if (object->building)
         {
@@ -273,6 +319,66 @@
     }
 
     return [geocodingResult copy];
+}
+
+- (NSString *)geocodeSharedRequest:(OAReverseGeocodingRequest *)request
+{
+    id<OASResultMatcher> cancel = [OASharedBlockResultMatcher matcherWithPublish:^BOOL(id object) {
+        return NO;
+    } cancelled:^BOOL {
+        return self->_stopping;
+    }];
+    OASGeocodingUtilitiesGeocodingResult *result = [OASharedObfResources.shared.geocodingService
+        lookupAddressLat:request.latitude lon:request.longitude
+        defaultRoutingConfig:OsmAndApp.instance.sharedDefaultRoutingConfig cancel:cancel];
+    return _stopping ? @"" : [self.class formatSharedAddress:result language:request.language transliterate:request.transliterate];
+}
+
++ (NSString *)formatSharedAddress:(OASGeocodingUtilitiesGeocodingResult *)result
+                        language:(NSString *)language
+                   transliterate:(BOOL)transliterate
+{
+    if (!result)
+        return @"";
+
+    NSMutableArray<NSString *> *parts = [NSMutableArray array];
+    NSString *street = [result.street getNameLang:language transliterate:transliterate];
+    NSString *city = [result.city getNameLang:language transliterate:transliterate];
+    if (result.building)
+    {
+        NSString *building = result.buildingInterpolation.length > 0 ? result.buildingInterpolation
+            : [result.building getNameLang:language transliterate:transliterate];
+        NSMutableArray<NSString *> *streetAndBuilding = [NSMutableArray array];
+        if (street.length > 0)
+            [streetAndBuilding addObject:street];
+        if (building.length > 0)
+            [streetAndBuilding addObject:building];
+        if (streetAndBuilding.count > 0)
+            [parts addObject:[streetAndBuilding componentsJoinedByString:@" "]];
+        if (city.length > 0)
+            [parts addObject:city];
+    }
+    else if (result.street || result.city)
+    {
+        if (street.length > 0)
+            [parts addObject:street];
+        if (city.length > 0)
+            [parts addObject:city];
+    }
+    else if (result.point)
+    {
+        OASRouteDataObject *road = result.point.getRoad;
+        NSString *name = [road getNameLang:language transliterate:transliterate];
+        NSString *ref = [road getRefLang:language transliterate:transliterate direction:YES];
+        if (name.length > 0)
+            [parts addObject:name];
+        if (ref.length > 0)
+            [parts addObject:ref];
+    }
+    NSString *address = [parts componentsJoinedByString:@", "];
+    if (address.length > 0 && result.getDistance > 100)
+        address = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"shared_string_near"), address];
+    return address;
 }
 
 - (void) testAddressSearch:(NSString *)query lat:(double)lat lon:(double)lon

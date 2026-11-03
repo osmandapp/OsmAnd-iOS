@@ -77,7 +77,6 @@ final class AstroScheduleCardController {
         let periodEndInclusive = (calendar.date(byAdding: .day,
                                                 value: Self.periodDays,
                                                 to: self.periodStart) ?? periodEnd).addingTimeInterval(-0.001)
-        timeZoneText = AstroUtils.formatTimeZone(timeZone, from: self.periodStart, to: periodEndInclusive)
         let computationMatchesState =
             lastObjectId == skyObject.id &&
             lastObserverLat == observer.latitude &&
@@ -91,6 +90,7 @@ final class AstroScheduleCardController {
             return
         }
 
+        timeZoneText = AstroUtils.formatTimeZone(timeZone, from: self.periodStart, to: periodEndInclusive)
         computeWorkItem?.cancel()
         let periodStartCopy = self.periodStart
         let workItem = DispatchWorkItem { [weak self] in
@@ -101,6 +101,8 @@ final class AstroScheduleCardController {
                                                   observer: observer,
                                                   periodStart: periodStartCopy,
                                                   timeZone: timeZone)
+            let latestEventDate = max(periodEndInclusive, entries.compactMap(\.setDate).max() ?? periodEndInclusive)
+            let timeZoneText = AstroUtils.formatTimeZone(timeZone, from: periodStartCopy, to: latestEventDate)
             DispatchQueue.main.async { [weak self] in
                 guard let self,
                       !(self.computeWorkItem?.isCancelled ?? true),
@@ -113,6 +115,7 @@ final class AstroScheduleCardController {
                     return
                 }
                 self.days = entries
+                self.timeZoneText = timeZoneText
                 self.lastObjectId = skyObject.id
                 self.lastObserverLat = observer.latitude
                 self.lastObserverLon = observer.longitude
@@ -183,9 +186,10 @@ final class AstroScheduleCardController {
         return AstroScheduleDayItem(date: day,
                                     riseTime: riseSet.rise.map { timeFormatter.string(from: $0) },
                                     setTime: setTime.map { timeFormatter.string(from: $0) },
+                                    setDate: setTime,
                                     setDayOffset: max(0, setDayOffset),
                                     graph: AstroScheduleDayGraphSnapshot(sunAltitudes: samples.sunAltitudes,
-                                                                        objectAltitudes: samples.objectAltitudes))
+                                                                         objectAltitudes: samples.objectAltitudes))
     }
 
     private func dayOffset(from start: Date, to end: Date, timeZone: TimeZone) -> Int {

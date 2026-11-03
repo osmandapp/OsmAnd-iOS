@@ -141,6 +141,7 @@ struct AstroScheduleDayItem {
     let date: Date
     let riseTime: String?
     let setTime: String?
+    let setDate: Date?
     let setDayOffset: Int
     let graph: AstroScheduleDayGraphSnapshot
 }

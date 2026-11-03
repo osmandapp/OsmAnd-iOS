@@ -112,7 +112,8 @@ static const NSInteger kOrderInternalRow = 0;
 static const NSInteger kOrderTitleRow = 0;
 static const NSInteger kOrderDateRow = 3;
 static const NSInteger kOrderCoommentRow = 4;
-static const NSInteger kOrderNearestRow = 1000;
+static const NSInteger kOrderNearestWikiRow = 1000;
+static const NSInteger kOrderNearestPoiRow = 1001;
 static const NSInteger kOrderNamesRow = 18000;
 static const NSInteger kOrderOsmRow = 19000;
 static const NSInteger kOrderCoordinatesRow = 20000;
@@ -634,13 +635,13 @@ static const NSInteger kOrderCoordinatesRow = 20000;
          textColor:nil
             isText:NO
          needLinks:NO
-             order:kOrderNearestRow
+             order:kOrderNearestPoiRow
           typeName:@""
      isPhoneNumber:NO
              isUrl:NO];
 
     rowInfo.collapsed = YES;
-    rowInfo.order = kOrderNearestRow;
+    rowInfo.order = kOrderNearestPoiRow;
 
     OACollapsableNearestPoiWikiView *view =
         [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -676,13 +677,13 @@ static const NSInteger kOrderCoordinatesRow = 20000;
          textColor:nil
             isText:NO
          needLinks:NO
-             order:kOrderNearestRow
+             order:kOrderNearestWikiRow
           typeName:@""
      isPhoneNumber:NO
              isUrl:NO];
 
     rowInfo.collapsed = YES;
-    rowInfo.order = kOrderNearestRow;
+    rowInfo.order = kOrderNearestWikiRow;
 
     OACollapsableNearestPoiWikiView *view =
         [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];

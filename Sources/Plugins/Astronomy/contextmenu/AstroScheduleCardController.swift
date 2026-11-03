@@ -74,8 +74,10 @@ final class AstroScheduleCardController {
                                       value: Self.periodDays - 1,
                                       to: self.periodStart) ?? self.periodStart
         rangeLabel = rangeFormatter.string(from: self.periodStart, to: periodEnd).replacingOccurrences(of: "—", with: " - ")
-        let periodStartNoon = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: self.periodStart) ?? self.periodStart
-        timeZoneText = AstroUtils.formatTimeZone(timeZone, at: periodStartNoon)
+        let periodEndInclusive = (calendar.date(byAdding: .day,
+                                                value: Self.periodDays,
+                                                to: self.periodStart) ?? periodEnd).addingTimeInterval(-0.001)
+        timeZoneText = AstroUtils.formatTimeZone(timeZone, from: self.periodStart, to: periodEndInclusive)
         let computationMatchesState =
             lastObjectId == skyObject.id &&
             lastObserverLat == observer.latitude &&

@@ -303,8 +303,10 @@ enum AstroUtils {
         return formatter.string(from: date)
     }
 
-    static func formatTimeZone(_ timeZone: TimeZone, at date: Date) -> String {
-        let offset = formatUtcOffset(seconds: timeZone.secondsFromGMT(for: date))
+    static func formatTimeZone(_ timeZone: TimeZone, from start: Date, to end: Date) -> String {
+        let startOffset = formatUtcOffset(seconds: timeZone.secondsFromGMT(for: start))
+        let endOffset = formatUtcOffset(seconds: timeZone.secondsFromGMT(for: end))
+        let offset = startOffset == endOffset ? startOffset : "\(startOffset) → \(endOffset)"
         let identifier = timeZone.identifier
         guard identifier.contains("/"), !identifier.hasPrefix("Etc/") else {
             return offset
@@ -313,7 +315,7 @@ enum AstroUtils {
         formatter.dateFormat = "VVV"
         formatter.timeZone = timeZone
         return String(format: localizedString("astro_city_time_utc_offset"),
-                      formatter.string(from: date),
+                      formatter.string(from: start),
                       offset)
     }
 

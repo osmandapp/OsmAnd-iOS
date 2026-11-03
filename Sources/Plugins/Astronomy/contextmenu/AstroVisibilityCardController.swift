@@ -93,7 +93,7 @@ final class AstroVisibilityCardController {
         culminationTime = culmination.time.map { timeFormatter.string(from: $0) }
         setTime = riseSet.set.map { timeFormatter.string(from: $0) }
         culminationColor = AstroChartColorPalette().colorForObjectAltitude(culmination.altitude ?? 0.0)
-        timeZoneText = AstroUtils.formatTimeZone(timeZone, at: startLocal)
+        timeZoneText = AstroUtils.formatTimeZone(timeZone, from: startLocal, to: endLocal)
         maybeRecomputeGraph(skyObject: skyObject, observer: observer, date: self.date, timeZone: timeZone)
 
         let location = resolveLocationTarget(observer: observer)

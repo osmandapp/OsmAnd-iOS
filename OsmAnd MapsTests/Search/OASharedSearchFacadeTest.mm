@@ -73,7 +73,7 @@
 
 - (void)testEveryKindOfResultOfTheAppHasTheSameOneInTheSharedSearch
 {
-    for (NSInteger i = EOAObjectTypeCity; i <= EOAObjectTypeIndexItem; i++)
+    for (NSInteger i = EOAObjectTypeCity; i <= EOAObjectTypeSuggestion; i++)
     {
         EOAObjectType type = (EOAObjectType) i;
         OASObjectType *shared = [OASharedSearchObjects sharedObjectType:type];
@@ -81,7 +81,7 @@
         XCTAssertEqual([OASharedSearchObjects appObjectType:shared], type, @"%ld %@", (long) type, shared.name);
     }
     XCTAssertEqual([OASharedSearchObjects appObjectType:nil], EOAObjectTypeUndefined);
-    for (OASObjectType *shared in @[OASObjectType.route, OASObjectType.mapMarker, OASObjectType.onlineSearch, OASObjectType.suggestion])
+    for (OASObjectType *shared in @[OASObjectType.route, OASObjectType.mapMarker, OASObjectType.onlineSearch])
         XCTAssertEqual([OASharedSearchObjects appObjectType:shared], EOAObjectTypeUndefined, @"%@ has no kind of the app: not a city", shared.name);
 }
 

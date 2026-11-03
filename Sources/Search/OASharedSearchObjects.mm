@@ -334,6 +334,7 @@ static NSDictionary<NSString *, NSNumber *> *appObjectTypesBySharedName()
             @"SEARCH_API_REGION_FINISHED" : @(EOAObjectTypeSearchApiRegionFinished),
             @"UNKNOWN_NAME_FILTER" : @(EOAObjectTypeUnknownNameFilter),
             @"INDEX_ITEM" : @(EOAObjectTypeIndexItem),
+            @"SUGGESTION" : @(EOAObjectTypeSuggestion),
         };
     });
     return types;

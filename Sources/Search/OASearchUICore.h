@@ -22,6 +22,10 @@
 - (OASearchResultCollection *) combineWithCollection:(OASearchResultCollection *)collection resort:(BOOL)resort removeDuplicates:(BOOL)removeDuplicates;
 - (OASearchResultCollection *) addSearchResults:(NSArray<OASearchResult *> *)sr resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
 - (NSArray<OASearchResult *> *) getCurrentSearchResults;
+/** Results currently visible in the search list. Classic search exposes its complete collection. */
+- (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults;
+- (BOOL)hasMoreSpatialSearchResults;
+- (BOOL)showMoreSpatialSearchResults;
 - (void) sortSearchResults;
 - (void) calculateAddressString;
 - (void) filterSearchDuplicateResults;
@@ -61,6 +65,8 @@ typedef void (^OASearchUICoreRunnable)();
 - (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrders;
 
 - (OASearchResultCollection *) getCurrentSearchResult;
+/** Creates a collection with the ordering policy of the API that published these results. */
+- (OASearchResultCollection *)createResultCollectionForPhrase:(OASearchPhrase *)phrase api:(id)api;
 - (OASearchPhrase *) getPhrase;
 - (OASearchSettings *) getSearchSettings;
 

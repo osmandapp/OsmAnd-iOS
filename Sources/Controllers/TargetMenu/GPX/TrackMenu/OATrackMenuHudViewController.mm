@@ -574,6 +574,38 @@
         [self fetchDescriptionImageIfNeeded];
 }
 
+- (NSString *)normalizedImageUrl:(NSString *)url
+{
+    NSString *prefix = [OATravelArticle.IMAGE_ROOT_URL stringByAppendingString:@"thumb/"];
+    if (![url hasPrefix:prefix])
+        return url;
+
+    NSRange suffixRange = [url rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"]];
+    NSUInteger pathEnd = suffixRange.location == NSNotFound ? url.length : suffixRange.location;
+    NSString *path = [url substringWithRange:NSMakeRange(prefix.length, pathEnd - prefix.length)];
+    NSMutableArray<NSString *> *segments = [[path componentsSeparatedByString:@"/"] mutableCopy];
+
+    // Match TravelArticle's iOS encoding so Android URLs reuse existing HTTP cache entries.
+    // Decode each segment once, then re-encode delimiters and '%' to preserve the URL structure.
+    NSMutableCharacterSet *allowedCharacters = [NSCharacterSet.URLQueryAllowedCharacterSet mutableCopy];
+    [allowedCharacters removeCharactersInString:@"/?#%"];
+    for (NSUInteger i = 0; i < segments.count; i++)
+    {
+        NSString *decodedSegment = [segments[i] stringByRemovingPercentEncoding];
+        if (!decodedSegment)
+            return url;
+        // Keep encoded dot segments from becoming path traversal components.
+        if ([decodedSegment isEqualToString:@"."] || [decodedSegment isEqualToString:@".."])
+            continue;
+        NSString *encodedSegment = [decodedSegment stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacters];
+        if (!encodedSegment)
+            return url;
+        segments[i] = encodedSegment;
+    }
+    return [[prefix stringByAppendingString:[segments componentsJoinedByString:@"/"]]
+            stringByAppendingString:[url substringFromIndex:pathEnd]];
+}
+
 - (void)fetchDescriptionImageIfNeeded
 {
     OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_description"];
@@ -582,7 +614,17 @@
         OAGPXTableCellData *cellData = [sectionData getSubject:@"image"];
         if (cellData)
         {
-            NSString *url = cellData.values[@"img"];
+            NSString *imageLink = cellData.values[@"img"];
+            NSString *url = imageLink.length > 0 ? [self normalizedImageUrl:imageLink] : nil;
+            NSURL *imageURL = url.length > 0 ? [NSURL URLWithString:url] : nil;
+            if (!imageURL)
+            {
+                _isImageDownloadFinished = YES;
+                _isImageDownloadSucceed = NO;
+                _cachedImage = nil;
+                _cachedImageURL = nil;
+                return;
+            }
             if (!_cachedImage || ![url isEqualToString:_cachedImageURL])
             {
                 _isImageDownloadFinished = NO;
@@ -590,23 +632,34 @@
                 _cachedImageURL = url;
 
                 __weak __typeof(self) weakSelf = self;
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
-                    UIImage *image = [UIImage imageWithData:data];
-                    weakSelf.isImageDownloadFinished = YES;
-                    weakSelf.isImageDownloadSucceed = image != nil;
+                // NSURLSession defaults to NSURLRequestUseProtocolCachePolicy, reusing fresh cached images
+                // according to HTTP cache headers to avoid downloading the same image on every opening.
+                [[[NSURLSession sharedSession] dataTaskWithURL:imageURL
+                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                {
+                    if (!weakSelf)
+                        return;
 
+                    BOOL successfulResponse = ![response isKindOfClass:NSHTTPURLResponse.class]
+                        || (((NSHTTPURLResponse *)response).statusCode >= 200 && ((NSHTTPURLResponse *)response).statusCode < 300);
+                    UIImage *image = !error && successfulResponse ? [UIImage imageWithData:data] : nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!weakSelf.isViewVisible)
+                        __strong __typeof(weakSelf) strongSelf = weakSelf;
+                        if (!strongSelf)
+                            return;
+
+                        strongSelf.isImageDownloadFinished = YES;
+                        strongSelf.isImageDownloadSucceed = image != nil;
+                        if (!strongSelf.isViewVisible)
                         {
-                            weakSelf.cachedImage = image;
+                            strongSelf.cachedImage = image;
                             NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:[sectionData.subjects indexOfObject:cellData]
-                                                                             inSection:[weakSelf.tableData.subjects indexOfObject:sectionData]];
-                            [weakSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
+                                                                             inSection:[strongSelf.tableData.subjects indexOfObject:sectionData]];
+                            [strongSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
                                                       withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                     });
-                });
+                }] resume];
             }
         }
     }

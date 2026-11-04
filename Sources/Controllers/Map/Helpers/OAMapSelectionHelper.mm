@@ -75,7 +75,7 @@ static int TILE_SIZE = 256;
     
     MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:point];
     [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO excludeUntouchableObjects:excludeUntouchableObjects];
-    [self collectObjectsFromMap:result point:point];
+    [self collectObjectsFromMap:result point:point excludeUntouchableObjects:excludeUntouchableObjects];
     
     if ([result isEmpty])
         [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES excludeUntouchableObjects:excludeUntouchableObjects];
@@ -84,9 +84,9 @@ static int TILE_SIZE = 256;
     return result;
 }
 
-- (void)collectObjectsFromMap:(MapSelectionResult *)result point:(CGPoint)point
+- (void)collectObjectsFromMap:(MapSelectionResult *)result point:(CGPoint)point excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    [self selectObjectsFromOpenGl:result point:point];
+    [self selectObjectsFromOpenGl:result point:point excludeUntouchableObjects:excludeUntouchableObjects];
 }
 
 - (void)collectObjectsFromLayers:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
@@ -116,7 +116,7 @@ static int TILE_SIZE = 256;
     }
 }
 
-- (void)selectObjectsFromOpenGl:(MapSelectionResult *)result point:(CGPoint)point
+- (void)selectObjectsFromOpenGl:(MapSelectionResult *)result point:(CGPoint)point excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     OAMapRendererView *rendererView = (OAMapRendererView *) mapVc.view;
@@ -130,7 +130,7 @@ static int TILE_SIZE = 256;
         
         const auto& symbols = [rendererView getSymbolsIn:area strict:NO];
         OAAmenitySearcher *amenitySearcher = [[OAAmenitySearcher alloc] init];
-        BOOL onlyPoints = [mapVc.mapLayers.routePlanningLayer isInMeasurementMode];
+        BOOL onlyPoints = excludeUntouchableObjects || [mapVc.mapLayers.routePlanningLayer isInMeasurementMode];
 
         for (const auto symbolInfo : symbols)
         {
@@ -164,7 +164,9 @@ static int TILE_SIZE = 256;
             else
             {
                 CLLocation *clickLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
-                result.objectLatLon = [self snapLatLonToWayGeometry:clickLatLon mapSymbol:symbolInfo.mapSymbol];
+                result.objectLatLon = excludeUntouchableObjects
+                    ? clickLatLon
+                    : [self snapLatLonToWayGeometry:clickLatLon mapSymbol:symbolInfo.mapSymbol];
             }
             
             if (cppAmenity != nullptr)

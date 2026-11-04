@@ -43,13 +43,7 @@ final class MapSelectionResult: NSObject {
     }
 
     func collect(_ object: Any, provider: Any?) {
-        collect(object, provider: provider, selectionLocation: nil)
-    }
-
-    func collect(_ object: Any, provider: Any?, selectionLocation: CLLocation?) {
-        let selectedObject = SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider)
-        selectedObject.selectionLocation = selectionLocation
-        allObjects.append(selectedObject)
+        allObjects.append(SelectedMapObject(mapObject: object, provider: provider as? OAContextMenuProvider))
     }
 
     func groupByOsmIdAndWikidataId() {

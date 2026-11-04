@@ -454,7 +454,7 @@
 
 - (NSArray<OATargetPoint *> *)navigationTargetPointsAt:(CGPoint)touchPoint
 {
-    MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:NO];
+    MapSelectionResult *result = [_mapSelectionHelper collectObjectsFromMap:touchPoint showUnknownLocation:NO excludeUntouchableObjects:YES];
 
     NSMutableArray<OATargetPoint *> *targetPoints = [NSMutableArray array];
     for (SelectedMapObject *selectedObject in [result getProcessedObjects])
@@ -468,7 +468,7 @@
         if (!targetPoint || targetPoint.type == OATargetMapDownload)
             continue;
 
-        CLLocation *location = selectedObject.selectionLocation ?: [provider getObjectLocation:selectedObject.object];
+        CLLocation *location = [provider getObjectLocation:selectedObject.object];
         if (location)
             targetPoint.location = location.coordinate;
 

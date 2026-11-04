@@ -162,6 +162,21 @@ static NSInteger const kQuickActionSlashBackgroundTag = -2;
     if (sender.buttonState && [sender.buttonState isKindOfClass:QuickActionButtonState.class])
     {
         QuickActionButtonState *quickActionButtonState = (QuickActionButtonState *) sender.buttonState;
+        if (LockHelper.shared.isScreenLocked)
+        {
+            // Match Android: unlock directly without opening the actions sheet.
+            for (OAQuickAction *quickAction in quickActionButtonState.quickActions)
+            {
+                if ([quickAction isKindOfClass:[LockScreenAction class]])
+                {
+                    [quickAction execute];
+                    [self updateQuickActionButtonColors:sender];
+                    return;
+                }
+            }
+            return;
+        }
+
         if ([quickActionButtonState isSingleAction])
         {
             [quickActionButtonState.quickActions.firstObject execute];

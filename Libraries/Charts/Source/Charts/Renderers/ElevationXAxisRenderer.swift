@@ -15,7 +15,7 @@ class ElevationXAxisRenderer: XAxisRenderer {
         CGRect(x: viewPortHandler.contentLeft,
                y: viewPortHandler.contentTop,
                width: viewPortHandler.contentWidth,
-               height: viewPortHandler.contentHeight - viewPortHandler.contentBottom - 4.0)
+               height: viewPortHandler.contentHeight)
     }
 
     init(_ chartView: LineChartView, viewPortHandler: ViewPortHandler, xAxis: XAxis, trans: Transformer) {

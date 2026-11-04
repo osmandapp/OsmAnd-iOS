@@ -12,7 +12,7 @@
 #import "OAResultMatcher.h"
 
 @class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OAObservable, OACurrentStreetName, OASGpxFile, OASKQuadRect;
-@class OAGpxRouteApproximation, OALocationsHolder, OASGpxPoint, OASGpxRouteApproximation, LiveActivityRouteInfo;
+@class OAGpxRouteApproximation, OALocationsHolder, OASGpxPoint, OASGpxRouteApproximation, NavigationSnapshot;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -63,7 +63,8 @@ struct GpxRouteApproximation;
 - (nullable NSString *) getLastRouteCalcErrorShort;
 - (void) setPauseNavigation:(BOOL) b;
 - (BOOL) isPauseNavigation;
-- (void)readLiveActivityRouteInfoWithCompletion:(void (^)(LiveActivityRouteInfo *info))completion;
+// Copies routing values under the router lock and calls completion on a background queue.
+- (void)readNavigationSnapshotWithCompletion:(void (^)(NavigationSnapshot *snapshot))completion;
 - (void) setFollowingMode:(BOOL)follow;
 - (BOOL) isRoutePlanningMode;
 - (void) setRoutePlanningMode:(BOOL)isRoutePlanningMode;

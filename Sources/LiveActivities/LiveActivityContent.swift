@@ -48,11 +48,6 @@ struct LiveActivityContent: Codable, Hashable, Sendable {
         isLocationUnavailable = try container.decodeIfPresent(Bool.self, forKey: .isLocationUnavailable) ?? false
     }
 
-    static func routeProgress(remainingDistance: Double, totalDistance: Double) -> Double? {
-        guard remainingDistance.isFinite, totalDistance.isFinite, totalDistance > 0 else { return nil }
-        return min(1, max(0, 1 - remainingDistance / totalDistance))
-    }
-
     // Payloads also contain LiveActivityAttributes. Truncate external route names so that
     // exceptionally long OSM names cannot exceed ActivityKit's 4 KB limit.
     static func truncateToUTF8ByteLimit(_ value: String, maxBytes: Int = 256) -> String {

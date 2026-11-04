@@ -1,10 +1,9 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
-
 /// Track recording content and state, corresponding to Android's GpxNotification.
 @available(iOS 16.2, *)
 @MainActor
-final class GpxLiveActivity: BaseLiveActivity {
+final class TrackRecordingLiveActivity: BaseLiveActivity {
     private var lastTrackIndex: Int32?
 
     init() {
@@ -39,23 +38,23 @@ final class GpxLiveActivity: BaseLiveActivity {
 
     override func buildContent() async -> LiveActivityContent? {
         guard let trackHelper = OASavingTrackHelper.sharedInstance() else { return nil }
-        let recordingInfo: LiveActivityRecordingInfo = await withCheckedContinuation { continuation in
-            trackHelper.readLiveActivityRecordingInfo { info in
-                continuation.resume(returning: info)
+        let snapshot: TrackRecordingSnapshot = await withCheckedContinuation { continuation in
+            trackHelper.readTrackRecordingSnapshot { snapshot in
+                continuation.resume(returning: snapshot)
             }
         }
-        guard recordingInfo.trackIndex == trackHelper.currentTrackIndex else {
+        guard snapshot.trackIndex == trackHelper.currentTrackIndex else {
             // The track was saved/cleared while the snapshot was returning to the main actor.
             refreshActivity()
             return nil
         }
         let isRecording = trackHelper.getIsRecording()
-        guard isRecording || recordingInfo.hasTrackPoints else { return nil }
+        guard isRecording || snapshot.hasTrackPoints else { return nil }
         var content = LiveActivityContent()
         content.phase = isRecording ? .active : .paused
         content.title = localizedString(isRecording ? "record_plugin_name" : "shared_string_paused")
-        content.distanceText = OAOsmAndFormatter.getFormattedDistance(recordingInfo.distance) ?? ""
-        content.durationText = OAOsmAndFormatter.getFormattedDuration(recordingInfo.duration) ?? ""
+        content.distanceText = OAOsmAndFormatter.getFormattedDistance(snapshot.distance) ?? ""
+        content.durationText = OAOsmAndFormatter.getFormattedDuration(snapshot.duration) ?? ""
         return content
     }
 }

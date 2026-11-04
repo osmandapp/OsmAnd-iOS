@@ -11,7 +11,7 @@
 
 #define kTrackNoHeading -1.0
 
-@class OASGpxFile, OASWptPt, LiveActivityRecordingInfo;
+@class OASGpxFile, OASWptPt, TrackRecordingSnapshot;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -37,7 +37,8 @@
 - (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading;
 - (BOOL) getIsRecording;
 
-- (void)readLiveActivityRecordingInfoWithCompletion:(void (^ _Nonnull)(LiveActivityRecordingInfo * _Nonnull info))completion;
+// Copies recording values and calls completion on the recording queue.
+- (void)readTrackRecordingSnapshotWithCompletion:(void (^ _Nonnull)(TrackRecordingSnapshot * _Nonnull snapshot))completion;
 
 - (void) runSyncBlock:(void (^)(void))block;
 

@@ -1254,7 +1254,7 @@ static const NSInteger kDBVersion = 1;
     }
 }
 
-- (void)readLiveActivityRecordingInfoWithCompletion:(void (^)(LiveActivityRecordingInfo *info))completion
+- (void)readTrackRecordingSnapshotWithCompletion:(void (^)(TrackRecordingSnapshot *snapshot))completion
 {
     dispatch_async(syncQueue, ^{
         NSTimeInterval duration = 0;
@@ -1273,11 +1273,11 @@ static const NSInteger kDBVersion = 1;
                     duration += (lastPoint.time - firstPoint.time) / 1000.0;
             }
         }
-        LiveActivityRecordingInfo *info = [[LiveActivityRecordingInfo alloc] initWithTrackIndex:self.currentTrackIndex
-                                                                                    distance:self->distance
-                                                                                    duration:duration
-                                                                              hasTrackPoints:self.hasTrackPoints];
-        completion(info);
+        TrackRecordingSnapshot *snapshot = [[TrackRecordingSnapshot alloc] initWithTrackIndex:self.currentTrackIndex
+                                                                                     distance:self->distance
+                                                                                     duration:duration
+                                                                               hasTrackPoints:self.hasTrackPoints];
+        completion(snapshot);
     });
 }
 

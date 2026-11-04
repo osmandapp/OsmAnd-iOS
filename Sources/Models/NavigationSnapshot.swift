@@ -1,9 +1,11 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
+import Foundation
 
+/// Distances are in meters; durations are in seconds.
 /// Immutable values copied under the router lock; no mutable route or maneuver objects leave it.
 @objcMembers
-final class LiveActivityRouteInfo: NSObject, @unchecked Sendable {
+final class NavigationSnapshot: NSObject, Codable, Sendable {
     let turnTypeValue: Int32
     let turnAngle: Float
     let exitNumber: Int
@@ -18,6 +20,12 @@ final class LiveActivityRouteInfo: NSObject, @unchecked Sendable {
     let isDeviatedFromRoute: Bool
     let routeDeviation: Double
     let calculationError: String
+
+    var progress: Double? {
+        let remainingDistance = max(0, self.remainingDistance)
+        guard remainingDistance.isFinite, totalDistance.isFinite, totalDistance > 0 else { return nil }
+        return min(1, max(0, 1 - remainingDistance / totalDistance))
+    }
 
     init(turnTypeValue: Int32,
          turnAngle: Float,

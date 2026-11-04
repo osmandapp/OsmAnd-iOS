@@ -63,7 +63,7 @@ struct GpxRouteApproximation;
 - (nullable NSString *) getLastRouteCalcErrorShort;
 - (void) setPauseNavigation:(BOOL) b;
 - (BOOL) isPauseNavigation;
-- (LiveActivityRouteInfo *)liveActivityRouteInfo;
+- (void)readLiveActivityRouteInfoWithCompletion:(void (^)(LiveActivityRouteInfo *info))completion;
 - (void) setFollowingMode:(BOOL)follow;
 - (BOOL) isRoutePlanningMode;
 - (void) setRoutePlanningMode:(BOOL)isRoutePlanningMode;

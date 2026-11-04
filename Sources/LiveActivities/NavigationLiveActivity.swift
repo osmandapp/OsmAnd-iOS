@@ -1,5 +1,7 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
+import OsmAndShared
+
 /// Navigation content and state, corresponding to Android's NavigationNotification.
 @available(iOS 16.2, *)
 @MainActor
@@ -21,33 +23,38 @@ final class NavigationLiveActivity: BaseLiveActivity {
         OAAppSettings.sharedManager().navigationLiveActivityEnabled.get(OARoutingHelper.sharedInstance().getAppMode())
     }
 
-    override func buildContent() -> LiveActivityContent? {
+    override func buildContent() async -> LiveActivityContent? {
         let routingHelper = OARoutingHelper.sharedInstance()
+        let routeInfo: LiveActivityRouteInfo = await withCheckedContinuation { continuation in
+            routingHelper.readLiveActivityRouteInfo { info in
+                continuation.resume(returning: info)
+            }
+        }
         var content = LiveActivityContent()
-        let isNavigationPaused = routingHelper.isPauseNavigation()
-        let isRouteCalculated = routingHelper.isRouteCalculated()
-        let routeInfo = routingHelper.liveActivityRouteInfo()
-        let remainingDistance = max(0, Double(routingHelper.getLeftDistance()))
-        let remainingDuration = max(0, Double(routingHelper.getLeftTime()))
-        if isRouteCalculated {
+        let remainingDistance = max(0, routeInfo.remainingDistance)
+        let remainingDuration = max(0, routeInfo.remainingDuration)
+        if routeInfo.isRouteCalculated {
             content.distanceText = OAOsmAndFormatter.getFormattedDistance(Float(remainingDistance), mode: routingHelper.getAppMode(), with: .useLowerBounds) ?? ""
             content.durationText = OAOsmAndFormatter.getFormattedDuration(remainingDuration) ?? ""
         }
-        content.speedText = formattedCurrentSpeed(isPaused: isNavigationPaused)
-        content.turnType = routeInfo.turnType
+        content.turnTypeValue = routeInfo.turnTypeValue
+        content.turnAngle = routeInfo.turnAngle
+        content.exitNumber = routeInfo.exitNumber
         content.turnID = routeInfo.turnID
-        if isNavigationPaused {
+        if routingHelper.isPauseNavigation() {
             content.phase = .paused
             content.title = localizedString("shared_string_paused")
-        } else if !isRouteCalculated {
-            let error = routingHelper.getLastRouteCalcErrorShort() ?? ""
+        } else if !routeInfo.isRouteCalculated {
+            let error = routeInfo.calculationError
             content.phase = .calculating
             content.title = localizedString("shared_string_navigation")
             content.subtitle = error.isEmpty ? localizedString("route_calculation") + "..." : LiveActivityContent.truncateToUTF8ByteLimit(error)
-        } else if OARoutingHelper.isDeviatedFromRoute() {
-            content.turnType = TurnType.companion.valueOf(value: TurnType.companion.OFFR, leftSide: false)
+        } else if routeInfo.isDeviatedFromRoute {
+            content.turnTypeValue = TurnType.companion.OFFR
+            content.turnAngle = 0
+            content.exitNumber = 0
             content.title = localizedString("announcement_time_off_route")
-            content.turnDistanceText = OAOsmAndFormatter.getFormattedDistance(Float(routingHelper.getRouteDeviation()), mode: routingHelper.getAppMode(), with: .useLowerBounds) ?? ""
+            content.turnDistanceText = OAOsmAndFormatter.getFormattedDistance(Float(routeInfo.routeDeviation), mode: routingHelper.getAppMode(), with: .useLowerBounds) ?? ""
         } else {
             content.title = LiveActivityContent.truncateToUTF8ByteLimit(routeInfo.instruction)
             content.subtitle = LiveActivityContent.truncateToUTF8ByteLimit(routeInfo.streetName)

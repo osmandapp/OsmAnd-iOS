@@ -5,10 +5,13 @@ import SwiftUI
 struct ActivitySymbolView: View {
     let kind: LiveActivityKind
     let state: LiveActivityContent
+    var isDataOutdated = false
 
     var body: some View {
         Group {
-            if state.phase == .paused {
+            if state.isLocationUnavailable {
+                locationUnavailableSymbolView
+            } else if state.phase == .paused {
                 pausedSymbolView
             } else if kind == .recording {
                 recordingSymbolView
@@ -18,7 +21,7 @@ struct ActivitySymbolView: View {
                 maneuverSymbolView
             }
         }
-        .foregroundStyle(Color.iconColorSelected)
+        .foregroundStyle(isDataOutdated && !state.isLocationUnavailable ? Color.secondary : Color.iconColorSelected)
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isImage)
         .accessibilityLabel(state.accessibilityTitle(for: kind))
@@ -26,9 +29,13 @@ struct ActivitySymbolView: View {
     }
 
     private var accessibilityDetails: String {
-        let distance = kind == .navigation ? state.turnDistanceText : state.distanceText
+        let distance = kind == .navigation ? (state.isLocationUnavailable ? "" : state.turnDistanceText) : state.distanceText
         let distanceDescription = distance.isEmpty ? "" : "\(localizedString("shared_string_distance")): \(distance)"
-        return [distanceDescription, state.subtitle].filter { !$0.isEmpty }.joined(separator: ", ")
+        return [distanceDescription, state.isLocationUnavailable ? "" : state.subtitle].filter { !$0.isEmpty }.joined(separator: ", ")
+    }
+
+    private var locationUnavailableSymbolView: some View {
+        Image(systemName: "location.slash").resizable().scaledToFit()
     }
 
     private var pausedSymbolView: some View {

@@ -13,11 +13,6 @@ struct ActivityTurnView: View {
         static let exitNumberLineLimit = 1
     }
 
-    private let arrowPath: Path
-    private let roundaboutPath: Path
-    private let roundaboutCenter: CGPoint
-    private let exitNumber: Int
-
     var body: some View {
         ZStack {
             roundaboutView
@@ -28,6 +23,11 @@ struct ActivityTurnView: View {
         }
         .aspectRatio(Constants.aspectRatio, contentMode: .fit)
     }
+
+    private let arrowPath: Path
+    private let roundaboutPath: Path
+    private let roundaboutCenter: CGPoint
+    private let exitNumber: Int
 
     private var roundaboutView: some View {
         ActivityTurnShape(turnPath: roundaboutPath).fill(Color.navArrowCircle)

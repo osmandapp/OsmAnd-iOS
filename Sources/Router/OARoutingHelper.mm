@@ -231,25 +231,37 @@ static BOOL _isDeviatedFromRoute = false;
     _isPausedDueToCarPlayDisconnect = NO;
     _isFollowingMode = follow;
     _isPauseNavigation = false;
+    [[ScreenAwakeService shared] updateIdleTimer];
     [LiveActivityManager.shared refresh];
 }
 
-// Pass a snapshot of route data to Swift.
-- (LiveActivityRouteInfo *)liveActivityRouteInfo
+// Never make the main actor wait for the routing lock when preparing a Live Activity update.
+- (void)readLiveActivityRouteInfoWithCompletion:(void (^)(LiveActivityRouteInfo *info))completion
 {
-    @synchronized (self)
-    {
-        OANextDirectionInfo *nextDirectionInfo = [self getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
-        OARouteDirectionInfo *routeDirection = nextDirectionInfo.directionInfo;
-        OASTurnType *turnType = routeDirection.turnType;
-        return [[LiveActivityRouteInfo alloc] initWithTurnType:turnType ?: [OASTurnType.companion straight]
-                                                        turnID:nextDirectionInfo ? nextDirectionInfo.directionInfoInd : -1
-                                                  turnDistance:nextDirectionInfo ? nextDirectionInfo.distanceTo : -1
-                                                   instruction:turnType ? [OARouteCalculationResult toString:turnType shortName:YES] : OALocalizedString(@"shared_string_navigation")
-                                                    streetName:routeDirection.streetName.length > 0 ? routeDirection.streetName : (routeDirection.ref ?: @"")
-                                                 totalDistance:[_route getWholeDistance]];
-    }
-    [[ScreenAwakeService shared] updateIdleTimer];
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        LiveActivityRouteInfo *info;
+        @synchronized (self)
+        {
+            OANextDirectionInfo *nextDirectionInfo = [self getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+            OARouteDirectionInfo *routeDirection = nextDirectionInfo.directionInfo;
+            OASTurnType *turnType = routeDirection.turnType ?: [OASTurnType.companion straight];
+            info = [[LiveActivityRouteInfo alloc] initWithTurnTypeValue:turnType.value
+                                                            turnAngle:turnType.turnAngle
+                                                           exitNumber:turnType.exitOut
+                                                               turnID:nextDirectionInfo ? nextDirectionInfo.directionInfoInd : -1
+                                                         turnDistance:nextDirectionInfo ? nextDirectionInfo.distanceTo : -1
+                                                          instruction:routeDirection.turnType ? [OARouteCalculationResult toString:turnType shortName:YES] : OALocalizedString(@"shared_string_navigation")
+                                                           streetName:routeDirection.streetName.length > 0 ? routeDirection.streetName : (routeDirection.ref ?: @"")
+                                                        totalDistance:[self->_route getWholeDistance]
+                                                    remainingDistance:[self getLeftDistance]
+                                                    remainingDuration:[self getLeftTime]
+                                                    isRouteCalculated:[self isRouteCalculated]
+                                                  isDeviatedFromRoute:[OARoutingHelper isDeviatedFromRoute]
+                                                       routeDeviation:[self getRouteDeviation]
+                                                     calculationError:[self getLastRouteCalcErrorShort] ?: @""];
+        }
+        completion(info);
+    });
 }
 
 - (BOOL) isRoutePlanningMode

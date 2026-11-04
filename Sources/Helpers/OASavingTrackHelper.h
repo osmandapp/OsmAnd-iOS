@@ -11,7 +11,7 @@
 
 #define kTrackNoHeading -1.0
 
-@class OASGpxFile, OASWptPt;
+@class OASGpxFile, OASWptPt, LiveActivityRecordingInfo;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -19,7 +19,8 @@
 @property (nonatomic, readonly) int points;
 @property (nonatomic, readonly) float distance;
 @property (nonatomic, readonly) BOOL isRecording;
-@property (nonatomic, readonly) int currentTrackIndex;
+@property (atomic, readonly) int currentTrackIndex;
+@property (atomic, readonly) BOOL hasTrackPoints;
 
 @property (nonatomic, readonly) OASGpxFile *currentTrack;
 
@@ -35,6 +36,8 @@
 - (BOOL) saveIfNeeded;
 - (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading;
 - (BOOL) getIsRecording;
+
+- (void)readLiveActivityRecordingInfoWithCompletion:(void (^ _Nonnull)(LiveActivityRecordingInfo * _Nonnull info))completion;
 
 - (void) runSyncBlock:(void (^)(void))block;
 

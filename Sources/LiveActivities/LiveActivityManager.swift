@@ -43,6 +43,7 @@ private final class LiveActivityCoordinator: NSObject {
         let refreshSelector = #selector(scheduleRefresh)
         observers = [
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.locationServices.updateLocationObserver),
+            OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.locationServices.statusObservable),
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.trackRecordingObservable),
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.trackStartStopRecObservable),
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.applicationModeChangedObservable)

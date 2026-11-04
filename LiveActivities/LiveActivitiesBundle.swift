@@ -39,7 +39,7 @@ struct LiveActivityWidget: Widget {
     }
 
     private func lockScreenView(_ context: ActivityViewContext<LiveActivityAttributes>) -> some View {
-        ActivityView(attributes: context.attributes, state: context.state)
+        ActivityView(attributes: context.attributes, state: context.state, isDataOutdated: context.isStale)
             .background(lockScreenBackgroundColor)
             .activityBackgroundTint(lockScreenBackgroundColor)
             .activitySystemActionForegroundColor(.white)
@@ -82,7 +82,7 @@ struct LiveActivityWidget: Widget {
     }
 
     private func expandedBottomView(_ context: ActivityViewContext<LiveActivityAttributes>) -> some View {
-        ActivityView(attributes: context.attributes, state: context.state, isDynamicIsland: true)
+        ActivityView(attributes: context.attributes, state: context.state, isDynamicIsland: true, isDataOutdated: context.isStale)
     }
 
     private func compactLeadingView(_ context: ActivityViewContext<LiveActivityAttributes>) -> some View {
@@ -103,10 +103,48 @@ struct LiveActivityWidget: Widget {
     }
 
     private func activitySymbolView(_ context: ActivityViewContext<LiveActivityAttributes>) -> some View {
-        ActivitySymbolView(kind: context.attributes.kind, state: context.state)
+        ActivitySymbolView(kind: context.attributes.kind, state: context.state, isDataOutdated: context.isStale)
     }
 
     private func displayedDistanceText(_ context: ActivityViewContext<LiveActivityAttributes>) -> String {
-        context.attributes.kind == .navigation ? context.state.turnDistanceText : context.state.distanceText
+        if context.attributes.kind == .navigation {
+            return context.state.isLocationUnavailable ? "" : context.state.turnDistanceText
+        }
+        return context.state.distanceText
+    }
+}
+
+private struct LiveActivityWidget_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            navigationPreview(ActivityView_Previews.navigation).previewDisplayName("Expanded · navigation")
+            navigationPreview(ActivityView_Previews.pausedNavigation).previewDisplayName("Expanded · paused")
+            navigationPreview(ActivityView_Previews.calculating).previewDisplayName("Expanded · calculating")
+            navigationPreview(ActivityView_Previews.calculationError).previewDisplayName("Expanded · error")
+            navigationPreview(ActivityView_Previews.navigation, isDataOutdated: true).previewDisplayName("Expanded · stale")
+            navigationPreview(ActivityView_Previews.locationUnavailable, isDataOutdated: true).previewDisplayName("Expanded · location unavailable")
+            navigationPreview(ActivityView_Previews.longStreetName).previewDisplayName("Expanded · long text")
+            navigationPreview(ActivityView_Previews.navigation).previewDisplayName("Expanded · large text")
+                .dynamicTypeSize(.accessibility3)
+            navigationPreview(ActivityView_Previews.rtlNavigation).previewDisplayName("Expanded · RTL")
+                .environment(\.layoutDirection, .rightToLeft)
+            ActivityView_Previews.attributes(.recording)
+                .previewContext(ActivityView_Previews.recording, viewKind: .dynamicIsland(.expanded))
+                .previewDisplayName("Expanded · recording")
+            ActivityView_Previews.attributes(.recording)
+                .previewContext(ActivityView_Previews.pausedRecording, viewKind: .dynamicIsland(.expanded))
+                .previewDisplayName("Expanded · recording paused")
+            ActivityView_Previews.attributes(.navigation)
+                .previewContext(ActivityView_Previews.navigation, viewKind: .dynamicIsland(.compact))
+                .previewDisplayName("Compact")
+            ActivityView_Previews.attributes(.navigation)
+                .previewContext(ActivityView_Previews.navigation, viewKind: .dynamicIsland(.minimal))
+                .previewDisplayName("Minimal")
+        }
+    }
+
+    private static func navigationPreview(_ state: LiveActivityContent, isDataOutdated: Bool = false) -> some View {
+        ActivityView_Previews.attributes(.navigation)
+            .previewContext(state, isStale: isDataOutdated, viewKind: .dynamicIsland(.expanded))
     }
 }

@@ -1,0 +1,19 @@
+// Copyright © 2026 OsmAnd. All rights reserved.
+
+
+/// Immutable values copied on the recording queue; no mutable GPX objects leave that queue.
+@objcMembers
+final class LiveActivityRecordingInfo: NSObject, @unchecked Sendable {
+    let trackIndex: Int32
+    let distance: Float
+    let duration: TimeInterval
+    let hasTrackPoints: Bool
+
+    init(trackIndex: Int32, distance: Float, duration: TimeInterval, hasTrackPoints: Bool) {
+        self.trackIndex = trackIndex
+        self.distance = distance
+        self.duration = duration
+        self.hasTrackPoints = hasTrackPoints
+        super.init()
+    }
+}

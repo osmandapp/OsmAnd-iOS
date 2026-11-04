@@ -1,28 +1,52 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
-import OsmAndShared
 
-/// A snapshot of route data that can cross the Objective-C++/Swift boundary.
+/// Immutable values copied under the router lock; no mutable route or maneuver objects leave it.
 @objcMembers
-final class LiveActivityRouteInfo: NSObject {
-    let turnType: TurnType
+final class LiveActivityRouteInfo: NSObject, @unchecked Sendable {
+    let turnTypeValue: Int32
+    let turnAngle: Float
+    let exitNumber: Int
     let turnID: Int
     let turnDistance: Double
     let instruction: String
     let streetName: String
     let totalDistance: Double
+    let remainingDistance: Double
+    let remainingDuration: TimeInterval
+    let isRouteCalculated: Bool
+    let isDeviatedFromRoute: Bool
+    let routeDeviation: Double
+    let calculationError: String
 
-    init(turnType: TurnType, turnID: Int, turnDistance: Double,
-         instruction: String, streetName: String, totalDistance: Double) {
-        // Copy the maneuver values used by Live Activities so route updates cannot mutate this snapshot.
-        self.turnType = TurnType.companion.valueOf(value: turnType.value, leftSide: false)
-        self.turnType.turnAngle = turnType.turnAngle
-        self.turnType.exitOut = turnType.exitOut
+    init(turnTypeValue: Int32,
+         turnAngle: Float,
+         exitNumber: Int,
+         turnID: Int,
+         turnDistance: Double,
+         instruction: String,
+         streetName: String,
+         totalDistance: Double,
+         remainingDistance: Double,
+         remainingDuration: TimeInterval,
+         isRouteCalculated: Bool,
+         isDeviatedFromRoute: Bool,
+         routeDeviation: Double,
+         calculationError: String) {
+        self.turnTypeValue = turnTypeValue
+        self.turnAngle = turnAngle.isFinite ? turnAngle : 0
+        self.exitNumber = exitNumber
         self.turnID = turnID
         self.turnDistance = turnDistance
         self.instruction = instruction
         self.streetName = streetName
         self.totalDistance = totalDistance
+        self.remainingDistance = remainingDistance
+        self.remainingDuration = remainingDuration
+        self.isRouteCalculated = isRouteCalculated
+        self.isDeviatedFromRoute = isDeviatedFromRoute
+        self.routeDeviation = routeDeviation
+        self.calculationError = calculationError
         super.init()
     }
 }

@@ -25,6 +25,7 @@ struct ActivityView: View {
     let attributes: LiveActivityAttributes
     let state: LiveActivityContent
     var isDynamicIsland = false
+    var isDataOutdated = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: Constants.contentSpacing) {
@@ -32,11 +33,13 @@ struct ActivityView: View {
                 headerView
             }
             activityDetailsView
-            if let progress = state.progress {
+            if !state.isLocationUnavailable, let progress = state.progress {
                 routeProgressView(progress)
             }
-            tripMetricsView
-                .padding(.horizontal, isDynamicIsland ? Constants.dynamicIslandMetricsHorizontalPadding : Constants.dynamicIslandPadding)
+            if !state.isLocationUnavailable || attributes.kind == .recording {
+                tripMetricsView
+                    .padding(.horizontal, isDynamicIsland ? Constants.dynamicIslandMetricsHorizontalPadding : Constants.dynamicIslandPadding)
+            }
         }
         .padding(isDynamicIsland ? Constants.dynamicIslandPadding : Constants.contentPadding)
         .foregroundStyle(.primary)
@@ -44,6 +47,7 @@ struct ActivityView: View {
     }
 
     private var accessibilityDetails: String {
+        guard !state.isLocationUnavailable else { return "" }
         let distance = attributes.kind == .navigation && state.phase != .paused ? state.turnDistanceText : ""
         let distanceDescription = distance.isEmpty ? "" : "\(localizedString("shared_string_distance")): \(distance)"
         return [distanceDescription, state.subtitle].filter { !$0.isEmpty }.joined(separator: ", ")
@@ -62,7 +66,7 @@ struct ActivityView: View {
             }
             activityDescriptionView
             Spacer(minLength: Constants.detailsSpacerMinLength)
-            if attributes.kind == .recording, !state.speedText.isEmpty {
+            if !isDataOutdated, !state.isLocationUnavailable, attributes.kind == .recording, !state.speedText.isEmpty {
                 recordingSpeedView
             }
         }
@@ -70,11 +74,11 @@ struct ActivityView: View {
 
     private var activityDescriptionView: some View {
         VStack(alignment: .leading, spacing: Constants.descriptionTextSpacing) {
-            if attributes.kind == .navigation, !state.turnDistanceText.isEmpty, !isDynamicIsland, state.phase != .paused {
+            if !state.isLocationUnavailable, attributes.kind == .navigation, !state.turnDistanceText.isEmpty, !isDynamicIsland, state.phase != .paused {
                 turnDistanceView
             }
             activityTitleView
-            if !state.subtitle.isEmpty {
+            if !state.isLocationUnavailable, !state.subtitle.isEmpty {
                 activitySubtitleView
             }
         }
@@ -85,7 +89,7 @@ struct ActivityView: View {
     }
 
     private var activityTitleView: some View {
-        Text(state.title)
+        Text(state.isLocationUnavailable ? localizedString("shared_string_location_unknown") : state.title)
             .font(.subheadline.weight(.semibold))
             .lineLimit(Constants.singleLineLimit)
     }
@@ -95,7 +99,7 @@ struct ActivityView: View {
             distanceView
             Spacer(minLength: Constants.metricsSpacerMinLength)
             durationView
-            if let arrivalTime = state.arrivalTime {
+            if !isDataOutdated, !state.isLocationUnavailable, let arrivalTime = state.arrivalTime {
                 Spacer(minLength: Constants.metricsSpacerMinLength)
                 arrivalTimeView(arrivalTime)
             }
@@ -123,15 +127,15 @@ struct ActivityView: View {
     }
 
     private var navigationSummaryView: some View {
-        Text(!state.speedText.isEmpty ? state.speedText : localizedString("shared_string_navigation"))
+        Text(!isDataOutdated && !state.isLocationUnavailable && !state.speedText.isEmpty ? state.speedText : localizedString("shared_string_navigation"))
             .font(.caption).foregroundStyle(.secondary).lineLimit(Constants.singleLineLimit)
             .accessibilityLabel(localizedString("shared_string_speed"))
             .accessibilityValue(state.speedText)
-            .accessibilityHidden(state.speedText.isEmpty)
+            .accessibilityHidden(isDataOutdated || state.isLocationUnavailable || state.speedText.isEmpty)
     }
 
     private var activitySymbolView: some View {
-        ActivitySymbolView(kind: attributes.kind, state: state)
+        ActivitySymbolView(kind: attributes.kind, state: state, isDataOutdated: isDataOutdated)
             .frame(width: Constants.symbolSize, height: Constants.symbolSize)
             // The adjacent description and metrics already include these details.
             .accessibilityValue("")
@@ -142,7 +146,8 @@ struct ActivityView: View {
     }
 
     private var activitySubtitleView: some View {
-        Text(state.subtitle).font(.caption).foregroundStyle(.secondary).lineLimit(Constants.singleLineLimit)
+        Text(state.subtitle)
+            .font(.caption).foregroundStyle(.secondary).lineLimit(Constants.singleLineLimit)
     }
 
     private var recordingSpeedView: some View {
@@ -188,43 +193,43 @@ struct ActivityView: View {
     }
 }
 
-private struct ActivityView_Previews: PreviewProvider {
+struct ActivityView_Previews: PreviewProvider {
     private enum Constants {
         static let previewWidth: CGFloat = 360
+        static let narrowWidth: CGFloat = 320
+        static let wideWidth: CGFloat = 430
         static let timeUntilArrival: TimeInterval = 1080
         static let routeProgress = 0.35
     }
 
     static var previews: some View {
         Group {
-            navigationPreview
-            recordingPreview
+            preview(navigation).previewDisplayName("Navigation · dark iOS")
+                .preferredColorScheme(.dark)
+            preview(navigation).previewDisplayName("Navigation · light iOS")
+                .preferredColorScheme(.light)
+            preview(recording, kind: .recording).previewDisplayName("Recording")
+            preview(pausedNavigation).previewDisplayName("Navigation paused")
+            preview(pausedRecording, kind: .recording).previewDisplayName("Recording paused")
+            preview(calculating).previewDisplayName("Calculating")
+            preview(calculationError).previewDisplayName("Calculation error")
+            preview(navigation, isDataOutdated: true).previewDisplayName("Last known maneuver")
+            preview(recording, kind: .recording, isDataOutdated: true).previewDisplayName("Recording · stale location")
+            preview(locationUnavailable, isDataOutdated: true).previewDisplayName("Location unavailable")
+            preview(recordingLocationUnavailable, kind: .recording, isDataOutdated: true).previewDisplayName("Recording · location unavailable")
+            preview(longStreetName, width: Constants.narrowWidth).previewDisplayName("Long text · 320 pt")
+            preview(navigation, width: Constants.wideWidth).previewDisplayName("Large text · 430 pt")
+                .dynamicTypeSize(.accessibility3)
+            preview(rtlNavigation, width: Constants.narrowWidth).previewDisplayName("RTL · 320 pt")
+                .environment(\.layoutDirection, .rightToLeft)
         }
-        .frame(width: Constants.previewWidth)
-        .background(Color.groupBg)
-        .environment(\.colorScheme, .dark)
-        .previewLayout(.sizeThatFits)
     }
 
-    private static var navigationPreview: some View {
-        ActivityView(attributes: attributes(.navigation), state: navigation)
-            .previewDisplayName("Navigation")
-    }
-
-    private static var recordingPreview: some View {
-        ActivityView(attributes: attributes(.recording), state: recording)
-            .previewDisplayName("Trip recording")
-    }
-
-    private static func attributes(_ kind: LiveActivityKind) -> LiveActivityAttributes {
-        LiveActivityAttributes(kind: kind, appName: "OsmAnd Maps")
-    }
-
-    private static var navigation: LiveActivityContent {
+    static var navigation: LiveActivityContent {
         var state = LiveActivityContent()
         state.title = "Turn right"
         state.subtitle = "Shevchenko Boulevard"
-        state.turnType = TurnType.companion.valueOf(value: TurnType.companion.TR, leftSide: false)
+        state.turnTypeValue = TurnType.companion.TR
         state.turnDistanceText = "250 m"
         state.distanceText = "12.4 km"
         state.durationText = "18 min"
@@ -234,12 +239,92 @@ private struct ActivityView_Previews: PreviewProvider {
         return state
     }
 
-    private static var recording: LiveActivityContent {
+    static var recording: LiveActivityContent {
         var state = LiveActivityContent()
         state.title = "Trip recording"
         state.distanceText = "8.6 km"
         state.durationText = "32 min"
         state.speedText = "23.8 km/h"
         return state
+    }
+
+    static var pausedNavigation: LiveActivityContent {
+        var state = navigation
+        state.phase = .paused
+        state.title = "Paused"
+        state.subtitle = ""
+        state.turnDistanceText = ""
+        state.arrivalTime = nil
+        state.progress = nil
+        state.speedText = ""
+        return state
+    }
+
+    static var pausedRecording: LiveActivityContent {
+        var state = recording
+        state.phase = .paused
+        state.title = "Paused"
+        state.speedText = ""
+        return state
+    }
+
+    static var calculating: LiveActivityContent {
+        var state = LiveActivityContent()
+        state.phase = .calculating
+        state.title = "Navigation"
+        state.subtitle = "Route calculation..."
+        return state
+    }
+
+    static var calculationError: LiveActivityContent {
+        var state = calculating
+        state.subtitle = "Route could not be calculated. Download the missing maps."
+        return state
+    }
+
+    static var locationUnavailable: LiveActivityContent {
+        var state = navigation
+        state.isLocationUnavailable = true
+        return state
+    }
+
+    static var recordingLocationUnavailable: LiveActivityContent {
+        var state = recording
+        state.isLocationUnavailable = true
+        return state
+    }
+
+    static var longStreetName: LiveActivityContent {
+        var state = navigation
+        state.title = "Im Kreisverkehr die dritte Ausfahrt nehmen"
+        state.subtitle = "Bürgermeister-Wilhelm-Drexelius-Straße / Bundesstraße 75"
+        state.turnTypeValue = TurnType.companion.RNDB
+        state.turnAngle = 270
+        state.exitNumber = 3
+        state.distanceText = "1,234.5 km"
+        state.durationText = "12 h 45 min"
+        return state
+    }
+
+    static var rtlNavigation: LiveActivityContent {
+        var state = navigation
+        state.title = "انعطف يمينًا ثم تابع السير"
+        state.subtitle = "شارع الشيخ محمد بن راشد آل مكتوم"
+        return state
+    }
+
+    static func attributes(_ kind: LiveActivityKind) -> LiveActivityAttributes {
+        LiveActivityAttributes(kind: kind, appName: "OsmAnd Maps")
+    }
+
+    private static func preview(_ state: LiveActivityContent,
+                                kind: LiveActivityKind = .navigation,
+                                isDataOutdated: Bool = false,
+                                width: CGFloat = Constants.previewWidth) -> some View {
+        ActivityView(attributes: attributes(kind), state: state, isDataOutdated: isDataOutdated)
+            .frame(width: width)
+            .background(Color.groupBg)
+            .environment(\.colorScheme, .dark)
+            .previewLayout(.sizeThatFits)
     }
 }

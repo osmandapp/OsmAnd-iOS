@@ -2,9 +2,9 @@
 
 import OsmAndShared
 
-struct LiveActivityContent: Codable, Hashable {
-    private var turnTypeValue = TurnType.companion.C
-    private var turnAngle: Float = 0
+struct LiveActivityContent: Codable, Hashable, Sendable {
+    var turnTypeValue: Int32 = TurnType.companion.C
+    var turnAngle: Float = 0
 
     var phase: LiveActivityPhase = .active
     var title = ""
@@ -17,20 +17,35 @@ struct LiveActivityContent: Codable, Hashable {
     var arrivalTime: Date?
     var speedText = ""
     var progress: Double?
+    var isLocationUnavailable = false
 
-    // Store values so encoding, equality and copies are independent of Kotlin object identity and mutation.
+    // Recreate the maneuver for drawing; only scalar values are stored and serialized.
     var turnType: TurnType {
-        get {
-            let turnType = TurnType.companion.valueOf(value: turnTypeValue, leftSide: false)
-            turnType.exitOut = Int32(clamping: exitNumber)
-            turnType.turnAngle = turnAngle
-            return turnType
-        }
-        set {
-            turnTypeValue = newValue.value
-            turnAngle = newValue.turnAngle.isFinite ? newValue.turnAngle : 0
-            exitNumber = Int(newValue.exitOut)
-        }
+        let turnType = TurnType.companion.valueOf(value: turnTypeValue, leftSide: false)
+        turnType.exitOut = Int32(clamping: exitNumber)
+        turnType.turnAngle = turnAngle
+        return turnType
+    }
+
+    init() {}
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        turnTypeValue = try container.decode(Int32.self, forKey: .turnTypeValue)
+        turnAngle = try container.decode(Float.self, forKey: .turnAngle)
+        phase = try container.decode(LiveActivityPhase.self, forKey: .phase)
+        title = try container.decode(String.self, forKey: .title)
+        subtitle = try container.decode(String.self, forKey: .subtitle)
+        turnID = try container.decode(Int.self, forKey: .turnID)
+        exitNumber = try container.decode(Int.self, forKey: .exitNumber)
+        turnDistanceText = try container.decode(String.self, forKey: .turnDistanceText)
+        distanceText = try container.decode(String.self, forKey: .distanceText)
+        durationText = try container.decode(String.self, forKey: .durationText)
+        arrivalTime = try container.decodeIfPresent(Date.self, forKey: .arrivalTime)
+        speedText = try container.decode(String.self, forKey: .speedText)
+        progress = try container.decodeIfPresent(Double.self, forKey: .progress)
+        // Older activity payloads do not contain this flag.
+        isLocationUnavailable = try container.decodeIfPresent(Bool.self, forKey: .isLocationUnavailable) ?? false
     }
 
     static func routeProgress(remainingDistance: Double, totalDistance: Double) -> Double? {
@@ -55,7 +70,9 @@ struct LiveActivityContent: Codable, Hashable {
     func accessibilityTitle(for kind: LiveActivityKind) -> String {
         let activityName = localizedString(kind == .navigation ? "shared_string_navigation" : "record_plugin_name")
         let instruction: String
-        if kind == .navigation, phase == .active, turnType.isRoundAbout() {
+        if isLocationUnavailable {
+            instruction = localizedString("shared_string_location_unknown")
+        } else if kind == .navigation, phase == .active, turnType.isRoundAbout() {
             instruction = String(format: localizedString("route_roundabout"), exitNumber)
         } else {
             instruction = title
@@ -67,5 +84,6 @@ struct LiveActivityContent: Codable, Hashable {
     func needsImmediateUpdate(comparedTo previous: Self) -> Bool {
         phase != previous.phase || turnID != previous.turnID || turnTypeValue != previous.turnTypeValue
             || turnAngle != previous.turnAngle || exitNumber != previous.exitNumber || title != previous.title
+            || isLocationUnavailable != previous.isLocationUnavailable
     }
 }

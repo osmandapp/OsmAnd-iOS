@@ -1,5 +1,6 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
+
 /// Track recording content and state, corresponding to Android's GpxNotification.
 @available(iOS 16.2, *)
 @MainActor
@@ -13,7 +14,7 @@ final class GpxLiveActivity: BaseLiveActivity {
     override func isActive() -> Bool {
         guard let trackHelper = OASavingTrackHelper.sharedInstance() else { return false }
         let isRecordingPluginEnabled = OAPluginsHelper.getEnabledPlugin(OAMonitoringPlugin.self) != nil
-        return isRecordingPluginEnabled && (trackHelper.getIsRecording() || (hasActiveSession && hasRecordedTrackPoints(trackHelper)))
+        return isRecordingPluginEnabled && (trackHelper.getIsRecording() || (hasActiveSession && trackHelper.hasTrackPoints))
     }
 
     override func isRunning() -> Bool {
@@ -28,7 +29,7 @@ final class GpxLiveActivity: BaseLiveActivity {
         if let trackHelper = OASavingTrackHelper.sharedInstance() {
             let currentTrackIndex = trackHelper.currentTrackIndex
             if let lastTrackIndex, lastTrackIndex != currentTrackIndex {
-                // Saving/clearing a track ends its activity before another recording starts.
+                // Detect a new track even when the previous card was dismissed or disabled.
                 removeActivity()
             }
             lastTrackIndex = currentTrackIndex
@@ -36,41 +37,25 @@ final class GpxLiveActivity: BaseLiveActivity {
         super.refreshActivity()
     }
 
-    override func buildContent() -> LiveActivityContent? {
+    override func buildContent() async -> LiveActivityContent? {
         guard let trackHelper = OASavingTrackHelper.sharedInstance() else { return nil }
+        let recordingInfo: LiveActivityRecordingInfo = await withCheckedContinuation { continuation in
+            trackHelper.readLiveActivityRecordingInfo { info in
+                continuation.resume(returning: info)
+            }
+        }
+        guard recordingInfo.trackIndex == trackHelper.currentTrackIndex else {
+            // The track was saved/cleared while the snapshot was returning to the main actor.
+            refreshActivity()
+            return nil
+        }
         let isRecording = trackHelper.getIsRecording()
+        guard isRecording || recordingInfo.hasTrackPoints else { return nil }
         var content = LiveActivityContent()
         content.phase = isRecording ? .active : .paused
         content.title = localizedString(isRecording ? "record_plugin_name" : "shared_string_paused")
-        content.distanceText = OAOsmAndFormatter.getFormattedDistance(trackHelper.distance) ?? ""
-        content.speedText = formattedCurrentSpeed(isPaused: !isRecording)
-        content.durationText = OAOsmAndFormatter.getFormattedDuration(recordedDuration(trackHelper)) ?? ""
+        content.distanceText = OAOsmAndFormatter.getFormattedDistance(recordingInfo.distance) ?? ""
+        content.durationText = OAOsmAndFormatter.getFormattedDuration(recordingInfo.duration) ?? ""
         return content
-    }
-
-    private func hasRecordedTrackPoints(_ trackHelper: OASavingTrackHelper) -> Bool {
-        var hasPoints = false
-        trackHelper.runSyncBlock {
-            hasPoints = trackHelper.currentTrack?.hasTrkPt() == true
-        }
-        return hasPoints
-    }
-
-    private func recordedDuration(_ trackHelper: OASavingTrackHelper) -> TimeInterval {
-        var duration: TimeInterval = 0
-        trackHelper.runSyncBlock {
-            guard let trackFile = trackHelper.currentTrack else { return }
-            // Recorded points are chronological. Read only segment endpoints, without analysing every point.
-            for case let track as Track in trackFile.tracks where !track.generalTrack {
-                for case let segment as TrkSegment in track.segments where !segment.generalSegment {
-                    guard let firstPoint = segment.points.firstObject as? WptPt,
-                          let lastPoint = segment.points.lastObject as? WptPt,
-                          firstPoint.time > 0, lastPoint.time >= firstPoint.time else { continue }
-                    // Like Android, exclude pauses between recorded segments.
-                    duration += Double(lastPoint.time - firstPoint.time) / 1000
-                }
-            }
-        }
-        return duration
     }
 }

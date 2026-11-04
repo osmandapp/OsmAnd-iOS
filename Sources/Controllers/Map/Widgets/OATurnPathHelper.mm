@@ -18,12 +18,12 @@
 
 @interface OATurnPathHelper ()
 
-+ (float) getX:(double)angle radius:(double)radius;
-+ (float) getY:(double)angle radius:(double)radius;
-+ (float) alignRotation:(float)t leftSide:(BOOL)leftSide minDelta:(double)minDelta out:(int)out;
++ (float)xCoordinateForAngle:(double)angle radius:(double)radius;
++ (float)yCoordinateForAngle:(double)angle radius:(double)radius;
++ (float)alignRotation:(float)t leftSide:(BOOL)leftSide minDelta:(double)minDelta out:(int)out;
 
-+ (void) arcLineTo:(UIBezierPath *)pathForTurn angle:(double)angle cx:(float)cx cy:(float)cy radius:(float)radius;
-+ (void) arcQuadTo:(UIBezierPath *)pathForTurn angle0:(double)angle0 radius0:(float)radius0 angle:(double)angle radius:(float)radius angle2:(double)angle2 radius2:(float)radius2 dl:(float)dl cx:(float)cx cy:(float)cy;
++ (void)arcLineTo:(UIBezierPath *)pathForTurn angle:(double)angle cx:(float)cx cy:(float)cy radius:(float)radius;
++ (void)arcQuadTo:(UIBezierPath *)pathForTurn angle0:(double)angle0 radius0:(float)radius0 angle:(double)angle radius:(float)radius angle2:(double)angle2 radius2:(float)radius2 dl:(float)dl cx:(float)cx cy:(float)cy;
 
 @end
 
@@ -62,7 +62,7 @@
 @synthesize radBottom, radStepInter, radArrowTriangle1;
 @synthesize widthStepIn, widthStepInter, widthArrow, radArrowTriangle2, dfL, dfAr2, dfStepInter, dfAr, dfOut, dfStepOut, dfIn, minDelta, rot, cx, cy, scaleTriangle;
 
-- (instancetype) initWithLeftSide:(BOOL)_leftSide turnAngle:(float)_turnAngle out:(int)_out wa:(int)_wa ha:(int)_ha scaleTriangle:(float)_scaleTriangle
+- (instancetype)initWithLeftSide:(BOOL)_leftSide turnAngle:(float)_turnAngle out:(int)_out wa:(int)_wa ha:(int)_ha scaleTriangle:(float)_scaleTriangle
 {
     self = [super init];
     if (self)
@@ -112,37 +112,37 @@
     return self;
 }
 
-- (float) getProjX:(double)angle radius:(double)radius
+- (float)projX:(double)angle radius:(double)radius
 {
-    return [OATurnPathHelper getX:angle radius:radius] + cx;
+    return [OATurnPathHelper xCoordinateForAngle:angle radius:radius] + cx;
 }
 
-- (float) getProjY:(double)angle radius:(double)radius
+- (float)projY:(double)angle radius:(double)radius
 {
-    return [OATurnPathHelper getY:angle radius:radius] + cy;
+    return [OATurnPathHelper yCoordinateForAngle:angle radius:radius] + cy;
 }
 
-- (float) getTriangle2X
+- (float)triangle2X
 {
-    return [self getProjX:rot + dfAr radius:radArrowTriangle1];
+    return [self projX:rot + dfAr radius:radArrowTriangle1];
 }
 
-- (float) getTriangle1X
+- (float)triangle1X
 {
-    return [self getProjX:rot - dfAr radius:radArrowTriangle1];
+    return [self projX:rot - dfAr radius:radArrowTriangle1];
 }
 
-- (float) getTriangle2Y
+- (float)triangle2Y
 {
-    return [self getProjY:rot + dfAr radius:radArrowTriangle1];
+    return [self projY:rot + dfAr radius:radArrowTriangle1];
 }
 
-- (float) getTriangle1Y
+- (float)triangle1Y
 {
-    return [self getProjY:rot - dfAr radius:radArrowTriangle1];
+    return [self projY:rot - dfAr radius:radArrowTriangle1];
 }
 
-- (void) drawTriangle:(UIBezierPath *)pathForTurn
+- (void)drawTriangle:(UIBezierPath *)pathForTurn
 {
     // up from arc
     [OATurnPathHelper arcLineTo:pathForTurn angle:rot - dfAr cx:cx cy:cy radius:radArrowTriangle1];
@@ -163,37 +163,37 @@
 @implementation OATurnPathHelper
 
 // angle - bottom is zero, right is -90, left is 90
-+ (float) getX:(double)angle radius:(double)radius
++ (float)xCoordinateForAngle:(double)angle radius:(double)radius
 {
     return cosf(angle + M_PI / 2) * radius;
 }
 
-+ (float) getY:(double)angle radius:(double)radius
++ (float)yCoordinateForAngle:(double)angle radius:(double)radius
 {
     return sinf(angle + M_PI / 2) * radius;
 }
 
-+ (float) getProjX:(double)angle cx:(float)cx cy:(float)cy radius:(double)radius
++ (float)projX:(double)angle cx:(float)cx cy:(float)cy radius:(double)radius
 {
-    return [self.class getX:angle radius:radius] + cx;
+    return [self.class xCoordinateForAngle:angle radius:radius] + cx;
 }
 
-+ (float) getProjY:(double)angle cx:(float)cx cy:(float)cy radius:(double)radius
++ (float)projY:(double)angle cx:(float)cx cy:(float)cy radius:(double)radius
 {
-    return [self.class getY:angle radius:radius] + cy;
+    return [self.class yCoordinateForAngle:angle radius:radius] + cy;
 }
 
-+ (float) startArcAngle:(double)i
++ (float)startArcAngle:(double)i
 {
-    return (float) (i * 180 / M_PI + 90);
+    return (float)(i * 180 / M_PI + 90);
 }
 
-+ (float) sweepArcAngle:(double)d
++ (float)sweepArcAngle:(double)d
 {
-    return (float) (d * 180 / M_PI);
+    return (float)(d * 180 / M_PI);
 }
 
-+ (float) alignRotation:(float)t leftSide:(BOOL)leftSide minDelta:(double)minDelta out:(int)out
++ (float)alignRotation:(float)t leftSide:(BOOL)leftSide minDelta:(double)minDelta out:(int)out
 {
     // t between ]-180, 180]
     while (t > 180) {
@@ -232,23 +232,23 @@
     return rot;
 }
 
-+ (void) arcLineTo:(UIBezierPath *)pathForTurn angle:(double)angle cx:(float)cx cy:(float)cy radius:(float)radius
++ (void)arcLineTo:(UIBezierPath *)pathForTurn angle:(double)angle cx:(float)cx cy:(float)cy radius:(float)radius
 {
-    [pathForTurn lineToX:[self.class getProjX:angle cx:cx cy:cy radius:radius] y:[self.class getProjY:angle cx:cx cy:cy radius:radius]];
+    [pathForTurn lineToX:[self.class projX:angle cx:cx cy:cy radius:radius] y:[self.class projY:angle cx:cx cy:cy radius:radius]];
 }
 
-+ (void) arcQuadTo:(UIBezierPath *)pathForTurn angle0:(double)angle0 radius0:(float)radius0 angle:(double)angle radius:(float)radius angle2:(double)angle2 radius2:(float)radius2 dl:(float)dl cx:(float)cx cy:(float)cy
++ (void)arcQuadTo:(UIBezierPath *)pathForTurn angle0:(double)angle0 radius0:(float)radius0 angle:(double)angle radius:(float)radius angle2:(double)angle2 radius2:(float)radius2 dl:(float)dl cx:(float)cx cy:(float)cy
 {
-    float X0 = [self.class getProjX:angle0 cx:cx cy:cy radius:radius0];
-    float Y0 = [self.class getProjY:angle0 cx:cx cy:cy radius:radius0];
-    float X = [self.class getProjX:angle cx:cx cy:cy radius:radius];
-    float Y = [self.class getProjY:angle cx:cx cy:cy radius:radius];
-    float X2 = [self.class getProjX:angle2 cx:cx cy:cy radius:radius2];
-    float Y2 = [self.class getProjY:angle2 cx:cx cy:cy radius:radius2];
+    float X0 = [self.class projX:angle0 cx:cx cy:cy radius:radius0];
+    float Y0 = [self.class projY:angle0 cx:cx cy:cy radius:radius0];
+    float X = [self.class projX:angle cx:cx cy:cy radius:radius];
+    float Y = [self.class projY:angle cx:cx cy:cy radius:radius];
+    float X2 = [self.class projX:angle2 cx:cx cy:cy radius:radius2];
+    float Y2 = [self.class projY:angle2 cx:cx cy:cy radius:radius2];
     float l2 = sqrtf((X-X2)*(X-X2) + (Y-Y2)*(Y-Y2));
     float l0 = sqrtf((X-X0)*(X-X0) + (Y-Y0)*(Y-Y0));
-    float proc2 = (float) (dl / l2);
-    float proc = (float) (dl / l0);
+    float proc2 = (float)(dl / l2);
+    float proc = (float)(dl / l0);
     [pathForTurn lineToX:X0 * proc + X * (1 - proc) y:Y0 * proc + Y * (1 - proc)];
     [pathForTurn addQuadCurveToPoint:CGPointMake(X2 * proc2 + X * (1 - proc2), Y2 * proc2 + Y * (1 - proc2)) controlPoint:CGPointMake(X, Y)];
 }
@@ -341,14 +341,14 @@
         float centerCurveY = shortArrow ? ha - 6 : ha / 2 + 8;
         float centerCurveX = centerBottomX + b * (wa / 2 - (shortArrow && noOverlap ? 6 : 0));
         // calculated
-        float rx1 =  ABS(centerCurveX - centerBottomX) - tv.widthStepIn / 2;
-        float rx2 =  ABS(centerCurveX - centerBottomX) + tv.widthStepIn / 2;
-        double t1 = acosf(ABS([tv getTriangle1X] - centerCurveX) / rx1) ;
-        float rb1 = (float) (ABS([tv getTriangle1Y] - centerCurveY) / sinf(t1));
-        float ellipseAngle1 = (float) (t1 / M_PI * 180);
-        double t2 = acosf(ABS([tv getTriangle2X] - centerCurveX) / rx2) ;
-        float rb2 = (float) (ABS([tv getTriangle2Y] - centerCurveY) / sinf(t2));
-        float ellipseAngle2 = (float) (t2 / M_PI * 180);
+        float rx1 = ABS(centerCurveX - centerBottomX) - tv.widthStepIn / 2;
+        float rx2 = ABS(centerCurveX - centerBottomX) + tv.widthStepIn / 2;
+        double t1 = acosf(ABS([tv triangle1X] - centerCurveX) / rx1) ;
+        float rb1 = (float)(ABS([tv triangle1Y] - centerCurveY) / sinf(t1));
+        float ellipseAngle1 = (float)(t1 / M_PI * 180);
+        double t2 = acosf(ABS([tv triangle2X] - centerCurveX) / rx2) ;
+        float rb2 = (float)(ABS([tv triangle2Y] - centerCurveY) / sinf(t2));
+        float ellipseAngle2 = (float)(t2 / M_PI * 180);
         
         CGRect innerOval = CGRectMake(centerCurveX - rx1, centerCurveY - rb1, rx1 * 2, rb1 * 2);
         CGRect outerOval = CGRectMake(centerCurveX - rx2, centerCurveY - rb2, rx2 * 2, rb2 * 2);
@@ -460,7 +460,7 @@
         }
         
         // move to bottom ring
-        [pathForTurn moveToX:[tv getProjX:tv.dfOut radius:tv.radOuterCircle] y:[tv getProjY:tv.dfOut radius:tv.radOuterCircle]];
+        [pathForTurn moveToX:[tv projX:tv.dfOut radius:tv.radOuterCircle] y:[tv projY:tv.dfOut radius:tv.radOuterCircle]];
         if (out <= 1)
             showSteps = false;
         
@@ -478,7 +478,7 @@
             // dfStepOut = st;
             if (showSteps)
             {
-                [outlay moveToX:[tv getProjX:tv.dfOut radius:tv.radOuterCircle] y:[tv getProjY:tv.dfOut radius:tv.radOuterCircle]];
+                [outlay moveToX:[tv projX:tv.dfOut radius:tv.radOuterCircle] y:[tv projY:tv.dfOut radius:tv.radOuterCircle]];
                 for (int i = 0; i < out - 1; i++)
                 {
                     [outlay arcTo:qrOut startAngle:[self.class startArcAngle:tv.dfOut + i * (st + tv.dfStepOut)] sweepAngle:[self.class sweepArcAngle:st]];

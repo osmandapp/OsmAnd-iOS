@@ -11,13 +11,12 @@
 
 #include <vector>
 #include <routeSegment.h>
-#include <routeSegmentResult.h>
 
-@class OAGpxRouteApproximation, OALocationsHolder;
+@class OAGpxRouteApproximation, OALocationsHolder, OASRouteSegmentResult;
 
 @interface OARoutingHelper(cpp)
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
+- (NSArray<OASRouteSegmentResult *> *) getUpcomingTunnel:(float)distToStart;
 - (std::vector<std::shared_ptr<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder;
 - (std::shared_ptr<GpxRouteApproximation>)calculateGpxApproximation:(OARoutingEnvironment *)env
                                                               gctx:(std::shared_ptr<GpxRouteApproximation>)gctx
@@ -26,7 +25,7 @@
                                               useExternalTimestamps:(BOOL)useExternalTimestamps
                                                      resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
+- (OASRouteSegmentResult *) getCurrentSegmentResult;
+- (OASRouteSegmentResult *) getNextStreetSegmentResult;
 
 @end

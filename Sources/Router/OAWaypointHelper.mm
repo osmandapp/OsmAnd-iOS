@@ -28,6 +28,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARouteDirectionInfo.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <binaryRead.h>
 
@@ -334,18 +335,40 @@
                                         constants:(EOASpeedConstant)constants
                                      whenExceeded:(BOOL)whenExceeded
 {
-    
     CLLocation *lastKnownLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
     if (lastKnownLocation)
     {
-        float maxSpeed = object->getMaximumSpeed(lastKnownLocation, [_appMode getRouteTypeProfile]);
-        
-        float delta = whenExceeded
-        ? [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f
-        : maxSpeed * -1;
-        return [[self class] createSpeedAlarm:constants mxspeed:maxSpeed loc:lastKnownLocation delta:delta];
+        // The direction argument has always been YES here: the call passed a location pointer where
+        // a direction was expected, and a pointer that is there is true. Kept as it was.
+        float maxSpeed = object->getMaximumSpeed(true, [_appMode getRouteTypeProfile]);
+        return [self speedLimitAlarm:maxSpeed location:lastKnownLocation constants:constants whenExceeded:whenExceeded];
     }
     return nil;
+}
+
+- (nullable OAAlarmInfo *)calculateSpeedLimitAlarmForRouteRoad:(OASRouteDataObject *)object
+                                                      location:(nonnull CLLocation *)location
+                                                     constants:(EOASpeedConstant)constants
+                                                  whenExceeded:(BOOL)whenExceeded
+{
+    CLLocation *lastKnownLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
+    if (lastKnownLocation)
+    {
+        float maxSpeed = [object getMaximumSpeedDirection:YES profile:[_appMode getRouteTypeProfile]];
+        return [self speedLimitAlarm:maxSpeed location:lastKnownLocation constants:constants whenExceeded:whenExceeded];
+    }
+    return nil;
+}
+
+- (nullable OAAlarmInfo *)speedLimitAlarm:(float)maxSpeed
+                                 location:(nonnull CLLocation *)location
+                                constants:(EOASpeedConstant)constants
+                             whenExceeded:(BOOL)whenExceeded
+{
+    float delta = whenExceeded
+    ? [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f
+    : maxSpeed * -1;
+    return [[self class] createSpeedAlarm:constants mxspeed:maxSpeed loc:location delta:delta];
 }
 
 - (void) announceVisibleLocations
@@ -424,7 +447,7 @@
                                         break;
                                     case AIT_PEDESTRIAN:
                                         announceRadius = (nextRoute != nil
-                                                          && nextRoute.turnType->isRoundAbout()
+                                                          && [nextRoute.turnType isRoundAbout]
                                                           && kIterator != 0)
                                                           ? kStateShortAlarmAnnounce
                                                           : kStateLongAlarmAnnounce;
@@ -921,8 +944,12 @@
         {
             for (int r = 0; r < pointTypes.size(); r++)
             {
-                auto typeRule = region->quickGetEncodingRule(pointTypes[r]);
-                OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:typeRule locInd:0 coordinate:loc.coordinate];
+                // The road under the user still comes from the C++ library, so its rule is handed
+                // over as the tag and value the alarm is decided by.
+                auto& typeRule = region->quickGetEncodingRule(pointTypes[r]);
+                OASRouteTypeRule *rule = [[OASRouteTypeRule alloc] initWithT:[NSString stringWithUTF8String:typeRule.getTag().c_str()]
+                                                                           v:[NSString stringWithUTF8String:typeRule.getValue().c_str()]];
+                OAAlarmInfo *info = [OAAlarmInfo createAlarmInfo:rule locInd:0 coordinate:loc.coordinate];
                 if (info)
                 {
                     if ((info.type != AIT_SPEED_CAMERA && info.type != AIT_RED_LIGHT_CAMERA) || showCameras)

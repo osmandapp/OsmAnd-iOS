@@ -13,7 +13,6 @@
 #import "OsmAndApp.h"
 #import "OAGPXTrackCell.h"
 #import "OASegmentTableViewCell.h"
-#import "OADividerCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OATrackSegmentsViewController.h"
 #import "OAUtilities.h"
@@ -44,6 +43,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
+static const NSInteger kTracksSection = 1;
+static const NSInteger kSegmentRow = 0;
+
 @interface OAOpenAddTrackViewController() <UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
@@ -59,6 +61,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     OAFoldersCell *_foldersCell;
     
     BOOL _showCurrentGpx;
+    BOOL _folderChangedSinceLastSort;
 }
 
 #pragma mark - Initialization
@@ -146,17 +149,16 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     NSMutableArray *data = [NSMutableArray new];
     NSMutableArray *existingTracksSection = [NSMutableArray new];
+    NSMutableArray *foldersSection = [NSMutableArray new];
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
     NSArray *filteredData = [self filterData:[db getDataItems]];
     NSArray *gpxList = [NSMutableArray arrayWithArray:[self sortData:filteredData]];
     
-    [existingTracksSection addObject:@{
+    [foldersSection addObject:@{
         @"type" : [OAFoldersCell getCellIdentifier],
         @"selectedValue" : @(_selectedFolderIndex),
         @"values" : [self getFoldersList]
     }];
-    
-    [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
     
     [existingTracksSection addObject:@{
         @"type" : [OASegmentTableViewCell getCellIdentifier],
@@ -192,7 +194,8 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             @"key" : @"gpx_route"
         }];
     }
-    [existingTracksSection addObject:@{ @"type" : [OADividerCell getCellIdentifier] }];
+
+    [data addObject:foldersSection];
     [data addObject:existingTracksSection];
     _data = data;
 }
@@ -211,7 +214,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     {
         [folderButtonsData addObject:@{
             @"title" : folderNames[i],
-            @"img" : @"ic_custom_folder"
+            @"img" : ACImageNameIcCustomFolder
         }];
     }
     return folderButtonsData;
@@ -266,12 +269,22 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     return _data[section].count;
 }
 
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    if (section == 1)
+        return 0.001;
+    return UITableViewAutomaticDimension;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    return section == 0 ? 0.001 : UITableViewAutomaticDimension;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-        return [OADividerCell cellHeight:SeparatorAppearance.thickness dividerInsets:UIEdgeInsetsZero];
-    else if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAFoldersCell getCellIdentifier]])
         return 52;
     
     return UITableViewAutomaticDimension;
@@ -299,6 +312,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
+            cell.segmentControl.selectedSegmentIndex = _sortingMode;
             UIFont *font = [UIFont scaledSystemFontOfSize:14.];
             [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateNormal];
             [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateSelected];
@@ -323,7 +337,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.distanceLabel.text = item[@"distance"];
             cell.timeLabel.text = item[@"time"];
             cell.wptLabel.text = item[@"wpt"];
-            cell.separatorView.hidden = indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 2;
+            cell.separatorView.hidden = indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 1;
         }
         return cell;
     }
@@ -346,20 +360,6 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             [_foldersCell.collectionView reloadData];
         }
         return _foldersCell;
-    }
-    else if ([item[@"type"] isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        OADividerCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
-            cell = (OADividerCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = [SeparatorAppearance color];
-            cell.dividerInsets = UIEdgeInsetsZero;
-            cell.dividerHight = SeparatorAppearance.thickness;
-        }
-        return cell;
     }
     return nil;
 }
@@ -483,6 +483,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void)onLeftNavbarButtonPressed
 {
+    if ([self.delegate respondsToSelector:@selector(onFileSelectionCancelled)])
+        [self.delegate onFileSelectionCancelled];
+
     [self dismissViewControllerAnimated:YES completion:^{
         if (_screenType == EOAFollowTrack)
             [self closeBottomSheetDelegate];
@@ -500,11 +503,35 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             _sortingMode = EOANameAscending;
         else if (segment.selectedSegmentIndex == 2)
             _sortingMode = EOANameDescending;
+
+        NSInteger previousSectionCount = self.tableView.numberOfSections;
+        NSInteger previousTrackRows = previousSectionCount > kTracksSection
+            ? [self.tableView numberOfRowsInSection:kTracksSection] : 0;
         [self generateData];
-        
-        NSMutableArray *pathsToReload = [NSMutableArray arrayWithArray:self.tableView.indexPathsForVisibleRows];
-        [pathsToReload removeObjectsInRange:NSMakeRange(0, 3)];
-        [self.tableView reloadRowsAtIndexPaths:pathsToReload withRowAnimation:UITableViewRowAnimationAutomatic];
+        BOOL needsFullReload = _folderChangedSinceLastSort || previousSectionCount != _data.count
+            || _data.count <= kTracksSection
+            || previousTrackRows != _data[kTracksSection].count;
+        _folderChangedSinceLastSort = NO;
+        if (needsFullReload)
+        {
+            [self.tableView reloadData];
+            return;
+        }
+
+        NSMutableArray<NSIndexPath *> *pathsToReload = [NSMutableArray array];
+        for (NSIndexPath *indexPath in self.tableView.indexPathsForVisibleRows)
+        {
+            if (indexPath.section != kTracksSection)
+                continue;
+            if (indexPath.row == kSegmentRow)
+                continue;
+            [pathsToReload addObject:indexPath];
+        }
+        if (pathsToReload.count > 0)
+        {
+            [self.tableView reloadRowsAtIndexPaths:pathsToReload
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
     }
 }
 
@@ -524,6 +551,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void)onItemSelected:(NSInteger)index
 {
     _selectedFolderIndex = index;
+    _folderChangedSinceLastSort = YES;
     [self generateData];
     [self.tableView reloadData];
 }
@@ -532,6 +560,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 
 - (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
 {
+    if ([self.delegate respondsToSelector:@selector(onFileSelectionCancelled)])
+        [self.delegate onFileSelectionCancelled];
+
     if (_screenType == EOAFollowTrack)
         [self closeBottomSheetDelegate];
 }

@@ -136,7 +136,8 @@ static NSString * const availableApplicationModesKey = @"available_application_m
 static NSString * const customAppModesKey = @"customAppModes";
 
 static NSString * const mapInfoControlsKey = @"mapInfoControls";
-static NSString * const transparentMapThemeKey = @"transparentMapTheme";
+static NSString * const mapInfoControlsLayoutKey = @"map_info_controls";
+static NSString * const transparentMapThemeKey = @"transparent_map_theme";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
@@ -171,6 +172,9 @@ static NSString * const locationIconSizeKey = @"locationIconSizeKey";
 static NSString * const courseIconSizeKey = @"courseIconSizeKey";
 
 static NSString * const rendererKey = @"renderer";
+
+static NSString * const preferredCoordinateFormatIdsKey = @"preferred_coordinate_format_ids";
+static NSString * const recentlyAddedCoordinateFormatIdsKey = @"recently_added_coordinate_format_ids";
 
 // navigation settings
 static NSString * const useFastRecalculationKey = @"useFastRecalculation";
@@ -301,6 +305,7 @@ static NSString * const cycleRoutesParameterKey = @"cycleRoutesParameter";
 static NSString * const mountainBikeRoutesParameterKey = @"mountainBikeRoutesParameter";
 static NSString * const mapManuallyRotatingAngleKey = @"mapManuallyRotatingAngle";
 static NSString * const mapScreenOrientationKey = @"mapScreenOrientation";
+static NSString * const keepScreenOnKey = @"keep_screen_on";
 static NSString * const detailedTrackGuidanceKey = @"detailedTrackGuidance";
 static NSString * const gpxApproximationDistanceKey = @"gpxApproximationDistance";
 static NSString * const activeMarkerKey = @"activeMarkerKey";
@@ -487,7 +492,10 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
+static NSString * const useSharedRoutingKey = @"useSharedRoutingKey";
 static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
+
+static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 @interface OAMetricsConstant()
 
@@ -1588,6 +1596,8 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) setValue:(NSObject *)value;
 - (void) setValue:(NSObject *)value mode:(OAApplicationMode *)mode;
 - (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode;
+- (instancetype)copyWithKey:(NSString *)key;
+- (OACommonPreference *)setupCopy:(OACommonPreference *)copy;
 
 @end
 
@@ -1630,6 +1640,29 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return self;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                 reason:[NSString stringWithFormat:@"%@ must override %@",
+                                         NSStringFromClass(self.class), NSStringFromSelector(_cmd)]
+                               userInfo:nil];
+}
+
+- (OACommonPreference *)setupCopy:(OACommonPreference *)copy
+{
+    if (self.global)
+        [copy makeGlobal];
+    else
+        [copy makeProfile];
+    if (self.shared)
+        [copy makeShared];
+    if (self.lastModifiedTimeStored)
+        [copy storeLastModifiedTime];
+    copy.defaultValue = self.defaultValue;
+    copy.defaultValues = [self.defaultValues copy];
+    return copy;
+}
+
 - (OAApplicationMode *)appMode
 {
     return [OAAppSettings sharedManager].currentMode;
@@ -1669,7 +1702,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     }
     if (!cachedValue)
     {
-        cachedValue = [self getProfileDefaultValue:mode];
+        cachedValue = [self profileDefaultValue:mode];
     }
     return cachedValue;
 }
@@ -1715,7 +1748,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     
     if (hasValue)
     {
-        NSObject *defValue = [self getProfileDefaultValue:mode];
+        NSObject *defValue = [self profileDefaultValue:mode];
         if (!defValue)
             return YES;
         
@@ -1770,7 +1803,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     }
     else
     {
-        NSObject *defValue = [self getProfileDefaultValue:mode];
+        NSObject *defValue = [self profileDefaultValue:mode];
         [self setValue:defValue mode:mode];
     }
 }
@@ -1778,11 +1811,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void)resetToDefault
 {
     OAApplicationMode *mode = [OAAppSettings sharedManager].currentMode;
-    NSObject *defValue = [self getProfileDefaultValue:mode];
+    NSObject *defValue = [self profileDefaultValue:mode];
     [self setValue:defValue mode:mode];
 }
 
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
 {
 
     if (self.global)
@@ -1799,7 +1832,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     {
         OAApplicationMode *pt = mode.parent;
         if (pt)
-            return [self getProfileDefaultValue:pt];
+            return [self profileDefaultValue:pt];
     }
 
     return self.defaultValue;
@@ -1850,6 +1883,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonAppMode *)[self setupCopy:[OACommonAppMode withKey:key defValue:self.defValue]];
 }
 
 - (OAApplicationMode *)get
@@ -1905,7 +1943,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     else
     {
         OAApplicationMode *defaultValue = self.defValue;
-        NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+        NSObject *pDefault = [self profileDefaultValue:self.appMode];
         if (pDefault)
             defaultValue = (OAApplicationMode *) pDefault;
 
@@ -1944,6 +1982,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonBoolean *)[self setupCopy:[OACommonBoolean withKey:key defValue:self.defValue]];
+}
+
 - (BOOL) get
 {
     return [self get:self.appMode];
@@ -1978,7 +2021,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     BOOL defaultValue = [self.key isEqualToString:settingMapLanguageTranslitKey] ? [[OAAppSettings sharedManager].settingPrefMapLanguage.get isEqualToString:@"en"] : self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = ((NSNumber *)pDefault).boolValue;
 
@@ -2014,6 +2057,15 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    // Preserve enum subclasses without calling their differently typed factories.
+    OACommonInteger *copy = [[self.class alloc] init];
+    copy.key = key;
+    copy.defValue = self.defValue;
+    return (OACommonInteger *)[self setupCopy:copy];
 }
 
 - (int) get
@@ -2054,7 +2106,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         defaultValue = [[OAAppSettings sharedManager].defaultApplicationMode.get isDerivedRoutingFrom:OAApplicationMode.CAR] ? 10 : -1;
     else
         defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = ((NSNumber *)pDefault).intValue;
 
@@ -2069,6 +2121,63 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [NSString stringWithFormat:@"%d", [self get:mode]];
+}
+
+@end
+
+@implementation OACommonKeepScreenOnMode
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAKeepScreenOnMode)defValue
+{
+    OACommonKeepScreenOnMode *obj = [[OACommonKeepScreenOnMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = (int)defValue;
+    }
+    return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    OACommonKeepScreenOnMode *copy = [OACommonKeepScreenOnMode withKey:key defValue:(EOAKeepScreenOnMode)self.defValue];
+    return (OACommonKeepScreenOnMode *)[self setupCopy:copy];
+}
+
+- (EOAKeepScreenOnMode)get
+{
+    return [super get];
+}
+
+- (EOAKeepScreenOnMode)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(EOAKeepScreenOnMode)value
+{
+    [super set:(int)value];
+}
+
+- (void)set:(EOAKeepScreenOnMode)value mode:(OAApplicationMode *)mode
+{
+    [super set:(int)value mode:mode];
+}
+
+- (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
+{
+    // Validate here so copying and importing preferences follow the same rule.
+    if (mode == OAApplicationMode.DEFAULT && [value isEqual:@(EOAKeepScreenOnModeDuringNavigation)])
+        value = @(EOAKeepScreenOnModeSystemDefault);
+    [super setValue:value mode:mode];
+}
+
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
+{
+    // Custom profiles have navigation settings, even when their parent is Browse map.
+    return @(mode == OAApplicationMode.DEFAULT
+             ? EOAKeepScreenOnModeSystemDefault
+             : EOAKeepScreenOnModeDuringNavigation);
 }
 
 @end
@@ -2090,6 +2199,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonLong *)[self setupCopy:[OACommonLong withKey:key defValue:self.defValue]];
 }
 
 - (long) get
@@ -2119,7 +2233,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     long defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = ((NSNumber *)pDefault).longValue;
 
@@ -2157,6 +2271,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonString *)[self setupCopy:[OACommonString withKey:key defValue:self.defValue]];
+}
+
 - (NSString *) get
 {
     return [self get:self.appMode];
@@ -2184,7 +2303,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     NSString *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSString *)pDefault;
 
@@ -2227,6 +2346,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonDouble *)[self setupCopy:[OACommonDouble withKey:key defValue:self.defValue]];
+}
+
 - (double) get
 {
     return [self get:self.appMode];
@@ -2254,7 +2378,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     double defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = ((NSNumber *)pDefault).doubleValue;
 
@@ -2290,6 +2414,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonStringList *)[self setupCopy:[OACommonStringList withKey:key defValue:self.defValue]];
 }
 
 - (NSArray<NSString *> *) get
@@ -2343,7 +2472,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     NSArray<NSString *> *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSArray<NSString *> *)pDefault;
 
@@ -2382,6 +2511,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonListOfStringList *)[self setupCopy:[OACommonListOfStringList withKey:key defValue:self.defValue]];
+}
+
 - (NSArray<NSArray<NSString *> *> *) get
 {
     return [self get:self.appMode];
@@ -2406,7 +2540,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     NSArray<NSArray<NSString *> *> *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSArray<NSArray<NSString *> *> *)pDefault;
     
@@ -2459,6 +2593,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonSubscriptionState *)[self setupCopy:[OACommonSubscriptionState withKey:key defValue:self.defValue]];
+}
+
 - (OASubscriptionState *) get
 {
     return [self get:self.appMode];
@@ -2483,7 +2622,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     OASubscriptionState *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (OASubscriptionState *) pDefault;
 
@@ -2510,6 +2649,11 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
         obj.defValue = defValue;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonMapSource *)[self setupCopy:[OACommonMapSource withKey:key defValue:self.defValue]];
 }
 
 - (nullable OAMapSource *) get
@@ -2541,7 +2685,7 @@ static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 - (void) resetToDefault
 {
     OAMapSource *defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (OAMapSource *) pDefault;
 
@@ -2591,7 +2735,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOASpeedLimitWarningState defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOASpeedLimitWarningState)((NSNumber *)pDefault).intValue;
 
@@ -2695,7 +2839,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAAutoZoomMap defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAAutoZoomMap)((NSNumber *)pDefault).intValue;
 
@@ -2775,7 +2919,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     [super set:speedConstant mode:mode];
 }
 
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
 {
     EOAMetricsConstant mc = [[OAAppSettings sharedManager].metricSystem get];
     if ([mode isDerivedRoutingFrom:[OAApplicationMode PEDESTRIAN]])
@@ -2799,7 +2943,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOASpeedConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOASpeedConstant)((NSNumber *)pDefault).intValue;
 
@@ -2890,7 +3034,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAVolumeConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAVolumeConstant)((NSNumber *)pDefault).intValue;
 
@@ -2972,7 +3116,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void)resetToDefault
 {
     EOATemperatureConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOATemperatureConstant)((NSNumber *)pDefault).intValue;
     
@@ -3055,7 +3199,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAAngularConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAAngularConstant)((NSNumber *)pDefault).intValue;
 
@@ -3138,7 +3282,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAActiveMarkerConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAActiveMarkerConstant)((NSNumber *)pDefault).intValue;
 
@@ -3279,7 +3423,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOADrivingRegion defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOADrivingRegion)((NSNumber *)pDefault).intValue;
 
@@ -3371,7 +3515,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAMetricsConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAMetricsConstant)((NSNumber *)pDefault).intValue;
 
@@ -3452,14 +3596,14 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void)resetToDefault
 {
     EOAltitudeMetricsConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAltitudeMetricsConstant)((NSNumber *)pDefault).intValue;
     
     [self set:defaultValue];
 }
 
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
 {
     NSSet *metricModes = [NSSet setWithArray:@[
         @(KILOMETERS_AND_METERS),
@@ -3561,7 +3705,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOARulerWidgetMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOARulerWidgetMode)((NSNumber *)pDefault).intValue;
 
@@ -3644,7 +3788,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAWikiArticleShowConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAWikiArticleShowConstant)((NSNumber *)pDefault).intValue;
 
@@ -3736,7 +3880,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOARateUsState defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOARateUsState)((NSNumber *)pDefault).intValue;
 
@@ -3818,7 +3962,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAGradientScaleType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAGradientScaleType)((NSNumber *)pDefault).intValue;
 
@@ -3904,7 +4048,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAUploadVisibility defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAUploadVisibility)((NSNumber *)pDefault).intValue;
 
@@ -3992,7 +4136,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOACoordinateInputFormats defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOACoordinateInputFormats)((NSNumber *)pDefault).intValue;
 
@@ -4031,6 +4175,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         obj.values = values;
     }
     return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    OACommonDownloadMode *copy = [super copyWithKey:key];
+    copy.values = [self.values copy];
+    return copy;
 }
 
 - (OADownloadMode *) get
@@ -4131,6 +4282,13 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    OACommonColoringType *copy = [super copyWithKey:key];
+    copy.values = [self.values copy];
+    return copy;
+}
+
 - (OAColoringType *) get
 {
     NSInteger indexOfValue = [super get:self.appMode];
@@ -4227,6 +4385,11 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     return obj;
 }
 
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonUnit *)[self setupCopy:[OACommonUnit withKey:key defValue:self.defValue]];
+}
+
 - (NSUnit *) get
 {
     return [self get:self.appMode];
@@ -4264,7 +4427,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
     if (!cachedValue)
     {
-        cachedValue = [self getProfileDefaultValue:mode];
+        cachedValue = [self profileDefaultValue:mode];
     }
     return cachedValue;
 }
@@ -4294,9 +4457,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
     [OAAppSettings notifyPreferenceChanged:self];
 }
 
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode
 {
-    NSObject *value = [super getProfileDefaultValue:mode];
+    NSObject *value = [super profileDefaultValue:mode];
     if ([value isKindOfClass:NSString.class])
         value = [NSUnit unitFromString:value];
     return value;
@@ -4389,7 +4552,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void) resetToDefault
 {
     EOAWidgetSizeStyle defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
 
@@ -4484,7 +4647,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 - (void)resetToDefault
 {
     EOASunPositionMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOASunPositionMode)((NSNumber *)pDefault).intValue;
 
@@ -4534,7 +4697,7 @@ static NSString *kMapScaleKey = @"MAP_SCALE";
 - (void)resetToDefault
 {
     EOAWidgetZoomLevelType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAWidgetZoomLevelType)((NSNumber *)pDefault).intValue;
 
@@ -4628,7 +4791,7 @@ static NSString *kLastUphill = @"LAST_UPHILL";
 - (void)resetToDefault
 {
     NSInteger defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
     
@@ -4725,7 +4888,7 @@ static NSString *kElevationLast  = @"LAST";
 - (void)resetToDefault
 {
     NSInteger defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
     
@@ -4819,7 +4982,7 @@ static NSString *kSlopeLastUphill   = @"LAST_UPHILL";
 - (void)resetToDefault
 {
     NSInteger defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
     
@@ -4914,7 +5077,7 @@ static NSString *kDistanceLastUphill = @"LAST_UPHILL";
 - (void)resetToDefault
 {
     NSInteger defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
     
@@ -5012,7 +5175,7 @@ static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
 - (void)resetToDefault
 {
     NSInteger defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (NSInteger)((NSNumber *)pDefault).intValue;
     
@@ -5105,7 +5268,7 @@ static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
 - (void) resetToDefault
 {
     EOADistanceByTapTextSizeConstant defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOADistanceByTapTextSizeConstant)((NSNumber *)pDefault).intValue;
 
@@ -5135,6 +5298,99 @@ static NSString *kMovingTimeLastUphill = @"LAST_UPHILL";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [self get:mode] == LARGE ? @"LARGE" : @"NORMAL";
+}
+
+@end
+
+@implementation OACommonPanelsLayoutMode
+
+static NSString *kPanelsLayoutWideKey = @"WIDE";
+static NSString *kPanelsLayoutCompactKey = @"COMPACT";
+
+@dynamic defValue;
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue
+{
+    OACommonPanelsLayoutMode *obj = [[OACommonPanelsLayoutMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (int)get
+{
+    return [super get];
+}
+
+- (int)get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void)set:(int)panelsLayoutMode
+{
+    [super set:panelsLayoutMode];
+}
+
+- (void)set:(int)panelsLayoutMode mode:(OAApplicationMode *)mode
+{
+    [super set:panelsLayoutMode mode:mode];
+}
+
+- (void)resetToDefault
+{
+    PanelsLayoutMode defaultValue = self.defValue;
+    NSNumber *profileDefault = (NSNumber *)[self profileDefaultValue:self.appMode];
+    if ([profileDefault isKindOfClass:[NSNumber class]])
+        defaultValue = (PanelsLayoutMode)profileDefault.intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    NSNumber *value = [self valueFromString:string appMode:mode];
+    if (value)
+        [super set:value.integerValue mode:mode];
+}
+
+- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
+{
+    static NSDictionary<NSString *, NSNumber *> *panelsLayoutModeMap;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        panelsLayoutModeMap = @{
+            kPanelsLayoutWideKey: @(PanelsLayoutModeWide),
+            kPanelsLayoutCompactKey: @(PanelsLayoutModeCompact)
+        };
+    });
+    return panelsLayoutModeMap[string];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    PanelsLayoutMode panelsLayoutMode = [self get:mode];
+    return [self toStringFromValue:@(panelsLayoutMode)];
+}
+
+- (NSString *)toStringFromValue:(id)value
+{
+    if (![value isKindOfClass:[NSNumber class]])
+        return @"";
+
+    PanelsLayoutMode panelsLayoutMode = (PanelsLayoutMode)[value intValue];
+    switch (panelsLayoutMode)
+    {
+        case PanelsLayoutModeWide:
+            return kPanelsLayoutWideKey;
+        case PanelsLayoutModeCompact:
+            return kPanelsLayoutCompactKey;
+        default:
+            return @"";
+    }
 }
 
 @end
@@ -5181,7 +5437,7 @@ static NSString *kDistanceKey = @"DISTANCE";
 - (void)resetToDefault
 {
     RouteInfoDisplayValue defaultValue = self.defValue;
-    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    NSNumber *pDefault = (NSNumber *)[self profileDefaultValue:self.appMode];
     if ([pDefault isKindOfClass:[NSNumber class]])
         defaultValue = (RouteInfoDisplayValue)pDefault.intValue;
 
@@ -5278,7 +5534,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 - (void)resetToDefault
 {
     RouteInfoDisplayPriority defaultValue = self.defValue;
-    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    NSNumber *pDefault = (NSNumber *)[self profileDefaultValue:self.appMode];
     if ([pDefault isKindOfClass:[NSNumber class]])
         defaultValue = (RouteInfoDisplayPriority)pDefault.intValue;
 
@@ -5405,7 +5661,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 - (void)resetToDefault
 {
     DayNightMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (DayNightMode) ((NSNumber *) pDefault).intValue;
 
@@ -5416,7 +5672,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 
 @implementation OACommonGridFormat
 
-+ (instancetype)withKey:(NSString *)key defValue:(int)defValue
++ (instancetype)withKey:(NSString *)key defValue:(NSString *)defValue
 {
     OACommonGridFormat *obj = [[OACommonGridFormat alloc] init];
     if (obj)
@@ -5427,82 +5683,48 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
     return obj;
 }
 
-- (int)get
+- (NSString *)get
 {
-    return [super get];
+    return [self get:self.appMode];
 }
 
-- (void)set:(int)gridFormat
+- (NSString *)get:(OAApplicationMode *)mode
 {
-    [super set:gridFormat];
+    NSObject *raw = [self getValue:mode];
+    if (!raw)
+        return self.defValue;
+
+    return [GridFormatWrapper migratePreferenceValue:raw];
 }
 
-- (int)get:(OAApplicationMode *)mode
+- (void)set:(NSString *)formatId
 {
-    return [super get:mode];
+    [self set:formatId mode:self.appMode];
 }
 
-- (void)set:(int)gridFormat mode:(OAApplicationMode *)mode
+- (void)set:(NSString *)formatId mode:(OAApplicationMode *)mode
 {
-    [super set:gridFormat mode:mode];
+    NSString *normalized = [GridFormatWrapper migratePreferenceValue:formatId];
+    [super set:normalized mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    NSNumber *value = [self valueFromString:strValue appMode:mode];
-    if (value)
-        [super set:value.integerValue mode:mode];
-}
-
-- (NSNumber *)valueFromString:(NSString *)string appMode:(OAApplicationMode *)mode
-{
-    static NSDictionary<NSString *, NSNumber *> *map;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        map = @{
-            @"DD_MM_SS": @(GridFormatDms),
-            @"DD_MM_MMM": @(GridFormatDm),
-            @"DD_DDDDD": @(GridFormatDigital),
-            @"UTM": @(GridFormatUtm),
-            @"MGRS": @(GridFormatMgrs)
-        };
-    });
-    return map[string];
+    [self set:strValue mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
-    {
-        case GridFormatDms:
-            return @"DD_MM_SS";
-        case GridFormatDm:
-            return @"DD_MM_MMM";
-        case GridFormatDigital:
-            return @"DD_DDDDD";
-        case GridFormatUtm:
-            return @"UTM";
-        case GridFormatMgrs:
-            return @"MGRS";
-        default:
-            return @"DD_MM_SS";
-    }
+    return [self get:mode];
 }
 
 - (void)resetToDefault
 {
-    GridFormat defaultValue = self.defValue;
-    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
-    if ([pDefault isKindOfClass:[NSNumber class]])
-        defaultValue = (GridFormat)pDefault.intValue;
-    
+    NSString *defaultValue = self.defValue;
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
+    if ([pDefault isKindOfClass:[NSString class]])
+        defaultValue = (NSString *)pDefault;
     [self set:defaultValue];
-}
-
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode
-{
-    int geoFormatId = [[OAAppSettings sharedManager].settingGeoFormat get:mode];
-    return [GridFormatWrapper gridFormatRawForGeoFormat:(int32_t)geoFormatId];
 }
 
 @end
@@ -5575,7 +5797,7 @@ static NSString *kDestinationFirstKey = @"DESTINATION_FIRST";
 - (void)resetToDefault
 {
     GridLabelsPosition defaultValue = self.defValue;
-    NSNumber *pDefault = (NSNumber *)[self getProfileDefaultValue:self.appMode];
+    NSNumber *pDefault = (NSNumber *)[self profileDefaultValue:self.appMode];
     if ([pDefault isKindOfClass:[NSNumber class]])
         defaultValue = (GridLabelsPosition)pDefault.intValue;
     
@@ -5622,7 +5844,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     [super set:(int)type mode:mode];
 }
 
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode {
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode {
     BOOL paidVersion = [OAIAPHelper isPaidVersion];
     return paidVersion ? @(0): @(1) ;
 }
@@ -5630,7 +5852,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 - (void)resetToDefault
 {
     EOAWikiDataSourceType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    NSObject *pDefault = [self profileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOAWikiDataSourceType)((NSNumber *)pDefault).intValue;
 
@@ -5712,6 +5934,68 @@ static NSString *kOfflineKey = @"OFFLINE";
         _sharedManager = [[OAAppSettings alloc] init];
     });
     return _sharedManager;
+}
+
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                          preferenceKey:(NSString *)preferenceKey
+                        screenLayoutMode:(NSNumber *)screenLayoutMode
+{
+    if (screenLayoutMode == nil)
+        return basePreference;
+
+    NSString *layoutPrefix = [ScreenLayoutModeWrapper keyForNumber:screenLayoutMode.intValue];
+    return [self layoutPreference:basePreference preferenceKey:preferenceKey layoutPrefix:layoutPrefix];
+}
+
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                           preferenceKey:(NSString *)preferenceKey
+                            layoutPrefix:(NSString *)layoutPrefix
+{
+    NSString *key = [NSString stringWithFormat:@"%@_%@", layoutPrefix, preferenceKey];
+    @synchronized(_profilePreferences)
+    {
+        OACommonPreference *preference = [_profilePreferences objectForKey:key];
+        if (!preference)
+        {
+            preference = [basePreference copyWithKey:key];
+            [_profilePreferences setObject:preference forKey:key];
+            [self registerPreference:preference forKey:key];
+        }
+        return preference;
+    }
+}
+
+- (void)registerWidgetLayoutPreferences
+{
+    NSArray<NSArray *> *preferences = @[
+        @[_mapInfoControls, mapInfoControlsLayoutKey],
+        @[_customWidgetKeys, customWidgetKeys],
+        @[_transparentMapTheme, transparentMapThemeKey],
+        @[_leftWidgetPanelOrder, leftWidgetPanelOrderKey],
+        @[_rightWidgetPanelOrder, rightWidgetPanelOrderKey],
+        @[_topWidgetPanelOrder, topWidgetPanelOrderOldKey],
+        @[_bottomWidgetPanelOrder, bottomWidgetPanelOrderKeyOld]
+    ];
+    for (NSArray *preferenceData in preferences)
+    {
+        OACommonPreference *preference = preferenceData.firstObject;
+        NSString *preferenceKey = preferenceData.lastObject;
+        for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
+        {
+            [self layoutPreference:preference
+                    preferenceKey:preferenceKey
+                  screenLayoutMode:screenLayoutMode];
+        }
+    }
+
+    for (NSNumber *screenLayoutMode in [ScreenLayoutModeWrapper allValues])
+    {
+        for (NSNumber *screenElementsMode in [ScreenElementsModeWrapper allValues])
+        {
+            [self panelsLayoutMode:screenLayoutMode.intValue
+                screenElementsMode:screenElementsMode.intValue];
+        }
+    }
 }
 
 + (void)performBatchedPreferenceNotifications:(void (^)(void))changes
@@ -5921,13 +6205,13 @@ static NSString *kOfflineKey = @"OFFLINE";
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
         
         // Widgets
-        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
-        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
-        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[WidgetsPanel leftPanel] originalOrder]]];
+        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[WidgetsPanel rightPanel] originalOrder]]];
+        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[WidgetsPanel topPanel] originalOrder]]];
+        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[WidgetsPanel bottomPanel] originalOrder]]];
 
-        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[WidgetsPanel topPanel] originalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[WidgetsPanel bottomPanel] originalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
@@ -5945,7 +6229,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _mapSettingShowCoordinatesGrid = [[OACommonBoolean withKey:mapSettingShowCoordinatesGridKey defValue:NO] makeProfile];
         _showPolygonsWhenUnderlayIsOn = [[OACommonBoolean withKey:showPolygonsWhenUnderlayIsOnKey defValue:NO] makeProfile];
-        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatDms] makeProfile];
+        _coordinateGridFormat = [[OACommonGridFormat withKey:coordinateGridFormatKey defValue:GridFormatWrapper.defaultFormatId] makeProfile];
         _coordinateGridMinZoom = [[OACommonInteger withKey:coordinateGridMinZoomKey defValue:0] makeProfile];
         _coordinateGridMaxZoom = [[OACommonInteger withKey:coordinateGridMaxZoomKey defValue:31] makeProfile];
         _coordinatesGridLabelsPosition = [[OACommonGridLabelsPosition withKey:coordinatesGridLabelsPositionKey defValue:GridLabelsPositionEdges] makeProfile];
@@ -6053,7 +6337,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_customAppModes forKey:@"custom_app_modes_keys"];
 
         _mapInfoControls = [OACommonString withKey:mapInfoControlsKey defValue:@""];
-        [_profilePreferences setObject:_mapInfoControls forKey:@"map_info_controls"];
+        [_profilePreferences setObject:_mapInfoControls forKey:mapInfoControlsLayoutKey];
         
         _derivedProfile = [OACommonString withKey:derivedProfileKey defValue:@"default"];
         [_derivedProfile setModeDefaultValue:@"motorcycle" mode:OAApplicationMode.MOTORCYCLE];
@@ -6165,7 +6449,10 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
 
         _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
-        [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
+        [_profilePreferences setObject:_transparentMapTheme forKey:transparentMapThemeKey];
+
+        _useSeparateLayouts = [OACommonBoolean withKey:useSeparateLayoutsKey defValue:NO];
+        [_profilePreferences setObject:_useSeparateLayouts forKey:useSeparateLayoutsKey];
 
         _showDistanceRuler = [OACommonBoolean withKey:showDistanceRulerKey defValue:NO];
         [_profilePreferences setObject:_showDistanceRuler forKey:@"show_distance_ruler"];
@@ -6184,7 +6471,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _tracksSortModes = [[[OACommonStringList withKey:tracksSortModesKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_tracksSortModes forKey:tracksSortModesKey];
         
-        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeTitleFor:nil]];
+        _searchTracksSortModes = [OACommonString withKey:searchTracksSortModesKey defValue:[TracksSortModeHelper getDefaultSortModeValueFor:nil]];
         [_globalPreferences setObject:_searchTracksSortModes forKey:searchTracksSortModesKey];
         
         _favoriteSortModes = [[[OACommonStringList withKey:favoriteSortModesKey defValue:@[]] makeGlobal] makeShared];
@@ -6342,6 +6629,24 @@ static NSString *kOfflineKey = @"OFFLINE";
         _fuelTankCapacity = [OACommonDouble withKey:fuelTankCapacityKey defValue:OASOBDDataComputer.shared.DEFAULT_FUEL_TANK_CAPACITY];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
+        
+        OACommonStringList *preferredCoordinateFormatIds =
+            [[OACommonStringList withKey:preferredCoordinateFormatIdsKey
+                               defValue:@[
+                @"builtin:ddd", @"builtin:ddm", @"builtin:dms", @"builtin:utm", @"builtin:olc"
+            ]] makeProfile];
+        OACommonStringList *recentlyAddedCoordinateFormatIds =
+            [[OACommonStringList withKey:recentlyAddedCoordinateFormatIdsKey
+                               defValue:@[]] makeGlobal];
+
+        [_profilePreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:preferredCoordinateFormatIds forKey:preferredCoordinateFormatIdsKey];
+        [_registeredPreferences setObject:recentlyAddedCoordinateFormatIds forKey:recentlyAddedCoordinateFormatIdsKey];
+
+        _coordinateFormatSettingsStorage =
+            [[CoordinateFormatSettingsStorage alloc] initWithSettings:self
+                                                 preferredPreference:preferredCoordinateFormatIds
+                                                    recentPreference:recentlyAddedCoordinateFormatIds];
 
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
@@ -6885,6 +7190,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
+
+        _keepScreenOn = [[OACommonKeepScreenOnMode withKey:keepScreenOnKey defValue:EOAKeepScreenOnModeDuringNavigation] makeProfile];
+        [_profilePreferences setObject:_keepScreenOn forKey:keepScreenOnKey];
         
         _detailedTrackGuidance = [[OACommonInteger withKey:detailedTrackGuidanceKey defValue:EOATrackApproximationManual] makeShared];
         [_profilePreferences setObject:_detailedTrackGuidance forKey:@"detailed_track_guidance"];
@@ -6894,6 +7202,9 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
+        
+        _useSharedRouting = [[[OACommonBoolean withKey:useSharedRoutingKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useSharedRouting forKey:@"use_shared_routing"];
         
         _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];
@@ -6906,6 +7217,9 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         _sphericalMap = [[OACommonBoolean withKey:@"sphericalMap" defValue:NO] makeProfile];
         [_globalPreferences setObject:_sphericalMap forKey:@"spherical_map"];
+
+        [self registerWidgetLayoutPreferences];
+        [WidgetPanelAppearancePreferencesRegistrar registerAllPreferencesWith:self];
         
         [self fetchImpassableRoads];
 
@@ -6922,6 +7236,114 @@ static NSString *kOfflineKey = @"OFFLINE";
         }
     }
     return self;
+}
+
+- (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode
+{
+    NSString *screenElementsPrefix = [ScreenElementsModeWrapper keyFor:(ScreenElementsMode)screenElementsMode];
+    NSString *screenLayoutPrefix = [ScreenLayoutModeWrapper keyFor:(ScreenLayoutMode)screenLayoutMode];
+    NSString *key = [NSString stringWithFormat:@"%@_%@_panels_layout_mode", screenElementsPrefix, screenLayoutPrefix];
+    @synchronized(_profilePreferences)
+    {
+        OACommonPanelsLayoutMode *preference = (OACommonPanelsLayoutMode *)[_profilePreferences objectForKey:key];
+        if (!preference)
+        {
+            preference = [OACommonPanelsLayoutMode withKey:key defValue:PanelsLayoutModeWide];
+            [_profilePreferences setObject:preference forKey:key];
+            [self registerPreference:preference forKey:key];
+        }
+        preference.defValue = (screenLayoutMode == ScreenLayoutModeLandscape || [OAUtilities isIPad])
+            && ![OAUtilities isWindowed]
+            ? PanelsLayoutModeCompact
+            : PanelsLayoutModeWide;
+        return preference;
+    }
+}
+
+- (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode
+{
+    ScreenElementsMode screenElementsMode = [_useSeparateLayouts get:appMode]
+        ? ScreenElementsModeIndependent
+        : ScreenElementsModeShared;
+    ScreenLayoutMode screenLayoutMode = [OAUtilities isLandscape]
+        ? ScreenLayoutModeLandscape
+        : ScreenLayoutModePortrait;
+    return [self panelsLayoutMode:screenLayoutMode screenElementsMode:screenElementsMode];
+}
+
+- (BOOL)isCompactPanelsLayout
+{
+    OAApplicationMode *appMode = [self.applicationMode get];
+    return [[self panelsLayoutModeForAppMode:appMode] get:appMode] == PanelsLayoutModeCompact;
+}
+
+- (OACommonBoolean *)transparentWidgets:(NSNumber *)screenLayoutMode
+{
+    return (OACommonBoolean *)[self layoutPreference:_transparentMapTheme
+                                      preferenceKey:transparentMapThemeKey
+                                   screenLayoutMode:screenLayoutMode];
+}
+
+- (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode
+{
+    NSNumber *screenLayoutMode = [_useSeparateLayouts get:appMode]
+        ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+        : nil;
+    return [self transparentWidgets:screenLayoutMode];
+}
+
+- (BOOL)isTransparentWidgets
+{
+    OAApplicationMode *appMode = [self.applicationMode get];
+    return [[self transparentWidgetsForAppMode:appMode] get:appMode];
+}
+
+- (OACommonString *)mapInfoControls:(NSNumber *)screenLayoutMode
+{
+    return (OACommonString *)[self layoutPreference:_mapInfoControls
+                                      preferenceKey:mapInfoControlsLayoutKey
+                                   screenLayoutMode:screenLayoutMode];
+}
+
+- (OACommonStringList *)customWidgetKeys:(NSNumber *)screenLayoutMode
+{
+    return (OACommonStringList *)[self layoutPreference:_customWidgetKeys
+                                          preferenceKey:customWidgetKeys
+                                       screenLayoutMode:screenLayoutMode];
+}
+
+- (OACommonListOfStringList *)widgetPanelOrder:(WidgetsPanel *)panel
+                              screenLayoutMode:(NSNumber *)screenLayoutMode
+{
+    OACommonListOfStringList *preference;
+    NSString *preferenceKey;
+    if (panel == WidgetsPanel.leftPanel)
+    {
+        preference = _leftWidgetPanelOrder;
+        preferenceKey = leftWidgetPanelOrderKey;
+    }
+    else if (panel == WidgetsPanel.rightPanel)
+    {
+        preference = _rightWidgetPanelOrder;
+        preferenceKey = rightWidgetPanelOrderKey;
+    }
+    else if (panel == WidgetsPanel.topPanel)
+    {
+        preference = _topWidgetPanelOrder;
+        preferenceKey = topWidgetPanelOrderOldKey;
+    }
+    else if (panel == WidgetsPanel.bottomPanel)
+    {
+        preference = _bottomWidgetPanelOrder;
+        preferenceKey = bottomWidgetPanelOrderKeyOld;
+    }
+    else
+    {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Unsupported panel" userInfo:nil];
+    }
+    return (OACommonListOfStringList *)[self layoutPreference:preference
+                                               preferenceKey:preferenceKey
+                                            screenLayoutMode:screenLayoutMode];
 }
 
 - (NSMapTable<NSString *, OACommonPreference *> *)getPreferences:(BOOL)global
@@ -7469,7 +7891,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     OAApplicationMode *nextAppMode = [self getSwitchedAppMode:appMode next:next];
     if (appMode != nextAppMode)
     {
-        [_applicationMode set:nextAppMode];
+        [self setApplicationModePref:nextAppMode];
         [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"application_profile_changed"), [nextAppMode toHumanString]]
                        details:@""
                       duration:4
@@ -7579,7 +8001,7 @@ static NSString *kOfflineKey = @"OFFLINE";
     for (NSString *filepath in arr)
     {
         NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:absoluteGpxFilepath];
+        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getCachedGPXItem:absoluteGpxFilepath];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])
@@ -7691,8 +8113,15 @@ static NSString *kOfflineKey = @"OFFLINE";
     NSMutableDictionary<NSString *, NSString *> *sortModes = [NSMutableDictionary dictionary];
     if (modes != nil && modes.count > 0)
     {
-        for (NSString *sortMode in modes)
+        // OACommonStringList splits imported values by comma, so restore the raw Android-compatible value first.
+        NSString *joinedSortModes = [modes componentsJoinedByString:@","];
+        NSArray<NSString *> *serializedSortModes = [joinedSortModes containsString:@";;"]
+            ? [joinedSortModes componentsSeparatedByString:@";;"]
+            : modes;
+        for (NSString *sortMode in serializedSortModes)
         {
+            if (sortMode.length == 0)
+                continue;
             NSArray<NSString *> *parts = [sortMode componentsSeparatedByString:@",,"];
             if (parts.count == 2)
                 sortModes[parts[0]] = parts[1];
@@ -7743,7 +8172,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [sortTypes addObject:combined];
     }
     
-    return [sortTypes copy];
+    return sortTypes.count > 0 ? @[[[sortTypes componentsJoinedByString:@";;"] stringByAppendingString:@";;"]] : @[];
 }
 
 - (NSArray<NSString *> *)plainFavoriteSortModesFromDictionary:(NSDictionary<NSString *, NSString *> *)favoriteSortModes

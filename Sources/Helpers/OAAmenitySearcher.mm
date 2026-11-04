@@ -45,6 +45,8 @@
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/ObfReader.h>
+#include <QFileInfo>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/ISearch.h>
@@ -469,7 +471,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         OsmAnd::PointI(x31 + 1, y31 + 1)
     );
 
-    const QList< std::shared_ptr<const OsmAnd::ObfFile> > repositories = [OAAmenitySearcher getAmenityRepositories:YES];
+    std::shared_ptr<OsmAnd::ObfDataInterface> repositoriesDataInterface;
+    const QList< std::shared_ptr<const OsmAnd::ObfFile> > repositories = [OAAmenitySearcher getAmenityRepositories:YES dataInterface:repositoriesDataInterface];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     if (!obfsCollection)
         return list;
@@ -718,14 +721,30 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     }
 }
 
-+ (QList< std::shared_ptr<const OsmAnd::ObfFile> >) getAmenityRepositories:(BOOL)includeTravel
++ (QList< std::shared_ptr<const OsmAnd::ObfFile> >) getAmenityRepositories:(BOOL)includeTravel dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface> &)dataInterface
 {
     QList<std::shared_ptr<const OsmAnd::ObfFile> > travelMaps;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > baseMaps;
     QList< std::shared_ptr<const OsmAnd::ObfFile> > result;
     
     OsmAndAppInstance app = [OsmAndApp instance];
-    QList<std::shared_ptr<const OsmAnd::ObfFile> > obfFiles = app.resourcesManager->obfsCollection->getObfFiles();
+    QList<std::shared_ptr<const OsmAnd::ObfFile> > obfFiles;
+    if (NSThread.isMainThread)
+    {
+        // The UI does not wait for a map being installed or updated: it is left out, and the other maps stay
+        // locked for reading while dataInterface is alive. Sorted the way getObfFiles() sorts
+        dataInterface = app.resourcesManager->obfsCollection->obtainDataInterface(nullptr, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::fullObfDataTypesMask(), false);
+        for (const auto& obfReader : dataInterface->obfReaders)
+            obfFiles.append(obfReader->obfFile);
+        std::sort(obfFiles.begin(), obfFiles.end(), [](const auto& a, const auto& b) {
+            return OsmAnd::Utilities::simplifyFileName(QFileInfo(a->filePath).fileName())
+                > OsmAnd::Utilities::simplifyFileName(QFileInfo(b->filePath).fileName());
+        });
+    }
+    else
+    {
+        obfFiles = app.resourcesManager->obfsCollection->getObfFiles();
+    }
 
     for (const auto& file : obfFiles)
     {
@@ -1457,6 +1476,33 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
         OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
         OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
         searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+
+        // Without a category filter the core decodes every amenity in the bbox and the accept
+        // block rejects almost all of them one by one.
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+        if (acceptedTypes.count > 0)
+        {
+            auto categoriesFilter = QHash<QString, QStringList>();
+            for (OAPOICategory *category in acceptedTypes.keyEnumerator)
+            {
+                NSMutableSet<NSString *> *subcategories = [acceptedTypes objectForKey:category];
+                QString categoryName = QString::fromNSString(category.name);
+                if (subcategories != [OAPOIBaseType nullSet] && subcategories.count > 0)
+                {
+                    QStringList subcatList;
+                    for (NSString *subcategory in subcategories)
+                        subcatList.push_back(QString::fromNSString(subcategory));
+
+                    categoriesFilter.insert(categoryName, subcatList);
+                }
+                else
+                {
+                    categoriesFilter.insert(categoryName, QStringList());
+                }
+            }
+            searchCriteria->categoriesFilter = categoriesFilter;
+        }
+
         NSMutableSet<NSString *> *deduplicateTypeIdSet = [NSMutableSet set];
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
         search->performSearch(*searchCriteria,
@@ -1602,7 +1648,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     
     const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
     const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
-    const auto repositories = [self getAmenityRepositories:includeTravel];
+    std::shared_ptr<OsmAnd::ObfDataInterface> repositoriesDataInterface;
+    const auto repositories = [self getAmenityRepositories:includeTravel dataInterface:repositoriesDataInterface];
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     
     const BOOL shouldFilterRepositories = bbox31.width() != 0 && bbox31.height() != 0;
@@ -1631,7 +1678,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
             
             NSMutableArray<OAPOI *> *foundAmenities = [NSMutableArray array];
 
-            search->performTravelGuidesSearch(repository->filePath, *searchCriteria,
+            search->performSearchInFile(repository, *searchCriteria,
                                               [&filter, &foundAmenities, &currentLocation, &deduplicateTypeIdSet, &publish, &done](const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
                                         const auto am = OAGetAmenityFromSearchResult(resultEntry);

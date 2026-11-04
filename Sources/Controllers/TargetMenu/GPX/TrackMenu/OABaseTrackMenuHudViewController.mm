@@ -209,6 +209,7 @@
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
         _isCurrentTrack = gpx.isShowCurrentTrack;
+        _isShown = _isCurrentTrack && _mapViewController.recTrackShowing;
         [self updateGpxData:gpx == nil updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];
@@ -296,7 +297,7 @@
     BOOL hasGeneralSegment = !_isCurrentTrack && _doc && [_doc getGeneralTrack] && [_doc getGeneralSegment];
     if (hasGeneralSegment)
     {
-        BOOL joinSegments = _gpx.dataItem.joinSegments;
+        BOOL joinSegments = _gpx.dataItem ? _gpx.joinSegments : [_doc isJoinSegments];
         _analysis = _doc ? [TrackChartHelper getAnalysisFor:[_doc getGeneralSegment] joinSegments:joinSegments] : nil;
     }
     else
@@ -351,7 +352,7 @@
     [self applyLocalization];
     _cachedYViewPort = _mapViewController.mapView.viewportYScale;
 
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    UIImage *backImage = [UIImage templateImageNamed:ACImageNameIcCustomArrowBack];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];

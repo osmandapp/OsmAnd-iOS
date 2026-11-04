@@ -23,12 +23,11 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
     let screenMode: ScreenMode
     let settings = OAAppSettings.sharedManager()
-    var layoutSections: [FavoriteListSection] = []
     let appearanceCollection: OAGPXAppearanceCollection = .sharedInstance()
-    var colorController: OAEditColorViewController?
+    var layoutSections: [FavoriteListSection] = []
     var favoriteItemsToMove: [Any]?
     var favoriteGroupAppearanceGroupName: String?
-    var favoriteGroupAppearanceEditor: OAFavoriteGroupEditorViewController?
+    var favoriteGroupAppearanceEditor: FavoriteGroupEditorViewController?
     var addToTrackGroupName: String?
     var addToTrackFavoriteItems: [Any]?
     var pointToShare: OAFavoritePointBridgeItem?
@@ -44,39 +43,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
     var locationUpdateObserver: OAAutoObserverProxy?
     var headingUpdateObserver: OAAutoObserverProxy?
     var selectionManager = SelectionManager<FavoriteSelectionItem>(allItems: [])
-    var isSearchResultsMode: Bool {
-        isSearchActive || isSelectionModeInSearch
-    }
-    var isAvailablePaymentBanner: Bool {
-        isRootFolder && !isSearchResultsMode && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
-    }
-    var isRootFolder: Bool {
-        guard case .root = screenMode else { return false }
-        return true
-    }
-    var normalTitle: String {
-        switch screenMode {
-        case .root: localizedString("shared_string_favorites")
-        case .folder(let folder, _): folder.title
-        }
-    }
-    var parentGroupName: String? {
-        guard case .folder(let folder, _) = screenMode, !folder.bridgeItem.groupName.isEmpty else { return nil }
-        return folder.bridgeItem.groupName
-    }
-    var searchParentGroupName: String? {
-        guard case .folder(let folder, _) = screenMode else { return nil }
-        return folder.bridgeItem.groupName
-    }
-    var currentSortMode: FavoriteSortMode {
-        isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode()
-    }
-    var currentSortHeader: FavoriteSortHeader {
-        FavoriteSortHeader(sortMode: currentSortMode, includesDistanceSortModes: isSearchResultsMode || !isRootFolder)
-    }
-    var currentSortEntryId: String {
-        parentGroupName ?? ""
-    }
+    weak var myPlacesDelegate: MyPlacesDelegate?
 
     lazy var collapsedRootSections = Self.loadCollapsedSections()
     lazy var collectionView: UICollectionView = {
@@ -101,8 +68,41 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         return searchController
     }()
     lazy var dataSource: DataSource = makeDataSource()
-    
-    weak var myPlacesDelegate: MyPlacesDelegate?
+
+    var isSearchResultsMode: Bool {
+        isSearchActive || isSelectionModeInSearch
+    }
+    var isAvailablePaymentBanner: Bool {
+        isRootFolder && !isSearchResultsMode && !UserDefaults.standard.bool(forKey: Self.wasClosedFreeBackupFavoritesBannerKey) && !OAIAPHelper.isOsmAndProAvailable() && !OABackupHelper.sharedInstance().isRegistered()
+    }
+    var isRootFolder: Bool {
+        guard case .root = screenMode else { return false }
+        return true
+    }
+    var normalTitle: String {
+        switch screenMode {
+        case .root: return localizedString("shared_string_favorites")
+        case .folder(let fullPath, _):
+            return OAFavoritesHelperBridge.shared().displayName(forFavoriteGroup: FavoriteFolderPath.shared.lastSegment(fullPath: fullPath))
+        }
+    }
+    var parentGroupName: String? {
+        guard case .folder(let fullPath, _) = screenMode, !fullPath.isEmpty else { return nil }
+        return fullPath
+    }
+    var searchParentGroupName: String? {
+        guard case .folder(let fullPath, _) = screenMode else { return nil }
+        return fullPath
+    }
+    var currentSortMode: FavoriteSortMode {
+        isSearchResultsMode ? searchFavoriteSortMode() : favoriteSortMode()
+    }
+    var currentSortHeader: FavoriteSortHeader {
+        FavoriteSortHeader(sortMode: currentSortMode, includesDistanceSortModes: isSearchResultsMode || !isRootFolder)
+    }
+    var currentSortEntryId: String {
+        parentGroupName ?? ""
+    }
     
     private var normalSubtitle: String {
         switch screenMode {
@@ -165,7 +165,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
         definesPresentationContext = false
         super.viewWillDisappear(animated)
     }
-    
+
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
         guard Thread.isMainThread else {
             DispatchQueue.main.async { [weak self] in
@@ -195,7 +195,7 @@ final class FavoriteListViewController: UIViewController, MyPlacesScrollResettab
 
         let currentTime = Date.now.timeIntervalSince1970
         guard forceUpdate || currentTime - lastDistanceDirectionUpdate >= 0.3 else { return }
-        lastDistanceDirectionUpdate = currentTime
+        defer { lastDistanceDirectionUpdate = Date.now.timeIntervalSince1970 }
         if currentSortMode.isDistanceOriented {
             cachedSearchFavoriteItems = nil
             applySnapshot(animatingDifferences: false)

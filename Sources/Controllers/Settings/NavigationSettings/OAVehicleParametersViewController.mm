@@ -167,7 +167,7 @@
     [otherParametersArr addObject:@{
         @"type" : [OASimpleTableViewCell reuseIdentifier],
         @"title" : OALocalizedString(@"default_speed_setting_title"),
-        @"icon" : @"ic_action_speed",
+        @"icon" : ACImageNameIcActionSpeed,
         @"name" : @"defaultSpeed",
     }];
     if (parametersArr.count > 0)
@@ -243,7 +243,7 @@
         @"title" : OALocalizedString(@"fuel_tank_capacity"),
         @"value" : stringValue,
         @"selectedItem" : @(index),
-        @"icon" : @"ic_custom_obd_fuel_tank",
+        @"icon" : ACImageNameIcCustomObdFuelTank,
         @"possibleValues" : possibleValues,
         @"possibleValuesDescr" : valueDescriptions,
         @"setting" : doubleParam,
@@ -254,19 +254,19 @@
 - (NSString *) getParameterIcon:(NSString *)parameterName
 {
     if ([parameterName isEqualToString:RouteParamVehicleHelper.weight])
-        return @"ic_custom_weight_limit";
+        return ACImageNameIcCustomWeightLimit;
     else if ([parameterName isEqualToString:RouteParamVehicleHelper.height])
-        return @"ic_custom_height_limit";
+        return ACImageNameIcCustomHeightLimit;
     else if ([parameterName isEqualToString:RouteParamVehicleHelper.length])
-        return @"ic_custom_length_limit";
+        return ACImageNameIcCustomLengthLimit;
     else if ([parameterName isEqualToString:RouteParamVehicleHelper.width])
-        return @"ic_custom_width_limit";
+        return ACImageNameIcCustomWidthLimit;
     else if ([parameterName isEqualToString:RouteParamVehicleHelper.motorType])
-        return @"ic_custom_fuel";
+        return ACImageNameIcCustomFuel;
     else if ([parameterName isEqualToString:RouteParamVehicleHelper.maxAxleLoad])
-        return @"ic_custom_hgv_axle_load";
+        return ACImageNameIcCustomHgvAxleLoad;
     else if ([parameterName isEqualToString:RouteParamVehicleHelper.weightRating])
-        return @"ic_custom_hgv_full_load";
+        return ACImageNameIcCustomHgvFullLoad;
     return @"";
 }
 

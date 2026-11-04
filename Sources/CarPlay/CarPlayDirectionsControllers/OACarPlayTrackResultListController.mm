@@ -21,6 +21,7 @@
 #import <CarPlay/CarPlay.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACarPlayTrackResultListController
 {
@@ -59,7 +60,7 @@
 
             CPListItem *listItem = [[CPListItem alloc] initWithText:trackItem.gpxFileNameWithoutExtension
                                                          detailText:[self getTrackDescription:trackItem]
-                                                              image:[UIImage imageNamed:@"ic_custom_trip"]
+                                                              image:[UIImage imageNamed:ACImageNameIcCustomTrip]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             listItem.userInfo = trackItem;

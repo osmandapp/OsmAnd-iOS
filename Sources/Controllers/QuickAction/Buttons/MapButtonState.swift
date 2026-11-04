@@ -10,7 +10,7 @@
 open class MapButtonState: NSObject {
     static let originalValue: Int64 = -1
     static let rectangleRadiusDp: Int32 = 6
-    static let defaultSizeDp: Int32 = 48
+    static let defaultSizeDp = ButtonAppearanceParams.bigSize
     static let roundRadiusDp: Int32 = 36
     static let opaqueAlpha: Double = 1
     static let defaultGlassStyle: Int32 = -1
@@ -95,7 +95,7 @@ open class MapButtonState: NSObject {
             }
             return icon
         } else {
-            return UIImage.templateImageNamed("ic_custom_quick_action")
+            return .icCustomQuickAction
         }
     }
     

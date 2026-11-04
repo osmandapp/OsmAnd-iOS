@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OsmAndSharedWrapper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define PLUGIN_ID kInAppId_Addon_External_Sensors
 
@@ -107,15 +108,15 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 
 - (NSString *)batteryOutlinedIconNameForWidgetType:(OAWidgetType *)widgetType {
     if (widgetType == OAWidgetType.heartRate) {
-        return @"ic_custom_sensor_heart_rate_battery_outlined";
+        return ACImageNameIcCustomSensorHeartRateBatteryOutlined;
     } else if (widgetType == OAWidgetType.bicycleCadence) {
-        return @"ic_custom_sensor_cadence_battery_outlined";
+        return ACImageNameIcCustomSensorCadenceBatteryOutlined;
     } else if (widgetType == OAWidgetType.bicycleSpeed) {
-        return @"ic_custom_sensor_speed_battery_outlined";
+        return ACImageNameIcCustomSensorSpeedBatteryOutlined;
     } else if (widgetType == OAWidgetType.bicycleDistance) {
-        return @"ic_custom_sensor_distance_battery_outlined";
+        return ACImageNameIcCustomSensorDistanceBatteryOutlined;
     } else if (widgetType == OAWidgetType.temperature) {
-        return @"ic_custom_sensor_temperature_battery_outlined";
+        return ACImageNameIcCustomSensorTemperatureBatteryOutlined;
     } else {
         return @"";
     }
@@ -123,15 +124,15 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 
 - (NSString *)batteryIconNameForWidgetType:(OAWidgetType *)widgetType {
     if (widgetType == OAWidgetType.heartRate) {
-        return @"widget_sensor_heart_rate_battery";
+        return ACImageNameWidgetSensorHeartRateBattery;
     } else if (widgetType == OAWidgetType.bicycleCadence) {
-        return @"widget_sensor_cadence_battery";
+        return ACImageNameWidgetSensorCadenceBattery;
     } else if (widgetType == OAWidgetType.bicycleSpeed) {
-        return @"widget_sensor_speed_battery";
+        return ACImageNameWidgetSensorSpeedBattery;
     } else if (widgetType == OAWidgetType.bicycleDistance) {
-        return @"widget_sensor_distance_battery";
+        return ACImageNameWidgetSensorDistanceBattery;
     } else if (widgetType == OAWidgetType.temperature) {
-        return @"widget_sensor_temperature_battery";
+        return ACImageNameWidgetSensorTemperatureBattery;
     } else {
         return @"";
     }
@@ -163,7 +164,9 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
     auto widgetTypeArray = @[OAWidgetType.heartRate,
                              OAWidgetType.bicycleCadence,
                              OAWidgetType.bicycleDistance,
@@ -171,7 +174,7 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
                              OAWidgetType.temperature];
     for (OAWidgetType *widgetType in widgetTypeArray)
     {
-        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode widgetParams:widgetParams]]];
+        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:widgetType widgetParams:widgetParams]]]];
     }
 }
 

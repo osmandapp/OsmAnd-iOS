@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 struct RouteDataObject;
 
-@class OARouteCalculationResult, OALocationPointWrapper, OAAlarmInfo;
+@class OARouteCalculationResult, OALocationPointWrapper, OAAlarmInfo, OASRouteDataObject;
 
 @interface OAWaypointHelper : NSObject
 
@@ -61,6 +61,11 @@ struct RouteDataObject;
                                           location:(nonnull CLLocation *)location
                                          constants:(EOASpeedConstant)constants
                                       whenExceeded:(BOOL)whenExceeded;
+/** The same alarm off a road the route is built on, which is an OsmAndShared one. */
+- (nullable OAAlarmInfo *)calculateSpeedLimitAlarmForRouteRoad:(OASRouteDataObject *)object
+                                                     location:(nonnull CLLocation *)location
+                                                    constants:(EOASpeedConstant)constants
+                                                 whenExceeded:(BOOL)whenExceeded;
 
 @end
 

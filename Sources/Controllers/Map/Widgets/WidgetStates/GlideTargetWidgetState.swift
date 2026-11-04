@@ -42,6 +42,12 @@ final class GlideTargetWidgetState: OAWidgetState {
         Self.registerPreference(customId).set(preference.get(appMode), mode: appMode)
     }
 
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId).set(preference.get(fromAppMode), mode: toAppMode)
+    }
+
     private static func registerPreference(_ customId: String?, widgetParams: ([String: Any])? = nil) -> OACommonBoolean {
         var prefId = Self.prefBaseId
         if let customId, !customId.isEmpty {

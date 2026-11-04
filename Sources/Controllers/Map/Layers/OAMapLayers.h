@@ -32,7 +32,6 @@
 #import "OAUnderlayMapLayer.h"
 #import "OAWeatherRasterLayer.h"
 #import "OAWeatherContourLayer.h"
-#import "OANetworkRouteSelectionLayer.h"
 #import "OATravelSelectionLayer.h"
 
 @class OAMapViewController, OAAisTrackerLayer;
@@ -53,7 +52,6 @@
 @property (nonatomic, readonly) OAOsmBugsLayer *osmBugsLayer;
 @property (nonatomic, readonly) OAMapillaryLayer *mapillaryLayer;
 @property (nonatomic, readonly) OARulerByTapControlLayer *rulerByTapControlLayer;
-@property (nonatomic, readonly) OANetworkRouteSelectionLayer *networkRouteSelectionLayer;
 @property (nonatomic, readonly) OATravelSelectionLayer *travelSelectionLayer;
 @property (nonatomic, readonly) OAAisTrackerLayer *aisTrackerLayer;
 

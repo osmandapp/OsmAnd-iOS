@@ -97,13 +97,13 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
         transportCell = [NSMutableDictionary dictionary];
         transportCell[@"title"] = OALocalizedString(enabled ? @"shared_string_enabled" : @"rendering_value_disabled_name");
         transportCell[@"value"] = @(enabled);
-        transportCell[@"icon"] = enabled ? @"ic_custom_show" : @"ic_custom_hide";
+        transportCell[@"icon"] = enabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
         transportCell[@"type"] = [OASwitchTableViewCell getCellIdentifier];
         transportCell[@"switch"] = ^(BOOL isOn, NSIndexPath *indexPath) {
             [_styleSettings setCategoryEnabled:isOn categoryName:TRANSPORT_CATEGORY];
             transportCell[@"title"] = OALocalizedString(isOn ? @"shared_string_enabled" : @"rendering_value_disabled_name");
             transportCell[@"value"] = @(isOn);
-            transportCell[@"icon"] = isOn ? @"ic_custom_show" : @"ic_custom_hide";
+            transportCell[@"icon"] = isOn ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             [self.tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         };
         [data addObject:@[transportCell]];

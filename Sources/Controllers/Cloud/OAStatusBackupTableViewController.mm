@@ -174,7 +174,7 @@
     if (_tableType == EOARecentChangesConflicts)
     {
         _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAndShevronAlways;
-        _downloadingCellCloudHelper.rightIconName = @"ic_custom_alert";
+        _downloadingCellCloudHelper.rightIconName = ACImageNameIcCustomAlert;
         _downloadingCellCloudHelper.rightIconColor = [UIColor colorNamed:ACColorNameIconColorDisruptive];
     }
     else
@@ -241,7 +241,7 @@
         OATableRowData *progressCell = [OATableRowData rowData];
         [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
         [progressCell setKey:@"backupProgress"];
-        [progressCell setIconName:@"ic_custom_cloud_upload"];
+        [progressCell setIconName:ACImageNameIcCustomCloudUpload];
         [progressCell setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
         [statusSection addRow:progressCell];
         _syncProgressCell = [NSIndexPath indexPathForRow:[statusSection rowCount] - 1 inSection:[_data sectionCount] - 1];
@@ -384,7 +384,7 @@
             kCellKeyKey: @"epmtyState",
             kCellTitleKey: [self getLocalizedEmptyStateHeader],
             kCellDescrKey: OALocalizedString(@"cloud_all_changes_uploaded_descr"),
-            kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
+            kCellIconNameKey: ACImageNameIcActionCloudSmileFaceColored
         }];
     }
     else

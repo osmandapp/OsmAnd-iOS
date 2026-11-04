@@ -9,6 +9,7 @@
 // analog in android: PlaceDetailsMenuBuilder.java
 
 import QuartzCore
+import OsmAndShared
 
 @objcMembers
 final class PlaceDetailsViewController: OAPOIViewController {
@@ -73,6 +74,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     }
 
     override func getTypeStr() -> String? {
+        guard detailsObject == nil else { return OAPOIViewController.getTypeStr(for: poi) }
         let typeString = provider.typeString { super.getTypeStr() }
         return typeString ?? super.getTypeStr()
     }
@@ -107,7 +109,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             hasDescription = buildDescription(amenities: getTravelAmenities(), allowOnlineWiki: false, rows: rows)
         }
         if hasDescription {
-            infoBundle.setCustomHiddenExtensions([DESCRIPTION_TAG])
+            infoBundle.setCustomHiddenExtensions(customHiddenExtensions: [DESCRIPTION_TAG])
         }
         
         if customOnlinePhotosPosition {
@@ -129,7 +131,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
         let extensions = amenity.getAmenityExtensions(false)
-        let bundle = AdditionalInfoBundle(additionalInfo: extensions)
+        let bundle = AdditionalInfoBundle(poiTypes: OAPOIHelper.sharedInstance().kPoiTypes, additionalInfo: extensions)
         let filteredInfo = bundle.getFilteredLocalizedInfo()
         
         if buildShortWikiDescription(filteredInfo, allowOnlineWiki: allowOnlineWiki, rows: rows) {
@@ -155,7 +157,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
         
         searchTravelArticles(routeIds: routeIds) { articles in
             if !articles.isEmpty {
-                let icon = UIImage.templateImageNamed("ic_custom_backpack")
+                let icon = UIImage.icCustomBackpack
                 let title = localizedString("travel_guides")
                 let collapsableView = self.getGuidesCollapsableView(articles: articles)
                 

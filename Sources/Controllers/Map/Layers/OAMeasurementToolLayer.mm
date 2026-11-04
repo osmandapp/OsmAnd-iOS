@@ -7,8 +7,8 @@
 //
 
 #import "OAMeasurementToolLayer.h"
-#import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
@@ -27,6 +27,7 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/SingleSkImage.h>
+#import "GeneratedAssetSymbols.h"
 
 #define MIN_POINTS_PERCENTILE 5
 #define START_ZOOM 8
@@ -43,6 +44,7 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _selectedMarkerCollection;
     
     sk_sp<SkImage> _selectedMarkerIcon;
+    sk_sp<SkImage> _pointMarkerIcon;
     
     OsmAnd::PointI _cachedCenter;
     BOOL _isInMovingMode;
@@ -64,7 +66,7 @@
     _pointMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _selectedMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_movable"];
+    _selectedMarkerIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPlanRoutePointMovable];
     
     _initDone = YES;
     
@@ -182,7 +184,17 @@
 
 - (std::shared_ptr<OsmAnd::MapMarker>) drawMarker:(const OsmAnd::PointI &)position collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
-    return [self drawMarker:position collection:collection bitmap:[OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"]];
+    return [self drawMarker:position collection:collection bitmap:[self pointMarkerIcon]];
+}
+
+- (sk_sp<SkImage>)pointMarkerIcon
+{
+    @synchronized (self)
+    {
+        if (!_pointMarkerIcon)
+            _pointMarkerIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPlanRoutePointNormal];
+        return _pointMarkerIcon;
+    }
 }
 
 - (void) updateLastPointToCenter
@@ -391,7 +403,7 @@
 - (void) drawPointMarkers:(const QVector<OsmAnd::PointI> &)points collection:(std::shared_ptr<OsmAnd::MapMarkersCollection> &)collection
 {
     collection->removeAllMarkers();
-    sk_sp<SkImage> pointMarkerIcon = [OANativeUtilities skImageFromPngResource:@"map_plan_route_point_normal"];
+    sk_sp<SkImage> pointMarkerIcon = [self pointMarkerIcon];
     
     if (_editingCtx.getPointsCount > 500)
     {
@@ -467,9 +479,6 @@
 
 - (void) drawBeforeAfterPath
 {
-    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
-    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
-
     OsmAnd::PointI center;
     if (!CGPointEqualToPoint(_cursorScreenPoint, CGPointZero))
     {
@@ -482,6 +491,21 @@
         auto centerPixel = self.mapViewController.mapView.getCenterPixel;
         [self.mapViewController.mapView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&center];
     }
+    [self drawBeforeAfterPath:center];
+}
+
+- (void)drawBeforeAfterPath:(const OsmAnd::PointI &)center
+{
+    if (_editingCtx.approximationSessionActive)
+    {
+        _lastLineCollection->removeAllLines();
+        _selectedMarkerCollection->removeAllMarkers();
+        _cachedCenter = OsmAnd::PointI(-1, -1);
+        return;
+    }
+
+    NSArray<OASTrkSegment *> *before = _editingCtx.getBeforeSegments;
+    NSArray<OASTrkSegment *> *after = _editingCtx.getAfterSegments;
     if (center == _cachedCenter)
         return;
 
@@ -535,6 +559,35 @@
     }
 }
 
+#if DEBUG
+- (void)prepareRouteLinesForTesting
+{
+    _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _lastLineCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _selectedMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+}
+
+- (NSUInteger)centerLineCountForTesting
+{
+    return _lastLineCollection ? _lastLineCollection->getLines().size() : 0;
+}
+
+- (NSUInteger)routeLineCountForTesting
+{
+    return _collection ? _collection->getLines().size() : 0;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)routeLineCollectionForUITesting
+{
+    return _collection;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)previewLineCollectionForUITesting
+{
+    return _lastLineCollection;
+}
+#endif
+
 - (void) drawRouteSegments
 {
     NSArray<OASTrkSegment *> *beforeSegs = _editingCtx.getBeforeTrkSegmentLine;
@@ -559,6 +612,12 @@
         }
         [self drawLines:afterPoints collection:_collection lineId:lineId++];
     }
+    const auto lines = _collection->getLines();
+    for (const auto &line : lines)
+    {
+        if (line->lineId >= lineId)
+            _collection->removeLine(line);
+    }
 }
 
 - (void) drawRouteSegment:(const QVector<OsmAnd::PointI> &)points {
@@ -575,6 +634,11 @@
 {
     if (self.isVisible && self.delegate)
         [self.delegate onTouch:coordinate longPress:longPress];
+}
+
+- (BOOL)isInMeasurementMode
+{
+    return _editingCtx != nil;
 }
 
 - (void) moveMapToPoint:(NSInteger)pos

@@ -127,7 +127,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else
     {
         return @[[self createRightNavbarButton:nil
-                                      iconName:@"ic_navbar_settings"
+                                      iconName:ACImageNameIcNavbarSettings
                                         action:@selector(onRightNavbarButtonPressed)
                                           menu:nil]];
     }
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
             self.priceButton.layer.borderWidth = 0.0;
             self.priceButton.backgroundColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             self.priceButton.tintColor = [UIColor whiteColor];
-            [self.priceButton setImage:[UIImage imageNamed:@"ic_checkmark_big_enable"] forState:UIControlStateNormal];
+            [self.priceButton setImage:[UIImage imageNamed:ACImageNameIcCheckmarkBigEnable] forState:UIControlStateNormal];
         }
         else
         {
@@ -314,7 +314,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
             self.priceButton.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorSelected].CGColor;
             self.priceButton.backgroundColor = [UIColor clearColor];
             self.priceButton.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
-            [self.priceButton setImage:[UIImage imageNamed:@"ic_checkmark_big_enable"] forState:UIControlStateNormal];
+            [self.priceButton setImage:[UIImage imageNamed:ACImageNameIcCheckmarkBigEnable] forState:UIControlStateNormal];
         }
     }
     else

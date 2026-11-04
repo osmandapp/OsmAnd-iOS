@@ -143,6 +143,11 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     [self processValues];
 }
 
+- (BOOL)hasOpeningHours
+{
+    return _openingHours.length > 0;
+}
+
 - (void) processValues
 {
     if (self.values)
@@ -186,7 +191,6 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             
             if ([key isEqualToString:@"opening_hours"])
             {
-                self.hasOpeningHours = YES;
                 self.openingHours = value;
             }
             
@@ -493,7 +497,6 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
         if ([tag isEqualToString:OPENING_HOURS_TAG])
         {
             self.openingHours = value;
-            self.hasOpeningHours = YES;
         }
     }
 }
@@ -859,9 +862,12 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
-                NSString *trimmedKey = [key stringByReplacingOccurrencesOfString:COLLAPSABLE_PREFIX withString:@""];
-                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
-                    additionalInfo[trimmedKey] = map[key];
+                BOOL externalNamespace = [key containsString:@":"]
+                        && ![key hasPrefix:OASGpxUtilities.shared.OSMAND_EXTENSIONS_PREFIX]
+                        && ![key hasPrefix:OASGpxUtilities.shared.GPXTPX_PREFIX];
+                BOOL hidden = [HIDDEN_EXTENSIONS containsObject:key] || (!externalNamespace && [HIDDEN_EXTENSIONS containsObject:shortKey]);
+                if (!hidden && map[key].length > 0)
+                    additionalInfo[key] = map[key];
             }
         }
         if (!type)
@@ -876,10 +882,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             if (subType)
                 amenity.subType = subType;
             if (openingHours)
-            {
                 amenity.openingHours = openingHours;
-                amenity.hasOpeningHours = YES;
-            }
             [amenity setValues:additionalInfo];
         }
     }

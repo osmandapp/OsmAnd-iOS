@@ -116,7 +116,7 @@
     [self applyLocalization];
     [self generateData];
     
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
+    UIImage *backImage = [UIImage templateImageNamed:ACImageNameIcCustomArrowBack];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
@@ -127,7 +127,7 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.estimatedRowHeight = 44.;
+    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
@@ -200,7 +200,7 @@
         @"cellId" : OASwitchTableViewCell.getCellIdentifier,
         @"type" : kSwitchCell,
         @"title" : layerTitle,
-        @"image" : _weatherBand ? _weatherBand.getIcon : @"ic_custom_contour_lines"
+        @"image" : _weatherBand ? _weatherBand.getIcon : ACImageNameIcCustomContourLines
     }];
     CGFloat switchCellLabelWidth = width - kSwitchCellLabelHorizontalOffset;
     CGFloat labelHeight = [OAUtilities calculateTextBounds:layerTitle width:switchCellLabelWidth font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]].height;
@@ -220,7 +220,7 @@
         NSDictionary *transparencyRow = @{
             @"cellId" : OATitleSliderTableViewCell.getCellIdentifier,
             @"type" : kTransparencyCell,
-            @"title" : OALocalizedString(@"shared_string_transparency"),
+            @"title" : OALocalizedString(@"visibility"),
             @"value" : @([self getLayerAlphaValue])
         };
         
@@ -729,7 +729,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.backgroundColor = UIColor.clearColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         }
         cell.dividerColor = [SeparatorAppearance color];
         CGFloat leftInset = [item[@"inset"] floatValue];

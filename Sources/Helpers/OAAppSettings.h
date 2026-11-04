@@ -10,7 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory;
+@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OASGradientPaletteCategory, WidgetsPanel;
+@class CoordinateFormatSettingsStorage;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const kPreferenceKeysUserInfoKey = @"kPreferenceKeysUserInfoKey";
@@ -42,8 +43,6 @@ static const NSInteger MAP_GEO_FORMAT_SECONDS = 2;
 static const NSInteger MAP_GEO_UTM_FORMAT = 3;
 static const NSInteger MAP_GEO_OLC_FORMAT = 4;
 static const NSInteger MAP_GEO_MGRS_FORMAT = 5;
-static const NSInteger SWISS_GRID_FORMAT = 6;
-static const NSInteger SWISS_GRID_PLUS_FORMAT = 7;
 
 static const NSInteger ROTATE_MAP_NONE = 0;
 static const NSInteger ROTATE_MAP_BEARING = 1;
@@ -71,6 +70,13 @@ typedef NS_ENUM(NSInteger, EOAScreenOrientation)
     EOAScreenOrientationSystem = -1, //ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     EOAScreenOrientationPortrait = 1, //ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     EOAScreenOrientationLandscape = 6 //ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+};
+
+typedef NS_ENUM(int, EOAKeepScreenOnMode)
+{
+    EOAKeepScreenOnModeSystemDefault = 0,
+    EOAKeepScreenOnModeDuringNavigation,
+    EOAKeepScreenOnModeAlways
 };
 
 typedef NS_ENUM(NSInteger, EOATrackApproximationType)
@@ -422,7 +428,7 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 - (NSObject *)getPrefValue;
 - (NSObject *)getPrefValue:(OAApplicationMode *)mode;
-- (NSObject *)getProfileDefaultValue:(OAApplicationMode *)mode;
+- (NSObject *)profileDefaultValue:(OAApplicationMode *)mode;
 - (void)resetModeToDefault:(OAApplicationMode *)mode;
 - (void)resetToDefault;
 - (void)setValueFromString:(NSString *)strValue appMode:(nullable OAApplicationMode *)mode;
@@ -469,6 +475,17 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 - (int) get:(OAApplicationMode *)mode;
 - (void) set:(int)integer;
 - (void) set:(int)integer mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonKeepScreenOnMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(EOAKeepScreenOnMode)defValue;
+
+- (EOAKeepScreenOnMode)get;
+- (EOAKeepScreenOnMode)get:(OAApplicationMode *)mode;
+- (void)set:(EOAKeepScreenOnMode)value;
+- (void)set:(EOAKeepScreenOnMode)value mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -934,6 +951,17 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @end
 
+@interface OACommonPanelsLayoutMode : OACommonInteger
+
++ (instancetype)withKey:(NSString *)key defValue:(int)defValue;
+
+- (int)get;
+- (int)get:(OAApplicationMode *)mode;
+- (void)set:(int)panelsLayoutMode;
+- (void)set:(int)panelsLayoutMode mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OACommonWidgetDefaultView : OACommonInteger
 
 + (instancetype)withKey:(NSString *)key defValue:(int)defValue;
@@ -960,7 +988,14 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 
 @end
 
-@interface OACommonGridFormat : OACommonInteger
+@interface OACommonGridFormat : OACommonString
+
++ (instancetype)withKey:(NSString *)key defValue:(NSString *)defValue;
+
+- (NSString *)get;
+- (NSString *)get:(OAApplicationMode *)mode;
+- (void)set:(NSString *)formatId;
+- (void)set:(NSString *)formatId mode:(OAApplicationMode *)mode;
 
 @end
 
@@ -998,9 +1033,11 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonDrivingRegion *drivingRegion;
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (nonatomic) OACommonInteger *settingGeoFormat; // 0 - degrees, 1 - minutes/seconds
+@property (nonatomic, readonly) CoordinateFormatSettingsStorage *coordinateFormatSettingsStorage;
 @property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 @property (nonatomic) OACommonBoolean *metricSystemChangedManually;
 @property (nonatomic) OACommonInteger *mapScreenOrientation;
+@property (nonatomic) OACommonKeepScreenOnMode *keepScreenOn;
 @property (nonatomic) OACommonInteger *detailedTrackGuidance;
 @property (nonatomic) OACommonInteger *gpxApproximationDistance;
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
@@ -1227,6 +1264,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *showNearbyPoi;
 
 @property (nonatomic) OACommonBoolean *transparentMapTheme;
+@property (nonatomic) OACommonBoolean *useSeparateLayouts;
 @property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 @property (nonatomic) OACommonBoolean *showElevationProfileWidget;
@@ -1239,6 +1277,20 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *searchFavoriteSortMode;
 @property (nonatomic) OACommonString *travelGuidesSortMode;
 @property (nonatomic) OACommonString *osmEditsSortMode;
+
+- (OACommonPanelsLayoutMode *)panelsLayoutMode:(int)screenLayoutMode screenElementsMode:(int)screenElementsMode;
+- (OACommonPanelsLayoutMode *)panelsLayoutModeForAppMode:(OAApplicationMode *)appMode;
+- (OACommonPreference *)layoutPreference:(OACommonPreference *)basePreference
+                          preferenceKey:(NSString *)preferenceKey
+                        screenLayoutMode:(nullable NSNumber *)screenLayoutMode;
+- (BOOL)isCompactPanelsLayout;
+- (OACommonBoolean *)transparentWidgets:(nullable NSNumber *)screenLayoutMode;
+- (OACommonBoolean *)transparentWidgetsForAppMode:(OAApplicationMode *)appMode;
+- (BOOL)isTransparentWidgets;
+- (OACommonString *)mapInfoControls:(nullable NSNumber *)screenLayoutMode;
+- (OACommonStringList *)customWidgetKeys:(nullable NSNumber *)screenLayoutMode;
+- (OACommonListOfStringList *)widgetPanelOrder:(WidgetsPanel *)panel
+                              screenLayoutMode:(nullable NSNumber *)screenLayoutMode;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
 @property (nonatomic) NSString *simulateNavigationMode;
@@ -1542,6 +1594,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonString *userUUID;
 @property (nonatomic) OACommonLong *userIosIdExpiredTime;
 @property (nonatomic) OACommonBoolean *useOldRouting;
+@property (nonatomic) OACommonBoolean *useSharedRouting;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
 
 @property (nonatomic) OACommonBoolean *wikiShowImagePreviews;

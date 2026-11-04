@@ -15,6 +15,7 @@
 #import "OAPluginsHelper.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -32,8 +33,8 @@ static QuickActionType *TYPE;
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_parking_place")]
                nameAction:OALocalizedString(@"shared_string_add")]
-               iconName:@"ic_custom_parking"]
-              secondaryIconName:@"ic_custom_compound_action_add"]
+               iconName:ACImageNameIcCustomParking]
+              secondaryIconName:ACImageNameIcCustomCompoundActionAdd]
              category:QuickActionTypeCategoryMyPlaces]
             nonEditable];
 }

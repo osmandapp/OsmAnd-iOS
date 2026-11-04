@@ -123,7 +123,7 @@ final class WeatherDataSourceViewController: OABaseNavbarViewController {
             cell.descriptionLabel.text = weatherSource.description
             cell.descriptionVisibility(true)
             cell.titleLabel.text = weatherSource.title
-            cell.leftIconView.image = isSelected ? UIImage.templateImageNamed("ic_checkmark_default") : nil
+            cell.leftIconView.image = isSelected ? .icCheckmarkDefault : nil
             cell.leftIconView.tintColor = .iconColorActive
             cell.accessibilityLabel = cell.titleLabel.text
             cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")

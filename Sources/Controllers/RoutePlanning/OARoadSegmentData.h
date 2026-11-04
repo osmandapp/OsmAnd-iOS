@@ -12,7 +12,7 @@
 
 @class OAApplicationMode, OASWptPt;
 
-struct RouteSegmentResult;
+@class OASRouteSegmentResult;
 
 @interface OARoadSegmentData : NSObject
 
@@ -20,9 +20,9 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) OASWptPt *start;
 @property (nonatomic, readonly) OASWptPt *end;
 @property (nonatomic, readonly) NSArray<OASWptPt *> *gpxPoints;
-@property (nonatomic, readonly) std::vector<std::shared_ptr<RouteSegmentResult>> segments;
+@property (nonatomic, readonly) NSArray<OASRouteSegmentResult *> *segments;
 @property (nonatomic, readonly) double distance;
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode start:(OASWptPt *)start end:(OASWptPt *)end points:(NSArray<OASWptPt *> *)points segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments;
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode start:(OASWptPt *)start end:(OASWptPt *)end points:(NSArray<OASWptPt *> *)points segments:(NSArray<OASRouteSegmentResult *> *)segments;
 
 @end

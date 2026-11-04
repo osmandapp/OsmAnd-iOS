@@ -126,7 +126,7 @@
         @{
             @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_folder"),
-            @"img" : @"ic_custom_add",
+            @"img" : ACImageNameIcCustomAdd,
         },
     ]];
     
@@ -161,7 +161,7 @@
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%d", tracksCount],
             @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: selectedFolderName]],
-            @"img" : @"ic_custom_folder"
+            @"img" : ACImageNameIcCustomFolder
         }];
     }
     

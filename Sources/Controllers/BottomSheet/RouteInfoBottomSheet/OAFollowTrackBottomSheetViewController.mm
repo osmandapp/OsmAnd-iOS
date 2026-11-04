@@ -79,7 +79,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.rightButton removeFromSuperview];
-    [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"]];
+    [self.leftIconView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowBack]];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];
@@ -180,14 +180,14 @@
 	[items addObject:@{
 		@"type" : [OASimpleTableViewCell getCellIdentifier],
 		@"title" : OALocalizedString(@"select_another_track"),
-		@"img" : @"ic_custom_folder",
+		@"img" : ACImageNameIcCustomFolder,
 		@"key" : @"select_another"
 	}];
 	
 	[items addObject:@{
 		@"type" : [OASwitchTableViewCell getCellIdentifier],
 		@"title" : OALocalizedString(@"gpx_option_reverse_route"),
-		@"img" : @"ic_custom_swap",
+		@"img" : ACImageNameIcCustomSwap,
 		@"key" : @"reverse_track"
 	}];
 	
@@ -196,7 +196,7 @@
 		[items addObject:@{
 			@"type" : [OASimpleTableViewCell getCellIdentifier],
 			@"title" : OALocalizedString(@"attach_to_the_roads"),
-			@"img" : @"ic_custom_attach_track",
+			@"img" : ACImageNameIcCustomAttachTrack,
 			@"key" : @"attach_to_roads"
 		}];
 	}
@@ -259,14 +259,20 @@
     [self openPlanRoute:NO];
 }
 
-- (void) openPlanRoute:(BOOL)showSnapWarning
+- (void) openPlanRoute:(BOOL)attachToRoads
 {
     if (_gpx)
     {
-        NSString *filePath = _gpx.path;
+        OASGpxFile *gpx = _gpx;
+        NSString *fileName = gpx.path.lastPathComponent.stringByDeletingPathExtension;
         [self dismissViewControllerAnimated:NO completion:^{
-            [[OARootViewController instance].mapPanel closeRouteInfo];
-            [PlanRouteScrollableViewController openExistingTrackWithFilePath:filePath];
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            [mapPanel closeRouteInfo:YES onComplete:^{
+                [PlanRouteScrollableViewController openExistingTrackWithGpxFile:gpx
+                                                                       fileName:fileName ?: @""
+                                                                 sourceFilePath:gpx.path
+                                                                  attachToRoads:attachToRoads];
+            }];
         }];
     }
 }

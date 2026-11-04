@@ -131,6 +131,7 @@ static BOOL _isDeviatedFromRoute = false;
     GPS_TOLERANCE = (NSInteger) (DEFAULT_GPS_TOLERANCE * ARRIVAL_DISTANCE_FACTOR);
     [_voiceRouter updateAppMode];
     [_routingModeChangedObservable notifyEventWithKey:mode];
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (OAApplicationMode *) getAppMode
@@ -172,6 +173,7 @@ static BOOL _isDeviatedFromRoute = false;
         //app.getNotificationHelper().updateTopNotification();
         //app.getNotificationHelper().refreshNotifications();
     }
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isPauseNavigation
@@ -240,6 +242,7 @@ static BOOL _isDeviatedFromRoute = false;
         //app.getNotificationHelper().updateTopNotification();
         //app.getNotificationHelper().refreshNotifications();
     }
+    [[ScreenAwakeService shared] updateIdleTimer];
 }
 
 - (BOOL) isRoutePlanningMode
@@ -274,6 +277,15 @@ static BOOL _isDeviatedFromRoute = false;
         if (![_listeners containsObject:l])
             [_listeners addObject:l];
         [_transportRoutingHelper addListener:l];
+    }
+}
+
+// A copy, so that a listener can add or remove listeners from its callback
+- (NSArray<id<OARouteInformationListener>> *) currentListeners
+{
+    @synchronized (_listeners)
+    {
+        return [_listeners copy];
     }
 }
 
@@ -347,42 +359,20 @@ static BOOL _isDeviatedFromRoute = false;
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @synchronized (_listeners)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<OARouteInformationListener> l in [self currentListeners])
         {
-            NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-            for (id<OARouteInformationListener> l in _listeners)
-            {
-                if (l)
-                {
-                    if ([l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
-                    [l newRouteHasMissingOrOutdatedMaps:missingMaps mapsToUpdate:mapsToUpdate potentiallyUsedMaps:potentiallyUsedMaps];
-                }
-                else
-                {
-                    [inactiveListeners addObject:l];
-                }
-            }
-            [_listeners removeObjectsInArray:inactiveListeners];
+            if ([l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
+                [l newRouteHasMissingOrOutdatedMaps:missingMaps mapsToUpdate:mapsToUpdate potentiallyUsedMaps:potentiallyUsedMaps];
         }
     });
 }
 
 - (void) newRouteCalculated:(BOOL)newRoute
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        @synchronized (_listeners)
-        {
-            NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-            for (id<OARouteInformationListener> l in _listeners)
-            {
-                if (l)
-                    [l newRouteIsCalculated:newRoute];
-                else
-                    [inactiveListeners addObject:l];
-            }
-            [_listeners removeObjectsInArray:inactiveListeners];
-        }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<OARouteInformationListener> l in [self currentListeners])
+            [l newRouteIsCalculated:newRoute];
     });
 }
 
@@ -454,12 +444,12 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult
+- (OASRouteSegmentResult *) getCurrentSegmentResult
 {
     return [_route getCurrentSegmentResult];
 }
 
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult
+- (OASRouteSegmentResult *) getNextStreetSegmentResult
 {
     return [_route getNextStreetSegmentResult];
 }
@@ -565,19 +555,9 @@ static BOOL _isDeviatedFromRoute = false;
             if (updateAndNotify)
             {
                 [_route updateCurrentRoute:newCurrentRoute + 1];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    @synchronized (_listeners)
-                    {
-                        NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                        for (id<OARouteInformationListener> l in _listeners)
-                        {
-                            if (l)
-                                [l routeWasUpdated];
-                            else
-                                [inactiveListeners addObject:l];
-                        }
-                        [_listeners removeObjectsInArray:inactiveListeners];
-                    }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    for (id<OARouteInformationListener> l in [self currentListeners])
+                        [l routeWasUpdated];
                 });
             }
 
@@ -890,7 +870,7 @@ static BOOL _isDeviatedFromRoute = false;
     }
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart
+- (NSArray<OASRouteSegmentResult *> *) getUpcomingTunnel:(float)distToStart
 {
     return [_route getUpcomingTunnel:distToStart];
 }
@@ -976,19 +956,9 @@ static BOOL _isDeviatedFromRoute = false;
 
         [[OAWaypointHelper sharedInstance] setNewRoute:_route];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @synchronized (_listeners)
-            {
-                NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                for (id<OARouteInformationListener> l in _listeners)
-                {
-                    if (l)
-                        [l routeWasCancelled];
-                    else
-                        [inactiveListeners addObject:l];
-                }
-                [_listeners removeObjectsInArray:inactiveListeners];
-            }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (id<OARouteInformationListener> l in [self currentListeners])
+                [l routeWasCancelled];
         });
         _finalLocation = newFinalLocation;
         _lastGoodRouteLocation = nil;
@@ -1013,19 +983,9 @@ static BOOL _isDeviatedFromRoute = false;
 {
     @synchronized (self)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            @synchronized (_listeners)
-            {
-                NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
-                for (id<OARouteInformationListener> l in _listeners)
-                {
-                    if (l)
-                        [l routeWasFinished];
-                    else
-                        [inactiveListeners addObject:l];
-                }
-                [_listeners removeObjectsInArray:inactiveListeners];
-            }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for (id<OARouteInformationListener> l in [self currentListeners])
+                [l routeWasFinished];
         });
     }
 }
@@ -1038,6 +998,26 @@ static BOOL _isDeviatedFromRoute = false;
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end
 {
 	return [_provider getRoutingEnvironment:mode start:start end:end];
+}
+
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder
+{
+	return [_provider generateSharedGpxPoints:env gctx:gctx locationsHolder:locationsHolder];
+}
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
+{
+	return [_provider calculateSharedGpxApproximation:env
+                                                gctx:gctx
+                                              points:points
+                               useExternalTimestamps:useExternalTimestamps
+                                       resultMatcher:resultMatcher];
 }
 
 - (std::vector<SHARED_PTR<GpxPoint>>) generateGpxPoints:(OARoutingEnvironment *)env gctx:(std::shared_ptr<GpxRouteApproximation>)gctx locationsHolder:(OALocationsHolder *)locationsHolder
@@ -1181,11 +1161,11 @@ static BOOL _isDeviatedFromRoute = false;
     }
     
     NSArray<CLLocation *> *locations = route.getImmutableAllLocations;
-    auto originalRoute = route.getOriginalRoute;
+    NSArray<OASRouteSegmentResult *> *originalRoute = route.getOriginalRoute;
     OARouteExporter *exporter = [[OARouteExporter alloc] initWithName:name
                                                                route:originalRoute
                                                            locations:locations
-                                                   routePointIndexes:{}
+                                                   routePointIndexes:@[]
                                                               points:points
                                                   preserveTimestamps:NO];
     return [exporter exportRoute];

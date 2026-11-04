@@ -467,7 +467,7 @@
     }
     else if ([parameter isEqualToString:RouteParamVehicleHelper.motorType])
     {
-        return [UIImage imageNamed:@"ic_custom_fuel"];
+        return [UIImage imageNamed:ACImageNameIcCustomFuel];
     }
     
     return nil;

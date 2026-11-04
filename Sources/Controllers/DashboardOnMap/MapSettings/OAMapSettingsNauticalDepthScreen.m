@@ -69,7 +69,7 @@
     [switchSection addRowFromDictionary:@{
         kCellTypeKey: [OASwitchTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"nautical_depth"),
-        kCellIconNameKey: @"ic_custom_nautical_depth_colored",
+        kCellIconNameKey: ACImageNameIcCustomNauticalDepthColored,
         kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
         @"iconTintDisabled" : [UIColor colorNamed:ACColorNameIconColorDisabled]
     }];

@@ -10,7 +10,7 @@
 
 @implementation OAOcbfHelper
 
-+ (void)downloadOcbfIfUpdated:(void (^)(void))completionHandler
++ (void)downloadOcbfIfUpdated:(void (^)(BOOL updated))completionHandler
 {
     NSString *urlString = @"https://builder.osmand.net/basemap/regions.ocbf";
     NSLog(@"[OCBF] Starting check for update at URL: %@", urlString);
@@ -20,16 +20,17 @@
     {
         NSLog(@"[OCBF] Invalid URL: %@", urlString);
         if (completionHandler)
-            completionHandler();
+            completionHandler(NO);
         return;
     }
 
     NSLog(@"[OCBF] Skip downloading URL: %@", urlString);
     if (completionHandler)
-        completionHandler();
+        completionHandler(NO);
     return;
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL copiedFromBundle = NO;
     
     NSString *cachedPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
@@ -47,6 +48,7 @@
         }
         else
         {
+            copiedFromBundle = YES;
             NSLog(@"[OCBF] Copied default OCBF from bundle to library.");
         }
     }
@@ -67,10 +69,11 @@
         {
             NSLog(@"[OCBF] Error during HEAD request: %@", error.localizedDescription);
             if (completionHandler)
-                completionHandler();
+                completionHandler(copiedFromBundle);
             return;
         }
         
+        BOOL updated = copiedFromBundle;
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         NSInteger responseCode = httpResponse.statusCode;
         NSLog(@"[OCBF] HTTP response: %ld", (long)responseCode);
@@ -80,9 +83,12 @@
             NSString *lastModified = httpResponse.allHeaderFields[@"Last-Modified"];
             NSLog(@"[OCBF] Last-Modified header: %@", lastModified ?: @"<none>");
             
-            [self downloadOcbfIfUpdated:url
-                     lastModifiedString:lastModified
-                          cachedPathLib:cachedPathLib];
+            if ([self downloadOcbfIfUpdated:url
+                         lastModifiedString:lastModified
+                              cachedPathLib:cachedPathLib])
+            {
+                updated = YES;
+            }
         }
         else
         {
@@ -90,12 +96,12 @@
         }
         
         if (completionHandler)
-            completionHandler();
+            completionHandler(updated);
     }] resume];
 }
 
 
-+ (void)downloadOcbfIfUpdated:(NSURL *)url
++ (BOOL)downloadOcbfIfUpdated:(NSURL *)url
            lastModifiedString:(NSString *)lastModifiedString
                 cachedPathLib:(NSString *)cachedPathLib
 {
@@ -136,6 +142,7 @@
     if ([lastModifiedLocal laterDate:lastModifiedServer] == lastModifiedServer)
         downloadFromServer = YES;
     
+    BOOL saved = NO;
     if (downloadFromServer)
     {
         NSLog(@"Downloading new file from server");
@@ -144,7 +151,10 @@
         {
             // Save the data
             if ([data writeToFile:cachedPathLib atomically:YES])
+            {
+                saved = YES;
                 NSLog(@"Downloaded file saved to: %@", cachedPathLib);
+            }
             
             // Set the file modification date to the timestamp from the server
             if (lastModifiedServer)
@@ -158,7 +168,8 @@
                     NSLog(@"Error setting file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
             }
         }
-    }  
+    }
+    return saved;
 }
 
 + (BOOL) isBundledOcbfNewer

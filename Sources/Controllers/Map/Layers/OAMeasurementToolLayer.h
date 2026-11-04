@@ -38,8 +38,15 @@
 - (OASWptPt *) getMovedPointToApply;
 
 - (void) onMapPointSelected:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress;
+- (BOOL)isInMeasurementMode;
 
 - (void) moveMapToPoint:(NSInteger)pos;
 - (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate;
+
+#if DEBUG
+- (void)prepareRouteLinesForTesting;
+- (NSUInteger)routeLineCountForTesting;
+- (NSUInteger)centerLineCountForTesting;
+#endif
 
 @end

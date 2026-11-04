@@ -16,6 +16,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectActivityView: UIActivityIndicatorView!
     @IBOutlet private weak var connectStatusLabel: UILabel!
     @IBOutlet private weak var connectButton: UIButton!
+    @IBOutlet private weak var dividerBottomView: UIView!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
     var didPairedDeviceAction: (() -> Void)?
@@ -23,6 +24,10 @@ final class DescriptionDeviceHeader: UIView {
     private var device: Device?
     
     // MARK: - Configure
+    func hideBottomDivider() {
+        dividerBottomView?.isHidden = true
+    }
+    
     func configure(device: Device) {
         self.device = device
         deviceNameLabel.text = device.deviceName
@@ -155,8 +160,8 @@ final class DescriptionDeviceHeader: UIView {
                 
                 defer {
                     completedCount += 1
-                    if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
-                        OBDService.shared.startDispatcher()
+                    if completedCount == totalServices, let obdDevice = device as? OBDVehicleMetricsDevice {
+                        OBDService.shared.startDispatcherWhenReady(device: obdDevice)
                     }
                 }
                 

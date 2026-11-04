@@ -317,9 +317,11 @@ const static OsmAnd::ZoomLevel MAX_ZOOM_TO_SHOW = OsmAnd::ZoomLevel7;
         }
         
         [regions sortUsingComparator:^NSComparisonResult(id a, id b) {
-            NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
-            NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
-            return [second compare:first];
+            double first = [(OAWorldRegion *) a getArea];
+            double second = [(OAWorldRegion *) b getArea];
+            if (second < first)
+                return NSOrderedAscending;
+            return second > first ? NSOrderedDescending : NSOrderedSame;
         }];
         
         const auto externalMaps = [OAResourcesUIHelper getExternalMapFilesAt:point31 routeData:NO];

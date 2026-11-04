@@ -284,14 +284,14 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
                 cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             }
             
-            NSString *imgName = enabled ? @"ic_custom_show" : @"ic_custom_hide";
+            NSString *imgName = enabled ? ACImageNameIcCustomShow : ACImageNameIcCustomHide;
             if (isMountain)
             {
-                imgName = @"ic_action_bicycle_dark";
+                imgName = ACImageNameIcActionBicycleDark;
             }
             else if (isDifficultyClassification)
             {
-                imgName = @"ic_action_trekking_dark";
+                imgName = ACImageNameIcActionTrekkingDark;
             }
             
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];

@@ -9,6 +9,7 @@
 #import "OABearingWidgetState.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #define BEARING_WIDGET_STATE_RELATIVE_BEARING @"bearing_widget_state_relative_bearing"
 #define BEARING_WIDGET_STATE_MAGNETIC_BEARING @"bearing_widget_state_magnetic_bearing"
@@ -35,7 +36,7 @@
 
 - (NSString *) getMenuIconId
 {
-    return [_settings.showRelativeBearing get] ? @"ic_action_relative_bearing" : @"ic_action_bearing";
+    return [_settings.showRelativeBearing get] ? ACImageNameIcActionRelativeBearing : ACImageNameIcActionBearing;
 }
 
 - (NSString *) getMenuItemId
@@ -50,7 +51,7 @@
 
 - (NSArray<NSString *> *) getMenuIconIds
 {
-    return @[ @"ic_action_bearing", @"ic_action_relative_bearing" ];
+    return @[ ACImageNameIcActionBearing, ACImageNameIcActionRelativeBearing ];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

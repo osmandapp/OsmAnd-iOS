@@ -35,6 +35,7 @@
 #import "OAGpxApproximationParams.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
@@ -260,10 +261,9 @@
     }
     else
     {
-        OASGpxDataItem *dataItem = trackItem.dataItem;
-        if (dataItem)
+        NSString *path = trackItem.dataItem ? trackItem.dataItem.file.absolutePath : trackItem.path;
+        if (path.length > 0)
         {
-            NSString *path = dataItem.file.absolutePath;
             if ([gpxMap objectForKey:path])
             {
                 gpxFile = gpxMap[path];
@@ -271,11 +271,8 @@
             }
             else
             {
-                if (path.length > 0)
-                {
-                    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
-                    gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-                }
+                OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+                gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
             }
         }
     }
@@ -364,7 +361,7 @@
 - (void) stopNavigationActionConfirm
 {
     [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"cancel_route")
-                                               titleIcon:@"ic_custom_alert"
+                                               titleIcon:ACImageNameIcCustomAlert
                                                  message:OALocalizedString(@"stop_routing_confirm")
                                              cancelTitle:OALocalizedString(@"shared_string_no")
                                                doneTitle:OALocalizedString(@"shared_string_yes")

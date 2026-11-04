@@ -83,16 +83,17 @@ struct RegionResources
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > outdatedResources;
 };
 
-static BOOL ResourceMatchesRegion(OAWorldRegion *region,
-                                  const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &resource,
+// The region-dependent part of the match is resolved by the caller, since this runs once per region-resource pair
+static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
+                                  const OsmAnd::ResourcesManager::Resource &resource,
                                   const QString &downloadsIdPrefix,
                                   const QString &acceptedExtension)
 {
-    if ([region.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && resource->type == OsmAndResourceType::StarMap)
+    if (isTravelRegion && resource.type == OsmAndResourceType::StarMap)
         return YES;
     if (!acceptedExtension.isEmpty())
-        return resource->id.endsWith(acceptedExtension);
-    return resource->id.startsWith(downloadsIdPrefix);
+        return resource.id.endsWith(acceptedExtension);
+    return resource.id.startsWith(downloadsIdPrefix);
 }
 
 @implementation OAManageResourcesViewController
@@ -157,7 +158,6 @@ static BOOL ResourceMatchesRegion(OAWorldRegion *region,
     UISearchController *_searchController;
     
     uint64_t _totalInstalledSize;
-    uint64_t _liveUpdatesInstalledSize;
 
     MBProgressHUD *_refreshRepositoryProgressHUD;
     
@@ -181,7 +181,7 @@ static BOOL ResourceMatchesRegion(OAWorldRegion *region,
     CALayer *_horizontalLine;
     
     BOOL _viewAppeared;
-    BOOL _repositoryUpdating;
+    BOOL _refreshingRepository;
 
     NSString *_otherRegionId;
     NSString *_nauticalRegionId;
@@ -206,6 +206,9 @@ static NSMutableArray *_searchableWorldwideRegionItems;
 
 static BOOL _lackOfResources = NO;
 static BOOL _repositoryUpdated = NO;
+
+// posted after updateRepository rebuilt the group items, which visible region lists hold copies of
+static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsRebuiltNotification";
 
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
@@ -305,7 +308,9 @@ static BOOL _repositoryUpdated = NO;
     [self registerCells];
     [self setupDownloadingCellHelper];
 
+    // Only the e-mail subscription still uses it; touches pass through so it never blocks the list
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    _refreshRepositoryProgressHUD.userInteractionEnabled = NO;
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
     _displayBanner = ![self shouldHideBanner];
@@ -321,7 +326,7 @@ static BOOL _repositoryUpdated = NO;
     [self obtainDataAndItems];
     [self prepareContent];
 
-    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
+    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0)];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
@@ -369,6 +374,7 @@ static BOOL _repositoryUpdated = NO;
     _updateButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"arrow.triangle.2.circlepath"] style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateBtnClicked:)];
     if (!hideUpdateButton)
         [self.navigationController.navigationBar.topItem setRightBarButtonItem:_updateButton animated:YES];
+    [self updateRepositoryUpdateIndicator];
     [self setupSearchControllerWithFilter:NO];
 
     [self updateContentIfNeeded];
@@ -389,6 +395,8 @@ static BOOL _repositoryUpdated = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRepositoryUpdateFinished:) name:OARepositoryUpdateFinishedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceGroupsRebuilt:) name:kResourceGroupsRebuiltNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
@@ -421,13 +429,6 @@ static BOOL _repositoryUpdated = NO;
         {
             // show no internet popup
             [OAPluginPopupViewController showNoInternetConnectionFirst];
-        }
-        else if (_app.isRepositoryUpdating)
-        {
-            NSLog(@"OAManageResourcesViewController viewDidAppear isRepositoryUpdating show:YES");
-            _repositoryUpdating = YES;
-            _updateButton.enabled = NO;
-            [_refreshRepositoryProgressHUD show:YES];
         }
     }
     _viewAppeared = YES;
@@ -592,8 +593,8 @@ static BOOL _repositoryUpdated = NO;
 {
     if (value == self.region)
     {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (_weatherForecastRow != -1)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_weatherForecastRow != -1 && _weatherForecastRow < _regionMapItems.count)
             {
                 OAResourceItem *item = _regionMapItems[_weatherForecastRow];
                 [self updateDisplayItem:item];
@@ -663,6 +664,11 @@ static BOOL _repositoryUpdated = NO;
     [_subscriptionBannerView updateView];
 }
 
+- (void) resourceGroupsRebuilt:(NSNotification *)notification
+{
+    [self updateContent];
+}
+
 - (void) resourceInstallationFailed:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -683,14 +689,6 @@ static BOOL _repositoryUpdated = NO;
 
     if ([self shouldDisplayWeatherForecast:self.region])
         [_weatherHelper calculateCacheSize:self.region onComplete:nil];
-
-    if (_repositoryUpdating)
-    {
-        _repositoryUpdating = NO;
-        _updateButton.enabled = YES;
-        NSLog(@"OAManageResourcesViewController updateContent _refreshRepositoryProgressHUD hide:YES");
-        [_refreshRepositoryProgressHUD hide:YES];
-    }
 }
 
 - (void)updateMultipleResources
@@ -762,13 +760,84 @@ static BOOL _repositoryUpdated = NO;
         _searchableWorldwideRegionItems = [NSMutableArray array];
     
     NSArray<OAWorldRegion *> *mergedRegions = [app.worldRegion.flattenedSubregions arrayByAddingObject:app.worldRegion];
-    for (OAWorldRegion *region in mergedRegions)
+    const int regionsCount = (int) mergedRegions.count;
+    NSString *travelRegionId = OsmAnd::WorldRegions::TravelRegionId.toNSString();
+
+    QVector< QString > regionPrefixes(regionsCount);
+    QVector< QString > regionExtensions(regionsCount);
+    QVector< bool > regionIsTravel(regionsCount);
+
+    // Resource ids are '<download name>.<suffix>' and downloadsIdPrefix is '<download name>.',
+    // so for such regions the prefix match is an exact lookup by the id up to its first dot.
+    // Regions matched by extension or by a partial prefix (world, others, custom) stay on the scan path.
+    QHash< QString, QVector<int> > regionsByDownloadPrefix;
+    QVector< int > scannedRegions;
+
+    for (int i = 0; i < regionsCount; i++)
     {
+        OAWorldRegion *region = mergedRegions[i];
+        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
+        const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
+        const bool isTravel = [region.regionId isEqualToString:travelRegionId];
+
+        regionPrefixes[i] = downloadsIdPrefix;
+        regionExtensions[i] = acceptedExtension;
+        regionIsTravel[i] = isTravel;
+
+        if (!doInit)
+            continue;
+
+        if (!isTravel && acceptedExtension.isEmpty()
+            && downloadsIdPrefix.endsWith(QLatin1Char('.')) && downloadsIdPrefix.count(QLatin1Char('.')) == 1)
+        {
+            regionsByDownloadPrefix[downloadsIdPrefix].append(i);
+        }
+        else
+        {
+            scannedRegions.append(i);
+        }
+    }
+
+    QVector< QList< std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > > repositoryResourcesByRegion;
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > deletedResources;
+    if (doInit)
+        repositoryResourcesByRegion.resize(regionsCount);
+
+    for (const auto& resource : _resourcesInRepository)
+    {
+        if (resource->isDeleted)
+            deletedResources.append(resource);
+
+        if (!doInit)
+            continue;
+
+        const auto dotIndex = resource->id.indexOf(QLatin1Char('.'));
+        if (dotIndex != -1)
+        {
+            const auto citRegions = regionsByDownloadPrefix.constFind(resource->id.left(dotIndex + 1));
+            if (citRegions != regionsByDownloadPrefix.cend())
+            {
+                for (const int regionIndex : *citRegions)
+                    repositoryResourcesByRegion[regionIndex].append(resource);
+            }
+        }
+        for (const int regionIndex : scannedRegions)
+        {
+            if (ResourceMatchesRegion(regionIsTravel.at(regionIndex), *resource, regionPrefixes.at(regionIndex), regionExtensions.at(regionIndex)))
+                repositoryResourcesByRegion[regionIndex].append(resource);
+        }
+    }
+
+    for (int regionIndex = 0; regionIndex < regionsCount; regionIndex++)
+    {
+        OAWorldRegion *region = mergedRegions[regionIndex];
+
         if (initWorldwideRegionItems)
             [_searchableWorldwideRegionItems addObject:region];
         
-        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
-        const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
+        const BOOL isTravelRegion = regionIsTravel.at(regionIndex);
+        const QString &downloadsIdPrefix = regionPrefixes.at(regionIndex);
+        const QString &acceptedExtension = regionExtensions.at(regionIndex);
         
         RegionResources regionResources;
         RegionResources regionResPrevious;
@@ -784,7 +853,7 @@ static BOOL _repositoryUpdated = NO;
         {
             for (const auto& resource : _localResources)
             {
-                if (ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
+                if (ResourceMatchesRegion(isTravelRegion, *resource, downloadsIdPrefix, acceptedExtension))
                     regionResources.allResources.remove(resource->id);
             }
             for (const auto& resource : regionResources.outdatedResources)
@@ -804,7 +873,7 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _outdatedResources)
         {
-            if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
+            if (!ResourceMatchesRegion(isTravelRegion, *resource, downloadsIdPrefix, acceptedExtension))
                 continue;
             
             regionResources.allResources.insert(resource->id, resource);
@@ -814,7 +883,7 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _localResources)
         {
-            if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
+            if (!ResourceMatchesRegion(isTravelRegion, *resource, downloadsIdPrefix, acceptedExtension))
                 continue;
 
             if (!regionResources.allResources.contains(resource->id))
@@ -827,11 +896,8 @@ static BOOL _repositoryUpdated = NO;
         {
             NSMutableArray *typesArray = [NSMutableArray array];
             BOOL hasSrtm = NO;
-            for (const auto& resource : _resourcesInRepository)
+            for (const auto& resource : repositoryResourcesByRegion.at(regionIndex))
             {
-                if (!ResourceMatchesRegion(region, resource, downloadsIdPrefix, acceptedExtension))
-                    continue;
-                
                 switch (resource->type)
                 {
                     case OsmAndResourceType::MapRegion:
@@ -874,19 +940,32 @@ static BOOL _repositoryUpdated = NO;
         }
         else
         {
+            // A removed resource may be absent from the repository, and value() returns a null pointer for it
             for (const auto& resource : regionResPrevious.outdatedResources)
+            {
                 if (!regionResources.allResources.contains(resource->id))
-                    regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
+                {
+                    const auto repositoryResource = _resourcesInRepository.value(resource->id);
+                    if (repositoryResource)
+                        regionResources.allResources.insert(resource->id, repositoryResource);
+                }
+            }
 
             for (const auto& resource : regionResPrevious.localResources)
+            {
                 if (!regionResources.allResources.contains(resource->id))
-                    regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
+                {
+                    const auto repositoryResource = _resourcesInRepository.value(resource->id);
+                    if (repositoryResource)
+                        regionResources.allResources.insert(resource->id, repositoryResource);
+                }
+            }
         }
         
         // This code swaps downloaded unsupported maps from local resources with DeletedMap resource with same id
-        for (const auto& resource : _resourcesInRepository)
+        for (const auto& resource : deletedResources)
         {
-            if (regionResources.allResources.contains(resource->id) && resource->isDeleted)
+            if (regionResources.allResources.contains(resource->id))
             {
                 const auto& unsupportedResource = regionResources.allResources.value(resource->id);
                 if (unsupportedResource->type != OsmAndResourceType::DeletedMap)
@@ -958,6 +1037,9 @@ static BOOL _repositoryUpdated = NO;
     
     for (const auto& resource_ : regionResources.allResources)
     {
+        if (resource_->type == OsmAndResourceType::DeletedMap)
+            continue;
+
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
         if (item_)
         {
@@ -1328,8 +1410,6 @@ static BOOL _repositoryUpdated = NO;
     }
 
     // Local Resources
-    _liveUpdatesInstalledSize = _app.resourcesManager->changesManager->getUpdatesSize();
-    
     _totalInstalledSize = 0;
     for (const auto& localResource : _localResources)
     {
@@ -1405,7 +1485,7 @@ static BOOL _repositoryUpdated = NO;
     
     for (OAResourceItem *item in _regionMapItems)
     {
-        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey) || item.resourceType == OsmAndResourceType::DeletedMap)
+        if (item.resourceId == QStringLiteral(kWorldSeamarksKey) || item.resourceId == QStringLiteral(kWorldSeamarksOldKey))
         {
             [_regionMapItems removeObject:item];
             break;
@@ -1880,26 +1960,56 @@ static BOOL _repositoryUpdated = NO;
     [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"res_catalog_upd")];
 }
 
+// A spinner replaces the refresh button while this screen or the app updates the repository
+- (void) updateRepositoryUpdateIndicator
+{
+    BOOL visible = _refreshingRepository || _app.isRepositoryUpdating;
+    _updateButton.enabled = !visible;
+    if (hideUpdateButton)
+        return;
+
+    UIBarButtonItem *item = _updateButton;
+    if (visible)
+    {
+        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+        spinner.color = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
+        [spinner startAnimating];
+        item = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+    }
+    [self.navigationItem setRightBarButtonItem:item animated:NO];
+}
+
 - (void) updateRepository
 {
     _doDataUpdateReload = YES;
-    _updateButton.enabled = NO;
-    NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD show:YES");
-    [_refreshRepositoryProgressHUD show:YES];
-    NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated start");
-    [OAOcbfHelper downloadOcbfIfUpdated:^{
-        NSLog(@"OAManageResourcesViewController downloadOcbfIfUpdated end");
-        [_app loadWorldRegions];
-        self.region = _app.worldRegion;
-        [_app startRepositoryUpdateAsync:NO];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"OAManageResourcesViewController updateRepository _refreshRepositoryProgressHUD hide:YES");
-            [_refreshRepositoryProgressHUD hide:YES];
-            [self updateContent];
-            [_app.worldRegion buildResourceGroupItem];
-            _updateButton.enabled = YES;
+    _refreshingRepository = YES;
+    [self updateRepositoryUpdateIndicator];
+    [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+            // The region tree is reread only when regions.ocbf changed.
+            // The tree is read here but published on the main thread: self.region, the region-keyed resource cache and
+            // the section layout are all compared against _app.worldRegion by identity.
+            OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
+            [_app startRepositoryUpdateAsync:NO];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (reloadedWorldRegion)
+                {
+                    [_app applyWorldRegions:reloadedWorldRegion];
+                    self.region = _app.worldRegion;
+                }
+                [self updateContent];
+                [_app.worldRegion rebuildResourceGroupItem];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kResourceGroupsRebuiltNotification object:self];
+                _refreshingRepository = NO;
+                [self updateRepositoryUpdateIndicator];
+            });
         });
     }];
+}
+
+- (void) onRepositoryUpdateFinished:(NSNotification *)notification
+{
+    [self updateRepositoryUpdateIndicator];
 }
 
 - (UITableView *) getTableView
@@ -2080,7 +2190,7 @@ static BOOL _repositoryUpdated = NO;
         sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
-    if (_freeMapsBannerSection)
+    if (_freeMapsBannerSection >= 0)
         sectionsCount++;
     if (_extraMapsSection >= 0)
         sectionsCount++;
@@ -2697,7 +2807,7 @@ static BOOL _repositoryUpdated = NO;
                 cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 66., 0., 0.);
                 cell.titleLabel.text = OALocalizedString(@"free_downloads");
                 cell.descriptionLabel.text = [self getFreeMapsMessage];
-                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored"];
+                cell.leftIconView.image = [UIImage rtlImageNamed:ACImageNameIcCustomMapUpdatesColored];
             }
             return cell;
         }
@@ -2715,7 +2825,7 @@ static BOOL _repositoryUpdated = NO;
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
             cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
-            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
+            UIImage *iconImage = [UIImage imageNamed:ACImageNameIcCustomDownload];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -2763,7 +2873,7 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
+                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? ACImageNameIcCustomMultiDownload : ACImageNameIcCustomDownload;
                 UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -2795,7 +2905,7 @@ static BOOL _repositoryUpdated = NO;
             }
             else
             {
-                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
+                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? ACImageNameIcCustomMultiDownload : ACImageNameIcCustomDownload;
                 UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];

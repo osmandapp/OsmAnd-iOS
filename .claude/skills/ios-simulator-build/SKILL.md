@@ -42,10 +42,7 @@ for the Bash call — that's a GUI/Finder action, not a build/simctl one).
 
 ## One-time repairs (only needed once per broken/fresh checkout — check for the specific error first)
 
-1. **`'libxslt/documents.h' file not found`** (BRCybertron target) → run
-   `Scripts/download_libxslt_for_BRCybertron_spm.sh` from `ios/`.
-
-2. **`Build input file cannot be found: .../core/src/...`** → the cmake-generated core Xcode
+1. **`Build input file cannot be found: .../core/src/...`** → the cmake-generated core Xcode
    project at `repos/baked/fat-ios-clang.xcode` has drifted from `core/src`. Regenerate it
    (cheap, ~15s, just cmake configure — NOT the full Qt rebuild):
    ```bash
@@ -53,7 +50,7 @@ for the Bash call — that's a GUI/Finder action, not a build/simctl one).
    ```
    Don't run the full `prepare.sh` for this — it also wipes Pods/Podfile.lock.
 
-3. **A compile error inside `core/externals/<name>/upstream.patched/<file>` that looks like an
+2. **A compile error inside `core/externals/<name>/upstream.patched/<file>` that looks like an
    ancient-Mac-OS compat shim breaking under a newer SDK** (e.g. `TARGET_OS_MAC`-gated code,
    missing headers like `fp.h`): check `core/externals/<name>/patches/` first — there is
    probably already a patch for it that just isn't reflected in the current `upstream.patched/`
@@ -72,7 +69,7 @@ for the Bash call — that's a GUI/Finder action, not a build/simctl one).
    Confirmed needed for **zlib** (`1-clang17.patch`) and **libpng** (`clang17.patch`) against
    iOS SDK 26.5 on 2026-09-03.
 
-4. **`xcodebuild -showdestinations` / `-showsdks` shows a much newer SDK than any installed
+3. **`xcodebuild -showdestinations` / `-showsdks` shows a much newer SDK than any installed
    simulator runtime, and every simulator device is `unavailable, runtime profile not found
    using "System" match policy"`** — usually right after an Xcode update. `xcodebuild
    -downloadPlatform iOS` can pull a runtime build that the SDK's match policy then rejects
@@ -83,7 +80,7 @@ for the Bash call — that's a GUI/Finder action, not a build/simctl one).
    devices bound to the previous runtime stay `unavailable` — just boot one of the new devices
    Xcode auto-creates (e.g. "iPhone 17") or `simctl create` a fresh one on the new runtime.
 
-5. **`Failed to launch AssetCatalogSimulatorAgent via CoreSimulator spawn` /
+4. **`Failed to launch AssetCatalogSimulatorAgent via CoreSimulator spawn` /
    `Failed to open FIFOs for handshaking with platform tool`** on every
    `CompileAssetCatalog(Variant)` step, regardless of sandbox/destination/`ENABLE_ON_DEMAND_RESOURCES`
    flags or CoreSimulatorService restarts — this is Xcode being too old for the installed macOS.

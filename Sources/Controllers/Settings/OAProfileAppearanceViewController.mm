@@ -246,8 +246,8 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
     _profile.derivedProfile = baseModeForNewProfile.getDerivedProfile;
     _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
-    _profile.locationIcon = [baseModeForNewProfile.getLocationIcon name];
-    _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
+    _profile.locationIcon = baseModeForNewProfile.locationIconName;
+    _profile.navigationIcon = baseModeForNewProfile.navigationIconName;
     _profile.viewAngleVisibility = (int)[baseModeForNewProfile getViewAngleVisibility];
     _profile.locationRadiusVisibility = (int)[baseModeForNewProfile getLocationRadiusVisibility];
     _profile.locationIconSize = [baseModeForNewProfile getLocationIconSize];
@@ -419,7 +419,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"view_angle"),
         kCellDescrKey : OALocalizedString(viewAngleVisibilityName),
-        kCellIconNameKey : @"ic_custom_location_view_angle",
+        kCellIconNameKey : ACImageNameIcCustomLocationViewAngle,
         kCellIconTintColor : viewAngleVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : [UIColor colorNamed:ACColorNameIconColorDisabled],
         kCellKeyKey : kViewAngleCellKey,
     }];
@@ -427,7 +427,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"location_radius"),
         kCellDescrKey : OALocalizedString(locationRadiusVisibilityName),
-        kCellIconNameKey : @"ic_custom_location_radius",
+        kCellIconNameKey : ACImageNameIcCustomLocationRadius,
         kCellIconTintColor : locationRadiusVisibility != MarkerDisplayOptionOff ? UIColorFromRGB(_changedProfile.profileColor) : [UIColor colorNamed:ACColorNameIconColorDisabled],
         kCellKeyKey : kLocationRadiusCellKey,
     }];
@@ -739,7 +739,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
         {
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage imageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -808,7 +808,7 @@ static NSString *kAllColorsButtonKey =  @"kAllColorsButtonKey";
             }
             cell.topLabel.text = item.title;
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
-            [cell.rightActionButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
+            [cell.rightActionButton setImage:[UIImage imageNamed:ACImageNameIcCustomAdd] forState:UIControlStateNormal];
             cell.rightActionButton.tag = indexPath.section << 10 | indexPath.row;
             cell.collectionView.contentInset = UIEdgeInsetsMake(0, 20, 0, 20);
             [cell.collectionView reloadData];

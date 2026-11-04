@@ -23,7 +23,8 @@ typedef enum
     EOAProfileGeneralSettingsDistanceDuringNavigation,
     EOAProfileGeneralSettingsExternalInputDevices,
     EOAProfileGeneralSettingsScreenCoordsFormat,
-    EOAProfileGeneralSettingsAppTheme
+    EOAProfileGeneralSettingsAppTheme,
+    EOAProfileGeneralSettingsKeepScreenOn
 } EOAProfileGeneralSettingsParameter;
 
 @interface OAProfileGeneralSettingsViewController : OABaseSettingsViewController

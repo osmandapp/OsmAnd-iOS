@@ -192,8 +192,11 @@ static BOOL dataInvalidated = NO;
 {
     [super viewDidLoad];
 
+    // Shows progress only: touches pass through, so deleting (which waits for the renderer
+    // to release the file) never locks the whole window
     _deleteResourceProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     _deleteResourceProgressHUD.labelText = OALocalizedString(@"res_deleting");
+    _deleteResourceProgressHUD.userInteractionEnabled = NO;
     [self.view addSubview:_deleteResourceProgressHUD];
 }
 

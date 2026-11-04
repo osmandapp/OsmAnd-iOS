@@ -274,7 +274,7 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_remove_outlined"];
+            cell.rightIconView.image = [UIImage templateImageNamed:ACImageNameIcCustomRemoveOutlined];
         }
         if (cell)
         {

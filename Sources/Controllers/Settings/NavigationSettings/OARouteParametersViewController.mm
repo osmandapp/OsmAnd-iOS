@@ -68,6 +68,7 @@ static NSString *roadSpeedsKey = @"roadSpeeds";
 static NSString *angleStraightKey = @"angleStraight";
 static NSString *routingAlgorithmKey = @"routing_algorithm";
 static NSString *autoZoomKey = @"auto_zoom";
+static NSString *sharedRoutingKey = @"shared_routing";
 static NSString *paramsIdsKey = @"paramsIds";
 static NSString *paramsNamesKey = @"paramsNames";
 static NSString *reverseDirKey = @"reverseDir";
@@ -146,14 +147,14 @@ static NSString *foregroundImageKey = @"foregroundImage";
 - (NSString *) getParameterIcon:(NSString *)parameterName isSelected:(BOOL)isSelected
 {
     if ([parameterName isEqualToString:kRouteParamShortWay])
-        return @"ic_custom_fuel";
+        return ACImageNameIcCustomFuel;
     else if ([parameterName isEqualToString:kRouteParamAllowPrivate] || [parameterName isEqualToString:kRouteParamAllowPrivateTruck])
-        return isSelected ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
+        return isSelected ? ACImageNameIcCustomAllowPrivateAccess : ACImageNameIcCustomForbidPrivateAccess;
     else if ([parameterName isEqualToString:kRouteParamAllowMotorway])
-        return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
+        return isSelected ? ACImageNameIcCustomMotorways : ACImageNameIcCustomAvoidMotorways;
     else if ([parameterName isEqualToString:kRouteParamHeightObstacles])
         return ACImageNameIcCustomAscent;
-    return @"ic_custom_alert";
+    return ACImageNameIcCustomAlert;
 }
 
 - (void) clearParameters
@@ -173,8 +174,8 @@ static NSString *foregroundImageKey = @"foregroundImage";
     NSMutableArray<NSDictionary *> *headerImageSection = [NSMutableArray array];
     [headerImageSection addObject:@{
         typeKey : [OADeviceScreenTableViewCell getCellIdentifier],
-        foregroundImageKey : @"img_settings_sreen_route_parameters@3x.png",
-        backgroundImageKey : @"img_settings_device_bottom_light@3x.png",
+        foregroundImageKey : ACImageNameImgSettingsSreenRouteParameters,
+        backgroundImageKey : ACImageNameImgSettingsDeviceBottomLight,
     }];
     [tableData addObject:headerImageSection];
     
@@ -189,7 +190,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
             typeKey : [OAValueTableViewCell getCellIdentifier],
             keyKey : angleStraightKey,
             titleKey : OALocalizedString(@"recalc_angle_dialog_title"),
-            iconKey : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
+            iconKey : [UIImage imageNamed:ACImageNameIcCustomMinimalDistance],
             valueKey : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), @((int) [_settings.routeStraightAngle get:self.appMode]).stringValue]
         }];
     }
@@ -237,7 +238,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR])
                 {
                     title = OALocalizedString(@"fast_route_mode");
-                    icon = @"ic_custom_fastest_route";
+                    icon = ACImageNameIcCustomFastestRoute;
                 }
                 [tableSection addObject: @{
                     typeKey : [OASwitchTableViewCell getCellIdentifier],
@@ -305,7 +306,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 typeKey : [OASimpleTableViewCell getCellIdentifier],
                 titleKey : title,
                 descriptionKey : description,
-                iconKey : @"ic_custom_alert",
+                iconKey : ACImageNameIcCustomAlert,
                 valueKey : @([self checkIfAnyParameterIsSelected:_avoidParameters]),
                 keyKey : avoidRoadsKey
             }];
@@ -316,7 +317,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
             [tableSection addObject:@{
                 typeKey : [OASimpleTableViewCell getCellIdentifier],
                 titleKey : OALocalizedString(@"prefer_in_routing_title"),
-                iconKey : @"ic_custom_alert",
+                iconKey : ACImageNameIcCustomAlert,
                 valueKey : @([self checkIfAnyParameterIsSelected:_preferParameters]),
                 keyKey : preferRoadsKey
             }];
@@ -456,7 +457,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     [tableSection addObject: @{
         typeKey : [OASwitchTableViewCell getCellIdentifier],
         nameKey : paramId,
-        iconKey : @"ic_action_hill_climbing",
+        iconKey : ACImageNameIcActionHillClimbing,
         titleKey : OALocalizedString(@"routing_attr_allow_via_ferrata_name"),
         valueKey : rp
     }];
@@ -472,7 +473,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     [tableSection addObject: @{
         typeKey : [OASwitchTableViewCell getCellIdentifier],
         nameKey : paramId,
-        iconKey : @"ic_custom_van",
+        iconKey : ACImageNameIcCustomVan,
         titleKey : OALocalizedString(@"routing_attr_goods_restrictions_name"),
         valueKey : goodsParameter
     }];
@@ -488,7 +489,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         typeKey : [OAValueTableViewCell getCellIdentifier],
         keyKey : recalculateRouteKey,
         titleKey : OALocalizedString(@"route_recalculation_dist_title"),
-        iconKey : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
+        iconKey : [UIImage imageNamed:ACImageNameIcCustomMinimalDistance],
         iconTintKey: [_settings.routeRecalculationDistance get:self.appMode] == -1 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : _iconColor,
         valueKey : descr
     }];
@@ -500,7 +501,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         typeKey : [OASwitchTableViewCell getCellIdentifier],
         keyKey : reverseDirKey,
         titleKey : OALocalizedString(@"in_case_of_reverse_direction"),
-        iconKey : @"ic_custom_reverse_direction",
+        iconKey : ACImageNameIcCustomReverseDirection,
         valueKey : @(![_settings.disableWrongDirectionRecalc get:self.appMode])
     }];
 }
@@ -514,15 +515,22 @@ static NSString *foregroundImageKey = @"foregroundImage";
             typeKey : [OAValueTableViewCell getCellIdentifier],
             keyKey : routingAlgorithmKey,
             titleKey : OALocalizedString(@"routing_algorithm"),
-            iconKey : [UIImage templateImageNamed:@"ic_custom_route_points"],
+            iconKey : [UIImage imageNamed:ACImageNameIcCustomRoutePoints],
             valueKey : OALocalizedString([_settings.useOldRouting get] ? @"routing_algorithm_a" : @"routing_algorithm_highway_hierarchies")
         }];
         [tableSection addObject:@{
             typeKey : [OAValueTableViewCell getCellIdentifier],
             keyKey : autoZoomKey,
             titleKey : OALocalizedString(@"auto_zoom"),
-            iconKey : [UIImage templateImageNamed:@"ic_custom_zoom_level"],
+            iconKey : [UIImage imageNamed:ACImageNameIcCustomZoomLevel],
             valueKey : OALocalizedString([_settings.useV1AutoZoom get] ? @"auto_zoom_discrete" : @"auto_zoom_smooth")
+        }];
+        [tableSection addObject:@{
+            typeKey : [OASwitchTableViewCell getCellIdentifier],
+            keyKey : sharedRoutingKey,
+            titleKey : OALocalizedString(@"routing_engine_shared"),
+            iconKey : ACImageNameIcCustomRoutePoints,
+            valueKey : @([_settings.useSharedRouting get])
         }];
     }
 }
@@ -535,7 +543,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     NSString *title = [rp getText];
     NSString *iconName = [rp getIconName];
     if (!iconName || iconName.length == 0)
-        iconName = @"ic_custom_alert";
+        iconName = ACImageNameIcCustomAlert;
     
     if (param.type == RoutingParameterType::BOOLEAN)
     {
@@ -585,7 +593,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         typeKey : [OASwitchTableViewCell getCellIdentifier],
         keyKey : tempLimitationKey,
         titleKey : OALocalizedString(@"temporary_conditional_routing"),
-        iconKey : @"ic_custom_road_works",
+        iconKey : ACImageNameIcCustomRoadWorks,
         valueKey : @([_settings.enableTimeConditionalRouting get:self.appMode])
     }];
 }
@@ -776,6 +784,10 @@ static NSString *foregroundImageKey = @"foregroundImage";
         else if ([item[keyKey] isEqualToString:tempLimitationKey])
         {
             [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
+        }
+        else if ([item[keyKey] isEqualToString:sharedRoutingKey])
+        {
+            [_settings.useSharedRouting set:isChecked];
         }
         if (self.delegate)
             [self.delegate onSettingsChanged];

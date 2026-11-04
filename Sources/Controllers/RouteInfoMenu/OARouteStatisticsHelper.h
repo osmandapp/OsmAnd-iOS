@@ -8,20 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-#include "binaryRead.h"
-#include "routeSegmentResult.h"
-#include <vector>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
-@class OARouteStatistics, OARouteSegmentAttribute;
+@class OARouteStatistics, OARouteSegmentAttribute, OASRouteDataObject, OASRouteSegmentResult;
 
 @interface OARouteSegmentWithIncline : NSObject
 
-@property (nonatomic) std::shared_ptr<RouteDataObject> obj;
+@property (nonatomic) OASRouteDataObject *obj;
 @property (nonatomic) float dist;
 @property (nonatomic) float h;
 @property (nonatomic) NSMutableArray<NSNumber *> *interpolatedHeightByStep;
@@ -33,8 +30,8 @@ static NSString *ROUTE_INFO_PREFIX = @"routeInfo_";
 
 @interface OARouteStatisticsHelper : NSObject
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(std::vector<SHARED_PTR<RouteSegmentResult> >)route;
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames;
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(NSArray<OASRouteSegmentResult *> *)route;
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(NSArray<OASRouteSegmentResult *> *)route attributeNames:(NSArray<NSString *> *)attributeNames;
 + (NSArray<NSString *> *) getRouteStatisticAttrsNames:(BOOL)excludeSteepness;
 
 @end

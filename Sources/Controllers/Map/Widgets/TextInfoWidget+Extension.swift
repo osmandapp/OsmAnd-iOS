@@ -8,12 +8,17 @@
 
 extension OATextInfoWidget {
     @objc var widgetSizeStyle: EOAWidgetSizeStyle {
+        if let panelSizeStyleOverride,
+           let style = EOAWidgetSizeStyle(rawValue: panelSizeStyleOverride.intValue) {
+            return style
+        }
         guard widgetSizePref != nil else {
             return .medium
         }
-        return widgetSizePref?.get(OAAppSettings.sharedManager().applicationMode.get()) ?? .medium
+        let appMode = getAppMode() ?? OAAppSettings.sharedManager().applicationMode.get()
+        return widgetSizePref?.get(appMode) ?? .medium
     }
-    
+
     @objc var isSidePanelSimpleLayoutMode: Bool {
         switch widgetSizeStyle {
         case .medium, .large:
@@ -25,7 +30,7 @@ extension OATextInfoWidget {
     
     func updateWith(style: EOAWidgetSizeStyle, appMode: OAApplicationMode) {
         refreshLayout()
-        guard widgetSizeStyle != style else {
+        guard widgetSizeStyleFor(appMode: appMode) != style else {
             return
         }
         widgetSizePref?.set(style, mode: appMode)

@@ -79,7 +79,7 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
         widgetState.customId ?? widgetType?.id
     }
     
-    override func getWidgetState() -> OAWidgetState {
+    override func storedWidgetState() -> OAWidgetState {
         return widgetState
     }
     
@@ -142,15 +142,19 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
             averageSpeed = computer.getAverageSpeed(interval, skipLowSpeed: false)
         }
         
-        if let speed = averageSpeed, !speed.isNaN, speed != 0 {
-            let estimatedLeftSeconds = Int(Double(distance) / Double(speed))
-            updateArrivalTime(estimatedLeftSeconds)
-        } else {
-            setText(Self.DASH, subtext: nil)
+        if let speed = averageSpeed, speed.isFinite, speed > 0 {
+            let estimatedLeftSeconds = Double(distance) / Double(speed)
+            if estimatedLeftSeconds.isFinite,
+               estimatedLeftSeconds >= 0,
+               estimatedLeftSeconds < Double(Int.max) {
+                updateArrivalTime(Int(estimatedLeftSeconds))
+                return
+            }
         }
+        setText(Self.DASH, subtext: nil)
     }
 
-    private func updateArrivalTime(_ leftSeconds: Int) -> Bool {
+    private func updateArrivalTime(_ leftSeconds: Int) {
         let toFindTime = Date().timeIntervalSince1970 + TimeInterval(leftSeconds)
         let dateFormatter = DateFormatter()
         let toFindDate = Date(timeIntervalSince1970: toFindTime)
@@ -164,7 +168,6 @@ final class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
             let aStr = dateFormatter.string(from: toFindDate)
             setText(timeStr, subtext: aStr)
         }
-        return true
     }
     
     private func updateIconIfNeeded(marker: OADestination, newMode: SideMarkerMode, modeChanged: Bool) {

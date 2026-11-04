@@ -8,6 +8,7 @@
 
 #import "OAStreet.h"
 #import "OACity.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAStreet ()
 
@@ -53,7 +54,7 @@
 
 -(NSString *)iconName
 {
-    return @"ic_action_street_name";
+    return ACImageNameIcActionStreetName;
 }
 
 @end

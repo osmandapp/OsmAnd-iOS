@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAMapSelectionHelper : NSObject
 
 - (MapSelectionResult *)collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation;
+- (MapSelectionResult *)collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects;
 
 + (OAPOI *)findAmenity:(CLLocation *)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId;
 + (OAPOI *)findAmenity:(CLLocation *)latLon names:(NSArray<NSString *> *)names obfId:(uint64_t)obfId radius:(int)radius;
@@ -21,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAPOI *)findAmenityByOsmId:(NSArray<OAPOI *> *)amenities obfId:(uint64_t)obfId point:(CLLocation *)point;
 + (OAPOI *)findAmenityByName:(NSArray<OAPOI *> *)amenities names:(NSArray<NSString *> *)names;
 
-- (BOOL) showContextMenuForSearchResult:(OAPOI *)poi filename:(NSString *)filename;
+- (BOOL) showContextMenuForSearchResult:(OAPOI *)poi;
 
 @end
 

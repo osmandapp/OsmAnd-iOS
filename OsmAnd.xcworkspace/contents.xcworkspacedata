@@ -66,10 +66,19 @@
                               location = "group:SentenceParser.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:NmeaPositionParser.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:DataNotAvailableException.kt">
                            </FileRef>
                            <FileRef
                               location = "group:ParseException.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:GGAParser.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RMCParser.kt">
                            </FileRef>
                            <FileRef
                               location = "group:UnsupportedSentenceException.kt">
@@ -82,10 +91,19 @@
                               location = "group:Sentence.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:PositionSentence.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:TalkerId.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:GGASentence.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:Checksum.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:RMCSentence.kt">
                            </FileRef>
                            <FileRef
                               location = "group:SentenceValidator.kt">
@@ -299,6 +317,19 @@
                         location = "group:settings"
                         name = "settings">
                         <Group
+                           location = "group:coordinates"
+                           name = "coordinates">
+                           <FileRef
+                              location = "group:EpsgCatalogRepository.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:CoordinateFormat.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:CoordinateFormatIds.kt">
+                           </FileRef>
+                        </Group>
+                        <Group
                            location = "group:enums"
                            name = "enums">
                            <FileRef
@@ -445,13 +476,22 @@
                            location = "group:OsmAndFormatter.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:PlatformUnicode.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KUnicode.kt">
                         </FileRef>
                         <FileRef
                            location = "group:KGeoParsedPoint.kt">
                         </FileRef>
                         <FileRef
                            location = "group:KStringMatcher.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformDateNames.kt">
                         </FileRef>
                         <FileRef
                            location = "group:KCollectionUtils.kt">
@@ -490,7 +530,22 @@
                            location = "group:StringBundleReader.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:StringExternalizable.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KTransliterationTables.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KSearchAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KLock.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KTransliterationHelper.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KCollatorStringMatcher.kt">
                         </FileRef>
                         <FileRef
                            location = "group:PlatformUtil.kt">
@@ -499,7 +554,16 @@
                            location = "group:PoiAdditionalLangLookup.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KArabicNormalizer.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:NamingUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OpeningHoursTime.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KCollationKey.kt">
                         </FileRef>
                         <FileRef
                            location = "group:MultiNameSerializer.kt">
@@ -517,8 +581,48 @@
                            location = "group:KGeoPointParserUtil.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:PlatformSerializable.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:StringBundle.kt">
                         </FileRef>
+                        <FileRef
+                           location = "group:PlatformStrings.kt">
+                        </FileRef>
+                        <Group
+                           location = "group:collections"
+                           name = "collections">
+                           <FileRef
+                              location = "group:KTIntArrayList.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KTLongObjectMap.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KPriorityQueue.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ExcludeKTLongObjectMap.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KTLongArrayList.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KTIntObjectMap.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KBitSet.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KTLongHashSet.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KTLongObjectLookup.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:KTIntLongMap.kt">
+                           </FileRef>
+                        </Group>
                         <FileRef
                            location = "group:DbUtils.kt">
                         </FileRef>
@@ -526,10 +630,51 @@
                            location = "group:Logger.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KCollator.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:OpeningHoursParser.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:SharedDateFormatter.kt">
                         </FileRef>
                         <FileRef
                            location = "group:SharedNumberFormatter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KUnicodeDiacriticRanges.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:osm"
+                        name = "osm">
+                        <FileRef
+                           location = "group:PoiFilter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MapRenderingTypes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PoiType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AbstractPoiType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MapPoiTypes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PoiCategory.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PoiTranslator.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:favorites"
+                        name = "favorites">
+                        <FileRef
+                           location = "group:FavoriteFolderPath.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -589,6 +734,17 @@
                         <FileRef
                            location = "group:StringExtensions.kt">
                         </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:search"
+                        name = "search">
+                        <Group
+                           location = "group:core"
+                           name = "core">
+                           <FileRef
+                              location = "group:KHashQuadTree.kt">
+                           </FileRef>
+                        </Group>
                      </Group>
                      <Group
                         location = "group:units"
@@ -803,6 +959,9 @@
                            location = "group:enums"
                            name = "enums">
                            <FileRef
+                              location = "group:GpxLineStyleType.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:Gpx3DLinePositionType.kt">
                            </FileRef>
                            <FileRef
@@ -855,6 +1014,9 @@
                               location = "group:TrkSegment.kt">
                            </FileRef>
                            <FileRef
+                              location = "group:GpxExtensionsMap.kt">
+                           </FileRef>
+                           <FileRef
                               location = "group:Author.kt">
                            </FileRef>
                            <FileRef
@@ -890,6 +1052,9 @@
                         </FileRef>
                         <FileRef
                            location = "group:GpxSplitType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelObfGpxTrackOptimizer.kt">
                         </FileRef>
                         <Group
                            location = "group:data"
@@ -949,10 +1114,16 @@
                            location = "group:AisLatLon.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:NmeaLocationParser.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:AisObjType.kt">
                         </FileRef>
                         <FileRef
                            location = "group:AisMessageListener.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AisConnectionListener.kt">
                         </FileRef>
                         <FileRef
                            location = "group:AisLocation.kt">
@@ -984,22 +1155,240 @@
                         </FileRef>
                      </Group>
                      <Group
+                        location = "group:binary"
+                        name = "binary">
+                        <FileRef
+                           location = "group:SearchPoiTypeFilter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SearchFilter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryAmenityIndexRepository.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:QueryToken.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryIndexPart.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryMapPoiReaderAdapter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MapRoot.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ObfReaderSupplier.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryMapIndexReader.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TagValuePair.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryMapDataObject.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ObfConstants.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AmenityIndexRepository.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SearchPoiAdditionalFilter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MapTree.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MapIndex.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PoiSubType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryHHRouteReaderAdapter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:CodedInputStream.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BinaryMapRouteReaderAdapter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PoiRegion.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SearchRequest.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ResultMatcher.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
                         location = "group:routing"
                         name = "routing">
                         <FileRef
+                           location = "group:FastRoutingState.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:GeneralRouterProfile.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteDataUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteDataResources.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteDataObject.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:DirectionPoint.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:HHRoutingContext.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:HHRouteRegionPointsCtx.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:HHRoutingConfig.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:HHRoutePlanner.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoutingContext.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:HHNetworkRouteRes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteDataBundle.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoadSplitStructure.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxPointsMatchApproximation.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:BundledRoutingXml.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteCalculationMode.kt">
                         </FileRef>
                         <FileRef
                            location = "group:ColoringType.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:RouteRegion.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ExitInfo.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxRouteApproximation.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteSubregion.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NativeDirectionPoint.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TurnLanes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteTypeRule.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MissingMapsResult.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteCalculationProgress.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxPoint.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteConditionalHelper.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:HHRouteDataStructure.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:RouteColorize.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:NetworkDBPoint.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GeneralRouter.kt">
                         </FileRef>
                         <FileRef
                            location = "group:Gpx3DWallColorType.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:BinaryRoutePlanner.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoutePlannerFrontEnd.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TurnPreparation.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TurnType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteCalculationInterruptedException.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoundaboutTurn.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteResultPreparation.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoutingConfiguration.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PrecalculatedRouteDirection.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteSegmentResult.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoutingRequest.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:SlopeCalculator.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:VehicleRouter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteSegment.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteCalcResult.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxMultiSegmentsApproximation.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RoadTraversal.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:panoramax"
+                        name = "panoramax">
+                        <FileRef
+                           location = "group:PanoramaxApi.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -1022,13 +1411,77 @@
                            location = "group:StringIntPair.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:KIntQuadTree.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:Amenity.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KLocation.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:BTDeviceInfo.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KQuadPointDouble.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KDataTileManager.kt">
                         </FileRef>
                         <FileRef
                            location = "group:Limits.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:CityType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KQuadPoint.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:KQuadRect.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:MapObject.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KQuadTree.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:AmenityRoutePoint.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:travel"
+                        name = "travel">
+                        <FileRef
+                           location = "group:WikivoyageSearchResult.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelGpx.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelArticleIdentifier.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelArticle.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PopularArticles.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelObfContext.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:WikivoyageOSMTags.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelObfGpxBuilder.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelObfHelper.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:TravelBookmarks.kt">
                         </FileRef>
                      </Group>
                      <Group
@@ -1151,8 +1604,21 @@
                         location = "group:media"
                         name = "media">
                         <FileRef
+                           location = "group:PanoramaxMediaFactory.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:RemoteMediaFactory.kt">
                         </FileRef>
+                        <Group
+                           location = "group:library"
+                           name = "library">
+                           <FileRef
+                              location = "group:MediaFormatting.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:MediaLibrary.kt">
+                           </FileRef>
+                        </Group>
                         <FileRef
                            location = "group:LinkMediaFactory.kt">
                         </FileRef>
@@ -1213,6 +1679,12 @@
                         location = "group:util"
                         name = "util">
                         <FileRef
+                           location = "group:PlatformUnicode.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformDateNames.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:Localization.kt">
                         </FileRef>
                         <FileRef
@@ -1229,6 +1701,15 @@
                         </FileRef>
                         <FileRef
                            location = "group:UrlEncoder.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformSerializable.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformStrings.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KCollator.kt">
                         </FileRef>
                         <FileRef
                            location = "group:SharedDateFormatter.kt">
@@ -1294,6 +1775,9 @@
                            location = "group:NetworkProxyState.kt">
                         </FileRef>
                         <FileRef
+                           location = "group:SQLiteConnectionImpl.kt">
+                        </FileRef>
+                        <FileRef
                            location = "group:XmlSerializerAPI.kt">
                         </FileRef>
                         <FileRef
@@ -1304,6 +1788,13 @@
                         </FileRef>
                         <FileRef
                            location = "group:SQLiteAPIImpl.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:routing"
+                        name = "routing">
+                        <FileRef
+                           location = "group:BundledRoutingXml.kt">
                         </FileRef>
                      </Group>
                   </Group>

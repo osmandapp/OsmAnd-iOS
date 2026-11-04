@@ -207,7 +207,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                 
                 let hasSubitems = item.bool(forKey: "hasSubitems")
                 if hasSubitems {
-                    cell.button.setImage(UIImage(named: "ic_custom_arrow_right"), for: .normal)
+                    cell.button.setImage(.icCustomArrowRight, for: .normal)
                     cell.button.tintColor = UIColor.iconColorDefault
                 }
 

@@ -15,6 +15,7 @@
 #import "OsmAndSharedWrapper.h"
 #import "OAGPXUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kImportFolderName @"import"
 #define kGpxFileExtension @"gpx"
@@ -40,7 +41,7 @@
 
 - (UIImage *)activityImage
 {
-    return [UIImage imageNamed:@"ic_share_folder_trips"];
+    return [UIImage imageNamed:ACImageNameIcShareFolderTrips];
 }
 
 - (BOOL)canPerformWithActivityItems:(NSArray *)activityItems

@@ -22,13 +22,23 @@
 #import "OAOsmAndFormatter.h"
 #import "OAWidgetsVisibilityHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
-#include <turnType.h>
 #include <binaryRead.h>
 #include <routingContext.h>
 #include <routeResultPreparation.h>
+
+/** The lanes the widget draws still come from the C++ road as well, so they meet as one vector. */
+static vector<int> toLanes(OASKotlinIntArray *lanes)
+{
+    vector<int> res;
+    for (int i = 0; lanes != nil && i < lanes.size; i++)
+        res.push_back([lanes getIndex:i]);
+
+    return res;
+}
 
 #define kBorder 6.0
 #define kLanesViewHeight 36.0
@@ -228,11 +238,11 @@
             OANextDirectionInfo *r = [_rh getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:false];
             if (r && r.directionInfo && r.directionInfo.turnType)
             {
-                loclanes = r.directionInfo.turnType->getLanes();
+                loclanes = toLanes(r.directionInfo.turnType.lanes);
                 // primary = r.directionInfo.getTurnType();
                 locimminent = r.imminent;
                 // Do not show too far
-                if ((r.distanceTo > 800 && r.directionInfo.turnType->isSkipToSpeak()) || r.distanceTo > 1200)
+                if ((r.distanceTo > 800 && r.directionInfo.turnType.isSkipToSpeak) || r.distanceTo > 1200)
                     loclanes.clear();
                 
                 dist = r.distanceTo;
@@ -246,7 +256,7 @@
                 OARouteDirectionInfo *next = [_rh getRouteDirections][di];
                 if (next)
                 {
-                    loclanes = next.turnType->getLanes();
+                    loclanes = toLanes(next.turnType.lanes);
                     // primary = next.getTurnType();
                 }
             }

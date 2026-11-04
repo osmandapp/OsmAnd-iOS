@@ -189,8 +189,8 @@ final class PlanRoutePoiViewController: UIViewController, PlanRouteTabContent {
 
     private func poiDistanceAndDirection(for point: PlanRoutePoiPoint) -> (distance: String?, direction: CGFloat) {
         guard let wpt = point.item.point, let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation else { return (nil, 0) }
-        let meters = OADistanceAndDirectionsUpdater.getDistanceFrom(location, toDestinationLatitude: wpt.lat, destinationLongitude: wpt.lon)
-        return (OAOsmAndFormatter.getFormattedDistance(Float(meters)), OADistanceAndDirectionsUpdater.getDirectionAngle(from: location, toDestinationLatitude: wpt.lat, destinationLongitude: wpt.lon))
+        let meters = OADistanceAndDirectionsUpdater.distance(from: location, toDestinationLatitude: wpt.lat, destinationLongitude: wpt.lon)
+        return (OAOsmAndFormatter.getFormattedDistance(Float(meters)), OADistanceAndDirectionsUpdater.directionAngle(from: location, toDestinationLatitude: wpt.lat, destinationLongitude: wpt.lon))
     }
 
     private func poiAddress(for point: PlanRoutePoiPoint) -> String {

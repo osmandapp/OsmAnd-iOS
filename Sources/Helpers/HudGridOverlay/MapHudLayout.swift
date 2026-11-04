@@ -13,14 +13,12 @@ final class MapHudLayout: NSObject {
     private let containerView: UIView
     private let dpToPx: CGFloat = 1.0
     private let hudBasePaddingDp: CGFloat = 16.0
-    private let tablet: Bool
     
     private var gridOverlay: HudGridOverlay?
     private var topInset: CGFloat
     private var bottomInset: CGFloat
     private var leftInset: CGFloat
     private var rightInset: CGFloat
-    private var portrait: Bool
     private var lastWidth: CGFloat = 0
     private var mapButtons: [OAHudButton] = []
     private var widgetPositions: [UIView: ButtonPositionSize] = [:]
@@ -29,6 +27,7 @@ final class MapHudLayout: NSObject {
     private var additionalOrder: [UIView] = []
     private var externalTopOverlayPx: CGFloat = 0
     private var externalBottomOverlayPx: CGFloat = 0
+    private var externalLeftOverlayPx: CGFloat = 0
     private var externalRulerLeftOffsetPx: CGFloat = 0
     private var ignoreTopSidePanels = false
     private var ignoreBottomSidePanels = false
@@ -40,8 +39,6 @@ final class MapHudLayout: NSObject {
     
     init(containerView: UIView) {
         self.containerView = containerView
-        self.tablet = OAUtilities.isIPad()
-        self.portrait = OAUtilities.isPortrait()
         let ins = containerView.safeAreaInsets
         self.topInset = ins.top
         self.bottomInset = ins.bottom
@@ -150,6 +147,13 @@ final class MapHudLayout: NSObject {
             refresh()
         }
     }
+
+    func setExternalLeftOverlay(_ pixels: CGFloat) {
+        let px = max(0, pixels)
+        guard abs(px - externalLeftOverlayPx) > 0 else { return }
+        externalLeftOverlayPx = px
+        refresh()
+    }
     
     func setExternalRulerLeftOffset(_ pixels: CGFloat) {
         let px = max(0, pixels)
@@ -192,7 +196,7 @@ final class MapHudLayout: NSObject {
         let width = Int(getAdjustedWidth())
         let height = Int(getAdjustedHeight())
         let m = OAUtilities.relativeMargins(for: button, inParent: containerView)
-        let leftGap = m.left - leftInset
+        let leftGap = m.left - leftInset - externalLeftOverlayPx
         let rightGap = m.right - rightInset
         let topGap = m.top - topInset
         let bottomGap = m.bottom - bottomInset
@@ -213,8 +217,13 @@ final class MapHudLayout: NSObject {
         refresh()
     }
     
+    func isOnRightSide(_ frame: CGRect) -> Bool {
+        let leftGap = frame.minX - leftInset - externalLeftOverlayPx
+        let rightGap = containerView.bounds.width - frame.maxX - rightInset
+        return leftGap > rightGap
+    }
+
     func onContainerSizeChanged() {
-        portrait = OAUtilities.isPortrait()
         let safeAreaIns = containerView.safeAreaInsets
         let insetChanged = topInset != safeAreaIns.top || bottomInset != safeAreaIns.bottom || leftInset != safeAreaIns.left || rightInset != safeAreaIns.right
         topInset = safeAreaIns.top
@@ -258,7 +267,9 @@ final class MapHudLayout: NSObject {
             return !v.isHidden && v.alpha > 0.01 && v.bounds.width > 0 && v.bounds.height > 0
         }
         
-        if filtered.contains(where: { $0.0 is OADownloadMapWidget }), let topBarPanelContainer {
+        // A centered landscape banner leaves the Wide top panel visible on both sides.
+        if OAUtilities.isPortrait() || isCompactPanelsLayout,
+           filtered.contains(where: { $0.0 is OADownloadMapWidget }), let topBarPanelContainer {
             filtered.removeAll { (v, _) in v === topBarPanelContainer }
         }
         
@@ -284,7 +295,7 @@ final class MapHudLayout: NSObject {
         if view === topBarPanelContainer || view is OADownloadMapWidget {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: isCompactPanelsLayout ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
             position.setNonMoveable()
         } else if view === leftWidgetsPanel {
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_TOP)
@@ -299,7 +310,7 @@ final class MapHudLayout: NSObject {
         } else if view === bottomBarPanelContainer {
             position.setMoveDescendantsVertical()
             position.setPositionVertical(posV: ButtonPositionSize.companion.POS_BOTTOM)
-            position.setPositionHorizontal(posH: !portrait || tablet ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
+            position.setPositionHorizontal(posH: isCompactPanelsLayout ? ButtonPositionSize.companion.POS_LEFT : ButtonPositionSize.companion.POS_FULL_WIDTH)
             position.setNonMoveable()
         } else if view is OAMapRulerView {
             position.setMoveHorizontal()
@@ -328,7 +339,7 @@ final class MapHudLayout: NSObject {
     }
     
     private func getAdjustedWidth() -> CGFloat {
-        containerView.bounds.width - leftInset - rightInset
+        max(0, containerView.bounds.width - leftInset - rightInset - externalLeftOverlayPx)
     }
     
     private func collectPositions() -> [(UIView, ButtonPositionSize)] {
@@ -364,7 +375,7 @@ final class MapHudLayout: NSObject {
             }
         }
         
-        if hasBanner && !portrait {
+        if hasBanner && (isCompactPanelsLayout || !OAUtilities.isPortrait()) {
             result.append(contentsOf: pendingSidePanels)
         }
         
@@ -403,7 +414,8 @@ final class MapHudLayout: NSObject {
             let hostW = containerView.bounds.width
             let available = max(0, getAdjustedWidth())
             let heightPx: CGFloat = view.bounds.height > 0 ? view.bounds.height : 155.0
-            let desiredWidth = portrait ? available : min(available, hostW * 0.5)
+            // The download prompt follows the orientation, not the widget panels layout.
+            let desiredWidth = OAUtilities.isPortrait() ? available : min(available, hostW * 0.5)
             let width8 = Int32(max(1, floor(desiredWidth / dpToPx / cell)))
             let height8 = Int32(max(1, ceil(heightPx / dpToPx / cell)))
             position.setSize(width8dp: width8, height8dp: height8)
@@ -411,9 +423,7 @@ final class MapHudLayout: NSObject {
             position.marginY = 0
             let parentW = Int(available)
             let parentH = Int(getAdjustedHeight())
-            let xPixelsPortrait: CGFloat = 0
-            let xPixelsLandscape: CGFloat = (available - desiredWidth) / 2.0
-            let xPixels = Int(round(max(0, portrait ? xPixelsPortrait : xPixelsLandscape)))
+            let xPixels = Int(round(max(0, (available - desiredWidth) / 2.0)))
             let yPixels = 0
             position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: true, x: Int32(xPixels), gravTop: true, y: Int32(yPixels))
             return position
@@ -428,18 +438,18 @@ final class MapHudLayout: NSObject {
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             let leftAligned = position.isLeft
             let topAligned = position.isTop
-            let xRaw = leftAligned ? m.left - leftInset : m.right - rightInset
+            let xRaw = leftAligned ? m.left - leftInset - externalLeftOverlayPx : m.right - rightInset
             let yRaw = topAligned ? m.top - topInset : m.bottom - bottomInset
             let xPixels = Int(round(max(0, xRaw)))
             let yPixels = Int(round(max(0, yRaw)))
             position.calcGridPositionFromPixel(dpToPix: Float(dpToPx), widthPx: Int32(parentW), heightPx: Int32(parentH), gravLeft: leftAligned, x: Int32(xPixels), gravTop: topAligned, y: Int32(yPixels))
-        } else if (view === topBarPanelContainer || view === bottomBarPanelContainer), !portrait || tablet {
+        } else if (view === topBarPanelContainer || view === bottomBarPanelContainer), isCompactPanelsLayout {
             let parentW = Int(getAdjustedWidth())
             let parentH = Int(getAdjustedHeight())
             let m = OAUtilities.relativeMargins(for: view, inParent: containerView)
             let leftAligned = position.isLeft
             let topAligned = position.isTop
-            let xRaw = leftAligned ? m.left - leftInset : m.right - rightInset
+            let xRaw = leftAligned ? m.left - leftInset - externalLeftOverlayPx : m.right - rightInset
             let yRaw = topAligned ? m.top - topInset : m.bottom - bottomInset
             let xPixels = Int(round(max(0, xRaw)))
             let yPixels = Int(round(max(0, yRaw)))
@@ -451,13 +461,16 @@ final class MapHudLayout: NSObject {
         
         return position
     }
+
+    private var isCompactPanelsLayout: Bool {
+        OAAppSettings.sharedManager().isCompactPanelsLayout()
+    }
     
     @discardableResult private func updateButtonParams(for view: UIView, with position: ButtonPositionSize) -> Bool {
         if view is OADownloadMapWidget {
             let available = max(0, getAdjustedWidth())
-            let isPortrait = OAUtilities.isPortrait()
-            let desiredWidth = isPortrait ? available : min(available, containerView.bounds.width * 0.5)
-            let x = leftInset + (available - desiredWidth) / 2.0
+            let desiredWidth = OAUtilities.isPortrait() ? available : min(available, containerView.bounds.width * 0.5)
+            let x = leftInset + externalLeftOverlayPx + (available - desiredWidth) / 2.0
             let y = topInset
             let height = view.bounds.height > 0 ? view.bounds.height : 155.0
             let newFrame = CGRect(x: x, y: y, width: desiredWidth, height: height)
@@ -475,9 +488,11 @@ final class MapHudLayout: NSObject {
         let placeOnLeft = position.isLeft
         let ruler = view as? OAMapRulerView
         if let ruler, position.isBottom, !ignoreBottomSidePanels, let bottomBarPanelContainer, !bottomBarPanelContainer.isHidden, bottomBarPanelContainer.alpha > 0.01, bottomBarPanelContainer.bounds.height > 0 {
-            var proposedX = placeOnLeft ? leftInset + startX : containerView.bounds.width - rightInset - ruler.bounds.width - startX
+            var proposedX = placeOnLeft
+                ? leftInset + externalLeftOverlayPx + startX
+                : containerView.bounds.width - rightInset - ruler.bounds.width - startX
             if placeOnLeft, externalRulerLeftOffsetPx > 0 {
-                proposedX += max(0, externalRulerLeftOffsetPx - startX)
+                proposedX += max(0, externalRulerLeftOffsetPx - leftInset - externalLeftOverlayPx - startX)
             }
             
             let bottomFrame = bottomBarPanelContainer.convert(bottomBarPanelContainer.bounds, to: containerView)
@@ -493,8 +508,16 @@ final class MapHudLayout: NSObject {
         
         let extraTop = position.isTop && !additionalOrder.contains { !$0.isHidden && $0.alpha > 0.01 && $0.bounds.height > 0 && $0 is OADownloadMapWidget } ? externalTopOverlayPx : 0.0
         let extraBottom = position.isBottom ? externalBottomOverlayPx : 0.0
-        let rulerExtraX = ruler != nil && externalRulerLeftOffsetPx > 0 && placeOnLeft ? max(0, externalRulerLeftOffsetPx - startX) : 0.0
-        let newX: CGFloat = (placeOnLeft ? leftInset + startX : containerView.bounds.width - rightInset - view.bounds.width - startX) + rulerExtraX
+        let rulerExtraX = ruler != nil && externalRulerLeftOffsetPx > 0 && placeOnLeft
+            ? max(0, externalRulerLeftOffsetPx - leftInset - externalLeftOverlayPx - startX)
+            : 0.0
+        let baseX: CGFloat
+        if placeOnLeft {
+            baseX = leftInset + externalLeftOverlayPx + startX
+        } else {
+            baseX = containerView.bounds.width - rightInset - view.bounds.width - startX
+        }
+        let newX = baseX + rulerExtraX
         let newY: CGFloat = position.isTop ? topInset + startY + extraTop : topInset + getAdjustedHeight() - view.bounds.height - startY - extraBottom
         let newOrigin = CGPoint(x: newX, y: newY)
         if view.frame.origin != newOrigin {
@@ -562,6 +585,7 @@ extension MapHudLayout {
         cfg.cellFixPx = max(0, (hudBasePaddingDp - CGFloat(ButtonPositionSize.companion.DEF_MARGIN_DP)) * dpToPx)
         cfg.safeAreaInsets = containerView.safeAreaInsets
         cfg.bottomOverlayPx = externalBottomOverlayPx
+        cfg.leftOverlayPx = externalLeftOverlayPx
         overlay.cfg = cfg
     }
     

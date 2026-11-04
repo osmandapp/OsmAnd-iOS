@@ -14,6 +14,7 @@
 #import "OsmAndSharedWrapper.h"
 
 #import <CarPlay/CarPlay.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OACarPlayTracksListController()<OASTrackFolderLoaderTaskLoadTracksListener>
 
@@ -71,7 +72,7 @@
             NSString *folderName = folder == rootFolder ? OALocalizedString(@"shared_string_gpx_tracks") : folder.getName;
             CPListItem *listItem = [[CPListItem alloc] initWithText:folderName
                                                          detailText:@(trackItems.count).stringValue
-                                                              image:[UIImage imageNamed:@"ic_custom_folder"]
+                                                              image:[UIImage imageNamed:ACImageNameIcCustomFolder]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             listItem.userInfo = trackItems;
@@ -93,7 +94,7 @@
             [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
                                                              detailText:@(lastModifiedList.count).stringValue
-                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_history"]
+                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomHistory]
                                                                                                   color:UIColorFromRGB(color_primary_purple)]
                                                          accessoryImage:nil
                                                           accessoryType:CPListItemAccessoryTypeDisclosureIndicator];

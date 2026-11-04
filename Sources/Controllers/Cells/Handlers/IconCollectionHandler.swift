@@ -106,7 +106,7 @@ class IconCollectionHandler: OABaseCollectionHandler {
         let iconSize = getIconSize()
         
         cell.cellWidthConstraint.constant = itemSize.width
-        cell.cellWidthConstraint.constant = itemSize.height
+        cell.cellHeightConstraint.constant = itemSize.height
         cell.iconBackgroundWidthConstraint.constant = backgroundIconSize
         cell.iconBackgroundHeightConstraint.constant = backgroundIconSize
         cell.iconWidthConstraint.constant = iconSize
@@ -170,17 +170,20 @@ class IconCollectionHandler: OABaseCollectionHandler {
     }
     
     override func getSelectedItem() -> Any {
-        if let selectedIndexPath, !iconNamesData.isEmpty, !iconNamesData[selectedIndexPath.section].isEmpty {
+        if let selectedIndexPath,
+           iconNamesData.indices.contains(selectedIndexPath.section),
+           iconNamesData[selectedIndexPath.section].indices.contains(selectedIndexPath.row) {
             return iconNamesData[selectedIndexPath.section][selectedIndexPath.row]
         }
-        return iconNamesData[0][0]
+        return iconNamesData.first?.first ?? ""
     }
 }
 
 extension IconCollectionHandler: IconsCollectionViewControllerDelegate {
     
     func selectIconName(_ iconName: String) {
-        guard let selectedIndex = iconNamesData[0].firstIndex(of: iconName) else { return }
+        guard let iconNames = iconNamesData.first,
+              let selectedIndex = iconNames.firstIndex(of: iconName) else { return }
         let selectedIndexPath = IndexPath(row: selectedIndex, section: 0)
         setSelectedIndexPath(selectedIndexPath)
         getCollectionView()?.reloadData()

@@ -76,7 +76,7 @@ private struct OsmBenefitsOAuthBackgroundView: View {
 private struct OsmBenefitsOAuthTextHeaderView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-            Image(uiImage: UIImage(named: "ic_custom_openstreetmap_logo_colored_day_big")!)
+            Image(uiImage: .icCustomOpenstreetmapLogoColoredDayBig)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 48, height: 48)

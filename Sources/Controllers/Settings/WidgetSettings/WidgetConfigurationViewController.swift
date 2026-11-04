@@ -28,9 +28,14 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     private lazy var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
+    private var appearanceLayoutMode: ScreenLayoutMode? {
+        OAAppSettings.sharedManager().useSeparateLayouts.get(selectedAppMode)
+        ? widgetInfo.screenLayoutMode
+        : nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
         if createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
             if let selectedAppMode {
                 widgetConfigurationParams = ["selectedAppMode": selectedAppMode]
@@ -53,7 +58,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         tableData.clearAllData()
         // Add section for simple widgets
         if !WidgetType.isComplexWidget(widgetInfo.key) && (!Self.excludedUISettingsWidgetKeys.contains(widgetInfo.key) || widgetPanel.isPanelVertical) {
-            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel, widgetConfigurationParams) {
+            if let settingsData = widgetInfo.settingsDataForSimpleWidget(selectedAppMode, widgetsPanel: widgetPanel, widgetConfigurationParams) {
                 for i in 0 ..< settingsData.sectionCount() {
                     tableData.addSection(settingsData.sectionData(for: i))
                 }
@@ -147,7 +152,10 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
                 var widgetSizeStyle: EOAWidgetSizeStyle = .medium
                 if !createNew {
-                    widgetSizeStyle = pref.get(selectedAppMode)
+                    let panelSizeMode = WidgetPanelAppearanceSettings(appMode: selectedAppMode,
+                                                                     layoutMode: appearanceLayoutMode)
+                        .sizeMode(for: widgetPanel)
+                    widgetSizeStyle = panelSizeMode.widgetSizeStyle ?? pref.get(selectedAppMode)
                 } else {
                     if let rawValue = widgetConfigurationParams?["widgetSizeStyle"] as? Int,
                        let style = EOAWidgetSizeStyle(rawValue: rawValue) {
@@ -172,14 +180,22 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self, let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
+                let sizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
                 if !createNew {
-                    pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
+                    let appearanceSettings = WidgetPanelAppearanceSettings(appMode: selectedAppMode,
+                                                                           layoutMode: appearanceLayoutMode)
+                    let hasPanelSizeOverride = appearanceSettings.sizeMode(for: widgetPanel) != .original
+                    let sizeChanged = pref.get(selectedAppMode) != sizeStyle
+                    pref.set(sizeStyle, mode: selectedAppMode)
+                    if sizeChanged || hasPanelSizeOverride {
+                        appearanceSettings.setSizeMode(.original, for: widgetPanel)
+                    }
                 }
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
                 if item.string(forKey: "behaviour") == "simpleWidget", !createNew {
-                    updateWidgetStyleForRow(with: widgetInfo)
+                    updateWidgetStyleForRow(with: widgetInfo, style: sizeStyle)
                     OARootViewController.instance().mapPanel.recreateControls()
                 }
                 if !widgetPanel.isPanelVertical {
@@ -255,7 +271,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         }
         return UIMenu(options: .singleSelection, children: actions)
     }
-    
+
     private func createBooleanMenuWith(currentValue: String, pref: OACommonBoolean, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
         let actions = options.compactMap { row -> UIAction? in
             guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
@@ -275,7 +291,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         return UIMenu(options: .singleSelection, children: actions)
     }
-        
+
     private func createStringMenuWith(currentValue: String, pref: OACommonString, options: [OATableRowData], indexPath: IndexPath) -> UIMenu {
         let actions = options.compactMap { row -> UIAction? in
             guard let title = row.title?.trimmingCharacters(in: .whitespaces), !title.isEmpty else { return nil }
@@ -407,14 +423,16 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         present(alert, animated: true)
     }
     
-    private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo) {
+    private func updateWidgetStyleForRow(with mapWidgetInfo: MapWidgetInfo, style: EOAWidgetSizeStyle? = nil) {
         let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
-        guard let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode,
-                                                                panel: widgetPanel,
-                                                                filterModes: enabledWidgetsFilter),
+        guard let pagedWidgets = widgetRegistry.pagedWidgets(forPanel: selectedAppMode,
+                                                             panel: widgetPanel,
+                                                             filterModes: enabledWidgetsFilter,
+                                                             screenLayoutMode: widgetInfo.screenLayoutMode.rawValue),
               let widget = mapWidgetInfo.widget as? OATextInfoWidget else {
             return
         }
+        let rowStyle = style ?? widget.widgetSizeStyle
         
         guard widgetPanel.isPanelVertical else {
             (pagedWidgets
@@ -422,7 +440,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
                 .first { $0.contains { $0.key == mapWidgetInfo.key } }?
                 .first { $0.key == mapWidgetInfo.key }?
                 .widget as? OATextInfoWidget)?
-                .updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
+                .updateWith(style: rowStyle, appMode: selectedAppMode)
             return
         }
 
@@ -430,7 +448,7 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
             .compactMap { $0.array as? [MapWidgetInfo] }
             .first { $0.contains { $0.key == mapWidgetInfo.key } }?
             .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach { $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode) }
+            .forEach { $0.updateWith(style: rowStyle, appMode: selectedAppMode) }
     }
     
     @objc private func onSwitchClick(_ sender: Any) -> Bool {
@@ -443,7 +461,15 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         
         let pref = data.obj(forKey: "pref") as! OACommonBoolean
         if !createNew {
+            let iconVisibilityChanged = pref.get(selectedAppMode) != sw.isOn
             pref.set(sw.isOn, mode: selectedAppMode)
+            if iconVisibilityChanged, pref.key.hasPrefix("simple_widget_show_icon") {
+                WidgetPanelAppearanceSettings(
+                    appMode: selectedAppMode,
+                    layoutMode: appearanceLayoutMode
+                )
+                .setIconMode(.original, for: widgetPanel)
+            }
         }
         widgetConfigurationParams?[pref.key] = sw.isOn
         
@@ -488,7 +514,7 @@ extension WidgetConfigurationViewController {
     }
     
     override func getTableHeaderDescriptionAttr() -> NSAttributedString {
-        guard let widgetType = widgetInfo.getWidgetType() else { return NSAttributedString(string: "") }
+        guard let widgetType = widgetInfo.widgetType() else { return NSAttributedString(string: "") }
         let attrStr = NSMutableAttributedString(string: widgetType.descr)
         // Set font attribute
         let font = UIFont.systemFont(ofSize: 17)
@@ -518,6 +544,7 @@ extension WidgetConfigurationViewController {
                 let newWidgetsInfos = WidgetUtils.createNewWidgets(widgetsIds: [widgetInfo.key],
                                                                    panel: widgetPanel,
                                                                    appMode: selectedAppMode,
+                                                                   screenLayoutMode: widgetInfo.screenLayoutMode,
                                                                    selectedWidget: selectedWidget,
                                                                    widgetParams: widgetConfigurationParams,
                                                                    addToNext: addToNext)

@@ -34,7 +34,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_action_time.png" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ZC-NGY">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_action_time" translatesAutoresizingMaskIntoConstraints="NO" id="sVm-ZC-NGY">
                         <rect key="frame" x="140" y="0.0" width="50" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -57,7 +57,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                        <state key="normal" image="ic_prev.png"/>
+                        <state key="normal" image="ic_prev"/>
                         <connections>
                             <action selector="leftButtonPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Q8e-cz-swM"/>
                         </connections>
@@ -74,7 +74,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                        <state key="normal" image="menu_cell_pointer.png"/>
+                        <state key="normal" image="menu_cell_pointer"/>
                         <connections>
                             <action selector="rightButtonPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="ljz-lM-lJc"/>
                         </connections>
@@ -96,9 +96,9 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_action_time.png" width="30" height="30"/>
+        <image name="ic_action_time" width="30" height="30"/>
         <image name="ic_custom_route" width="128" height="128"/>
-        <image name="ic_prev.png" width="6" height="10.5"/>
-        <image name="menu_cell_pointer.png" width="6" height="10.5"/>
+        <image name="ic_prev" width="6" height="10.5"/>
+        <image name="menu_cell_pointer" width="6" height="10.5"/>
     </resources>
 </document>

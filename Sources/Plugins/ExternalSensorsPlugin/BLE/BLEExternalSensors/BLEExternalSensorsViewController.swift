@@ -264,7 +264,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     private func configureEmptyHeader() {
         view.layoutIfNeeded()
         headerEmptyView.subviews.forEach { $0.removeFromSuperview() }
-        let imageView = UIImageView(image: UIImage(named: "img_help_sensors_day"))
+        let imageView = UIImageView(image: .imgHelpSensorsDay)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         

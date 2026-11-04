@@ -31,11 +31,11 @@ final class RouteInfoDestinationSector: NSObject {
     func getImage() -> UIImage {
         switch sector {
         case .straight:
-            UIImage.icCustomRoadSideFront
+            .icCustomRoadSideFront
         case .left:
-            UIImage.icCustomRoadSideLeft
+            .icCustomRoadSideLeft
         case .right:
-            UIImage.icCustomRoadSideRight
+            .icCustomRoadSideRight
         }
     }
     

@@ -30,7 +30,6 @@
 @implementation OAOsmAccountSettingsViewController
 {
     NSArray<NSArray *> *_data;
-    NSIndexPath *_loginIndexPath;
     NSIndexPath *_userNameIndexPath;
     OAAppSettings *_settings;
 }
@@ -69,36 +68,24 @@
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
 
-    NSMutableArray<NSDictionary *> *loginLogoutSection = [NSMutableArray new];
-    [data addObject:loginLogoutSection];
+    NSMutableArray<NSDictionary *> *userNameSection = [NSMutableArray new];
+    [data addObject:userNameSection];
 
-    [loginLogoutSection addObject:@{
-        @"type" : [OADividerCell getCellIdentifier],
-        @"left_inset" : @(0.)
-    }];
-    [loginLogoutSection addObject:@{
+    [userNameSection addObject:@{
         @"key" : @"user_name",
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"user_name"),
         @"value" : _settings.osmUserDisplayName.get
     }];
-    _userNameIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
+    _userNameIndexPath = [NSIndexPath indexPathForRow:userNameSection.count - 1 inSection:data.count - 1];
 
-    [loginLogoutSection addObject:@{
-        @"type" : [OADividerCell getCellIdentifier],
-        @"left_inset" : @(0.)
-    }];
+    NSMutableArray<NSDictionary *> *buttonSection = [NSMutableArray new];
+    [data addObject:buttonSection];
 
-    [loginLogoutSection addObject:@{
-        @"key" : @"empty_cell",
-        @"type" : [OADividerCell getCellIdentifier]
+    [buttonSection addObject:@{
+        @"key" : @"login_logout_cell",
+        @"type" : [OAFilledButtonCell getCellIdentifier]
     }];
-
-    [loginLogoutSection addObject:@{
-            @"key" : @"login_logout_cell",
-            @"type" : [OAFilledButtonCell getCellIdentifier]
-    }];
-    _loginIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
 
     _data = data;
 }
@@ -162,45 +149,6 @@
             [cell.button addTarget:self action:@selector(loginLogoutButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         }
         outCell = cell;
-    }
-    else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        OADividerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
-            cell = (OADividerCell *) nib[0];
-            cell.dividerColor = [SeparatorAppearance color];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            BOOL isErrorEmptyCell = [item[@"key"] isEqualToString:@"empty_cell"];
-            cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : [UIColor colorNamed:ACColorNameGroupBg];
-            cell.dividerHight = isErrorEmptyCell ? 30. : SeparatorAppearance.thickness;
-            cell.dividerInsets = UIEdgeInsetsMake(0., isErrorEmptyCell ? CGFLOAT_MAX : [item[@"left_inset"] floatValue], 0., 0.);
-        }
-        outCell = cell;
-    }
-    else if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
-    {
-        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.backgroundColor = UIColor.clearColor;
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
-        }
-        return cell;
     }
 
     if ([outCell needsUpdateConstraints])

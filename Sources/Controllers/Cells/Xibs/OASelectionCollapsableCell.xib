@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="414" height="54"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_folder.png" translatesAutoresizingMaskIntoConstraints="NO" id="bcI-8d-le5" userLabel="Left Icon View">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_folder" translatesAutoresizingMaskIntoConstraints="NO" id="bcI-8d-le5" userLabel="Left Icon View">
                         <rect key="frame" x="60" y="12" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="BXs-u5-u7a"/>
@@ -33,7 +33,7 @@
                         <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_arrow_up.png" translatesAutoresizingMaskIntoConstraints="NO" id="Gs1-fR-3ze" userLabel="Arrow Icon View">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_arrow_up" translatesAutoresizingMaskIntoConstraints="NO" id="Gs1-fR-3ze" userLabel="Arrow Icon View">
                         <rect key="frame" x="309" y="12" width="30" height="30"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="30" id="BaD-Fq-rmA"/>
@@ -170,8 +170,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_arrow_up.png" width="30" height="30"/>
-        <image name="ic_custom_folder.png" width="30" height="30"/>
+        <image name="ic_custom_arrow_up" width="30" height="30"/>
+        <image name="ic_custom_folder" width="30" height="30"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

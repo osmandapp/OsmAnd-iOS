@@ -652,7 +652,7 @@
 "starting_point" = "Пачатковы пункт";
 "shared_string_road" = "Дарога";
 "avoid_roads_msg" = "Абраць іншы маршрут, пазначыўшы дарогі, якія варта пазбягаць";
-"day_off_label" = "адкл";
+"day_off_label" = "выхадны";
 "open_from" = "Адчынена з";
 "open_till" = "Адчынена да";
 "will_open_at" = "Адчыніцца а";

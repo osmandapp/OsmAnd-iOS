@@ -15,7 +15,7 @@
 @implementation OAClearPointsCommand
 {
     NSArray<OASWptPt *> *_points;
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
+    NSDictionary<OAWptPtPair *, OARoadSegmentData *> *_roadSegmentData;
     EOAClearPointsMode _clearMode;
     NSInteger _pointPosition;
 }
@@ -31,7 +31,15 @@
 
 - (BOOL) execute
 {
-    _pointPosition = [self getEditingCtx].selectedPointPosition;
+    OAMeasurementEditingContext *ctx = [self getEditingCtx];
+    if (ctx == nil)
+        return NO;
+    _pointPosition = ctx.selectedPointPosition;
+    if (_clearMode != EOAClearPointsModeAll
+        && (_pointPosition < 0 || _pointPosition >= ctx.getAllPoints.count))
+        return NO;
+    _points = [ctx.getAllPoints copy];
+    _roadSegmentData = [ctx.roadSegmentData copy];
     [self executeCommand];
     return YES;
 }
@@ -39,8 +47,6 @@
 - (void) executeCommand
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
-    _points = [NSArray arrayWithArray:ctx.getPoints];
-    _roadSegmentData = ctx.roadSegmentData;
     switch (_clearMode) {
         case EOAClearPointsModeAll:
         {
@@ -52,12 +58,14 @@
         case EOAClearPointsModeBefore:
         {
             [ctx trimBefore:_pointPosition];
+            [ctx splitSegments:ctx.getAllPoints.count];
             [self.measurementLayer updateLayer];
             break;
         }
         case EOAClearPointsModeAfter:
         {
             [ctx trimAfter:_pointPosition];
+            [ctx splitSegments:ctx.getAllPoints.count];
             [self.measurementLayer updateLayer];
             break;
         }
@@ -68,7 +76,7 @@
 {
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     [ctx clearSegments];
-    ctx.roadSegmentData = _roadSegmentData;
+    ctx.roadSegmentData = [_roadSegmentData mutableCopy];
     [ctx addPoints:_points];
     [self.measurementLayer updateLayer];
 }

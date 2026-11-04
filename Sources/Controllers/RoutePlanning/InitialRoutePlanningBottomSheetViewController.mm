@@ -84,14 +84,14 @@ static const NSUInteger kRecentTracksLimit = 5;
     [actionSection addObject: @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_create_new_route"),
-            @"img" : @"ic_custom_trip",
+            @"img" : ACImageNameIcCustomTrip,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"create_new_route"
         }];
     [actionSection addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"plan_route_open_existing_track"),
-            @"img" : @"ic_custom_folder_outlined",
+            @"img" : ACImageNameIcCustomFolderOutlined,
             @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"open_track"
         }];

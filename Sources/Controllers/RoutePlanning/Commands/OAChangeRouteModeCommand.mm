@@ -25,8 +25,8 @@
 {
     NSMutableArray<OASWptPt *> *_oldPoints;
     NSMutableArray<OASWptPt *> *_newPoints;
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_oldRoadSegmentData;
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_newRoadSegmentData;
+    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *_oldRoadSegmentData;
+    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *_newRoadSegmentData;
     NSArray *_oldProfileTypes;
     NSArray *_newProfileTypes;
     OAApplicationMode *_oldMode;
@@ -34,9 +34,14 @@
     EOAChangeRouteType _changeRouteType;
     NSInteger _pointIndex;
     NSArray<NSNumber *> *_pointIndexes;
+    BOOL _updatesPendingSegmentMode;
 }
 
-- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer appMode:(OAApplicationMode *)appMode changeRouteType:(EOAChangeRouteType)changeRouteType pointIndex:(NSInteger)pointIndex
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
+                      appMode:(OAApplicationMode *)appMode
+              changeRouteType:(EOAChangeRouteType)changeRouteType
+                   pointIndex:(NSInteger)pointIndex
+    updatesPendingSegmentMode:(BOOL)updatesPendingSegmentMode
 {
     self = [super initWithLayer:measurementLayer];
     if (self)
@@ -44,6 +49,7 @@
         _newMode = appMode;
         _changeRouteType = changeRouteType;
         _pointIndex = pointIndex;
+        _updatesPendingSegmentMode = updatesPendingSegmentMode;
         _oldMode = self.getEditingCtx.appMode;
     }
     return self;
@@ -175,17 +181,12 @@
     return CHANGE_ROUTE_MODE;
 }
 
-- (NSArray<OASWptPt *> *) getPairAt:(NSInteger)pointIndex
+- (OAWptPtPair *) getPairAt:(NSInteger)pointIndex
 {
-    NSMutableArray<OASWptPt *> *res = [NSMutableArray array];
     OASWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
-    if (first)
-        [res addObject:first];
     OASWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
-    if (second)
-        [res addObject:second];
-
-    return [NSArray arrayWithArray:res];
+    // a pair short of a point matches nothing in the map, as the shorter array did before
+    return [OAWptPtPair pairWithFirst:first second:second];
 }
 
 - (void) executeCommand
@@ -202,7 +203,9 @@
     {
         OASWptPt *lastPoint = _newPoints[_newPoints.count - 1];
         if (lastPoint.isGap)
-            editingCtx.appMode = _newMode;
+        {
+            editingCtx.appMode = _updatesPendingSegmentMode ? _newMode : _oldMode;
+        }
         else
             editingCtx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     }

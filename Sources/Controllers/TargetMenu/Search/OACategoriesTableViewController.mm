@@ -17,6 +17,7 @@
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIFiltersHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -66,7 +67,7 @@
         for (OASearchResult *sr in [res getCurrentSearchResults])
             [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
 
-        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_add"] text:OALocalizedString(@"add_custom_category") actionButton:YES onClickFunction:^(id sender) {
+        [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomAdd] text:OALocalizedString(@"add_custom_category") actionButton:YES onClickFunction:^(id sender) {
             if (self.delegate)
                 [self.delegate showCreateFilterScreen];
         }]];
@@ -74,7 +75,7 @@
         NSArray<OAPOIUIFilter *> *allFilters = [self.delegate getSortedFiltersIncludeInactive];
         if (allFilters.count > 0)
         {
-            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_edit"] text:OALocalizedString(@"rearrange_categories") actionButton:YES onClickFunction:^(id sender) {
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomEdit] text:OALocalizedString(@"rearrange_categories") actionButton:YES onClickFunction:^(id sender) {
                 if (self.delegate)
                     [self.delegate showRearrangeFiltersScreen:allFilters];
             }]];
@@ -82,7 +83,7 @@
         NSArray<OAPOIUIFilter *> *customFilters = [self.delegate getCustomFilters];
         if (customFilters.count > 0)
         {
-            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_remove"] text:OALocalizedString(@"delete_custom_categories") actionButton:YES onClickFunction:^(id sender) {
+            [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomRemove] text:OALocalizedString(@"delete_custom_categories") actionButton:YES onClickFunction:^(id sender) {
                 if (self.delegate)
                     [self.delegate showDeleteFiltersScreen:customFilters];
             }]];

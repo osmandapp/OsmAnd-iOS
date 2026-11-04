@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint;
+@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint, OASKQuadRect;
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -88,6 +88,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property (nonatomic) int mapPositionX;
 
 @property(readonly) CGFloat displayDensityFactor;
+@property(nonatomic) double viewportXScale;
 @property(nonatomic) double viewportYScale;
 
 @property(readonly) OAObservable *framePreparedObservable;
@@ -102,6 +103,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 @property(readonly) NSDate *lastRotatingByGestureTime;
 
 @property (atomic, readonly) BOOL mapViewLoaded;
+@property (nonatomic) BOOL attachedToCarPlayWindow;
+@property (nonatomic, readonly) BOOL recTrackShowing;
 
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
@@ -111,6 +114,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (float) getMapZoom;
 - (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
+- (void)reloadMapSourceIfNightModeChanged;
 - (void)setSingleTapContextMenuGestureEnabled:(BOOL)enabled;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;
@@ -152,6 +156,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
 - (void)cancelAllAnimations;
+- (void)cancelAutoZoomAnimation;
 
 - (void)correctPosition:(Point31)targetPosition31
        originalCenter31:(Point31)originalCenter31
@@ -209,6 +214,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 // Synchronously commits a short renderer/view mutation on the main thread.
 // Do not perform file I/O, DB/cache/network work, dispatch_sync, or notifications here.
 - (void) runWithRenderSync:(nullable void (^)(void))runnable;
+- (void) applyFrameRefreshRateLimit;
 - (void) updateLayer:(NSString *)layerId;
 
 - (nullable UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
@@ -245,6 +251,12 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
              analysis:(OASGpxTrackAnalysis *)analysis
               segment:(nullable OASTrkSegment *)segment
      trackChartHelper:(TrackChartHelper *)trackChartHelper;
+
+- (void)fitTrackOnMapWithRect:(OASKQuadRect *)rect
+                     location:(CLLocationCoordinate2D)location
+                     forceFit:(BOOL)forceFit
+             trackChartHelper:(TrackChartHelper *)trackChartHelper
+    NS_SWIFT_NAME(fitTrack(rect:location:forceFit:trackChartHelper:));
 
 - (void)contextMenuDidShow:(id)targetObj;
 - (void)contextMenuDidHide;

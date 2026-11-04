@@ -6,15 +6,18 @@
 //
 
 import UIKit
+import DGCharts
 
 final class AnalyzeCardCell: UITableViewCell {
-
-    let cardView = UIView()
 
     private enum Layout {
         static let cornerRadius: CGFloat = 24
         static let horizontalInset: CGFloat = 16
     }
+
+    let cardView = UIView()
+
+    weak var chartView: BarLineChartViewBase?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,6 +30,7 @@ final class AnalyzeCardCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        chartView = nil
         cardView.subviews.forEach { $0.removeFromSuperview() }
     }
 

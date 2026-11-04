@@ -196,8 +196,8 @@
     [_targetAppMode setRouterService:_sourceAppMode.getRouterService];
     [_targetAppMode setIconColor:_sourceAppMode.getIconColor];
     [_targetAppMode setCustomIconColor:_sourceAppMode.getCustomIconColor];
-    [_targetAppMode setLocationIconName:[_sourceAppMode.getLocationIcon name]];
-    [_targetAppMode setNavigationIconName:[_sourceAppMode.getNavigationIcon name]];
+    [_targetAppMode setLocationIconName:_sourceAppMode.locationIconName];
+    [_targetAppMode setNavigationIconName:_sourceAppMode.navigationIconName];
     
     [app.data.mapLayerChangeObservable notifyEvent];
 }
@@ -229,7 +229,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.secondaryImageView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
+            cell.secondaryImageView.image = [UIImage imageNamed:ACImageNameIcCheckmarkDefault];
             cell.secondaryImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }

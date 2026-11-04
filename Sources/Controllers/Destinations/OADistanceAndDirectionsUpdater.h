@@ -16,8 +16,17 @@
                          indexPaths:(NSArray<NSIndexPath *> *)indexPaths
                             itemKey:(NSString *)itemKey;
 
-+ (CGFloat)getDirectionAngleFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude;
++ (CGFloat)directionAngleFromLocation:(CLLocation *)currentLocation
+                toDestinationLatitude:(CGFloat)destinationLatitude
+                 destinationLongitude:(CGFloat)destinationLongitude;
 
-+ (CGFloat)getDistanceFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude;
++ (CGFloat)directionAngleFromLocation:(CLLocation *)sourceLocation
+                      sourceDirection:(CLLocationDirection)sourceDirection
+                toDestinationLatitude:(CGFloat)destinationLatitude
+                 destinationLongitude:(CGFloat)destinationLongitude;
+
++ (CGFloat)distanceFromLocation:(CLLocation *)currentLocation
+          toDestinationLatitude:(CGFloat)destinationLatitude
+           destinationLongitude:(CGFloat)destinationLongitude;
 
 @end

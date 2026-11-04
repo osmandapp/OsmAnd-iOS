@@ -15,6 +15,7 @@
 #import "OARoutingHelper.h"
 #import "OARoutingHelper+cpp.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAndSharedWrapper.h"
 
 #include "routeSegmentResult.h"
 
@@ -87,15 +88,18 @@
         CLLocation *lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
         if (lastKnownLocation)
         {
-            const auto& current = _routingHelper.getCurrentSegmentResult;
-            std::shared_ptr<RouteDataObject> dataObject;
+            OASRouteSegmentResult *current = _routingHelper.getCurrentSegmentResult;
             if (current)
-                dataObject = current->object;
+            {
+                alarm = [_wh calculateSpeedLimitAlarmForRouteRoad:[current getObject] location:lastKnownLocation constants:speedFormat whenExceeded:whenExceeded];
+            }
             else
-                dataObject = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
-
-            if (dataObject)
-                alarm = [_wh calculateSpeedLimitAlarm:dataObject location:lastKnownLocation constants:speedFormat whenExceeded:whenExceeded];
+            {
+                // The road under the user, when there is no route, still comes from the C++ library.
+                const auto dataObject = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
+                if (dataObject)
+                    alarm = [_wh calculateSpeedLimitAlarm:dataObject location:lastKnownLocation constants:speedFormat whenExceeded:whenExceeded];
+            }
         }
     }
     if (alarm)

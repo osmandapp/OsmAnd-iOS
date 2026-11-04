@@ -18,11 +18,9 @@
 
 #include "CommonCollections.h"
 #include "commonOsmAndCore.h"
-#include <turnType.h>
 
-struct RouteSegmentResult;
-
-@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect;
+@class OARouteCalculationParams, OARouteDirectionInfo, OAAlarmInfo, QuadRect, OASTurnType, OASRouteSegmentResult;
+@class OAMissingMapsResult;
 
 @interface OANextDirectionInfo : NSObject
 
@@ -32,6 +30,16 @@ struct RouteSegmentResult;
 @property (nonatomic) NSString *pointName;
 @property (nonatomic) int imminent;
 @property (nonatomic) int directionInfoInd;
+
+@end
+
+@interface OAIntermediatePointInfo : NSObject
+
+@property (nonatomic, readonly) int routePointOffset;
+@property (nonatomic, readonly) int distance;
+@property (nonatomic, readonly) long time;
+
+- (instancetype) initWithRoutePointOffset:(int)routePointOffset distance:(int)distance time:(long)time;
 
 @end
 
@@ -56,31 +64,31 @@ struct RouteSegmentResult;
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 @property (nonatomic) NSArray<OAWorldRegion *> * potentiallyUsedMaps;
 
-@property (nonatomic) NSArray<CLLocation *> * missingMapsPoints;
-@property (nonatomic) std::shared_ptr<RoutingContext> missingMapsRoutingContext;
+/** What the missing maps check found, for the required maps screen; nil when nothing is missing. */
+@property (nonatomic, readonly) OAMissingMapsResult *missingMapsResult;
 
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
 
 - (instancetype) initWithLocations:(NSArray<CLLocation *> *)list directions:(NSArray<OARouteDirectionInfo *> *)directions params:(OARouteCalculationParams *)params waypoints:(NSArray<id<OALocationPoint>> *)waypoints addMissingTurns:(BOOL)addMissingTurns;
 
-- (instancetype) initWithSegmentResults:(std::vector<std::shared_ptr<RouteSegmentResult>>&)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint initialCalculation:(BOOL)initialCalculation;
+- (instancetype) initWithSegmentResults:(NSArray<OASRouteSegmentResult *> *)list start:(CLLocation *)start end:(CLLocation *)end intermediates:(NSArray<CLLocation *> *)intermediates leftSide:(BOOL)leftSide routingTime:(float)routingTime waypoints:(NSArray<id<OALocationPoint>> *)waypoints mode:(OAApplicationMode *)mode calculateFirstAndLastPoint:(BOOL)calculateFirstAndLastPoint initialCalculation:(BOOL)initialCalculation;
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment;
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute;
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute:(int)startIndex;
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute:(int)startIndex includeFirstSegment:(BOOL)includeFirstSegment;
+- (NSArray<OASRouteSegmentResult *> *) getOriginalRoute:(int)startIndex endIndex:(int)endIndex includeFirstSegment:(BOOL)includeFirstSegment;
 - (QuadRect *) getLocationsRect;
-+ (NSString *) toString:(std::shared_ptr<TurnType>)type shortName:(BOOL)shortName;
++ (NSString *) toString:(OASTurnType *)type shortName:(BOOL)shortName;
 
 - (NSArray<CLLocation *> *) getImmutableAllLocations;
 - (NSArray<OASimulatedLocation *> *)getImmutableSimulatedLocations;
 - (NSArray<OARouteDirectionInfo *> *) getImmutableAllDirections;
 - (NSArray<CLLocation *> *) getRouteLocations;
 - (int) getRouteDistanceToFinish:(int)posFromCurrentIndex;
-- (std::shared_ptr<RouteSegmentResult>) getCurrentSegmentResult;
-- (std::shared_ptr<RouteSegmentResult>) getNextStreetSegmentResult;
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getUpcomingTunnel:(float)distToStart;
+- (OASRouteSegmentResult *) getCurrentSegmentResult;
+- (OASRouteSegmentResult *) getNextStreetSegmentResult;
+- (NSArray<OASRouteSegmentResult *> *) getUpcomingTunnel:(float)distToStart;
 - (float) getCurrentMaxSpeed:(int)profile;
 - (int) getWholeDistance;
 - (BOOL) isCalculated;
@@ -108,6 +116,7 @@ struct RouteSegmentResult;
 - (int)getDistanceToNextIntermediate:(CLLocation *)fromLoc intermediateIndexOffset:(int)intermediateIndexOffset;
 - (int) getIndexOfIntermediate:(int)countFromLast;
 - (int) getIntermediatePointsToPass;
+- (NSArray<OAIntermediatePointInfo *> *) getIntermediatePointInfos;
 - (long) getLeftTime:(CLLocation *)fromLoc;
 - (long) getLeftTimeToNextTurn:(CLLocation *)fromLoc;
 - (int) getLeftTimeToNextDirection:(CLLocation *)fromLoc;
@@ -119,7 +128,6 @@ struct RouteSegmentResult;
 - (void)setMissingMaps:(NSArray<OAWorldRegion *> *)missingMaps
           mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
               usedMaps:(NSArray<OAWorldRegion *> *)usedMaps
-                   ctx:(std::shared_ptr<RoutingContext>)ctx
-                points:(NSArray<CLLocation *> *)points;
+                result:(OAMissingMapsResult *)result;
 
 @end

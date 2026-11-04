@@ -178,7 +178,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     for (NSString *resourceId in ids)
     {
         const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-        if (resource && (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::RoadMapRegion))
+        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
         {
             BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
             if (!isInstalled)
@@ -262,10 +262,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 
 - (BOOL)isMatch:(OASearchPhrase *)phrase text:(NSString *)text
 {
-    if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
-    {
-        return YES;
-    }
     OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_EQUALS_FROM_SPACE];
     return [matcher matches:text];
 }
@@ -298,8 +294,11 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
+        if (![point isVisible])
+            continue;
+
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = [point getName];
+        sr.localeName = [point getDisplayName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_OBJECT_PRIORITY;
         sr.objectType = EOAObjectTypeFavorite;
@@ -342,8 +341,11 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
+        if (![point isVisible])
+            continue;
+
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = [point getName];
+        sr.localeName = [point getDisplayName];
         sr.favorite = point.favorite;
         sr.priority = SEARCH_FAVORITE_CATEGORY_PRIORITY;
         sr.objectType = EOAObjectTypeFavorite;
@@ -541,7 +543,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
                 if ([OSM_WIKI_CATEGORY isEqualToString:pt.name])
                     sr.localeName = [NSString stringWithFormat:@"%@ (%@)", pt.nameLocalized, [mapPoiTypes getAllLanguagesTranslationSuffix]];
                 else
-                    sr.localeName = pt.nameLocalized;
+                    sr.localeName = [PoiAdditionalLabels getSearchName:pt];
                 sr.object = pt;
                 sr.relatedObject = point;
                 sr.priorityDistance = 0;

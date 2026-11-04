@@ -24,10 +24,10 @@ final class SegmentButtonsSliderTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        plusButton.setImage(UIImage.templateImageNamed("ic_custom_map_zoom_in"), for: .normal)
+        plusButton.setImage(.icCustomMapZoomIn, for: .normal)
         plusButton.addTarget(self, action: #selector(plusTapped), for: .touchUpInside)
         plusButton.tintColor = .iconColorActive
-        minusButton.setImage(UIImage.templateImageNamed("ic_custom_map_zoom_out"), for: .normal)
+        minusButton.setImage(.icCustomMapZoomOut, for: .normal)
         minusButton.addTarget(self, action: #selector(minusTapped), for: .touchUpInside)
         minusButton.tintColor = .iconColorActive
         sliderView.delegate = self

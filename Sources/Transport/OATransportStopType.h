@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, EOATransportStopType)
     TST_SUBWAY
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface OATransportStopType : NSObject
 
 @property (nonatomic, readonly) EOATransportStopType type;
@@ -39,6 +41,8 @@ typedef NS_ENUM(NSInteger, EOATransportStopType)
 + (NSString *) getResName:(EOATransportStopType)type;
 
 + (BOOL) isTopType:(EOATransportStopType)type;
-+ (OATransportStopType *) findType:(NSString *)typeName;
++ (nullable OATransportStopType *) findType:(nullable NSString *)typeName;
     
 @end
+
+NS_ASSUME_NONNULL_END

@@ -615,7 +615,7 @@ typedef enum
 
         NSMutableArray<OAPOIFilterListItem *> *items = [NSMutableArray array];
         
-        [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:@"ic_working_time.png"] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
+        [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:ACImageNameIcWorkingTime] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
         NSString *keyNameOpen24 = [[OALocalizedString(@"shared_string_is_open_24_7") stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowerCase];
         
         [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:OALocalizedString(@"shared_string_is_open_24_7") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen24] category:nil keyName:keyNameOpen24]];
@@ -627,6 +627,10 @@ typedef enum
         NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *additionalsMap = [NSMutableDictionary dictionary];
         [self extractPoiAdditionals:[poiAdditionals allValues] additionalsMap:additionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:NO];
         [self extractPoiAdditionals:otherAdditionalCategories additionalsMap:additionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:NO];
+        // labels depend on all values of a category, not only on the visible ones
+        NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *allAdditionalsMap = [NSMutableDictionary dictionary];
+        [self extractPoiAdditionals:[poiAdditionals allValues] additionalsMap:allAdditionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:YES];
+        [self extractPoiAdditionals:otherAdditionalCategories additionalsMap:allAdditionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:YES];
         
         if (additionalsMap.count > 0)
         {
@@ -651,13 +655,35 @@ typedef enum
                     categoryIcon = [OAUtilities getMxIcon:category];
                 
                 if (!categoryIcon) {
-                    categoryIcon = [UIImage imageNamed:@"ic_search_filter"];
+                    categoryIcon = [UIImage imageNamed:ACImageNameIcSearchFilter];
                 }
 
                 categoryIcon = [OAUtilities getTintableImage:categoryIcon];
                 
                 groupId++;
                 NSMutableArray<OAPOIFilterListItem *> *items = [NSMutableArray array];
+
+                NSArray<OAPOIType *> *allCategoryPoiAdditionals = allAdditionalsMap[category] ?: value;
+                NSMutableArray<NSString *> *translations = [NSMutableArray array];
+                NSMutableArray<NSString *> *osmValues = [NSMutableArray array];
+                for (OAPOIType *poiType in allCategoryPoiAdditionals)
+                {
+                    [translations addObject:poiType.nameLocalized ?: @""];
+                    [osmValues addObject:[poiType getOsmValue] ?: @""];
+                }
+                if ([PoiAdditionalLabels isSingleYes:osmValues])
+                {
+                    // a group of one "yes" value is a single switch
+                    NSString *keyName = [[allCategoryPoiAdditionals.firstObject.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase];
+                    NSString *label = [PoiAdditionalLabels getSwitchLabel:translations.firstObject groupName:categoryLocalizedName];
+                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:categoryIcon text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
+                    [groups setObject:items forKey:[NSNumber numberWithInt:groupId]];
+                    continue;
+                }
+                NSArray<NSString *> *labels = [PoiAdditionalLabels getGroupLabels:translations osmValues:osmValues];
+                NSMutableDictionary<NSString *, NSString *> *poiAdditionalLabels = [NSMutableDictionary dictionary];
+                for (NSInteger i = 0; i < allCategoryPoiAdditionals.count; i++)
+                    poiAdditionalLabels[allCategoryPoiAdditionals[i].name] = labels[i];
 
                 [items addObject:[[OAPOIFilterListItem alloc] initWithType:GROUP_HEADER icon:categoryIcon text:categoryLocalizedName groupIndex:groupId expandable:YES expanded:expanded checked:NO category:category keyName:nil]];
                 
@@ -672,7 +698,8 @@ typedef enum
                 {
                     NSString *keyName = [[poiType.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase];
                     
-                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:poiType.nameLocalized groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
+                    NSString *label = poiAdditionalLabels[poiType.name] ?: poiType.nameLocalized;
+                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
                 }
                 if (!showAll && categoryPoiAdditionals.count > 0)
                 {
@@ -852,7 +879,7 @@ typedef enum
             [cell clearButtonVisibility:NO];
             cell.inputField.textAlignment = NSTextAlignmentNatural;
             cell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
-            cell.leftIconView.image = [UIImage templateImageNamed:@"search_icon"];
+            cell.leftIconView.image = [UIImage templateImageNamed:ACImageNameSearchIcon];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
@@ -898,7 +925,7 @@ typedef enum
                 [cell.titleLabel setText:item.text];
                 if (item.expandable)
                 {
-                    cell.rightIconView.image = !item.expanded ? [UIImage templateImageNamed:@"ic_arrow_open.png"] : [UIImage templateImageNamed:@"ic_arrow_close.png"];
+                    cell.rightIconView.image = [UIImage imageNamed:!item.expanded ? ACImageNameIcArrowOpen : ACImageNameIcArrowClose];
                     cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
                     [cell rightIconVisibility:YES];
                 }

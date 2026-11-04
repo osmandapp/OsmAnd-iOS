@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
 
-@class OAWidgetPanelViewController, OAMapHudViewController, OATextInfoWidget;
+@class OAWidgetPanelViewController, OAMapHudViewController, OATextInfoWidget, WidgetsPanel;
 
 @protocol OAMapInfoControllerProtocol
 
@@ -53,6 +53,7 @@
 - (void) recreateAllControls;
 - (void) recreateControls;
 - (void) recreateTopWidgetsPanel;
+- (void) recreateWidgetsPanel:(WidgetsPanel *)panel NS_SWIFT_NAME(recreateWidgetsPanel(_:));
 - (void) updateInfo;
 - (void) updateWeatherToolbarVisible;
 - (void) expandClicked:(id)sender;
@@ -60,6 +61,9 @@
 - (void) updateRuler;
 
 - (void)updateWidgetsInfo;
+
+- (void)applyTextState:(OATextState *)textState
+             toWidgets:(NSArray<OABaseWidgetView *> *)widgets;
 
 - (void)updateLayout;
 - (void)viewWillTransition:(CGSize)size;

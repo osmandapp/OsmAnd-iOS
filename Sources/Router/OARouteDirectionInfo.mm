@@ -7,6 +7,7 @@
 //
 
 #import "OARouteDirectionInfo.h"
+#import "OsmAndSharedWrapper.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "OAOsmAndFormatter.h"
@@ -18,7 +19,7 @@
     NSString *_descriptionRoute;
 }
 
-- (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType
+- (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(OASTurnType *)turnType
 {
     self = [super init];
     if (self)

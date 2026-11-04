@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     self.rightButton.titleLabel.adjustsFontForContentSizeCategory = YES;
     self.rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
-    [self.closeButton setImage:[UIImage templateImageNamed:@"ic_custom_close"] forState:UIControlStateNormal];
+    [self.closeButton setImage:[UIImage imageNamed:ACImageNameIcCustomClose] forState:UIControlStateNormal];
     self.closeButton.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     
     _currentState = EOAScrollableMenuStateInitial;

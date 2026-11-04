@@ -23,6 +23,7 @@
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonsDividerTag 150
 
@@ -72,7 +73,7 @@
                      @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
                      @"title" : OALocalizedString(@"mapillary"),
                      @"description" : @"",
-                     @"img" : @"ic_custom_mapillary_color_logo.png"
+                     @"img" : ACImageNameIcCustomMapillaryColorLogo
                      }];
     
     [arr addObject:@{

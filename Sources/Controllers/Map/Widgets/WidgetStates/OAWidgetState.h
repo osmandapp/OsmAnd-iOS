@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *) getSettingsIconId:(BOOL)nightMode;
 - (void) changeToNextState;
 - (void) copyPrefs:(OAApplicationMode *)appMode customId:(nullable NSString *)customId;
+- (void)copyPrefsFromMode:(OAApplicationMode *)fromAppMode
+                  appMode:(OAApplicationMode *)appMode
+                 customId:(nullable NSString *)customId;
 
 @end
 

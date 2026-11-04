@@ -14,7 +14,7 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="86"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_osmand_pro_logo_colored.png" translatesAutoresizingMaskIntoConstraints="NO" id="ISg-vp-QTb" userLabel="Left Icon Image View">
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_custom_osmand_pro_logo_colored" translatesAutoresizingMaskIntoConstraints="NO" id="ISg-vp-QTb" userLabel="Left Icon Image View">
                     <rect key="frame" x="12" y="17" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -81,7 +81,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_osmand_pro_logo_colored.png" width="30" height="30"/>
+        <image name="ic_custom_osmand_pro_logo_colored" width="30" height="30"/>
         <namedColor name="buttonBgColorSecondary">
             <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

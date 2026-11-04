@@ -14,6 +14,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import textwrap
 from dataclasses import dataclass
 from typing import Any, Iterable, Iterator, Sequence
 
@@ -22,6 +23,40 @@ UUID_PATTERN = re.compile(
     r"UUID:\s+([0-9A-Fa-f-]{36})\s+\(([^)]+)\)\s+(.+)$"
 )
 DEFAULT_ARCHIVES = Path.home() / "Library" / "Developer" / "Xcode" / "Archives"
+DETAIL_LABELS = {
+    "version": "Report format version",
+    "applicationVersion": "Application version",
+    "terminationReason": "Termination reason",
+    "exceptionType": "Exception type",
+    "exceptionCode": "Exception code",
+    "virtualMemoryRegionInfo": "Virtual memory region",
+}
+EXCEPTION_TYPES = {
+    1: "EXC_BAD_ACCESS",
+    2: "EXC_BAD_INSTRUCTION",
+    3: "EXC_ARITHMETIC",
+    4: "EXC_EMULATION",
+    5: "EXC_SOFTWARE",
+    6: "EXC_BREAKPOINT",
+    7: "EXC_SYSCALL",
+    8: "EXC_MACH_SYSCALL",
+    9: "EXC_RPC_ALERT",
+    10: "EXC_CRASH",
+    11: "EXC_RESOURCE",
+    12: "EXC_GUARD",
+    13: "EXC_CORPSE_NOTIFY",
+}
+SIGNALS = {
+    4: "SIGILL",
+    5: "SIGTRAP",
+    6: "SIGABRT",
+    7: "SIGBUS",
+    8: "SIGFPE",
+    9: "SIGKILL",
+    11: "SIGSEGV",
+    13: "SIGPIPE",
+    15: "SIGTERM",
+}
 
 
 @dataclass(frozen=True)
@@ -52,6 +87,7 @@ class Diagnostic:
     source: Path
     ordinal: int
     details: dict[str, Any]
+    metadata: dict[str, Any]
     threads: list[Thread]
 
 
@@ -192,7 +228,10 @@ def parse_diagnostic(source: Path, ordinal: int, value: dict[str, Any]) -> Diagn
         )
         if key in value and value[key] is not None
     }
-    return Diagnostic(source, ordinal, details, threads)
+    metadata = value.get("diagnosticMetaData")
+    if not isinstance(metadata, dict):
+        metadata = {}
+    return Diagnostic(source, ordinal, details, metadata, threads)
 
 
 def load_reports(paths: Iterable[Path]) -> list[Diagnostic]:
@@ -374,6 +413,343 @@ def frame_location(frame: Frame) -> str:
     return " ".join(values)
 
 
+def human_value(value: Any) -> str:
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    return str(value)
+
+
+def metadata_value(key: str, value: Any) -> Any:
+    if isinstance(value, int) and not isinstance(value, bool):
+        if key == "exceptionType" and value in EXCEPTION_TYPES:
+            return f"{EXCEPTION_TYPES[value]} ({value})"
+        if key == "signal" and value in SIGNALS:
+            return f"{SIGNALS[value]} ({value})"
+    return value
+
+
+def first_match(pattern: str, value: str) -> str | None:
+    match = re.search(pattern, value, re.MULTILINE | re.DOTALL)
+    return match.group(1).strip() if match else None
+
+
+def parse_termination_reason(value: Any) -> dict[str, str]:
+    if not isinstance(value, str) or not value:
+        return {}
+
+    details: dict[str, str] = {}
+    code = first_match(r"\bcode:(0x[0-9A-Fa-f]+)", value)
+    watchdog_event = first_match(r"^WatchdogEvent:\s*([^\n]+)", value)
+    timeout = first_match(r"time allowance of ([0-9.]+ seconds)", value)
+
+    if code == "0x8BADF00D" or watchdog_event:
+        details["Type"] = "Watchdog termination"
+    if code:
+        details["Code"] = code
+    if watchdog_event:
+        details["Event"] = watchdog_event
+    if timeout:
+        details["Time limit"] = timeout
+
+    fields = (
+        ("Process visibility", r"^ProcessVisibility:\s*([^\n]+)"),
+        ("Process state", r"^ProcessState:\s*([^\n]+)"),
+        ("Thermal level", r'"Thermal Level:\s*([^"\n]+)'),
+        ("Thermal state", r'"Thermal State:\s*([^"\n]+)'),
+        ("Report type", r"\breportType:([^\s>]+)"),
+        (
+            "Termination resistance",
+            r"\bmaxTerminationResistance:([^\s>]+)",
+        ),
+    )
+    for label, pattern in fields:
+        match = first_match(pattern, value)
+        if match:
+            details[label] = match
+
+    total_cpu = re.search(
+        r"Elapsed total CPU time \(seconds\):\s*([0-9.]+) "
+        r"\(user ([0-9.]+), system ([0-9.]+)\),\s*([0-9]+% CPU)",
+        value,
+    )
+    if total_cpu:
+        total, user, system, percentage = total_cpu.groups()
+        details["Total CPU"] = (
+            f"{total} s ({percentage}; user {user} s, system {system} s)"
+        )
+
+    application_cpu = re.search(
+        r"Elapsed application CPU time \(seconds\):\s*([0-9.]+),\s*"
+        r"([0-9]+% CPU)",
+        value,
+    )
+    if application_cpu:
+        elapsed, percentage = application_cpu.groups()
+        details["Application CPU"] = f"{elapsed} s ({percentage})"
+
+    explanation = first_match(
+        r"\bexplanation:(.*?)(?=\n[A-Z][A-Za-z]+:|\nThermalInfo:|"
+        r"\sreportType:|\smaxTerminationResistance:|>$)",
+        value,
+    )
+    if explanation:
+        details["Explanation"] = " ".join(explanation.split())
+
+    return details
+
+
+def append_labeled_value(
+    output: list[str],
+    indentation: str,
+    label: str,
+    value: Any,
+) -> None:
+    prefix_width = len(indentation) + len(label) + 2
+    lines = []
+    for source_line in human_value(value).splitlines() or [""]:
+        lines.extend(
+            textwrap.wrap(
+                source_line,
+                width=max(40, 120 - prefix_width),
+                break_long_words=False,
+                break_on_hyphens=False,
+            )
+            or [""]
+        )
+    output.append(f"{indentation}{label}: {lines[0]}")
+    continuation = f"{indentation}{' ' * (len(label) + 2)}"
+    output.extend(f"{continuation}{line}" for line in lines[1:])
+
+
+def clean_symbol_name(value: str) -> str:
+    return value.split(" (in ", 1)[0].strip()
+
+
+def is_relevant_app_symbol(value: str) -> bool:
+    name = clean_symbol_name(value)
+    if name.startswith("objc2kotlin_"):
+        return False
+    return (
+        name.startswith(("-[", "+["))
+        or "net.osmand" in name
+        or "OsmAnd::" in name
+    )
+
+
+def render_incident_summary(
+    diagnostic: Diagnostic,
+    symbolicated: dict[tuple[str, int], str],
+) -> list[str]:
+    termination = parse_termination_reason(
+        diagnostic.metadata.get("terminationReason")
+    )
+    attributed_thread = next(
+        (
+            (index, thread)
+            for index, thread in enumerate(diagnostic.threads)
+            if thread.attributed
+        ),
+        None,
+    )
+
+    exception_type = diagnostic.metadata.get("exceptionType")
+    signal = diagnostic.metadata.get("signal")
+    incident_type = termination.get("Type")
+    if not incident_type and exception_type is not None:
+        incident_type = str(metadata_value("exceptionType", exception_type))
+    if not incident_type:
+        incident_type = "Crash"
+    output = ["Incident summary:", f"  Type: {incident_type}"]
+    if signal is not None:
+        output.append(f"  Signal: {metadata_value('signal', signal)}")
+    memory_region = diagnostic.metadata.get("virtualMemoryRegionInfo")
+    if isinstance(memory_region, str):
+        fault_address = first_match(r"^\s*(0x[0-9A-Fa-f]+)\b", memory_region)
+        if fault_address:
+            output.append(f"  Fault address: {fault_address}")
+    if termination.get("Event"):
+        output.append(f"  Watchdog event: {termination['Event']}")
+    if termination.get("Time limit"):
+        output.append(f"  Time limit: {termination['Time limit']}")
+    if termination.get("Process state") or termination.get("Process visibility"):
+        process = " / ".join(
+            value
+            for value in (
+                termination.get("Process state"),
+                termination.get("Process visibility"),
+            )
+            if value
+        )
+        output.append(f"  Process: {process}")
+
+    if attributed_thread:
+        thread_index, thread = attributed_thread
+        output.append(f"  Attributed thread: {thread_index}")
+        relevant_path: list[str] = []
+        top_description: str | None = None
+        if thread.frames:
+            top_frame = thread.frames[0]
+            top_name = resolved_frame_name(top_frame, symbolicated)
+            if top_name:
+                top_description = clean_symbol_name(top_name)
+            else:
+                location = frame_location(top_frame)
+                top_description = top_frame.binary_name
+                if location:
+                    top_description += f" ({location})"
+            append_labeled_value(output, "  ", "Top frame", top_description)
+
+        top_application_frame: str | None = None
+        for frame in thread.frames:
+            key = (
+                (frame.binary_uuid, frame.offset)
+                if frame.binary_uuid and frame.offset is not None
+                else None
+            )
+            name = symbolicated.get(key) if key else None
+            if name:
+                if top_application_frame is None:
+                    top_application_frame = clean_symbol_name(name)
+                if is_relevant_app_symbol(name):
+                    relevant_path.append(clean_symbol_name(name))
+        if top_application_frame and top_application_frame != top_description:
+            append_labeled_value(
+                output,
+                "  ",
+                "Top application frame",
+                top_application_frame,
+            )
+        if relevant_path:
+            output.append("  Relevant app path:")
+            output.extend(
+                f"    {index}. {name}"
+                for index, name in enumerate(relevant_path[:6], start=1)
+            )
+    return output
+
+
+def render_metadata(metadata: dict[str, Any]) -> list[str]:
+    """Render MetricKit metadata in stable, readable groups without losing fields."""
+    if not metadata:
+        return []
+
+    output = ["Diagnostic metadata:"]
+    rendered_keys: set[str] = set()
+
+    version = metadata.get("appVersion")
+    build = metadata.get("appBuildVersion")
+    application: list[tuple[str, Any]] = []
+    if version is not None and build is not None:
+        application.append(("Version", f"{version} (build {build})"))
+        rendered_keys.update(("appVersion", "appBuildVersion"))
+    else:
+        if version is not None:
+            application.append(("Version", version))
+            rendered_keys.add("appVersion")
+        if build is not None:
+            application.append(("Build", build))
+            rendered_keys.add("appBuildVersion")
+
+    groups = (
+        (
+            "Application",
+            application,
+            (
+                ("Bundle identifier", "bundleIdentifier"),
+                ("TestFlight", "isTestFlightApp"),
+            ),
+        ),
+        (
+            "Device and OS",
+            [],
+            (
+                ("OS", "osVersion"),
+                ("Device", "deviceType"),
+                ("Architecture", "platformArchitecture"),
+                ("Region", "regionFormat"),
+            ),
+        ),
+        (
+            "Exception",
+            [],
+            (
+                ("Type", "exceptionType"),
+                ("Code", "exceptionCode"),
+                ("Signal", "signal"),
+            ),
+        ),
+        (
+            "Process and power",
+            [],
+            (
+                ("PID", "pid"),
+                ("Low Power Mode", "lowPowerModeEnabled"),
+            ),
+        ),
+    )
+
+    for heading, initial_values, fields in groups:
+        values = list(initial_values)
+        for label, key in fields:
+            if key in metadata and metadata[key] is not None:
+                values.append((label, metadata_value(key, metadata[key])))
+                rendered_keys.add(key)
+        if values:
+            output.append(f"  {heading}:")
+            for label, value in values:
+                append_labeled_value(output, "    ", label, value)
+
+    termination_reason = metadata.get("terminationReason")
+    termination = parse_termination_reason(termination_reason)
+    if termination:
+        rendered_keys.add("terminationReason")
+        output.append("  Termination:")
+        for label, value in termination.items():
+            append_labeled_value(output, "    ", label, value)
+
+    additional = [
+        (key, value)
+        for key, value in metadata.items()
+        if key not in rendered_keys and value is not None
+    ]
+    if additional:
+        output.append("  Additional metadata:")
+        for key, value in additional:
+            append_labeled_value(output, "    ", key, value)
+    return output
+
+
+def resolved_frame_name(
+    frame: Frame,
+    symbolicated: dict[tuple[str, int], str],
+) -> str | None:
+    if frame.binary_uuid and frame.offset is not None:
+        return symbolicated.get((frame.binary_uuid, frame.offset))
+    return None
+
+
+def render_thread_frames(
+    output: list[str],
+    thread: Thread,
+    symbolicated: dict[tuple[str, int], str],
+    symbols: dict[str, SymbolFile],
+) -> None:
+    for frame in thread.frames:
+        name = resolved_frame_name(frame, symbolicated)
+        location = frame_location(frame)
+        if name:
+            output.append(f"{frame.index:>4}  {frame.binary_name}  {name}")
+        else:
+            reason = ""
+            if frame.binary_uuid and frame.binary_uuid not in symbols:
+                reason = " [no matching dSYM]"
+            output.append(
+                f"{frame.index:>4}  {frame.binary_name}  {location}{reason}"
+            )
+
+
 def render(
     diagnostics: Sequence[Diagnostic],
     symbolicated: dict[tuple[str, int], str],
@@ -388,7 +764,12 @@ def render(
         for key, value in diagnostic.details.items():
             if isinstance(value, (dict, list)):
                 value = json.dumps(value, ensure_ascii=False, separators=(",", ":"))
-            output.append(f"{key}: {value}")
+            output.append(f"{DETAIL_LABELS.get(key, key)}: {value}")
+        output.append("")
+        output.extend(render_incident_summary(diagnostic, symbolicated))
+        if diagnostic.metadata:
+            output.append("")
+            output.extend(render_metadata(diagnostic.metadata))
 
         if not diagnostic.threads:
             output.append("No call-stack threads found")
@@ -396,29 +777,17 @@ def render(
 
         for thread_index, thread in enumerate(diagnostic.threads):
             output.append("")
-            suffix = " [attributed/crashed]" if thread.attributed else ""
+            suffix = " [attributed]" if thread.attributed else ""
             output.append(f"Thread {thread_index}{suffix}")
-            for frame in thread.frames:
-                key = (
-                    (frame.binary_uuid, frame.offset)
-                    if frame.binary_uuid and frame.offset is not None
-                    else None
-                )
-                name = symbolicated.get(key) if key else None
-                indentation = "  " * frame.depth
-                location = frame_location(frame)
-                if name:
-                    output.append(
-                        f"{indentation}{frame.index:>4}  {frame.binary_name}  {name}"
-                    )
-                else:
-                    reason = ""
-                    if frame.binary_uuid and frame.binary_uuid not in symbols:
-                        reason = " [no matching dSYM]"
-                    output.append(
-                        f"{indentation}{frame.index:>4}  {frame.binary_name}  "
-                        f"{location}{reason}"
-                    )
+            if not thread.frames:
+                output.append("  No frames")
+                continue
+            render_thread_frames(
+                output,
+                thread,
+                symbolicated,
+                symbols,
+            )
     return "\n".join(output) + "\n"
 
 

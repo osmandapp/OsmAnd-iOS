@@ -27,6 +27,7 @@
 #import "OABuilding.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAMemoryLog.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -373,7 +374,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             NSNumber *osmIdObj = (that.obfId == [OAMapObject getInvalidObfId] || (int64_t)that.obfId < 0) ? nil : @(osmId);
             NSString *wikidata = [that getWikidata];
 
-            if (that.isRouteTrack)
+            if (that.isRouteTrack || that.isSuperRoute)
             {
                 osmIdObj = nil;
                 wikidata = nil; // do not merge routes
@@ -979,6 +980,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             if ([rm isCancelled])
                 return;
             
+            [OAMemoryLog.sharedInstance onSearchRun];
             [self searchInBackground:phrase matcher:rm];
             if (![rm isCancelled])
             {

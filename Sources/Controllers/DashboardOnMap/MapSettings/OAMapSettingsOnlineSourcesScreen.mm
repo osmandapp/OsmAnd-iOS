@@ -19,6 +19,7 @@
 #include <QSet>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kMaxDoneWidth 70
 
@@ -139,6 +140,7 @@ typedef enum
             _app.resourcesManager->uninstallTilesResource(item->name);
         }
         OsmAnd::OnlineTileSources::installTileSource(item, QString::fromNSString(_app.cachePath));
+        [_app backupOnlineTileSource:item->name.toNSString()];
         _app.resourcesManager->installTilesResource(item);
     }
     if (_selectedSources.size() == 1)
@@ -202,7 +204,7 @@ typedef enum
     if (cell)
     {
         UIImage *img = nil;
-        img = [UIImage rtlImageNamed:@"ic_custom_map_style"];
+        img = [UIImage rtlImageNamed:ACImageNameIcCustomMapStyle];
         
         cell.titleLabel.text = caption;
         cell.leftIconView.image = img;

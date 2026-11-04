@@ -27,6 +27,7 @@
 #import "OALiveMonitoringHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording
 
@@ -102,27 +103,29 @@
               appMode:(OAApplicationMode *)appMode
          widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
 
-    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingDistance widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];
 
-    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingTime widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:timeWidget]];
 
-    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingUphill widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:uphillWidget]];
 
-    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingDownhill widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:downhillWidget]];
     
-    OABaseWidgetView *averageSlopeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingAverageSlope customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *averageSlopeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingAverageSlope customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingAverageSlope widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:averageSlopeWidget]];
     
-    OABaseWidgetView *maxSpeedWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMaxSpeed customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *maxSpeedWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMaxSpeed customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingMaxSpeed widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:maxSpeedWidget]];
     
-    OABaseWidgetView *movingTimeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMovingTime customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *movingTimeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingMovingTime customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.tripRecordingMovingTime widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:movingTimeWidget]];
 }
 
@@ -160,10 +163,10 @@
     if (recOn)
     {
         [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
-                                                   titleIcon:@"ic_custom_route"
+                                                   titleIcon:ACImageNameIcCustomRoute
                                                  cancelTitle:OALocalizedString(@"shared_string_cancel")
                                        selectableItemsTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"gpx_start_new_segment"), OALocalizedString(@"save_current_track") ]
-                                       selectableItemsImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
+                                       selectableItemsImages:@[@"track_recording_stop", @"icon_info", @"track_new_segement" , @"track_save"]
                                           selectColpletition:^(NSInteger selectedIndex) {
             
                 switch (selectedIndex)
@@ -188,7 +191,7 @@
                         if ([_savingTrackHelper hasDataToSave] && _savingTrackHelper.distance < 10.0)
                         {
                             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_save_short_q")
-                                                                       titleIcon:@"ic_custom_route"
+                                                                       titleIcon:ACImageNameIcCustomRoute
                                                                          message:nil
                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
                                                                        doneTitle:OALocalizedString(@"shared_string_yes")
@@ -217,10 +220,10 @@
         if ([_savingTrackHelper hasData])
         {
             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
-                                                       titleIcon:@"ic_custom_route"
+                                                       titleIcon:ACImageNameIcCustomRoute
                                                      cancelTitle:nil
                                            selectableItemsTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"save_current_track")]
-                                           selectableItemsImages:@[@"ic_action_rec_start.png", @"icon_info.png", @"track_clear_data.png", @"track_save.png"]
+                                           selectableItemsImages:@[@"ic_action_rec_start", @"icon_info", @"track_clear_data", @"track_save"]
                                               selectColpletition:^(NSInteger selectedIndex) {
                 
                 switch (selectedIndex) {
@@ -328,7 +331,7 @@
     if (askForRec)
     {
         [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                                   titleIcon:@"ic_custom_route"
+                                                   titleIcon:ACImageNameIcCustomRoute
                                                      message:nil
                                                  cancelTitle:OALocalizedString(@"shared_string_no")
                                                    doneTitle:OALocalizedString(@"shared_string_yes")

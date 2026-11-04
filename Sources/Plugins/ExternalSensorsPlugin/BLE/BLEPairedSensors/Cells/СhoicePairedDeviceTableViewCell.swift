@@ -12,6 +12,6 @@ final class СhoicePairedDeviceTableViewCell: SearchDeviceTableViewCell {
     
     override func configure(item: Device) {
         super.configure(item: item)
-        checkmarkImageView.image =  item.isSelected ? UIImage(named: "ic_checkmark_default") : nil
+        checkmarkImageView.image =  item.isSelected ? .icCheckmarkDefault : nil
     }
 }

@@ -65,6 +65,12 @@ final class TripRecordingElevationWidgetState: OAWidgetState {
     override func copyPrefs(_ appMode: OAApplicationMode, customId: String?) {
         Self.registerPreference(customId: customId).set(elevationModePreference.get(appMode), mode: appMode)
     }
+
+    override func copyPrefs(from fromAppMode: OAApplicationMode,
+                            appMode toAppMode: OAApplicationMode,
+                            customId: String?) {
+        Self.registerPreference(customId: customId).set(elevationModePreference.get(fromAppMode), mode: toAppMode)
+    }
     
     func getElevationModePreference() -> OACommonTripRecordingElevationMode {
         elevationModePreference

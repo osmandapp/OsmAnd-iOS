@@ -29,7 +29,7 @@ final class OptionDeviceTableViewCell: UITableViewCell {
     
     private lazy var accessoryImageView: UIImageView = {
         let imgView = UIImageView(frame: .init(x: 0, y: 0, width: 30, height: 30))
-        imgView.image = UIImage(named: "ic_checkmark_default")
+        imgView.image = .icCheckmarkDefault
         return imgView
     }()
     
@@ -40,7 +40,7 @@ final class OptionDeviceTableViewCell: UITableViewCell {
                 deviceImageView.image = UIImage(named: iconName)
             }
         } else if optionDevice.option == .none {
-            deviceImageView.image = UIImage(named: "ic_custom_trip_hide")
+            deviceImageView.image = .icCustomTripHide
         }
 
         titleLabel.text = title

@@ -27,19 +27,19 @@
 
 @class OASTrkSegment, TrackChartPoints;
 
-struct RouteSegmentResult;
+@class OASRouteSegmentResult;
 
 @interface OABaseVectorLinesLayer : OASymbolMapLayer
 
 - (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection sync:(BOOL)sync;
 
-- (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName;
+- (sk_sp<SkImage>)directionArrowBitmapForColor:(UIColor *)color;
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color;
 - (sk_sp<SkImage>) walkBitmapWithColor:(OsmAnd::ColorARGB)color lineWidth:(CGFloat)lineWidth;
 
 - (void)calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                       attrName:(NSString *)attrName
-                 segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                 segmentResult:(NSArray<OASRouteSegmentResult *> *)segs
                      locations:(NSArray<CLLocation *> *)locations;
 
 - (void) showCurrentHighlitedLocation:(TrackChartPoints *)trackPoints;

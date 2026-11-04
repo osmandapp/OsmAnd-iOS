@@ -25,6 +25,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kAvoidModifiedTimeKey @"avoid_modified_key"
 
@@ -119,7 +120,7 @@
             else
             {
                 [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"impassable_road")
-                                                           titleIcon:@"ic_custom_alert"
+                                                           titleIcon:ACImageNameIcCustomAlert
                                                              message:OALocalizedString(@"error_avoid_specific_road")
                                                          cancelTitle:OALocalizedString(@"shared_string_ok")];
             }

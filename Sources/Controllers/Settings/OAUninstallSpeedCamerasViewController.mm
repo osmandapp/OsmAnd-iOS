@@ -101,7 +101,7 @@
     }];
     self.tableView.tableHeaderView =
         [OAUtilities setupTableHeaderViewWithAttributedText:attributedText
-                                          topCenterIconName:@"img_speed_camera_warning"
+                                          topCenterIconName:ACImageNameImgSpeedCameraWarning
                                                    iconSize:92.
                                             parentViewWidth:self.view.frame.size.width];
 }

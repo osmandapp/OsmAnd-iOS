@@ -29,7 +29,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetTransportStop,
     OATargetTransportRoute,
     OATargetGPX,
-    OATargetNetworkGPX,
     OATargetHistoryItem,
     OATargetAddress,
     OATargetTurn,
@@ -60,7 +59,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetProfileAppearanceIconSizeSettings,
     OATargetBaseDetailsObject,
     OATargetRenderedObject,
-    OATargetAisObject
+    OATargetAisObject,
+    OATargetWidgetPanelAppearanceSettings
 };
 
 @interface OATargetPoint : NSObject

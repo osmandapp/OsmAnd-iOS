@@ -36,7 +36,7 @@
                             <constraint firstAttribute="width" constant="30" id="I5P-XW-ZQ2"/>
                             <constraint firstAttribute="height" constant="30" id="drb-Hd-q28"/>
                         </constraints>
-                        <state key="normal" image="ic_custom_delete.png"/>
+                        <state key="normal" image="ic_custom_delete"/>
                     </button>
                 </subviews>
                 <constraints>
@@ -66,7 +66,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="ic_custom_delete.png" width="30" height="30"/>
+        <image name="ic_custom_delete" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

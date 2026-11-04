@@ -11,6 +11,7 @@
 #import "OAPOIBaseType.h"
 #import "OAPOIHelper.h"
 #import "OASearchAlgorithms.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATopIndexFilter
 
@@ -59,7 +60,7 @@
 
 - (NSString *)getIconResource 
 {
-    return @"ic_custom_search";
+    return ACImageNameIcCustomSearch;
 }
 
 + (NSString *)getValueKey:(NSString *)value

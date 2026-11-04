@@ -208,17 +208,17 @@ final class EditKeyAssignmentController: OABaseSettingsViewController {
         var menuElements: [UIMenuElement]?
         if !isEditMode && !isAdd {
             let editAction: UIAction = UIAction(title: localizedString("shared_string_edit"),
-                                                image: UIImage(named: "ic_custom_key_edit")) { [weak self] _ in
+                                                image: .icCustomKeyEdit) { [weak self] _ in
                 guard let self else { return }
                 self.switchEditMode(to: true)
             }
             let renameAction: UIAction = UIAction(title: localizedString("shared_string_rename"),
-                                                  image: UIImage(named: "ic_custom_edit")) { [weak self] _ in
+                                                  image: .icCustomEdit) { [weak self] _ in
                 guard let self else { return }
                 self.showRenameAlert()
             }
             let removeAction: UIAction = UIAction(title: localizedString("shared_string_remove"),
-                                                  image: UIImage(named: "ic_custom_trash_outlined")?.withTintColor(.iconColorDisruptive, renderingMode: .alwaysOriginal)) { [weak self] _ in
+                                                  image: .icCustomTrashOutlined.withTintColor(.iconColorDisruptive, renderingMode: .alwaysOriginal)) { [weak self] _ in
                 guard let self else { return }
                 self.showRemoveAlert()
             }

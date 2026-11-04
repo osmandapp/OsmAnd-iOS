@@ -16,6 +16,7 @@
 #import "OARouteStatistics.h"
 #import "OANativeUtilities.h"
 #import "OAApplicationMode.h"
+#import "OsmAndSharedWrapper.h"
 #import "OAMapSource.h"
 #import "OAAppData.h"
 
@@ -84,7 +85,7 @@ static NSArray<NSString *> *_boundariesClass;
     }
 }
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(NSArray<OASRouteSegmentResult *> *)route
 {
     NSMutableArray<NSString *> *attributeNames = [NSMutableArray new];
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -113,7 +114,7 @@ static NSArray<NSString *> *_boundariesClass;
     return [self calculateRouteStatistic:route attributeNames:attributeNames];
 }
 
-+ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(vector<SHARED_PTR<RouteSegmentResult> >)route attributeNames:(NSArray<NSString *> *)attributeNames
++ (NSArray<OARouteStatistics *> *) calculateRouteStatistic:(NSArray<OASRouteSegmentResult *> *)route attributeNames:(NSArray<NSString *> *)attributeNames
 {
     NSArray<OARouteSegmentWithIncline *> *routeSegmentWithInclines = [self.class calculateInclineRouteSegments:route];
     
@@ -133,17 +134,17 @@ static NSArray<NSString *> *_boundariesClass;
     return result;
 }
 
-+ (NSArray<OARouteSegmentWithIncline *> *) calculateInclineRouteSegments:(vector<SHARED_PTR<RouteSegmentResult> >) route
++ (NSArray<OARouteSegmentWithIncline *> *) calculateInclineRouteSegments:(NSArray<OASRouteSegmentResult *> *) route
 {
     NSMutableArray<OARouteSegmentWithIncline *> *input = [NSMutableArray new];
     float prevHeight = 0;
     int totalArrayHeightsLength = 0;
-    for (const auto& r : route)
+    for (OASRouteSegmentResult *r in route)
     {
-        const auto& heightValues = r->getHeightValues();
+        OASKotlinFloatArray *heightValues = [r getHeightValues];
         OARouteSegmentWithIncline *incl = [[OARouteSegmentWithIncline alloc] init];
-        incl.dist = r->distance;
-        incl.obj = r->object;
+        incl.dist = [r getDistance];
+        incl.obj = [r getObject];
         [input addObject:incl];
         float prevH = prevHeight;
         int indStep = 0;
@@ -154,19 +155,19 @@ static NSArray<NSString *> *_boundariesClass;
             incl.interpolatedHeightByStep = [NSMutableArray arrayWithObject:@(0) count:capacity];
             totalArrayHeightsLength += incl.interpolatedHeightByStep.count;
         }
-        if (heightValues.size() > 0)
+        if (heightValues.size > 0)
         {
             int indH = 2;
             float distCum = 0;
-            prevH = heightValues[1];
+            prevH = [heightValues getIndex:1];
             incl.h = prevH;
             if (incl.interpolatedHeightByStep != nil && incl.interpolatedHeightByStep.count > indStep)
                 incl.interpolatedHeightByStep[indStep++] = @(prevH);
 
             while(incl.interpolatedHeightByStep != nil &&
-                    indStep < incl.interpolatedHeightByStep.count && indH < heightValues.size())
+                    indStep < incl.interpolatedHeightByStep.count && indH < heightValues.size)
             {
-                float dist = heightValues[indH] + distCum;
+                float dist = [heightValues getIndex:indH] + distCum;
                 if(dist > indStep * H_STEP)
                 {
                     if(dist == distCum)
@@ -177,14 +178,14 @@ static NSArray<NSString *> *_boundariesClass;
                     {
                         incl.interpolatedHeightByStep[indStep] = @((float) (prevH +
                                                                             (indStep * H_STEP - distCum) *
-                                                                            (heightValues[indH + 1] - prevH) / (dist - distCum)));
+                                                                            ([heightValues getIndex:indH + 1] - prevH) / (dist - distCum)));
                     }
                     indStep++;
                 }
                 else
                 {
                     distCum = dist;
-                    prevH = heightValues[indH + 1];
+                    prevH = [heightValues getIndex:indH + 1];
                     indH += 2;
                 }
             }
@@ -479,27 +480,32 @@ static NSArray<NSString *> *_boundariesClass;
                                                                   segment:(OARouteSegmentWithIncline *) segment
                                                                slopeClass:(int) slopeClass
 {
-    SHARED_PTR<RouteDataObject> obj = segment.obj;
-    const auto& tps = obj->types;
+    OASRouteDataObject *obj = segment.obj;
+    OASKotlinIntArray *tps = obj.types;
     if ([attribute isEqualToString:@"routeInfo_steepness"] && slopeClass >= 0)
         return @{ @"additional" : _boundariesClass[slopeClass] };
     
     NSMutableDictionary<NSString *, NSString *> *result = [NSMutableDictionary new];
-    for (int k = 0; k < tps.size(); k++)
+    for (int k = 0; tps != nil && k < tps.size; k++)
     {
-        auto& tp = obj->region->quickGetEncodingRule(tps[k]);
-        if (tp.getTag() == "highway" || tp.getTag() == "route" ||
-            tp.getTag() == "railway" || tp.getTag() == "aeroway" || tp.getTag() == "aerialway")
+        OASRouteTypeRule *tp = [obj.region quickGetEncodingRuleId:[tps getIndex:k]];
+        if (tp == nil)
+            continue;
+
+        NSString *tag = tp.getTag;
+        NSString *value = tp.getValue ? tp.getValue : @"";
+        if ([tag isEqualToString:@"highway"] || [tag isEqualToString:@"route"] ||
+            [tag isEqualToString:@"railway"] || [tag isEqualToString:@"aeroway"] || [tag isEqualToString:@"aerialway"])
         {
-            [result setObject:[[NSString alloc] initWithUTF8String:tp.getTag().c_str()] forKey:@"tag"];
-            [result setObject:[[NSString alloc] initWithUTF8String:tp.getValue().c_str()] forKey:@"value"];
+            [result setObject:tag forKey:@"tag"];
+            [result setObject:value forKey:@"value"];
         }
-        else if (([attribute isEqualToString:@"routeInfo_surface"] && tp.getTag() == "surface") ||
-                 ([attribute isEqualToString:@"routeInfo_smoothness"] && tp.getTag() == "smoothness") ||
-                 ([attribute isEqualToString:@"routeInfo_winter_ice_road"] && (tp.getTag() == "winter_road" || tp.getTag() == "ice_road")) ||
-                 ([attribute isEqualToString:@"routeInfo_tracktype"] && tp.getTag() == "tracktype"))
+        else if (([attribute isEqualToString:@"routeInfo_surface"] && [tag isEqualToString:@"surface"]) ||
+                 ([attribute isEqualToString:@"routeInfo_smoothness"] && [tag isEqualToString:@"smoothness"]) ||
+                 ([attribute isEqualToString:@"routeInfo_winter_ice_road"] && ([tag isEqualToString:@"winter_road"] || [tag isEqualToString:@"ice_road"])) ||
+                 ([attribute isEqualToString:@"routeInfo_tracktype"] && [tag isEqualToString:@"tracktype"]))
         {
-            [result setObject:[NSString stringWithFormat:@"%@=%@", [[NSString alloc] initWithUTF8String:tp.getTag().c_str()], [[NSString alloc] initWithUTF8String:tp.getValue().c_str()]] forKey:@"additional"];
+            [result setObject:[NSString stringWithFormat:@"%@=%@", tag, value] forKey:@"additional"];
         }
     }
     

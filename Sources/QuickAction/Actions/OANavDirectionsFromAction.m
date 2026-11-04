@@ -11,6 +11,7 @@
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -28,7 +29,7 @@ static QuickActionType *TYPE;
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_directions_from")]
                nameAction:OALocalizedString(@"shared_string_set")]
-              iconName:@"ic_action_directions_from"]
+              iconName:ACImageNameIcActionDirectionsFrom]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }

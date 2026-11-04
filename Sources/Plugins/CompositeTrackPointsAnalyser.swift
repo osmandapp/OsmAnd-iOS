@@ -18,8 +18,10 @@ final class CompositeTrackPointsAnalyser: NSObject, GpxTrackAnalysisTrackPointsA
     }
     
     func onAnalysePoint(analysis: GpxTrackAnalysis, point: WptPt, attribute: PointAttributes) {
-        for analyser in analysers {
-            callAnalyser(analyser, analysis: analysis, point: point, attribute: attribute)
+        autoreleasepool {
+            for analyser in analysers {
+                callAnalyser(analyser, analysis: analysis, point: point, attribute: attribute)
+            }
         }
     }
     

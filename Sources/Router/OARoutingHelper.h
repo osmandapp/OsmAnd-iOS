@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "OACommonTypes.h"
 
+#import "OAResultMatcher.h"
+
 @class OAWorldRegion, OAApplicationMode, OARouteCalculationResult, OARouteDirectionInfo, OAGPXRouteParamsBuilder, OAVoiceRouter, OANextDirectionInfo, OASGpxTrackAnalysis, OARouteCalculationParams, OARouteProvider, OARoutingEnvironment, OAObservable, OACurrentStreetName, OASGpxFile, OASKQuadRect;
+@class OAGpxRouteApproximation, OALocationsHolder, OASGpxPoint, OASGpxRouteApproximation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -40,8 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 struct GpxPoint;
 struct GpxRouteApproximation;
-struct TurnType;
-struct RouteSegmentResult;
 
 @interface OARoutingHelper : NSObject
 
@@ -123,6 +124,16 @@ struct RouteSegmentResult;
 - (void)onCarPlayConnectionStateChanged;
 
 - (OARoutingEnvironment *) getRoutingEnvironment:(OAApplicationMode *)mode start:(CLLocation *)start end:(CLLocation *)end;
+
+- (NSArray<OASGpxPoint *> *) generateSharedGpxPoints:(OARoutingEnvironment *)env
+                                                gctx:(OASGpxRouteApproximation *)gctx
+                                     locationsHolder:(OALocationsHolder *)locationsHolder;
+
+- (OASGpxRouteApproximation *) calculateSharedGpxApproximation:(OARoutingEnvironment *)env
+                                                          gctx:(OASGpxRouteApproximation *)gctx
+                                                        points:(NSArray<OASGpxPoint *> *)points
+                                         useExternalTimestamps:(BOOL)useExternalTimestamps
+                                                 resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher;
 
 - (OASGpxFile *) generateGPXFileWithRoute:(NSString *)name;
 

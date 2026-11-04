@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OAOsmBugsRemoteUtil : NSObject <OAOsmBugsUtilsProtocol, NSURLSessionDelegate>
 
 -(OAOsmBugResult *)commit:(OAOsmNotePoint *) point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL) anonymous;
+- (OAOsmBugResult *)commit:(OAOsmNotePoint *)point text:(NSString *)text action:(EOAAction)action anonymous:(BOOL)anonymous allowUnconfirmedRetry:(BOOL)allowUnconfirmedRetry;
 -(OAOsmBugResult *)validateLoginDetails;
 
 @end

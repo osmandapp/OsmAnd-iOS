@@ -13,6 +13,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteCalculationResult.h"
 #import "OANativeUtilities.h"
+#import "OAUtilities.h"
 #import "OARouteStatisticsHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OATransportStopType.h"
@@ -41,6 +42,7 @@
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <SkCGUtils.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kTurnArrowsColoringByAttr 0xffffffff
 #define kOutlineId 1001
@@ -141,8 +143,8 @@ struct DrawPathData
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _transportRouteMarkers->setPriority(_linesPriority);
 
-    _transportTransferIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"];
-    _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
+    _transportTransferIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPublicTransportTransfer];
+    _transportShieldIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapPublicTransportStopShield];
     
     _routeAttributes = nil;
     _walkAttributes = nil;
@@ -163,7 +165,7 @@ struct DrawPathData
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
     _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(refreshRoute)
+                                                              withHandler:@selector(onUpdateGpxTracksOnMap)
                                                                andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 
     [self.app.paletteRepository addListenerListener:self];
@@ -300,7 +302,8 @@ struct DrawPathData
     auto marker = transportMarkerBuilder.buildAndAddToCollection(_transportRouteMarkers);
     marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(startLatLon));
     
-    OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
+    NSString *routeType = OAStringFromUTF8Nullable(routeSegment->route->type.c_str());
+    OATransportStopType *type = routeType ? [OATransportStopType findType:routeType] : nil;
     NSString *resId = type != nil ? type.resId : [OATransportStopType getResId:TST_BUS];
     UIImage *origIcon = [UIImage mapSvgImageNamed:resId];
     sk_sp<SkImage> stopImg = nullptr;
@@ -335,7 +338,8 @@ struct DrawPathData
     void (^drawTransportSegmentBlock)(void) = ^{
         [self drawRouteMarkers:routeSegment];
             
-        OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
+        NSString *routeType = OAStringFromUTF8Nullable(routeSegment->route->type.c_str());
+        OATransportStopType *type = routeType ? [OATransportStopType findType:routeType] : nil;
         NSString *str = [NSString stringWithUTF8String:routeSegment->route->color.c_str()];
         str = str.length == 0 ? type.renderAttr : str;
         OsmAnd::ColorARGB colorARGB;
@@ -423,8 +427,7 @@ struct DrawPathData
             || _routeLineColor == kDefaultRouteLineDayColor
             || _routeLineColor == kDefaultRouteLineNightColor;
 
-        iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                                  fileName:@"map_direction_arrow"];
+        iconBitmap = [self directionArrowBitmapForColor:hasStyleColor ? UIColor.whiteColor : color];
         specialIconBitmap = [self specialBitmapWithColor:lineColor];
     }
 
@@ -526,7 +529,7 @@ struct DrawPathData
     builder.setBaseOrder(self.pointsOrder - 2110);
     builder.setIsAccuracyCircleSupported(NO);
     builder.setIsHidden(YES);
-    builder.setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]));
+    builder.setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameMapPedestrianLocation]));
     _projectedPointMarker = builder.buildAndAddToCollection(_projectionPointCollection);
     [self.mapView addKeyedSymbolsProvider:_projectionPointCollection];
 }
@@ -969,6 +972,14 @@ struct DrawPathData
 - (void) refreshRoute
 {
     [self refreshRoute:YES];
+}
+
+- (void)onUpdateGpxTracksOnMap
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf refreshRoute];
+    });
 }
 
 - (void) refreshRoute:(BOOL)forceRedraw

@@ -12,6 +12,8 @@
 #import "OAFavoritesHelper.h"
 #import "OAPOI.h"
 #import "OsmAndApp.h"
+#import "OAEntity.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -38,7 +40,7 @@
     return self;
 }
 
-- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi
+- (instancetype) initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString*)formattedLocation poi:(OAPOI *)poi targetObject:(id)targetObject
 {
     self = [super init];
     if (self)
@@ -46,26 +48,55 @@
         [self commonInit];
 
         _iconName = [self.class getPoiIconName:poi];
-        
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
-
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         _favorite = [[OAFavoriteItem alloc] initWithLat:location.latitude
                                                     lon:location.longitude
                                                    name:formattedTitle
-                                               category:groupName];
+                                               category:@""];
         [_favorite setAddress:formattedLocation];
         [_favorite setTimestamp:[NSDate date]];
         [_favorite setIcon:_iconName];
         [_favorite setColor:favCol.color];
         [_favorite setAmenity:poi];
+        [self setOsmUrl:poi targetObject:targetObject];
         
         NSString *originName = poi.toStringEn;
         if (originName.length > 0)
             [_favorite setAmenityOriginName:originName];
     }
     return self;
+}
+
+- (void)setOsmUrl:(OAPOI *)poi targetObject:(id)targetObject
+{
+    if (![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
+        return;
+
+    id object = poi ?: targetObject;
+    if ([object isKindOfClass:BaseDetailsObject.class])
+    {
+        object = ((BaseDetailsObject *) object).syntheticAmenity;
+    }
+    else if ([object isKindOfClass:OAOpenStreetMapPoint.class])
+    {
+        OAEntity *entity = ((OAOpenStreetMapPoint *) object).getEntity;
+        if (entity.getId <= 0)
+            return;
+        
+        OAPOI *requestPoi = [[OAPOI alloc] init];
+        requestPoi.latitude = _favorite.getLatitude;
+        requestPoi.longitude = _favorite.getLongitude;
+        requestPoi.obfId = [ObfConstants createMapObjectIdFromOsmId:entity.getId type:[OAEntity stringTypeOf:entity]];
+        OAAmenitySearcherRequest *request = [[OAAmenitySearcherRequest alloc] initWithMapObject:requestPoi];
+        object = [OAAmenitySearcher.sharedInstance searchDetailedObjectWithRequest:request].syntheticAmenity;
+    }
+    
+    if ([object isKindOfClass:OAPOI.class] || [object isKindOfClass:OARenderedObject.class])
+    {
+        NSString *url = [ObfConstants getOsmUrlForId:object];
+        if (url.length > 0)
+            [_favorite setExtensions:@{OASGpxUtilities.shared.OSM_URL_EXTENSION: url}];
+    }
 }
 
 - (void) commonInit

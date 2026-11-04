@@ -10,19 +10,14 @@
 
 #import <Foundation/Foundation.h>
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-#include <turnType.h>
-#include <binaryRead.h>
-
 NS_ASSUME_NONNULL_BEGIN
 
-@class OANextDirectionInfo, RoadShield, OARoutingHelper;
+@class OANextDirectionInfo, RoadShield, OARoutingHelper, OASTurnType, OASRouteDataObject;
 
 @interface OACurrentStreetName : NSObject
 
 @property (nonatomic) NSString *text;
-@property (nonatomic) std::shared_ptr<TurnType> turnType;
+@property (nonatomic, nullable) OASTurnType *turnType;
 @property (nonatomic, assign) BOOL showMarker; // turn type has priority over showMarker
 @property (nonatomic) NSArray<RoadShield *> *shields;
 @property (nonatomic) NSString *exitRef;
@@ -36,14 +31,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RoadShield : NSObject
 
-@property (nonatomic, readonly) std::shared_ptr<RouteDataObject> rdo;
+@property (nonatomic, readonly) OASRouteDataObject *rdo;
 @property (nonatomic, readonly) NSString *tag;
 @property (nonatomic, readonly) NSString *value;
 @property (nonatomic, copy) NSString *additional;
 
-- (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value;
-+ (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo;
-+ (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef;
+- (instancetype)initWithRDO:(OASRouteDataObject *)rdo tag:(NSString *)tag value:(NSString *)value;
++ (NSArray<RoadShield *> *)createShields:(nullable OASRouteDataObject *)rdo;
++ (NSArray<RoadShield *> *)createDestination:(nullable OASRouteDataObject *)rdo destRef:(NSString *)destRef;
 
 @end
 

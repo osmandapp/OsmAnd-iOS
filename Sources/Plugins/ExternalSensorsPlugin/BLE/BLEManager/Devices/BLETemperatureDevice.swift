@@ -19,11 +19,11 @@ final class BLETemperatureDevice: Device {
     }
     
     override var getServiceConnectedImage: UIImage? {
-        UIImage(named: "widget_weather_temperature")
+        .widgetWeatherTemperature
     }
     
     override var getServiceDisconnectedImage: UIImage? {
-        UIImage(named: "ic_custom_sensor_thermometer")
+        .icCustomSensorThermometer
     }
     
     override var getDataFields: [[String: String]]? {

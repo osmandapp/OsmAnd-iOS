@@ -11,7 +11,7 @@
 
 @implementation OAFavoriteFolderBridgeItem
 
-- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize subtreePointsCount:(NSUInteger)subtreePointsCount
+- (instancetype)initWithGroup:(OAFavoriteGroup *)group index:(NSUInteger)index lastModifiedDate:(nullable NSDate *)lastModifiedDate fileSize:(long long)fileSize
 {
     self = [super init];
     if (self)
@@ -21,7 +21,6 @@
         _groupName = groupName;
         _title = [self.class titleForGroupName:groupName];
         _pointsCount = group.points.count;
-        _subtreePointsCount = subtreePointsCount;
         _isVisible = group.isVisible;
         _isPinned = group.isPinned;
         _color = group.color;

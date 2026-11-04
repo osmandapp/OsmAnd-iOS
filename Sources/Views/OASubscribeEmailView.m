@@ -59,7 +59,7 @@
     self.containerView = [[UIView alloc] init];
     self.containerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     self.imageView = [[UIImageView alloc] init];
-    self.imageView.image = [UIImage templateImageNamed:@"ic_action_message"];
+    self.imageView.image = [UIImage imageNamed:ACImageNameIcActionMessage];
     self.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.imageView sizeToFit];
     

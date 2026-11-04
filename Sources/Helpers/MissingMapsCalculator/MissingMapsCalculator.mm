@@ -9,6 +9,8 @@
 #import "MissingMapsCalculator.h"
 #import "OAMapUtils.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OsmAndSharedWrapper.h"
+#import "OAMissingMapsResult.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationResult.h"
@@ -33,18 +35,70 @@ static const double DISTANCE_SKIP = 10000;
 
 @end
 
+/** One installed map, read by whichever planner is in use. */
 @interface RegisteredMap : NSObject
 
 @property (nonatomic, assign) BinaryMapFile *reader;
+@property (nonatomic, strong) OASBinaryMapIndexReader *sharedReader;
 @property (nonatomic, assign) BOOL standard;
 @property (nonatomic, assign) long edition;
 @property (nonatomic, copy) NSString *downloadName;
+
+- (BOOL)hasRouteDataAtX31:(int)x31 y31:(int)y31;
 
 @end
 
 @implementation RegisteredMap
 
+- (BOOL)hasRouteDataAtX31:(int)x31 y31:(int)y31
+{
+    if (_sharedReader)
+        return [_sharedReader containsRouteData] && [_sharedReader containsActualRouteDataX31:x31 y31:y31 checkedRegions:nil];
+
+    int zoomToLoad = 14;
+    int x = x31 >> zoomToLoad;
+    int y = y31 >> zoomToLoad;
+    SearchQuery q((uint32_t) (x << zoomToLoad), (uint32_t) ((x + 1) << zoomToLoad), (uint32_t) (y << zoomToLoad),
+                  (uint32_t) ((y + 1) << zoomToLoad));
+    return _reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(_reader, &q);
+}
+
 @end
+
+// The two fast routing statuses the check can raise, in the words of each planner.
+static FastRoutingState::Status OACppRoutingStatus(EOAMissingMapsState state)
+{
+    switch (state)
+    {
+        case EOAMissingMapsStateMissingAtStartOrEnd:
+            return FastRoutingState::MISSING_MAPS_AT_START_OR_END;
+        case EOAMissingMapsStateMissingIntermediates:
+            return FastRoutingState::MISSING_MAPS_INTERMEDIATES;
+        case EOAMissingMapsStateMixedAtStartOrEnd:
+            return FastRoutingState::MIXED_MAPS_AT_START_OR_END;
+        case EOAMissingMapsStateMixedIntermediates:
+            return FastRoutingState::MIXED_MAPS_INTERMEDIATES;
+        case EOAMissingMapsStateNone:
+            return FastRoutingState::READY;
+    }
+}
+
+static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState state)
+{
+    switch (state)
+    {
+        case EOAMissingMapsStateMissingAtStartOrEnd:
+            return OASFastRoutingStateStatus.missingMapsAtStartOrEnd;
+        case EOAMissingMapsStateMissingIntermediates:
+            return OASFastRoutingStateStatus.missingMapsIntermediates;
+        case EOAMissingMapsStateMixedAtStartOrEnd:
+            return OASFastRoutingStateStatus.mixedMapsAtStartOrEnd;
+        case EOAMissingMapsStateMixedIntermediates:
+            return OASFastRoutingStateStatus.mixedMapsIntermediates;
+        case EOAMissingMapsStateNone:
+            return OASFastRoutingStateStatus.ready;
+    }
+}
 
 @implementation MissingMapsCalculator
 {
@@ -62,62 +116,139 @@ static const double DISTANCE_SKIP = 10000;
     return self;
 }
 
-- (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
-                             start:(CLLocation *)start
-                           targets:(NSArray<CLLocation *> *)targets
-                   checkHHEditions:(BOOL)checkHHEditions
+- (OAMissingMapsResult *)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
+                                              start:(CLLocation *)start
+                                            targets:(NSArray<CLLocation *> *)targets
+                                    checkHHEditions:(BOOL)checkHHEditions
 {
-    NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
-    std::vector<std::pair<double, double>> missingMapsPoints;
-    missingMapsPoints.emplace_back(start.coordinate.latitude, start.coordinate.longitude);
-    for (CLLocation *target in targets)
-    {
-        missingMapsPoints.emplace_back(target.coordinate.latitude, target.coordinate.longitude);
-    }
-    std::shared_ptr<MissingMapsCalculationResult> calculationResult = nullptr;
+    NSString *profile = [NSString stringWithUTF8String:profileToString(ctx->config->router->getProfile()).c_str()];
+    OAMissingMapsResult *result = [self checkMapsForProfile:profile
+                                                  knownMaps:[self registeredMapsForProfile:profile]
+                                                      start:start
+                                                    targets:targets
+                                            checkHHEditions:checkHHEditions];
     if (ctx->progress != nullptr)
     {
-        calculationResult = std::make_shared<MissingMapsCalculationResult>(ctx, missingMapsPoints);
+        if (result)
+            ctx->progress->raiseFastRoutingStatus(OACppRoutingStatus(result.state));
+        else
+            ctx->progress->resetFastRoutingStatus();
     }
-    _lastKeyNames = [NSMutableArray new];
-    NSMutableArray<MissingMapsCalculatorPoint *> *pointsToCheck = [NSMutableArray new];
-    string profile = profileToString(ctx->config->router->getProfile());
+    return result;
+}
+
+- (OAMissingMapsResult *)checkIfThereAreMissingSharedMaps:(OASRoutingContext *)ctx
+                                                    start:(CLLocation *)start
+                                                  targets:(NSArray<CLLocation *> *)targets
+                                          checkHHEditions:(BOOL)checkHHEditions
+{
+    NSString *profile = [[ctx.config.router getProfile] getBaseProfile];
+    OAMissingMapsResult *result = [self checkMapsForProfile:profile
+                                                  knownMaps:[self registeredSharedMaps:[ctx getMaps] profile:profile]
+                                                      start:start
+                                                    targets:targets
+                                            checkHHEditions:checkHHEditions];
+    OASRouteCalculationProgress *progress = ctx.calculationProgress;
+    if (progress)
+    {
+        if (result)
+            [progress raiseFastRoutingStatusStatus:OASharedRoutingStatus(result.state)];
+        else
+            [progress resetFastRoutingStatus];
+    }
+    return result;
+}
+
+- (OAMissingMapsResult *)checkIfThereAreMissingMapsForProfile:(NSString *)profile
+                                                        start:(CLLocation *)start
+                                                      targets:(NSArray<CLLocation *> *)targets
+                                              checkHHEditions:(BOOL)checkHHEditions
+{
+    return [self checkMapsForProfile:profile
+                           knownMaps:[self registeredMapsForProfile:profile]
+                               start:start
+                             targets:targets
+                     checkHHEditions:checkHHEditions];
+}
+
+// The maps the C++ planner reads: every obf file the app has open. Both planners are handed the
+// same files, so this answers for a check that has no routing context of its own either.
+- (NSDictionary<NSString *, RegisteredMap *> *)registeredMapsForProfile:(NSString *)profile
+{
     NSMutableDictionary<NSString *, RegisteredMap *> *knownMaps = [NSMutableDictionary new];
-    
     const auto openFilesSnapshot = getOpenFilesSnapshot();
     for (const auto& fileRef : openFilesSnapshot)
     {
         auto* file = fileRef.get();
         NSString *regionName = [NSString stringWithCString:file->inputName.c_str()
                                                   encoding:[NSString defaultCStringEncoding]];
-        NSString *downloadName = regionName.lastPathComponent;
-        if ([downloadName isEqualToString:kWorldMiniBasemapKey])
-        {
+        RegisteredMap *rmap = [self registerMapNamed:regionName into:knownMaps];
+        if (!rmap)
             continue;
-        }
-        RegisteredMap *rmap = [RegisteredMap new];
-        NSString *rmapDownloadName = [[downloadName stringByDeletingPathExtension] lowerCase];
-    
-        rmap.downloadName = rmapDownloadName;
+
         rmap.reader = file;
-        rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
-
-        if ([[rmap.downloadName lowercaseString] hasPrefix:@"world_"])
-        {
-            continue; // avoid including World_seamarks
-        }
-
-        [knownMaps setObject:rmap forKey:[rmap downloadName]];
-        
         for (const auto& rt : file->hhIndexes)
         {
-            if (rt->profile == profile)
-            {
+            if (rt->profile == profile.UTF8String)
                 rmap.edition = rt->edition;
-            }
         }
     }
-    
+    return knownMaps;
+}
+
+// The same maps as OsmAndShared readers, the ones its routing context searches.
+- (NSDictionary<NSString *, RegisteredMap *> *)registeredSharedMaps:(NSArray<OASBinaryMapIndexReader *> *)readers
+                                                            profile:(NSString *)profile
+{
+    NSMutableDictionary<NSString *, RegisteredMap *> *knownMaps = [NSMutableDictionary new];
+    for (OASBinaryMapIndexReader *reader in readers)
+    {
+        RegisteredMap *rmap = [self registerMapNamed:[[reader getFile] name] into:knownMaps];
+        if (!rmap)
+            continue;
+
+        rmap.sharedReader = reader;
+        for (OASHHRouteRegion *rt in [reader getHHRoutingIndexes])
+        {
+            if ([rt.profile isEqualToString:profile])
+                rmap.edition = rt.edition;
+        }
+    }
+    return knownMaps;
+}
+
+// The map under a file name, added to the known ones; nil for the maps the check ignores.
+- (RegisteredMap *)registerMapNamed:(NSString *)regionName into:(NSMutableDictionary<NSString *, RegisteredMap *> *)knownMaps
+{
+    NSString *downloadName = regionName.lastPathComponent;
+    if ([downloadName isEqualToString:kWorldMiniBasemapKey])
+        return nil;
+
+    RegisteredMap *rmap = [RegisteredMap new];
+    rmap.downloadName = [[downloadName stringByDeletingPathExtension] lowerCase];
+    rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
+
+    if ([[rmap.downloadName lowercaseString] hasPrefix:@"world_"])
+        return nil; // avoid including World_seamarks
+
+    [knownMaps setObject:rmap forKey:[rmap downloadName]];
+    return rmap;
+}
+
+- (OAMissingMapsResult *)checkMapsForProfile:(NSString *)profile
+                                   knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
+                                       start:(CLLocation *)start
+                                     targets:(NSArray<CLLocation *> *)targets
+                             checkHHEditions:(BOOL)checkHHEditions
+{
+    NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
+    NSMutableArray<CLLocation *> *missingMapsPoints = [NSMutableArray arrayWithObject:start];
+    [missingMapsPoints addObjectsFromArray:targets];
+    OAMissingMapsResult *calculationResult = [[OAMissingMapsResult alloc] initWithPoints:missingMapsPoints profile:profile];
+
+    _lastKeyNames = [NSMutableArray new];
+    NSMutableArray<MissingMapsCalculatorPoint *> *pointsToCheck = [NSMutableArray new];
+
     CLLocation *end = nil;
     CLLocation *prev = start;
     for (int i = 0; i < [targets count]; i++)
@@ -128,18 +259,15 @@ static const double DISTANCE_SKIP = 10000;
             continue;
         }
         
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev isStartEnd:i == 0 next:end];
+        [self split:knownMaps pointsToCheck:pointsToCheck pnt:prev isStartEnd:i == 0 next:end];
         prev = end;
     }
     
     if (end != nil)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end isStartEnd:YES];
+        [self addPoint:knownMaps pointsToCheck:pointsToCheck point:end isStartEnd:YES];
     }
     
-    NSMutableSet<NSString *> *usedMaps = [NSMutableSet set];
-    NSMutableSet<NSString *> *mapsToDownload = [NSMutableSet set];
-    NSMutableSet<NSString *> *mapsToUpdate = [NSMutableSet set];
     NSMutableSet<NSNumber *> *presentTimestamps = nil;
     BOOL mixedMapsAtStartOrEnd = NO;
     BOOL missingMapsAtStartOrEnd = NO;
@@ -162,11 +290,7 @@ static const double DISTANCE_SKIP = 10000;
                     {
                         missingMapsIntermediates = YES;
                     }
-                    if (calculationResult != nullptr)
-                    {
-                        calculationResult->addMissingMaps(r.UTF8String);
-                    }
-                    [mapsToDownload addObject:r];
+                    [calculationResult addMissingMap:r];
                     break;
                 }
             }
@@ -183,7 +307,7 @@ static const double DISTANCE_SKIP = 10000;
             }
         } else {
             if (p.regions.count > 0) {
-                [usedMaps addObject:p.regions.firstObject];
+                [calculationResult addUsedMap:p.regions.firstObject];
             }
         }
     }
@@ -229,19 +353,11 @@ static const double DISTANCE_SKIP = 10000;
                     {
                         mixedMapsIntermediates = YES;
                     }
-                    if (calculationResult != nullptr)
-                    {
-                        calculationResult->addMapToUpdate(region.UTF8String);
-                    }
-                    [mapsToUpdate addObject:region];
+                    [calculationResult addMapToUpdate:region];
                 }
                 else
                 {
-                    if (calculationResult != nullptr)
-                    {
-                        calculationResult->addUsedMaps(region.UTF8String);
-                    }
-                    [usedMaps addObject:region];
+                    [calculationResult addUsedMap:region];
                 }
             }
         }
@@ -258,11 +374,7 @@ static const double DISTANCE_SKIP = 10000;
                 {
                     if ([p.hhEditions[i] longValue] == selectedEdition)
                     {
-                        if (calculationResult != nullptr)
-                        {
-                            calculationResult->addUsedMaps(p.regions[i].UTF8String);
-                        }
-                        [usedMaps addObject:p.regions[i]];
+                        [calculationResult addUsedMap:p.regions[i]];
                         break;
                     }
                 }
@@ -270,45 +382,32 @@ static const double DISTANCE_SKIP = 10000;
         }
     }
     
-    if ([mapsToDownload count] == 0 && [mapsToUpdate count] == 0)
+    if (![calculationResult hasMissingMaps])
     {
-        if (ctx->progress != nullptr)
-        {
-            ctx->progress->missingMapsCalculationResult = nullptr;
-            ctx->progress->resetFastRoutingStatus();
-        }
-        return NO;
+        return nil;
     }
-    if (ctx->progress != nullptr)
+    if (missingMapsAtStartOrEnd)
     {
-        if (missingMapsAtStartOrEnd)
-        {
-            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_AT_START_OR_END);
-        }
-        else if (missingMapsIntermediates)
-        {
-            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MISSING_MAPS_INTERMEDIATES);
-        }
-        else if (mixedMapsAtStartOrEnd)
-        {
-            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_AT_START_OR_END);
-        }
-        else if (mixedMapsIntermediates)
-        {
-            ctx->progress->raiseFastRoutingStatus(FastRoutingState::MIXED_MAPS_INTERMEDIATES);
-        }
+        [calculationResult setState:EOAMissingMapsStateMissingAtStartOrEnd];
     }
-    if (ctx->progress != nullptr)
+    else if (missingMapsIntermediates)
     {
-        ctx->progress->missingMapsCalculationResult = calculationResult;
+        [calculationResult setState:EOAMissingMapsStateMissingIntermediates];
+    }
+    else if (mixedMapsAtStartOrEnd)
+    {
+        [calculationResult setState:EOAMissingMapsStateMixedAtStartOrEnd];
+    }
+    else if (mixedMapsIntermediates)
+    {
+        [calculationResult setState:EOAMissingMapsStateMixedIntermediates];
     }
     NSLog(@"Check missing maps %lu points %.2f sec", [pointsToCheck count], ([NSDate timeIntervalSinceReferenceDate] - tm));
     
-    return YES;
+    return calculationResult;
 }
 
-- (void)split:(std::shared_ptr<RoutingContext>)ctx
-    knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
+- (void)split:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
           pnt:(CLLocation *)pnt
    isStartEnd:(BOOL)isStartEnd
@@ -317,18 +416,17 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     double distance = [OAMapUtils getDistance:pnt.coordinate second:next.coordinate];
     if (distance < kDISTANCE_SPLIT)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt isStartEnd:isStartEnd];
+        [self addPoint:knownMaps pointsToCheck:pointsToCheck point:pnt isStartEnd:isStartEnd];
     }
     else
     {
         CLLocation *mid = [OAMapUtils calculateMidPoint:pnt s2:next];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:pnt isStartEnd:isStartEnd next:mid];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:mid isStartEnd:NO next:next];
+        [self split:knownMaps pointsToCheck:pointsToCheck pnt:pnt isStartEnd:isStartEnd next:mid];
+        [self split:knownMaps pointsToCheck:pointsToCheck pnt:mid isStartEnd:NO next:next];
     }
 }
 
-- (void)addPoint:(std::shared_ptr<RoutingContext>)ctx
-       knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
+- (void)addPoint:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
    pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
            point:(CLLocation *)loc
       isStartEnd:(BOOL)isStartEnd
@@ -378,20 +476,11 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             int x31 = OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude);
             int y31 = OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude);
             
-            int zoomToLoad = 14;
-            int x = x31 >> zoomToLoad;
-            int y = y31 >> zoomToLoad;
-            
             for (RegisteredMap *r in knownMaps.allValues)
             {
-                if (!r.standard)
+                if (!r.standard && [r hasRouteDataAtX31:x31 y31:y31])
                 {
-                    SearchQuery q((uint32_t)(x << zoomToLoad), (uint32_t)((x + 1) << zoomToLoad), (uint32_t)(y << zoomToLoad),
-                                  (uint32_t)((y + 1) << zoomToLoad));
-                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q))
-                    {
-                        [pnt.regions insertObject:r.downloadName atIndex:0];
-                    }
+                    [pnt.regions insertObject:r.downloadName atIndex:0];
                 }
             }
             
@@ -402,18 +491,18 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     }
 }
 
-- (NSArray<OAWorldRegion *> *)convert:(const std::vector<std::string>&)maps
+- (NSArray<OAWorldRegion *> *)convert:(NSArray<NSString *> *)maps
 {
-    if (maps.empty())
+    if (maps.count == 0)
     {
         return nil;
     }
     
     NSMutableArray<OAWorldRegion *> *worldRegions = [NSMutableArray array];
     
-    for (const auto& map : maps)
+    for (NSString *map in maps)
     {
-        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:[NSString stringWithUTF8String:map.c_str()]];
+        OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:map];
         if (worldRegion != nil)
         {
             [worldRegions addObject:worldRegion];
@@ -422,33 +511,17 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     return [worldRegions copy];
 }
 
-- (NSArray<CLLocation *> *)convertPoints:(const std::vector<std::pair<double, double>>&)points
+- (void)attachResult:(OAMissingMapsResult *)result
+toRouteCalculationResult:(OARouteCalculationResult *)routeResult
 {
-    if (points.empty())
-    {
-        return nil;
-    }
-    NSMutableArray<CLLocation *> *locations = [NSMutableArray arrayWithCapacity:points.size()];
-    for (const auto& point : points)
-    {
-        [locations addObject:[[CLLocation alloc] initWithLatitude:point.first longitude:point.second]];
-    }
-    return [locations copy];
-}
-
-- (void)attachToRouteCalculationResult:(OARouteCalculationResult *)routeResult
-                              progress:(std::shared_ptr<RouteCalculationProgress>)progress
-{
-    if (progress == nullptr || progress->missingMapsCalculationResult == nullptr || routeResult == nil)
+    if (result == nil || routeResult == nil)
     {
         return;
     }
-    const auto& calculationResult = progress->missingMapsCalculationResult;
-    [routeResult setMissingMaps:[self convert:calculationResult->missingMaps]
-                   mapsToUpdate:[self convert:calculationResult->mapsToUpdate]
-                       usedMaps:[self convert:calculationResult->usedMaps]
-                            ctx:calculationResult->missingMapsRoutingContext.lock()
-                         points:[self convertPoints:calculationResult->missingMapsPoints]];
+    [routeResult setMissingMaps:[self convert:result.missingMaps]
+                   mapsToUpdate:[self convert:result.mapsToUpdate]
+                       usedMaps:[self convert:result.usedMaps]
+                         result:result];
 }
 
 - (BOOL)addMapEditions:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps

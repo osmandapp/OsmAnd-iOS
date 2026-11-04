@@ -16,6 +16,7 @@
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAAlarmWidget ()
 
@@ -155,37 +156,37 @@
             BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
             BOOL isCanadianRegion = region == DR_CANADA;
 
-            NSString *locImgId = @"warnings_limit";
+            NSString *locImgId = ACImageNameWarningsLimit;
             NSString *text = @"";
             NSString *bottomText = @"";
             if (alarm.type == AIT_SPEED_LIMIT)
             {
                 if (isCanadianRegion)
                 {
-                    locImgId = @"warnings_speed_limit_ca";
+                    locImgId = ACImageNameWarningsSpeedLimitCa;
                     bottomText = [OASpeedConstant toShortString:[_settings.speedSystem get]];
                 }
                 else if (americanSigns)
                 {
-                    locImgId = @"warnings_speed_limit_us";
+                    locImgId = ACImageNameWarningsSpeedLimitUs;
                     //else case is done by drawing red ring
                 }
                 text = @(alarm.intValue).stringValue;
             }
             else if (alarm.type == AIT_SPEED_CAMERA || alarm.type == AIT_RED_LIGHT_CAMERA)
             {
-                locImgId = @"warnings_speed_camera";
+                locImgId = ACImageNameWarningsSpeedCamera;
             }
             else if (alarm.type == AIT_BORDER_CONTROL)
             {
-                locImgId = @"warnings_border_control";
+                locImgId = ACImageNameWarningsBorderControl;
             }
             else if (alarm.type == AIT_HAZARD)
             {
                 if (americanSigns)
-                    locImgId = @"warnings_hazard_us";
+                    locImgId = ACImageNameWarningsHazardUs;
                 else
-                    locImgId = @"warnings_hazard";
+                    locImgId = ACImageNameWarningsHazard;
             }
             else if (alarm.type == AIT_TOLL_BOOTH)
             {
@@ -195,36 +196,36 @@
             else if (alarm.type == AIT_TRAFFIC_CALMING)
             {
                 if (americanSigns)
-                    locImgId = @"warnings_traffic_calming_us";
+                    locImgId = ACImageNameWarningsTrafficCalmingUs;
                 else
-                    locImgId = @"warnings_traffic_calming";
+                    locImgId = ACImageNameWarningsTrafficCalming;
             }
             else if (alarm.type == AIT_STOP)
             {
-                locImgId = @"warnings_stop";
+                locImgId = ACImageNameWarningsStop;
             }
             else if(alarm.type == AIT_RAILWAY)
             {
                 if (isCanadianRegion)
-                    locImgId = @"warnings_railways_ca";
+                    locImgId = ACImageNameWarningsRailwaysCa;
                 else if (americanSigns)
-                    locImgId = @"warnings_railways_us";
+                    locImgId = ACImageNameWarningsRailwaysUs;
                 else
-                    locImgId = @"warnings_railways";
+                    locImgId = ACImageNameWarningsRailways;
             }
             else if (alarm.type == AIT_PEDESTRIAN)
             {
                 if (americanSigns)
-                    locImgId = @"warnings_pedestrian_us";
+                    locImgId = ACImageNameWarningsPedestrianUs;
                 else
-                    locImgId = @"warnings_pedestrian";
+                    locImgId = ACImageNameWarningsPedestrian;
             }
             else if (alarm.type == AIT_TUNNEL)
             {
                 if (americanSigns)
-                    locImgId = @"warnings_tunnel_us";
+                    locImgId = ACImageNameWarningsTunnelUs;
                 else
-                    locImgId = @"warnings_tunnel";
+                    locImgId = ACImageNameWarningsTunnel;
 
                 bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue withParams:alarm.type == AIT_TUNNEL ? [OsmAndFormatterParams useLowerBounds] : nil];
             }

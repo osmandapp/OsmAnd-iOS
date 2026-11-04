@@ -13,17 +13,32 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OARouteCalculationResult;
+@class OAMissingMapsResult, OARouteCalculationResult, OASRoutingContext;
 
 @interface MissingMapsCalculator : NSObject
 - (instancetype)init;
 
-- (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
-                             start:(CLLocation *)start
-                           targets:(NSArray<CLLocation *> *)targets
-                   checkHHEditions:(BOOL)checkHHEditions;
-- (void)attachToRouteCalculationResult:(OARouteCalculationResult *)routeResult
-                              progress:(std::shared_ptr<RouteCalculationProgress>)progress;
+/** The maps the route needs and does not have, over the files the C++ planner reads; nil when it has them all. */
+- (nullable OAMissingMapsResult *)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
+                                                       start:(CLLocation *)start
+                                                     targets:(NSArray<CLLocation *> *)targets
+                                             checkHHEditions:(BOOL)checkHHEditions;
+
+/** The same over the files the OsmAndShared planner reads. */
+- (nullable OAMissingMapsResult *)checkIfThereAreMissingSharedMaps:(OASRoutingContext *)ctx
+                                                             start:(CLLocation *)start
+                                                           targets:(NSArray<CLLocation *> *)targets
+                                                   checkHHEditions:(BOOL)checkHHEditions;
+
+/** The same for a profile on its own, over every map the app has open - a check after a download, say. */
+- (nullable OAMissingMapsResult *)checkIfThereAreMissingMapsForProfile:(NSString *)profile
+                                                                 start:(CLLocation *)start
+                                                               targets:(NSArray<CLLocation *> *)targets
+                                                       checkHHEditions:(BOOL)checkHHEditions;
+
+/** Puts the regions of an outcome on a route, where the required maps screen reads them. */
+- (void)attachResult:(nullable OAMissingMapsResult *)result
+toRouteCalculationResult:(nullable OARouteCalculationResult *)routeResult;
 
 @end
 

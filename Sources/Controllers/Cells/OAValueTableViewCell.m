@@ -25,7 +25,9 @@
         self.valueLabel.textAlignment = NSTextAlignmentLeft;
     self.valueLabel.adjustsFontSizeToFitWidth = YES;
     self.valueLabel.minimumScaleFactor = 0.8;
-    [self layoutIfNeeded];
+    // On Mac, let the table determine the row height before laying out the cell.
+    if (![OAUtilities isiOSAppOnMac])
+        [self layoutIfNeeded];
 }
 
 - (void)valueVisibility:(BOOL)show

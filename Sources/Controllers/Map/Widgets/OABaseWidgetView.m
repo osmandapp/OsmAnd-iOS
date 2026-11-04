@@ -11,11 +11,14 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+NSString * const kWidgetPanelKey = @"widgetPanel";
+
 @implementation OABaseWidgetView
 {
     BOOL _nightMode;
     UIView *_separatorBottomView;
     UIView *_separatorRightView;
+    UIColor *_separatorColor;
     NSLayoutConstraint *_heightConstraint;
 }
 
@@ -43,6 +46,7 @@
 {
     _separatorBottomView = [[UIView alloc] init];
     _separatorBottomView.hidden = YES;
+    _separatorBottomView.backgroundColor = _separatorColor;
     [self addSubview:_separatorBottomView];
     
     _separatorBottomView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -55,6 +59,7 @@
     
     _separatorRightView = [UIView new];
     _separatorRightView.hidden = YES;
+    _separatorRightView.backgroundColor = _separatorColor;
     [self addSubview:_separatorRightView];
     
     _separatorRightView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -68,6 +73,7 @@
 
 - (void)updatesSeparatorsColor:(UIColor *)color
 {
+    _separatorColor = color;
     _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
 }
 
@@ -140,16 +146,25 @@
 
 - (void) copySettings:(OAApplicationMode *)appMode customId:(NSString *)customId
 {
-    OAWidgetState *widgetState = [self getWidgetState];
+    OAWidgetState *widgetState = [self storedWidgetState];
     if (widgetState)
         [widgetState copyPrefs:appMode customId:customId];
 }
 
-- (OAWidgetState *)getWidgetState {
+- (void)copySettingsFromMode:(OAApplicationMode *)fromAppMode
+                     appMode:(OAApplicationMode *)appMode
+                    customId:(NSString *)customId
+{
+    OAWidgetState *widgetState = [self storedWidgetState];
+    if (widgetState)
+        [widgetState copyPrefsFromMode:fromAppMode appMode:appMode customId:customId];
+}
+
+- (OAWidgetState *)storedWidgetState {
     return nil;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     return nil;
 }
@@ -166,7 +181,7 @@
     return nil;
 }
 
-- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
+- (OATableDataModel *_Nullable)settingsDataForSimpleWidget:(OAApplicationMode *_Nonnull)appMode widgetsPanel:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams
 {
     return nil;
 }
@@ -220,7 +235,7 @@
     //[container addSubview:self];
 }
 
-- (void) detachView:(OAWidgetsPanel *)widgetsPanel
+- (void)detachView:(WidgetsPanel *)widgetsPanel
 {
     // Do not remove from superview since WidgetPageViewController populates stackView with widgets on update
     //if (self.superview)

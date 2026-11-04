@@ -34,12 +34,22 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
     EOAPlanRoutePointEditModeAddAfter
 };
 
+typedef NS_ENUM(NSInteger, EOAPlanRouteNavigationResult) {
+    EOAPlanRouteNavigationResultSuccess = 0,
+    EOAPlanRouteNavigationResultInvalidContext,
+    EOAPlanRouteNavigationResultNoPoints,
+    EOAPlanRouteNavigationResultMissingApproximationResult,
+    EOAPlanRouteNavigationResultExportFailed,
+    EOAPlanRouteNavigationResultTransitionFailed
+};
+
 @interface OAPlanRouteEditingBridge : NSObject
 
 @property (nonatomic, copy, nullable) void (^onChange)(void);
 @property (nonatomic, copy, nullable) void (^onRouteInfoChanged)(void);
 @property (nonatomic, copy, nullable) void (^onNewSegmentStarted)(void);
 @property (nonatomic, copy, nullable) void (^onPointEditModeRequested)(EOAPlanRoutePointEditMode mode);
+@property (nonatomic, copy, nullable) void (^onApproximationApplied)(void);
 @property (nonatomic, copy, nullable) void (^onApproximationPopupDismissed)(void);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeBeforeHandler) void (^onChangeRouteTypeBefore)(NSInteger pointIndex);
 @property (nonatomic, copy, nullable, getter=changeRouteTypeAfterHandler) void (^onChangeRouteTypeAfter)(NSInteger pointIndex);
@@ -53,8 +63,8 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 @property (nonatomic, readonly, nullable) OAApplicationMode *defaultAppMode;
 @property (nonatomic, readonly) BOOL isTrackReadyToCalculate;
 @property (nonatomic, readonly) BOOL isApproximationNeeded;
+@property (nonatomic, readonly) BOOL shouldRequestApproximationBeforeNavigation;
 @property (nonatomic, readonly) BOOL shouldShowApproximationWarning;
-@property (nonatomic, readonly, nullable) UIViewController *approximationWarningViewController;
 @property (nonatomic, readonly) BOOL hasChanges;
 @property (nonatomic, readonly) BOOL canUndo;
 @property (nonatomic, readonly) BOOL canRedo;
@@ -78,8 +88,13 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)dismiss;
 - (void)prepareNewRoute;
 - (void)prepareNewRouteWithApplicationMode:(OAApplicationMode *)applicationMode;
+- (nullable UIViewController *)beginApproximationSession;
 - (void)addPointAtCoordinate:(CLLocationCoordinate2D)coordinate;
+- (void)openTrackWithGpxFile:(OASGpxFile *)gpxFile
+             applicationMode:(nullable OAApplicationMode *)applicationMode
+             selectedSegment:(NSInteger)selectedSegment;
 - (void)openTrackWithFilePath:(NSString *)filePath;
+- (void)fitTrackOnMapWithBottomInset:(CGFloat)bottomInset leftInset:(CGFloat)leftInset;
 - (void)addCenterPoint;
 - (void)setCrosshairScreenPoint:(CGPoint)point;
 + (void)moveMapToCoordinate:(CLLocationCoordinate2D)coordinate;
@@ -105,6 +120,7 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)reorderSegmentFrom:(NSInteger)from to:(NSInteger)to;
 - (void)deleteSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes;
 - (void)startNewSegment;
+- (void)startNewSegmentWithMode:(OAApplicationMode *)mode;
 - (void)applyMode:(OAApplicationMode *)mode pointIndex:(NSInteger)pointIndex wholeRoute:(BOOL)wholeRoute;
 - (void)applyMode:(OAApplicationMode *)mode pointIndexes:(NSArray<NSNumber *> *)pointIndexes;
 - (void)refreshRouteForMode:(OAApplicationMode *)mode;
@@ -122,11 +138,13 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder
      showOnMap:(BOOL)showOnMap
+    simplified:(BOOL)simplified
     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
 
 - (void)saveAsCopy:(NSString *)fileName
             folder:(nullable NSString *)folder
          showOnMap:(BOOL)showOnMap
+        simplified:(BOOL)simplified
         onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete;
 
 - (void)saveSegmentWithPointIndexes:(NSArray<NSNumber *> *)indexes
@@ -137,7 +155,13 @@ typedef NS_ENUM(NSInteger, EOAPlanRoutePointEditMode) {
 - (void)appendToTrack:(NSString *)filePath
            onComplete:(void (^)(BOOL success))onComplete;
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName;
+- (EOAPlanRouteNavigationResult)enterNavigationWithTrackName:(NSString *)trackName
+                                             followTrackMode:(BOOL)followTrackMode
+                                              sourceFilePath:(nullable NSString *)sourceFilePath;
+
+- (EOAPlanRouteNavigationResult)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
+                                                            sourceFilePath:(nullable NSString *)sourceFilePath
+                                                          beforeTransition:(void (NS_NOESCAPE ^)(void))beforeTransition;
 
 @end
 

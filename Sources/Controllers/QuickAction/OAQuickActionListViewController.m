@@ -87,7 +87,7 @@
     else
     {
         UIBarButtonItem *addButton = [self createRightNavbarButton:nil
-                                                          iconName:@"ic_navbar_add"
+                                                          iconName:ACImageNameIcNavbarAdd
                                                             action:@selector(addActionPressed)
                                                               menu:nil];
         addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
@@ -106,7 +106,7 @@
         __weak __typeof(self) weakSelf = self;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
         UIAction *appearanceAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_appearance")
-                                                         image:[[UIImage imageNamed:@"ic_custom_appearance_outlined"] resizedMenuImage]
+                                                         image:[[UIImage imageNamed:ACImageNameIcCustomAppearanceOutlined] resizedMenuImage]
                                                     identifier:nil
                                                        handler:^(UIAction * _Nonnull action) {
             [weakSelf showMapButtonViewController];
@@ -191,7 +191,7 @@
         UIMenu *menu = [UIMenu menuWithChildren:menuElements];
 
         UIBarButtonItem *optionsButton = [self createRightNavbarButton:nil
-                                                              iconName:@"ic_navbar_overflow_menu_stroke"
+                                                              iconName:ACImageNameIcNavbarOverflowMenuStroke
                                                                 action:@selector(editPressed)
                                                                   menu:menu];
         return @[optionsButton, editButton, addButton];
@@ -319,7 +319,7 @@
         if (action.hasSecondaryIcon)
         {
             CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
-            UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
+            UIImage *imgBackground = [UIImage imageNamed:ACImageNameIcCustomCompoundActionBackground];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
             [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
             [cell.iconView addSubview:background];
@@ -330,7 +330,7 @@
         }
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
-        [cell.overflowButton setImage:[UIImage templateImageNamed:@"menu_cell_pointer"] forState:UIControlStateNormal];
+        [cell.overflowButton setImage:[UIImage templateImageNamed:ACImageNameMenuCellPointer] forState:UIControlStateNormal];
         [cell.overflowButton setTintColor:[UIColor colorNamed:ACColorNameIconColorSecondary]];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);

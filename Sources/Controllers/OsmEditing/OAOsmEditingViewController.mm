@@ -71,6 +71,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     
     BOOL _isAddingNewPOI;
     BOOL _isOnScreenSwitching;
+    BOOL _pageTransitionInProgress;
 }
 
 -(id) initWithLat:(double)latitude lon:(double)longitude
@@ -181,7 +182,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
         [backButton setTintColor:[UIColor colorNamed:ACColorNameNavBarTextColorPrimary]];
     }
-    [backButton setImage:[UIImage templateImageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
+    [backButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron] forState:UIControlStateNormal];
     [backButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
     [backButton addTarget:self action:@selector(onBackPressed) forControlEvents:UIControlEventTouchUpInside];
     _backButton = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -281,22 +282,31 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 - (IBAction)segmentChanged:(UISegmentedControl *)sender
 {
+    if (_pageTransitionInProgress)
+    {
+        _segmentControl.selectedSegmentIndex = _pageController.viewControllers.firstObject == _basicEditingController ? BASIC : ADVANCED;
+        return;
+    }
+
+    UIViewController *targetController = sender.selectedSegmentIndex == BASIC ? _basicEditingController : _advancedEditingController;
+    if (_pageController.viewControllers.firstObject == targetController)
+        return;
+
     _isOnScreenSwitching = YES;
     [self.view endEditing:YES];
-    
-    switch (_segmentControl.selectedSegmentIndex)
-    {
-        case 0:
-        {
-            [_pageController setViewControllers:@[_basicEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-            break;
-        }
-        case 1:
-        {
-            [_pageController setViewControllers:@[_advancedEditingController] direction:UIPageViewControllerNavigationDirectionForward animated:YES completion:nil];
-            break;
-        }
-    }
+
+    _pageTransitionInProgress = YES;
+    _segmentControl.enabled = NO;
+    _pageController.view.userInteractionEnabled = NO;
+    UIPageViewControllerNavigationDirection direction = sender.selectedSegmentIndex == BASIC
+        ? UIPageViewControllerNavigationDirectionReverse
+        : UIPageViewControllerNavigationDirectionForward;
+    [_pageController setViewControllers:@[targetController] direction:direction animated:YES completion:^(BOOL finished) {
+        self->_pageTransitionInProgress = NO;
+        self->_segmentControl.enabled = YES;
+        self->_pageController.view.userInteractionEnabled = YES;
+        self->_segmentControl.selectedSegmentIndex = self->_pageController.viewControllers.firstObject == self->_basicEditingController ? BASIC : ADVANCED;
+    }];
 }
 
 - (IBAction)deletePressed:(id)sender
@@ -359,7 +369,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         {
             if (offlineEdit)
                 [self.navigationController popViewControllerAnimated:YES];
-            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
+            [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate interactive:YES];
         }
     }
     else if ([self testTooManyCapitalLetters:[_editPoiData getTag:[OAOSMSettings getOSMKey:NAME]]])
@@ -370,7 +380,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     {
         if (offlineEdit)
             [self.navigationController popViewControllerAnimated:YES];
-        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
+        [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate interactive:YES];
     }
 }
 
@@ -418,7 +428,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 if ([self.class isOfflineEditing:_editingUtil])
                     [self.navigationController popViewControllerAnimated:YES];
-                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate];
+                [self.class savePoi:@"" poiData:_editPoiData editingUtil:_editingUtil closeChangeSet:NO editingDelegate:self.delegate interactive:YES];
             }]];
         }
         
@@ -426,7 +436,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     });
 }
 
-+ (void)savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate
++ (void)savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset editingDelegate:(id<OAOsmEditingBottomSheetDelegate>)editingDelegate interactive:(BOOL)interactive
 {
     OAEntity *original = poiData.getEntity;
     
@@ -477,15 +487,17 @@ typedef NS_ENUM(NSInteger, EditingTab)
         comment = comment ? comment : @"";
     }
     EOAAction action = original.getId <= 0 ? CREATE : MODIFY;
-    if (offlineEdit)
+    if (offlineEdit || !interactive)
     {
         __weak __typeof(self) weakSelf = self;
         [OAOsmEditingViewController commitEntity:action entity:entity entityInfo:[editingUtil getEntityInfo:poiData.getEntity.getId] comment:comment shouldClose:closeChangeset editingUtil:editingUtil changedTags:action == MODIFY ? poiData.getChangedTags : nil callback:^(OAEntity *result) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (editingDelegate)
                     [editingDelegate refreshData];
-                else if (result)
+                else if (interactive && result)
                     [weakSelf showContextMenu];
+                else if (!interactive && !result && [editingUtil isKindOfClass:OAOpenStreetMapRemoteUtil.class])
+                    [OAUtilities showToast:OALocalizedString(@"osm_upload_failed_title") details:OALocalizedString(@"osm_upload_failed_descr") duration:4 inView:OARootViewController.instance.view];
             });
         }];
     }
@@ -502,9 +514,9 @@ typedef NS_ENUM(NSInteger, EditingTab)
     }
 }
 
-+ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset
++ (void) savePoi:(NSString *) comment poiData:(OAEditPOIData *)poiData editingUtil:(id<OAOpenStreetMapUtilsProtocol>)editingUtil closeChangeSet:(BOOL)closeChangeset interactive:(BOOL)interactive
 {
-    [self savePoi:comment poiData:poiData editingUtil:editingUtil closeChangeSet:closeChangeset editingDelegate:nil];
+    [self savePoi:comment poiData:poiData editingUtil:editingUtil closeChangeSet:closeChangeset editingDelegate:nil interactive:interactive];
 }
 
 + (BOOL)isOfflineEditing:(id<OAOpenStreetMapUtilsProtocol>)editingUtil
@@ -544,8 +556,16 @@ typedef NS_ENUM(NSInteger, EditingTab)
 
 #pragma mark - UIPageViewControllerDelegate
 
+- (void)pageViewController:(UIPageViewController *)pageViewController willTransitionToViewControllers:(NSArray<UIViewController *> *)pendingViewControllers
+{
+    _pageTransitionInProgress = YES;
+    _segmentControl.enabled = NO;
+}
+
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
+    _pageTransitionInProgress = NO;
+    _segmentControl.enabled = YES;
     if (pageViewController.viewControllers[0] == _basicEditingController)
         _segmentControl.selectedSegmentIndex = BASIC;
     else

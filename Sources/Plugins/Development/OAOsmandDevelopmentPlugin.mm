@@ -83,21 +83,23 @@
 
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
 
-    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.devFps widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:fpsWidget]];
     
-    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.devCameraTilt widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:cameraTiltWidget]];
     
-    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.devCameraDistance widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:cameraDistanceWidget]];
     
-    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.devZoomLevel widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:zoomLevelWidget]];
     
-    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance customId:nil appMode:appMode widgetParams:widgetParams];
+    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.devTargetDistance widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:targetDistanceWidget]];
 }
 

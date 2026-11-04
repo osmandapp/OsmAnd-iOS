@@ -10,10 +10,15 @@
 #import "OACarPlayFavoriteResultListController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPointDescription.h"
+#import "OAOsmAndFormatter.h"
+#import "OALocationServices.h"
+#import "OAMapUtils.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACarPlayFavoritesListController
 {
@@ -33,7 +38,8 @@
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
         NSMutableArray<OAFavoriteItem *> *lastModifiedList = [NSMutableArray new];
         [favoriteGroups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableArray<OAFavoriteItem *> *points = group.points;
+            // Copy: sorting or trimming group.points itself would drop favorites on the next save
+            NSMutableArray<OAFavoriteItem *> *points = [group.points mutableCopy];
             [self sortFavoriteItems:points];
             if (points.count > CPListTemplate.maximumItemCount)
                 [points removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, points.count - CPListTemplate.maximumItemCount)];
@@ -42,7 +48,7 @@
                                                          detailText:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
                                                                                                OALocalizedString(@"points_count"),
                                                                                                @(points.count).stringValue]
-                                                              image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_folder"]
+                                                              image:[OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomFolder]
                                                                                               color:group.color]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
@@ -51,21 +57,20 @@
                 [self onItemSelected:item completionHandler:completionBlock];
             };
             [listItems addObject:listItem];
-            [lastModifiedList addObjectsFromArray:group.points];
+            [lastModifiedList addObjectsFromArray:points];
         }];
-        [listItems sortUsingComparator:^NSComparisonResult(CPListItem *i1, CPListItem *i2) {
-            return [i1.text compare:i2.text];
-        }];
+        CPListItem *homeItem = [self createHomeItem];
         NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
-        if (listItems.count > maximumItemCount - 1)
-            [listItems removeObjectsInRange:NSMakeRange(maximumItemCount - 1, listItems.count - maximumItemCount - 1)];
+        NSInteger maximumFolderCount = MAX(0, maximumItemCount - 1 - (homeItem ? 1 : 0));
+        if (listItems.count > maximumFolderCount)
+            [listItems removeObjectsInRange:NSMakeRange(maximumFolderCount, listItems.count - maximumFolderCount)];
 
         [self sortFavoriteItems:lastModifiedList];
         if (lastModifiedList.count > maximumItemCount)
             [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
                                                              detailText:@(lastModifiedList.count).stringValue
-                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_history"]
+                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcCustomHistory]
                                                                                                   color:UIColorFromRGB(color_primary_purple)]
                                                          accessoryImage:nil
                                                           accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
@@ -74,6 +79,8 @@
             [self onItemSelected:item completionHandler:completionBlock];
         };
         [listItems insertObject:lastModifiedItem atIndex:0];
+        if (homeItem)
+            [listItems insertObject:homeItem atIndex:0];
 
         return @[[[CPListSection alloc] initWithItems:listItems header:nil sectionIndexTitle:nil]];
     }
@@ -83,15 +90,38 @@
     }
 }
 
+- (nullable CPListItem *)createHomeItem
+{
+    OAFavoriteItem *home = [OAFavoritesHelper getSpecialPoint:OASpecialPointType.HOME];
+    if (!home)
+        return nil;
+
+    NSString *distance = nil;
+    CLLocation *location = OsmAndApp.instance.locationServices.lastKnownLocation;
+    if (location)
+        distance = [OAOsmAndFormatter getFormattedDistance:[OAMapUtils getDistance:location.coordinate second:CLLocationCoordinate2DMake([home getLatitude], [home getLongitude])]];
+    CPListItem *homeItem = [[CPListItem alloc] initWithText:[home getDisplayName]
+                                                 detailText:distance
+                                                      image:[home getCompositeIcon]
+                                             accessoryImage:nil
+                                              accessoryType:CPListItemAccessoryTypeNone];
+    homeItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+        OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[home getDisplayName]];
+        [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:[home getLatitude] longitude:[home getLongitude]] historyName:historyName];
+        [self safePopToRootTemplateAnimated:YES];
+        if (completionBlock)
+            completionBlock();
+    };
+    return homeItem;
+}
+
 - (void)sortFavoriteItems:(NSMutableArray<OAFavoriteItem *> *)favoriteItems
 {
     [favoriteItems sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
         NSDate *date1 = [i1 getTimestamp];
         NSDate *date2 = [i2 getTimestamp];
-        if (!date1 || !date2)
-            return NSOrderedDescending;
-        NSTimeInterval lastTime1 = date1.timeIntervalSince1970;
-        NSTimeInterval lastTime2 = date2.timeIntervalSince1970;
+        NSTimeInterval lastTime1 = date1 ? date1.timeIntervalSince1970 : 0;
+        NSTimeInterval lastTime2 = date2 ? date2.timeIntervalSince1970 : 0;
         return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
     }];
 }

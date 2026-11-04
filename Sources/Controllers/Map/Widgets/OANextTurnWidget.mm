@@ -10,7 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
 #import "OATurnDrawable.h"
-#import "OATurnDrawable+cpp.h"
+#import "OATurnDrawable+TurnType.h"
 #import "OARoutingHelper.h"
 #import "OARouteDirectionInfo.h"
 #import "OARouteCalculationResult.h"
@@ -27,6 +27,7 @@
 #import "OAMapPresentationEnvironment.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAStreetNameWidgetParams.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/MapStyleEvaluator.h>
@@ -114,7 +115,13 @@
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
         
-        OAWidgetsPanel *panel = [type getPanel:customId ?: type.id appMode:appMode];
+        NSNumber *screenLayoutMode = [[OAAppSettings sharedManager].useSeparateLayouts get:appMode]
+            ? @([ScreenLayoutModeWrapper defaultForAppMode:appMode])
+            : nil;
+        NSString *widgetId = customId.length > 0 ? customId : type.id;
+        WidgetsPanel *panel = [type panel:widgetId
+                                  appMode:appMode
+                         screenLayoutMode:screenLayoutMode];
         _isPanelVertical = [panel isPanelVertical];
         
         _turnDrawable = [[OATurnDrawable alloc] initWithMini:!_isPanelVertical && horisontalMini themeColor:EOATurnDrawableThemeColorMap];
@@ -314,10 +321,10 @@
 - (void)setExit:(OACurrentStreetName *)streetName
 {
     NSString *exitNumber = nil;
-    const auto& turnType = [self getTurnType];
+    OASTurnType *turnType = [self getTurnType];
     
-    if (turnType && turnType->getExitOut() > 0)
-        exitNumber = [NSString stringWithFormat:@"%d", turnType->getExitOut()];
+    if (turnType && turnType.exitOut > 0)
+        exitNumber = [NSString stringWithFormat:@"%d", turnType.exitOut];
     else if (streetName.exitRef.length > 0)
         exitNumber = streetName.exitRef;
     
@@ -444,14 +451,14 @@
     return oldDist == 0 || ABS(oldDist - dist) > 10;
 }
 
-- (std::shared_ptr<TurnType>) getTurnType
+- (OASTurnType *) getTurnType
 {
     return _turnDrawable.turnType;
 }
 
-- (void) setTurnType:(std::shared_ptr<TurnType>)turnType
+- (void) setTurnType:(OASTurnType *)turnType
 {
-    BOOL vis = [self updateVisibility:turnType != nullptr];
+    BOOL vis = [self updateVisibility:turnType != nil];
     if ([_turnDrawable setTurnType:turnType]
         || (_isPanelVertical && _turnDrawable.frame.size.width != _arrowSizeConstraint.constant)
         || vis)
@@ -497,10 +504,14 @@
 
 - (void) adjustViewSize
 {
+    if (_isPanelVertical || self.isSimpleLayout || self.isVerticalStackImageTitleSubtitleLayout)
+        return;
+
     [super adjustViewSize];
     self.topTextAnchor.constant = _horisontalMini ? 5 : self.topView.frame.size.height + 5;
     CGRect rect = self.frame;
-    rect.size.height += self.textView.frame.origin.y - 5;
+    // The label's frame may still contain its position from the previous layout pass.
+    rect.size.height += self.topTextAnchor.constant - 5;
     self.frame = rect;
 }
 
@@ -509,7 +520,7 @@
     return !_isPanelVertical;
 }
 
-- (BOOL)isEnabledShowIconSwitchWith:(OAWidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
+- (BOOL)isEnabledShowIconSwitchWith:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *,id> *)widgetConfigurationParams
 {
     return false;
 }
@@ -546,7 +557,7 @@
     
     if (ds)
     {
-        auto turnType = [self getTurnType];
+        OASTurnType *turnType = [self getTurnType];
         OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
         if (turnType && routingHelper)
             [self setContentDescription:[NSString stringWithFormat:@"%@ %@", ds, [OARouteCalculationResult toString:turnType shortName:NO]]];
@@ -565,12 +576,10 @@
 {
     [super updateColors:textState];
     UIColor *valueTextColor = self.valueTextColor;
-    UIColor *textColorSecondary = [UIColor colorNamed:ACColorNameTextColorSecondary];
-    UIColor *borderColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
     _distanceLabel.textColor = valueTextColor;
     _exitLabel.textColor = valueTextColor;
-    _exitLabel.borderColor = self.isNightMode ? borderColor.dark : borderColor.light;
-    _streetLabel.textColor = self.isNightMode ? textColorSecondary.dark : textColorSecondary.light;
+    _exitLabel.borderColor = textState.dividerColor;
+    _streetLabel.textColor = textState.unitColor;
     [self updateTextWitState:textState];
     [self applyOutlineIfNeededToLabel:_distanceLabel];
     [self applyOutlineIfNeededToLabel:_exitLabel];
@@ -588,7 +597,7 @@
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL followingMode = [routingHelper isFollowingMode]/* || app.getLocationProvider().getLocationSimulation().isRouteAnimating()*/;
-    std::shared_ptr<TurnType> turnType = nullptr;
+    OASTurnType *turnType = nil;
     BOOL deviatedFromRoute = false;
     int turnImminent = 0;
     int nextTurnDistance = 0;
@@ -608,7 +617,7 @@
             if (deviatedFromRoute)
             {
                 turnImminent = 0;
-                turnType = TurnType::ptrValueOf(TurnType::OFFR, [OADrivingRegion isLeftHandDriving:[settings.drivingRegion get]]);
+                turnType = [OASTurnType.companion valueOfValue:OASTurnType.companion.OFFR leftSide:[OADrivingRegion isLeftHandDriving:[settings.drivingRegion get]]];
                 [self setDeviatePath:(int) [routingHelper getRouteDeviation]];
             }
             else

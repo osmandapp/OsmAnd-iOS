@@ -83,7 +83,7 @@
         @"title" : OALocalizedString(@"favorites_item"),
         @"key" : @"favorites",
         @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
-        @"img" : @"ic_custom_favorites"
+        @"img" : ACImageNameIcCustomFavorites
     }];
     if ([_pointsHelper getHomePoint] && _type != EOADestinationTypeHome)
     {
@@ -92,7 +92,7 @@
             @"title" : OALocalizedString(@"favorite_home_category"),
             @"descr" : home.pointDescription.name,
             @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
-            @"img" : @"ic_custom_home",
+            @"img" : ACImageNameIcCustomHome,
             @"point" : home
         }];
     }
@@ -104,7 +104,7 @@
             @"title" : OALocalizedString(@"work_button"),
             @"descr" : work.pointDescription.name,
             @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
-            @"img" : @"ic_custom_work",
+            @"img" : ACImageNameIcCustomWork,
             @"point" : work
         }];
     }
@@ -114,10 +114,10 @@
     for (OAFavoriteItem *item in favorites)
     {
         [arr addObject:@{
-            @"title" : [item getName],
+            @"title" : [item getDisplayName],
             @"descr" : [OAFavoriteGroup getDisplayName:[item getCategory]],
             @"color" : [item getColor],
-            @"img" : @"ic_custom_favorites",
+            @"img" : ACImageNameIcCustomFavorites,
             @"point" : item
         }];
     }
@@ -132,7 +132,7 @@
         @"title": OALocalizedString(@"map_markers"),
         @"key": @"markers",
         @"color": [UIColor colorNamed:ACColorNameIconColorActive],
-        @"img": @"ic_custom_marker"
+        @"img": ACImageNameIcCustomMarker
     }];
 
     NSArray *markers = [_destinationsHelper sortedDestinationsWithoutParking];
@@ -155,7 +155,7 @@
 - (NSArray<OAFavoriteItem *> *) getSortedFavorites
 {
     NSArray *sortedArray = [[OAFavoritesHelper getFavoriteItems] sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return [[obj1 getName].lowercaseString compare:[obj2 getName].lowercaseString];
+        return [[obj1 getDisplayName].lowercaseString compare:[obj2 getDisplayName].lowercaseString];
     }];
     return sortedArray;
 }
@@ -194,7 +194,7 @@
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_search"),
-        @"img" : @"ic_navbar_search",
+        @"img" : ACImageNameIcNavbarSearch,
         @"key" : @"regular_search",
         @"round_bottom" : @(NO),
         @"round_top" : @(YES)
@@ -203,7 +203,7 @@
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_address"),
-        @"img" : @"ic_custom_home",
+        @"img" : ACImageNameIcCustomHome,
         @"key" : @"address_search",
         @"round_bottom" : @(YES),
         @"round_top" : @(NO)
@@ -216,7 +216,7 @@
         [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_my_location"),
-            @"img" : @"map_default_location",
+            @"img" : ACImageNameMapDefaultLocation,
             @"key" : @"my_location",
             @"round_bottom" : @(NO),
             @"round_top" : @(YES),
@@ -226,7 +226,7 @@
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
-        @"img" : @"ic_custom_show_on_map",
+        @"img" : ACImageNameIcCustomShowOnMap,
         @"key" : @"select_on_map",
         @"round_bottom" : @(YES),
         @"round_top" : @(_type != EOADestinationTypeStart)
@@ -252,7 +252,7 @@
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
         @"title" : OALocalizedString(@"swap_points"),
-        @"img" : @"ic_custom_swap",
+        @"img" : ACImageNameIcCustomSwap,
         @"key" : @"swap_points",
         @"round_bottom" : @(YES),
         @"round_top" : @(YES)
@@ -530,7 +530,7 @@
 {
     double latitude = item.favorite->getLatLon().latitude;
     double longitude = item.favorite->getLatLon().longitude;
-    NSString *title = item.favorite->getTitle().toNSString();
+    NSString *title = [item getDisplayName];
     
     if (_type == EOADestinationTypeStart)
         [_pointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:NO name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];

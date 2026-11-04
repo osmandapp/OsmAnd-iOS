@@ -47,13 +47,15 @@
 
 - (void)updateSeparatorInset
 {
-    self.separatorInset = UIEdgeInsetsMake(0., [self getLeftInsetToView:self.titleLabel], 0., 0.);
+    CGFloat leftInset = [self getLeftInsetToView:self.titleLabel];
+    CGFloat rightInset = self.directionalLayoutMargins.trailing;
+    self.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., rightInset);
 }
 
 - (CGFloat)getLeftInsetToView:(UIView *)view
 {
     CGRect viewFrame = [view convertRect:view.bounds toView:self];
-    return [self isDirectionRTL] ? ([self getTableView].frame.size.width - (viewFrame.origin.x + viewFrame.size.width)) : viewFrame.origin.x;
+    return [self isDirectionRTL] ? (self.bounds.size.width - (viewFrame.origin.x + viewFrame.size.width)) : viewFrame.origin.x;
 }
 
 - (void)leftEditButtonVisibility:(BOOL)show

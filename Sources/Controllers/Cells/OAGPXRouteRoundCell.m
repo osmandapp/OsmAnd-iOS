@@ -21,10 +21,10 @@
 {
     [super awakeFromNib];
     
-    _rightIconImageVIew.image = [UIImage templateImageNamed:@"ic_custom_trip"];
-    _distanceImageView.image = [UIImage templateImageNamed:@"ic_custom_length"];
-    _timeImageView.image = [UIImage templateImageNamed:@"ic_small_time_start"];
-    _wptImageView.image = [UIImage templateImageNamed:@"ic_small_waypoints"];
+    _rightIconImageVIew.image = [UIImage imageNamed:ACImageNameIcCustomTrip];
+    _distanceImageView.image = [UIImage imageNamed:ACImageNameIcCustomLength];
+    _timeImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallTimeStart];
+    _wptImageView.image = [UIImage templateImageNamed:ACImageNameIcSmallWaypoints];
     
     _rightIconImageVIew.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     _distanceImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];

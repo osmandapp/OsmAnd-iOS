@@ -78,7 +78,7 @@
     BOOL _calculatingRoute;
     
     NSArray<NSNumber *> *_sections;
-    NSDictionary *_pointsMap;
+    NSDictionary<NSNumber *, NSArray *> *_pointsMap;
 }
 
 @synthesize waypointsScreen, tableData, vwController, tblView, title;
@@ -128,9 +128,9 @@
 {
     UIButton *okButton = vwController.okButton;
     if (_flat)
-        [okButton setImage:[UIImage imageNamed:@"ic_tree_list_dark"] forState:UIControlStateNormal];
+        [okButton setImage:[UIImage imageNamed:ACImageNameIcTreeListDark] forState:UIControlStateNormal];
     else
-        [okButton setImage:[UIImage imageNamed:@"ic_flat_list_dark"] forState:UIControlStateNormal];
+        [okButton setImage:[UIImage imageNamed:ACImageNameIcFlatListDark] forState:UIControlStateNormal];
 }
 
 - (void) initData
@@ -302,7 +302,7 @@
 
 - (void) setupViewInternal
 {
-    NSMutableDictionary *points = [[self getPoints] mutableCopy];
+    NSMutableDictionary<NSNumber *, NSArray *> *points = [[self getPoints] mutableCopy];
 
     NSMutableArray<NSNumber *> *sections = [NSMutableArray array];
     if (_flat)
@@ -316,7 +316,7 @@
             if (_calculatingRoute && i != LPW_TARGETS && i != LPW_WAYPOINTS && _pointsMap[@(i)])
                 points[@(i)] = _pointsMap[@(i)];
             
-            if ([points[@(i)] count] > 0)
+            if (points[@(i)].count > 0)
                 [sections addObject:@(i)];
         }
     }
@@ -741,9 +741,9 @@
             deviationStr = [NSString stringWithFormat:@"+%@", [OAOsmAndFormatter getFormattedDistance:p.deviationDistance]];
             UIColor *color = [UIColor colorNamed:ACColorNameTextColorSecondary];
             if (p.deviationDirectionRight)
-                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnRight] color:color];
             else
-                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_left"] color:color];
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnLeft] color:color];
         }
         
         NSMutableAttributedString *distAttrStr = nil;
@@ -1225,7 +1225,7 @@
         
         NSIndexPath * indexPath = [tblView indexPathForCell:cell];
         
-        MGSwipeButton *remove = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+        MGSwipeButton *remove = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:ACImageNameIcTripRemovepoint] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
                                  {
                                      [self deleteItem:indexPath];
                                      return YES;

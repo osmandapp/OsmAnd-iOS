@@ -727,6 +727,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
     [pt setAmenity:[self getAmenity]];
 
+    NSString *osmUrlKey = OASGpxUtilities.shared.OSM_URL_EXTENSION;
+    NSString *osmUrl = self.favorite->getExtensions().value(QString::fromNSString(osmUrlKey)).toNSString();
+    if (osmUrl.length > 0)
+        exts[osmUrlKey] = osmUrl;
+
     pt.name = self.getName;
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)

@@ -69,7 +69,8 @@
     _tapRecognizer.numberOfTapsRequired = 1;
     [self setupTableFooterView];
     [self applyLocalization];
-    _inputText = [OAAppSettings.sharedManager.backupUserEmail get];
+    if ([self needEmailValidation])
+        _inputText = [OAAppSettings.sharedManager.backupUserEmail get];
     [self generateData];
     
     self.tableView.dataSource = self;
@@ -278,7 +279,13 @@
             cell.inputField.text = text;
             cell.inputField.textContentType = UITextContentTypeEmailAddress;
             if ([item[@"numbersKeyboard"] boolValue])
-                cell.inputField.keyboardType = UIKeyboardTypePhonePad;
+            {
+                // Code field also accepts the web password, so letters must be available
+                cell.inputField.keyboardType = UIKeyboardTypeASCIICapable;
+                cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                cell.inputField.smartQuotesType = UITextSmartQuotesTypeNo;
+                cell.inputField.smartDashesType = UITextSmartDashesTypeNo;
+            }
             else
                 cell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
             cell.inputField.returnKeyType = UIReturnKeyGo;

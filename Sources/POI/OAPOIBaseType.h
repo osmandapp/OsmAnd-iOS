@@ -33,6 +33,7 @@
 
 - (BOOL)isAdditional;
 - (void)addPoiAdditional:(OAPOIType *)poiType;
+- (nullable OAPOIType *)getPoiAdditionalByKeyName:(nullable NSString *)name;
 - (void)addExcludedPoiAdditionalCategories:(NSArray<NSString *> *)excluded;
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes;

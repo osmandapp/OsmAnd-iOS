@@ -186,7 +186,7 @@
 
 - (void)setupActionItems
 {
-    OAActionItem *actionResetToDefault = [[OAActionItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_reset"] title:OALocalizedString(@"reset_to_default") onClickFunction:^(id sender) {
+    OAActionItem *actionResetToDefault = [[OAActionItem alloc] initWithIcon:[UIImage imageNamed:ACImageNameIcCustomReset] title:OALocalizedString(@"reset_to_default") onClickFunction:^(id sender) {
         _isChanged = YES;
         _wasReset = YES;
         NSInteger countHiddenCells = [self.tableView numberOfRowsInSection:kHiddenFiltersSection];
@@ -288,7 +288,7 @@
                 icon = [OAPOIHelper getCustomFilterIcon:filter];
             [cell.leftIconView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 
-            NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
+            NSString *imageName = isAllFilters ? ACImageNameIcCustomDelete : ACImageNameIcCustomPlus;
             [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
             [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

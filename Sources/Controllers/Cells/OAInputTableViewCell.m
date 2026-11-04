@@ -8,6 +8,7 @@
 
 #import "OAInputTableViewCell.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAInputTableViewCell ()
 
@@ -21,7 +22,7 @@
 {
     [super awakeFromNib];
 
-    [self.clearButton setImage:[UIImage templateImageNamed:@"ic_banner_close"] forState:UIControlStateNormal];
+    [self.clearButton setImage:[UIImage templateImageNamed:ACImageNameIcBannerClose] forState:UIControlStateNormal];
     self.clearButton.tintColor = UIColorFromRGB(color_tint_gray);
 }
 

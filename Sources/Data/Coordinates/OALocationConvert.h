@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define FORMAT_DEGREES_SHORT 6
+#define FORMAT_DEGREES_SHORT 9
 #define FORMAT_DEGREES 0
 #define FORMAT_MINUTES 1
 #define FORMAT_SECONDS 2

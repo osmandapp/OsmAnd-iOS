@@ -15,7 +15,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAWaypointHelper.h"
 #import "OATurnDrawable.h"
-#import "OATurnDrawable+cpp.h"
+#import "OATurnDrawable+TurnType.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARouteInfoView.h"
@@ -169,7 +169,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     _turnDrawable.frame = _turnView.bounds;
     _imageView = [[UIImageView alloc] init];
     _imageView.contentMode = UIViewContentModeCenter;
-    _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_action_start_navigation"] color:UIColorFromRGB(color_myloc_distance)];
+    _imageView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcActionStartNavigation] color:UIColorFromRGB(color_myloc_distance)];
     _imageView.frame = _turnView.bounds;
     
     _exitRefTextContainer.layer.cornerRadius = 6.;
@@ -263,7 +263,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     settingRow.cellType = [OASwitchTableViewCell reuseIdentifier];
     settingRow.key = @"value_pref";
     settingRow.title = OALocalizedString(@"next_turn_information");
-    settingRow.iconName = @"ic_custom_next_turn";
+    settingRow.iconName = ACImageNameIcCustomNextTurn;
     [settingRow setObj:_widgetState.showNextTurnPref forKey:@"pref"];
     [settingRow setObj:@"ic_custom_next_turn" forKey:@"hide_icon"];
 
@@ -281,7 +281,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     return YES;
 }
 
-- (OAMapWidgetInfo *)getWidgetInfo
+- (OAMapWidgetInfo *)widgetInfo
 {
     NSString *widgetId = _customId ?: self.widgetType.id;
     return [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:widgetId];
@@ -448,9 +448,9 @@ static int stackViewLeadingToRefViewPadding = 16;
             deviationStr = [OAOsmAndFormatter getFormattedDistance:pnt.deviationDistance];
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             if (pnt.deviationDirectionRight)
-                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnRight] color:color];
             else
-                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_left"] color:color];
+                deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameIcSmallTurnLeft] color:color];
         }
         
         NSMutableAttributedString *distAttrStr = nil;
@@ -687,8 +687,8 @@ static int stackViewLeadingToRefViewPadding = 16;
 
 + (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield addedShields:(NSMutableArray<RoadShield *> *)addedShields
 {
-    const auto& object = shield.rdo;
-    const auto& tps = object->types;
+    OASRouteDataObject *object = shield.rdo;
+    OASKotlinIntArray *tps = object.types;
     NSString *nameTag = shield.tag;
     NSString *name = shield.value;
     NSMutableString *additional = [shield.additional mutableCopy];
@@ -700,18 +700,23 @@ static int stackViewLeadingToRefViewPadding = 16;
     env->applyTo(textEvaluator);
     OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
     
-    for (int i : tps) {
-        const auto& tp = object->region->quickGetEncodingRule(i);
-        if (tp.getTag() == "highway" || tp.getTag() == "route")
+    for (int k = 0; tps != nil && k < tps.size; k++) {
+        OASRouteTypeRule *tp = [object.region quickGetEncodingRuleId:[tps getIndex:k]];
+        if (tp == nil)
+            continue;
+
+        NSString *tag = tp.getTag;
+        NSString *value = tp.getValue ? tp.getValue : @"";
+        if ([tag isEqualToString:@"highway"] || [tag isEqualToString:@"route"])
         {
             textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 16);
             textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, 16);
-            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromStdString(tp.getTag()));
-            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromStdString(tp.getValue()));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QString::fromNSString(tag));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QString::fromNSString(value));
         }
         else
         {
-            [additional appendFormat:@"%s=%s;", tp.getTag().c_str(), tp.getValue().c_str()];
+            [additional appendFormat:@"%@=%@;", tag, value];
         }
     }
     
@@ -819,7 +824,7 @@ static int stackViewLeadingToRefViewPadding = 16;
     }
 }
 
-- (OAWidgetState *)getWidgetState
+- (OAWidgetState *)storedWidgetState
 {
     return _widgetState;
 }

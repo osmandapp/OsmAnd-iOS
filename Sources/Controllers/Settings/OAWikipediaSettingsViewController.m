@@ -21,6 +21,7 @@
 #import "OAPluginsHelper.h"
 
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAWikipediaSettingsViewController () <WikipediaScreenDelegate>
 
@@ -65,7 +66,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:@"ic_navbar_reset" action:@selector(onRightNavbarButtonPressed) menu:nil];
+    UIBarButtonItem *rightButton = [self createRightNavbarButton:nil iconName:ACImageNameIcNavbarReset action:@selector(onRightNavbarButtonPressed) menu:nil];
     rightButton.accessibilityLabel = OALocalizedString(@"reset_to_default");
     return @[rightButton];
 }
@@ -107,7 +108,7 @@
     languageItem.key = @"language";
     languageItem.cellType = [OAValueTableViewCell getCellIdentifier];
     languageItem.title = OALocalizedString(@"shared_string_language");
-    languageItem.iconName = @"ic_custom_map_languge";
+    languageItem.iconName = ACImageNameIcCustomMapLanguge;
     [self generateValueForItem:languageItem];
 
     OATableRowData *imagesItem = [languageSection createNewRow];

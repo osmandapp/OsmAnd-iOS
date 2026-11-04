@@ -20,6 +20,7 @@
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
+#import "GeneratedAssetSymbols.h"
 
 static OAColoringType * DEFAULT;
 static OAColoringType * CUSTOM_COLOR;
@@ -49,7 +50,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!DEFAULT)
     {
-        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_widget_renderer") iconName:@"ic_custom_map_style"];
+        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_widget_renderer") iconName:ACImageNameIcCustomMapStyle];
     }
     return DEFAULT;
 }
@@ -58,7 +59,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!CUSTOM_COLOR)
     {
-        CUSTOM_COLOR = [[OAColoringType alloc] initWithName:@"custom_color" title:OALocalizedString(@"shared_string_custom") iconName:@"ic_custom_settings"];
+        CUSTOM_COLOR = [[OAColoringType alloc] initWithName:@"custom_color" title:OALocalizedString(@"shared_string_custom") iconName:ACImageNameIcCustomSettings];
     }
     return CUSTOM_COLOR;
 }
@@ -77,7 +78,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!SPEED)
     {
-        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"shared_string_speed") iconName:@"ic_action_max_speed"];
+        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"shared_string_speed") iconName:ACImageNameIcActionMaxSpeed];
     }
     return SPEED;
 }
@@ -86,7 +87,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!ALTITUDE)
     {
-        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"altitude") iconName:@"ic_action_altitude"];
+        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"altitude") iconName:ACImageNameIcActionAltitude];
     }
     return ALTITUDE;
 }
@@ -95,7 +96,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
    if (!SLOPE)
    {
-       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"shared_string_slope") iconName:@"ic_custom_altitude_and_slope"];
+       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"shared_string_slope") iconName:ACImageNameIcCustomAltitudeAndSlope];
    }
     return SLOPE;
 }
@@ -104,7 +105,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!ATTRIBUTE)
     {
-        ATTRIBUTE = [[OAColoringType alloc] initWithName:@"attribute" title:OALocalizedString(@"attribute") iconName:@"ic_action_altitude"];
+        ATTRIBUTE = [[OAColoringType alloc] initWithName:@"attribute" title:OALocalizedString(@"attribute") iconName:ACImageNameIcActionAltitude];
     }
     return ATTRIBUTE;
 }
@@ -196,7 +197,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     
     if ([self isRouteInfoAttribute])
     {
-        return !route.getOriginalRoute.empty() && [self isAttributeAvailableForDrawing:route.getOriginalRoute attributeName:attributeName];
+        return route.getOriginalRoute.count > 0 && [self isAttributeAvailableForDrawing:route.getOriginalRoute attributeName:attributeName];
     }
     
     return YES;
@@ -222,8 +223,8 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     
     if ([self isRouteInfoAttribute])
     {
-        const auto routeSegments = [self getRouteSegmentsInTrack:selectedGpxFile];
-        if (routeSegments.empty())
+        NSArray<OASRouteSegmentResult *> *routeSegments = [self getRouteSegmentsInTrack:selectedGpxFile];
+        if (routeSegments.count == 0)
             return NO;
         return [self isAttributeAvailableForDrawing:routeSegments attributeName:attributeName];
     }
@@ -239,29 +240,27 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
-- (std::vector<std::shared_ptr<RouteSegmentResult>>) getRouteSegmentsInTrack:(OASGpxFile *)gpxFile
+- (NSArray<OASRouteSegmentResult *> *) getRouteSegmentsInTrack:(OASGpxFile *)gpxFile
 {
     if (!gpxFile.isOsmAndOrigin)
-        return {};
+        return @[];
     
-    std::vector<std::shared_ptr<RouteSegmentResult>> routeSegments;
+    NSMutableArray<OASRouteSegmentResult *> *routeSegments = [NSMutableArray array];
     for (NSInteger i = 0; i < [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO].count; i++)
     {
         OASTrkSegment *segment = [gpxFile getNonEmptyTrkSegmentsRoutesOnly:NO][i];
         if (segment.hasRoute)
         {
-            const auto rt = [OARouteProvider parseOsmAndGPXRoute:[NSMutableArray array] gpxFile:gpxFile segmentEndpoints:[NSMutableArray array] selectedSegment:i];
-            if (!rt.empty())
-                routeSegments.insert(routeSegments.end(), rt.begin(), rt.end());
+            [routeSegments addObjectsFromArray:[OARouteProvider parseOsmAndGPXRoute:[NSMutableArray array] gpxFile:gpxFile segmentEndpoints:[NSMutableArray array] selectedSegment:i]];
         }
     }
     return routeSegments;
 }
 
-- (BOOL) isAttributeAvailableForDrawing:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)routeSegments
+- (BOOL) isAttributeAvailableForDrawing:(NSArray<OASRouteSegmentResult *> *)routeSegments
                           attributeName:(NSString *)attributeName
 {
-    if (routeSegments.empty() || attributeName.length == 0)
+    if (routeSegments.count == 0 || attributeName.length == 0)
         return NO;
     
     NSArray<OARouteStatistics *> *stats = [OARouteStatisticsHelper calculateRouteStatistic:routeSegments attributeNames:@[attributeName]];

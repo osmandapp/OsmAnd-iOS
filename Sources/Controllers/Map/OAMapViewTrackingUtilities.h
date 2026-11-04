@@ -37,6 +37,7 @@
 - (void)switchRotateMapModeTo:(int)mode;
 - (void)refreshLocation;
 - (void)updateSettings;
+- (void)updateMapPosition;
 - (void)animatedAlignAzimuthToNorth;
 
 - (void)setRotationNoneToManual;

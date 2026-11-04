@@ -11,6 +11,8 @@
 #import <UIKit/UIKit.h>
 #include <vector>
 
+@class OASKotlinIntArray;
+
 @interface OALanesDrawable : UIView
 
 @property (nonatomic) float scaleCoefficient;
@@ -27,6 +29,8 @@
 
 - (std::vector<int>&) getLanes;
 - (void) setLanes:(std::vector<int>)lanes;
+/** The lanes of a manoeuvre, as they come off a turn type. */
+- (void) setTurnLanes:(OASKotlinIntArray *)lanes;
 - (void) updateBounds;
 
 @end

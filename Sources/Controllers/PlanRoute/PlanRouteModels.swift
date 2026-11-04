@@ -297,11 +297,12 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var defaultMode: OAApplicationMode? { get }
     var isTrackReadyToCalculate: Bool { get }
     var isApproximationNeeded: Bool { get }
+    var shouldRequestApproximationBeforeNavigation: Bool { get }
     var shouldShowApproximationWarning: Bool { get }
-    var approximationWarningViewController: UIViewController? { get }
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 
+    func beginApproximationSession() -> UIViewController?
     func addRoutePoint()
     func undo()
     func redo()
@@ -312,6 +313,8 @@ protocol PlanRoutePointsDataSource: AnyObject {
     func deleteRoutePoint(at index: Int)
     func deleteSegment(pointIndexes: [Int])
     func startNewSegment()
+    func startNewSegment(mode: OAApplicationMode?)
+    func continueRoute(mode: OAApplicationMode?)
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool)
     func applyMode(_ mode: OAApplicationMode, pointIndexes: [Int])
     func applyModeToContext(_ mode: OAApplicationMode?, context: SegmentRouteContext)
@@ -327,15 +330,17 @@ protocol PlanRoutePointsDataSource: AnyObject {
 }
 
 protocol PlanRouteSaveDataSource: AnyObject {
-    func saveAs(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
-    func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void)
+    func saveAs(fileName: String, folder: String?, showOnMap: Bool, simplified: Bool, onComplete: @escaping (Bool, String?) -> Void)
+    func saveAsCopy(fileName: String, folder: String?, showOnMap: Bool, simplified: Bool, onComplete: @escaping (Bool, String?) -> Void)
     func appendToTrack(filePath: String, onComplete: @escaping (Bool) -> Void)
-    func enterNavigation()
+    func enterNavigation(followTrackMode: Bool) -> EOAPlanRouteNavigationResult
+    func applyAttachedTrackToNavigation(beforeTransition: () -> Void) -> EOAPlanRouteNavigationResult
 }
 
 protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSource, PlanRoutePointsDataSource, PlanRouteSaveDataSource {
 
     var mode: PlanRouteMode { get }
+    var sourceFilePath: String? { get }
     var editTrackFolder: String? { get }
     var hasChanges: Bool { get }
     var hasPoints: Bool { get }
@@ -345,12 +350,14 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var presenterViewController: UIViewController? { get set }
     var onDataChanged: (() -> Void)? { get set }
     var onRouteInfoChanged: (() -> Void)? { get set }
+    var onApproximationApplied: (() -> Void)? { get set }
     var onApproximationPopupDismissed: (() -> Void)? { get set }
     var onChangeRouteTypeBefore: ((Int) -> Void)? { get set }
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }
 
     func setCrosshairPosition(screenPoint: CGPoint)
+    func fitTrackOnMap(bottomInset: CGFloat, leftInset: CGFloat)
     func applyPointEdit()
     func cancelPointEdit()
     func addAnotherPoint()

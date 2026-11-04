@@ -69,7 +69,7 @@ final class MapSettingsWikipediaScreen: NSObject, OAMapSettingsScreen {
         switchRow.cellType = OASwitchTableViewCell.reuseIdentifier
         switchRow.key = RowKey.wikipediaSwitchRowKey.rawValue
         switchRow.title = localizedString(isWikipediaEnabled ? "shared_string_enabled" : "rendering_value_disabled_name")
-        switchRow.icon = UIImage.templateImageNamed(isWikipediaEnabled ? "ic_custom_show" : "ic_custom_hide")
+        switchRow.icon = isWikipediaEnabled ? .icCustomShow : .icCustomHide
         switchRow.iconTintColor = isWikipediaEnabled ? .iconColorSelected : .iconColorDisabled
         switchRow.setObj(isWikipediaEnabled, forKey: ObjKey.isEnabled)
         guard isWikipediaEnabled else { return }

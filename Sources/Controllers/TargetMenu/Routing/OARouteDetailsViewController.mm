@@ -32,9 +32,12 @@
 #import "OAEmissionHelper.h"
 #import "OASegmentTableViewCell.h"
 #import "OARouteDirectionInfo.h"
+#import "OATargetPointsHelper.h"
+#import "OARTargetPoint.h"
+#import "OAPointDescription.h"
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
-#import "OATurnDrawable+cpp.h"
+#import "OATurnDrawable+TurnType.h"
 #import <DGCharts/DGCharts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 #import "CLLocation+Extension.h"
@@ -78,6 +81,78 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 @end
 
+@implementation OARouteDirectionItem
+
+- (instancetype) initWithDirection:(OARouteDirectionInfo *)direction
+                    directionIndex:(NSInteger)directionIndex
+             intermediatePointInfo:(OAIntermediatePointInfo *)intermediatePointInfo
+                       targetPoint:(OARTargetPoint *)targetPoint
+                 intermediateIndex:(NSInteger)intermediateIndex
+{
+    self = [super init];
+    if (self)
+    {
+        _direction = direction;
+        _directionIndex = directionIndex;
+        _intermediatePointInfo = intermediatePointInfo;
+        _targetPoint = targetPoint;
+        _intermediateIndex = intermediateIndex;
+    }
+    return self;
+}
+
+- (BOOL) isIntermediate
+{
+    return _intermediatePointInfo != nil;
+}
+
++ (OARouteDirectionItem *) intermediateItem:(OAIntermediatePointInfo *)info
+                         intermediateIndex:(NSInteger)intermediateIndex
+                        intermediatePoints:(NSArray<OARTargetPoint *> *)intermediatePoints
+{
+    OARTargetPoint *point = intermediateIndex < intermediatePoints.count ? intermediatePoints[intermediateIndex] : nil;
+    return [[OARouteDirectionItem alloc] initWithDirection:nil
+                                            directionIndex:-1
+                                     intermediatePointInfo:info
+                                               targetPoint:point
+                                         intermediateIndex:intermediateIndex];
+}
+
++ (NSArray<OARouteDirectionItem *> *) buildRouteDirectionItems:(NSArray<OARouteDirectionInfo *> *)routeDirections
+                                        intermediatePointInfos:(NSArray<OAIntermediatePointInfo *> *)intermediatePointInfos
+                                            intermediatePoints:(NSArray<OARTargetPoint *> *)intermediatePoints
+{
+    NSMutableArray<OARouteDirectionItem *> *items = [NSMutableArray array];
+    NSInteger intermediateIndex = 0;
+    for (NSInteger directionIndex = 0; directionIndex < routeDirections.count; directionIndex++)
+    {
+        OARouteDirectionInfo *direction = routeDirections[directionIndex];
+        while (intermediateIndex < intermediatePointInfos.count
+               && intermediatePointInfos[intermediateIndex].routePointOffset <= direction.routePointOffset)
+        {
+            [items addObject:[self intermediateItem:intermediatePointInfos[intermediateIndex]
+                                  intermediateIndex:intermediateIndex
+                                 intermediatePoints:intermediatePoints]];
+            intermediateIndex++;
+        }
+        [items addObject:[[OARouteDirectionItem alloc] initWithDirection:direction
+                                                          directionIndex:directionIndex
+                                                   intermediatePointInfo:nil
+                                                             targetPoint:nil
+                                                       intermediateIndex:-1]];
+    }
+    while (intermediateIndex < intermediatePointInfos.count)
+    {
+        [items addObject:[self intermediateItem:intermediatePointInfos[intermediateIndex]
+                              intermediateIndex:intermediateIndex
+                             intermediatePoints:intermediatePoints]];
+        intermediateIndex++;
+    }
+    return items;
+}
+
+@end
+
 
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, StatisticsSelectionDelegate, OAEmissionHelperListener>
 
@@ -95,11 +170,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSArray<NSNumber *> *_types;
     GPXDataSetAxisType _selectedXAxisMode;
     
-    BOOL _hasTranslated;
-    double _highlightDrawX;
-    
-    CGPoint _lastTranslation;
-    
+    RouteChartSynchronizer *_chartSynchronizer;
+
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
     NSString *_emission;
@@ -147,15 +219,44 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     _instructionsTabData = [NSMutableDictionary dictionary];
     NSMutableArray<UITableViewCell *> *cells = [NSMutableArray array];
     
-    NSArray<OARouteDirectionInfo *> *routeDirections = [self.routingHelper getRouteDirections];
-    for (NSInteger i = 0; i < routeDirections.count; i++)
+    OARouteCalculationResult *route = [self.routingHelper getRoute];
+    NSArray<OARouteDirectionInfo *> *routeDirections = [route getRouteDirections];
+    NSArray<OARouteDirectionItem *> *items = [OARouteDirectionItem buildRouteDirectionItems:routeDirections
+                                                                      intermediatePointInfos:[route getIntermediatePointInfos]
+                                                                          intermediatePoints:[[OATargetPointsHelper sharedInstance] getIntermediatePointsNavigation]];
+    for (OARouteDirectionItem *item in items)
     {
-        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
-        UITableViewCell *cell = [self getRouteDirectionCell:i model:routeDirectionInfo directionsInfo:routeDirections];
+        UITableViewCell *cell = item.isIntermediate
+            ? [self getIntermediatePointCell:item]
+            : [self getRouteDirectionCell:item.directionIndex model:item.direction directionsInfo:routeDirections];
         [cells addObject:cell];
     }
 
     [_instructionsTabData setObject:cells forKey:@(section++)];
+}
+
+- (UITableViewCell *) getIntermediatePointCell:(OARouteDirectionItem *)item
+{
+    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell setLeftTurnIconDrawable:nil];
+    [cell setLeftImageViewWithImage:[UIImage imageNamed:ACImageNameListIntermediate]];
+    [cell setBottomLanesImageWithImage:nil];
+
+    [cell setTopLeftLabelWithText:[NSString stringWithFormat:OALocalizedString(@"intermediate_point"), @(item.intermediateIndex + 1).stringValue]];
+    [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+
+    OARTargetPoint *point = item.targetPoint;
+    NSString *pointName = @"";
+    if (point)
+        pointName = [point getOnlyName].length > 0 ? [point getOnlyName] : [OAPointDescription getLocationNamePlain:[point getLatitude] lon:[point getLongitude]];
+    [cell setBottomLabelWithText:pointName];
+
+    OAIntermediatePointInfo *info = item.intermediatePointInfo;
+    NSString *distance = [OAOsmAndFormatter getFormattedDistance:info.distance withParams:[OsmAndFormatterParams useLowerBounds]];
+    NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:info.time shortFormat:YES];
+    [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
+    return cell;
 }
 
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
@@ -163,8 +264,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
-    const auto turnType = model.turnType;
-    [turnDrawable setTurnType:turnType];
+    [turnDrawable setTurnType:model.turnType];
     turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
     
     CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
@@ -175,12 +275,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [cell setLeftTurnIconDrawable:turnDrawable];
     [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
     
-    vector<int> lanes = model.turnType->getLanes();
-    if (lanes.size() > 0)
+    OASKotlinIntArray *lanes = model.turnType.lanes;
+    if (lanes != nil && lanes.size > 0)
     {
         OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
         _lanesDrawable.boldStroke = NO;
-        [_lanesDrawable setLanes:lanes];
+        [_lanesDrawable setTurnLanes:lanes];
         [_lanesDrawable updateBounds];
         _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
         [_lanesDrawable setNeedsDisplay];
@@ -296,24 +396,19 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                         startTime:self.analysis.startTime
                                          useHours:useHours];
 
-    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
-    [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.chartView
-                                      analysis:self.analysis
-                                     firstType:GPXDataSetTypeAltitude
-                                    secondType:GPXDataSetTypeSlope
-                                      axisType:_selectedXAxisMode
-                               calcWithoutGaps:[GpxUtils calcWithoutGaps:self.gpx gpxDataItem:gpx overrideIsGeneralTrack:YES]];
+    [GpxUIHelper refreshRouteLineChartWithChartView:routeStatsCell.chartView
+                                           analysis:self.analysis
+                                          firstType:GPXDataSetTypeAltitude
+                                         secondType:GPXDataSetTypeSlope
+                                           axisType:_selectedXAxisMode];
     
     BOOL hasSlope = routeStatsCell.chartView.lineData.dataSetCount > 1;
     
     self.statisticsChart = routeStatsCell.chartView;
+    [_chartSynchronizer setPrimaryChart:self.statisticsChart];
     UITableViewCell *analyzeBtnCell = [self getAnalyzeButtonCell];
     for (UIGestureRecognizer *recognizer in self.statisticsChart.gestureRecognizers)
     {
-        if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-        {
-            [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
-        }
         [recognizer addTarget:self action:@selector(onChartGesture:)];
     }
     
@@ -353,11 +448,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 }
 
 - (void)populateStatistics:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    const auto& originalRoute = self.routingHelper.getRoute.getOriginalRoute;
-    if (!originalRoute.empty())
+    NSArray<OASRouteSegmentResult *> *originalRoute = self.routingHelper.getRoute.getOriginalRoute;
+    if (originalRoute.count > 0)
     {
         NSArray<OARouteStatistics *> *routeInfo = [OARouteStatisticsHelper calculateRouteStatistic:originalRoute];
-        
         for (OARouteStatistics *stat in routeInfo)
         {
             OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell reuseIdentifier]];
@@ -366,17 +460,16 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
             [cell.detailsButton setTitle:OALocalizedString(@"rendering_category_details") forState:UIControlStateNormal];
             cell.barChartView.delegate = self;
-            [GpxUIHelper refreshBarChartWithChartView:cell.barChartView statistics:stat analysis:self.analysis nightMode:[OAAppSettings sharedManager].isAppMapNightMode];
+            [GpxUIHelper refreshRouteBarChartWithChartView:cell.barChartView
+                                                statistics:stat
+                                                  analysis:self.analysis
+                                                 nightMode:[OAAppSettings sharedManager].isAppMapNightMode];
+            [_chartSynchronizer registerBarChart:cell.barChartView];
             
             for (UIGestureRecognizer *recognizer in cell.barChartView.gestureRecognizers)
             {
-                if ([recognizer isKindOfClass:UIPanGestureRecognizer.class])
-                {
-                    [recognizer addTarget:self action:@selector(onBarChartScrolled:)];
-                }
                 [recognizer addTarget:self action:@selector(onChartGesture:)];
             }
-            [cell.barChartView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onBarChartTapped:)]];
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
@@ -408,7 +501,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     if (_selectedXAxisMode != GPXDataSetAxisTypeDistance && _selectedXAxisMode != GPXDataSetAxisTypeTime && _selectedXAxisMode != GPXDataSetAxisTypeTimeOfDay)
         _selectedXAxisMode = GPXDataSetAxisTypeDistance;
     
-    _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
     
@@ -510,6 +602,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     _selectedTab = EOAOARouteDetailsViewControllerModeInstructions;
     _expandedSections = [NSMutableSet new];
+    _chartSynchronizer = [RouteChartSynchronizer new];
     [self registerCells];
     [self generateData];
     
@@ -567,7 +660,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     }
     
     _cancelButton.layer.cornerRadius = 9.;
-    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
+    [self setupButtonAppearance:_startButton iconName:ACImageNameIcCustomNavigationArrow color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color
@@ -581,13 +674,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     __weak __typeof(self) weakSelf = self;
     UIAction *shareFileAction = [UIAction actionWithTitle:OALocalizedString(@"share_as_file")
-                                                    image:[UIImage templateImageNamed:ACImageNameIcCustomFileRouting]
+                                                    image:[UIImage imageNamed:ACImageNameIcCustomFileRouting]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onShareAsFilePressed];
     }];
     UIAction *shareLinkAction = [UIAction actionWithTitle:OALocalizedString(@"share_link")
-                                                    image:[UIImage templateImageNamed:ACImageNameIcCustomLink]
+                                                    image:[UIImage imageNamed:ACImageNameIcCustomLink]
                                                identifier:nil
                                                   handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onShareAsLinkPressed];
@@ -599,6 +692,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (void)refreshContent
 {
     NSInteger contentSectionNumber = 1;
+    [_chartSynchronizer reset];
     [self populateInstructionsTabCells:contentSectionNumber];
     [self populateAnalysisTabCells:contentSectionNumber];
     [self generateData];
@@ -696,7 +790,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     self.titleView.text = OALocalizedString(@"layer_route");
     [self.doneButton setTitle:nil forState:UIControlStateNormal];
-    [self.doneButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomExportOutlined] forState:UIControlStateNormal];
+    [self.doneButton setImage:[UIImage imageNamed:ACImageNameIcCustomExportOutlined] forState:UIControlStateNormal];
     self.doneButton.accessibilityLabel = OALocalizedString(@"shared_string_share");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.startButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
@@ -776,58 +870,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
   
 }
 
-- (void) onBarChartTapped:(UITapGestureRecognizer *)recognizer
+- (void)onChartGesture:(UIGestureRecognizer *)recognizer
 {
-    if (recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake([recognizer locationInView:self.statisticsChart].x, 0.)];
-        self.statisticsChart.lastHighlighted = h;
-        [self.statisticsChart highlightValue:h callDelegate:YES];
-    }
-}
-
-- (void) onBarChartScrolled:(UIPanGestureRecognizer *)recognizer
-{
-    if (recognizer.state == UIGestureRecognizerStateChanged)
-    {
-        if (self.statisticsChart.lowestVisibleX > 0.1 && [self getRoundedDouble:self.statisticsChart.highestVisibleX] != [self getRoundedDouble:self.statisticsChart.chartXMax])
-        {
-            _lastTranslation = [recognizer translationInView:self.statisticsChart];
-            return;
-        }
-        
-        ChartHighlight *lastHighlighted = self.statisticsChart.lastHighlighted;
-        CGPoint touchPoint = [recognizer locationInView:self.statisticsChart];
-        CGPoint translation = [recognizer translationInView:self.statisticsChart];
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(self.statisticsChart.isFullyZoomedOut ? touchPoint.x : _highlightDrawX + (_lastTranslation.x - translation.x), 0.)];
-        
-        if (h != lastHighlighted)
-        {
-            self.statisticsChart.lastHighlighted = h;
-            [self.statisticsChart highlightValue:h callDelegate:YES];
-        }
-    }
-    else if (recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        _lastTranslation = CGPointZero;
-        if (self.statisticsChart.highlighted.count > 0)
-            _highlightDrawX = self.statisticsChart.highlighted.firstObject.drawX;
-    }
-}
-
-- (void) onChartGesture:(UIGestureRecognizer *)recognizer
-{
-    if (recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        _hasTranslated = NO;
-        if (self.statisticsChart.highlighted.count > 0)
-            _highlightDrawX = self.statisticsChart.highlighted.firstObject.drawX;
-        else
-            _highlightDrawX = -1;
-    }
-    else if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
-              ([recognizer isKindOfClass:UITapGestureRecognizer.class] && (((UITapGestureRecognizer *) recognizer).nsuiNumberOfTapsRequired == 2)))
-             && recognizer.state == UIGestureRecognizerStateEnded)
+    if (([recognizer isKindOfClass:UIPinchGestureRecognizer.class] ||
+         ([recognizer isKindOfClass:UITapGestureRecognizer.class] && ((UITapGestureRecognizer *)recognizer).nsuiNumberOfTapsRequired == 2))
+        && recognizer.state == UIGestureRecognizerStateEnded)
     {
         if (self.analysis && self.segment)
         {
@@ -990,37 +1037,19 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)chartValueNothingSelected:(ChartViewBase *)chartView
 {
+    if (chartView != self.statisticsChart)
+        return;
+
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
-    
-    for (NSArray *cellArray in _data.allValues)
-    {
-        for (UITableViewCell *cell in cellArray)
-        {
-            if ([cell isKindOfClass:OARouteInfoCell.class])
-            {
-                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                [routeCell.barChartView highlightValue:nil];
-            }
-        }
-    }
+    [_chartSynchronizer clearSynchronizedHighlights];
 }
 
 - (void)chartValueSelected:(ChartViewBase *)chartView entry:(ChartDataEntry *)entry highlight:(ChartHighlight *)highlight
 {
-    for (NSArray *cellArray in _data.allValues)
-    {
-        for (UITableViewCell *cell in cellArray)
-        {
-            if ([cell isKindOfClass:OARouteInfoCell.class])
-            {
-                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                
-                ChartHighlight *bh = [routeCell.barChartView.highlighter getHighlightWithX:1. y:highlight.xPx];
-                [bh setDrawWithX:highlight.xPx y:highlight.xPx];
-                [routeCell.barChartView highlightValue:bh];
-            }
-        }
-    }
+    if (chartView != self.statisticsChart)
+        return;
+
+    [_chartSynchronizer syncHighlight:highlight sourceChart:self.statisticsChart];
     if (self.analysis && self.segment)
     {
         [self.trackChartHelper refreshChart:self.statisticsChart
@@ -1034,50 +1063,14 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)chartScaled:(ChartViewBase *)chartView scaleX:(CGFloat)scaleX scaleY:(CGFloat)scaleY
 {
-    [self syncVisibleCharts:chartView];
+    if ([chartView isKindOfClass:BarLineChartViewBase.class])
+        [_chartSynchronizer syncViewPortFrom:(BarLineChartViewBase *)chartView];
 }
 
 - (void)chartTranslated:(ChartViewBase *)chartView dX:(CGFloat)dX dY:(CGFloat)dY
 {
-    [self syncVisibleCharts:chartView];
-    _hasTranslated = true;
-    if (_highlightDrawX != -1)
-    {
-        ChartHighlight *h = [self.statisticsChart getHighlightByTouchPoint:CGPointMake(_highlightDrawX, 0.)];
-        if (h)
-        {
-            [self.statisticsChart highlightValue:h callDelegate:YES];
-            if (self.analysis && self.segment)
-            {
-                [self.trackChartHelper refreshChart:self.statisticsChart
-                                               fitTrack:YES
-                                               forceFit:NO
-                                       recalculateXAxis:NO
-                                               analysis:self.analysis
-                                                segment:self.segment];
-            }
-        }
-    }
-}
-
-- (void) syncVisibleCharts:(ChartViewBase *)chartView
-{
-    for (NSArray *cellArray in _data.allValues)
-    {
-        for (UITableViewCell *cell in cellArray)
-        {
-            if ([cell isKindOfClass:OARouteInfoCell.class])
-            {
-                OARouteInfoCell *routeCell = (OARouteInfoCell *) cell;
-                [routeCell.barChartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:routeCell.barChartView invalidate:YES];
-            }
-            else if ([cell isKindOfClass:ElevationChartCell.class])
-            {
-                ElevationChartCell *chartCell = (ElevationChartCell *) cell;
-                [chartCell.chartView.viewPortHandler refreshWithNewMatrix:chartView.viewPortHandler.touchMatrix chart:chartCell.chartView invalidate:YES];
-            }
-        }
-    }
+    if ([chartView isKindOfClass:BarLineChartViewBase.class])
+        [_chartSynchronizer syncViewPortFrom:(BarLineChartViewBase *)chartView];
 }
 
 #pragma mark - OAStatisticsSelectionDelegate
@@ -1101,7 +1094,9 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                                           chart:graphCell.chartView
                                        analysis:self.analysis
                                   statsModeCell:statsModeCell
-                         overrideIsGeneralTrack:YES];
+                         overrideIsGeneralTrack:YES
+                         useRouteDistanceLayout:YES];
+        [_chartSynchronizer setPrimaryChart:graphCell.chartView];
     }
 }
 

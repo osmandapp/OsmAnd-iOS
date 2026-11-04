@@ -13,6 +13,7 @@
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static QuickActionType *TYPE;
 
@@ -33,8 +34,8 @@ static QuickActionType *TYPE;
                                                    cl:self.class]
                 name:OALocalizedString(@"shared_string_navigation")]
                nameAction:OALocalizedString(@"quick_action_verb_pause_resume")]
-               iconName:@"ic_custom_navigation_arrow"]
-             secondaryIconName:@"ic_custom_compound_action_play"]
+               iconName:ACImageNameIcCustomNavigationArrow]
+             secondaryIconName:ACImageNameIcCustomCompoundActionPlay]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
@@ -69,8 +70,8 @@ static QuickActionType *TYPE;
 - (NSString *)getSecondaryIconName
 {
     if (_helper.isRoutePlanningMode || !_helper.isRouteCalculated)
-        return @"ic_custom_compound_action_play";
-    return @"ic_custom_compound_action_pause";
+        return ACImageNameIcCustomCompoundActionPlay;
+    return ACImageNameIcCustomCompoundActionPause;
 }
 
 - (NSString *)getActionText

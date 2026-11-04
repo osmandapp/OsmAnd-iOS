@@ -31,6 +31,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 #define PLUGIN_ID kInAppId_Addon_Parking
 
@@ -204,8 +205,10 @@
 
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    _parkingPlaceControl = (OASimpleWidget *) [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode widgetParams:widgetParams];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
+    _parkingPlaceControl = (OASimpleWidget *) [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.parking widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_parkingPlaceControl]];
 }
 
@@ -292,7 +295,7 @@
     };
     
     [_parkingPlaceControl setText:nil subtext:nil];
-    [_parkingPlaceControl setIcon:@"widget_parking"];
+    [_parkingPlaceControl setIcon:ACImageNameWidgetParking];
     return _parkingPlaceControl;
 }
 

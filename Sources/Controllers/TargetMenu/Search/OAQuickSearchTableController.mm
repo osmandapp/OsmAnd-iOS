@@ -166,15 +166,15 @@
 + (void) goToPoint:(double)latitude longitude:(double)longitude preferredZoom:(float)preferredZoom
 {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer unknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
     [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:preferredZoom];
 }
 
-+ (void)goToPoint:(OAPOI *)poi searchResult:(OASearchResult *)searchResult preferredZoom:(float)preferredZoom
++ (void)goToPoint:(OAPOI *)poi preferredZoom:(float)preferredZoom
 {
     OAMapSelectionHelper *mapSelectionHelper = [[OAMapSelectionHelper alloc] init];
-    BOOL routeFound = [mapSelectionHelper showContextMenuForSearchResult:poi filename:searchResult ? searchResult.resourceId : nil];
+    BOOL routeFound = [mapSelectionHelper showContextMenuForSearchResult:poi];
     if (routeFound)
         return;
     
@@ -193,22 +193,35 @@
         OAPOI *poi = [OAAmenitySearcher findPOIByName:item.name lat:item.latitude lon:item.longitude];
         if (poi)
         {
-            [self.class goToPoint:poi searchResult:nil preferredZoom:preferredZoom];
+            [self.class goToPoint:poi preferredZoom:preferredZoom];
             originFound = YES;
         }
     }
     else if (item.hType == OAHistoryTypeFavorite)
     {
+        OAFavoriteItem *nameMatch = nil;
+        OAFavoriteItem *locationMatch = nil;
+        NSUInteger nameMatchCount = 0;
+        NSUInteger locationMatchCount = 0;
         for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
         {
             OsmAnd::LatLon latLon = point.favorite->getLatLon();
-            if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude]
-                && [item.name isEqualToString:[point getName]])
+            if (![OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude])
+                continue;
+            
+            locationMatch = point;
+            locationMatchCount++;
+            if ([item.name isEqualToString:[point getName]] || [item.name isEqualToString:[point getDisplayName]])
             {
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:point pushed:NO saveState:NO];
-                originFound = YES;
-                break;
+                nameMatch = point;
+                nameMatchCount++;
             }
+        }
+
+        if (nameMatchCount == 1 || (nameMatchCount == 0 && locationMatchCount == 1 && [locationMatch isSpecialPoint]))
+        {
+            [[OARootViewController instance].mapPanel openTargetViewWithFavorite:(nameMatch ?: locationMatch) pushed:NO saveState:NO];
+            originFound = YES;
         }
     }
     else if (item.hType == OAHistoryTypeWpt)
@@ -351,7 +364,7 @@
                             [delegate closeSearch];
                         return;
                     }
-                    [self.class goToPoint:poi searchResult:searchResult preferredZoom:searchResult.preferredZoom];
+                    [self.class goToPoint:poi preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -391,7 +404,7 @@
                 {
                     latitude = fav.favorite->getLatLon().latitude;
                     longitude = fav.favorite->getLatLon().longitude;
-                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:fav.favorite->getTitle().toNSString()];
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[fav getDisplayName]];
                 }
                 break;
             }
@@ -675,7 +688,7 @@
                         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                         [cell.titleLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
                         [cell.titleLabel setText:[item getName]];
-                        cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+                        cell.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomTrip];
                         
                     }
                     cell.descriptionLabel.text = nil;
@@ -690,7 +703,7 @@
                     if (cell)
                     {
                         [cell.titleView setText:[item getName]];
-                        cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                        cell.titleIcon.image = [UIImage templateImageNamed:ACImageNameIcActionWorldGlobe];
                         [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                         cell.openingHoursView.hidden = YES;
                         cell.timeIcon.hidden = YES;
@@ -714,7 +727,7 @@
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
-                    cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                    cell.titleIcon.image = [UIImage templateImageNamed:ACImageNameIcActionWorldGlobe];
                     [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;

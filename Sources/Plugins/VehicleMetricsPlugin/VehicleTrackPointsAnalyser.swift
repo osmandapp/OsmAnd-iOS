@@ -11,23 +11,40 @@ import Foundation
 @objcMembers
 final class VehicleTrackPointsAnalyser: NSObject, GpxTrackAnalysisTrackPointsAnalyser {
     
+    private static let gpxTags: [String] = OBDCommand.entries.compactMap { $0.gpxTag }
+    private static let gpxTagSet: Set<String> = Set(gpxTags)
+
     func onAnalysePoint(analysis: GpxTrackAnalysis, point: WptPt, attribute: PointAttributes) {
-        // Skip analyser entirely if the point has no OBD extensions
-        guard !(point.getDeferredExtensionsToRead().isEmpty && point.getExtensionsToRead().isEmpty) else { return }
-        for command in OBDCommand.entries {
-            guard let tag = command.gpxTag else { continue }
-            let value = getPointAttribute(wptPt: point, key: tag)
+        let ext = point.extensions as NSDictionary?
+        let deferred = point.deferredExtensions as NSDictionary?
+        
+        guard hasAnyObdKey(ext) || hasAnyObdKey(deferred) else { return }
+
+        let deferredExtensions = point.getDeferredExtensionsToRead()
+        let extensions = point.getExtensionsToRead()
+        for tag in Self.gpxTags {
+            let value = getPointAttribute(deferredExtensions: deferredExtensions, extensions: extensions, key: tag)
             attribute.setAttributeValue(tag: tag, value: value)
             if !analysis.hasData(tag: tag) && attribute.hasValidValue(tag: tag) {
                 analysis.setHasData(tag: tag, hasData: true)
             }
         }
     }
-    
-    private func getPointAttribute(wptPt: WptPt, key: String) -> Float {
-        var value = wptPt.getDeferredExtensionsToRead()[key]
+
+    private func hasAnyObdKey(_ dict: NSDictionary?) -> Bool {
+        guard let dict, dict.count > 0 else { return false }
+        for key in dict {
+            if let key = key as? String, Self.gpxTagSet.contains(key) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private func getPointAttribute(deferredExtensions: [String: String], extensions: [String: String], key: String) -> Float {
+        var value = deferredExtensions[key]
         if value?.isEmpty ?? true {
-            value = wptPt.getExtensionsToRead()[key]
+            value = extensions[key]
         }
         
         return Float(value ?? "") ?? 0

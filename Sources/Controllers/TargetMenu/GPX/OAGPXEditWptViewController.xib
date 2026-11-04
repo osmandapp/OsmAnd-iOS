@@ -56,7 +56,7 @@
                             <rect key="frame" x="276" y="20" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <state key="normal" image="icon_remove.png">
+                            <state key="normal" image="icon_remove">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
@@ -95,6 +95,6 @@
         </view>
     </objects>
     <resources>
-        <image name="icon_remove.png" width="18" height="23"/>
+        <image name="icon_remove" width="18" height="23"/>
     </resources>
 </document>

@@ -11,12 +11,6 @@
 #define kDefaultFavoriteZoom 15.0f
 #define kDefaultFavoriteZoomOnShow 16.0f
 
-#define kFavoriteDefaultColorKey @"FavoriteDefaultColorKey"
-#define kFavoriteDefaultGroupKey @"FavoriteDefaultGroupKey"
-
-#define kWptDefaultColorKey @"WptDefaultColorKey"
-#define kWptDefaultGroupKey @"WptDefaultGroupKey"
-
 @interface OAFavoriteColor : NSObject
 
 @property (nonatomic) NSString *name;
@@ -32,9 +26,9 @@
 
 + (NSArray *)builtinColors;
 
-+ (NSInteger) getValidBuiltInColorNumber:(NSInteger)number;
-
-+ (UIColor *) getDefaultColor;
++ (NSInteger)getValidBuiltInColorNumber:(NSInteger)number;
++ (UIColor *)getColorFromBuiltInNumberOrARGB:(NSInteger)value;
++ (UIColor *)getDefaultColor;
 
 + (OAFavoriteColor *)getFavoriteColor:(UIColor *)color;
 

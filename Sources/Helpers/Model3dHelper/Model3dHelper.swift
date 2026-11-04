@@ -30,7 +30,7 @@ final class Model3dHelper: NSObject {
     func getModel(modelName: String, callback: OAModel3dCallback?) -> OAModel3dWrapper? {
         lock.lock()
         
-        let pureModelName = modelName.lastPathComponent().replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
+        let pureModelName = Model3dHelper.pureModelName(modelName)
         if !modelName.hasPrefix(MODEL_NAME_PREFIX) {
             processCallback(modelName: pureModelName, model: nil, callback: callback)
             
@@ -167,6 +167,11 @@ final class Model3dHelper: NSObject {
         return res
     }
     
+    static func pureModelName(_ modelName: String) -> String {
+        let name = modelName.lastPathComponent()
+        return name.hasPrefix(MODEL_NAME_PREFIX) ? String(name.dropFirst(MODEL_NAME_PREFIX.count)) : name
+    }
+
     static func getModelPath(modelName: String) -> String {
         return OsmAndApp.swiftInstance().models3dPath.appendingPathComponent(modelName)
     }

@@ -149,7 +149,7 @@ final class DefaultMapButtonViewController: OABaseNavbarViewController {
             }
             let selected = item.bool(forKey: Self.selectedKey)
             cell.descriptionVisibility(false)
-            cell.leftIconView.image = UIImage.templateImageNamed(selected ? "ic_custom_show" : "ic_custom_hide")
+            cell.leftIconView.image = selected ? .icCustomShow : .icCustomHide
             cell.leftIconView.tintColor = selected ? item.iconTintColor : .iconColorDefault
             cell.titleLabel.text = item.title
             cell.accessibilityLabel = item.accessibilityLabel

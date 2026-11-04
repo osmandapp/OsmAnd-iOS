@@ -147,13 +147,13 @@
     NSString *id = [NSString stringWithUTF8String:_routingParameter.id.c_str()];
     NSString *name;
     if ([id isEqualToString:kRouteParamHeightObstacles])
-        name = @"ic_custom_terrain_any";
+        name = ACImageNameIcCustomTerrainAny;
     else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorPlain])
-        name = @"ic_custom_terrain_less_hilly";
+        name = ACImageNameIcCustomTerrainLessHilly;
     else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorMorePlain])
-        name = @"ic_custom_terrain_flat";
+        name = ACImageNameIcCustomTerrainFlat;
     else if ([id isEqualToString:kRouteParamIdReliefSmoothnessFactorHills])
-        name = @"ic_custom_terrain_hilly";
+        name = ACImageNameIcCustomTerrainHilly;
     return name;
 }
 
@@ -307,13 +307,13 @@
 {
     NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
     BOOL isChecked = self.isChecked;
-    NSString *name = @"ic_custom_trip";
+    NSString *name = ACImageNameIcCustomTrip;
     if ([id isEqualToString:kRouteParamShortWay])
-        name = @"ic_custom_fuel";
+        name = ACImageNameIcCustomFuel;
     else if ([id isEqualToString:kRouteParamAllowPrivate] || [id isEqualToString:kRouteParamAllowPrivateTruck])
-        name = isChecked ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
+        name = isChecked ? ACImageNameIcCustomAllowPrivateAccess : ACImageNameIcCustomForbidPrivateAccess;
     else if ([id isEqualToString:kRouteParamAllowMotorway])
-        name = isChecked ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
+        name = isChecked ? ACImageNameIcCustomMotorways : ACImageNameIcCustomAvoidMotorways;
     else if ([id isEqualToString:kRouteParamHeightObstacles])
         name = ACImageNameIcCustomAscent;
     return name;
@@ -468,9 +468,9 @@
 {
     NSString *name;
     if ([_groupName isEqualToString:kRouteParamGroupDrivingStyle])
-        name = @"ic_profile_bicycle";
+        name = ACImageNameIcProfileBicycle;
     else if ([_groupName isEqualToString:kRouteParamReliefSmoothnessFactor])
-        name = @"ic_action_altitude";
+        name = ACImageNameIcActionAltitude;
     return name ? [UIImage imageNamed:name] : nil;
 }
 
@@ -523,7 +523,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:[self.settings.voiceMute get:self.getApplicationMode] ? @"ic_custom_sound_off" : @"ic_custom_sound"];
+    return [UIImage imageNamed:[self.settings.voiceMute get:self.getApplicationMode] ? ACImageNameIcCustomSoundOff : ACImageNameIcCustomSound];
 }
 
 - (NSString *) getCellType
@@ -612,7 +612,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_show_along_route"];
+    return [UIImage imageNamed:ACImageNameIcCustomShowAlongRoute];
 }
 
 - (NSString *) getCellType
@@ -652,7 +652,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_alert"];
+    return [UIImage imageNamed:ACImageNameIcCustomAlert];
 }
 
 - (NSString *) getValue
@@ -712,7 +712,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_profile_bus"];
+    return [UIImage imageNamed:ACImageNameIcProfileBus];
 }
 
 - (NSString *) getCellType
@@ -784,7 +784,7 @@
 
 - (UIImage *)getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_trip"];
+    return [UIImage imageNamed:ACImageNameIcCustomTrip];
 }
 
 - (UIColor *)getTintColor
@@ -803,7 +803,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_navigation_arrow"];
+    return [UIImage imageNamed:ACImageNameIcCustomNavigationArrow];
 }
 
 - (NSString *) getCellType
@@ -865,7 +865,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_alert"];
+    return [UIImage imageNamed:ACImageNameIcCustomAlert];
 }
 
 - (NSString *) getCellType
@@ -947,7 +947,7 @@
 
 - (UIImage *) getIcon
 {
-    return [UIImage imageNamed:@"ic_custom_appearance"];
+    return [UIImage imageNamed:ACImageNameIcCustomAppearance];
 }
 
 - (NSString *) getCellType
@@ -987,7 +987,7 @@
 
 - (UIImage *)getIcon
 {
-    return [self isSelected] ? [UIImage imageNamed:@"ic_custom_hazmat_limit_colored"] : [UIImage templateImageNamed:@"ic_custom_hazmat_limit"];
+    return [UIImage imageNamed:[self isSelected] ? ACImageNameIcCustomHazmatLimitColored : ACImageNameIcCustomHazmatLimit];
 }
 
 - (NSString *) getDescription
@@ -1068,7 +1068,7 @@
 
 - (UIImage *)getIcon
 {
-    return [UIImage templateImageNamed:@"ic_custom_van"];
+    return [UIImage imageNamed:ACImageNameIcCustomVan];
 }
 
 - (NSString *) getDescription

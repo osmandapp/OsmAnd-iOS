@@ -26,7 +26,6 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
-#import "GeneratedAssetSymbols.h"
 #import "OAUtilities.h"
 #import "OAAppVersion.h"
 #import "OAResourcesUISwiftHelper.h"
@@ -344,7 +343,7 @@ typedef enum
 - (UIMenu *)rightNavButtonMenuItems {
     __weak OAFirstUsageWizardController *weakSelf = self;
     UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_osmand_cloud")
-                                                       image:[UIImage imageNamed:@"ic_custom_restore"]
+                                                       image:[UIImage imageNamed:ACImageNameIcCustomRestore]
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
         UIViewController *controller = OABackupHelper.sharedInstance.isRegistered
@@ -356,7 +355,7 @@ typedef enum
         }];
     }];
     UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_file")
-                                                      image:[UIImage imageNamed:@"ic_custom_import_outlined"]
+                                                      image:[UIImage imageNamed:ACImageNameIcCustomImportOutlined]
                                                  identifier:nil
                                                     handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf onRestoreFromFilePressed];
@@ -717,9 +716,15 @@ typedef enum
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated start");
-        [OAOcbfHelper downloadOcbfIfUpdated:^{
+        [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
             NSLog(@"OAFirstUsageWizardController downloadOcbfIfUpdated end");
-            [_app loadWorldRegions];
+            OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
+            if (reloadedWorldRegion)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_app applyWorldRegions:reloadedWorldRegion];
+                });
+            }
             [_app startRepositoryUpdateAsync:NO];
         }];
     });

@@ -12,6 +12,7 @@
 #import "CLLocation+Extension.h"
 #import "OAMapLayers.h"
 #import "OAMeasurementEditingContext.h"
+#import "OAAppVersion.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAGpxData.h"
 #import "OAAddPointCommand.h"
@@ -19,6 +20,7 @@
 #import "OAJoinPointsCommand.h"
 #import "OASplitPointsCommand.h"
 #import "OARemovePointCommand.h"
+#import "OARemovePointsCommand.h"
 #import "OAReorderPointCommand.h"
 #import "OAReorderSegmentCommand.h"
 #import "OAChangeRouteModeCommand.h"
@@ -27,6 +29,7 @@
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OANativeUtilities.h"
 #import "OASelectedGPXHelper.h"
+#import "OAGPXDatabase.h"
 #import "OADefaultFavorite.h"
 #import "OARouteStatisticsHelper.h"
 #import "OARoadSegmentData.h"
@@ -37,6 +40,10 @@
 #import "OARouteExporter.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
+#import "OAMapActions.h"
+#import "OAMapPanelViewController.h"
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
 #import "OAWaypointHelper.h"
 #import "OALocationPointWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -147,6 +154,33 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                      pointIndex:(NSInteger)pointIndex
                                      wholeRoute:(BOOL)wholeRoute;
 - (BOOL)hasRoutePairForMovingPointInContext:(nullable OAMeasurementEditingContext *)ctx;
++ (OAMeasurementEditingContext *)editingContextForGpxFile:(nullable OASGpxFile *)gpxFile
+                                          applicationMode:(nullable OAApplicationMode *)applicationMode
+                                          selectedSegment:(NSInteger)selectedSegment;
++ (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges;
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                 pointCount:(NSInteger)pointCount;
++ (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount;
++ (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
+                                                        hasRoute:(BOOL)hasRoute
+                                             approximationNeeded:(BOOL)approximationNeeded;
++ (BOOL)shouldUseRoutePointsOnlyForNavigationWithPointCount:(NSInteger)pointCount
+                                                   hasRoute:(BOOL)hasRoute
+                                        approximationNeeded:(BOOL)approximationNeeded;
++ (OASGpxFile *)routePointsOnlyNavigationGpxWithPoints:(NSArray<OASWptPt *> *)points;
++ (nullable OAApplicationMode *)navigationAppModeForEditingAppMode:(nullable OAApplicationMode *)editingAppMode;
++ (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                  hasRoute:(BOOL)hasRoute
+                                                                hasChanges:(BOOL)hasChanges;
+- (void)openTrackWithEditingContext:(OAMeasurementEditingContext *)ctx;
+- (nullable OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)ctx
+                                               trackName:(NSString *)trackName;
+- (void)performNavigationWithGpx:(OASGpxFile *)gpx
+                  editingContext:(OAMeasurementEditingContext *)ctx
+                   routingHelper:(OARoutingHelper *)routingHelper
+                      mapActions:(OAMapActions *)mapActions
+                 followTrackMode:(BOOL)followTrackMode
+                  sourceFilePath:(nullable NSString *)sourceFilePath;
 
 @end
 
@@ -196,13 +230,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (BOOL)isAddNewSegmentAllowed
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    return ctx != nil && [ctx isAddNewSegmentAllowed];
+    return ctx != nil && [ctx isAddNewSegmentAllowed] && !ctx.getPoints.lastObject.isGap;
 }
 
 - (nullable OAApplicationMode *)defaultAppMode
 {
-    OAApplicationMode *mode = [self editingContext].appMode;
-    return (mode == OAApplicationMode.DEFAULT) ? nil : mode;
+    return [OAPlanRouteEditingBridge navigationAppModeForEditingAppMode:[self editingContext].appMode];
 }
 
 - (BOOL)isTrackReadyToCalculate
@@ -217,13 +250,23 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return ctx != nil && [ctx isApproximationNeeded];
 }
 
+- (BOOL)shouldRequestApproximationBeforeNavigation
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    if (ctx == nil)
+        return NO;
+    return [OAPlanRouteEditingBridge shouldRequestApproximationBeforeNavigationWithPointCount:ctx.getPoints.count
+                                                                                      hasRoute:ctx.hasRoute
+                                                                           approximationNeeded:ctx.isApproximationNeeded];
+}
+
 - (BOOL)shouldShowApproximationWarning
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     return ctx != nil && [ctx shouldCheckApproximation] && [ctx isApproximationNeeded] && [ctx hasTimestamps];
 }
 
-- (UIViewController *)approximationWarningViewController
+- (UIViewController *)beginApproximationSession
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || ctx.getPointsCount == 0)
@@ -231,6 +274,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OASnapTrackWarningViewController *warningController = [[OASnapTrackWarningViewController alloc] init];
     warningController.delegate = self;
     _approximationPopupController = warningController;
+    ctx.approximationSessionActive = YES;
     return warningController;
 }
 
@@ -273,8 +317,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSTimeInterval duration = 0;
     for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
     {
-        for (const auto &segment : data.segments)
-            duration += segment->segmentTime;
+        for (OASRouteSegmentResult *segment in data.segments)
+            duration += [segment getSegmentTime];
     }
     return duration;
 }
@@ -375,39 +419,53 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)openTrackWithFilePath:(NSString *)filePath
 {
-    OAMeasurementToolLayer *layer = [self layer];
-    if (layer == nil)
-        return;
-
-    OAMeasurementEditingContext *ctx = [[OAMeasurementEditingContext alloc] init];
-
     OASGpxFile *gpxFile = nil;
     if (filePath.length > 0)
     {
         NSString *absolutePath = filePath.isAbsolutePath ? filePath : [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filePath];
         OASGpxFile *selectedFile = [OASelectedGPXHelper.instance activeGpxFileForPath:absolutePath fallbackPath:filePath];
         if (selectedFile)
-    {
+        {
             gpxFile = selectedFile;
         }
         else
         {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:absolutePath];
-        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-        }
-        if (gpxFile)
-        {
-            if (!gpxFile.routes)
-                gpxFile.routes = [NSMutableArray new];
-            if (!gpxFile.tracks)
-                gpxFile.tracks = [NSMutableArray new];
-            if (!gpxFile.getPointsList)
-                [gpxFile clearPoints];
+            gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
         }
     }
-    OAGpxData *gpxData = gpxFile != nil ? [[OAGpxData alloc] initWithFile:gpxFile] : nil;
-    ctx.gpxData = gpxData;
+    [self openTrackWithGpxFile:gpxFile applicationMode:nil selectedSegment:-1];
+}
+
+- (void)openTrackWithGpxFile:(OASGpxFile *)gpxFile
+             applicationMode:(OAApplicationMode *)applicationMode
+             selectedSegment:(NSInteger)selectedSegment
+{
+    OAMeasurementEditingContext *ctx = [OAPlanRouteEditingBridge editingContextForGpxFile:gpxFile
+                                                                          applicationMode:applicationMode
+                                                                          selectedSegment:selectedSegment];
+    [self openTrackWithEditingContext:ctx];
+}
+
++ (OAMeasurementEditingContext *)editingContextForGpxFile:(OASGpxFile *)gpxFile
+                                          applicationMode:(OAApplicationMode *)applicationMode
+                                          selectedSegment:(NSInteger)selectedSegment
+{
+    if (gpxFile != nil)
+    {
+        if (gpxFile.routes == nil)
+            gpxFile.routes = [NSMutableArray new];
+        if (gpxFile.tracks == nil)
+            gpxFile.tracks = [NSMutableArray new];
+        if (gpxFile.getPointsList == nil)
+            [gpxFile clearPoints];
+    }
+    OAMeasurementEditingContext *ctx = [[OAMeasurementEditingContext alloc] init];
+    ctx.gpxData = gpxFile != nil ? [[OAGpxData alloc] initWithFile:gpxFile] : nil;
+    ctx.selectedSegment = selectedSegment;
     NSArray<OASWptPt *> *routePoints = gpxFile.getRoutePoints;
+    if (applicationMode != nil)
+        ctx.appMode = applicationMode;
     if (routePoints.count > 0)
     {
         OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:routePoints.lastObject.getProfileType
@@ -415,6 +473,25 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         if (appMode != nil)
             ctx.appMode = appMode;
     }
+    return ctx;
+}
+
++ (NSString *)navigationFilePathForExportedGpx:(OASGpxFile *)gpx
+                                 sourceFilePath:(NSString *)sourceFilePath
+{
+    if (sourceFilePath.length > 0)
+        return sourceFilePath;
+    if (gpx.path.length > 0)
+        return gpx.path;
+    return nil;
+}
+
+- (void)openTrackWithEditingContext:(OAMeasurementEditingContext *)ctx
+{
+    OAMeasurementToolLayer *layer = [self layer];
+    if (layer == nil)
+        return;
+    OASGpxFile *gpxFile = ctx.gpxData.gpxFile;
     ctx.progressDelegate = self;
     _initialPoiStateSnapshot = gpxFile != nil ? [[PlanRoutePoiStateSnapshot alloc] initWithGpxFile:gpxFile draftGpxFile:nil] : nil;
     _editingPoiStateSnapshot = nil;
@@ -427,6 +504,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [layer updateLayer];
 }
 
+- (void)fitTrackOnMapWithBottomInset:(CGFloat)bottomInset leftInset:(CGFloat)leftInset
+{
+    OAGpxData *gpxData = [self editingContext].gpxData;
+    if (gpxData == nil)
+        return;
+    OAGpxBounds bounds = gpxData.rect;
+    [OARootViewController.instance.mapPanel displayAreaOnMap:bounds.topLeft
+                                                 bottomRight:bounds.bottomRight
+                                                 bottomInset:bottomInset
+                                                   leftInset:leftInset];
+}
+
 - (double)distanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
     return [OAMapUtils getDistance:from.lat lon1:from.lon lat2:to.lat lon2:to.lon];
@@ -434,7 +523,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
-    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[@[from, to]];
+    OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[[OAWptPtPair pairWithFirst:from second:to]];
     return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
 }
 
@@ -1037,11 +1126,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil)
         return;
     [self invalidateTerrainElevationGpx];
-    NSArray<NSNumber *> *sorted = [indexes sortedArrayUsingComparator:^NSComparisonResult(NSNumber *a, NSNumber *b) {
-        return [b compare:a];
-    }];
-    for (NSNumber *indexNumber in sorted)
-        [ctx.commandManager execute:[[OARemovePointCommand alloc] initWithLayer:layer position:indexNumber.integerValue]];
+    [ctx.commandManager execute:[[OARemovePointsCommand alloc] initWithLayer:layer positions:indexes]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1049,13 +1134,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)startNewSegment
 {
+    [self startNewSegmentWithMode:[self editingContext].appMode];
+}
+
+- (void)startNewSegmentWithMode:(OAApplicationMode *)mode
+{
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || ctx.getPointsCount == 0)
+    if (ctx == nil || !self.isAddNewSegmentAllowed || mode == nil)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = ctx.getPointsCount - 1;
-    BOOL started = [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES]];
+    BOOL started = [ctx.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:layer after:YES appMode:mode]];
     ctx.selectedPointPosition = -1;
     [layer updateLayer];
     if (started && self.onNewSegmentStarted)
@@ -1102,10 +1192,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                        pointIndex:pointIndex
                                        wholeRoute:wholeRoute];
     EOAChangeRouteType type = wholeRoute ? EOAChangeRouteWhole : EOAChangeRouteNextSegment;
+    BOOL updatesPendingSegmentMode = wholeRoute || (pointIndex >= 0 && pointIndex == ctx.getPointsCount - 1);
     [ctx.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:layer
                                                                           appMode:mode
                                                                    changeRouteType:type
-                                                                        pointIndex:pointIndex]];
+                                                                        pointIndex:pointIndex
+                                                         updatesPendingSegmentMode:updatesPendingSegmentMode]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1220,13 +1312,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeBefore]];
     ctx.selectedPointPosition = -1;
-    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1236,13 +1327,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || index < 0 || index >= ctx.getPointsCount)
         return;
     [self invalidateTerrainElevationGpx];
     ctx.selectedPointPosition = index;
     [ctx.commandManager execute:[[OAClearPointsCommand alloc] initWithMeasurementLayer:layer mode:EOAClearPointsModeAfter]];
     ctx.selectedPointPosition = -1;
-    [ctx splitSegments:ctx.getBeforePoints.count + ctx.getAfterPoints.count];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1373,7 +1463,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
 
     OASGpxFile *gpxFile = filePath.length == 0 ? _draftGpxFile : [self editingContext].gpxData.gpxFile;
-    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil gpxFile:gpxFile];
+    OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location title:OALocalizedString(@"shared_string_waypoint") address:nil customParam:gpxFilePath pointType:EOAEditPointTypeWaypoint targetMenuState:nil poi:nil gpxFile:gpxFile targetObject:nil];
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [presentingViewController presentViewController:navigationController animated:YES completion:nil];
@@ -1615,23 +1705,54 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)saveAs:(NSString *)fileName
         folder:(nullable NSString *)folder
      showOnMap:(BOOL)showOnMap
+    simplified:(BOOL)simplified
     onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
 {
-    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:NO onComplete:onComplete];
+    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:NO simplified:simplified onComplete:onComplete];
 }
 
 - (void)saveAsCopy:(NSString *)fileName
             folder:(nullable NSString *)folder
          showOnMap:(BOOL)showOnMap
+        simplified:(BOOL)simplified
         onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
 {
-    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:YES onComplete:onComplete];
+    [self performSaveWithFileName:fileName folder:folder showOnMap:showOnMap asCopy:YES simplified:simplified onComplete:onComplete];
+}
+
+- (nullable OASGpxFile *)exportSimplifiedGpx:(NSString *)trackName editingContext:(OAMeasurementEditingContext *)ctx
+{
+    if ([ctx getPointsCount] == 0)
+        return nil;
+
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    OASTrack *track = [[OASTrack alloc] init];
+    track.name = trackName;
+    [gpx.tracks addObject:track];
+
+    if (ctx.gpxData.gpxFile != nil)
+    {
+        for (OASWptPt *point in [ctx.gpxData.gpxFile getPointsList])
+            [gpx addPointPoint:point];
+    }
+
+    NSMutableArray<OASTrkSegment *> *lines = [NSMutableArray array];
+    [lines addObjectsFromArray:[ctx getBeforeTrkSegmentLine] ?: @[]];
+    [lines addObjectsFromArray:[ctx getAfterTrkSegmentLine] ?: @[]];
+    for (OASTrkSegment *line in lines)
+    {
+        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+        segment.points = line.points;
+        [track.segments addObject:segment];
+    }
+    return gpx;
 }
 
 - (void)performSaveWithFileName:(NSString *)fileName
                          folder:(nullable NSString *)folder
                       showOnMap:(BOOL)showOnMap
                          asCopy:(BOOL)asCopy
+                     simplified:(BOOL)simplified
                      onComplete:(void (^)(BOOL success, NSString * _Nullable outPath))onComplete
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
@@ -1644,7 +1765,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSString *originalGpxPath = [OAUtilities absoluteGpxPathForPath:ctx.gpxData.gpxFile.path].stringByStandardizingPath;
     PlanRoutePoiStateSnapshot *originalPoiStateSnapshot = _initialPoiStateSnapshot;
     NSString *trackName = (fileName.length > 0 ? fileName : OALocalizedString(@"quick_action_new_route")).decomposedStringWithCanonicalMapping;
-    OASGpxFile *gpx = [ctx exportGpx:trackName];
+    OASGpxFile *gpx = simplified ? [self exportSimplifiedGpx:trackName editingContext:ctx] : [ctx exportGpx:trackName];
     if (gpx == nil)
     {
         if (onComplete) onComplete(NO, nil);
@@ -1655,6 +1776,10 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     NSString *gpxRootPath = OsmAndApp.instance.gpxPath;
     NSString *folderPath = (folder.length > 0) ? [gpxRootPath stringByAppendingPathComponent:folder] : gpxRootPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
+    if (!asCopy && [originalGpxPath.decomposedStringWithCanonicalMapping isEqualToString:outFile.decomposedStringWithCanonicalMapping])
+        gpx.metadata = [[OASMetadata alloc] initWithSource:ctx.gpxData.gpxFile.metadata];
+    
+    [OAPlanRouteEditingBridge savePreselectedRouteActivity:gpx syncWithEditedProfile:[OAPlanRouteEditingBridge shouldSyncRouteActivityWithEditedProfile:ctx] appMode:ctx.appMode];
     BOOL restoreOriginalActiveGpx = originalGpxPath.length > 0 && originalPoiStateSnapshot != nil && ![originalGpxPath isEqualToString:outFile];
     __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
@@ -1752,6 +1877,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
     }
 
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    OAApplicationMode *appMode = OAApplicationMode.DEFAULT;
+    for (NSInteger i = endPointIndex - 1; i >= startPointIndex; i--)
+    {
+        if (!points[i].isGap)
+        {
+            appMode = [OAApplicationMode valueOfStringKey:points[i].getProfileType def:OAApplicationMode.DEFAULT];
+            break;
+        }
+    }
+    
+    [OAPlanRouteEditingBridge savePreselectedRouteActivity:gpx syncWithEditedProfile:NO appMode:appMode];
     NSString *folderPath = OsmAndApp.instance.gpxPath;
     NSString *outFile = [[[folderPath stringByAppendingPathComponent:trackName] stringByAppendingPathExtension:@"gpx"] stringByStandardizingPath];
 
@@ -1801,6 +1938,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     [self addDraftWaypointsToGpx:currentGpx];
 
     NSString *absPath = [OAUtilities absoluteGpxPathForPath:filePath].stringByStandardizingPath;
+    BOOL syncWithEditedProfile = [OAPlanRouteEditingBridge shouldSyncRouteActivityWithEditedProfile:ctx];
+    OAApplicationMode *appMode = ctx.appMode;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OASKFile *file = [[OASKFile alloc] initWithFilePath:absPath];
         OASGpxFile *existingGpx = [OASGpxUtilities.shared loadGpxFileFile:file];
@@ -1825,6 +1964,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             if (existingPoints.count > 0)
                 [currentGpx addPointsCollection:existingPoints];
 
+            currentGpx.metadata = [[OASMetadata alloc] initWithSource:existingGpx.metadata];
+            [OAPlanRouteEditingBridge savePreselectedRouteActivity:currentGpx syncWithEditedProfile:syncWithEditedProfile appMode:appMode];
             OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:currentGpx];
             success = exception == nil;
             if (success)
@@ -1847,33 +1988,223 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     });
 }
 
-- (void)enterNavigationWithTrackName:(NSString *)trackName
+- (EOAPlanRouteNavigationResult)enterNavigationWithTrackName:(NSString *)trackName
+                                             followTrackMode:(BOOL)followTrackMode
+                                              sourceFilePath:(NSString *)sourceFilePath
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    EOAPlanRouteNavigationResult preflightResult =
+        [OAPlanRouteEditingBridge genericNavigationPreflightResultWithContext:ctx != nil
+                                                                    pointCount:ctx.getPoints.count];
+    if (preflightResult != EOAPlanRouteNavigationResultSuccess)
+        return preflightResult;
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    BOOL shouldUseRoutePointsOnly =
+        [OAPlanRouteEditingBridge shouldUseRoutePointsOnlyForNavigationWithPointCount:points.count
+                                                                             hasRoute:ctx.hasRoute
+                                                                  approximationNeeded:ctx.isApproximationNeeded];
+    BOOL shouldNavigateDirectlyToPoint =
+        [OAPlanRouteEditingBridge shouldNavigateDirectlyToPointWithPointCount:points.count];
+    OAMapActions *mapActions = OARootViewController.instance.mapPanel.mapActions;
+    if (mapActions == nil)
+        return EOAPlanRouteNavigationResultTransitionFailed;
+    if (shouldNavigateDirectlyToPoint)
+    {
+        OASWptPt *point = points.firstObject;
+        OATargetPointsHelper *targetPointsHelper = OATargetPointsHelper.sharedInstance;
+        [targetPointsHelper clearAllPoints:NO];
+        CLLocation *destination = [[CLLocation alloc] initWithLatitude:point.getLatitude
+                                                            longitude:point.getLongitude];
+        [targetPointsHelper navigateToPoint:destination updateRoute:NO intermediate:-1];
+        [mapActions enterRoutePlanningModeGivenGpx:nil
+                                             from:nil
+                                         fromName:nil
+                   useIntermediatePointsByDefault:YES
+                                       showDialog:YES];
+        [self clearDraftGpx];
+        return EOAPlanRouteNavigationResultSuccess;
+    }
+    OASGpxFile *gpx;
+    NSString *navigationSourceFilePath = sourceFilePath;
+    if (shouldUseRoutePointsOnly)
+    {
+        gpx = [OAPlanRouteEditingBridge routePointsOnlyNavigationGpxWithPoints:points];
+        navigationSourceFilePath = nil;
+        [OATargetPointsHelper.sharedInstance clearAllPoints:NO];
+    }
+    else
+    {
+        gpx = [self navigationGpxWithEditingContext:ctx trackName:trackName];
+    }
+    if (gpx == nil)
+        return EOAPlanRouteNavigationResultExportFailed;
+    [self performNavigationWithGpx:gpx
+                   editingContext:ctx
+                    routingHelper:OARoutingHelper.sharedInstance
+                       mapActions:mapActions
+                  followTrackMode:followTrackMode
+                   sourceFilePath:navigationSourceFilePath];
+    return EOAPlanRouteNavigationResultSuccess;
+}
+
+- (EOAPlanRouteNavigationResult)applyAttachedTrackToNavigationWithTrackName:(NSString *)trackName
+                                                            sourceFilePath:(NSString *)sourceFilePath
+                                                          beforeTransition:(void (NS_NOESCAPE ^)(void))beforeTransition
+{
+    OAMeasurementEditingContext *ctx = [self editingContext];
+    EOAPlanRouteNavigationResult preflightResult =
+        [OAPlanRouteEditingBridge attachNavigationPreflightResultWithContext:ctx != nil
+                                                                    hasRoute:[ctx hasRoute]
+                                                                  hasChanges:[ctx hasChanges]];
+    if (preflightResult != EOAPlanRouteNavigationResultSuccess)
+        return preflightResult;
+    OASGpxFile *gpx = [self navigationGpxWithEditingContext:ctx trackName:trackName];
+    if (gpx == nil)
+        return EOAPlanRouteNavigationResultExportFailed;
+    OAMapActions *mapActions = OARootViewController.instance.mapPanel.mapActions;
+    if (mapActions == nil)
+        return EOAPlanRouteNavigationResultTransitionFailed;
+    beforeTransition();
+    [self performNavigationWithGpx:gpx
+                   editingContext:ctx
+                    routingHelper:OARoutingHelper.sharedInstance
+                       mapActions:mapActions
+                  followTrackMode:YES
+                   sourceFilePath:sourceFilePath];
+    return EOAPlanRouteNavigationResultSuccess;
+}
+
++ (BOOL)canApplyAttachedTrackWithRoute:(BOOL)hasRoute changes:(BOOL)hasChanges
+{
+    return hasRoute || hasChanges;
+}
+
++ (EOAPlanRouteNavigationResult)genericNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                 pointCount:(NSInteger)pointCount
+{
+    if (!hasContext)
+        return EOAPlanRouteNavigationResultInvalidContext;
+    if (pointCount == 0)
+        return EOAPlanRouteNavigationResultNoPoints;
+    return EOAPlanRouteNavigationResultSuccess;
+}
+
++ (BOOL)shouldNavigateDirectlyToPointWithPointCount:(NSInteger)pointCount
+{
+    return pointCount == 1;
+}
+
++ (BOOL)shouldRequestApproximationBeforeNavigationWithPointCount:(NSInteger)pointCount
+                                                        hasRoute:(BOOL)hasRoute
+                                             approximationNeeded:(BOOL)approximationNeeded
+{
+    return pointCount != 1 && !hasRoute && approximationNeeded;
+}
+
++ (BOOL)shouldUseRoutePointsOnlyForNavigationWithPointCount:(NSInteger)pointCount
+                                                   hasRoute:(BOOL)hasRoute
+                                        approximationNeeded:(BOOL)approximationNeeded
+{
+    return pointCount > 1 && !hasRoute && !approximationNeeded;
+}
+
++ (OASGpxFile *)routePointsOnlyNavigationGpxWithPoints:(NSArray<OASWptPt *> *)points
+{
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    [gpx addRoutePointsPoints:points addRoute:NO];
+    return gpx;
+}
+
++ (OAApplicationMode *)navigationAppModeForEditingAppMode:(OAApplicationMode *)editingAppMode
+{
+    return editingAppMode == OAApplicationMode.DEFAULT ? nil : editingAppMode;
+}
+
++ (EOAPlanRouteNavigationResult)attachNavigationPreflightResultWithContext:(BOOL)hasContext
+                                                                  hasRoute:(BOOL)hasRoute
+                                                                hasChanges:(BOOL)hasChanges
+{
+    if (!hasContext)
+        return EOAPlanRouteNavigationResultInvalidContext;
+    if (![OAPlanRouteEditingBridge canApplyAttachedTrackWithRoute:hasRoute changes:hasChanges])
+        return EOAPlanRouteNavigationResultMissingApproximationResult;
+    return EOAPlanRouteNavigationResultSuccess;
+}
+
++ (BOOL)shouldSyncRouteActivityWithEditedProfile:(OAMeasurementEditingContext *)editingCtx
+{
+    return !editingCtx.isNewData && editingCtx.hasRoutePoints && !editingCtx.isInMultiProfileMode;
+}
+
++ (void)savePreselectedRouteActivity:(OASGpxFile *)gpxFile syncWithEditedProfile:(BOOL)syncWithEditedProfile appMode:(OAApplicationMode *)appMode
+{
+    OASRouteActivityHelper *helper = OASRouteActivityHelper.shared;
+    OASMetadata *metadata = gpxFile.metadata;
+    if (!syncWithEditedProfile && [metadata getRouteActivityActivities:helper.getActivities] != nil)
         return;
+    
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if (appMode == OAApplicationMode.DEFAULT)
+        appMode = settings.applicationMode.get;
+    
+    NSString *activityId = [settings.currentTrackRouteActivity get:appMode];
+    if (syncWithEditedProfile)
+        [metadata setRouteActivityActivity:[helper findRouteActivityId:activityId]];
+    else if (activityId.length > 0)
+        [metadata setRouteActivityActivity:[helper findRouteActivityId:activityId]];
+}
+
+- (OASGpxFile *)navigationGpxWithEditingContext:(OAMeasurementEditingContext *)ctx
+                                      trackName:(NSString *)trackName
+{
     NSString *name = trackName.length > 0 ? trackName : OALocalizedString(@"quick_action_new_route");
     OASGpxFile *gpx = [ctx exportGpx:name];
     if (gpx == nil)
-        return;
+        return nil;
 
     [self addPoiGroupsFromGpx:ctx.gpxData.gpxFile toGpx:gpx];
     [self addDraftWaypointsToGpx:gpx];
-    NSString *outFile = [[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        OASKFile *file = [[OASKFile alloc] initWithFilePath:outFile];
-        [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx];
-        gpx.path = outFile;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self clearDraftGpx];
-            [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx
-                                                                                         path:outFile
-                                                                                         from:nil
-                                                                                     fromName:nil
-                                                                 useIntermediatePointsByDefault:YES
-                                                                                   showDialog:YES];
-        });
-    });
+    return gpx;
+}
+
+- (void)performNavigationWithGpx:(OASGpxFile *)gpx
+                  editingContext:(OAMeasurementEditingContext *)ctx
+                   routingHelper:(OARoutingHelper *)routingHelper
+                      mapActions:(OAMapActions *)mapActions
+                 followTrackMode:(BOOL)followTrackMode
+                  sourceFilePath:(NSString *)sourceFilePath
+{
+    NSString *navigationFilePath = [OAPlanRouteEditingBridge navigationFilePathForExportedGpx:gpx
+                                                                               sourceFilePath:sourceFilePath];
+    if (routingHelper.isFollowingMode && followTrackMode)
+    {
+        [mapActions setGPXRouteParamsWithDocument:gpx path:navigationFilePath];
+        [OATargetPointsHelper.sharedInstance updateRouteAndRefresh:YES];
+        [routingHelper recalculateRouteDueToSettingsChange];
+    }
+    else if (routingHelper.isFollowingMode)
+    {
+        [mapActions stopNavigationWithoutConfirm];
+        [mapActions enterRoutePlanningModeGivenGpx:gpx
+                                              path:navigationFilePath
+                                              from:nil
+                                          fromName:nil
+                    useIntermediatePointsByDefault:YES
+                                        showDialog:YES];
+    }
+    else
+    {
+        [mapActions stopNavigationWithoutConfirm];
+        OAApplicationMode *navigationAppMode = [OAPlanRouteEditingBridge navigationAppModeForEditingAppMode:ctx.appMode];
+        [mapActions enterRoutePlanningModeGivenGpx:gpx
+                                           appMode:navigationAppMode
+                                              path:navigationFilePath
+                                              from:nil
+                                          fromName:nil
+                    useIntermediatePointsByDefault:YES
+                                        showDialog:YES];
+    }
+    [self clearDraftGpx];
 }
 
 - (void)sortSegmentDoorToDoorWithPointIndexes:(NSArray<NSNumber *> *)indexes
@@ -1944,7 +2275,9 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil)
+    if (ctx == nil || ctx.approximationSessionActive)
+        return;
+    if (ctx.originalPointToMove != nil || ctx.isInAddPointMode)
         return;
 
     NSInteger hitIndex = [layer findNearestPointToCoordinate:coordinate];
@@ -2074,14 +2407,11 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     if (ctx == nil || ctx.orderedRoadSegmentData.count == 0)
         return @[];
 
-    std::vector<std::shared_ptr<RouteSegmentResult>> combined;
+    NSMutableArray<OASRouteSegmentResult *> *combined = [NSMutableArray array];
     for (OARoadSegmentData *data in ctx.orderedRoadSegmentData)
-    {
-        const auto &segs = data.segments;
-        combined.insert(combined.end(), segs.begin(), segs.end());
-    }
+        [combined addObjectsFromArray:data.segments];
 
-    if (combined.empty())
+    if (combined.count == 0)
         return @[];
 
     return [OARouteStatisticsHelper calculateRouteStatistic:combined];
@@ -2408,6 +2738,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onPopupDismissed
 {
+    [self editingContext].approximationSessionActive = NO;
     UIViewController *controller = _approximationPopupController.navigationController ?: _approximationPopupController;
     _approximationPopupController = nil;
     if (controller.presentingViewController != nil)
@@ -2419,7 +2750,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (void)onCancelSnapApproximation:(BOOL)hasApproximationStarted
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
-    ctx.inApproximationMode = NO;
+    ctx.approximationSessionActive = NO;
     if (hasApproximationStarted)
         [ctx.commandManager undo];
     [[self layer] updateLayer];
@@ -2435,13 +2766,15 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onApplyGpxApproximation
 {
-    [self editingContext].inApproximationMode = NO;
+    [self editingContext].approximationSessionActive = NO;
     _approximationPopupController = nil;
     [[self layer] updateLayer];
     [self invalidateTerrainElevationGpx];
     if (self.onChange)
         self.onChange();
-    if (self.onApproximationPopupDismissed)
+    if (self.onApproximationApplied)
+        self.onApproximationApplied();
+    else if (self.onApproximationPopupDismissed)
         self.onApproximationPopupDismissed();
 }
 

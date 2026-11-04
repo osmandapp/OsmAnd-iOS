@@ -88,7 +88,7 @@
             @{
                     @"type" : [OATitleDescriptionBigIconCell getCellIdentifier],
                     @"title" : OALocalizedString(@"benefits_for_contributors"),
-                    @"icon": @"ic_custom_openstreetmap_logo_colored_day_big"
+                    @"icon": ACImageNameIcCustomOpenstreetmapLogoColoredDayBig
             },
             @{
                     @"type" : [OATitleDescriptionBigIconCell getCellIdentifier],
@@ -98,8 +98,8 @@
             @{
                     @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"daily_map_updates"),
-                    @"left_icon": @"ic_custom_map_updates_colored",
-                    @"right_icon": @"img_openstreetmap_logo"
+                    @"left_icon": ACImageNameIcCustomMapUpdatesColored,
+                    @"right_icon": ACImageNameImgOpenstreetmapLogo
             },
             @{
                     @"type" : [OADividerCell getCellIdentifier],
@@ -108,8 +108,8 @@
             @{
                     @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"monthly_map_updates"),
-                    @"left_icon": @"ic_custom_monthly_map_updates_colored",
-                    @"right_icon": @"img_openstreetmap_logo"
+                    @"left_icon": ACImageNameIcCustomMonthlyMapUpdatesColored,
+                    @"right_icon": ACImageNameImgOpenstreetmapLogo
             },
             @{
                     @"type" : [OADividerCell getCellIdentifier],
@@ -118,8 +118,8 @@
             @{
                     @"type" : [OAValueTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"unlimited_map_downloads"),
-                    @"left_icon": @"ic_custom_unlimited_downloads_colored",
-                    @"right_icon": @"img_openstreetmap_logo"
+                    @"left_icon": ACImageNameIcCustomUnlimitedDownloadsColored,
+                    @"right_icon": ACImageNameImgOpenstreetmapLogo
             },
             @{
                     @"type" : [OADividerCell getCellIdentifier]
@@ -128,7 +128,7 @@
                     @"type" : [OASimpleTableViewCell getCellIdentifier],
                     @"title" : OALocalizedString(@"shared_string_update_required"),
                     @"descr" : OALocalizedString(@"osm_login_needs_ios_16_4"),
-                    @"left_icon": @"ic_custom_alert",
+                    @"left_icon": ACImageNameIcCustomAlert,
                     @"left_icon_tint" : [UIColor colorNamed:ACColorNameIconColorSelected]
             },
             @{
@@ -137,7 +137,7 @@
                     @"title" : OALocalizedString(@"sign_in_with_open_street_map"),
                     @"background_color": [UIColor colorNamed:ACColorNameButtonBgColorDisabled],
                     @"tint_color": [UIColor colorNamed:ACColorNameTextColorTertiary],
-                    @"icon" : @"ic_action_openstreetmap_logo",
+                    @"icon" : ACImageNameIcActionOpenstreetmapLogo,
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)
             },

@@ -30,6 +30,7 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/SingleSkImage.h>
 #include <SkCanvas.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kZoomDelta 0.1
 
@@ -48,6 +49,9 @@
     OsmAnd::MapMarker::OnSurfaceIconKey _locationIconKey;
     
     sk_sp<SkImage> _xAxisLocationIcon;
+    sk_sp<SkImage> _directionArrowIcon;
+    sk_sp<SkImage> _directionArrowSmallIcon;
+    sk_sp<SkImage> _directionArrowDarkIcon;
 }
 
 - (void)initLayer
@@ -57,7 +61,7 @@
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
 
-    _xAxisLocationIcon = [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"];
+    _xAxisLocationIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapMapillaryLocation];
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -66,7 +70,7 @@
     
     _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
     locationMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
-        OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]));
+        OsmAnd::SingleSkImage([OANativeUtilities skImageFromAssetNamed:ACImageNameMapPedestrianLocation]));
     _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
     
     [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
@@ -133,12 +137,40 @@
         [self.mapView addKeyedSymbolsProvider:_vectorLinesArrowsProvider];
 }
 
-- (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName
+- (sk_sp<SkImage>)directionArrowBitmapForColor:(UIColor *)color
 {
-    UIImage *image = [UIImage imageNamed:fileName];
-    if ([OAUtilities isColorBright:color])
-        image = [OAUtilities tintImageWithColor:image color:UIColor.blackColor];
-    return [OANativeUtilities skImageFromCGImage:image.CGImage];
+    if (![OAUtilities isColorBright:color])
+        return [self directionArrowIcon];
+
+    @synchronized (self)
+    {
+        if (!_directionArrowDarkIcon)
+        {
+            UIImage *image = [OAUtilities tintImageWithColor:[UIImage imageNamed:ACImageNameMapDirectionArrow] color:UIColor.blackColor];
+            _directionArrowDarkIcon = [OANativeUtilities skImageFromCGImage:image.CGImage];
+        }
+        return _directionArrowDarkIcon;
+    }
+}
+
+- (sk_sp<SkImage>)directionArrowIcon
+{
+    @synchronized (self)
+    {
+        if (!_directionArrowIcon)
+            _directionArrowIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapDirectionArrow];
+        return _directionArrowIcon;
+    }
+}
+
+- (sk_sp<SkImage>)directionArrowSmallIcon
+{
+    @synchronized (self)
+    {
+        if (!_directionArrowSmallIcon)
+            _directionArrowSmallIcon = [OANativeUtilities skImageFromAssetNamed:ACImageNameMapDirectionArrowSmall];
+        return _directionArrowSmallIcon;
+    }
 }
 
 - (sk_sp<SkImage>) specialBitmapWithColor:(OsmAnd::ColorARGB)color
@@ -169,7 +201,7 @@
     paint.setColor(SkColorSetARGB(color.a, color.r, color.g, color.b));
     canvas.drawCircle(bitmapSize / 2, bitmapSize  / 2, (bitmapSize - strokeWidth) / 2, paint);
 
-    const auto arrowImage = [OANativeUtilities skImageFromPngResource:@"map_direction_arrow_small"];
+    const auto arrowImage = [self directionArrowSmallIcon];
     if (arrowImage)
         canvas.drawImage(arrowImage,
                         (bitmapSize - arrowImage->width()) / 2.0f,
@@ -217,7 +249,7 @@
     paint.setStrokeWidth(strokeWidth);
     canvas.drawRRect(rrect, paint);
 
-    const auto arrowImage = [OANativeUtilities skImageFromPngResource:@"map_direction_arrow"];
+    const auto arrowImage = [self directionArrowIcon];
     if (arrowImage)
     {
         SkScalar imageHeight = arrowImage->height();
@@ -238,17 +270,17 @@
 
 - (void) calculateSegmentsColor:(QList<OsmAnd::FColorARGB> &)colors
                        attrName:(NSString *)attrName
-                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
+                  segmentResult:(NSArray<OASRouteSegmentResult *> *)segs
                       locations:(NSArray<CLLocation *> *)locations
 {
     const auto& env = [OsmAndApp instance].defaultRenderer;
     OARouteStatisticsComputer *statsComputer = [[OARouteStatisticsComputer alloc] initWithPresentationEnvironment:env];
     int firstSegmentLocationIdx = [self getIdxOfFirstSegmentLocation:locations routeSegments:segs];
-    for (NSInteger i = 0; i < segs.size(); i++)
+    for (NSInteger i = 0; i < (NSInteger) segs.count; i++)
     {
-        const auto& segment = segs[i];
+        OASRouteSegmentResult *segment = segs[i];
         OARouteSegmentWithIncline *routeSeg = [[OARouteSegmentWithIncline alloc] init];
-        routeSeg.obj = segment->object;
+        routeSeg.obj = [segment getObject];
         OARouteSegmentAttribute *attribute = [statsComputer classifySegment:attrName slopeClass:-1 segment:routeSeg];
         OsmAnd::ColorARGB color((int)attribute.color);
 //        color = color == 0 ? RouteColorize.LIGHT_GREY : color;
@@ -261,13 +293,13 @@
             }
         }
 
-        int pointsSize = abs(segment->getStartPointIndex() - segment->getEndPointIndex());
+        int pointsSize = abs([segment getStartPointIndex] - [segment getEndPointIndex]);
         for (int j = 0; j < pointsSize; j++)
         {
             colors.push_back(color);
         }
 
-        if (i == segs.size() - 1)
+        if (i == (NSInteger) segs.count - 1)
         {
             int start = colors.size();
             for (int j = start; j < locations.count; j++)
@@ -279,17 +311,17 @@
 }
 
 - (int) getIdxOfFirstSegmentLocation:(NSArray<CLLocation *> *)locations
-                       routeSegments:(const std::vector<std::shared_ptr<RouteSegmentResult>> &)routeSegments
+                       routeSegments:(NSArray<OASRouteSegmentResult *> *)routeSegments
 {
     int locationsIdx = 0;
-    if (routeSegments.size() == 0)
+    if (routeSegments.count == 0)
         return locationsIdx;
-    const auto& segmentStartPoint = routeSegments[0]->getStartPoint();
+    OASKLatLon *segmentStartPoint = [routeSegments[0] getStartPoint];
     while (locationsIdx < locations.count)
     {
         CLLocation *location = locations[locationsIdx];
-        if (location.coordinate.latitude == segmentStartPoint.lat
-            && location.coordinate.longitude == segmentStartPoint.lon)
+        if (location.coordinate.latitude == segmentStartPoint.latitude
+            && location.coordinate.longitude == segmentStartPoint.longitude)
         {
             break;
         }

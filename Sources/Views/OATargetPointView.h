@@ -52,12 +52,15 @@
 - (void) prepare;
 - (void) prepareNoInit;
 - (void) prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
+- (void) cancelScrollingForRotation;
+- (void) finishRotation;
 - (void) updateColors;
 
 - (void) showTopToolbarWithAnimation:(BOOL)animated forceToShowIfTypeFloating:(BOOL)forceToShowIfTypeFloating;
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
+- (BOOL)isHiding;
 - (BOOL) preHide;
 
 - (void) hideByMapGesture;

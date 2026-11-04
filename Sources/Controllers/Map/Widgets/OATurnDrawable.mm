@@ -14,7 +14,7 @@
 
 @implementation OATurnDrawable
 {
-    std::shared_ptr<TurnType> _turnType;
+    OASTurnType *_turnType;
     BOOL _mini;
     EOATurnDrawableThemeColor _themeColor;
     UIColor *_routeDirectionColor;
@@ -97,12 +97,12 @@
     [self setNeedsDisplay];
 }
 
-- (std::shared_ptr<TurnType>) turnType
+- (OASTurnType *) turnType
 {
     return _turnType;
 }
 
-- (BOOL) setTurnType:(std::shared_ptr<TurnType>)turnType
+- (BOOL) setTurnType:(OASTurnType *)turnType
 {
     if (turnType != _turnType)
     {
@@ -142,13 +142,13 @@
         CGContextDrawPath(context, kCGPathFillStroke);
     }
 
-    if (_turnType && !_mini && _turnType->getExitOut() > 0 && _textFont)
+    if (_turnType && !_mini && _turnType.exitOut > 0 && _textFont)
     {
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
         attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
         attributes[NSFontAttributeName] = _textFont;
         
-        NSString *text = [NSString stringWithFormat:@"%d", _turnType->getExitOut()];
+        NSString *text = [NSString stringWithFormat:@"%d", _turnType.exitOut];
         CGSize size = [OAUtilities calculateTextBounds:text width:500 font:_textFont];
         CGPoint p = CGPointMake(self.centerText.x - size.width / 2, self.centerText.y - size.height / 2 + 1);
         [text drawAtPoint:p withAttributes:attributes];

@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OATurnResource.h"
 #import "OATurnPathHelper.h"
+#import "OsmAndSharedWrapper.h"
 #import "OAUtilities.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -56,6 +57,13 @@
     _lanes = lanes;
 }
 
+- (void) setTurnLanes:(OASKotlinIntArray *)lanes
+{
+    _lanes.clear();
+    for (int i = 0; lanes != nil && i < lanes.size; i++)
+        _lanes.push_back([lanes getIndex:i]);
+}
+
 - (void) updateBounds
 {
     CGFloat w = 0;
@@ -67,9 +75,9 @@
         NSMutableArray *boundsArr = [NSMutableArray arrayWithCapacity:_lanes.size()];
         for (int i = 0; i < _lanes.size(); i++)
         {
-            int turnType = TurnType::getPrimaryTurn(_lanes[i]);
-            int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);
-            int thirdTurnType = TurnType::getTertiaryTurn(_lanes[i]);
+            int turnType = [OASTurnType.companion getPrimaryTurnLaneValue:_lanes[i]];
+            int secondTurnType = [OASTurnType.companion getSecondaryTurnLaneValue:_lanes[i]];
+            int thirdTurnType = [OASTurnType.companion getTertiaryTurnLaneValue:_lanes[i]];
             
             CGRect imgBounds = CGRectZero;
             
@@ -149,9 +157,9 @@
             else
                 _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].appMapThemeColor;
 
-            int turnType = TurnType::getPrimaryTurn(_lanes[i]);
-            int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);
-            int thirdTurnType = TurnType::getTertiaryTurn(_lanes[i]);
+            int turnType = [OASTurnType.companion getPrimaryTurnLaneValue:_lanes[i]];
+            int secondTurnType = [OASTurnType.companion getSecondaryTurnLaneValue:_lanes[i]];
+            int thirdTurnType = [OASTurnType.companion getTertiaryTurnLaneValue:_lanes[i]];
 
             CGRect imgBounds = CGRectZero;
             UIBezierPath *thirdTurnPath;

@@ -52,6 +52,10 @@ final class GlideTargetWidget: GlideBaseWidget {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func storedWidgetState() -> OAWidgetState? {
+        widgetState
+    }
+
     override func updateInfo() -> Bool {
         if isInTargetAltitudeState() {
             updateTargetAltitude()

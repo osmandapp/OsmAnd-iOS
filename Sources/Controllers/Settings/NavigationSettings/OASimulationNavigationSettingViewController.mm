@@ -98,9 +98,7 @@
 - (void)generateData
 {
     NSMutableArray *result = [NSMutableArray array];
-    NSNumber *zeroInset = [NSNumber numberWithFloat:0];
-    NSNumber *defaultInset = [NSNumber numberWithFloat:20 + [OAUtilities getLeftMargin]];
-    
+
     NSString *selectedModeDescription = @"";
     for (OASimulationMode *mode in [OASimulationMode values])
     {
@@ -110,20 +108,12 @@
     
     NSArray *switchSection = @[
         @{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : zeroInset,
-        },
-        @{
             @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"key" : kSimulateNavigationSwitchkey,
             @"title" : OALocalizedString(@"shared_string_enabled"),
             @"value" : @(_isEnabled),
             @"headerTitle" : @"",
             @"footerTitle" : @""
-        },
-        @{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : zeroInset,
         }
     ];
     [result addObject:switchSection];
@@ -133,21 +123,16 @@
         BOOL isConstantMode = [_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModeConstant]];
         NSMutableArray *paramsSection = [NSMutableArray array];
         [paramsSection addObject:@{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : zeroInset,
-            @"headerTitle" : OALocalizedString(@"speed_mode"),
-            @"footerTitle" : selectedModeDescription
-        }];
-        [paramsSection addObject:@{
             @"type" : kUICellKey,
             @"key" : [OASimulationMode toKey:EOASimulationModePreview],
             @"title" : [OASimulationMode toTitle:EOASimulationModePreview],
             @"descr" : @"",
-            @"selected" : @([_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModePreview]])
+            @"selected" : @([_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModePreview]]),
+            @"headerTitle" : OALocalizedString(@"speed_mode"),
+            @"footerTitle" : selectedModeDescription
         }];
         [paramsSection addObject:@{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : defaultInset,
+            @"type" : [OADividerCell getCellIdentifier]
         }];
         [paramsSection addObject:@{
             @"type" : kUICellKey,
@@ -168,8 +153,7 @@
             }];
         }
         [paramsSection addObject:@{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : defaultInset,
+            @"type" : [OADividerCell getCellIdentifier]
         }];
         [paramsSection addObject:@{
             @"type" : kUICellKey,
@@ -177,10 +161,6 @@
             @"title" : [OASimulationMode toTitle:EOASimulationModeRealistic],
             @"descr" : @"",
             @"selected" : @([_selectedMode isEqualToString:[OASimulationMode toKey:EOASimulationModeRealistic]])
-        }];
-        [paramsSection addObject:@{
-            @"type" : [OADividerCell getCellIdentifier],
-            @"inset" : zeroInset,
         }];
         [result addObject:[NSArray arrayWithArray:paramsSection]];
     }
@@ -339,8 +319,8 @@
             cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerColor = [SeparatorAppearance color];
             cell.dividerHight = SeparatorAppearance.thickness;
+            cell.alignsWithLayoutMargins = YES;
         }
-        cell.dividerInsets = UIEdgeInsetsMake(0, [item[@"inset"] doubleValue], 0, 0);
         return cell;
     }
     return nil;
@@ -424,7 +404,7 @@
     {
         _selectedSpeed = sender.value;
         [self generateData];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:3 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

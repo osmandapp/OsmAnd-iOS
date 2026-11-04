@@ -108,7 +108,7 @@
         standardIconId = (!type ? nil : type.name);
         filterId = [[STD_PREFIX stringByAppendingString:(standardIconId ? standardIconId : @"")] stringByAppendingString:idSuffix];
         
-        name = !type ? OALocalizedString(@"poi_filter_closest_poi") : ([type.nameLocalized stringByAppendingString:idSuffix]);
+        name = !type ? OALocalizedString(@"poi_filter_closest_poi") : ([[PoiAdditionalLabels getSearchName:type] stringByAppendingString:idSuffix]);
         if (!type)
         {
             [self initSearchAll];

@@ -25,9 +25,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) double longitude;
 @property (nonatomic, readonly, nullable) NSDate *timestampDate;
 @property (nonatomic, readonly) BOOL isVisible;
+@property (nonatomic, readonly) UIColor *color;
+@property (nonatomic, readonly) NSString *iconName;
+@property (nonatomic, readonly) NSString *backgroundIconName;
 
 - (instancetype)initWithFavorite:(OAFavoriteItem *)favorite;
 - (UIImage *)icon;
+- (UIImage *)iconWithColor:(UIColor *)color;
 - (void)updateDistanceAndDirection;
 - (void)updateDistanceAndDirectionFromMapCenter:(CLLocationCoordinate2D)mapCenterCoordinate mapAzimuth:(CLLocationDirection)mapAzimuth;
 

@@ -11,12 +11,7 @@
 #import <Foundation/Foundation.h>
 #import "OAExitInfo.h"
 
-#include <CommonCollections.h>
-#include <commonOsmAndCore.h>
-#include <turnType.h>
-#include <binaryRead.h>
-
-@class OAExitInfo;
+@class OAExitInfo, OASTurnType, OASRouteDataObject;
 
 @interface OARouteDirectionInfo : NSObject
 // location when you should action (turn or go ahead)
@@ -24,7 +19,7 @@
 // location where direction end. useful for roundabouts.
 @property (nonatomic) int routeEndPointOffset;
 // Type of action to take
-@property (nonatomic, assign) std::shared_ptr<TurnType> turnType;
+@property (nonatomic) OASTurnType *turnType;
 // Speed after the action till next turn
 @property (nonatomic) float averageSpeed;
 
@@ -37,11 +32,11 @@
 @property (nonatomic) NSString* ref;
 @property (nonatomic) NSString* streetName;
 @property (nonatomic) NSString* destinationName;
-@property (nonatomic) std::shared_ptr<RouteDataObject> routeDataObject;
+@property (nonatomic) OASRouteDataObject *routeDataObject;
 @property (nonatomic) OAExitInfo *exitInfo;
 @property (nonatomic) NSString* destinationRef;
 
-- (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(std::shared_ptr<TurnType>)turnType;
+- (instancetype)initWithAverageSpeed:(float)averageSpeed turnType:(OASTurnType *)turnType;
 
 - (NSString *) getDescriptionRoute;
 - (NSString *) getDescriptionRoutePart;

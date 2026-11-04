@@ -91,21 +91,23 @@
                appMode:(OAApplicationMode *)appMode
           widgetParams:(NSDictionary *)widgetParams
 {
-    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
+    OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode
+                                                            screenLayoutMode:delegate.screenLayoutMode
+                                                        preferenceLayoutMode:delegate.preferenceLayoutMode];
 
-    _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil appMode:appMode widgetParams:widgetParams];
+    _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.weatherTemperatureWidget widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherTempControl]];
 
-    _weatherPressureControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget customId:nil appMode:appMode widgetParams:widgetParams];
+    _weatherPressureControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.weatherAirPressureWidget widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPressureControl]];
 
-    _weatherWindSpeedControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherWindWidget customId:nil appMode:appMode widgetParams:widgetParams];
+    _weatherWindSpeedControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherWindWidget customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.weatherWindWidget widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherWindSpeedControl]];
 
-    _weatherCloudControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget customId:nil appMode:appMode widgetParams:widgetParams];
+    _weatherCloudControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.weatherCloudsWidget widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherCloudControl]];
 
-    _weatherPrecipControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget customId:nil appMode:appMode widgetParams:widgetParams];
+    _weatherPrecipControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget customId:nil appMode:appMode widgetParams:[creator widgetParamsFor:OAWidgetType.weatherPrecipitationWidget widgetParams:widgetParams]];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPrecipControl]];
 }
 

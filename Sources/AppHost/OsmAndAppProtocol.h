@@ -10,8 +10,12 @@
 #import "OACommonTypes.h"
 
 @class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable, OASPaletteRepository;
+@class OASGeneralRouter, OASRoutingConfigurationBuilder;
 
 @protocol OAAppearanceProtocol;
+
+// Posted on the main thread when a repository update ends, whether it succeeded or not
+FOUNDATION_EXTERN NSString *const OARepositoryUpdateFinishedNotification;
 
 @protocol OsmAndAppProtocol <NSObject>
 @required
@@ -30,6 +34,7 @@
 @property(nonatomic, readonly) NSString *travelGuidesPath;
 @property(nonatomic, readonly) NSString *gpxTravelPath;
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
+@property(nonatomic, readonly) NSString *onlineTileSourcesPath;
 @property(nonatomic, readonly) NSString *routingMapsCachePath;
 @property(nonatomic, readonly) NSString *models3dPath;
 @property(nonatomic, readonly) NSString *colorsPalettePath;
@@ -59,7 +64,14 @@
 @property (nonatomic) BOOL isInBackgroundOnDevice; // YES if is in background on device (carplay may be active)
 @property(readonly) OAObservable* backgroundStateObservable;
 
+// Split so that callers can read the tree off the main thread and publish it there together with dependent state
+- (OAWorldRegion *) readWorldRegions;
+- (void) applyWorldRegions:(OAWorldRegion *)worldRegion;
 - (void) loadWorldRegions;
+
+/** The OsmAndShared twin of getRoutingConfigForMode:, from the same routing.xml files. */
+- (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode;
+- (OASGeneralRouter *) getSharedRouter:(OASRoutingConfigurationBuilder *)builder mode:(OAApplicationMode *)mode;
 
 - (void) saveDataToPermamentStorage;
 
@@ -74,8 +86,6 @@
 
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
-
-- (void)allowScreenTurnOff:(BOOL)allow;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
 
@@ -113,6 +123,14 @@
 
 - (void) loadRoutingFiles;
 - (void) rescanUnmanagedStoragePaths;
+
+// The resources manager reads online tile source definitions from Library/Caches, which iOS may
+// purge at any time; onlineTileSourcesPath is where they survive. Every place that writes or
+// removes a ".metainfo" under cachePath must mirror the change through these, so the two never
+// fall out of sync.
+- (void) backupOnlineTileSource:(NSString *)name;
+- (void) backupAllOnlineTileSources;
+- (void) removeOnlineTileSourceBackup:(NSString *)name;
 
 - (NSString *) favoritesStorageFilename:(NSString *)groupName;
 - (NSString *) getGroupFileName:(NSString *)groupName;

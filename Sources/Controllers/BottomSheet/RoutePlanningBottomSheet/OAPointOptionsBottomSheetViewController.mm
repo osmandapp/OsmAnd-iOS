@@ -51,6 +51,7 @@
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.sectionHeaderHeight = 16.;
+    self.tableView.accessibilityIdentifier = [UITestAccessibilityIdentifier planRoutePointAction:@"menu"];
     [self.rightButton removeFromSuperview];
     self.leftIconView.image = [UIImage imageNamed:ACImageNameIcCustomRoutes];
     self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
@@ -69,7 +70,7 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"move_point"),
-            @"img" : @"ic_custom_change_object_position",
+            @"img" : ACImageNameIcCustomChangeObjectPosition,
             @"key" : @"move_point"
         }
     ]];
@@ -78,14 +79,14 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_point_before"),
-            @"img" : @"ic_custom_add_point_before",
+            @"img" : ACImageNameIcCustomAddPointBefore,
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeBefore)
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_point_after"),
-            @"img" : @"ic_custom_add_point_after",
+            @"img" : ACImageNameIcCustomAddPointAfter,
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeAfter)
         }
@@ -96,7 +97,7 @@
             @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_before"),
             @"desc" : [self getDescription:YES],
-            @"img" : @"ic_custom_trim_before",
+            @"img" : ACImageNameIcCustomTrimBefore,
             @"key" : @"trim_before",
             @"value" : @(EOAClearPointsModeBefore)
         },
@@ -104,7 +105,7 @@
             @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"trim_after"),
             @"desc" : [self getDescription:NO],
-            @"img" : @"ic_custom_trim_after",
+            @"img" : ACImageNameIcCustomTrimAfter,
             @"key" : @"trim_after",
             @"value" : @(EOAClearPointsModeAfter)
         }
@@ -120,7 +121,7 @@
             @{
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"gpx_start_new_segment"),
-                @"img" : @"ic_custom_new_segment",
+                @"img" : ACImageNameIcCustomNewSegment,
                 @"key" : @"new_segment"
             }
         ]];
@@ -131,7 +132,7 @@
             @{
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"join_segments"),
-                @"img" : @"ic_custom_join_segments",
+                @"img" : ACImageNameIcCustomJoinSegments,
                 @"key" : @"join_segments"
             }
         ]];
@@ -146,13 +147,13 @@
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"plan_route_split_before"),
-                    @"img" : @"ic_custom_split_before",
+                    @"img" : ACImageNameIcCustomSplitBefore,
                     @"key" : @"split_before"
                 },
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"plan_route_split_after"),
-                    @"img" : @"ic_custom_split_after",
+                    @"img" : ACImageNameIcCustomSplitAfter,
                     @"key" : @"split_after"
                 }
             ]];
@@ -163,7 +164,7 @@
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"plan_route_split_before"),
-                    @"img" : @"ic_custom_split_before",
+                    @"img" : ACImageNameIcCustomSplitBefore,
                     @"key" : @"split_before"
                 }
             ]];
@@ -174,7 +175,7 @@
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
                     @"title" : OALocalizedString(@"plan_route_split_after"),
-                    @"img" : @"ic_custom_split_after",
+                    @"img" : ACImageNameIcCustomSplitAfter,
                     @"key" : @"split_after"
                 }
             ]];
@@ -201,7 +202,7 @@
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"delete_point"),
-            @"img" : @"ic_custom_remove_outlined",
+            @"img" : ACImageNameIcCustomRemoveOutlined,
             @"custom_color" : UIColorFromRGB(color_primary_red),
             @"key" : @"delete_point"
         }
@@ -214,7 +215,7 @@
     OAApplicationMode *routeAppMode = before ? _editingCtx.getBeforeSelectedPointAppMode : _editingCtx.getSelectedPointAppMode;
     NSString *icon;
     if (OAApplicationMode.DEFAULT == routeAppMode)
-        icon = @"ic_custom_straight_line";
+        icon = ACImageNameIcCustomStraightLine;
     else
         icon = routeAppMode.getIconName;
         
@@ -286,7 +287,7 @@
 - (double) getTrimmedDistance:(OAMeasurementEditingContext *)editingCtx before:(BOOL)before
 {
     NSArray<OASWptPt *> *points = [editingCtx getPoints];
-    NSMutableDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
+    NSMutableDictionary<OAWptPtPair *, OARoadSegmentData *> *roadSegmentData = editingCtx.roadSegmentData;
     NSInteger pointIndex = editingCtx.selectedPointPosition;
     double dist = 0;
     NSInteger startIdx;
@@ -305,8 +306,7 @@
     {
         OASWptPt *first = points[i - 1];
         OASWptPt *second = points[i];
-        NSArray<OASWptPt *> *pair = @[first, second];
-        OARoadSegmentData *segment = roadSegmentData[pair];
+        OARoadSegmentData *segment = roadSegmentData[[OAWptPtPair pairWithFirst:first second:second]];
         BOOL routeSegmentBuilt = segment && segment.distance > 0;
        
         dist += routeSegmentBuilt ? segment.distance : [OAMapUtils getDistance:CLLocationCoordinate2DMake(first.lat, first.lon) second: CLLocationCoordinate2DMake(second.lat, second.lon)];
@@ -334,6 +334,10 @@
         {
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
+            NSString *actionKey = item[@"key"];
+            if ([actionKey isEqualToString:@"add_points"])
+                actionKey = [item[@"value"] integerValue] == EOAAddPointModeBefore ? @"add_before" : @"add_after";
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier planRoutePointAction:actionKey];
             
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)
@@ -368,6 +372,7 @@
             [cell roundCorners:(indexPath.row == 0) bottomCorners:(indexPath.row == _data[indexPath.section].count - 1)];
             cell.titleView.text = item[@"title"];
             cell.descrView.text = item[@"desc"];
+            cell.accessibilityIdentifier = [UITestAccessibilityIdentifier planRoutePointAction:item[@"key"]];
             
             UIColor *tintColor = item[@"custom_color"];
             if (tintColor)

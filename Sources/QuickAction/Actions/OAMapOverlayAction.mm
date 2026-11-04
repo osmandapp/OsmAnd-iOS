@@ -19,6 +19,7 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kOverlays = @"overlays";
 static NSString * const kNoOverlay = @"no_overlay";
@@ -47,8 +48,8 @@ static QuickActionType *TYPE;
                                                  cl:self.class]
                 name:OALocalizedString(@"quick_action_map_overlay")]
                nameAction:OALocalizedString(@"shared_string_change")]
-              iconName:@"ic_custom_overlay_map"]
-             secondaryIconName:@"ic_custom_compound_action_change"]
+              iconName:ACImageNameIcCustomOverlayMap]
+             secondaryIconName:ACImageNameIcCustomCompoundActionChange]
             category:QuickActionTypeCategoryConfigureMap];
 }
 
@@ -187,7 +188,7 @@ static QuickActionType *TYPE;
                          @"type" : [OATitleDescrDraggableCell getCellIdentifier],
                          @"title" : source.lastObject,
                          @"value" : source.firstObject,
-                         @"img" : @"ic_custom_map_style"
+                         @"img" : ACImageNameIcCustomMapStyle
                          }];
     }
     [arr addObject:@{

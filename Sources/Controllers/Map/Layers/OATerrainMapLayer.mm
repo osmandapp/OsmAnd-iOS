@@ -99,7 +99,7 @@
         {
             [self.mapView setProvider:_layerProvider forLayer:self.layerIndex];
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
+            config.setOpacityFactor(_terrainMode.alpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         }
         else
@@ -179,7 +179,7 @@
                 else
                 {
                     OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
+                    config.setOpacityFactor(_terrainMode.alpha);
                     [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
                 }
             }];

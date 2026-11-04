@@ -31,6 +31,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         downloadTaskProgressObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskProgressChanged), andObserve: OsmAndApp.swiftInstance().downloadsManager.progressCompletedObservable)
         downloadTaskCompletedObserver = OAAutoObserverProxy(self, withHandler: #selector(onDownloadResourceTaskFinished), andObserve: OsmAndApp.swiftInstance().downloadsManager.completedObservable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(onLocalResourcesChanged), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
+        NotificationCenter.default.addObserver(self, selector: #selector(onResourceInstallingFinished), name: .OAResourceInstallingFinished, object: nil)
     }
     
     deinit {
@@ -87,9 +88,13 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func isInstalled(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
-            return resourceItem.isInstalled() || super.isInstalled(resourceId)
+            return resourceItem.isInstalled() || (super.isInstalled(resourceId) && !OAResourcesInstaller.isInstalling(resourceId))
         }
         return false
+    }
+
+    func isInstalling(_ resourceId: String) -> Bool {
+        helperHasItemFor(resourceId) && OAResourcesInstaller.isInstalling(resourceId)
     }
     
     override func isDownloading(_ resourceId: String) -> Bool {
@@ -186,6 +191,24 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         return nil
     }
     
+    override func setupRightIconForIdleCell(cell: DownloadingCell, rightIconName: String?, resourceId: String) {
+        guard isInstalling(resourceId) else {
+            super.setupRightIconForIdleCell(cell: cell, rightIconName: rightIconName, resourceId: resourceId)
+            return
+        }
+        let progressView = cell.accessoryView as? FFCircularProgressView ?? FFCircularProgressView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+        progressView.iconView = UIView()
+        progressView.tintColor = .iconColorActive
+        progressView.iconPath = UIBezierPath()
+        progressView.progress = 0
+        if !progressView.isSpinning {
+            progressView.startSpinProgressBackgroundLayer()
+        }
+        cell.accessoryView = progressView
+        cell.accessoryType = .none
+        cell.rightIconVisibility(false)
+    }
+
     override func getLeftIconName(_ resourceId: String) -> String? {
         if let resourceItem = getResource(resourceId) {
             return resourceItem.iconName()
@@ -194,6 +217,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     }
     
     override func onCellClicked(_ resourceId: String) {
+        guard !isInstalling(resourceId) else { return }
         if !isFinished(resourceId) || isAlwaysClickable {
             if !isDownloading(resourceId) {
                 if !isDisabled(resourceId) {
@@ -299,7 +323,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 guard let self else { return }
 
                 self.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
-                if self.isInstalled(resourceId) {
+                if self.isInstalled(resourceId) && !self.isInstalling(resourceId) {
                     self.delegate?.onDownloadTaskFinished?(resourceId: resourceId)
                 }
               
@@ -313,6 +337,18 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
+    // Core reports the new local resource before the installer is done; only the icons are refreshed, the texts belong to the host
+    @objc private func onResourceInstallingFinished(notification: Notification) {
+        guard let resourceId = notification.object as? String, helperHasItemFor(resourceId) else { return }
+        if let cell = cells[resourceId] {
+            setupLeftIcon(cell: cell, leftIconName: getLeftIconName(resourceId), resourceId: resourceId)
+            setupRightIconForIdleCell(cell: cell, rightIconName: getRightIconName(resourceId), resourceId: resourceId)
+        }
+        if isInstalled(resourceId) {
+            delegate?.onDownloadTaskFinished?(resourceId: resourceId)
+        }
+    }
+
     @objc private func onLocalResourcesChanged(observer: Any, key: Any, value: Any) {
         guard let hostViewController else { return }
         DispatchQueue.main.async { [weak self] in

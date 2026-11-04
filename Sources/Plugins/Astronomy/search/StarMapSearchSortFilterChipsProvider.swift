@@ -187,7 +187,7 @@ final class StarMapSearchSortFilterChipsProvider: StarMapSearchSortFilterChipsDa
         SearchSortFilterChipGroup(
             id: StarMapSearchSortFilterChipGroupID.nakedEye.rawValue,
             chipTitle: localizedString("astro_filter_naked_eye"),
-            chipImage: chipImage("ic_custom_show"),
+            chipImage: .icCustomShow.resizedTemplateImage(with: 20),
             selectionMode: .toggle,
             isToggleOn: searchState.nakedEyeOnly
         )

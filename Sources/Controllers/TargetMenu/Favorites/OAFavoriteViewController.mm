@@ -110,7 +110,7 @@ static const NSInteger kOrderFavGroupRow = 1;
         UIColor *color = favoriteGroup.color ? favoriteGroup.color : [OADefaultFavorite getDefaultColor];
         UIColor *disabledColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         color = favoriteGroup.isVisible ? color : disabledColor;
-        UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
+        UIImage *icon = [UIImage imageNamed:ACImageNameIcCustomFolder];
         NSString *name = [self.favorite getCategoryDisplayName];
         NSString *description = OALocalizedString(@"context_menu_points_of_group");
 

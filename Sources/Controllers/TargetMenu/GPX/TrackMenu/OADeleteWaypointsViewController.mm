@@ -67,6 +67,7 @@
     [super viewDidLoad];
     
     _waypointGroups = self.trackMenuDelegate ? [self.trackMenuDelegate getWaypointsData] : [NSMutableDictionary dictionary];
+    self.tableView.estimatedRowHeight = 66.;
     self.tableView.editing = YES;
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
 
@@ -209,7 +210,7 @@
 
             if (![cell.directionIconView.tintColor isEqual:UIColorFromRGB(color_active_light)])
             {
-                cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionIconView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
         }
@@ -236,7 +237,7 @@
 
             [cell.titleView setText:cellData.title];
 
-            [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
+            [cell.leftIconView setImage:[UIImage imageNamed:ACImageNameIcCustomFolder]];
             cell.leftIconView.tintColor = cellData.tintColor;
 
             cell.arrowIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
@@ -265,8 +266,8 @@
             NSString *groupName = self.trackMenuDelegate ? [self.trackMenuDelegate checkGroupName:cellData.title] : @"";
             UIImage *selectionImage = [_selectedWaypointGroups.allKeys containsObject:groupName] ?
             _selectedWaypointGroups[groupName].count == _waypointGroups[groupName].count
-            ? [UIImage imageNamed:@"ic_system_checkbox_selected"]
-            : [UIImage imageNamed:@"ic_system_checkbox_indeterminate"]
+            ? [UIImage imageNamed:ACImageNameIcSystemCheckboxSelected]
+            : [UIImage imageNamed:ACImageNameIcSystemCheckboxIndeterminate]
             : nil;
             [cell.selectionButton setImage:selectionImage forState:UIControlStateNormal];
         }
@@ -464,7 +465,7 @@
         kCellToggle: @(!cellData.toggle)
     }];
     [cellData setData:@{
-        kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+        kCellRightIconName: cellData.toggle ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowRight
     }];
     
     NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:indexPath.section];

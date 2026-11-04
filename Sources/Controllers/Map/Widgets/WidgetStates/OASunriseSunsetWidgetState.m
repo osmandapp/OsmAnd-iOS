@@ -13,6 +13,7 @@
 #import "OAApplicationMode.h"
 #import "OASunriseSunsetWidget.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OASunriseSunsetWidgetState
 {
@@ -38,7 +39,7 @@
     return self;
 }
 
-- (OAWidgetType *)getWidgetType
+- (OAWidgetType *)widgetType
 {
     return _widgetType;
 }
@@ -101,9 +102,9 @@
 - (NSString *) getMenuIconId
 {
     if ([self isSunriseMode])
-        return @"widget_sunrise";
+        return ACImageNameWidgetSunrise;
     else
-        return @"widget_sunset";
+        return ACImageNameWidgetSunset;
 }
 
 - (NSString *)getSettingsIconId:(BOOL)nightMode
@@ -137,6 +138,14 @@
 - (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId
 {
     [[self registerPreference:customId widgetParams:nil] set:[_preference get:appMode] mode:appMode];
+}
+
+- (void)copyPrefsFromMode:(OAApplicationMode *)fromAppMode
+                  appMode:(OAApplicationMode *)appMode
+                 customId:(NSString *)customId
+{
+    [[self registerPreference:customId widgetParams:nil] set:[_preference get:fromAppMode] mode:appMode];
+    [[self registerSunPositionPreference:customId widgetParams:nil] set:[_sunPositionPreference get:fromAppMode] mode:appMode];
 }
 
 - (NSString *)getPrefId {

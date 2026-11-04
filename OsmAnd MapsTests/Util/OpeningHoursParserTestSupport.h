@@ -6,9 +6,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithOpeningHoursString:(NSString *)openingHoursString;
 + (void)configureLocaleIdentifier:(nullable NSString *)localeIdentifier twelveHourFormattingEnabled:(BOOL)enabled;
++ (void)setAdditionalString:(NSString *)value forKey:(NSString *)key NS_SWIFT_NAME(setAdditionalString(_:forKey:));
 + (NSInteger)weekdayForDate:(NSDate *)date NS_SWIFT_NAME(weekday(for:));
 
 - (BOOL)isOpenedAt:(NSString *)dateTimeString;
+- (BOOL)isOpened24_7At:(NSString *)dateTimeString NS_SWIFT_NAME(isOpened24_7(at:));
 - (NSString *)infoAt:(NSString *)dateTimeString;
 - (NSString *)shortInfoAt:(NSString *)dateTimeString;
 - (NSString *)infoAt:(NSString *)dateTimeString sequenceIndex:(NSInteger)sequenceIndex;

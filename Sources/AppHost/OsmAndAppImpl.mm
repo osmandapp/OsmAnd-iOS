@@ -29,6 +29,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
 #import "OAQuickSearchHelper.h"
+#import "OAReverseGeocoder.h"
 #import "OADiscountHelper.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -72,6 +73,7 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
+#include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
 #include <OsmAndCore/Search/CommonWords.h>
@@ -86,8 +88,9 @@
 #define VERSION_4_7_5 4.75
 
 #define kAppData @"app_data"
-#define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
+
+NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFinishedNotification";
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -106,6 +109,8 @@
 
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
+    // The OsmAndShared routing configs, by the file they were parsed from ("" is the built in one).
+    NSMutableDictionary<NSString *, OASRoutingConfigurationBuilder *> *_sharedRoutingConfigs;
 
     BOOL _isInBackground;
 }
@@ -124,6 +129,7 @@
 @synthesize travelGuidesPath = _travelGuidesPath;
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
+@synthesize onlineTileSourcesPath = _onlineTileSourcesPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
 @synthesize models3dPath = _models3dPath;
 @synthesize colorsPalettePath = _colorsPalettePath;
@@ -180,6 +186,7 @@
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
+        _onlineTileSourcesPath = [_dataPath stringByAppendingPathComponent:@"OnlineTileSources"];
         _routingMapsCachePath = [_cachePath stringByAppendingPathComponent:@"ind_routing.cache"];
         _colorsPalettePath = [_documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
 
@@ -223,6 +230,96 @@
     [self createFolderIfNeeded:_favoritesPath];
     [self createFolderIfNeeded:_weatherForecastPath];
     [self createFolderIfNeeded:_hiddenMapsPath];
+    [self createFolderIfNeeded:_onlineTileSourcesPath];
+    [self restoreOnlineTileSourcesToCache];
+    [self backupAllOnlineTileSources];
+}
+
+// The resources manager only ever looks for online tile source definitions (".metainfo" files,
+// written by "Add online source") under Library/Caches, which iOS is free to purge whenever the
+// app isn't running and which no device backup ever contains. That copy is therefore treated as
+// disposable, and onlineTileSourcesPath holds the definitions that actually define the user's
+// sources; a purge then costs only the re-download of the cached tile images. This puts the
+// definitions back where the resources manager expects them, and must run before it is
+// constructed, since it scans Library/Caches exactly once, at startup.
+- (void)restoreOnlineTileSourcesToCache
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (NSString *name in [fileManager contentsOfDirectoryAtPath:_onlineTileSourcesPath error:nil])
+    {
+        NSString *backupMetainfoPath = [self metainfoPathIn:_onlineTileSourcesPath forSource:name];
+        if (![fileManager fileExistsAtPath:backupMetainfoPath])
+            continue;
+
+        NSString *cacheMetainfoPath = [self metainfoPathIn:_cachePath forSource:name];
+        if ([fileManager fileExistsAtPath:cacheMetainfoPath])
+            continue;
+
+        [self copyMetainfoFrom:backupMetainfoPath to:cacheMetainfoPath forSource:name];
+    }
+}
+
+// Takes over the definitions that only Library/Caches still holds — sources added by a build that
+// predates onlineTileSourcesPath, or installed straight into the cache by the core. Purely
+// additive: a definition leaves onlineTileSourcesPath only through
+// -removeOnlineTileSourceBackup:, so a failure here can never drop the last copy of one.
+- (void)backupAllOnlineTileSources
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    for (NSString *name in [fileManager contentsOfDirectoryAtPath:_cachePath error:nil])
+    {
+        if ([fileManager fileExistsAtPath:[self metainfoPathIn:_cachePath forSource:name]])
+            [self backupOnlineTileSource:name];
+    }
+}
+
+// Write-through: call right after a source's ".metainfo" has been written to Library/Caches, so
+// that the definition is never one termination or crash away from being lost.
+- (void)backupOnlineTileSource:(NSString *)name
+{
+    NSString *cacheMetainfoPath = [self metainfoPathIn:_cachePath forSource:name];
+    NSString *backupMetainfoPath = [self metainfoPathIn:_onlineTileSourcesPath forSource:name];
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager fileExistsAtPath:cacheMetainfoPath])
+        return;
+
+    if ([fileManager contentsEqualAtPath:cacheMetainfoPath andPath:backupMetainfoPath])
+        return;
+
+    [fileManager removeItemAtPath:backupMetainfoPath error:nil];
+    [self copyMetainfoFrom:cacheMetainfoPath to:backupMetainfoPath forSource:name];
+}
+
+// Write-through counterpart: call wherever a source's ".metainfo" is removed from Library/Caches,
+// so that deleting a source deletes it for good instead of having it reappear on the next launch.
+- (void)removeOnlineTileSourceBackup:(NSString *)name
+{
+    NSError *error = nil;
+    NSString *backupEntryPath = [_onlineTileSourcesPath stringByAppendingPathComponent:name];
+    if ([NSFileManager.defaultManager fileExistsAtPath:backupEntryPath]
+        && ![NSFileManager.defaultManager removeItemAtPath:backupEntryPath error:&error])
+    {
+        OALog(@"Failed to remove online tile source \"%@\" from %@: %@", name, _onlineTileSourcesPath, error.localizedDescription);
+    }
+}
+
+- (NSString *)metainfoPathIn:(NSString *)directory forSource:(NSString *)name
+{
+    return [[directory stringByAppendingPathComponent:name] stringByAppendingPathComponent:@".metainfo"];
+}
+
+- (void)copyMetainfoFrom:(NSString *)sourcePath to:(NSString *)destinationPath forSource:(NSString *)name
+{
+    NSError *error = nil;
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager createDirectoryAtPath:destinationPath.stringByDeletingLastPathComponent
+                withIntermediateDirectories:YES
+                                 attributes:nil
+                                      error:&error]
+        || ![fileManager copyItemAtPath:sourcePath toPath:destinationPath error:&error])
+    {
+        OALog(@"Failed to copy online tile source \"%@\" to %@: %@", name, destinationPath, error.localizedDescription);
+    }
 }
 
 - (void)createFolderIfNeeded:(NSString *)path
@@ -246,6 +343,9 @@
     OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
     
     OpeningHoursParser::setAdditionalString("off", [OALocalizedString(@"day_off_label") UTF8String]);
+    OpeningHoursParser::setAdditionalString("public_holiday", [OALocalizedString(@"opening_hours_public_holiday") UTF8String]);
+    OpeningHoursParser::setAdditionalString("school_holiday", [OALocalizedString(@"opening_hours_school_holiday") UTF8String]);
+    OpeningHoursParser::setAdditionalString("easter", [OALocalizedString(@"opening_hours_easter") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"shared_string_open") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open_24_7", [OALocalizedString(@"shared_string_is_open_24_7") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_at", [OALocalizedString(@"will_open_at") UTF8String]);
@@ -519,6 +619,7 @@
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
+        [self backupAllOnlineTileSources];
         LogStartup(@"first launch - built-in tile sources installed");
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }
@@ -532,6 +633,7 @@
             _data.underlayMapSource = nil;
             _data.lastMapSource = [OAAppData defaultMapSource];
             _resourcesManager->installBuiltInTileSources();
+            [self backupAllOnlineTileSources];
 
             [self clearUnsupportedTilesCache];
             LogStartup(@"version < 3.10 migration done");
@@ -746,9 +848,6 @@
         LogStartup(@"location services initialized and started");
     }
 
-    [self allowScreenTurnOff:NO];
-    LogStartup(@"screen turn off disallowed");
-
     _appearance = [[OADaytimeAppearance alloc] init];
     LogStartup(@"OADaytimeAppearance initialized");
     _appearanceChangeObservable = [[OAObservable alloc] init];
@@ -761,7 +860,6 @@
     LogStartup(@"target points cleared");
 
     [[OASGpxDbHelper shared] loadItemsBlocking];
-    [[OASGpxDbHelper shared] startFilesystemReconciliation];
     LogStartup(@"GPX DB helper loaded items blocking");
 
     [OASavingTrackHelper sharedInstance];
@@ -816,6 +914,8 @@
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     LogStartup(@"migration manager migration checked/done");
 
+    [[ScreenAwakeService shared] start];
+
     [OAPOIHelper sharedInstance];
     LogStartup(@"POI helper initialized");
 
@@ -859,7 +959,7 @@
 
 - (void) instantiateWeatherResourcesManager
 {
-    QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings; // init later
+    QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>> bandSettings;
     _resourcesManager->instantiateWeatherResourcesManager(
         bandSettings,
         QString::fromNSString(_weatherForecastPath),
@@ -868,6 +968,8 @@
         [UIScreen mainScreen].scale,
         std::make_shared<OAWeatherWebClient>()
     );
+    // tile tasks may start before the first map source update
+    _resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
 }
 
 - (std::shared_ptr<OsmAnd::MapPresentationEnvironment>)defaultRenderer
@@ -956,8 +1058,103 @@
     return builder;
 }
 
+// The OsmAndShared twin of getRoutingConfigForMode:, choosing the same file: a custom one only once the
+// C++ loader has accepted it, as the OsmAndShared parser throws on a file it cannot read. A file is
+// parsed when it is first needed rather than at startup.
+- (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode
+{
+    NSString *fileName = nil;
+    NSString *routingProfileKey = [mode getRoutingProfile];
+    if (routingProfileKey.length > 0)
+    {
+        int index = [routingProfileKey indexOf:ROUTING_FILE_EXT];
+        if (index != -1)
+        {
+            NSString *key = [routingProfileKey substringToIndex:index + ROUTING_FILE_EXT.length];
+            if (_customRoutingConfigs.find(key.UTF8String) != _customRoutingConfigs.end()
+                && [NSFileManager.defaultManager fileExistsAtPath:[self sharedRoutingFilePath:key]])
+                fileName = key;
+        }
+    }
+    @synchronized (self)
+    {
+        if (!_sharedRoutingConfigs)
+            _sharedRoutingConfigs = [NSMutableDictionary dictionary];
+
+        if (!fileName)
+            return [self sharedDefaultRoutingConfig];
+
+        OASRoutingConfigurationBuilder *builder = _sharedRoutingConfigs[fileName];
+        if (!builder)
+        {
+            OASRoutingConfigurationBuilder *config =
+                [[OASRoutingConfigurationBuilder alloc] initWithDefaultAttributes:[self getSharedDefaultAttributes]];
+            builder = [OASRoutingConfiguration.companion parseFromFileFilePath:[self sharedRoutingFilePath:fileName]
+                                                                     filename:fileName
+                                                                       config:config];
+            _sharedRoutingConfigs[fileName] = builder;
+        }
+        return builder;
+    }
+}
+
+- (OASRoutingConfigurationBuilder *) sharedDefaultRoutingConfig
+{
+    @synchronized (self)
+    {
+        if (!_sharedRoutingConfigs)
+            _sharedRoutingConfigs = [NSMutableDictionary dictionary];
+
+        OASRoutingConfigurationBuilder *builder = _sharedRoutingConfigs[@""];
+        if (!builder)
+        {
+            builder = [OASRoutingConfiguration.companion parseFromFileFilePath:[NSBundle.mainBundle pathForResource:@"routing" ofType:@"xml"]
+                                                                     filename:nil
+                                                                       config:[[OASRoutingConfigurationBuilder alloc] init]];
+            _sharedRoutingConfigs[@""] = builder;
+        }
+        return builder;
+    }
+}
+
+- (OASGeneralRouter *) getSharedRouter:(OASRoutingConfigurationBuilder *)builder mode:(OAApplicationMode *)mode
+{
+    if (!builder)
+        return nil;
+
+    OASGeneralRouter *router = [builder getRouterRoutingProfileName:[mode getRoutingProfile]];
+    if (!router && mode.parent)
+        router = [builder getRouterRoutingProfileName:mode.parent.stringKey];
+    return router;
+}
+
+- (NSString *) sharedRoutingFilePath:(NSString *)fileName
+{
+    return [[self.documentsPath stringByAppendingPathComponent:ROUTING_PROFILES_DIR] stringByAppendingPathComponent:fileName];
+}
+
+- (NSDictionary<NSString *, NSString *> *) getSharedDefaultAttributes
+{
+    NSMutableDictionary<NSString *, NSString *> *defaultAttributes = [NSMutableDictionary dictionary];
+    NSDictionary<NSString *, NSString *> *attributes = [[self sharedDefaultRoutingConfig] getAttributes];
+    for (NSString *key in attributes)
+    {
+        if (![key isEqualToString:@"routerName"])
+            defaultAttributes[key] = attributes[key];
+    }
+    return defaultAttributes;
+}
+
 - (void) loadRoutingFiles
 {
+    @synchronized (self)
+    {
+        // the custom files are read again below; their OsmAndShared twins when they are next asked for
+        OASRoutingConfigurationBuilder *builtIn = _sharedRoutingConfigs[@""];
+        [_sharedRoutingConfigs removeAllObjects];
+        if (builtIn)
+            _sharedRoutingConfigs[@""] = builtIn;
+    }
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         const auto defaultAttributes = [self getDefaultAttributes];
         UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> customConfigs;
@@ -1088,6 +1285,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isRepositoryUpdating = NO;
                 NSLog(@"_isRepositoryUpdating = NO");
+                [[NSNotificationCenter defaultCenter] postNotificationName:OARepositoryUpdateFinishedNotification object:nil];
             });
         });
     }
@@ -1096,6 +1294,9 @@
         self.resourcesManager->updateRepository();
         _isRepositoryUpdating = NO;
         NSLog(@"_isRepositoryUpdating = NO");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:OARepositoryUpdateFinishedNotification object:nil];
+        });
     }
 }
 
@@ -1158,10 +1359,21 @@
     return _resourcesManager->uninstallResource(QString::fromNSString(fileId));
 }
 
-- (void) loadWorldRegions
+- (OAWorldRegion *) readWorldRegions
 {
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
-    _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
+    return [OAWorldRegion loadFrom:ocbfPathLib];
+}
+
+- (void) applyWorldRegions:(OAWorldRegion *)worldRegion
+{
+    if (worldRegion)
+        _worldRegion = worldRegion;
+}
+
+- (void) loadWorldRegions
+{
+    [self applyWorldRegions:[self readWorldRegions]];
 }
 
 - (void) addRegionNamesToCommonWords
@@ -1212,6 +1424,8 @@
 
 - (void) shutdown
 {
+    [[OAReverseGeocoder instance] stop];
+
     if (_initialized)
     {
         [OAQuickSearchHelper.instance cancelSearch:YES];
@@ -1301,13 +1515,13 @@
 
 - (NSString *)getGroupFileName:(NSString *)groupName
 {
-    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:kSubfolderPlaceholder];
+    NSString *result = [groupName stringByReplacingOccurrencesOfString:@"/" withString:SUBFOLDER_PLACEHOLDER];
     result = [result stringByReplacingOccurrencesOfString:@":" withString:XML_COLON];
     return result;
 }
 
 - (NSString *)getGroupName:(NSString *)fileName {
-    NSString *result = [fileName stringByReplacingOccurrencesOfString:kSubfolderPlaceholder withString:@"/"];
+    NSString *result = [fileName stringByReplacingOccurrencesOfString:SUBFOLDER_PLACEHOLDER withString:@"/"];
     result = [result stringByReplacingOccurrencesOfString:XML_COLON withString:@":"];
     return result;
 }
@@ -1334,18 +1548,6 @@
     return deviceMemoryAvailable;
 }
 
-- (void) allowScreenTurnOff:(BOOL)allow
-{
-    if (allow)
-        OALog(@"Going to enable screen turn-off");
-    else
-        OALog(@"Going to disable screen turn-off");
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].idleTimerDisabled = !allow;
-    });
-}
-
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
 
@@ -1360,9 +1562,6 @@
 
     [self saveDataToPermamentStorage];
 
-    // In background allow to turn off screen
-    [self allowScreenTurnOff:YES];
-
     NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
     if (backgroundTimeRemaining == DBL_MAX) {
         OALog(@"Background time remaining: unlimited");
@@ -1373,7 +1572,7 @@
 
 - (void) onApplicationWillEnterForeground
 {
-    [self allowScreenTurnOff:NO];
+    [InstallAttribution checkAndReport];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

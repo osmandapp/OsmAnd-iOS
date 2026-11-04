@@ -36,6 +36,7 @@
 #import "OAAppVersion.h"
 #import "OAAppData.h"
 #import "OARouteCalculationResult.h"
+#import "OAMissingMapsResult.h"
 #import "OAMapSource.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -48,6 +49,7 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/ObfsCollection.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
+#import "GeneratedAssetSymbols.h"
 
 typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
@@ -108,48 +110,48 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     switch (type)
     {
         case OsmAndResourceType::VoicePack:
-            imageNamed = @"ic_custom_sound";
+            imageNamed = ACImageNameIcCustomSound;
             break;
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            imageNamed = @"ic_custom_contour_lines";
+            imageNamed = ACImageNameIcCustomContourLines;
             break;
         case OsmAndResourceType::WikiMapRegion:
-            imageNamed = @"ic_custom_wikipedia";
+            imageNamed = ACImageNameIcCustomWikipedia;
             break;
         case OsmAndResourceType::LiveUpdateRegion:
-            imageNamed = @"ic_custom_upload"; //ic_custom_online
+            imageNamed = ACImageNameIcCustomUpload; //ic_custom_online
             break;
         case OsmAndResourceType::GpxFile:
-            imageNamed = @"ic_custom_route";
+            imageNamed = ACImageNameIcCustomRoute;
             break;
         case OsmAndResourceType::SqliteFile:
-            imageNamed = @"ic_custom_overlay_map";
+            imageNamed = ACImageNameIcCustomOverlayMap;
             break;
         case OsmAndResourceType::MapStyle:
-            imageNamed = @"ic_custom_map_style";
+            imageNamed = ACImageNameIcCustomMapStyle;
             break;
         case OsmAndResourceType::MapStylesPresets:
-            imageNamed = @"ic_custom_options";
+            imageNamed = ACImageNameIcCustomOptions;
             break;
         case OsmAndResourceType::OnlineTileSources:
-            imageNamed = @"ic_custom_map_online";
+            imageNamed = ACImageNameIcCustomMapOnline;
             break;
         case OsmAndResourceType::WeatherForecast:
-            imageNamed = @"ic_custom_umbrella";
+            imageNamed = ACImageNameIcCustomUmbrella;
             break;
         case OsmAndResourceType::Travel:
-            imageNamed = @"ic_custom_wikipedia";
+            imageNamed = ACImageNameIcCustomWikipedia;
             break;
         case OsmAndResourceType::StarMap:
-            imageNamed = @"ic_custom_star_shine";
+            imageNamed = ACImageNameIcCustomStarShine;
             break;
         case OsmAndResourceType::GeoTiffRegion:
         case OsmAndResourceType::HeightmapRegionLegacy:
-            imageNamed = @"ic_custom_terrain";
+            imageNamed = ACImageNameIcCustomTerrain;
             break;
         default:
-            imageNamed = @"ic_custom_map";
+            imageNamed = ACImageNameIcCustomMap;
             break;
     }
     return imageNamed;
@@ -886,29 +888,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSMutableString* text;
-    if (isUpdate)
-    {
-        text = [OALocalizedString(@"res_update_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
-    else
-    {
-        text = [OALocalizedString(@"res_install_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
+    NSString *prefix = OALocalizedString(isUpdate ? @"res_update_no_space" : @"res_install_no_space");
+    NSString *text = [NSString stringWithFormat:@"%@ %@. %@ %@",
+                      prefix,
+                      resourceName ?: @"",
+                      stringifiedSize,
+                      OALocalizedString(@"res_no_space_free")];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:text preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
@@ -945,6 +930,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (void)startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name
 {
+    if ([OAResourcesInstaller isInstalling:resourceId])
+        return;
+
     // Create download tasks
     NSString* ver = OAAppVersion.getVersion;
     NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
@@ -1189,9 +1177,11 @@ includeHidden:(BOOL)includeHidden
     if (mapRegions.count > 0)
     {
         sortedSelectedRegions = [mapRegions sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-            NSNumber *first = @([(OAWorldRegion *) a getArea]);
-            NSNumber *second = @([(OAWorldRegion *) b getArea]);
-            return [first compare:second];
+            double first = [(OAWorldRegion *) a getArea];
+            double second = [(OAWorldRegion *) b getArea];
+            if (first < second)
+                return NSOrderedAscending;
+            return first > second ? NSOrderedDescending : NSOrderedSame;
         }];
 
         for (OAWorldRegion *region in sortedSelectedRegions)
@@ -1399,6 +1389,9 @@ includeHidden:(BOOL)includeHidden
         }
         else
         {
+            if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+                return;
+
             // Create download task
             NSURL *url = [NSURL URLWithString:item.downloadUrl];
             NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -1440,6 +1433,7 @@ includeHidden:(BOOL)includeHidden
             OsmAndAppInstance app = OsmAndApp.instance;
             const auto result = tileSource.toOnlineTileSource;
             OsmAnd::OnlineTileSources::installTileSource(result, QString::fromNSString(app.cachePath));
+            [app backupOnlineTileSource:result->name.toNSString()];
             app.resourcesManager->installTilesResource(result);
         }
         [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
@@ -1497,6 +1491,8 @@ includeHidden:(BOOL)includeHidden
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
     if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
+        return;
+    if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
         return;
 
     BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
@@ -1584,7 +1580,8 @@ includeHidden:(BOOL)includeHidden
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
     for (OAResourceItem *item in selectedItems)
     {
-        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
+        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion])
+            || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
             [items removeObject:item];
     }
     if (items.count == 0)
@@ -1661,6 +1658,9 @@ includeHidden:(BOOL)includeHidden
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
+    if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+        return;
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
     if (!resourceInRepository)
@@ -1772,6 +1772,9 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
+        if ([OAResourcesInstaller isInstalling:item.resource->id.toNSString()])
+            return;
+
         // Create download tasks
         NSString *ver = OAAppVersion.getVersion;
         NSURL *pureUrl = item.resource->url.toNSURL();
@@ -1817,6 +1820,13 @@ includeHidden:(BOOL)includeHidden
         OAResourceItem *item = mutableItems.firstObject;
 
         const auto resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId);
+        if (!resource)
+        {
+            // an item list built before a repository update can hold an id the repository no longer has
+            NSLog(@"[WARNING] startDownloadOfItems: %@ is not in the repository", item.resourceId.toNSString());
+            [mutableItems removeObject:item];
+            continue;
+        }
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
         repositoryItem.resourceId = resource->id;
         repositoryItem.resourceType = resource->type;
@@ -1839,6 +1849,9 @@ includeHidden:(BOOL)includeHidden
            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
+    if ([OAResourcesInstaller isInstalling:resource->id.toNSString()])
+        return;
+
     // Create download tasks
     NSString *ver = OAAppVersion.getVersion;
     NSURL *pureUrl = resource->url.toNSURL();
@@ -1875,6 +1888,9 @@ includeHidden:(BOOL)includeHidden
 
 + (void) offerCancelDownloadOf:(OAResourceItem *)item_ onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
 {
+    if ([OAResourcesInstaller isInstalling:item_.resourceId.toNSString()])
+        return;
+
     BOOL isUpdate = NO;
     NSString *resourceName;
 
@@ -2047,9 +2063,13 @@ includeHidden:(BOOL)includeHidden
             {
                 OAOnlineTilesResourceItem *tilesItem = (OAOnlineTilesResourceItem *) item;
                 [[NSFileManager defaultManager] removeItemAtPath:tilesItem.path error:nil];
+                [app removeOnlineTileSourceBackup:item.title];
                 app.resourcesManager->uninstallTilesResource(QString::fromNSString(item.title));
                 if ([tilesItem.title isEqualToString:@"OsmAnd (online tiles)"])
+                {
                     app.resourcesManager->installBuiltInTileSources();
+                    [app backupAllOnlineTileSources];
+                }
 
                 [app.localResourcesChangedObservable notifyEvent];
             }
@@ -2072,8 +2092,13 @@ includeHidden:(BOOL)includeHidden
 
                 if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
-                
-                [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
+
+                // group items are rebuilt on the main thread
+                OAWorldRegion *region = item.worldRegion;
+                NSNumber *type = [OAResourceType toValue:item.resourceType];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [region.superregion updateGroupItems:region type:type];
+                });
             }
         }
 
@@ -2084,7 +2109,7 @@ includeHidden:(BOOL)includeHidden
         }
 
         if (block)
-            block();
+            dispatch_async(dispatch_get_main_queue(), block);
     };
 
     if (progressHUD)
@@ -2096,7 +2121,10 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
-        proc();
+        // Uninstalling waits for renderer threads to release the resource, so never run it on the main thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            proc();
+        });
     }
 }
 
@@ -2480,13 +2508,14 @@ includeHidden:(BOOL)includeHidden
     
     NSMutableString *pointsString = [NSMutableString string];
     
-    for (CLLocation *l in routeCalculationResult.missingMapsPoints) {
+    OAMissingMapsResult *missingMapsResult = routeCalculationResult.missingMapsResult;
+    for (CLLocation *l in missingMapsResult.points) {
         [pointsString appendString:[NSString stringWithFormat:@"&%@", [self formatPointString:l]]];
     }
     
     NSString *routeMode = @"car";
-    GeneralRouterProfile profile = routeCalculationResult.missingMapsRoutingContext->config->router->getProfile();
-    if (profile == GeneralRouterProfile::BICYCLE || profile == GeneralRouterProfile::PEDESTRIAN)
+    NSString *profile = missingMapsResult.profile;
+    if ([profile isEqualToString:@"bicycle"] || [profile isEqualToString:@"pedestrian"])
     {
         routeMode = @"bicycle";
     }

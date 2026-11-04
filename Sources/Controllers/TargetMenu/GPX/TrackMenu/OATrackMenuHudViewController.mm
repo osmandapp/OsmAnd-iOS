@@ -248,7 +248,7 @@
     [super viewDidLoad];
 
     if ([self openedFromMap])
-        [self.backButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
+        [self.backButton setImage:[UIImage imageNamed:ACImageNameIcCustomCancel] forState:UIControlStateNormal];
     
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 
@@ -265,7 +265,7 @@
             [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = NO;
     }
 
-    UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
+    UIImage *groupsImage = [UIImage imageNamed:ACImageNameIcCustomFolderVisible];
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
     self.groupsButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.groupsButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
@@ -553,7 +553,7 @@
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
-            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
+            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage imageNamed:ACImageNameIcCustomTrip]
                         title:localizedTitle.length > 0 ? localizedTitle : self.gpx.gpxFileNameWithoutExtension
                   nearestCity:self.gpx.nearestCity];
 
@@ -574,6 +574,38 @@
         [self fetchDescriptionImageIfNeeded];
 }
 
+- (NSString *)normalizedImageUrl:(NSString *)url
+{
+    NSString *prefix = [OATravelArticle.IMAGE_ROOT_URL stringByAppendingString:@"thumb/"];
+    if (![url hasPrefix:prefix])
+        return url;
+
+    NSRange suffixRange = [url rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"?#"]];
+    NSUInteger pathEnd = suffixRange.location == NSNotFound ? url.length : suffixRange.location;
+    NSString *path = [url substringWithRange:NSMakeRange(prefix.length, pathEnd - prefix.length)];
+    NSMutableArray<NSString *> *segments = [[path componentsSeparatedByString:@"/"] mutableCopy];
+
+    // Match TravelArticle's iOS encoding so Android URLs reuse existing HTTP cache entries.
+    // Decode each segment once, then re-encode delimiters and '%' to preserve the URL structure.
+    NSMutableCharacterSet *allowedCharacters = [NSCharacterSet.URLQueryAllowedCharacterSet mutableCopy];
+    [allowedCharacters removeCharactersInString:@"/?#%"];
+    for (NSUInteger i = 0; i < segments.count; i++)
+    {
+        NSString *decodedSegment = [segments[i] stringByRemovingPercentEncoding];
+        if (!decodedSegment)
+            return url;
+        // Keep encoded dot segments from becoming path traversal components.
+        if ([decodedSegment isEqualToString:@"."] || [decodedSegment isEqualToString:@".."])
+            continue;
+        NSString *encodedSegment = [decodedSegment stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacters];
+        if (!encodedSegment)
+            return url;
+        segments[i] = encodedSegment;
+    }
+    return [[prefix stringByAppendingString:[segments componentsJoinedByString:@"/"]]
+            stringByAppendingString:[url substringFromIndex:pathEnd]];
+}
+
 - (void)fetchDescriptionImageIfNeeded
 {
     OAGPXTableSectionData *sectionData = [_tableData getSubject:@"section_description"];
@@ -582,7 +614,17 @@
         OAGPXTableCellData *cellData = [sectionData getSubject:@"image"];
         if (cellData)
         {
-            NSString *url = cellData.values[@"img"];
+            NSString *imageLink = cellData.values[@"img"];
+            NSString *url = imageLink.length > 0 ? [self normalizedImageUrl:imageLink] : nil;
+            NSURL *imageURL = url.length > 0 ? [NSURL URLWithString:url] : nil;
+            if (!imageURL)
+            {
+                _isImageDownloadFinished = YES;
+                _isImageDownloadSucceed = NO;
+                _cachedImage = nil;
+                _cachedImageURL = nil;
+                return;
+            }
             if (!_cachedImage || ![url isEqualToString:_cachedImageURL])
             {
                 _isImageDownloadFinished = NO;
@@ -590,23 +632,34 @@
                 _cachedImageURL = url;
 
                 __weak __typeof(self) weakSelf = self;
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-                    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString: url]];
-                    UIImage *image = [UIImage imageWithData:data];
-                    weakSelf.isImageDownloadFinished = YES;
-                    weakSelf.isImageDownloadSucceed = image != nil;
+                // NSURLSession defaults to NSURLRequestUseProtocolCachePolicy, reusing fresh cached images
+                // according to HTTP cache headers to avoid downloading the same image on every opening.
+                [[[NSURLSession sharedSession] dataTaskWithURL:imageURL
+                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error)
+                {
+                    if (!weakSelf)
+                        return;
 
+                    BOOL successfulResponse = ![response isKindOfClass:NSHTTPURLResponse.class]
+                        || (((NSHTTPURLResponse *)response).statusCode >= 200 && ((NSHTTPURLResponse *)response).statusCode < 300);
+                    UIImage *image = !error && successfulResponse ? [UIImage imageWithData:data] : nil;
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (!weakSelf.isViewVisible)
+                        __strong __typeof(weakSelf) strongSelf = weakSelf;
+                        if (!strongSelf)
+                            return;
+
+                        strongSelf.isImageDownloadFinished = YES;
+                        strongSelf.isImageDownloadSucceed = image != nil;
+                        if (!strongSelf.isViewVisible)
                         {
-                            weakSelf.cachedImage = image;
+                            strongSelf.cachedImage = image;
                             NSIndexPath *imageCellIndex = [NSIndexPath indexPathForRow:[sectionData.subjects indexOfObject:cellData]
-                                                                             inSection:[weakSelf.tableData.subjects indexOfObject:sectionData]];
-                            [weakSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
+                                                                             inSection:[strongSelf.tableData.subjects indexOfObject:sectionData]];
+                            [strongSelf.tableView reloadRowsAtIndexPaths:@[imageCellIndex]
                                                       withRowAnimation:UITableViewRowAnimationAutomatic];
                         }
                     });
-                });
+                }] resume];
             }
         }
     }
@@ -901,6 +954,8 @@
 
 - (IBAction)onBackButtonPressed:(id)sender
 {
+    if (_reopeningState.temporarilyShown && self.isShown && !self.isCurrentTrack)
+        [self.settings hideGpx:@[self.gpx.gpxFilePath] update:YES];
     [self hide];
 }
 
@@ -942,7 +997,7 @@
         state.openedFromTrackMenu = YES;
         OASGpxFile *gpxFile = weakSelf.doc;
         if (!gpxFile)
-            weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:weakSelf.gpx.dataItem.file];
+            weakSelf.doc = [OASGpxUtilities.shared loadGpxFileFile:([weakSelf.gpx getFile] ?: [[OASKFile alloc] initWithFilePath:weakSelf.gpx.path])];
         
         [weakSelf.mapPanelViewController openTargetViewWithRouteDetailsGraph:weakSelf.doc
                                                                    trackItem:weakSelf.gpx
@@ -984,9 +1039,13 @@
     _pushedNewScreen = YES;
     OATrackMenuViewControllerState *state = [self getCurrentState];
     state.openedFromTrackMenu = YES;
-    NSString *absolutePath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
+    OASGpxFile *currentTrack = self.isCurrentTrack ? self.doc : nil;
+    NSString *absolutePath = currentTrack == nil ? [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath] : nil;
     [self hide:YES duration:.2 onComplete:^{
-        [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath trackMenuState:state];
+        if (currentTrack != nil)
+            [PlanRouteScrollableViewController openCurrentTrackWithGpxFile:currentTrack trackMenuState:state];
+        else
+            [PlanRouteScrollableViewController openExistingTrackWithFilePath:absolutePath trackMenuState:state];
     }];
 }
 
@@ -1301,7 +1360,7 @@
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
         [self.mapViewController updateWpts:existWaypoints ? existWaypoints :waypoints docPath:path updateMap:YES];
     }
-    else if (newGroupColor)
+    else
     {
         __weak __typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1467,7 +1526,7 @@
 
 - (NSString *)getGpxFileSize
 {
-    NSString *absolutePath = self.gpx.dataItem.file.absolutePath;
+    NSString *absolutePath = self.gpx.path;
     NSDictionary *fileAttributes = [NSFileManager.defaultManager attributesOfItemAtPath:absolutePath error:nil];
     return [NSByteCountFormatter stringFromByteCount:fileAttributes.fileSize
                                           countStyle:NSByteCountFormatterCountStyleFile];
@@ -1586,6 +1645,7 @@
 
 - (BOOL)changeTrackVisible
 {
+    _reopeningState.temporarilyShown = NO;
     BOOL visible = [super changeTrackVisible];
     [_uiBuilder resetDataInTab:_selectedTab == EOATrackMenuHudOverviewTab ? EOATrackMenuHudActionsTab : EOATrackMenuHudOverviewTab];
     return visible;
@@ -1603,7 +1663,7 @@
 
 - (BOOL)isJoinSegments
 {
-    return self.gpx.joinSegments;
+    return self.gpx.dataItem ? self.gpx.joinSegments : [self.doc isJoinSegments];
 }
 
 - (CLLocationCoordinate2D)getCenterGpxLocation
@@ -1643,9 +1703,15 @@
         NSIndexPath *indexPath = [self.tableView indexPathForCell:actionsTabCell];
         touchPointArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
     }
-    if (self.gpx.dataItem)
+    OASGpxDataItem *dataItem = self.gpx.dataItem;
+    if (!dataItem && ![self isCurrentTrack])
     {
-        [_gpxUIHelper openExportForTrack:self.gpx.dataItem
+        OASKFile *file = [self.gpx getFile] ?: [[OASKFile alloc] initWithFilePath:self.gpx.path];
+        dataItem = [[OAGPXDatabase sharedDb] getGPXItem:self.gpx.path] ?: [[OASGpxDataItem alloc] initWithFile:file];
+    }
+    if (dataItem || [self isCurrentTrack])
+    {
+        [_gpxUIHelper openExportForTrack:dataItem
                                   gpxDoc:self.doc
                           isCurrentTrack:[self isCurrentTrack]
                         inViewController:self
@@ -1934,7 +2000,17 @@
             if (weakSelf.isShown)
                 [weakSelf.settings hideGpx:@[weakSelf.gpx.gpxFilePath] update:YES];
 
-            [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
+            OASKFile *file = weakSelf.gpx.getFile ?: [[OASKFile alloc] initWithFilePath:weakSelf.gpx.path];
+            if (weakSelf.gpx.dataItem)
+            {
+                [[OAGPXDatabase sharedDb] removeGpxItem:weakSelf.gpx.dataItem withLocalRemove:YES];
+            }
+            else
+            {
+                [[OASGpxDbHelper shared] removeFile:file];
+                [[NSFileManager defaultManager] removeItemAtPath:weakSelf.gpx.path error:nil];
+            }
+            [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:file];
         }
 
         [weakSelf hide];
@@ -1944,8 +2020,7 @@
 }
 
 - (void)showAlertRenameTrack {
-   
-    NSString *gpxFileName = self.gpx.dataItem.gpxFileName.lastPathComponent;
+    NSString *gpxFileName = self.gpx.gpxFileName.lastPathComponent;
     NSString *gpxFileNameWithoutExtension = [gpxFileName stringByDeletingPathExtension];
     
     if (gpxFileNameWithoutExtension.length > 0) {
@@ -2035,30 +2110,30 @@
     UIColor *groupColor = UIColorFromARGB([self getWaypointsGroupColor:displayName]);
     BOOL isVisible = [self isWaypointsGroupVisible:displayName];
     
-    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : @"ic_custom_map_pin_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *toggleVisibility = [UIAction actionWithTitle:OALocalizedString(isVisible ? @"shared_string_hide_from_map" : @"shared_string_show_on_map") image:[UIImage imageNamed:isVisible ? @"ic_custom_hide_outlined" : ACImageNameIcCustomMapPinOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         BOOL currentVisible = [weakSelf isWaypointsGroupVisible:displayName];
         [weakSelf setWaypointsGroupVisible:displayName show:!currentVisible];
     }];
     
-    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:@"ic_custom_edit"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename") image:[UIImage imageNamed:ACImageNameIcCustomEdit] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf showRenameWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
-    UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:@"ic_custom_appearance_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *changeAppearanceAction = [UIAction actionWithTitle:OALocalizedString(@"change_appearance") image:[UIImage imageNamed:ACImageNameIcCustomAppearanceOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf showAppearanceWaypointsGroupOptionsForName:displayName groupColor:groupColor];
     }];
     
-    UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:@"ic_custom_folder_add_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *copyAsNewFolderAction = [UIAction actionWithTitle:OALocalizedString(@"copy_as_new_folder") image:[UIImage imageNamed:ACImageNameIcCustomFolderAddOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf copyWaypointsGroupAsNewFolderWithName:displayName groupColor:groupColor];
     }];
     
-    UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:@"ic_custom_folder_open"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *addToExistingFolderAction = [UIAction actionWithTitle:OALocalizedString(@"add_to_a_folder") image:[UIImage imageNamed:ACImageNameIcCustomFolderOpen] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf presentAddToExistingFolderForGroupName:displayName groupColor:groupColor];
     }];
     
-    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:@"ic_custom_copy"] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
+    UIMenu *copyToFavoritesMenu = [UIMenu menuWithTitle:OALocalizedString(@"add_to_favorites") image:[UIImage imageNamed:ACImageNameIcCustomCopy] identifier:nil options:0 children:@[copyAsNewFolderAction, addToExistingFolderAction]];
     
-    UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:@"ic_custom_trash_outlined"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+    UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete") image:[UIImage imageNamed:ACImageNameIcCustomTrashOutlined] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
         [weakSelf openConfirmDeleteWaypointsScreen:displayName];
     }];
     deleteAction.attributes = UIMenuElementAttributesDestructive;
@@ -2534,7 +2609,7 @@
             [cell.iconView setImage:cellData.leftIcon];
             [cell setRegion:cellData.desc];
             [cell setDirection:cellData.values[@"string_value_distance"]];
-            cell.showWaypointImageView.image = [UIImage templateImageNamed:ACImageNameIcCustomLocationMarkerOutlined];
+            cell.showWaypointImageView.image = [UIImage imageNamed:ACImageNameIcCustomLocationMarkerOutlined];
             cell.showWaypointImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             cell.showWaypointButton.accessibilityLabel = [NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), cellData.title];
             [cell.showWaypointButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
@@ -2546,7 +2621,7 @@
                     CGAffineTransformMakeRotation([cellData.values[@"float_value_direction"] floatValue]);
             if (![cell.directionIconView.tintColor isEqual:UIColorFromRGB(color_active_light)])
             {
-                cell.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
+                cell.directionIconView.image = [UIImage imageNamed:ACImageNameIcSmallDirection];
                 cell.directionIconView.tintColor = UIColorFromRGB(color_active_light);
             }
             cell.accessibilityIdentifier = [UITestAccessibilityIdentifier gpxTrackMenuWaypoint:cellData.title];
@@ -2577,7 +2652,7 @@
             [cell.leftIconView setImage:cellData.leftIcon];
             cell.leftIconView.tintColor = [cellData.tintColor toARGBNumber] == 0 ? [OADefaultFavorite getDefaultColor] : cellData.tintColor;
 
-            [cell.optionsButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
+            [cell.optionsButton setImage:[UIImage templateImageNamed:ACImageNameIcCustomOverflowMenu]
                                 forState:UIControlStateNormal];
             cell.optionsButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
@@ -2976,7 +3051,7 @@
             kCellToggle: @(!cellData.toggle)
     }];
     [cellData setData:@{
-            kCellRightIconName: cellData.toggle ? @"ic_custom_arrow_up" : @"ic_custom_arrow_right"
+            kCellRightIconName: cellData.toggle ? ACImageNameIcCustomArrowUp : ACImageNameIcCustomArrowRight
     }];
 
     [self.tableView beginUpdates];

@@ -9,6 +9,7 @@
 #import "OATurnPathHelper.h"
 #import "OAUtilities.h"
 #import "OATurnResource.h"
+#import "OsmAndSharedWrapper.h"
 
 @interface OATurnPathHelper ()
 
@@ -248,7 +249,7 @@
 }
 
 // 72x72
-+ (void)calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(std::shared_ptr<TurnType>)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini shortArrow:(BOOL)shortArrow noOverlap:(BOOL)noOverlap smallArrow:(BOOL)smallArrow
++ (void)calcTurnPath:(UIBezierPath *)pathForTurn outlay:(UIBezierPath *)outlay turnType:(OASTurnType *)turnType transform:(CGAffineTransform)transform center:(CGPoint *)center mini:(BOOL)mini shortArrow:(BOOL)shortArrow noOverlap:(BOOL)noOverlap smallArrow:(BOOL)smallArrow
 {
     if (!turnType)
         return;
@@ -261,20 +262,20 @@
     int wa = 72;
     int lowMargin = 6;
     float scaleTriangle = smallArrow ? 1.f : 1.5f;
-    int turnTypeId = turnType->getValue();
+    int turnTypeId = turnType.value;
     
     // TEST
-    //if (TurnType::C != turnTypeId)
-    //    turnTypeId = TurnType::TU;
+    //if (OASTurnType.companion.C != turnTypeId)
+    //    turnTypeId = OASTurnType.companion.TU;
     
-    if (TurnType::C == turnTypeId)
+    if (OASTurnType.companion.C == turnTypeId)
     {
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         [pathForTurn moveToX:wa / 2 + tv.widthStepIn / 2 y:ha - lowMargin];
         [tv drawTriangle:pathForTurn];
         [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 y:ha - lowMargin];
     }
-    else if (TurnType::OFFR == turnTypeId)
+    else if (OASTurnType.companion.OFFR == turnTypeId)
     {
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:NO turnAngle:0 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         float rightX = wa / 2 + tv.widthStepIn / 2;
@@ -303,9 +304,9 @@
         [tv drawTriangle:pathForTurn];
         [pathForTurn lineToX:leftX y:ha - 4 * lowMargin - 3 * step];
     }
-    else if (TurnType::TR == turnTypeId || TurnType::TL == turnTypeId)
+    else if (OASTurnType.companion.TR == turnTypeId || OASTurnType.companion.TL == turnTypeId)
     {
-        int b = TurnType::TR == turnTypeId ? 1 : -1;
+        int b = OASTurnType.companion.TR == turnTypeId ? 1 : -1;
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 90 : -90 out:0 wa:wa ha:(shortArrow ? ha : ha / 2) scaleTriangle:scaleTriangle];
         // calculated
         float rDiv =  (shortArrow ? 4 : noOverlap ? 1 : 2);
@@ -324,9 +325,9 @@
         [pathForTurn arcTo:outerOval startAngle:-90 sweepAngle:-b * 90];
         [pathForTurn rLineToX:0 y:h];
     }
-    else if (TurnType::TSLR == turnTypeId || TurnType::TSLL == turnTypeId)
+    else if (OASTurnType.companion.TSLR == turnTypeId || OASTurnType.companion.TSLL == turnTypeId)
     {
-        int b = TurnType::TSLR == turnTypeId ? 1 : -1;
+        int b = OASTurnType.companion.TSLR == turnTypeId ? 1 : -1;
         float angle = shortArrow ? 65 : 45;
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? angle : -angle out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
         tv.cx -= b * (shortArrow ? 0 : 7);
@@ -353,9 +354,9 @@
         [pathForTurn arcTo:outerOval startAngle:-90 - b * (90 - (ellipseAngle2)) sweepAngle:-b * (ellipseAngle2)];
         [pathForTurn lineToX:centerBottomX - b * tv.widthStepIn / 2 y:ha - lowMargin];
     }
-    else if (TurnType::TSHR == turnTypeId || TurnType::TSHL == turnTypeId)
+    else if (OASTurnType.companion.TSHR == turnTypeId || OASTurnType.companion.TSHL == turnTypeId)
     {
-        int b = TurnType::TSHR == turnTypeId ? 1 : -1;
+        int b = OASTurnType.companion.TSHR == turnTypeId ? 1 : -1;
         float centerCircleY = shortArrow ? ha / 2 : ha / 4;
         float centerCircleX = wa / 2 - (noOverlap ? b * (wa / 5) : 0);
         OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:b != 1 turnAngle:b == 1 ? 135 : -135 out:0 wa:wa ha:ha scaleTriangle:scaleTriangle];
@@ -378,9 +379,9 @@
         [pathForTurn arcTo:innerOval startAngle:-90  + b * angle sweepAngle:- b * (90 + angle)];
         [pathForTurn lineToX:centerCircleX - b * tv.widthStepIn / 2 y:ha - lowMargin];
     }
-    else if (TurnType::TU == turnTypeId || TurnType::TRU == turnTypeId)
+    else if (OASTurnType.companion.TU == turnTypeId || OASTurnType.companion.TRU == turnTypeId)
     {
-        int b = TurnType::TU == turnTypeId ? -1 : 1;
+        int b = OASTurnType.companion.TU == turnTypeId ? -1 : 1;
         float radius = shortArrow ? 10 : 16;
         float centerRadiusY = ha / 2 + (shortArrow ? 10 : -10);
         float extraMarginBottom = shortArrow ? 0 : 5;
@@ -404,9 +405,9 @@
         [pathForTurn arcTo:outerOval startAngle:-90 + b * 90 sweepAngle:-b * 180];
         [pathForTurn lineToX:centerRadiusX - b * (radius + tv.widthStepIn / 2) y:ha - lowMargin];
     }
-    else if (TurnType::KL == turnTypeId || TurnType::KR == turnTypeId)
+    else if (OASTurnType.companion.KL == turnTypeId || OASTurnType.companion.KR == turnTypeId)
     {
-        int b = TurnType::KR == turnTypeId ? 1 : -1;
+        int b = OASTurnType.companion.KR == turnTypeId ? 1 : -1;
         float shiftX = shortArrow ? 12 : 8;
         float firstH = 18;
         float secondH = 20;
@@ -429,12 +430,12 @@
         //            [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 + mdx, ha - lowMargin - firstH);
         [pathForTurn lineToX:wa / 2 - tv.widthStepIn / 2 + mdx y:ha - lowMargin];
     }
-    else if (turnType && turnType->isRoundAbout())
+    else if (turnType && [turnType isRoundAbout])
     {
-        int out = turnType->getExitOut();
-        BOOL leftSide = turnType->isLeftSide();
+        int out = turnType.exitOut;
+        BOOL leftSide = [turnType isLeftSide];
         BOOL showSteps = SHOW_STEPS && !mini;
-        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:leftSide turnAngle:turnType->getTurnAngle() out:out wa:wa ha:ha scaleTriangle:1];
+        OATurnVariables *tv = [[OATurnVariables alloc] initWithLeftSide:leftSide turnAngle:turnType.turnAngle out:out wa:wa ha:ha scaleTriangle:1];
         if (center)
         {
             center->x = tv.cx;
@@ -522,9 +523,9 @@
 
 + (UIBezierPath *)getPathFromTurnType:(NSMapTable<OATurnResource *, UIBezierPath *> *)cache firstTurn:(int)firstTurn secondTurn:(int)secondTurn thirdTurn:(int)thirdTurn turnIndex:(int)turnIndex coef:(float)coef leftSide:(BOOL)leftSide smallArrow:(BOOL)smallArrow boldStroke:(BOOL)boldStroke
 {
-    int firstTurnType = TurnType::valueOf(firstTurn, leftSide).getValue();
-    int secondTurnType = TurnType::valueOf(secondTurn, leftSide).getValue();
-    int thirdTurnType = TurnType::valueOf(thirdTurn, leftSide).getValue();
+    int firstTurnType = [OASTurnType.companion valueOfValue:firstTurn leftSide:leftSide].value;
+    int secondTurnType = [OASTurnType.companion valueOfValue:secondTurn leftSide:leftSide].value;
+    int thirdTurnType = [OASTurnType.companion valueOfValue:thirdTurn leftSide:leftSide].value;
     
     OATurnResource *turnResource = nil;
     
@@ -534,13 +535,13 @@
         {
             turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:NO leftSide:leftSide];
         }
-        else if (secondTurnType == TurnType::C || thirdTurnType == TurnType::C)
+        else if (secondTurnType == OASTurnType.companion.C || thirdTurnType == OASTurnType.companion.C)
         {
             turnResource = [[OATurnResource alloc] initWithTurnTypeShort:firstTurnType leftSide:leftSide];
         }
         else
         {
-            if (firstTurnType == TurnType::TU || firstTurnType == TurnType::TRU)
+            if (firstTurnType == OASTurnType.companion.TU || firstTurnType == OASTurnType.companion.TRU)
                 turnResource = [[OATurnResource alloc] initWithTurnTypeShort:firstTurnType leftSide:leftSide];
             else
                 turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:NO leftSide:leftSide];
@@ -548,20 +549,20 @@
     }
     else if (turnIndex == SECOND_TURN)
     {
-        if (TurnType::isLeftTurn(firstTurnType) && TurnType::isLeftTurn(secondTurnType))
+        if ([OASTurnType.companion isLeftTurnType:firstTurnType] && [OASTurnType.companion isLeftTurnType:secondTurnType])
             turnResource = nil;
-        else if (TurnType::isRightTurn(firstTurnType) && TurnType::isRightTurn(secondTurnType))
+        else if ([OASTurnType.companion isRightTurnType:firstTurnType] && [OASTurnType.companion isRightTurnType:secondTurnType])
             turnResource = nil;
-        else if (firstTurnType == TurnType::C || thirdTurnType == TurnType::C)
+        else if (firstTurnType == OASTurnType.companion.C || thirdTurnType == OASTurnType.companion.C)
             turnResource = [[OATurnResource alloc] initWithTurnTypeShort:secondTurnType leftSide:leftSide];
         else
             turnResource = [[OATurnResource alloc] initWithTurnType:secondTurnType noOverlap:NO leftSide:leftSide];
     }
     else if (turnIndex == THIRD_TURN)
     {
-        if ((TurnType::isLeftTurn(firstTurnType) || TurnType::isLeftTurn(secondTurnType)) && TurnType::isLeftTurn(thirdTurnType))
+        if (([OASTurnType.companion isLeftTurnType:firstTurnType] || [OASTurnType.companion isLeftTurnType:secondTurnType]) && [OASTurnType.companion isLeftTurnType:thirdTurnType])
             turnResource = nil;
-        else if ((TurnType::isRightTurn(firstTurnType) || TurnType::isRightTurn(secondTurnType)) && TurnType::isRightTurn(thirdTurnType))
+        else if (([OASTurnType.companion isRightTurnType:firstTurnType] || [OASTurnType.companion isRightTurnType:secondTurnType]) && [OASTurnType.companion isRightTurnType:thirdTurnType])
             turnResource = nil;
         else
             turnResource = [[OATurnResource alloc] initWithTurnTypeShort:thirdTurnType leftSide:leftSide];
@@ -583,7 +584,7 @@
     CGFloat coef = size.width / 72.0;
     UIBezierPath *path = [UIBezierPath bezierPath];
     path.lineWidth = boldStroke ? 2.f : 1.f;
-    [self.class calcTurnPath:path outlay:nil turnType:TurnType::ptrValueOf(turnResource.turnType, turnResource.leftSide) transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap smallArrow:smallArrow];
+    [self.class calcTurnPath:path outlay:nil turnType:[OASTurnType.companion valueOfValue:turnResource.turnType leftSide:turnResource.leftSide] transform:CGAffineTransformMakeScale(coef, coef) center:nil mini:NO shortArrow:turnResource.shortArrow noOverlap:turnResource.noOverlap smallArrow:smallArrow];
     
     return path;
 }

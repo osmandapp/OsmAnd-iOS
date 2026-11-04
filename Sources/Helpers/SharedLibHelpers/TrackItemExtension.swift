@@ -15,9 +15,9 @@ extension TrackItem {
         get {
             if isShowCurrentTrack {
                 return name
-            } else {
-                return dataItem?.gpxFileName ?? ""
             }
+            let stored = dataItem?.gpxFileName ?? ""
+            return stored.isEmpty ? (path as NSString).lastPathComponent : stored
         }
         set {
             dataItem?.gpxFileName = newValue
@@ -26,7 +26,10 @@ extension TrackItem {
 
     var gpxFolderName: String {
         get {
-            dataItem?.gpxFolderName ?? ""
+            if let stored = dataItem?.gpxFolderName, !stored.isEmpty {
+                return stored
+            }
+            return (trackItemRelativePath() as NSString).deletingLastPathComponent
         }
         set {
             dataItem?.gpxFolderName = newValue
@@ -34,7 +37,23 @@ extension TrackItem {
     }
 
     var gpxFilePath: String {
-        dataItem?.gpxFilePath ?? ""
+        if let stored = dataItem?.gpxFilePath, !stored.isEmpty {
+            return stored
+        }
+        return trackItemRelativePath()
+    }
+
+    private func trackItemRelativePath() -> String {
+        let absolute = path
+        let gpxDir = OsmAndApp.swiftInstance().gpxPath ?? ""
+        guard !gpxDir.isEmpty, absolute.hasPrefix(gpxDir) else {
+            return (absolute as NSString).lastPathComponent
+        }
+        var relative = String(absolute.dropFirst(gpxDir.count))
+        while relative.hasPrefix("/") {
+            relative.removeFirst()
+        }
+        return relative
     }
 
     var creationDate: Date {
@@ -276,7 +295,7 @@ extension TrackItem {
     }
     
     var gpxFileNameWithoutExtension: String {
-        dataItem?.gpxFileNameWithoutExtension ?? ""
+        dataItem?.gpxFileNameWithoutExtension ?? (gpxFileName as NSString).deletingPathExtension
     }
     
     func resetAppearanceToOriginal() {

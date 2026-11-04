@@ -15,6 +15,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OAVoiceRouter.h"
 #import "OAAnnounceTimeDistances.h"
+#import "OsmAndSharedWrapper.h"
 
 #include "routeSegmentResult.h"
 #include <OsmAndCore/Utilities.h>
@@ -68,13 +69,13 @@
 - (BOOL)setupNextTurnStreetName:(OANextDirectionInfo *)info
 {
     BOOL isSet = NO;
-    if (info.directionInfo && !info.directionInfo.turnType->isSkipToSpeak()) {
+    if (info.directionInfo && !info.directionInfo.turnType.isSkipToSpeak) {
         NSString *name = info.directionInfo.streetName;
         NSString *ref = info.directionInfo.ref;
         NSString *destinationName = info.directionInfo.destinationName;
         isSet = !(name.length == 0 && ref.length == 0 && destinationName.length == 0);
 
-        const auto& dataObject = info.directionInfo.routeDataObject;
+        OASRouteDataObject *dataObject = info.directionInfo.routeDataObject;
         if (_useDestination)
             _shields = [RoadShield createDestination:info.directionInfo.routeDataObject destRef:info.directionInfo.destinationRef];
         else
@@ -86,7 +87,7 @@
         _text = [OARoutingHelperUtils formatStreetName:name ref:ref destination:destinationName towards:@"" shields:_shields];
         _turnType = info.directionInfo.turnType;
         if (!_turnType)
-            _turnType = TurnType::ptrValueOf(TurnType::C, false);
+            _turnType = [OASTurnType.companion valueOfValue:OASTurnType.companion.C leftSide:NO];
         
         OAExitInfo *exitInfo = info.directionInfo.exitInfo;
         if (exitInfo)
@@ -123,7 +124,7 @@
         [self setupNextRoadStreetName:routingHelper];
     
     if (!showNextTurn)
-        _turnType = nullptr;
+        _turnType = nil;
     if (!_turnType)
         _showMarker = YES;
 }
@@ -138,7 +139,7 @@
     OACurrentStreetName *otherName = (OACurrentStreetName *) object;
     if (![self.text isEqualToString:otherName.text])
         return NO;
-    if (self.turnType && otherName.turnType && self.turnType->getValue() != otherName.turnType->getValue())
+    if (self.turnType && otherName.turnType && self.turnType.value != otherName.turnType.value)
         return NO;
     if (self.showMarker != otherName.showMarker)
         return NO;
@@ -153,7 +154,7 @@
 - (NSUInteger) hash
 {
     NSUInteger result = [self.text hash];
-    result = 31 * result + (self.turnType ? self.turnType->getValue() : 0.);
+    result = 31 * result + (self.turnType ? self.turnType.value : 0.);
     result = 31 * result + (self.showMarker ? 1 : 0);
     result = 31 * result + [self.shields hash];
     result = 31 * result + [self.exitRef hash];
@@ -162,12 +163,12 @@
 
 - (BOOL)setupCurrentRoadStreetName:(OARoutingHelper *)routingHelper
 {
-    const auto& rs = [routingHelper getCurrentSegmentResult];
+    OASRouteSegmentResult *rs = [routingHelper getCurrentSegmentResult];
     if (rs)
     {
         _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
         _showMarker = YES;
-        _shields = [RoadShield createShields:rs->object];
+        _shields = [RoadShield createShields:[rs getObject]];
         if (_text.length == 0 && _shields.count == 0)
             _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:YES];
         
@@ -178,27 +179,27 @@
 
 - (void)setupNextRoadStreetName:(OARoutingHelper *)routingHelper
 {
-    const auto& rs = [routingHelper getNextStreetSegmentResult];
+    OASRouteSegmentResult *rs = [routingHelper getNextStreetSegmentResult];
     if (rs)
     {
         _text = [self.class getRouteSegmentStreetName:routingHelper rs:rs includeRef:NO];
-        _turnType = TurnType::ptrValueOf(TurnType::C, false);
-        _shields = [RoadShield createShields:rs->object];
+        _turnType = [OASTurnType.companion valueOfValue:OASTurnType.companion.C leftSide:NO];
+        _shields = [RoadShield createShields:[rs getObject]];
     }
 }
 
-+ (NSString *)getRouteSegmentStreetName:(OARoutingHelper *)routingHelper rs:(const std::shared_ptr<RouteSegmentResult> &)rs includeRef:(BOOL)includeRef
++ (NSString *)getRouteSegmentStreetName:(OARoutingHelper *)routingHelper rs:(OASRouteSegmentResult *)rs includeRef:(BOOL)includeRef
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     if (!lang)
         lang = [OAUtilities currentLang];
-    
-    auto locale = std::string([lang UTF8String]);
+
     BOOL transliterate = settings.settingMapLanguageTranslit.get;
-    NSString *nm = [NSString stringWithUTF8String:rs->object->getName(locale, transliterate).c_str()];
-    NSString *rf = [NSString stringWithUTF8String:rs->object->getRef(locale, transliterate, rs->isForwardDirection()).c_str()];
-    NSString *dn = [NSString stringWithUTF8String:rs->object->getDestinationName(locale, transliterate, rs->isForwardDirection()).c_str()];
+    OASRouteDataObject *object = [rs getObject];
+    NSString *nm = [object getNameLang:lang transliterate:transliterate];
+    NSString *rf = [object getRefLang:lang transliterate:transliterate direction:[rs isForwardDirection]];
+    NSString *dn = [object getDestinationNameLang:lang transliterate:transliterate direction:[rs isForwardDirection]];
     return [OARoutingHelperUtils formatStreetName:nm ref:includeRef ? rf : nil destination:dn towards:@"»"];
 }
 
@@ -206,7 +207,7 @@
 
 @implementation RoadShield
 
-- (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value
+- (instancetype)initWithRDO:(OASRouteDataObject *)rdo tag:(NSString *)tag value:(NSString *)value
 {
     self = [super init];
     if (self)
@@ -218,33 +219,31 @@
     return self;
 }
 
-+ (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo
++ (NSArray<RoadShield *> *)createShields:(OASRouteDataObject *)rdo
 {
     NSMutableArray<RoadShield *> *shields = [NSMutableArray array];
     NSMutableString *additional = [NSMutableString string];
     
-    if (rdo && !rdo->namesIds.empty())
+    OASKotlinIntArray *nameIds = rdo.nameIds;
+    if (rdo && nameIds != nil && nameIds.size > 0)
     {
-        for (NSInteger i = 0; i < rdo->namesIds.size(); i++)
+        for (int i = 0; i < nameIds.size; i++)
         {
-            uint32_t nameId = rdo->namesIds[i].first;
-            
+            int nameId = [nameIds getIndex:i];
+
             NSString *tag = nil;
-            if (rdo->region)
-            {
-                std::string localTagStr = rdo->region->quickGetEncodingRule(nameId).getTag();
-                tag = OAStringFromUTF8Nullable(localTagStr.c_str());
-            }
+            if (rdo.region)
+                tag = [rdo.region quickGetEncodingRuleId:nameId].getTag;
+
             if (!tag)
             {
-                NSLog(@"[RoadShield] Warning: tag is null for nameId %u", nameId);
+                NSLog(@"[RoadShield] Warning: tag is null for nameId %d", nameId);
                 continue;
             }
-            
-            NSString *val = @"";
-            auto it = rdo->names.find(nameId);
-            if (it != rdo->names.end() && !it->second.empty())
-                val = OAStringFromUTF8Nullable(it->second.c_str());
+
+            NSString *val = [rdo.names getKey:nameId];
+            if (!val)
+                val = @"";
             
             if (![tag hasSuffix:@"_ref"] && ![tag hasPrefix:@"route_road"])
             {
@@ -264,7 +263,7 @@
     return [shields copy];
 }
 
-+ (NSArray<RoadShield *> *)createDestination:(std::shared_ptr<RouteDataObject>)rdo destRef:(NSString *)destRef
++ (NSArray<RoadShield *> *)createDestination:(OASRouteDataObject *)rdo destRef:(NSString *)destRef
 {
     NSMutableArray<RoadShield *> * shields = [[self createShields:rdo] mutableCopy];
     if (rdo && destRef.length > 0 && shields.count > 0)
@@ -323,7 +322,7 @@
 {
     NSUInteger result = [self.tag hash];
     result = 31 * result + [self.value hash];
-    result = 31 * result + (self.rdo ? self.rdo->id : 0);
+    result = 31 * result + (self.rdo ? self.rdo.id : 0);
     return result;
 }
 

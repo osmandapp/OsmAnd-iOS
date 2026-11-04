@@ -34,6 +34,7 @@ final class URLSessionConfigProvider: NSObject {
 final class URLSessionManager: NSObject {
     // 30 days
     static let cacheLifetime: TimeInterval = 30 * 24 * 60 * 60
+    static let wikiFileMetadataCheckedKey = "wikiFileMetadataChecked"
     
     // UserInfo keys
     private static let expirationDateKey = "expirationDate"
@@ -58,8 +59,19 @@ final class URLSessionManager: NSObject {
                               data: Data,
                               for request: URLRequest,
                               sessionKey: String) {
+        storeResponse(response, data: data, for: request, sessionKey: sessionKey, wikiFileMetadataChecked: false)
+    }
+
+    static func storeResponse(_ response: URLResponse,
+                              data: Data,
+                              for request: URLRequest,
+                              sessionKey: String,
+                              wikiFileMetadataChecked: Bool) {
         let expirationDate = Date().addingTimeInterval(cacheLifetime)
-        let userInfo: [AnyHashable: Any] = [expirationDateKey: expirationDate]
+        var userInfo: [AnyHashable: Any] = [expirationDateKey: expirationDate]
+        if wikiFileMetadataChecked {
+            userInfo[wikiFileMetadataCheckedKey] = true
+        }
         
         let cached = CachedURLResponse(response: response,
                                        data: data,
@@ -81,7 +93,7 @@ final class URLSessionManager: NSObject {
     
     // MARK: - Fetch
     
-    /// Returns cached response if it's not expired. Removes it otherwise.
+    /// Returns the cached response, including expired entries that can be used when offline.
     static func cachedResponse(for request: URLRequest,
                                sessionKey: String) -> CachedURLResponse? {
         guard let cache = session(for: sessionKey).configuration.urlCache,
@@ -90,6 +102,11 @@ final class URLSessionManager: NSObject {
         }
         
         return cached
+    }
+
+    static func isExpiredCachedResponse(_ cached: CachedURLResponse) -> Bool {
+        guard let expirationDate = cached.userInfo?[expirationDateKey] as? Date else { return false }
+        return expirationDate <= Date()
     }
     
     // MARK: - Cleanup

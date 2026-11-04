@@ -645,18 +645,21 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func getGpxForSelectedRow(at indexPath: IndexPath) -> GpxDataItem? {
+        let gpxList: [GpxDataItem]
         if isSearchActive {
-            return filteredGpxList[indexPath.row]
+            gpxList = filteredGpxList
         } else {
             switch indexPath.section {
             case 0:
-                return isShowingVisibleTracks ? visibleGpxList[indexPath.row] : allGpxList[indexPath.row]
+                gpxList = isShowingVisibleTracks ? visibleGpxList : allGpxList
             case 1 where isShowingVisibleTracks:
-                return recentlyVisibleGpxList[indexPath.row]
+                gpxList = recentlyVisibleGpxList
             default:
                 return nil
             }
         }
+        guard gpxList.indices.contains(indexPath.row) else { return nil }
+        return gpxList[indexPath.row]
     }
     
     private func getSelectedTrackPaths() -> [String] {
@@ -733,7 +736,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             return
         }
         
-        guard isTracksAvailable, currentSortMode == .nearest, forceUpdate
+        guard isTracksAvailable, currentSortMode.isCurrentLocationDistanceOriented, forceUpdate
                 || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
         else {
             lock.unlock()
@@ -813,10 +816,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
               let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
         let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
         UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-            self.tableView.contentInset = contentInsets
-            self.tableView.scrollIndicatorInsets = contentInsets
+            self.tableView.contentInset.bottom = keyboardHeight
+            self.tableView.verticalScrollIndicatorInsets.bottom = keyboardHeight
             self.buttonsBottomOffsetConstraint.constant = keyboardHeight
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -826,10 +828,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         guard let userInfo = notification.userInfo,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
               let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
-        let contentInsets = UIEdgeInsets.zero
         UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-            self.tableView.contentInset = contentInsets
-            self.tableView.scrollIndicatorInsets = contentInsets
+            self.tableView.contentInset.bottom = 0
+            self.tableView.verticalScrollIndicatorInsets.bottom = 0
             self.buttonsBottomOffsetConstraint.constant = 0
             self.view.layoutIfNeeded()
         }, completion: nil)
@@ -923,9 +924,12 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
 
 extension MapSettingsGpxViewController {
     private func createSortMenu() -> UIMenu {
-        let sortingOptions = UIMenu(options: .displayInline, children: [
-            createAction(for: .nearest),
+        let lastModifiedOption = UIMenu(options: .displayInline, children: [
             createAction(for: .lastModified)
+        ])
+        let nearestOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearestToCurrentLocation),
+            createAction(for: .nearestToMapCenter)
         ])
         let alphabeticalOptions = UIMenu(options: .displayInline, children: [
             createAction(for: .nameAZ),
@@ -944,7 +948,7 @@ extension MapSettingsGpxViewController {
             createAction(for: .shorterDurationFirst)
         ])
         
-        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+        return UIMenu(title: "", children: [lastModifiedOption, nearestOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
     }
     
     private func createAction(for sortType: TracksSortMode) -> UIAction {

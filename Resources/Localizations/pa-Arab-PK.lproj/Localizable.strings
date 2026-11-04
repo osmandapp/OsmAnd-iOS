@@ -68,7 +68,7 @@
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "search_more" = "Search more…";
-"day_off_label" = "off";
+"day_off_label" = "بند";
 "open_from" = "Open from";
 "open_till" = "Open till";
 "will_close_at" = "Will close at";

@@ -31,6 +31,17 @@
 {
     OAPOI *_poi;
     BOOL _wasSearchedPoi;
+    QList<std::shared_ptr<const OsmAnd::TransportRoute>> _routes;
+}
+
+- (const QList<std::shared_ptr<const OsmAnd::TransportRoute>> &)getRoutes
+{
+    return _routes;
+}
+
+- (void)setRoutes:(const QList<std::shared_ptr<const OsmAnd::TransportRoute>> &)routes
+{
+    _routes = routes;
 }
 
 - (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop

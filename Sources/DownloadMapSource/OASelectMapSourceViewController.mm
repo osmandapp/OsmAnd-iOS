@@ -20,6 +20,7 @@
 #include <QSet>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#import "GeneratedAssetSymbols.h"
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -143,7 +144,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (cell)
     {
         UIImage *img = nil;
-        img = [UIImage imageNamed:@"ic_custom_map_online"];
+        img = [UIImage imageNamed:ACImageNameIcCustomMapOnline];
         cell.titleLabel.text = caption;
         cell.leftIconView.image = img;
         if ([_app.data.lastMapSource isEqual:itemMapSource])

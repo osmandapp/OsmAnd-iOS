@@ -282,8 +282,7 @@
                     || _routeLineColor == kDefaultRouteLineDayColor
                     || _routeLineColor == kDefaultRouteLineNightColor;
 
-            auto iconBitmap = [self bitmapForColor:hasStyleColor ? UIColor.whiteColor : color
-                        fileName:@"map_direction_arrow"];
+            auto iconBitmap = [self directionArrowBitmapForColor:hasStyleColor ? UIColor.whiteColor : color];
             if (iconBitmap)
             {
                 builder.setPathIcon(OsmAnd::SingleSkImage(iconBitmap))

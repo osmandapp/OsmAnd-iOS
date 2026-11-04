@@ -112,66 +112,102 @@
         return items;
     }
 
+    // Work out what has to come out of the archive before touching it, so that it can then be read
+    // in a single pass. Reopening it per entry made one hiccup cost every entry that came after.
+    QHash<QString, QString> destinationByItemName;
+    NSMutableArray<NSDictionary *> *plannedReads = [NSMutableArray array];
     for (const auto& archiveItem : constOf(archiveItems))
     {
         if (!archiveItem.isValid())
             continue;
-        
-        QString filename = archiveItem.name;
+
+        NSString *fileName = archiveItem.name.toNSString();
         OASettingsItem *item = nil;
         for (OASettingsItem *settingsItem in items)
         {
-            if ([settingsItem applyFileName:filename.toNSString()])
+            if ([settingsItem applyFileName:fileName])
             {
                 item = settingsItem;
                 break;
             }
         }
-        
-        if (item && ((collecting && item.shouldReadOnCollecting) || (!collecting && !item.shouldReadOnCollecting)))
+
+        if (!item || !((collecting && item.shouldReadOnCollecting) || (!collecting && !item.shouldReadOnCollecting)))
+            continue;
+
+        OASettingsItemReader *reader = item.getReader;
+        if (!reader)
+            continue;
+
+        NSString *tmpFileName = [_tmpFilesDir stringByAppendingString:[@"/" stringByAppendingString:fileName]];
+        NSMutableArray<NSString *> *requiredNames = [NSMutableArray array];
+        if ([fileName hasSuffix:@"/"])
         {
-            OASettingsItemReader *reader = item.getReader;
-            NSError *err = nil;
-            if (reader)
+            // Directory item: the reader expects everything below it to be on disk
+            for (const auto& nestedItem : constOf(archiveItems))
             {
-                NSString *fileName = archiveItem.name.toNSString();
-                NSString *tmpFileName = [_tmpFilesDir stringByAppendingString:[@"/" stringByAppendingString:fileName]];
-                BOOL isDir = [fileName hasSuffix:@"/"];
-                if (isDir)
+                NSString *nestedName = nestedItem.name.toNSString();
+                if ([nestedName hasPrefix:fileName] && ![nestedName isEqualToString:fileName])
                 {
-                    // Collect all items for this directory
-                    for (const auto& archiveItem : constOf(archiveItems))
-                    {
-                        NSString *itemName = archiveItem.name.toNSString();
-                        if ([itemName hasPrefix:fileName] && ![itemName isEqualToString:fileName])
-                        {
-                            if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString([_tmpFilesDir stringByAppendingPathComponent:itemName])))
-                            {
-                                NSLog(@"Error processing directory item");
-                                continue;
-                            }
-                        }
-                    }
+                    destinationByItemName[nestedItem.name] =
+                        QString::fromNSString([_tmpFilesDir stringByAppendingPathComponent:nestedName]);
+                    [requiredNames addObject:nestedName];
                 }
-                else
-                {
-                    if (!archive.extractItemToFile(archiveItem.name, QString::fromNSString(tmpFileName)))
-                    {
-                        NSLog(@"Error processing items");
-                        continue;
-                    }
-                }
-                [reader readFromFile:tmpFileName error:&err];
-                [item applyAdditionalParams:tmpFileName];
             }
-            
-            if (err)
-                [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.name]];
         }
+        else
+        {
+            destinationByItemName[archiveItem.name] = QString::fromNSString(tmpFileName);
+            [requiredNames addObject:fileName];
+        }
+
+        [plannedReads addObject:@{ @"item" : item, @"reader" : reader, @"path" : tmpFileName, @"required" : requiredNames }];
     }
-    
+
+    QStringList failedNames;
+    if (!destinationByItemName.isEmpty() && !archive.extractItemsTo(destinationByItemName, &failedNames))
+        NSLog(@"Archive %@ could not be read to the end, some items are missing", file);
+
+    NSMutableSet<NSString *> *failedNameSet = [NSMutableSet set];
+    for (const auto& failedName : OsmAnd::constOf(failedNames))
+        [failedNameSet addObject:failedName.toNSString()];
+
+    NSInteger failedItems = 0;
+    for (NSDictionary *plannedRead in plannedReads)
+    {
+        OASettingsItem *item = plannedRead[@"item"];
+        NSString *tmpFileName = plannedRead[@"path"];
+
+        NSString *missingName = nil;
+        for (NSString *requiredName in (NSArray<NSString *> *) plannedRead[@"required"])
+        {
+            if ([failedNameSet containsObject:requiredName])
+            {
+                missingName = requiredName;
+                break;
+            }
+        }
+        if (missingName)
+        {
+            NSLog(@"Failed to extract %@ from %@", missingName, file);
+            [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.name]];
+            failedItems++;
+            continue;
+        }
+
+        NSError *err = nil;
+        [((OASettingsItemReader *) plannedRead[@"reader"]) readFromFile:tmpFileName error:&err];
+        [item applyAdditionalParams:tmpFileName];
+
+        if (err)
+            [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), item.name]];
+    }
+
     [fileManager removeItemAtPath:_tmpFilesDir error:nil];
-    
+
+    if (failedItems > 0)
+        NSLog(@"%ld of %lu items failed to extract from %@", (long) failedItems, (unsigned long) plannedReads.count, file);
+
     return items;
 }
 

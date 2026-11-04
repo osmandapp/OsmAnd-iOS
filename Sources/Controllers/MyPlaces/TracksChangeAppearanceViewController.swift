@@ -345,7 +345,7 @@ final class TracksChangeAppearanceViewController: OABaseNavbarViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: OACollectionSingleLineTableViewCell.reuseIdentifier) as! OACollectionSingleLineTableViewCell
             let isRightActionButtonVisible = isSolidColorSelected || isGradientColorSelected
             cell.rightActionButtonVisibility(isRightActionButtonVisible)
-            cell.rightActionButton.setImage(isRightActionButtonVisible ? UIImage.templateImageNamed("ic_custom_add") : nil, for: .normal)
+            cell.rightActionButton.setImage(isRightActionButtonVisible ? .icCustomAdd : nil, for: .normal)
             cell.rightActionButton.tag = isRightActionButtonVisible ? (indexPath.section << 10 | indexPath.row) : 0
             cell.rightActionButton.accessibilityLabel = isRightActionButtonVisible ? localizedString(isSolidColorSelected ? "shared_string_add_color" : "add_palette") : nil
             cell.rightActionButton.removeTarget(nil, action: nil, for: .allEvents)

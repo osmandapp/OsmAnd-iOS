@@ -58,7 +58,7 @@ final class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
         DispatchQueue.main.async {
             if let article = self.article {
                 let isSaved = TravelObfHelper.shared.getBookmarksHelper().isArticleSaved(article: self.article!)
-                self.bookmarkIcon.image = isSaved ? UIImage(named: "ic_custom20_bookmark") : nil
+                self.bookmarkIcon.image = isSaved ? .icCustom20Bookmark : nil
             }
         }
     }

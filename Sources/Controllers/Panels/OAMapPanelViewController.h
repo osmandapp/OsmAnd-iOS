@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly, nullable) OAMapHudViewController* hudViewController;
 @property (nonatomic, readonly, nullable) OABaseScrollableHudViewController* scrollableHudViewController;
 @property (nonatomic, readonly, nullable) OABaseScrollableHudViewController* prevScrollableHudViewController;
+@property (nonatomic, readonly, nullable) OABaseScrollableHudViewController *suspendedPlanRouteController;
 @property (nonatomic, readonly) OAMapActions *mapActions;
 @property (nonatomic, readonly) OAMapWidgetRegistry *mapWidgetRegistry;
 @property (nonatomic, readonly, nullable) UIView *shadeView;
@@ -51,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 - (void) hideScrollableHudViewController;
+- (void)forceHidePlanRouteIfNeeded;
+- (void)disablePlanRouteSearchContextMenuForMapGesture;
 
 - (void) showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller;
 
@@ -166,6 +169,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;
 - (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type;
+- (BOOL)isSelectingNavigationPoint;
+- (BOOL)processNavigationPointSelection:(NSArray<OATargetPoint *> *)targetPoints;
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(nullable OASGpxFile *)gpx analysis:(nullable OASGpxTrackAnalysis *)analysis;
@@ -225,12 +230,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) showDestinations;
 
+- (void) showProgress;
+- (void) hideProgress;
+
 - (void) showToolbar:(OAToolbarViewController *)toolbarController;
 - (void) hideToolbar:(OAToolbarViewController *)toolbarController;
 - (void) showPoiToolbar:(OAPOIUIFilter *)filter latitude:(double)latitude longitude:(double)longitude;
 
-- (void) showProgress;
-- (void) hideProgress;
 
 - (void) openSearch;
 - (void) openSearch:(nullable NSObject *)object location:(nullable CLLocation *)location;

@@ -2857,3 +2857,5 @@
 "open_from_short" = "Fra";
 "shared_string_instant" = "Øyeblikkelig";
 "shared_strings_dimensions" = "Dimensjoner";
+
+"ios_release_5_4" = "• Nytt design for «Mine steder» — med undermapper for favoritter, festede mapper og raskere handlinger\n• Gjenoppbygd «Planlegg en rute» — legg til rute- og POI-punkter, og kombiner ulike rutetyper\n• Nytt astronomi-tillegg: stjernekart med detaljert database for hvert objekt, synlighetsgrafer og en observasjonsplan\n• Lagt til visualiseringstypen «Terrengskygger»\n• Lagt til støtte for kart med kun veier\n• Rediger fargepaletten for spor og terreng\n• Organiser spor automatisk etter år, lengde, aktivitet og mer\n• Del opp GPX-filer med flere spor i separate filer ved import\n• Angi standardutseende for spormapper\n• Lagt til innstilling for sykkelbredde for å unngå smale sykkelveier\n• Lagt til widget for OBD-II-adapterspenning\n• Lagt til alternativet «Sett tale-lyd på pause» for å pause podkaster eller lydbøker under navigasjonsinstruksjoner\n• Komplett ikonutvalg er nå tilgjengelig for profiler\n• Forbedret ytelse ved håndtering av et stort antall favoritter\n• Rettet et problem med prøveperioden for CarPlay";

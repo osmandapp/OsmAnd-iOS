@@ -293,7 +293,7 @@ static NSString *kBackupSuffix = @"_osmand_backup";
         if ([gpx compare:oldPath] == NSOrderedSame)
         {
             [visibleGpx removeObject:gpx];
-            [visibleGpx addObject:newPath.decomposedStringWithCanonicalMapping];
+            [visibleGpx addObject:newPath];
             break;
         }
     }

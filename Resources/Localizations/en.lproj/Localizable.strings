@@ -1915,6 +1915,8 @@
 
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
+"osm_note_upload_uncertain_message" = "The result of a previous note upload could not be confirmed. The note may already exist on OpenStreetMap. Sending again may create a duplicate note. Choose Retry to check again without resending, or Send again to upload it again.";
+"osm_note_send_again" = "Send again";
 "exit_without_saving" = "Exit without saving?";
 "unsaved_changes_will_be_lost" = "Any unsaved changes will be lost. Continue?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";

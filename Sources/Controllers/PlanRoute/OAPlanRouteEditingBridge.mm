@@ -2270,7 +2270,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 - (void)onTouch:(CLLocationCoordinate2D)coordinate longPress:(BOOL)longPress
 {
-    if (longPress)
+    if (longPress || (self.presenterViewController && !self.presenterViewController.view.isUserInteractionEnabled))
         return;
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];

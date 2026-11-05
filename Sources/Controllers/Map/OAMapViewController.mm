@@ -3733,6 +3733,41 @@ static char kMapSourceUpdateQueueKey;
     return NO;
 }
 
+- (void)selectWpt:(OAGpxWptItem *)item
+{
+    OASGpxFile *gpxFile = nil;
+    NSString *docPath = item.docPath;
+    if (docPath.length > 0)
+    {
+        gpxFile = [_selectedGpxHelper getGpxFileFor:docPath];
+        if (!gpxFile && [_gpxFilePathTemp isEqualToString:docPath])
+            gpxFile = _gpxFilesTemp.firstObject;
+    }
+    else if ([_selectedGpxHelper findGpxFile:&gpxFile path:&docPath containingWaypoint:item.point])
+    {
+        item.docPath = docPath;
+    }
+
+    if (gpxFile)
+    {
+        NSMutableSet<NSString *> *groups = [NSMutableSet set];
+        for (OASWptPt *point in gpxFile.getPointsList)
+        {
+            if (point.category.length > 0 && !gpxFile.pointsGroups[point.category].isHidden)
+                [groups addObject:point.category];
+        }
+        item.groups = groups.allObjects;
+    }
+
+    // Copy the selected waypoint so edits do not change its stored group before updateWpts:.
+    if (item.docPath.length > 0)
+        item.point = [[OASWptPt alloc] initWithWptPt:item.point];
+
+    self.foundWpt = item.point;
+    self.foundWptGroups = item.groups;
+    self.foundWptDocPath = item.docPath;
+}
+
 - (BOOL) deleteFoundWpt
 {
     if (!self.foundWpt)
@@ -4081,10 +4116,15 @@ static char kMapSourceUpdateQueueKey;
         }
     }
     
-    if (_gpxFilesTemp.count != 0)
-    {
-        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
+    NSString *path = [OAUtilities absoluteGpxPathForPath:docPath];
+    NSString *tempPath = [OAUtilities absoluteGpxPathForPath:_gpxFilePathTemp];
+    OASGpxFile *gpxFile = [tempPath isEqualToString:path] ? _gpxFilesTemp.firstObject : nil;
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+    if (!gpxFile)
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
 
+    if (gpxFile && !gpxFile.error)
+    {
         for (OAGpxWptItem *item in items)
         {
             for (OASWptPt *loc in gpxFile.getPointsList)
@@ -4103,16 +4143,17 @@ static char kMapSourceUpdateQueueKey;
         
         if (found)
         {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
             gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
+            if ([OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile])
+                return NO;
             
             // update map
-            if (updateMap)
+            if (updateMap && gpxFile == _gpxFilesTemp.firstObject)
+            {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    //[self showTempGpxTrack:docPath];
+                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
                 });
-            
+            }
         }
     }
     
@@ -4233,10 +4274,15 @@ static char kMapSourceUpdateQueueKey;
         }
     }
 
-    if (_gpxFilesTemp.count != 0)
-    {
-        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
+    NSString *path = [OAUtilities absoluteGpxPathForPath:docPath];
+    NSString *tempPath = [OAUtilities absoluteGpxPathForPath:_gpxFilePathTemp];
+    OASGpxFile *gpxFile = [tempPath isEqualToString:path] ? _gpxFilesTemp.firstObject : nil;
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+    if (!gpxFile)
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
 
+    if (gpxFile && !gpxFile.error)
+    {
         for (OAGpxWptItem *item in items)
         {
             for (int i = 0; i < gpxFile.getPointsList.count; i++)
@@ -4254,14 +4300,17 @@ static char kMapSourceUpdateQueueKey;
         
         if (found)
         {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
             gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            
+            if ([OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile])
+                return NO;
+
             // update map
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self initRendererWithGpxTracks];
-            });
+            if (gpxFile == _gpxFilesTemp.firstObject)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self initRendererWithGpxTracks];
+                });
+            }
             
             return YES;
         }

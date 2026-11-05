@@ -29,6 +29,9 @@
 @end
 
 @implementation OATargetMultiView
+{
+    NSObject *_hideAnimationToken;
+}
 
 - (instancetype) init
 {
@@ -175,6 +178,7 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    _hideAnimationToken = nil;
     //[self applyMapInteraction:self.frame.size.height];
     
     if (animated)
@@ -221,6 +225,7 @@
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    _hideAnimationToken = nil;
     if (self.superview)
     {
         CGRect frame = self.frame;
@@ -231,14 +236,19 @@
         
         if (animated && duration > 0.0)
         {
+            NSObject *hideAnimationToken = [NSObject new];
+            _hideAnimationToken = hideAnimationToken;
             [UIView animateWithDuration:duration animations:^{
                 
                 self.frame = frame;
                 
             } completion:^(BOOL finished) {
-                // An interrupted hide must not remove a picker that has been shown again.
-                if (finished)
+                // A newer show or hide supersedes this request, even if its animation completes later.
+                if (_hideAnimationToken == hideAnimationToken)
+                {
+                    _hideAnimationToken = nil;
                     [self removeFromSuperview];
+                }
                 
                 if (onComplete)
                     onComplete();

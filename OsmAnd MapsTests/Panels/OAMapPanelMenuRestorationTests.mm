@@ -185,6 +185,39 @@
     XCTAssertEqual(panel.prevScrollableHudViewController, planner);
 }
 
+- (void)checkReopeningMultiMenuDuringHide:(BOOL)animated
+{
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:container.bounds];
+    OATargetPoint *point = [[OATargetPoint alloc] init];
+    point.title = @"Test point";
+    menu.targetPoints = @[point];
+    [container addSubview:menu];
+    [menu show:NO onComplete:nil];
+
+    XCTestExpectation *hideCompleted = [self expectationWithDescription:@"Previous hide completed"];
+    [menu hide:YES duration:0.2 onComplete:^{
+        [hideCompleted fulfill];
+    }];
+    XCTestExpectation *showCompleted = [self expectationWithDescription:@"Menu shown again"];
+    [menu show:animated onComplete:^{
+        [showCompleted fulfill];
+    }];
+    [self waitForExpectations:@[hideCompleted, showCompleted] timeout:3];
+
+    XCTAssertEqual(menu.superview, container);
+}
+
+- (void)testReopeningMultiMenuDuringHideKeepsItVisible
+{
+    [self checkReopeningMultiMenuDuringHide:YES];
+}
+
+- (void)testReopeningMultiMenuWithoutAnimationDuringHideKeepsItVisible
+{
+    [self checkReopeningMultiMenuDuringHide:NO];
+}
+
 - (void)testRealPlannerRestoresViewportCenterToCrosshair
 {
     OAAppDelegate *appDelegate = (OAAppDelegate *)UIApplication.sharedApplication.delegate;

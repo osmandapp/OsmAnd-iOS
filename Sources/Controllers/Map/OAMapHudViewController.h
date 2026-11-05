@@ -73,6 +73,7 @@
 @property (nonatomic, strong, readonly) MapHudLayout *mapHudLayout;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
+@property (nonatomic, readonly) BOOL topControlsVisible;
 
 - (void) enterContextMenuMode;
 - (void) restoreFromContextMenuMode;

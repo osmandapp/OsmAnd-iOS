@@ -35,6 +35,7 @@
 #import "Localization.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
+#import "OAFreeRegionHelper.h"
 #import "OAProducts.h"
 #import "OAInAppCell.h"
 #import "OADownloadMultipleResourceViewController.h"
@@ -537,7 +538,8 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
 
 - (BOOL) shouldHideEmailSubscription
 {
-    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class] || [self shouldDisplayFreeMapsMessage];
+    // the free version offers the email in the "not eligible" dialog of a free region replace
+    return YES;
 }
 
 - (BOOL) shouldDisplayWeatherForecast:(OAWorldRegion *)region
@@ -646,10 +648,12 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     if ([self.region isKindOfClass:OACustomRegion.class])
         return;
 
-    int freeMaps = [OAIAPHelper freeMapsAvailable];
-    EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
+    // free version: one free region, the banner shows it instead of the free maps counter
+    EOASubscriptionBannerType bannerType = EOASubscriptionBannerFree;
+    NSString *freeRegionName = [OAFreeRegionHelper getFreeRegion].name;
 
-    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType && _subscriptionBannerView.freeMapsCount == freeMaps)
+    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType
+        && (_subscriptionBannerView.freeRegionName == freeRegionName || [_subscriptionBannerView.freeRegionName isEqualToString:freeRegionName]))
     {
         [_subscriptionBannerView updateFrame];
         return;

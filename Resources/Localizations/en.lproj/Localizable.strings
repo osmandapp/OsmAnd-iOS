@@ -1,4 +1,17 @@
 "OsmAnd Maps" = "OsmAnd Maps";
+"free_region_get_maps_plus" = "Get Maps+";
+"free_region_not_chosen_descr" = "The region of your first downloaded map becomes your free region.";
+"free_region_banner_descr" = "All maps of %@ are free.";
+"free_region_maps_size" = "Maps: %d · %@";
+"free_region_replace_note" = "On replace, maps of other regions are deleted. The world map and plugin maps (contour lines, terrain, depth, Wikipedia, travel guides) stay.";
+"free_region_other_title" = "%@ is not your free region";
+"free_region_other_descr" = "Replace %1$@ with %2$@, or get Maps+ for all regions.";
+"free_region_not_eligible_title" = "You're not eligible for a free replace";
+"free_region_not_eligible_email_descr" = "Leave your email to replace it. We send OsmAnd news and discounts about once a month.";
+"free_region_not_eligible_buy_descr" = "Get Maps+ to download maps of all regions.";
+"free_region_update_maps_title" = "Update your maps";
+"free_region_update_maps_descr" = "The new search needs maps of this version. Update all your maps - it is free.";
+"later" = "Later";
 "send_crash_log" = "Send crash logs";
 "send_crash_log_descr" = "From previous crashes";
 "no_crashes_recorded" = "No crashes recorded";

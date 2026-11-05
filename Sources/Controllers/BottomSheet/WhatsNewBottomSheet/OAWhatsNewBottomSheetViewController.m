@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OALinks.h"
 #import "OARootViewController.h"
+#import "OAFreeRegionHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -93,6 +94,16 @@
     CGFloat contentHeight = [OAUtilities calculateTextBounds:[self getAttributedContentText] width:width].height;
     CGFloat buttonsHeight = 60. + [OAUtilities getBottomMargin];
     return headerHeight + contentHeight + buttonsHeight + 2 * kVerticalMargin;
+}
+
+- (void) hide:(BOOL)animated completion:(void (^ __nullable)(void))completion
+{
+    [super hide:animated completion:^{
+        if (completion)
+            completion();
+        // after What's new: the new search does not work with the old maps
+        [OAFreeRegionDialogs showUpdateMapsWarningIfNeeded];
+    }];
 }
 
 - (void) onRightButtonPressed

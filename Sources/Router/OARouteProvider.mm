@@ -884,6 +884,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     {
         cf->routeCalculationTime = [[NSDate date] timeIntervalSince1970];
     }
+    cf->showMinorTurns = [OAAppSettings.sharedManager.showMinorTurns get:params.mode];
     return cf;
 }
 
@@ -1478,6 +1479,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
                                                 params:(OASMutableDictionary<NSString *, NSString *> *) paramsR];
     if ([settings.enableTimeConditionalRouting get:params.mode])
         cf.routeCalculationTime = (int64_t) (NSDate.date.timeIntervalSince1970 * 1000); // java reads the conditions off a millisecond clock
+    cf.showMinorTurns = [settings.showMinorTurns get:params.mode];
     return cf;
 }
 

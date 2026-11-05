@@ -1196,6 +1196,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *followTheRoute;
 @property (nonatomic) OACommonString *followTheGpxRoute;
 @property (nonatomic) OACommonBoolean *enableTimeConditionalRouting;
+@property (nonatomic) OACommonBoolean *showMinorTurns;
 @property (nonatomic) OACommonDouble *arrivalDistanceFactor;
 @property (nonatomic) OACommonBoolean *useIntermediatePointsNavigation;
 @property (nonatomic) OACommonBoolean *disableOffrouteRecalc;

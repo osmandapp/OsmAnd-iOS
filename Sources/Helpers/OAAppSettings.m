@@ -185,6 +185,7 @@ static NSString * const followTheRouteKey = @"followTheRoute";
 static NSString * const followTheGpxRouteKey = @"followTheGpxRoute";
 static NSString * const arrivalDistanceFactorKey = @"arrivalDistanceFactor";
 static NSString * const enableTimeConditionalRoutingKey = @"enableTimeConditionalRouting";
+static NSString * const showMinorTurnsKey = @"showMinorTurns";
 static NSString * const useIntermediatePointsNavigationKey = @"useIntermediatePointsNavigation";
 static NSString * const disableOffrouteRecalcKey = @"disableOffrouteRecalc";
 static NSString * const disableWrongDirectionRecalcKey = @"disableWrongDirectionRecalc";
@@ -6567,6 +6568,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_arrivalDistanceFactor forKey:@"arrival_distance_factor"];
         _enableTimeConditionalRouting = [OACommonBoolean withKey:enableTimeConditionalRoutingKey defValue:YES];
         [_profilePreferences setObject:_enableTimeConditionalRouting forKey:@"enable_time_conditional_routing"];
+        _showMinorTurns = [OACommonBoolean withKey:showMinorTurnsKey defValue:YES];
+        [_profilePreferences setObject:_showMinorTurns forKey:@"show_minor_turns"];
         _useIntermediatePointsNavigation = [[OACommonBoolean withKey:useIntermediatePointsNavigationKey defValue:NO] makeGlobal];
         [_globalPreferences setObject:_useIntermediatePointsNavigation forKey:@"use_intermediate_points_navigation"];
 

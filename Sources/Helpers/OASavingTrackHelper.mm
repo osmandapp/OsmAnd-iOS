@@ -63,6 +63,13 @@
 
 static const NSInteger kDBVersion = 1;
 
+@interface OASavingTrackHelper ()
+
+@property (atomic, readwrite) int currentTrackIndex;
+@property (atomic, readwrite) BOOL hasTrackPoints;
+
+@end
+
 @implementation OASavingTrackHelper
 {
     OsmAndAppInstance _app;
@@ -92,6 +99,7 @@ static const NSInteger kDBVersion = 1;
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
     _currentTrack = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    self.hasTrackPoints = NO;
     _currentTrack.showCurrentTrack = YES;
     [_currentTrack setWidthWidth:[settings.currentTrackWidth get]];
     [_currentTrack setShowArrowsShowArrows:[settings.currentTrackShowArrows get]];
@@ -119,7 +127,7 @@ static const NSInteger kDBVersion = 1;
     if (self)
     {
         _app = [OsmAndApp instance];
-        currentTrackIndex = 1;
+        self.currentTrackIndex = 1;
         syncQueue = dispatch_queue_create("sth_syncQueue", DISPATCH_QUEUE_SERIAL);
         
         [self createDb];
@@ -383,8 +391,17 @@ static const NSInteger kDBVersion = 1;
     return res;
 }
 
-- (void) clearData
+- (void)clearData
 {
+    dispatch_sync(syncQueue, ^{
+        [self clearDataOnSyncQueue];
+    });
+}
+
+- (void)clearDataOnSyncQueue
+{
+    dispatch_assert_queue(syncQueue);
+
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
         
@@ -412,7 +429,7 @@ static const NSInteger kDBVersion = 1;
     
     distance = 0;
     points = 0;
-    currentTrackIndex++;
+    self.currentTrackIndex++;
     
     [_currentTrack clearData];
     
@@ -424,6 +441,7 @@ static const NSInteger kDBVersion = 1;
     _currentTrack.modifiedTime = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
     
     [self prepareCurrentTrackForRecording];
+    [LiveActivityManager.shared refresh];
 }
 
 - (void) saveDataToGpx
@@ -511,7 +529,7 @@ static const NSInteger kDBVersion = 1;
             }
         }
         
-        [self clearData];
+        [self clearDataOnSyncQueue];
         
         if (completionHandler)
             completionHandler();
@@ -941,6 +959,7 @@ static const NSInteger kDBVersion = 1;
         [_currentTrack appendTrackPointToDisplay:pt];
         OASTrkSegment *lt = [track.segments lastObject];
         [lt.points addObject:pt];
+        self.hasTrackPoints = YES;
     }
 
     if (segmentAdded)
@@ -1212,6 +1231,7 @@ static const NSInteger kDBVersion = 1;
         OASGpxTrackAnalysis *analysisNew = [_currentTrack getAnalysisFileTimestamp:[[NSDate date] timeIntervalSince1970]];
         distance = analysisNew.totalDistance;
         points = analysisNew.wptPoints;
+        self.hasTrackPoints = [_currentTrack hasTrkPt];
     });
 }
 
@@ -1232,6 +1252,33 @@ static const NSInteger kDBVersion = 1;
     {
         return NO;
     }
+}
+
+- (void)readTrackRecordingSnapshotWithCompletion:(void (^)(TrackRecordingSnapshot *snapshot))completion
+{
+    dispatch_async(syncQueue, ^{
+        NSTimeInterval duration = 0;
+        // Recorded points are chronological. Exclude pauses between segments, as on Android.
+        for (OASTrack *track in self.currentTrack.tracks)
+        {
+            if (track.generalTrack)
+                continue;
+            for (OASTrkSegment *segment in track.segments)
+            {
+                if (segment.generalSegment)
+                    continue;
+                OASWptPt *firstPoint = segment.points.firstObject;
+                OASWptPt *lastPoint = segment.points.lastObject;
+                if (firstPoint.time > 0 && lastPoint.time >= firstPoint.time)
+                    duration += (lastPoint.time - firstPoint.time) / 1000.0;
+            }
+        }
+        TrackRecordingSnapshot *snapshot = [[TrackRecordingSnapshot alloc] initWithTrackIndex:self.currentTrackIndex
+                                                                                     distance:self->distance
+                                                                                     duration:duration
+                                                                               hasTrackPoints:self.hasTrackPoints];
+        completion(snapshot);
+    });
 }
 
 - (void) runSyncBlock:(void (^)(void))block

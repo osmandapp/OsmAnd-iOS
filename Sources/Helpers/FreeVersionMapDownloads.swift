@@ -8,6 +8,22 @@
 
 import Foundation
 
+enum ReplaceAnswer: String {
+    case ok
+    case requestEmail = "request_email"
+    case no
+    
+    static func parse(_ response: Data?) -> ReplaceAnswer? {
+        guard let response else { return nil }
+        guard let json = (try? JSONSerialization.jsonObject(with: response)) as? [String: Any] else {
+            NSLog("Replace response: %@", String(data: response, encoding: .utf8) ?? "")
+            return nil
+        }
+        
+        return ReplaceAnswer(rawValue: (json["status"] as? String ?? "").lowercased()) ?? .no
+    }
+}
+
 @objcMembers
 final class FreeRegionCheck: NSObject {
     let freeRegion: OAWorldRegion?
@@ -33,6 +49,8 @@ final class FreeVersionMapDownloads: NSObject {
     private static let regionKey = "region"
     private static let replacesKey = "replaces"
     private static let federations: Set<String> = ["northamerica_us", "northamerica_canada", "russia", "southamerica_brazil", "asia_india", "asia_china", "australia-oceania-all_australia-oceania"]
+    private static let replaceURL = "https://osmand.net/api/replace-download-map"
+    private static let registerEmailURL = "https://osmand.net/subscription/register_email"
     
     var isFreeVersion: Bool {
         !OAIAPHelper.isPaidVersion()
@@ -112,8 +130,59 @@ final class FreeVersionMapDownloads: NSObject {
         return region == freeRegion
     }
     
+    func requestReplace(from: OAWorldRegion, to: OAWorldRegion, onAnswer: @escaping (ReplaceAnswer?) -> Void) {
+        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
+        var params: [String: String] = ["os": "ios", "package": Bundle.main.bundleIdentifier ?? "", "version": OAAppVersion.getVersion(), "lang": app.getLanguageCode(), "nd": String(app.getAppInstalledDays()), "ns": String(app.getAppExecCount())]
+        if let aid = app.getUserIosId(), !aid.isEmpty {
+            params["aid"] = aid
+        }
+
+        let attribution = NSMutableDictionary()
+        InstallAttribution.addParams(attribution)
+        params.merge(attribution as? [String: String] ?? [:]) { $1 }
+        params["from"] = from.regionId
+        params["to"] = to.regionId
+        params["replaces"] = String(replacesCount)
+        params["email"] = String(OAAppSettings.sharedManager().emailSubscribed.get())
+        sendRequest(Self.replaceURL, params: params, post: false) { onAnswer(ReplaceAnswer.parse($0)) }
+    }
+    
+    func registerEmail(_ email: String, onRegistered: @escaping (Bool) -> Void) {
+        var params = ["os": "ios", "email": email]
+        if let aid = OsmAndApp.swiftInstance().getUserIosId(), !aid.isEmpty {
+            params["aid"] = aid
+        }
+
+        sendRequest(Self.registerEmailURL, params: params, post: true) { result in
+            let registered = self.isEmailRegistered(email, result)
+            if registered {
+                OAAppSettings.sharedManager().emailSubscribed.set(true)
+            }
+            onRegistered(registered)
+        }
+    }
+    
     func collectMapsToDelete(_ newRegion: OAWorldRegion) -> [(region: OAWorldRegion, items: [OAResourceSwiftItem])] {
         collectLocalMaps().filter { $0.key.regionId != newRegion.regionId }.sorted { $0.key.compare($1.key) == .orderedAscending }.map { (region: $0.key, items: $0.value) }
+    }
+    
+    private func sendRequest(_ url: String, params: [String: String], post: Bool, onResult: @escaping (Data?) -> Void) {
+        OANetworkUtilities.sendRequest(withUrl: url, params: params, post: post) { data, response, _ in
+            let result = (response as? HTTPURLResponse)?.statusCode == 200 ? data : nil
+            DispatchQueue.main.async {
+                onResult(result)
+            }
+        }
+    }
+    
+    private func isEmailRegistered(_ email: String, _ response: Data?) -> Bool {
+        guard let response else { return false }
+        guard let json = (try? JSONSerialization.jsonObject(with: response)) as? [String: Any] else {
+            NSLog("Register email response: %@", String(data: response, encoding: .utf8) ?? "")
+            return false
+        }
+        
+        return email.caseInsensitiveCompare(json["email"] as? String ?? "") == .orderedSame
     }
     
     private func getItemRegion(_ item: OAResourceSwiftItem) -> OAWorldRegion? {

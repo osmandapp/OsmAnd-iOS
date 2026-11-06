@@ -9,6 +9,7 @@
 #import "OAAppDelegate.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OATargetMultiView.h"
+#import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseScrollableHudViewController (PlanRouteTestFactory)
@@ -191,7 +192,7 @@
 - (void)checkReopeningMultiMenuDuringHide:(BOOL)animated backButton:(BOOL)backButton
 {
     OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
-    panel.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    panel.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, OAUtilities.calculateScreenWidth, OAUtilities.calculateScreenHeight)];
     OABaseScrollableHudViewController *planner = [[OABaseScrollableHudViewController alloc] initWithNibName:nil bundle:nil];
     planner.view = [[UIView alloc] initWithFrame:panel.view.bounds];
     [panel setValue:planner forKey:@"prevScrollableHudViewController"];
@@ -201,7 +202,11 @@
     point.title = @"Test point";
     menu.targetPoints = @[point];
     [panel.view addSubview:menu];
-    [menu show:NO onComplete:nil];
+    XCTestExpectation *initialShow = [self expectationWithDescription:@"Menu initially shown"];
+    [menu show:YES onComplete:^{ [initialShow fulfill]; }];
+    [self waitForExpectations:@[initialShow] timeout:3];
+    CGRect visibleFrame = menu.frame;
+    XCTAssertTrue(CGRectContainsRect(panel.view.bounds, visibleFrame));
 
     XCTestExpectation *hideCompleted = [self expectationWithDescription:@"Cancelled hide must not complete"];
     hideCompleted.inverted = YES;
@@ -215,6 +220,8 @@
     [self waitForExpectations:@[hideCompleted, showCompleted] timeout:1];
 
     XCTAssertEqual(menu.superview, panel.view);
+    XCTAssertEqualObjects([NSValue valueWithCGRect:menu.frame], [NSValue valueWithCGRect:visibleFrame]);
+    XCTAssertTrue(CGRectContainsRect(panel.view.bounds, menu.frame));
     XCTAssertNil(panel.scrollableHudViewController);
     XCTAssertNil(planner.parentViewController);
     XCTAssertNil(planner.view.superview);
@@ -244,6 +251,39 @@
 - (void)testReopeningMultiMenuDuringBackButtonDismissalKeepsEditorSuspended
 {
     [self checkReopeningMultiMenuDuringHide:YES backButton:YES];
+}
+
+- (void)checkReopeningMultiMenuInIPhoneLandscape:(BOOL)animated
+{
+    XCTSkipIf(UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone, @"Requires the iPhone landscape layout");
+    UIWindow *window = UIApplication.sharedApplication.mainWindow;
+    XCTAssertNotNil(window);
+    if (!window)
+        return;
+
+    CGRect originalFrame = window.frame;
+    @try
+    {
+        // The menu determines its landscape layout from the app window's width.
+        window.frame = CGRectMake(0, 0, 844, 390);
+        XCTAssertEqualWithAccuracy(OAUtilities.calculateScreenWidth, 844, 0.01);
+        XCTAssertEqualWithAccuracy(OAUtilities.calculateScreenHeight, 390, 0.01);
+        [self checkReopeningMultiMenuDuringHide:animated backButton:NO];
+    }
+    @finally
+    {
+        window.frame = originalFrame;
+    }
+}
+
+- (void)testReopeningMultiMenuDuringHideInIPhoneLandscapeKeepsItVisible
+{
+    [self checkReopeningMultiMenuInIPhoneLandscape:YES];
+}
+
+- (void)testReopeningMultiMenuWithoutAnimationDuringHideInIPhoneLandscapeKeepsItVisible
+{
+    [self checkReopeningMultiMenuInIPhoneLandscape:NO];
 }
 
 - (void)testReopeningMultiMenuCancelsPendingPresentationAndAllowsNextRequest

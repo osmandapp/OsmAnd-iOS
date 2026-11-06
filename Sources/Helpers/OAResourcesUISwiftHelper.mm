@@ -340,7 +340,10 @@
     OsmAndAppInstance app = OsmAndApp.instance;
     for (const auto& localResource : app.resourcesManager->getLocalResources())
     {
-        if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed || (localResource->type != OsmAndResourceType::MapRegion && localResource->type != OsmAndResourceType::RoadMapRegion))
+        if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed || app.resourcesManager->isLocalResourceHidden(localResource))
+            continue;
+
+        if (localResource->type != OsmAndResourceType::MapRegion && localResource->type != OsmAndResourceType::RoadMapRegion)
             continue;
         
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
@@ -349,7 +352,6 @@
         item.resource = localResource;
         item.size = localResource->size;
         item.worldRegion = [OAResourcesUIHelper findRegionOrAnySubregionOf:app.worldRegion thatContainsResource:localResource->id];
-        item.title = [OAResourcesUIHelper titleOfResource:localResource inRegion:item.worldRegion withRegionName:YES withResourceType:NO];
         [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }
     

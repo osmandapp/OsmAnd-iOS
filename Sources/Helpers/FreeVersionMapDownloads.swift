@@ -112,6 +112,10 @@ final class FreeVersionMapDownloads: NSObject {
         return region == freeRegion
     }
     
+    func collectMapsToDelete(_ newRegion: OAWorldRegion) -> [(region: OAWorldRegion, items: [OAResourceSwiftItem])] {
+        collectLocalMaps().filter { $0.key.regionId != newRegion.regionId }.sorted { $0.key.compare($1.key) == .orderedAscending }.map { (region: $0.key, items: $0.value) }
+    }
+    
     private func getItemRegion(_ item: OAResourceSwiftItem) -> OAWorldRegion? {
         isCountedInDownloads(item) ? getRegionByDownloadName(getDownloadName(item.resourceId())) : nil
     }
@@ -126,7 +130,7 @@ final class FreeVersionMapDownloads: NSObject {
     }
     
     private func getRegionByDownloadName(_ downloadName: String) -> OAWorldRegion? {
-        guard let region = OsmAndApp.swiftInstance().worldRegion?.getDataByDownloadName(downloadName), !region.isInPurchasedArea() else { return nil }
+        guard !downloadName.isEmpty, let region = OsmAndApp.swiftInstance().worldRegion?.getDataByDownloadName(downloadName), !region.isInPurchasedArea() else { return nil }
         return getFreeRegionOf(region)
     }
     
@@ -154,6 +158,18 @@ final class FreeVersionMapDownloads: NSObject {
         }
         
         return nil
+    }
+    
+    private func collectLocalMaps() -> [OAWorldRegion: [OAResourceSwiftItem]] {
+        var result: [OAWorldRegion: [OAResourceSwiftItem]] = [:]
+        let items = OAResourcesUISwiftHelper.getInstalledMapResources().sorted { $0.resourceId() < $1.resourceId() }
+        for item in items {
+            if let region = getRegionByDownloadName(getDownloadName(item.resourceId())) {
+                result[region, default: []].append(item)
+            }
+        }
+        
+        return result
     }
     
     private func storeFreeRegion(_ region: OAWorldRegion) {

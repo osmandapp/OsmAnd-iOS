@@ -23,6 +23,7 @@
 #import "OsmAndApp.h"
 #import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAObfFileList.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -492,6 +493,271 @@
     [self addAttachment:attachment];
     [NSFileManager.defaultManager removeItemAtPath:path error:nil];
     [OASharedObfResources.shared refreshFiles];
+}
+
+@end
+
+@interface OASharedSearchUICore (ResourcePreparationTest)
+- (void)prepareSearchResourcesIncludingTravel:(BOOL)includeTravel
+                                  completion:(void (^)(NSArray<NSString *> *, NSArray<OASBinaryMapIndexReader *> *, uint64_t))completion;
+@end
+
+@interface OAResourcePreparationTestCore : OASharedSearchUICore
+@property (nonatomic, copy) NSArray<NSString *> *(^prepare)(BOOL);
+@property (nonatomic, copy) void (^didPrepare)(double);
+@end
+
+@implementation OAResourcePreparationTestCore
+- (void)prepareSearchResourcesIncludingTravel:(BOOL)includeTravel
+                                  completion:(void (^)(NSArray<NSString *> *, NSArray<OASBinaryMapIndexReader *> *, uint64_t))completion
+{
+    NSAssert(!NSThread.isMainThread, @"Resource preparation must not run on the main thread");
+    if (!self.prepare)
+    {
+        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        [super prepareSearchResourcesIncludingTravel:includeTravel completion:^(NSArray *ids, NSArray *readers, uint64_t generation) {
+            if (self.didPrepare)
+                self.didPrepare((CFAbsoluteTimeGetCurrent() - start) * 1000);
+            completion(ids, readers, generation);
+        }];
+        return;
+    }
+    uint64_t generation = [OASharedObfResources.shared currentGeneration];
+    completion(self.prepare(includeTravel), @[], generation);
+}
+@end
+
+@interface OASharedSearchResourcePreparationTest : XCTestCase
+@end
+
+@implementation OASharedSearchResourcePreparationTest
+
+- (void)testInstalledResourcesPrepareOffMainThreadBenchmark
+{
+    NSArray<NSString *> *resourceIds = [OAObfFileList searchResourceIdsIncludingTravel:YES];
+    XCTSkipIf(resourceIds.count == 0, @"The app has no installed maps");
+    OASharedSearchSettings *before = [[OASharedSearchSettings alloc] initWithShared:[[OASSearchSettings alloc] initWithS:nil]];
+    OAResourcePreparationTestCore *after = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    [after initApi];
+    NSMutableArray<NSNumber *> *beforeMain = [NSMutableArray array], *afterMain = [NSMutableArray array], *afterWorker = [NSMutableArray array];
+    for (NSInteger round = 0; round < 8; round++)
+    {
+        // The former helper path, with the same installed maps and warmed registry.
+        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        [OASharedObfResources.shared refreshFiles];
+        [before setOfflineIndexes:[OAObfFileList searchResourceIdsIncludingTravel:YES]];
+        [before setRegions:OsmAndApp.instance.worldRegion];
+        double beforeMs = (CFAbsoluteTimeGetCurrent() - start) * 1000;
+        XCTestExpectation *applied = [self expectationWithDescription:@"real resources prepared and applied"];
+        __block double workerMs = 0;
+        after.didPrepare = ^(double milliseconds) {
+            workerMs += milliseconds;
+        };
+        start = CFAbsoluteTimeGetCurrent();
+        [after updateSearchResourcesIncludingTravel:YES regions:OsmAndApp.instance.worldRegion];
+        double afterMs = (CFAbsoluteTimeGetCurrent() - start) * 1000;
+        [after shallowSearchAsync:OASearchLocationAndUrlAPI.class text:@"52.52, 13.405" matcher:nil completion:^(OASearchResultCollection *result) {
+            XCTAssertNotNil(result);
+            [applied fulfill];
+        }];
+        [self waitForExpectations:@[applied] timeout:30];
+        XCTAssertEqualObjects([[after getSearchSettings] getOfflineIndexes], resourceIds);
+        XCTAssertEqualObjects([((OASharedSearchSettings *)[after getSearchSettings]).shared getOfflineIndexes], [before.shared getOfflineIndexes]);
+        if (round > 0)
+        {
+            [beforeMain addObject:@(beforeMs)];
+            [afterMain addObject:@(afterMs)];
+            [afterWorker addObject:@(workerMs)];
+        }
+    }
+    NSNumber *(^median)(NSArray<NSNumber *> *) = ^NSNumber *(NSArray<NSNumber *> *times) {
+        return [times sortedArrayUsingSelector:@selector(compare:)][times.count / 2];
+    };
+    NSString *measurement = [NSString stringWithFormat:@"Warm resource refresh, %lu IDs, 7 rounds after warm-up, median ms: before main=%@, after main dispatch=%@, after worker=%@",
+        (unsigned long)resourceIds.count, median(beforeMain), median(afterMain), median(afterWorker)];
+    NSLog(@"%@", measurement);
+    XCTAttachment *attachment = [XCTAttachment attachmentWithString:measurement];
+    attachment.lifetime = XCTAttachmentLifetimeKeepAlways;
+    [self addAttachment:attachment];
+}
+
+- (void)waitForResources:(NSArray<NSString *> *)ids core:(OASharedSearchUICore *)core
+{
+    NSPredicate *applied = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        return [[[core getSearchSettings] getOfflineIndexes] isEqualToArray:ids];
+    }];
+    [self waitForExpectations:@[[[XCTNSPredicateExpectation alloc] initWithPredicate:applied object:nil]] timeout:10];
+}
+
+- (void)testPreparationLeavesMainThreadFreeAndPreservesNewSettings
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    XCTestExpectation *entered = [self expectationWithDescription:@"preparation entered"];
+    dispatch_semaphore_t gate = dispatch_semaphore_create(0);
+    core.prepare = ^NSArray *(BOOL includeTravel) {
+        XCTAssertTrue(includeTravel);
+        [entered fulfill];
+        XCTAssertEqual(dispatch_semaphore_wait(gate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC)), 0);
+        return @[@"prepared.obf"];
+    };
+    XCTAssertTrue(NSThread.isMainThread);
+    [core updateSearchResourcesIncludingTravel:YES regions:OsmAndApp.instance.worldRegion];
+    [self waitForExpectations:@[entered] timeout:5];
+    XCTestExpectation *responsive = [self expectationWithDescription:@"main queue responsive while readers open"];
+    dispatch_async(dispatch_get_main_queue(), ^{ [responsive fulfill]; });
+    [self waitForExpectations:@[responsive] timeout:2];
+    [core updateSettings:[[[[core getSearchSettings] setLang:@"de" transliterateIfMissing:YES] setRadiusLevel:4] setTotalLimit:17]];
+    dispatch_semaphore_signal(gate);
+    [self waitForResources:@[@"prepared.obf"] core:core];
+    XCTAssertEqualObjects([[core getSearchSettings] getLang], @"de");
+    XCTAssertTrue([[core getSearchSettings] isTransliterate]);
+    XCTAssertEqual([[core getSearchSettings] getRadiusLevel], 4);
+    XCTAssertEqual([[core getSearchSettings] getTotalLimit], 17);
+    XCTAssertEqual([[core getSearchSettings] getRegions], OsmAndApp.instance.worldRegion);
+}
+
+- (void)testNewResourceUpdateDiscardsTheInFlightSnapshot
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    XCTestExpectation *first = [self expectationWithDescription:@"first preparation entered"];
+    XCTestExpectation *second = [self expectationWithDescription:@"second preparation entered"];
+    dispatch_semaphore_t firstGate = dispatch_semaphore_create(0), secondGate = dispatch_semaphore_create(0);
+    core.prepare = ^NSArray *(BOOL includeTravel) {
+        if (includeTravel)
+        {
+            [first fulfill];
+            dispatch_semaphore_wait(firstGate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+            return @[@"obsolete.travel.obf"];
+        }
+        [second fulfill];
+        dispatch_semaphore_wait(secondGate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+        return @[@"current.obf"];
+    };
+    [core updateSearchResourcesIncludingTravel:YES regions:nil];
+    [self waitForExpectations:@[first] timeout:5];
+    [core updateSearchResourcesIncludingTravel:NO regions:nil];
+    dispatch_semaphore_signal(firstGate);
+    [self waitForExpectations:@[second] timeout:5];
+    XCTAssertEqual([[core getSearchSettings] getOfflineIndexes].count, 0u);
+    dispatch_semaphore_signal(secondGate);
+    [self waitForResources:@[@"current.obf"] core:core];
+}
+
+- (void)testRegistryChangeDuringPreparationRetriesBeforeApplying
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    XCTestExpectation *entered = [self expectationWithDescription:@"preparation entered"];
+    dispatch_semaphore_t gate = dispatch_semaphore_create(0);
+    __block NSUInteger attempts = 0;
+    core.prepare = ^NSArray *(BOOL includeTravel) {
+        if (++attempts == 1)
+        {
+            [entered fulfill];
+            dispatch_semaphore_wait(gate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+            return @[@"stale.obf"];
+        }
+        return @[@"current.obf"];
+    };
+    [core updateSearchResourcesIncludingTravel:YES regions:nil];
+    [self waitForExpectations:@[entered] timeout:5];
+    [OASharedObfResources.shared refreshFiles];
+    dispatch_semaphore_signal(gate);
+    [self waitForResources:@[@"current.obf"] core:core];
+    XCTAssertEqual(attempts, 2u);
+}
+
+- (void)testOnlyLatestSearchRunsAfterPreparation
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApi];
+    dispatch_semaphore_t gate = dispatch_semaphore_create(0);
+    core.prepare = ^NSArray *(BOOL includeTravel) {
+        dispatch_semaphore_wait(gate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+        return @[@"prepared.obf"];
+    };
+    XCTestExpectation *searched = [self expectationWithDescription:@"latest search started"];
+    __block NSUInteger searches = 0;
+    __weak OASharedSearchUICore *weakCore = core;
+    [core setOnSearchStart:^{
+        searches++;
+        XCTAssertEqualObjects([[weakCore getPhrase] getText:YES], @"52.52, 13.405");
+        XCTAssertEqualObjects([[weakCore getSearchSettings] getOfflineIndexes], @[@"prepared.obf"]);
+        [searched fulfill];
+    }];
+    [core updateSearchResourcesIncludingTravel:YES regions:nil];
+    [[core.shared getPhrase] setAcceptPrivateAcceptPrivate:YES];
+    [core search:@"obsolete" delayedExecution:NO matcher:nil];
+    [core search:@"52.52, 13.405" delayedExecution:NO matcher:nil];
+    XCTAssertEqualObjects([[core getPhrase] getText:YES], @"52.52, 13.405");
+    XCTAssertTrue([[core.shared getPhrase] isAcceptPrivate]);
+    XCTAssertEqual(searches, 0u);
+    dispatch_semaphore_signal(gate);
+    [self waitForExpectations:@[searched] timeout:10];
+    [core cancelSearch:YES];
+    XCTAssertEqual(searches, 1u);
+}
+
+- (void)testCancelledSearchDoesNotResumeAfterPreparation
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApi];
+    dispatch_semaphore_t gate = dispatch_semaphore_create(0);
+    core.prepare = ^NSArray *(BOOL includeTravel) {
+        dispatch_semaphore_wait(gate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+        return @[@"prepared.obf"];
+    };
+    XCTestExpectation *searched = [self expectationWithDescription:@"cancelled search must not start"];
+    searched.inverted = YES;
+    [core setOnSearchStart:^{ [searched fulfill]; }];
+    [core updateSearchResourcesIncludingTravel:YES regions:nil];
+    [core search:@"52.52, 13.405" delayedExecution:NO matcher:nil];
+    [core cancelSearch:NO];
+    dispatch_semaphore_signal(gate);
+    [self waitForResources:@[@"prepared.obf"] core:core];
+    [self waitForExpectations:@[searched] timeout:0.2];
+}
+
+- (void)testShallowSearchKeepsItsSettingsAndCompletesAfterPreparation
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApi];
+    dispatch_semaphore_t gate = dispatch_semaphore_create(0);
+    core.prepare = ^NSArray *(BOOL includeTravel) {
+        dispatch_semaphore_wait(gate, dispatch_time(DISPATCH_TIME_NOW, 10 * NSEC_PER_SEC));
+        return @[@"prepared.obf"];
+    };
+    XCTestExpectation *searched = [self expectationWithDescription:@"shallow searches completed"];
+    searched.expectedFulfillmentCount = 2;
+    NSMutableArray *order = [NSMutableArray array];
+    [core updateSearchResourcesIncludingTravel:YES regions:nil];
+    [core updateSettings:[[core getSearchSettings] setLang:@"de" transliterateIfMissing:NO]];
+    for (NSString *label in @[@"first", @"second"])
+    {
+        [core shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *result) {
+            XCTAssertFalse(NSThread.isMainThread);
+            XCTAssertNotNil(result);
+            XCTAssertEqualObjects([result.phrase.getSettings getLang], @"de");
+            [order addObject:label];
+            [searched fulfill];
+        }];
+    }
+    [core updateSettings:[[core getSearchSettings] setLang:@"fr" transliterateIfMissing:NO]];
+    XCTAssertEqual(order.count, 0u);
+    dispatch_semaphore_signal(gate);
+    [self waitForExpectations:@[searched] timeout:10];
+    XCTAssertEqualObjects(order, (@[@"first", @"second"]));
+    XCTAssertEqualObjects([[core getSearchSettings] getLang], @"fr");
+}
+
+- (void)testEmptyResourceUpdateRemovesPreviousMaps
+{
+    OAResourcePreparationTestCore *core = [[OAResourcePreparationTestCore alloc] initWithLang:@"en" transliterate:NO];
+    core.prepare = ^NSArray *(BOOL includeTravel) { return includeTravel ? @[@"previous.obf"] : @[]; };
+    [core updateSearchResourcesIncludingTravel:YES regions:nil];
+    [self waitForResources:@[@"previous.obf"] core:core];
+    [core updateSearchResourcesIncludingTravel:NO regions:nil];
+    [self waitForResources:@[] core:core];
+    XCTAssertEqual([((OASharedSearchSettings *)[core getSearchSettings]).shared getOfflineIndexes].count, 0u);
 }
 
 @end

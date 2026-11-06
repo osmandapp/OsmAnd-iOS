@@ -31,6 +31,10 @@ NS_ASSUME_NONNULL_BEGIN
 /** The apis of the spatial search, with the rules files rules*.xml of searchRulesDir, or of the classic one as initApi. */
 - (void)initApiUseSpatialSearch:(BOOL)useSpatialSearch searchRulesDir:(NSString *)searchRulesDir;
 
+/** Prepares map readers off the calling thread and applies only the latest resource update.
+ Searches requested during preparation resume with the prepared resources. */
+- (void)updateSearchResourcesIncludingTravel:(BOOL)includeTravel regions:(nullable OAWorldRegion *)regions;
+
 @end
 
 /** Settings of the shared search: the setters make copies, as those of OASearchSettings do. */

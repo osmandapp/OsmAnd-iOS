@@ -17,6 +17,7 @@
 #import "OANameStringMatcher.h"
 #import "OAResultMatcher.h"
 #import "OAAtomicInteger.h"
+#import "OAObfFileList.h"
 #import "OAPOIHelper.h"
 #import "OAWorldRegion.h"
 #import "QuadRect.h"
@@ -107,8 +108,13 @@
 
 - (void)setOfflineIndexes:(NSArray<NSString *> *)resourceIds
 {
+    [self setOfflineIndexes:resourceIds preparedReaders:[OASharedObfResources.shared searchReadersForResourceIds:resourceIds ?: @[]]];
+}
+
+- (void)setOfflineIndexes:(NSArray<NSString *> *)resourceIds preparedReaders:(NSArray<OASBinaryMapIndexReader *> *)readers
+{
     _resourceIds = [resourceIds copy] ?: @[];
-    [_shared setOfflineIndexesOfflineIndexes:[OASharedObfResources.shared searchReadersForResourceIds:_resourceIds]];
+    [_shared setOfflineIndexesOfflineIndexes:readers];
 }
 
 - (int)getRadiusLevel
@@ -799,6 +805,11 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     OASharedSearchResultCollection *_currentSearchResult;
     // a search that started before the last cancel is cancelled: the shared one ends without a word
     OAAtomicInteger *_cancels;
+    dispatch_queue_t _resourcePreparationQueue;
+    NSUInteger _resourceUpdate;
+    BOOL _preparingResources;
+    void (^_pendingSearch)(void);
+    NSMutableArray *_pendingShallowSearches;
 }
 
 - (instancetype)initWithLang:(NSString *)lang transliterate:(BOOL)transliterate
@@ -809,6 +820,8 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
         _shared = [[OASSearchUICore alloc] initWithPoiTypes:OAPOIHelper.sharedInstance.kPoiTypes locale:lang transliterate:transliterate];
         _settings = [[OASharedSearchSettings alloc] initWithShared:[_shared getSearchSettings]];
         _cancels = [OAAtomicInteger atomicInteger:0];
+        _resourcePreparationQueue = dispatch_queue_create("net.osmand.searchResources", DISPATCH_QUEUE_SERIAL);
+        _pendingShallowSearches = [NSMutableArray array];
     }
     return self;
 }
@@ -816,6 +829,62 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
 - (void)initApi
 {
     [_shared doInit];
+}
+
+// Called only on the resource queue. File stamps, headers and typed readers can all require I/O.
+- (void)prepareSearchResourcesIncludingTravel:(BOOL)includeTravel
+                                  completion:(void (^)(NSArray<NSString *> *, NSArray<OASBinaryMapIndexReader *> *, uint64_t))completion
+{
+    OASharedObfResources *resources = OASharedObfResources.shared;
+    [resources refreshFiles];
+    uint64_t generation = [resources currentGeneration];
+    NSArray<NSString *> *resourceIds = [OAObfFileList searchResourceIdsIncludingTravel:includeTravel];
+    NSArray<OASBinaryMapIndexReader *> *readers = [resources searchReadersForResourceIds:resourceIds];
+    completion(resourceIds, readers, generation);
+}
+
+- (void)updateSearchResourcesIncludingTravel:(BOOL)includeTravel regions:(OAWorldRegion *)regions
+{
+    NSUInteger request;
+    @synchronized (self)
+    {
+        request = ++_resourceUpdate;
+        _preparingResources = YES;
+    }
+    dispatch_async(_resourcePreparationQueue, ^{
+        @synchronized (self)
+        {
+            if (request != self->_resourceUpdate)
+                return;
+        }
+        [self prepareSearchResourcesIncludingTravel:includeTravel completion:^(NSArray<NSString *> *resourceIds, NSArray<OASBinaryMapIndexReader *> *readers, uint64_t generation) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @synchronized (self)
+                {
+                    if (request != self->_resourceUpdate)
+                        return;
+                    // The registry also observes map changes. Its notification can precede ours.
+                    if (generation != [OASharedObfResources.shared currentGeneration])
+                    {
+                        [self updateSearchResourcesIncludingTravel:includeTravel regions:regions];
+                        return;
+                    }
+                    OASharedSearchSettings *settings = (OASharedSearchSettings *) [self getSearchSettings];
+                    [settings setOfflineIndexes:resourceIds preparedReaders:readers];
+                    [settings setRegions:regions];
+                    self->_preparingResources = NO;
+                    NSArray *shallowSearches = [self->_pendingShallowSearches copy];
+                    [self->_pendingShallowSearches removeAllObjects];
+                    void (^search)(void) = self->_pendingSearch;
+                    self->_pendingSearch = nil;
+                    for (void (^shallowSearch)(OASharedSearchSettings *) in shallowSearches)
+                        shallowSearch(settings);
+                    if (search)
+                        search();
+                }
+            });
+        }];
+    });
 }
 
 - (void)initApiUseSpatialSearch:(BOOL)useSpatialSearch searchRulesDir:(NSString *)searchRulesDir
@@ -897,6 +966,27 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
 
     OASharedSearchSettings *settings = [searchSettings isKindOfClass:OASharedSearchSettings.class]
         ? (OASharedSearchSettings *) searchSettings : (OASharedSearchSettings *) [self getSearchSettings];
+    @synchronized (self)
+    {
+        if (_preparingResources)
+        {
+            BOOL usesCoreResources = settings == [self getSearchSettings];
+            OASharedSearchSettings *snapshot = [[OASharedSearchSettings alloc] initWithSettings:settings];
+            __weak OASharedSearchUICore *weakSelf = self;
+            [_pendingShallowSearches addObject:[^(OASharedSearchSettings *prepared) {
+                NSArray<NSString *> *ids = usesCoreResources ? [prepared getOfflineIndexes] : [snapshot getOfflineIndexes];
+                NSSet<NSString *> *selectedIds = [NSSet setWithArray:ids];
+                NSArray<OASBinaryMapIndexReader *> *readers = [[prepared.shared getOfflineIndexes] filteredArrayUsingPredicate:
+                    [NSPredicate predicateWithBlock:^BOOL(OASBinaryMapIndexReader *reader, NSDictionary *bindings) {
+                        NSString *resourceId = [OASharedObfResources.shared resourceIdsOf:@[reader]].firstObject;
+                        return resourceId && [selectedIds containsObject:resourceId];
+                    }]];
+                [snapshot setOfflineIndexes:ids preparedReaders:readers];
+                [weakSelf shallowSearchAsync:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:snapshot completion:completion];
+            } copy]];
+            return;
+        }
+    }
     OASSearchSettings *shared = [[OASSearchSettings alloc] initWithS:[settings sharedWithCurrentReaders]];
     [_shared shallowSearchAsyncApi:api text:text matcher:[self sharedMatcherFor:matcher cancelledBySearch:NO]
                         resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:shared
@@ -974,8 +1064,8 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     @synchronized (self)
     {
         _settings = sharedSettings;
+        [_shared updateSettingsSettings:_preparingResources ? sharedSettings.shared : [sharedSettings sharedWithCurrentReaders]];
     }
-    [_shared updateSettingsSettings:[sharedSettings sharedWithCurrentReaders]];
 }
 
 - (BOOL)selectSearchResult:(OASearchResult *)r
@@ -995,6 +1085,18 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
 
 - (void)search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
+    @synchronized (self)
+    {
+        if (_preparingResources)
+        {
+            [_cancels incrementAndGet];
+            BOOL acceptPrivate = [[_shared getPhrase] isAcceptPrivate];
+            [[_shared resetPhraseText:text] setAcceptPrivateAcceptPrivate:acceptPrivate];
+            __weak OASharedSearchUICore *weakSelf = self;
+            _pendingSearch = [^{ [weakSelf search:text delayedExecution:delayedExecution matcher:matcher]; } copy];
+            return;
+        }
+    }
     // the settings the core holds get the readers of the maps installed now, in place
     [(OASharedSearchSettings *) [self getSearchSettings] sharedWithCurrentReaders];
     [_shared searchText:text delayedExecution:delayedExecution matcher:[self sharedMatcherFor:matcher cancelledBySearch:YES]];
@@ -1002,7 +1104,11 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
 
 - (void)cancelSearch:(BOOL)sync
 {
-    [_cancels incrementAndGet];
+    @synchronized (self)
+    {
+        [_cancels incrementAndGet];
+        _pendingSearch = nil;
+    }
     if (!sync)
         return;
 

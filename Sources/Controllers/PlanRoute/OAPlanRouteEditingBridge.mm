@@ -1793,6 +1793,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             OASGpxDataItem *item = [gpxDb getGPXItem:gpxFilePath];
             if (!item)
                 item = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
+            [item setAnalysisAnalysis:[gpx getAnalysisFileTimestamp:file.lastModified]];
             [gpxDb updateDataItem:item];
         }
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -476,7 +476,16 @@ typedef enum
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden)
+    if (_dashboard)
+    {
+        for (UIViewController *controller in self.childViewControllers.reverseObjectEnumerator)
+        {
+            if ([controller isKindOfClass:OADashboardViewController.class])
+                return controller.preferredStatusBarStyle;
+        }
+        return _dashboard.preferredStatusBarStyle;
+    }
+    else if (!_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
     else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
                                         (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||

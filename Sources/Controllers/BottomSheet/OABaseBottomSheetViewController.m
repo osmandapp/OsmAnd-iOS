@@ -38,6 +38,13 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     BOOL _isHiding;
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    return UIVerticalBarBehaviorDisabled;
+}
+#endif
+
 - (instancetype) init
 {
     self = [super init];
@@ -162,7 +169,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) getLandscapeHeight
 {
-    return OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight;
+    return OAUtilities.isIPad ? [self getViewHeight] : DeviceScreenHeight - self.view.safeAreaInsets.top;
 }
 
 - (void) adjustFrame
@@ -237,33 +244,14 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self.tableView reloadData];
     if (animated)
     {
-        CGRect frame = _bottomSheetView.frame;
-        if (OAUtilities.isLandscapeIpadAware)
-        {
-            frame.origin.x = DeviceScreenWidth/2 - frame.size.width / 2;
-            frame.size.width = OAUtilities.isIPad ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
-        }
-        else
-        {
-            frame.origin.x = 0.0;
-            frame.size.width = DeviceScreenWidth;
-        }
+        CGRect finalFrame = _bottomSheetView.frame;
+        CGRect frame = finalFrame;
         frame.origin.y = DeviceScreenHeight + 10;
         _bottomSheetView.frame = frame;
-        frame.origin.y = DeviceScreenHeight - _bottomSheetView.bounds.size.height;
         [UIView animateWithDuration:.3 animations:^{
-            _bottomSheetView.frame = frame;
+            _bottomSheetView.frame = finalFrame;
             self.view.backgroundColor = [self getBackgroundColor];
         }];
-    }
-    else
-    {
-        CGRect frame = _bottomSheetView.frame;
-        if (OAUtilities.isLandscape)
-            frame.origin.y = 0.0;
-        else
-            frame.origin.y = DeviceScreenHeight - _bottomSheetView.bounds.size.height;
-        _bottomSheetView.frame = frame;
     }
 }
 
@@ -382,7 +370,8 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     CGPoint touchPoint = [recognizer locationInView:self.view];
     CGPoint initialPoint = [self calculateInitialPoint];
     
-    CGFloat fullScreenAnchor = OAUtilities.getStatusBarHeight + 80.;
+    CGFloat topInset = self.view.safeAreaInsets.top;
+    CGFloat fullScreenAnchor = topInset + 80.;
     
     switch (recognizer.state)
     {
@@ -395,15 +384,15 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
                 return;
             
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if (_bottomSheetView.frame.origin.y > OAUtilities.getStatusBarHeight
+            if (_bottomSheetView.frame.origin.y > topInset
                 || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
             {
                 [_tableView setContentOffset:CGPointZero];
             }
             
-            if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
+            if (newY <= topInset || _tableView.contentOffset.y > 0)
             {
-                newY = OAUtilities.getStatusBarHeight;
+                newY = topInset;
                 if (_tableView.contentOffset.y > 0)
                     _initialTouchPoint = [recognizer locationInView:_bottomSheetView].y;
             }
@@ -413,7 +402,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
             }
             
             CGRect frame = _bottomSheetView.frame;
-            frame.origin.y = newY < OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
+            frame.origin.y = MAX(newY, topInset);
             frame.size.height = DeviceScreenHeight - newY;
             _bottomSheetView.frame = frame;
             

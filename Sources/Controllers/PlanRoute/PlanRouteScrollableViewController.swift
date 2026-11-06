@@ -23,7 +23,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     @objc private(set) var isSaving = false
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
+        OAAppSettings.sharedManager().isAppMapNightMode ? .lightContent : .darkContent
     }
 
     override var currentState: EOADraggableMenuState {
@@ -66,6 +66,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var crosshairCenterYConstraint: NSLayoutConstraint?
     private var dayNightObserver: OAAutoObserverProxy?
     private var routeTypeButtonBottomConstraint: NSLayoutConstraint?
+    private var inlineLayout = false
+    private var stackedConstraints: [NSLayoutConstraint] = []
+    private var inlineConstraints: [NSLayoutConstraint] = []
     private var panStartHeight: CGFloat = 0
     private var navControllerHistory: [UIViewController] = []
     private var trackMenuState: OATrackMenuViewControllerState?
@@ -246,6 +249,21 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         reloadData()
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        let bounds = view.safeAreaLayoutGuide.layoutFrame
+        let inline = bounds.width >= 540 && view.bounds.height < 520 && bounds.width > view.bounds.height
+        guard inline != inlineLayout, !stackedConstraints.isEmpty else { return }
+        inlineLayout = inline
+        NSLayoutConstraint.deactivate(inline ? stackedConstraints : inlineConstraints)
+        NSLayoutConstraint.activate(inline ? inlineConstraints : stackedConstraints)
+        let height = approximationHeight ?? pointEditingHeight ?? height(for: sheetState)
+        sheetHeightConstraint?.constant = height
+        routeTypeButtonBottomConstraint?.constant = -(height + 12)
+        updateCrosshair(sheetHeight: height)
+        refreshMapControls()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateCrosshairImage()
@@ -314,7 +332,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func getNavbarHeight() -> CGFloat {
-        OAUtilities.getStatusBarHeight() + PlanRouteTopToolbarView.contentHeight
+        view.safeAreaInsets.top + PlanRouteTopToolbarView.contentHeight
     }
 
     override func getToolbarHeight() -> CGFloat {
@@ -471,7 +489,6 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         NSLayoutConstraint.activate([
             topPartView.topAnchor.constraint(equalTo: grabberView.bottomAnchor, constant: 6),
             topPartView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
-            topPartView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
             topPartView.heightAnchor.constraint(equalToConstant: Self.topPartViewHeight)
         ])
     }
@@ -486,12 +503,21 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             sheetView.addSubview(contentView)
         }
         sheetView.bringSubviewToFront(bottomToolbar)
-        NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
-            segmentControl.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: horizontalInset),
-            segmentControl.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -horizontalInset),
-
+        inlineConstraints = [
+            topPartView.trailingAnchor.constraint(equalTo: segmentControl.leadingAnchor, constant: -8),
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.centerXAnchor),
+            segmentControl.centerYAnchor.constraint(equalTo: topPartView.centerYAnchor),
+            tabContainerView.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 12)
+        ]
+        stackedConstraints = [
+            topPartView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
             tabContainerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 12),
+            segmentControl.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: horizontalInset)
+        ]
+        NSLayoutConstraint.activate(stackedConstraints)
+        NSLayoutConstraint.activate([
+            segmentControl.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -horizontalInset),
             tabContainerView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
             tabContainerView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
             tabContainerView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor)
@@ -557,8 +583,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         view.addSubview(topToolbar)
         NSLayoutConstraint.activate([
             topToolbar.topAnchor.constraint(equalTo: view.topAnchor),
-            topToolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            topToolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            topToolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            topToolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             topToolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: PlanRouteTopToolbarView.contentHeight)
         ])
     }
@@ -892,7 +918,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func height(for state: EOADraggableMenuState, screenHeight: CGFloat? = nil) -> CGFloat {
         let targetScreenHeight = screenHeight ?? currentScreenHeight
-        let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + 8 + segmentControl.intrinsicContentSize.height + 12
+        let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + (inlineLayout ? 0 : 8 + segmentControl.intrinsicContentSize.height) + 12
             + PlanRouteButtonFactory.bottomButtonHeight + 8 + OAUtilities.getBottomMargin()
         switch state {
         case .initial:

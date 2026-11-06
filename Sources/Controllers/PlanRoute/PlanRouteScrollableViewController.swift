@@ -462,8 +462,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         let heightConstraint = sheetView.heightAnchor.constraint(equalToConstant: height(for: sheetState))
         sheetHeightConstraint = heightConstraint
         NSLayoutConstraint.activate([
-            sheetView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            sheetView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             heightConstraint
         ])
@@ -474,7 +474,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetView.addSubview(grabberView)
         NSLayoutConstraint.activate([
             grabberView.topAnchor.constraint(equalTo: sheetView.topAnchor, constant: 8),
-            grabberView.centerXAnchor.constraint(equalTo: sheetView.centerXAnchor),
+            grabberView.centerXAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.centerXAnchor),
             grabberView.widthAnchor.constraint(equalToConstant: 36),
             grabberView.heightAnchor.constraint(equalToConstant: 5)
         ])
@@ -492,7 +492,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetView.addSubview(topPartView)
         NSLayoutConstraint.activate([
             topPartView.topAnchor.constraint(equalTo: grabberView.bottomAnchor, constant: 6),
-            topPartView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
+            topPartView.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor),
             topPartView.heightAnchor.constraint(equalToConstant: Self.topPartViewHeight)
         ])
     }
@@ -509,21 +509,21 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetView.bringSubviewToFront(bottomToolbar)
         inlineConstraints = [
             topPartView.trailingAnchor.constraint(equalTo: segmentControl.leadingAnchor, constant: -8),
-            segmentControl.leadingAnchor.constraint(equalTo: sheetView.centerXAnchor),
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.centerXAnchor),
             segmentControl.centerYAnchor.constraint(equalTo: topPartView.centerYAnchor),
             tabContainerView.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 12)
         ]
         stackedConstraints = [
-            topPartView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
+            topPartView.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor),
             tabContainerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 12),
             segmentControl.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
-            segmentControl.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: horizontalInset)
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor, constant: horizontalInset)
         ]
         NSLayoutConstraint.activate(stackedConstraints)
         NSLayoutConstraint.activate([
-            segmentControl.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -horizontalInset),
-            tabContainerView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
-            tabContainerView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
+            segmentControl.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor, constant: -horizontalInset),
+            tabContainerView.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor),
+            tabContainerView.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor),
             tabContainerView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor)
         ])
     }
@@ -565,8 +565,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         bottomToolbar.translatesAutoresizingMaskIntoConstraints = false
         sheetView.addSubview(bottomToolbar)
         NSLayoutConstraint.activate([
-            bottomToolbar.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
-            bottomToolbar.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
+            bottomToolbar.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor),
+            bottomToolbar.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor),
             bottomToolbar.bottomAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             bottomToolbar.heightAnchor.constraint(equalToConstant: PlanRouteButtonFactory.bottomButtonHeight)
         ])

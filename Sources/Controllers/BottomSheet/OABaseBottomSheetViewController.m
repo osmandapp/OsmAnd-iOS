@@ -38,13 +38,6 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     BOOL _isHiding;
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
-- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
-{
-    return UIVerticalBarBehaviorDisabled;
-}
-#endif
-
 - (instancetype) init
 {
     self = [super init];

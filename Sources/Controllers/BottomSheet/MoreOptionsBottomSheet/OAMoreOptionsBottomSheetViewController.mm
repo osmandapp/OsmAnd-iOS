@@ -481,6 +481,7 @@
 {
     if (![self usesWidePhoneLayout])
     {
+        self.tableView.tableHeaderView = nil;
         [super updateTableHeaderView];
         return;
     }

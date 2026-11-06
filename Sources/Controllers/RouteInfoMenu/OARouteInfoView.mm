@@ -865,6 +865,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
     }
     
+    UIEdgeInsets safeInsets = self.safeAreaInsets;
     BOOL isFullScreen = _currentState == EOARouteInfoMenuStateFullScreen;
     _statusBarBackgroundView.frame = isFullScreen ? CGRectMake(0., 0., self.bounds.size.width, self.superview.safeAreaInsets.top) : CGRectZero;
     
@@ -877,15 +878,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _buttonsView.frame = buttonsFrame;
     
     CGRect contentFrame = _contentContainer.frame;
-    contentFrame.size.width = self.bounds.size.width;
+    contentFrame.origin.x = safeInsets.left;
+    contentFrame.size.width = self.bounds.size.width - safeInsets.left - safeInsets.right;
     contentFrame.origin.y = CGRectGetMaxY(_statusBarBackgroundView.frame);
     contentFrame.size.height -= contentFrame.origin.y;
     _contentContainer.frame = contentFrame;
     
-    CGFloat width = buttonsFrame.size.width - OAUtilities.getLeftMargin * (isLandscape ? 1 : 2) - 32.;
+    CGFloat width = buttonsFrame.size.width - safeInsets.left - safeInsets.right - 32.;
     CGFloat buttonWidth = width / 2 - 8;
     
-    _cancelButton.frame = CGRectMake(16. + OAUtilities.getLeftMargin, 9., buttonWidth, 42.);
+    _cancelButton.frame = CGRectMake(16. + safeInsets.left, 9., buttonWidth, 42.);
     _goButton.frame = CGRectMake(CGRectGetMaxX(_cancelButton.frame) + 16., 9., buttonWidth, 42.);
     
     CGFloat goIconOffset = 12;
@@ -915,7 +917,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     CGFloat tableViewY = CGRectGetMaxY(_appModeViewContainer.frame);
     _tableView.frame = CGRectMake(0., tableViewY, contentFrame.size.width, contentFrame.size.height - tableViewY);
     
-    _appModeViewContainer.frame = CGRectMake(OAUtilities.getLeftMargin, _appModeViewContainer.frame.origin.y, contentFrame.size.width - OAUtilities.getLeftMargin, _appModeViewContainer.frame.size.height);
+    _appModeViewContainer.frame = CGRectMake(0., _appModeViewContainer.frame.origin.y, contentFrame.size.width, _appModeViewContainer.frame.size.height);
     
     _appModeView.frame = CGRectMake(0., 0., _appModeViewContainer.frame.size.width, _appModeViewContainer.frame.size.height);
     

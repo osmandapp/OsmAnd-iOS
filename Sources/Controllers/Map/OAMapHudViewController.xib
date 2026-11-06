@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -115,8 +116,9 @@
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <viewLayoutGuide key="safeArea" id="safe-widget-guide"/>
                     <constraints>
-                        <constraint firstItem="2RZ-GK-954" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="2Th-rm-hLr"/>
+                        <constraint firstItem="2RZ-GK-954" firstAttribute="centerX" secondItem="safe-widget-guide" secondAttribute="centerX" id="2Th-rm-hLr"/>
                         <constraint firstAttribute="trailingMargin" secondItem="K8g-PT-gdL" secondAttribute="trailing" priority="999" constant="-8" id="3LD-NT-9Ml"/>
                         <constraint firstItem="0Nq-xj-KuM" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" constant="10" id="H1E-b4-VNm"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="left" secondItem="w1v-g4-GFe" secondAttribute="leftMargin" constant="-10" id="H90-Re-Dif"/>
@@ -129,7 +131,7 @@
                         <constraint firstAttribute="rightMargin" secondItem="8m9-Ym-Yya" secondAttribute="right" constant="-10" id="cbg-nq-EYB"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="top" secondItem="w1v-g4-GFe" secondAttribute="top" id="l7W-kJ-xAQ"/>
-                        <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="nd0-KQ-Ihp"/>
+                        <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="safe-widget-guide" secondAttribute="centerX" id="nd0-KQ-Ihp"/>
                         <constraint firstAttribute="trailingMargin" secondItem="2RZ-GK-954" secondAttribute="trailing" priority="999" constant="-8" id="oaV-Cz-WGl"/>
                         <constraint firstItem="cig-0C-vFU" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="xJK-OC-uYa"/>
                     </constraints>

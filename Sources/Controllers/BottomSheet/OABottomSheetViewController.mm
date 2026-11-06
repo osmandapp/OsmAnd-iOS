@@ -18,7 +18,6 @@
 #import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.0
-#define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
 #define kButtonsDividerTag 150
 
 @interface OABottomSheetViewController () <OATableViewDelegate, UIGestureRecognizerDelegate>
@@ -43,13 +42,6 @@
 }
 
 @synthesize screenObj;
-
-#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
-- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
-{
-    return UIVerticalBarBehaviorDisabled;
-}
-#endif
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -88,8 +80,9 @@
     return ([OAUtilities isLandscape] && ![OAUtilities isWindowed] /*|| UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad*/);
 }
 
--(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         _rotating = YES;
         [self applyCorrectSizes];
@@ -126,15 +119,15 @@
     return CGRectMake(0, 0, size.width, size.height);
 }
 
-- (CGSize) screenSize
+- (CGSize)screenSize
 {
-    return CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
+    return self.bottomSheetWindow.bounds.size;
 }
 
 - (CGRect)contentViewFrame
 {
     CGSize screenSize = [self screenSize];
-    CGFloat width = [OAUtilities isIPad] ? kOABottomSheetWidthIPad : kOABottomSheetWidth;
+    CGFloat width = [OAUtilities isIPad] ? screenSize.width / 2. : kOABottomSheetWidth;
     if ([self isLandscape])
         return CGRectMake(screenSize.width / 2 - width / 2, 0.0, width, screenSize.height - _keyboardHeight);
     else
@@ -154,14 +147,14 @@
     
     CGRect cancelFrame = self.buttonsView.frame;
     cancelFrame.size.height = bottomSheetCancelButtonHeight + bottomMargin;
-    cancelFrame.origin.y = DeviceScreenHeight - cancelFrame.size.height;
+    cancelFrame.origin.y = [self screenSize].height - cancelFrame.size.height;
     self.buttonsView.frame = cancelFrame;
     UIEdgeInsets buttonInsets = self.cancelButton.contentEdgeInsets;
     buttonInsets.bottom = bottomMargin;
     self.cancelButton.contentEdgeInsets = buttonInsets;
     
     CGRect tableViewFrame = self.tableView.frame;
-    tableViewFrame.size.height = DeviceScreenHeight - cancelFrame.size.height;
+    tableViewFrame.size.height = [self screenSize].height - cancelFrame.size.height;
     self.tableView.frame = tableViewFrame;
 }
 
@@ -293,10 +286,10 @@
     
     _keyboardHeight = 0;
     
-    self.bottomSheetWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIWindowScene *windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
+    self.bottomSheetWindow = [[UIWindow alloc] initWithWindowScene:windowScene];
     self.bottomSheetWindow.windowLevel = UIWindowLevelNormal;
     self.bottomSheetWindow.backgroundColor = [UIColor clearColor];
-    self.bottomSheetWindow.windowScene = (UIWindowScene *)UIApplication.sharedApplication.mainScene;
     [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
 
     CGRect frame = [self screenFrame];
@@ -365,8 +358,8 @@
 - (void) showInternal
 {
     _showing = YES;
-    [self.bottomSheetWindow makeKeyAndVisible];
     self.bottomSheetWindow.rootViewController = self;
+    [self.bottomSheetWindow makeKeyAndVisible];
     if (_appearFirstTime)
     {
         [self additionalSetup];

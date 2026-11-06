@@ -86,6 +86,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
     BOOL _driveModeActive;
     BOOL _hudButtonsVisible;
+    BOOL _safeAreaLayoutUpdateScheduled;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -440,7 +441,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [super viewSafeAreaInsetsDidChange];
     self.statusBarViewHeightConstraint.constant = self.view.safeAreaInsets.top;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
-    [_mapHudLayout onContainerSizeChanged];
+    if (_safeAreaLayoutUpdateScheduled)
+        return;
+    _safeAreaLayoutUpdateScheduled = YES;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        [strongSelf->_mapHudLayout onContainerSizeChanged];
+        strongSelf->_safeAreaLayoutUpdateScheduled = NO;
+    });
 }
 
 -(void) addAccessibilityLabels

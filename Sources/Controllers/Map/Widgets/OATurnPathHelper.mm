@@ -7,9 +7,14 @@
 //
 
 #import "OATurnPathHelper.h"
-#import "OAUtilities.h"
 #import "OATurnResource.h"
 #import "OsmAndSharedWrapper.h"
+
+#if defined(OSMAND_LIVE_ACTIVITIES)
+#import "LiveActivities-Swift.h"
+#else
+#import "OsmAnd_Maps-Swift.h"
+#endif
 
 @interface OATurnPathHelper ()
 

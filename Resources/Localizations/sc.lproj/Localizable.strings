@@ -1245,7 +1245,7 @@
 "rendering_attr_surface_ground_name" = "Terrinu (naturale)";
 "routeInfo_road_types_name" = "Castas de àndalas";
 "rendering_value_orange_name" = "Arantzu";
-"routing_attr_avoid_sett_description" = "Istransit sos impredados e su pavè";
+"routing_attr_avoid_sett_description" = "Istransit su pavè";
 "rendering_attr_contourWidth_description" = "Grussesa curvas de livellu";
 "rendering_attr_ice_road_name" = "Caminu de astra";
 "rendering_attr_smoothness_intermediate_name" = "Intermèdia";
@@ -1389,7 +1389,7 @@
 "rendering_attr_hmRendered_name" = "Ammustra prus minujas in sa mapa";
 "rendering_attr_piste_difficulty_connection_name" = "Connessione";
 "rendering_attr_showLez_description" = "Ammustra sas zonas de emissione bassa in sa mapa. No influentzat su càrculu de s\'àndala.";
-"routing_attr_avoid_sett_name" = "Perunu impredadu o pavè";
+"routing_attr_avoid_sett_name" = "Chene pavè";
 "rendering_value_translucent_orange_name" = "Arantzu translùcidu";
 "routing_attr_allow_motorway_description" = "Permitit s\'impreu de sas autostradas.";
 "rendering_attr_coloredBuildings_name" = "Edifìtzios colorados pro casta";
@@ -3019,3 +3019,5 @@
 "trace_rendering" = "Informatziones de depuratzione de còdighe de su rendimentu";
 "shared_string_normal" = "Normale";
 "shared_string_large" = "Mannu";
+"routing_attr_avoid_cobblestone_name" = "Èvita s\'impedradu";
+"routing_attr_avoid_cobblestone_description" = "Èvita s\'impedradu";

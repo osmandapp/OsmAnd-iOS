@@ -1358,7 +1358,7 @@
 "routing_attr_height_obstacles_description" = "Rutiranjeto može da izbegne silnite nagornici.";
 "rendering_attr_currentTrackColor_description" = "GPX boja";
 "routing_attr_driving_style_speed_name" = "Pokratki pravci";
-"routing_attr_avoid_sett_description" = "Izbegnuvaj kaldrma ili kameni kocki";
+"routing_attr_avoid_sett_description" = "Izbegnuvaj kameni kocki";
 "rendering_attr_hikingRoutesOSMC_description" = "Avtomatski iscrtani karti spored OSMC tragite.";
 "rendering_value_car_name" = "Avtomobil";
 "routing_attr_avoid_unpaved_name" = "Naesafaltirani patista";
@@ -1411,7 +1411,7 @@
 "routing_attr_prefer_motorway_name" = "Pretpocitaj avtopatista";
 "rendering_attr_surface_cobblestone_name" = "Kaldrma";
 "rendering_attr_highway_class_state_road_name" = "Lokalen pat";
-"routing_attr_avoid_sett_name" = "Bez kaldrma ili kameni kocki";
+"routing_attr_avoid_sett_name" = "Bez kameni kocki";
 "rendering_value_translucent_lightblue_name" = "Prodzirno svetlo sina";
 "rendering_attr_smoothness_good_name" = "Dobar";
 "routing_attr_weight_name" = "Ogranicena tezina";
@@ -2028,3 +2028,5 @@
 "shared_string_other" = "Drug";
 "average" = "Prosecno";
 "trace_rendering" = "Se prikažuvaat informacii za otstranuvanje greški";
+"routing_attr_avoid_cobblestone_name" = "Izbegnuvaj kaldrma";
+"routing_attr_avoid_cobblestone_description" = "Izbegnuvaj kaldrma";

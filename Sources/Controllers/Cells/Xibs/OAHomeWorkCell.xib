@@ -19,7 +19,6 @@
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Ly2-zs-tB4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="groupBg"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="3kJ-D0-RJa">
                             <size key="itemSize" width="50" height="50"/>
@@ -33,6 +32,12 @@
                         </connections>
                     </collectionView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="Ly2-zs-tB4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="9Uy-oF-22h"/>
+                    <constraint firstItem="Ly2-zs-tB4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="uvh-W9-zY0"/>
+                    <constraint firstAttribute="trailing" secondItem="Ly2-zs-tB4" secondAttribute="trailing" id="hkc-hZ-pGw"/>
+                    <constraint firstAttribute="bottom" secondItem="Ly2-zs-tB4" secondAttribute="bottom" id="Yha-zC-mAf"/>
+                </constraints>
             </tableViewCellContentView>
             <color key="backgroundColor" name="groupBg"/>
             <connections>

@@ -330,12 +330,37 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchBar.delegate = self;
     _searchController.obscuresBackgroundDuringPresentation = NO;
+    if (@available(iOS 27.0, *))
+    {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        {
+            self.navigationItem.searchBarPlacementAllowsToolbarIntegration = NO;
+            self.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
+            self.navigationItem.hidesSearchBarWhenScrolling = NO;
+        }
+    }
     self.navigationItem.searchController = _searchController;
     
     if (_displayBanner)
         [self setupSubscriptionBanner];
 
     self.definesPresentationContext = YES;
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (@available(iOS 27.0, *))
+    {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        {
+            UINavigationItemSearchBarPlacement placement = self.view.safeAreaLayoutGuide.layoutFrame.size.width >= 600.0
+                ? UINavigationItemSearchBarPlacementIntegratedButton
+                : UINavigationItemSearchBarPlacementStacked;
+            if (self.navigationItem.preferredSearchBarPlacement != placement)
+                self.navigationItem.preferredSearchBarPlacement = placement;
+        }
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated

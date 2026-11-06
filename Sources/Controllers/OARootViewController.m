@@ -107,9 +107,9 @@ typedef enum : NSUInteger {
     [viewController didMoveToParentViewController:self];
 }
 
-- (void) loadView
+- (void)loadView
 {
-    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    self.view = [[UIView alloc] init];
     self.view.backgroundColor = UIColor.whiteColor;
 }
 

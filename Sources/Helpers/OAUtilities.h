@@ -419,6 +419,7 @@ static inline double normalizeDouble(double v)
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(nullable NSString *)iconName tintColor:(nullable UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(nullable UIColor *)tintColor icon:(nullable UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(nullable UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset;
++ (UIView *)setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset parentViewWidth:(CGFloat)parentViewWidth contentInsets:(UIEdgeInsets)contentInsets;
 
 + (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize parentViewWidth:(CGFloat)parentViewWidth;
 

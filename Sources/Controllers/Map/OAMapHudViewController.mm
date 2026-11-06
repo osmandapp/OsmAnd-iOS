@@ -86,6 +86,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
     BOOL _driveModeActive;
     BOOL _hudButtonsVisible;
+    BOOL _safeAreaLayoutUpdateScheduled;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -209,7 +210,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     _driveModeButton.userInteractionEnabled = YES;
     [self updateRouteButton:NO followingMode:NO];
 
-    self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
+    self.statusBarViewHeightConstraint.constant = self.view.safeAreaInsets.top;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
     
     _topWidgetsView.accessibilityIdentifier = @"widgets_panel_top";
@@ -421,8 +422,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
+        self.statusBarViewHeightConstraint.constant = self.view.safeAreaInsets.top;
         self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
         if (_mapInfoController.weatherToolbarVisible)
             [_mapInfoController updateWeatherToolbarVisible];
@@ -437,9 +439,19 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)viewSafeAreaInsetsDidChange
 {
     [super viewSafeAreaInsetsDidChange];
-    self.statusBarViewHeightConstraint.constant = [OAUtilities isIPad] || ![OAUtilities isLandscape] ? [OAUtilities getStatusBarHeight] : 0.;
+    self.statusBarViewHeightConstraint.constant = self.view.safeAreaInsets.top;
     self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
-    [_mapHudLayout onContainerSizeChanged];
+    if (_safeAreaLayoutUpdateScheduled)
+        return;
+    _safeAreaLayoutUpdateScheduled = YES;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return;
+        [strongSelf->_mapHudLayout onContainerSizeChanged];
+        strongSelf->_safeAreaLayoutUpdateScheduled = NO;
+    });
 }
 
 -(void) addAccessibilityLabels
@@ -1451,7 +1463,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (void) updateTopButtonsLayoutY
 {
-    BOOL isPhoneLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
+    BOOL hasSideToolbar = [OAUtilities isLandscape] && ![OAUtilities isIPad]
+        && _mapPanelViewController.activeTargetType != OATargetRoutePlanning;
     BOOL contextMenuMode = self.contextMenuMode || _mapPanelViewController.suspendedPlanRouteController != nil;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;
@@ -1472,9 +1485,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     if (isBannerVisible)
         bannerH = self.downloadMapWidget.frame.size.height + self.downloadMapWidget.shadowOffset;
     
-    BOOL ignoreTopSidePanels = !isPhoneLandscape && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
+    BOOL ignoreTopSidePanels = !hasSideToolbar && (contextMenuMode || isTargetMode || isAllowToolbarsVisible || (ctxToolbarH > baseMin));
     CGFloat extraTop = 0.0;
-    if (!isPhoneLandscape)
+    if (!hasSideToolbar)
     {
         if (contextMenuMode || isTargetMode)
         {
@@ -1590,7 +1603,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         contextMenuToolbarHeight = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
     else if ([_mapPanelViewController isTopToolbarActive])
         contextMenuToolbarHeight = [_mapPanelViewController getTargetToolbarHeight];
-    CGFloat offset = [OAUtilities isLandscape] && ![OAUtilities isIPad] ? 0. : contextMenuToolbarHeight > 0 ? contextMenuToolbarHeight : [self getHudMinTopOffset];
+    CGFloat offset = [self getHudMinTopOffset];
+    if (![OAUtilities isLandscape] || [OAUtilities isIPad] || _mapPanelViewController.activeTargetType == OATargetRoutePlanning)
+        offset = MAX(offset, contextMenuToolbarHeight);
     BOOL isToolbarAllowed = !_mapInfoController.weatherToolbarVisible;
     BOOL isToolbarVisible = isToolbarAllowed && _toolbarViewController && _toolbarViewController.view.superview;
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetChangePosition;
@@ -1643,6 +1658,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_primary_table_background);
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
+    else if (_mapInfoController.topPanelController.hasLeadingMarkerBar)
+        statusBarColor = UIColor.clearColor;
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
         statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     if (!statusBarColor)

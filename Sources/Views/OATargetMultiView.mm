@@ -182,11 +182,10 @@
     [self cancelHide];
     [self.layer removeAllAnimations];
     //[self applyMapInteraction:self.frame.size.height];
+    CGRect frame = [self getFrame];
     
     if (animated)
     {
-        CGRect frame = [self getFrame];
-        
         [UIView animateWithDuration:0.3 animations:^{
 
             self.frame = frame;
@@ -201,20 +200,6 @@
     }
     else
     {
-        CGRect frame = self.frame;
-        if ([self isLandscape])
-        {
-            frame.size.height = DeviceScreenHeight;
-            frame.size.width = kInfoViewLanscapeWidth;
-            frame.origin.y = 0.0;
-        }
-        else
-        {
-            frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
-            frame.size.width = DeviceScreenWidth;
-            frame.origin.y = DeviceScreenHeight - frame.size.height;
-        }
-        
         self.frame = frame;
         
         if (onComplete)

@@ -247,7 +247,7 @@ extension CardsViewController: UICollectionViewDelegate {
         
         if card is WikiImageCard || card is UrlImageCard {
             let cards = dataSource.snapshot().itemIdentifiers
-                .filter { $0 is WikiImageCard || $0 is UrlImageCard }
+                .filter { $0 is WikiImageCard || $0 is UrlImageCard || $0 is MapillaryAmenityImageCard }
                 .compactMap { $0 as? ImageCard }
             guard let initialIndex = cards.firstIndex(where: { $0 === card }) else { return }
             let imageDataSource = SimpleImageDatasource(imageItems: cards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)

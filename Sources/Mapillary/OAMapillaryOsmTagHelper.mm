@@ -29,7 +29,7 @@
 
 + (void)downloadImageByKey:(NSString *)key
                    session:(nullable NSURLSession *)session
-          onDataDownloaded:(void (^)(NSDictionary *data))onDataDownloaded
+          onDataDownloaded:(void (^)(NSDictionary * _Nullable data))onDataDownloaded
 {
     NSString *urlStr = [NSString stringWithFormat:@"%@%@?%@&%@",
             GRAPH_URL_ENDPOINT, key, PARAM_ACCESS_TOKEN, PARAM_FIELDS];
@@ -83,8 +83,13 @@
             result[@"externalLink"] = @(NO);
             result[@"topIcon"] = ACImageNameIcCustomMapillaryColorLogo;
 
+            NSString *imageUrl = result[@"imageUrl"];
             if (onDataDownloaded)
-                onDataDownloaded(result);
+                onDataDownloaded([imageUrl isKindOfClass:NSString.class] && imageUrl.length > 0 ? result : nil);
+        }
+        else if (onDataDownloaded)
+        {
+            onDataDownloaded(nil);
         }
     }];
 }
@@ -97,7 +102,7 @@
     NSURLSession *urlSession = session ?: [URLSessionManager sessionFor:key];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:dataURL
-                                             cachePolicy:NSURLRequestReturnCacheDataElseLoad
+                                             cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                          timeoutInterval:30];
     
     void (^completionHandler)(NSData * _Nullable) = ^(NSData * _Nullable result) {
@@ -115,26 +120,16 @@
                                     NSError * _Nullable error) {
         if (error && error.code == NSURLErrorCancelled)
             return;
-        
-        if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
-        {
-            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
-            if (cached)
-                completionHandler(cached.data);
-            else
-                completionHandler(nil);
-            return;
-        }
-        
+
         if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
             ((NSHTTPURLResponse *)response).statusCode == 200 && data) {
             [URLSessionManager storeResponse:response data:data for:request sessionKey:key];
             completionHandler(data);
             return;
         }
-        
-        completionHandler(nil);
-        
+
+        NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
+        completionHandler(cached.data);
     }] resume];
 }
 

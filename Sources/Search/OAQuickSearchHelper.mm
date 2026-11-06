@@ -621,9 +621,12 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 - (void) setResourcesForSearchUICore
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    if ([_core isKindOfClass:OASharedSearchUICore.class])
-        [OASharedObfResources.shared refreshFiles];
     BOOL isCarPlayAppActive = UIApplication.sharedApplication.isCarPlayAppActive;
+    if ([_core isKindOfClass:OASharedSearchUICore.class])
+    {
+        [(OASharedSearchUICore *) _core updateSearchResourcesIncludingTravel:!isCarPlayAppActive regions:app.worldRegion];
+        return;
+    }
     [[_core getSearchSettings] setOfflineIndexes:[OAObfFileList searchResourceIdsIncludingTravel:!isCarPlayAppActive]];
     [[_core getSearchSettings] setRegions:app.worldRegion];
 }

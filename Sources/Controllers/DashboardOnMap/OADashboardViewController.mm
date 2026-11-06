@@ -40,6 +40,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     BOOL _showing;
     BOOL _hiding;
     BOOL _rotating;
+    BOOL _navbarAppearanceInitialized;
+    BOOL _navbarOpaqueBackground;
+    BOOL _navbarLightTheme;
 }
 
 @synthesize screenObj;
@@ -444,6 +447,12 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     if (@available(iOS 27.0, *))
     {
         BOOL opaqueBackground = self.navbarBackgroundView.alpha > 0.5;
+        BOOL lightTheme = [ThemeManager shared].isLightTheme;
+        if (_navbarAppearanceInitialized && _navbarOpaqueBackground == opaqueBackground && _navbarLightTheme == lightTheme)
+            return;
+        _navbarAppearanceInitialized = YES;
+        _navbarOpaqueBackground = opaqueBackground;
+        _navbarLightTheme = lightTheme;
         self.navbarBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
         self.titleView.textColor = [UIColor colorNamed:opaqueBackground ? ACColorNameTextColorPrimary : ACColorNameNavBarTextColorPrimary];
         UIColor *buttonColor = [UIColor colorNamed:opaqueBackground ? ACColorNameIconColorActive : ACColorNameNavBarTextColorPrimary];
@@ -559,7 +568,10 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
         [self.navbarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+        [self updateNavbarBackground];
+    }
 }
 
 - (void)onLeftNavbarButtonPressed

@@ -89,8 +89,8 @@
 
 - (void)updateLayout:(CGRect)frame
 {
-    CGFloat listWidth = _firstRow ? 48. : 0.;
-    CGFloat rightMargin = listWidth + (self.buttonOkVisible ? 40. : 0.);
+    CGFloat listWidth = 48.;
+    CGFloat rightMargin = (_firstRow || self.buttonOkVisible ? listWidth : 0.) + (self.buttonOkVisible ? 40. : 0.);
     CGFloat h = frame.size.height;
     CGFloat dirViewWidth = frame.size.width - rightMargin;
 

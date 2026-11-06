@@ -1647,7 +1647,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_primary_table_background);
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
-    else if (_mapInfoController.topPanelController.hasVisibleMarkerBar)
+    else if (_mapInfoController.topPanelController.hasLeadingMarkerBar)
         statusBarColor = UIColor.clearColor;
     else if (_mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets])
         statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;

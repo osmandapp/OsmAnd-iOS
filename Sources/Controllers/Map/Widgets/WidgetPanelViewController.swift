@@ -58,11 +58,18 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
     
-    var hasVisibleMarkerBar: Bool {
-        widgetPages.joined().contains { $0 is OADestinationBarWidget && !$0.isHidden }
-    }
-
     // swiftlint:enable all
+
+    var hasLeadingMarkerBar: Bool {
+        let visibleWidgets: [OABaseWidgetView]
+        if isHorizontal {
+            visibleWidgets = widgetPages.flatMap { $0 }
+        } else {
+            guard widgetPages.indices.contains(currentIndex) else { return false }
+            visibleWidgets = widgetPages[currentIndex]
+        }
+        return visibleWidgets.first { !$0.isHidden } is OADestinationBarWidget
+    }
     
     // MARK: - Init
     

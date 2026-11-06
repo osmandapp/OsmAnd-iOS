@@ -190,6 +190,7 @@
 @implementation OABaseTrackMenuHudViewController
 {
     CGFloat _cachedYViewPort;
+    BOOL _wasLeftSidePresentation;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -377,6 +378,15 @@
     [_mapPanelViewController targetUpdateControlsLayout:YES customStatusBarStyle:self.preferredStatusBarStyle];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     [self changeHud:[self getViewHeight]];
+}
+
+- (void)updateLayoutCurrentState
+{
+    BOOL leftSidePresentation = self.isLeftSidePresentation;
+    [super updateLayoutCurrentState];
+    if (_wasLeftSidePresentation && !leftSidePresentation)
+        [self updateShowingState:EOADraggableMenuStateExpanded];
+    _wasLeftSidePresentation = leftSidePresentation;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection

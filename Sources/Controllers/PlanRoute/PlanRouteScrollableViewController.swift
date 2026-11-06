@@ -11,6 +11,8 @@ import CoreLocation
 import OsmAndShared
 
 final class PlanRouteScrollableViewController: OABaseScrollableHudViewController {
+    private static let inlineLayoutMinimumWidth: CGFloat = 540
+    private static let inlineLayoutMaximumHeight: CGFloat = 520
     private static let topPartViewHeight: CGFloat = 50
     private static let sheetGrabberAreaHeight: CGFloat = 16
     private static let bottomToolbarReservedHeight: CGFloat = 60
@@ -252,7 +254,9 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         let bounds = view.safeAreaLayoutGuide.layoutFrame
-        let inline = bounds.width >= 540 && view.bounds.height < 520 && bounds.width > view.bounds.height
+        let minimumWidth = Self.inlineLayoutMinimumWidth
+        let maximumHeight = Self.inlineLayoutMaximumHeight
+        let inline = bounds.width >= minimumWidth && view.bounds.height < maximumHeight && bounds.width > view.bounds.height
         guard inline != inlineLayout, !stackedConstraints.isEmpty else { return }
         inlineLayout = inline
         NSLayoutConstraint.deactivate(inline ? stackedConstraints : inlineConstraints)

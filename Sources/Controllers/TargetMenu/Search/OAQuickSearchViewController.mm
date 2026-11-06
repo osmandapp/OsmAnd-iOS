@@ -903,7 +903,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (_modalInput)
     {
         self.leftImageButton.hidden = NO;
-        self.textField.frame = CGRectMake(margins.left + 36, 5 + statusBarHeight, contentWidth - 36, self.textField.frame.size.height);
+        CGRect buttonFrame = self.leftImageButton.frame;
+        buttonFrame.origin.x = MAX(self.view.safeAreaInsets.left, margins.left - 8.);
+        self.leftImageButton.frame = buttonFrame;
+        CGFloat fieldX = CGRectGetMaxX(buttonFrame);
+        self.textField.frame = CGRectMake(fieldX, 5 + statusBarHeight, MAX(0., self.view.bounds.size.width - margins.right - fieldX), self.textField.frame.size.height);
     }
     else
     {

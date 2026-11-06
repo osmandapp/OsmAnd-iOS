@@ -914,6 +914,15 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
             return;
         }
         
+        OASKFile *copiedFile = [[OASKFile alloc] initWithFilePath:destinationPath];
+        OASGpxFile *copiedGpx = [OASGpxUtilities.shared loadGpxFileFile:copiedFile];
+        NSString *copiedName = newName.stringByDeletingPathExtension;
+        if (!copiedGpx.error && copiedGpx.isOsmAndOrigin && ![copiedName isEqualToString:copiedGpx.metadata.name])
+        {
+            [copiedGpx updateTrackNameNewName:copiedName];
+            [OASGpxUtilities.shared writeGpxFileFile:copiedFile gpxFile:copiedGpx];
+        }
+
         OASGpxDataItem *gpx = [gpxDatabase getGPXItem:sourcePath];
         if (!gpx)
         {

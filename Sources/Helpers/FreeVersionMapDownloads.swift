@@ -9,6 +9,23 @@
 import Foundation
 
 @objcMembers
+final class FreeRegionCheck: NSObject {
+    let freeRegion: OAWorldRegion?
+    let freeItems: [OAResourceSwiftItem]
+    let otherRegions: [OAWorldRegion]
+    
+    var isAllFree: Bool {
+        otherRegions.isEmpty
+    }
+    
+    init(freeRegion: OAWorldRegion?, freeItems: [OAResourceSwiftItem], otherRegions: [OAWorldRegion]) {
+        self.freeRegion = freeRegion
+        self.freeItems = freeItems
+        self.otherRegions = otherRegions
+    }
+}
+
+@objcMembers
 final class FreeVersionMapDownloads: NSObject {
     static let shared = FreeVersionMapDownloads()
     
@@ -44,6 +61,14 @@ final class FreeVersionMapDownloads: NSObject {
     
     private override init() {}
     
+    func chooseFreeRegion(_ item: OAResourceSwiftItem) {
+        lock.lock()
+        defer { lock.unlock() }
+        if isFreeVersion, let region = getItemRegion(item) {
+            storeFreeRegion(region)
+        }
+    }
+    
     func replaceFreeRegion(_ region: OAWorldRegion) {
         lock.lock()
         defer { lock.unlock() }
@@ -52,6 +77,57 @@ final class FreeVersionMapDownloads: NSObject {
             values[Self.regionKey] = regionId
             values[Self.replacesKey] = (values[Self.replacesKey] as? Int ?? 0) + 1
         }
+    }
+    
+    func check(_ items: [OAResourceSwiftItem]) -> FreeRegionCheck {
+        guard isFreeVersion, isRegionsLoaded else { return FreeRegionCheck(freeRegion: nil, freeItems: items, otherRegions: []) }
+        var freeRegion = self.freeRegion
+        var freeItems: [OAResourceSwiftItem] = []
+        var otherRegions: [OAWorldRegion] = []
+        for item in items {
+            let region = getItemRegion(item)
+            if freeRegion == nil {
+                freeRegion = region
+            }
+            if region == nil || region == freeRegion || item.isInstalled() {
+                freeItems.append(item)
+            } else if let region, !otherRegions.contains(region) {
+                otherRegions.append(region)
+            }
+        }
+        
+        return FreeRegionCheck(freeRegion: freeRegion, freeItems: freeItems, otherRegions: otherRegions)
+    }
+    
+    func canDownload(_ item: OAResourceSwiftItem) -> Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        guard isFreeVersion, isRegionsLoaded else { return true }
+        guard let region = getItemRegion(item), !item.isInstalled() else { return true }
+        guard let freeRegion else {
+            storeFreeRegion(region)
+            return true
+        }
+        
+        return region == freeRegion
+    }
+    
+    private func getItemRegion(_ item: OAResourceSwiftItem) -> OAWorldRegion? {
+        isCountedInDownloads(item) ? getRegionByDownloadName(getDownloadName(item.resourceId())) : nil
+    }
+    
+    private func isCountedInDownloads(_ item: OAResourceSwiftItem) -> Bool {
+        let type = item.resourceType()
+        return (type == .mapRegion || type == .roadMapRegion) && !item.isFree()
+    }
+    
+    private func getDownloadName(_ resourceId: String) -> String {
+        String(resourceId.prefix { $0 != "." })
+    }
+    
+    private func getRegionByDownloadName(_ downloadName: String) -> OAWorldRegion? {
+        guard let region = OsmAndApp.swiftInstance().worldRegion?.getDataByDownloadName(downloadName), !region.isInPurchasedArea() else { return nil }
+        return getFreeRegionOf(region)
     }
     
     private func getFreeRegionOf(_ region: OAWorldRegion) -> OAWorldRegion? {

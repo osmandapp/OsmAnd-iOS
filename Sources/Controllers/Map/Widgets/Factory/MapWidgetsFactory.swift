@@ -117,6 +117,9 @@ final class MapWidgetsFactory: NSObject {
         case .glideAverage:
             let glideWidgetState = GlideAverageWidgetState(customId, widgetParams: widgetParams)
             return GlideAverageWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
+        case .inclinometerPitch, .inclinometerRoll:
+            let inclinometerState = InclinometerWidgetState(widgetType: widgetType, customId: customId, widgetParams: widgetParams)
+            return InclinometerWidget(with: inclinometerState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         default:

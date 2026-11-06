@@ -1,0 +1,19 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(3 3)">
+<path d="M1,21L23,15.5L23,21Z" stroke="#505762" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<g transform="translate(0 -0.1) translate(12 11.5) rotate(-14) scale(0.72) translate(-12 -11.5)">
+<path d="M5,3H19Q20.5,3 20.5,4.5V13.5H3.5V4.5Q3.5,3 5,3Z" stroke="#505762" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<path d="M4.25,11H4.3A0.85,0.85 0 0 1 5.15,11.85V19.15A0.85,0.85 0 0 1 4.3,20H4.25A0.85,0.85 0 0 1 3.4,19.15V11.85A0.85,0.85 0 0 1 4.25,11Z" stroke="#505762" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<path d="M19.7,11H19.75A0.85,0.85 0 0 1 20.6,11.85V19.15A0.85,0.85 0 0 1 19.75,20H19.7A0.85,0.85 0 0 1 18.85,19.15V11.85A0.85,0.85 0 0 1 19.7,11Z" stroke="#505762" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</g>
+<path d="M1,21L23,15.5L23,21Z" fill="#2C7AF6"/>
+<g transform="translate(0 -0.1) translate(12 11.5) rotate(-14) scale(0.72) translate(-12 -11.5)">
+<path d="M4.25,11H4.3A0.85,0.85 0 0 1 5.15,11.85V19.15A0.85,0.85 0 0 1 4.3,20H4.25A0.85,0.85 0 0 1 3.4,19.15V11.85A0.85,0.85 0 0 1 4.25,11Z" fill="#505762"/>
+<path d="M19.7,11H19.75A0.85,0.85 0 0 1 20.6,11.85V19.15A0.85,0.85 0 0 1 19.75,20H19.7A0.85,0.85 0 0 1 18.85,19.15V11.85A0.85,0.85 0 0 1 19.7,11Z" fill="#505762"/>
+<path d="M5,3H19Q20.5,3 20.5,4.5V13.5H3.5V4.5Q3.5,3 5,3Z" fill="#FFC107"/>
+<path d="M6,5H18V8H6Z" fill="#D1E6FF"/>
+<path d="M7.8,10.8a4.2,4.2 0 1,0 8.4,0a4.2,4.2 0 1,0 -8.4,0Z" fill="#505762"/>
+<path d="M10.5,10.8a1.5,1.5 0 1,0 3.0,0a1.5,1.5 0 1,0 -3.0,0Z" fill="#FFFFFF"/>
+</g>
+</g>
+</svg>

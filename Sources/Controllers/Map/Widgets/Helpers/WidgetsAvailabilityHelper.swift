@@ -77,6 +77,8 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetAvailability(widgetType: .sunset)
         regWidgetAvailability(widgetType: .glideTarget)
         regWidgetAvailability(widgetType: .glideAverage)
+        regWidgetAvailability(widgetType: .inclinometerPitch)
+        regWidgetAvailability(widgetType: .inclinometerRoll)
         
         // vertical
         regWidgetVisibility(widgetType: .streetName, appModes: [.car()])

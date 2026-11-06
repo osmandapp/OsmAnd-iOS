@@ -68,6 +68,13 @@ typedef enum : NSUInteger {
     BOOL _isNavigationScreenOpened;
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    return UIVerticalBarBehaviorDisabled;
+}
+#endif
+
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -109,7 +116,7 @@ typedef enum : NSUInteger {
 
 - (void) loadView
 {
-    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view.backgroundColor = UIColor.whiteColor;
 }
 

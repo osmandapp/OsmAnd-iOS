@@ -866,7 +866,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     
     BOOL isFullScreen = _currentState == EOARouteInfoMenuStateFullScreen;
-    _statusBarBackgroundView.frame = isFullScreen ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+    _statusBarBackgroundView.frame = isFullScreen ? CGRectMake(0., 0., self.bounds.size.width, self.superview.safeAreaInsets.top) : CGRectZero;
     
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = self.bounds.size.width / 2 - sliderFrame.size.width / 2;
@@ -2219,7 +2219,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     CGPoint initialPoint = [self calculateInitialPoint];
     
     CGFloat expandedAnchor = DeviceScreenHeight / 4 + 40.;
-    CGFloat fullScreenAnchor = OAUtilities.getStatusBarHeight + 40.;
+    CGFloat topInset = self.superview.safeAreaInsets.top;
+    CGFloat fullScreenAnchor = topInset + 40.;
     
     switch (recognizer.state)
     {
@@ -2229,13 +2230,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         case UIGestureRecognizerStateChanged:
         {
             CGFloat newY = touchPoint.y - _initialTouchPoint;
-            if (self.frame.origin.y > OAUtilities.getStatusBarHeight
+            if (self.frame.origin.y > topInset
                 || (_initialTouchPoint < _tableView.frame.origin.y && _tableView.contentOffset.y > 0))
             {
                 [_tableView setContentOffset:CGPointZero];
             }
             
-            if (newY <= OAUtilities.getStatusBarHeight || _tableView.contentOffset.y > 0)
+            if (newY <= topInset || _tableView.contentOffset.y > 0)
             {
                 newY = 0;
                 if (_tableView.contentOffset.y > 0)
@@ -2247,11 +2248,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }
             
             CGRect frame = self.frame;
-            frame.origin.y = newY > 0 && newY <= OAUtilities.getStatusBarHeight ? OAUtilities.getStatusBarHeight : newY;
+            frame.origin.y = newY > 0 && newY <= topInset ? topInset : newY;
             frame.size.height = DeviceScreenHeight - newY;
             self.frame = frame;
             
-            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., DeviceScreenWidth, OAUtilities.getStatusBarHeight) : CGRectZero;
+            _statusBarBackgroundView.frame = newY == 0 ? CGRectMake(0., 0., self.bounds.size.width, topInset) : CGRectZero;
             
             CGRect buttonsFrame = _buttonsView.frame;
             buttonsFrame.origin.y = frame.size.height - buttonsFrame.size.height;

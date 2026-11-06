@@ -18,6 +18,13 @@
     NSMutableArray<OAAutoObserverProxy *> *_observers;
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    return UIVerticalBarBehaviorDisabled;
+}
+#endif
+
 #pragma mark - Initialization
 
 // use addNotification:selector: method here

@@ -324,6 +324,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)viewWillLayoutSubviews
 {
+    [super viewWillLayoutSubviews];
     [self updateNavbar];
 }
 
@@ -881,8 +882,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
     CGRect topViewFrame = _topView.frame;
-    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-    statusBarHeight = statusBarHeight == 0 ? 10.0 : statusBarHeight;
+    CGFloat statusBarHeight = MAX(10., self.view.safeAreaInsets.top);
+    UIEdgeInsets margins = self.view.layoutMargins;
+    CGFloat contentWidth = self.view.bounds.size.width - margins.left - margins.right;
+    CGFloat cancelWidth = self.btnCancel.bounds.size.width;
     topViewFrame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
 
     _textField.hidden = !showInputView;
@@ -900,14 +903,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (_modalInput)
     {
         self.leftImageButton.hidden = NO;
-        self.textField.frame = CGRectMake(44 + OAUtilities.getLeftMargin, 5 + statusBarHeight, self.view.frame.size.width - 44 - 8 - 2*OAUtilities.getLeftMargin, self.textField.frame.size.height);
+        CGRect buttonFrame = self.leftImageButton.frame;
+        buttonFrame.origin.x = MAX(self.view.safeAreaInsets.left, margins.left - 8.);
+        self.leftImageButton.frame = buttonFrame;
+        CGFloat fieldX = CGRectGetMaxX(buttonFrame);
+        self.textField.frame = CGRectMake(fieldX, 5 + statusBarHeight, MAX(0., self.view.bounds.size.width - margins.right - fieldX), self.textField.frame.size.height);
     }
     else
     {
         self.leftImageButton.hidden = YES;
-        self.textField.frame = CGRectMake(8 + OAUtilities.getLeftMargin, 5 + statusBarHeight, self.view.frame.size.width - 84 - 8 - 2*OAUtilities.getLeftMargin, self.textField.frame.size.height);
-        self.tabs.frame = CGRectMake(8 + OAUtilities.getLeftMargin, self.tabs.frame.origin.y, self.view.frame.size.width - 2*8 - 2*OAUtilities.getLeftMargin, self.tabs.frame.size.height);
-        self.btnCancel.frame = CGRectMake(self.view.frame.size.width - 84 - OAUtilities.getLeftMargin + 8, self.btnCancel.frame.origin.y, self.btnCancel.frame.size.width, self.btnCancel.frame.size.height);
+        self.textField.frame = CGRectMake(margins.left, 5 + statusBarHeight, contentWidth - cancelWidth - 8, self.textField.frame.size.height);
+        self.tabs.frame = CGRectMake(margins.left, self.tabs.frame.origin.y, contentWidth, self.tabs.frame.size.height);
+        self.btnCancel.frame = CGRectMake(self.view.bounds.size.width - margins.right - cancelWidth, self.btnCancel.frame.origin.y, self.btnCancel.frame.size.width, self.btnCancel.frame.size.height);
     }
 
     _topView.frame = topViewFrame;
@@ -928,7 +935,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void) adjustViewPosition:(UIView *)view byHeight:(CGFloat)height
 {
     CGRect frame = view.frame;
-    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight] == 0 ? 10.0 : [OAUtilities getStatusBarHeight];
+    CGFloat statusBarHeight = MAX(10., self.view.safeAreaInsets.top);
     frame.origin.y = statusBarHeight + height;
     view.frame = frame;
 }

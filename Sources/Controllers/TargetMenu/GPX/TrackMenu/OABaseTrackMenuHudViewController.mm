@@ -190,6 +190,7 @@
 @implementation OABaseTrackMenuHudViewController
 {
     CGFloat _cachedYViewPort;
+    BOOL _wasLeftSidePresentation;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -379,14 +380,13 @@
     [self changeHud:[self getViewHeight]];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)updateLayoutCurrentState
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    __weak __typeof(self) weakSelf = self;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        if (![weakSelf isLandscape])
-            [weakSelf goExpanded];
-    } completion:nil];
+    BOOL leftSidePresentation = self.isLeftSidePresentation;
+    [super updateLayoutCurrentState];
+    if (_wasLeftSidePresentation && !leftSidePresentation)
+        [self updateShowingState:EOADraggableMenuStateExpanded];
+    _wasLeftSidePresentation = leftSidePresentation;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection

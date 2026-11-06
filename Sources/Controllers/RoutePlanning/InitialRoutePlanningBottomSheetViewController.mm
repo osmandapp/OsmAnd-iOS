@@ -63,9 +63,9 @@ static const NSUInteger kRecentTracksLimit = 5;
 - (CGFloat) initialHeight
 {
     int tracksCount = (int)[[OAGPXDatabase sharedDb] getDataItems].count;
-    int maxHeight = DeviceScreenHeight / 3 * 2;
+    int maxHeight = [self.view sceneLayoutHeight] / 3 * 2;
     
-    int estimatedHeight = kApproximateEmptyMenuHeight + OAUtilities.getBottomMargin;
+    int estimatedHeight = kApproximateEmptyMenuHeight + [self.view sceneBottomInset];
     if (tracksCount > 0)
         estimatedHeight += (kApproximateGpxHeaderHeight + tracksCount * kApproximateGpxCellHeight + kVerticalMargin);
     

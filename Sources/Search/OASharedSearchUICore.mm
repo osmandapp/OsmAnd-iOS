@@ -404,6 +404,10 @@
     // the shared object the app's one was made of
     id _sharedObject;
     NSObject *_appObject;
+    id _sharedRelatedObject;
+    NSObject *_appRelatedObject;
+    OASSearchResult *_sharedParent;
+    OASearchResult *_appParent;
 }
 
 // the shared result keeps the weight it computed first, so it is not read before the search sorts
@@ -414,15 +418,61 @@
 
 - (NSObject *)object
 {
-    id sharedObject = self.sharedResult.object;
     @synchronized (self)
     {
+        id sharedObject = self.sharedResult.object;
         if (sharedObject != _sharedObject)
         {
             _sharedObject = sharedObject;
             _appObject = [OASharedSearchObjects appObjectFor:sharedObject];
         }
         return _appObject;
+    }
+}
+
+- (NSObject *)relatedObject
+{
+    @synchronized (self)
+    {
+        id shared = self.sharedResult.relatedObject;
+        if (shared != _sharedRelatedObject)
+        {
+            _sharedRelatedObject = shared;
+            _appRelatedObject = [OASharedSearchObjects appObjectFor:shared];
+        }
+        return _appRelatedObject;
+    }
+}
+
+- (void)setRelatedObject:(NSObject *)relatedObject
+{
+    @synchronized (self)
+    {
+        _sharedRelatedObject = self.sharedResult.relatedObject;
+        _appRelatedObject = relatedObject;
+    }
+}
+
+- (OASearchResult *)parentSearchResult
+{
+    @synchronized (self)
+    {
+        OASSearchResult *shared = self.sharedResult.parentSearchResult;
+        if (shared != _sharedParent)
+        {
+            _sharedParent = shared;
+            _appParent = shared ? [OASearchResult resultOfShared:shared phrase:self.requiredSearchPhrase] : nil;
+        }
+        return _appParent;
+    }
+}
+
+- (void)setParentSearchResult:(OASearchResult *)parentSearchResult
+{
+    @synchronized (self)
+    {
+        _sharedParent = self.sharedResult.parentSearchResult;
+        _appParent = parentSearchResult;
     }
 }
 
@@ -459,7 +509,7 @@
 
     OASearchResult *result = [[OASharedSearchResult alloc] initWithPhrase:phrase];
     result.sharedResult = shared;
-    if (shared.object && !result.object)
+    if (![OASharedSearchObjects canConvertSharedObject:shared.object])
         return nil;
 
     result.objectType = [OASharedSearchObjects appObjectType:shared.objectType];
@@ -470,7 +520,6 @@
     result.cityName = shared.cityName;
     result.localeRelatedObjectName = shared.localeRelatedObjectName;
     result.distRelatedObjectName = shared.distRelatedObjectName;
-    result.relatedObject = [OASharedSearchObjects appObjectFor:shared.relatedObject];
     result.location = [OASharedSearchObjects appObjectFor:shared.location];
     result.preferredZoom = shared.preferredZoom;
     result.impreciseCoordinates = [shared hasImpreciseCoordinates];
@@ -500,8 +549,6 @@
     else if ([resource isEqualToString:@"TRAVEL"])
         result.searchResultResource = EOASearchResultResourceTravel;
 
-    if (shared.parentSearchResult)
-        result.parentSearchResult = [self resultOfShared:shared.parentSearchResult phrase:phrase];
     return result;
 }
 
@@ -605,16 +652,52 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     {
         if (![_shared isSkipSorting])
             return [self getCurrentSearchResults];
-        [self getCurrentSearchResults];
         NSMutableArray<OASearchResult *> *results = [NSMutableArray array];
         for (OASSearchResult *shared in [_shared getVisibleSpatialSearchResults])
         {
-            OASearchResult *result = [_appResults objectForKey:shared];
+            OASearchResult *result = [_appResults objectForKey:shared] ?: [OASearchResult resultOfShared:shared phrase:self.phrase];
             if (result)
+            {
+                [_appResults setObject:result forKey:shared];
                 [results addObject:result];
+            }
         }
         return results;
     }
+}
+
+- (NSArray<OASearchResult *> *)prepareVisibleResultsWithCancellation:(BOOL (^)(void))cancelled
+{
+    if (cancelled())
+        return nil;
+    NSArray<OASearchResult *> *results = [self getVisibleSpatialSearchResults];
+    for (OASearchResult *result in results)
+    {
+        if (cancelled())
+            return nil;
+        (void)result.object;
+        (void)result.relatedObject;
+    }
+    return cancelled() ? nil : results;
+}
+
+// Only existing adapters are transferred; shared still owns ordering and duplicate removal.
+- (NSMapTable<OASSearchResult *, OASearchResult *> *)cachedAppResults
+{
+    @synchronized (self)
+    {
+        return [_appResults copy];
+    }
+}
+
+- (void)pruneAppResults
+{
+    NSHashTable *retained = [NSHashTable hashTableWithOptions:NSPointerFunctionsObjectPointerPersonality];
+    for (OASSearchResult *result in [_shared getCurrentSearchResults])
+        [retained addObject:result];
+    for (OASSearchResult *result in _appResults.keyEnumerator.allObjects)
+        if (![retained containsObject:result])
+            [_appResults removeObjectForKey:result];
 }
 
 - (BOOL)hasMoreSpatialSearchResults
@@ -647,6 +730,7 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
             [shared addObject:sharedResult];
         }
         [_shared addSearchResultsSr:shared resortAll:resortAll removeDuplicates:removeDuplicates];
+        [self pruneAppResults];
         _currentResults = nil;
     }
     return self;
@@ -666,12 +750,11 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     }
     OASharedSearchResultCollection *combined = [[OASharedSearchResultCollection alloc] initWithShared:
         [_shared combineWithCollectionCollection:other.shared resort:resort removeDuplicates:removeDuplicates]];
-    for (OASearchResult *result in [[self getCurrentSearchResults] arrayByAddingObjectsFromArray:[collection getCurrentSearchResults]])
-    {
-        OASSearchResult *shared = [result toSharedResult];
-        if (![combined->_appResults objectForKey:shared])
-            [combined->_appResults setObject:result forKey:shared];
-    }
+    for (NSMapTable<OASSearchResult *, OASearchResult *> *cache in @[[self cachedAppResults], [other cachedAppResults]])
+        for (OASSearchResult *shared in cache)
+            if (![combined->_appResults objectForKey:shared])
+                [combined->_appResults setObject:[cache objectForKey:shared] forKey:shared];
+    [combined pruneAppResults];
     return combined;
 }
 
@@ -697,6 +780,7 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     @synchronized (self)
     {
         [_shared filterSearchDuplicateResults];
+        [self pruneAppResults];
         _currentResults = nil;
     }
 }

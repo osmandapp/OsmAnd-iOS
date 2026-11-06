@@ -7,6 +7,7 @@
 //
 
 #import "OAQuickSearchViewController.h"
+#import "OASharedSearchUICore.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
 #import "OAMapLayers.h"
@@ -160,6 +161,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     BOOL _historyEditing;
 
     BOOL _bottomViewVisible;
+
+    NSOperationQueue *_resultPreparationQueue;
+    NSUInteger _resultPresentationGeneration;
+    BOOL _preparingResults;
+    BOOL _pendingMoreButton;
+    BOOL _pendingEmptyResult;
 }
 
 - (instancetype)init
@@ -177,6 +184,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _searchQuery = @"";
     _searchType = OAQuickSearchType::REGULAR;
     _runSearchFirstTime = YES;
+    _resultPreparationQueue = [[NSOperationQueue alloc] init];
+    _resultPreparationQueue.maxConcurrentOperationCount = 1;
+    _resultPreparationQueue.qualityOfService = NSQualityOfServiceUserInitiated;
 }
 
 -(void)applyLocalization
@@ -317,6 +327,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [super viewWillDisappear:animated];
 
     self.paused = YES;
+    [self cancelResultPreparation];
 
     [self unregisterKeyboardNotifications];
 
@@ -1466,6 +1477,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
     if ([self.searchQuery localizedCaseInsensitiveCompare:newQueryText] != NSOrderedSame)
     {
+        [self cancelResultPreparation];
         self.searchQuery = newQueryText;
         if (self.searchQuery.length == 0)
         {
@@ -1584,6 +1596,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore onSearchStarted:(OASearchStartedCallback)onSearchStarted onPublish:(OAPublishCallback)onPublish onSearchFinished:(OASearchFinishedCallback)onSearchFinished
 {
+    [self cancelResultPreparation];
     self.foundPartialLocation = false;
     [self updateBarActionView];
     self.interruptedSearch = false;
@@ -1864,6 +1877,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) addMoreButton
 {
+    if (_preparingResults)
+    {
+        _pendingMoreButton = YES;
+        return;
+    }
     __weak OAQuickSearchViewController *weakSelf = self;
     NSString *name = OALocalizedString([[self getResultCollection] hasMoreSpatialSearchResults] ? @"show_more" : @"search_POI_level_btn");
     OAQuickSearchMoreListItem *moreListItem = [[OAQuickSearchMoreListItem alloc] initWithName:name onClickFunction:^(id sender) {
@@ -1879,6 +1897,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) addEmptyResult
 {
+    if (_preparingResults)
+    {
+        _pendingEmptyResult = YES;
+        return;
+    }
     OAQuickSearchEmptyResultListItem *item = [[OAQuickSearchEmptyResultListItem alloc] init];
     int minimalSearchRadius = [self.searchUICore getMinimalSearchRadius:self.searchUICore.getPhrase];
     if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
@@ -1895,16 +1918,62 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
+- (void)cancelResultPreparation
+{
+    _resultPresentationGeneration++;
+    [_resultPreparationQueue cancelAllOperations];
+    _preparingResults = NO;
+    _pendingMoreButton = NO;
+    _pendingEmptyResult = NO;
+}
+
+- (void)displayPreparedResults:(NSArray<OASearchResult *> *)results append:(BOOL)append
+{
+    NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray arrayWithCapacity:results.count];
+    for (OASearchResult *result in results)
+        [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:result]];
+    [self updateData:rows append:append];
+}
+
 - (void)updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
 {
-    if (!_paused)
+    [self cancelResultPreparation];
+    if (_paused)
+        return;
+    if (![res isKindOfClass:OASharedSearchResultCollection.class])
     {
-        NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
-        for (OASearchResult *sr in [res getVisibleSpatialSearchResults])
-            [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
-
-        [self updateData:rows append:append];
+        [self displayPreparedResults:[res getVisibleSpatialSearchResults] append:append];
+        return;
     }
+
+    _preparingResults = YES;
+    NSUInteger generation = _resultPresentationGeneration;
+    __weak OAQuickSearchViewController *weakSelf = self;
+    NSBlockOperation *operation = [[NSBlockOperation alloc] init];
+    __weak NSBlockOperation *weakOperation = operation;
+    [operation addExecutionBlock:^{
+        NSBlockOperation *currentOperation = weakOperation;
+        NSArray<OASearchResult *> *results = [(OASharedSearchResultCollection *)res prepareVisibleResultsWithCancellation:^BOOL {
+            return currentOperation.isCancelled;
+        }];
+        if (!results || currentOperation.isCancelled)
+            return;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            OAQuickSearchViewController *controller = weakSelf;
+            if (!controller || currentOperation.isCancelled || controller->_resultPresentationGeneration != generation
+                || controller.paused || controller.cancelPrev)
+                return;
+            controller->_preparingResults = NO;
+            [controller displayPreparedResults:results append:append];
+            if (controller->_pendingEmptyResult)
+                [controller addEmptyResult];
+            if (controller->_pendingMoreButton)
+                [controller addMoreButton];
+            controller->_pendingEmptyResult = NO;
+            controller->_pendingMoreButton = NO;
+        });
+    }];
+    [_resultPreparationQueue addOperation:operation];
 }
 
 - (void)createAndRefreshCustomFilter:(OAPOIUIFilter *)newFilter newName:(NSString *)newName

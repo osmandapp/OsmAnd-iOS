@@ -153,9 +153,9 @@
             }
         }
     }
-    if (_parentSearchResult)
+    if (self.parentSearchResult)
         // parent search result should not change weight of current result, so we divide by MAX_TYPES_BASE_10^2
-        res = res + [_parentSearchResult getSumPhraseMatchWeight:(exactResult == nil ? self : exactResult)] / MAX_PHRASE_WEIGHT_TOTAL;
+        res = res + [self.parentSearchResult getSumPhraseMatchWeight:(exactResult == nil ? self : exactResult)] / MAX_PHRASE_WEIGHT_TOTAL;
     
     return res;
 }
@@ -335,16 +335,16 @@
 
 - (int) getDepth
 {
-    if (_parentSearchResult != nil)
-        return 1 + [_parentSearchResult getDepth];
+    if (self.parentSearchResult != nil)
+        return 1 + [self.parentSearchResult getDepth];
     return 1;
 }
 
 - (int) getFoundWordCount
 {
     int inc = [self getSelfWordCount];
-    if (_parentSearchResult != nil)
-        inc += [_parentSearchResult getFoundWordCount];
+    if (self.parentSearchResult != nil)
+        inc += [self.parentSearchResult getFoundWordCount];
     return inc;
 }
 
@@ -390,8 +390,8 @@
 
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult
 {
-    OASearchResult *prev = _parentSearchResult;
-    _parentSearchResult = parentSearchResult;
+    OASearchResult *prev = self.parentSearchResult;
+    self.parentSearchResult = parentSearchResult;
     return prev;
 }
 
@@ -425,9 +425,9 @@
             [b appendString:@", "];
         
         [b appendString:_localeRelatedObjectName];
-        if ([_relatedObject isKindOfClass:OAStreet.class])
+        if ([self.relatedObject isKindOfClass:OAStreet.class])
         {
-            OAStreet *street = (OAStreet *) _relatedObject;
+            OAStreet *street = (OAStreet *) self.relatedObject;
             OACity *city = street.city;
             if (city != nil)
             {

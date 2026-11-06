@@ -69,6 +69,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities;
 
+/** Resolves the searchable type without copying the amenity's names, tags or geometry. */
++ (nullable OAPOIType *)searchableTypeForSharedAmenity:(OASAmenity *)amenity;
+
 /** The shared search's amenity as the app's model, field for field as parsePOIByAmenity makes it from the C++ one. */
 + (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity;
 

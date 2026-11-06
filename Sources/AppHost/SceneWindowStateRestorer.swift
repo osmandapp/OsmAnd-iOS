@@ -9,6 +9,9 @@ import UIKit
         let topController: UIViewController?
         let presenter: UIViewController
         let modals: [ModalState]
+        weak var destinationWindow: UIWindow?
+        var generation = 0
+        var isInstallingWindow = false
 
         init(
             root: OARootViewController,
@@ -16,7 +19,8 @@ import UIKit
             navigationStack: [UIViewController],
             topController: UIViewController?,
             presenter: UIViewController,
-            modals: [ModalState]
+            modals: [ModalState],
+            destinationWindow: UIWindow
         ) {
             self.root = root
             self.navigationController = navigationController
@@ -24,6 +28,7 @@ import UIKit
             self.topController = topController
             self.presenter = presenter
             self.modals = modals
+            self.destinationWindow = destinationWindow
         }
     }
 
@@ -33,6 +38,7 @@ import UIKit
         let hadSheet: Bool
         let detents: [UISheetPresentationController.Detent]
         let selectedDetent: UISheetPresentationController.Detent.Identifier?
+        let sheetDelegate: UISheetPresentationControllerDelegate?
         let prefersGrabberVisible: Bool
         let preferredCornerRadius: CGFloat?
         let prefersScrollingExpandsWhenScrolledToEdge: Bool
@@ -48,6 +54,7 @@ import UIKit
             hadSheet = sheet != nil
             detents = sheet?.detents ?? []
             selectedDetent = sheet?.selectedDetentIdentifier
+            sheetDelegate = sheet?.delegate
             prefersGrabberVisible = sheet?.prefersGrabberVisible ?? false
             preferredCornerRadius = sheet?.preferredCornerRadius
             prefersScrollingExpandsWhenScrolledToEdge = sheet?.prefersScrollingExpandsWhenScrolledToEdge ?? true
@@ -70,6 +77,7 @@ import UIKit
                 sheet.preferredCornerRadius = preferredCornerRadius
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
                 sheet.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
+                sheet.delegate = sheetDelegate
             }
 
             if let popover = controller.popoverPresentationController {
@@ -117,6 +125,12 @@ import UIKit
             return false
         }
 
+        if let pending, pending.destinationWindow !== window {
+            pending.destinationWindow = window
+            pending.generation += 1
+        }
+        pending?.isInstallingWindow = true
+
         rootViewController.movingBetweenWindowScenes = pending != nil
             || (previousWindow != nil && previousWindow !== window)
         if let previousWindow, previousWindow !== window,
@@ -128,6 +142,7 @@ import UIKit
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         restoreNavigationStack(navigationStack, on: navigationController, root: rootViewController)
+        pending?.isInstallingWindow = false
 
         // A dismissal already in progress must restore into whichever window owns the root last.
         if pending != nil { return true }
@@ -141,21 +156,12 @@ import UIKit
                                        navigationStack: navigationStack,
                                        topController: topController,
                                        presenter: presenter,
-                                       modals: modals)
+                                       modals: modals,
+                                       destinationWindow: window)
         pendingTransfer = transfer
         // Re-present the same modal controllers so UIKit creates presentations for the new window.
         presenter.dismiss(animated: false) {
-            guard pendingTransfer === transfer else { return }
-            guard navigationController.view.window != nil else {
-                finish(transfer)
-                return
-            }
-            restoreNavigationStack(transfer.navigationStack, on: navigationController, root: rootViewController)
-            guard navigationController.topViewController === transfer.topController else {
-                finish(transfer)
-                return
-            }
-            restoreModals(transfer, from: presenter, at: 0)
+            resume(transfer)
         }
         return true
     }
@@ -171,11 +177,54 @@ import UIKit
         root.movingBetweenWindowScenes = wasMoving
     }
 
+    private static func resume(_ transfer: PendingTransfer) {
+        guard pendingTransfer === transfer else { return }
+        if transfer.isInstallingWindow {
+            DispatchQueue.main.async { resume(transfer) }
+            return
+        }
+        let navigationController = transfer.navigationController
+        guard let destinationWindow = transfer.destinationWindow,
+              navigationController.view.window === destinationWindow else {
+            finish(transfer)
+            return
+        }
+        restoreNavigationStack(transfer.navigationStack, on: navigationController, root: transfer.root)
+        guard navigationController.topViewController === transfer.topController else {
+            finish(transfer)
+            return
+        }
+        restoreModals(transfer, from: transfer.presenter, at: 0, generation: transfer.generation)
+    }
+
+    private static func restart(_ transfer: PendingTransfer) {
+        guard pendingTransfer === transfer else { return }
+        guard transfer.presenter.presentedViewController != nil else {
+            resume(transfer)
+            return
+        }
+        transfer.presenter.dismiss(animated: false) {
+            resume(transfer)
+        }
+    }
+
     private static func restoreModals(
         _ transfer: PendingTransfer,
         from presenter: UIViewController,
-        at index: Int
+        at index: Int,
+        generation: Int
     ) {
+        guard pendingTransfer === transfer else { return }
+        if transfer.isInstallingWindow {
+            DispatchQueue.main.async {
+                restoreModals(transfer, from: presenter, at: index, generation: generation)
+            }
+            return
+        }
+        guard generation == transfer.generation else {
+            restart(transfer)
+            return
+        }
         guard index < transfer.modals.count else {
             finish(transfer)
             return
@@ -185,7 +234,7 @@ import UIKit
         presenter.present(modal.controller, animated: false) {
             // The presentation controller can be recreated by present(_:animated:completion:).
             modal.restorePresentation()
-            restoreModals(transfer, from: modal.controller, at: index + 1)
+            restoreModals(transfer, from: modal.controller, at: index + 1, generation: generation)
         }
     }
 

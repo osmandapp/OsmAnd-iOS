@@ -19,7 +19,20 @@ extension UIApplication {
     
     @objc var mainScene: UIScene? {
         let scenes = connectedScenes.filter { $0.session.configuration.name == Constants.defaultConfiguration }
-        return scenes.first { $0.activationState == .foregroundActive }
+        let activeScenes = scenes.filter { $0.activationState == .foregroundActive }
+        // Multiple scenes can be foreground-active, and connectedScenes has no focus order.
+        // Prefer the scene that currently hosts the shared root controller over a placeholder window.
+        if activeScenes.count > 1,
+           let owner = (delegate as? OAAppDelegate)?
+            .rootViewController?
+            .navigationController?
+            .viewIfLoaded?
+            .window?
+            .windowScene,
+           activeScenes.contains(where: { $0 === owner }) {
+            return owner
+        }
+        return activeScenes.first
             ?? scenes.first { $0.activationState == .foregroundInactive }
             ?? scenes.first
     }

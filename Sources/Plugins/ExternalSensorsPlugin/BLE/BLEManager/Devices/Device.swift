@@ -78,10 +78,6 @@ class Device: NSObject {
         nil
     }
 
-    var getDataFields: [[String: String]]? {
-        nil
-    }
-
     var getSettingsFields: [String: Any]? {
         nil
     }
@@ -137,6 +133,10 @@ class Device: NSObject {
                 didDisconnectDevice()
             }
         }
+    }
+    
+    func getDataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
+        nil
     }
 
     /*

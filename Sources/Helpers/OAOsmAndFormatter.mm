@@ -402,11 +402,21 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
+    return [self getFormattedSpeed:metersperseconds mode:nil valueUnitArray:valueUnitArray];
+}
+
++ (NSString *)getFormattedSpeed:(float)metersperseconds mode:(OAApplicationMode *)mode
+{
+    return [self getFormattedSpeed:metersperseconds mode:mode valueUnitArray:nil];
+}
+
++ (NSString *)getFormattedSpeed:(float)metersperseconds mode:(OAApplicationMode *)mode valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
+{
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    OAApplicationMode *mode = [settings.applicationMode get];
+    OAApplicationMode *appMode = mode ?: [settings.applicationMode get];
     return [self getFormattedSpeed:metersperseconds
-                       speedSystem:[settings.speedSystem get:mode]
-                             drive:[mode hasFastSpeed]
+                       speedSystem:[settings.speedSystem get:appMode]
+                             drive:[appMode hasFastSpeed]
                     valueUnitArray:valueUnitArray];
 }
 

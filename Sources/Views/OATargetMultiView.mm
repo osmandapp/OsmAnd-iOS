@@ -31,6 +31,7 @@
 @implementation OATargetMultiView
 {
     NSObject *_hideAnimationToken;
+    void (^_hideCompletion)(BOOL hidden);
 }
 
 - (instancetype) init
@@ -178,7 +179,8 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    _hideAnimationToken = nil;
+    [self cancelHide];
+    [self.layer removeAllAnimations];
     //[self applyMapInteraction:self.frame.size.height];
     
     if (animated)
@@ -225,7 +227,24 @@
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    [self hide:animated duration:duration completion:^(BOOL hidden) {
+        if (hidden && onComplete)
+            onComplete();
+    }];
+}
+
+- (void)cancelHide
+{
     _hideAnimationToken = nil;
+    void (^completion)(BOOL) = _hideCompletion;
+    _hideCompletion = nil;
+    if (completion)
+        completion(NO);
+}
+
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration completion:(void (^)(BOOL hidden))completion
+{
+    [self cancelHide];
     if (self.superview)
     {
         CGRect frame = self.frame;
@@ -238,20 +257,21 @@
         {
             NSObject *hideAnimationToken = [NSObject new];
             _hideAnimationToken = hideAnimationToken;
+            _hideCompletion = [completion copy];
             [UIView animateWithDuration:duration animations:^{
                 
                 self.frame = frame;
                 
             } completion:^(BOOL finished) {
                 // A newer show or hide supersedes this request, even if its animation completes later.
-                if (_hideAnimationToken == hideAnimationToken)
-                {
-                    _hideAnimationToken = nil;
-                    [self removeFromSuperview];
-                }
-                
-                if (onComplete)
-                    onComplete();
+                if (_hideAnimationToken != hideAnimationToken)
+                    return;
+
+                _hideAnimationToken = nil;
+                _hideCompletion = nil;
+                [self removeFromSuperview];
+                if (completion)
+                    completion(YES);
             }];
         }
         else
@@ -260,8 +280,8 @@
             
             [self removeFromSuperview];
             
-            if (onComplete)
-                onComplete();
+            if (completion)
+                completion(YES);
         }
     }
 }

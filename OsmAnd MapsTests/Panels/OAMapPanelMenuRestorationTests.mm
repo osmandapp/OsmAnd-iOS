@@ -9,6 +9,7 @@
 #import "OAAppDelegate.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OATargetMultiView.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseScrollableHudViewController (PlanRouteTestFactory)
 + (void)showNewRoute;
@@ -20,6 +21,8 @@
 - (void)hideMultiMenuIfNeeded;
 - (void)hideTargetPointMenu:(CGFloat)duration onComplete:(void (^)(void))completion;
 - (void)hideTargetPointMenu:(CGFloat)duration onComplete:(void (^)(void))completion hideActiveTarget:(BOOL)hideActiveTarget mapGestureAction:(BOOL)mapGestureAction;
+- (void)enqueueContextMenuPresentation:(void (^)(void))presentation;
+- (void)showMultiPointMenu:(CLLocation *)touchPointLatLon points:(NSArray<OATargetPoint *> *)points selectedObjects:(NSMutableArray<SelectedMapObject *> *)selectedObjects onComplete:(void (^)(void))onComplete;
 @end
 
 // Delay dismissal so the tests exercise restoration after the menu animation.
@@ -185,37 +188,119 @@
     XCTAssertEqual(panel.prevScrollableHudViewController, planner);
 }
 
-- (void)checkReopeningMultiMenuDuringHide:(BOOL)animated
+- (void)checkReopeningMultiMenuDuringHide:(BOOL)animated backButton:(BOOL)backButton
 {
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
-    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:container.bounds];
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    panel.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    OABaseScrollableHudViewController *planner = [[OABaseScrollableHudViewController alloc] initWithNibName:nil bundle:nil];
+    planner.view = [[UIView alloc] initWithFrame:panel.view.bounds];
+    [panel setValue:planner forKey:@"prevScrollableHudViewController"];
+    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:panel.view.bounds];
+    panel.targetMultiMenuView = menu;
     OATargetPoint *point = [[OATargetPoint alloc] init];
     point.title = @"Test point";
     menu.targetPoints = @[point];
-    [container addSubview:menu];
+    [panel.view addSubview:menu];
     [menu show:NO onComplete:nil];
 
-    XCTestExpectation *hideCompleted = [self expectationWithDescription:@"Previous hide completed"];
-    [menu hide:YES duration:0.2 onComplete:^{
+    XCTestExpectation *hideCompleted = [self expectationWithDescription:@"Cancelled hide must not complete"];
+    hideCompleted.inverted = YES;
+    [panel targetHideMenu:0.2 backButtonClicked:backButton onComplete:^{
         [hideCompleted fulfill];
     }];
     XCTestExpectation *showCompleted = [self expectationWithDescription:@"Menu shown again"];
     [menu show:animated onComplete:^{
         [showCompleted fulfill];
     }];
-    [self waitForExpectations:@[hideCompleted, showCompleted] timeout:3];
+    [self waitForExpectations:@[hideCompleted, showCompleted] timeout:1];
 
-    XCTAssertEqual(menu.superview, container);
+    XCTAssertEqual(menu.superview, panel.view);
+    XCTAssertNil(panel.scrollableHudViewController);
+    XCTAssertNil(planner.parentViewController);
+    XCTAssertNil(planner.view.superview);
+    XCTAssertEqual(panel.prevScrollableHudViewController, planner);
+
+    XCTestExpectation *dismissed = [self expectationWithDescription:@"Reopened menu dismissed"];
+    [panel targetHideMenu:0.2 backButtonClicked:backButton onComplete:^{ [dismissed fulfill]; }];
+    [self waitForExpectations:@[dismissed] timeout:3];
+
+    XCTAssertNil(menu.superview);
+    XCTAssertEqual(panel.scrollableHudViewController, planner);
+    XCTAssertEqual(planner.parentViewController, panel);
+    XCTAssertEqual(planner.view.superview, panel.view);
+    XCTAssertNil(panel.prevScrollableHudViewController);
 }
 
 - (void)testReopeningMultiMenuDuringHideKeepsItVisible
 {
-    [self checkReopeningMultiMenuDuringHide:YES];
+    [self checkReopeningMultiMenuDuringHide:YES backButton:NO];
 }
 
 - (void)testReopeningMultiMenuWithoutAnimationDuringHideKeepsItVisible
 {
-    [self checkReopeningMultiMenuDuringHide:NO];
+    [self checkReopeningMultiMenuDuringHide:NO backButton:NO];
+}
+
+- (void)testReopeningMultiMenuDuringBackButtonDismissalKeepsEditorSuspended
+{
+    [self checkReopeningMultiMenuDuringHide:YES backButton:YES];
+}
+
+- (void)testReopeningMultiMenuCancelsPendingPresentationAndAllowsNextRequest
+{
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    panel.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    OABaseScrollableHudViewController *planner = [[OABaseScrollableHudViewController alloc] initWithNibName:nil bundle:nil];
+    planner.view = [[UIView alloc] initWithFrame:panel.view.bounds];
+    [panel setValue:planner forKey:@"prevScrollableHudViewController"];
+    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:panel.view.bounds];
+    OATargetPoint *point = [[OATargetPoint alloc] init];
+    point.title = @"Test point";
+    menu.targetPoints = @[point];
+    panel.targetMultiMenuView = menu;
+    [panel.view addSubview:menu];
+    [menu show:NO onComplete:nil];
+
+    ContextMenuPresentationCoordinator *coordinator = [ContextMenuPresentationCoordinator new];
+    [panel setValue:coordinator forKey:@"contextMenuPresentationCoordinator"];
+    XCTestExpectation *cancelled = [self expectationWithDescription:@"Superseded presentation must not run"];
+    cancelled.inverted = YES;
+    [panel enqueueContextMenuPresentation:^{ [cancelled fulfill]; }];
+    XCTAssertTrue(coordinator.isTransitionInProgress);
+
+    [panel showMultiPointMenu:nil points:@[point] selectedObjects:nil onComplete:nil];
+    XCTAssertFalse(coordinator.isTransitionInProgress);
+    [self waitForExpectations:@[cancelled] timeout:1];
+    XCTAssertEqual(menu.superview, panel.view);
+    XCTAssertNil(panel.scrollableHudViewController);
+    XCTAssertNil(planner.view.superview);
+    XCTAssertEqual(panel.prevScrollableHudViewController, planner);
+
+    XCTestExpectation *presented = [self expectationWithDescription:@"Next presentation completed"];
+    [panel enqueueContextMenuPresentation:^{ [presented fulfill]; }];
+    [self waitForExpectations:@[presented] timeout:3];
+    XCTAssertFalse(coordinator.isTransitionInProgress);
+    XCTAssertNil(menu.superview);
+    XCTAssertEqual(panel.prevScrollableHudViewController, planner);
+}
+
+- (void)testNewHideCancelsPreviousDismissal
+{
+    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1366, 1024)];
+    OATargetMultiView *menu = [[OATargetMultiView alloc] initWithFrame:container.bounds];
+    [container addSubview:menu];
+    XCTestExpectation *cancelled = [self expectationWithDescription:@"Previous hide cancelled"];
+    [menu hide:YES duration:0.2 completion:^(BOOL hidden) {
+        XCTAssertFalse(hidden);
+        [cancelled fulfill];
+    }];
+    XCTestExpectation *dismissed = [self expectationWithDescription:@"New hide completed"];
+    [menu hide:YES duration:0.3 completion:^(BOOL hidden) {
+        XCTAssertTrue(hidden);
+        [dismissed fulfill];
+    }];
+    [self waitForExpectations:@[cancelled, dismissed] timeout:3];
+    XCTAssertNil(menu.superview);
 }
 
 - (void)testRealPlannerRestoresViewportCenterToCrosshair

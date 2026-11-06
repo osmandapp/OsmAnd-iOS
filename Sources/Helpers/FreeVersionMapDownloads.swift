@@ -15,6 +15,7 @@ final class FreeVersionMapDownloads: NSObject {
     private static let preferencesName = "net.osmand.free_region"
     private static let regionKey = "region"
     private static let replacesKey = "replaces"
+    private static let federations: Set<String> = ["northamerica_us", "northamerica_canada", "russia", "southamerica_brazil", "asia_india", "asia_china", "australia-oceania-all_australia-oceania"]
     
     var isFreeVersion: Bool {
         !OAIAPHelper.isPaidVersion()
@@ -51,6 +52,32 @@ final class FreeVersionMapDownloads: NSObject {
             values[Self.regionKey] = regionId
             values[Self.replacesKey] = (values[Self.replacesKey] as? Int ?? 0) + 1
         }
+    }
+    
+    private func getFreeRegionOf(_ region: OAWorldRegion) -> OAWorldRegion? {
+        let country = getCountryRegion(region)
+        if let country, Self.federations.contains(country.regionId), country != region {
+            var state = region
+            while let superregion = state.superregion, superregion != country {
+                state = superregion
+            }
+            return state
+        }
+        
+        return country
+    }
+    
+    private func getCountryRegion(_ region: OAWorldRegion) -> OAWorldRegion? {
+        if region.isContinent() { return nil }
+        var current = region
+        while let parent = current.superregion {
+            if parent.isContinent() || parent.regionId == nil {
+                return current
+            }
+            current = parent
+        }
+        
+        return nil
     }
     
     private func storeFreeRegion(_ region: OAWorldRegion) {

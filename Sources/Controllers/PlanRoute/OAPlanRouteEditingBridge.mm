@@ -1747,6 +1747,25 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return gpx;
 }
 
++ (void)refreshSavedGpx:(OASGpxFile *)gpx file:(OASKFile *)file
+{
+    gpx.path = file.absolutePath;
+    NSString *shortPath = [OAUtilities getGpxShortPath:gpx.path];
+    OAGPXDatabase *database = OAGPXDatabase.sharedDb;
+    OASGpxDataItem *item = [database getGPXItem:shortPath];
+    if (!item)
+    {
+        item = [database addGPXFileToDBIfNeeded:shortPath];
+        [item readGpxParamsGpxFile:gpx];
+    }
+    [item setAnalysisAnalysis:[gpx getAnalysisFileTimestamp:file.lastModified
+                                            fromDistance:nil
+                                              toDistance:nil
+                                          pointsAnalyzer:[OASPlatformUtil.shared getTrackPointsAnalyser]]];
+    item.lastModifiedTime = [NSDate dateWithTimeIntervalSince1970:file.lastModified / 1000.];
+    [database updateDataItem:item];
+}
+
 - (void)performSaveWithFileName:(NSString *)fileName
                          folder:(nullable NSString *)folder
                       showOnMap:(BOOL)showOnMap
@@ -1789,12 +1808,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         if (success)
         {
             gpxFilePath = [OAUtilities getGpxShortPath:outFile];
-            OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
-            OASGpxDataItem *item = [gpxDb getGPXItem:gpxFilePath];
-            if (!item)
-                item = [gpxDb addGPXFileToDBIfNeeded:gpxFilePath];
-            [item setAnalysisAnalysis:[gpx getAnalysisFileTimestamp:file.lastModified]];
-            [gpxDb updateDataItem:item];
+            [OAPlanRouteEditingBridge refreshSavedGpx:gpx file:file];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             __strong __typeof(weakSelf) strongSelf = weakSelf;
@@ -1899,10 +1913,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         if (success)
         {
             NSString *gpxFilePath = [OAUtilities getGpxShortPath:outFile];
-            OASGpxDataItem *item = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
-            if (!item)
-                item = [OAGPXDatabase.sharedDb addGPXFileToDBIfNeeded:gpxFilePath];
-            [OAGPXDatabase.sharedDb updateDataItem:item];
+            [OAPlanRouteEditingBridge refreshSavedGpx:gpx file:file];
             if (showOnMap)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -1970,11 +1981,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             success = exception == nil;
             if (success)
             {
-                NSString *gpxFilePath = [OAUtilities getGpxShortPath:absPath];
-                OASGpxDataItem *item = [OAGPXDatabase.sharedDb getGPXItem:gpxFilePath];
-                if (!item)
-                    item = [OAGPXDatabase.sharedDb addGPXFileToDBIfNeeded:gpxFilePath];
-                [OAGPXDatabase.sharedDb updateDataItem:item];
+                [OAPlanRouteEditingBridge refreshSavedGpx:currentGpx file:file];
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -48,6 +48,7 @@ static NSString *kPlatformHuawei = @"huawei";
 static NSString *kPlatformFastspring = @"fastspring";
 static NSString *const kFreeMapsAvailableKey = @"freeMapsAvailable";
 static NSString *const kFreeMapsMarkerCreatedKey = @"freeMapsMarkerCreated";
+static NSString *const kNightlyBundleId = @"net.osmand.maps.nightly";
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
@@ -181,6 +182,7 @@ static OASubscriptionState *EXPIRED;
     
     BOOL _wasAddedToQueue;
     BOOL _wasProductListFetched;
+    BOOL _externalPurchasesVerified;
     
     NSTimeInterval _lastBackupPurchaseCheckTime;
     BOOL _backupPurchaseRequested;
@@ -809,6 +811,7 @@ static OASubscriptionState *EXPIRED;
 
         _productsRequestInProgress = YES;
     }
+    _externalPurchasesVerified = NO;
 
     // Add self as transaction observer
     if (!_wasAddedToQueue)
@@ -859,6 +862,8 @@ static OASubscriptionState *EXPIRED;
                 if (hasToken)
                 {
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        __block BOOL subscriptionsVerified = NO;
+                        __block BOOL inAppsVerified = NO;
                         [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/getAll" params:params post:NO async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                             if (response && ((NSHTTPURLResponse *)response).statusCode == 200 && data)
                             {
@@ -867,7 +872,10 @@ static OASubscriptionState *EXPIRED;
                                     NSError *jsonParsingError = nil;
                                     NSArray *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonParsingError];
                                     if (!jsonParsingError)
+                                    {
                                         _subscriptionStateMap = [self parseSubscriptionStates:resultJson];
+                                        subscriptionsVerified = [resultJson isKindOfClass:[NSArray class]];
+                                    }
                                 }
                                 @catch (NSException *e)
                                 {
@@ -890,7 +898,10 @@ static OASubscriptionState *EXPIRED;
                                         if ([self isEmptyDictionary:resultJson])
                                             [self logoutUser];
                                         else if ([resultJson isKindOfClass:[NSArray class]])
+                                        {
                                             _inAppStateMap = [self parseInAppStates:(NSArray *)resultJson];
+                                            inAppsVerified = YES;
+                                        }
                                         else
                                             NSLog(@"Unexpected JSON type");
                                     }
@@ -902,6 +913,7 @@ static OASubscriptionState *EXPIRED;
                             }
                         }];
                         
+                        _externalPurchasesVerified = subscriptionsVerified && inAppsVerified;
                         [self startProductsRequest];
                     });
                     return;
@@ -925,6 +937,33 @@ static OASubscriptionState *EXPIRED;
 {
     [[OABackupHelper sharedInstance] logout];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
+}
+
++ (BOOL) isNightlyBuild
+{
+    return [NSBundle.mainBundle.bundleIdentifier isEqualToString:kNightlyBundleId];
+}
+
+- (void) onCloudAccountChanged
+{
+    if (![self.class isNightlyBuild])
+        return;
+
+    if (_settings.backupAccessToken.get.length == 0)
+    {
+        BOOL isPaidVersion = [self.class isPaidVersion];
+        BOOL isOsmAndProAvailable = [self.class isOsmAndProAvailable];
+
+        _subscriptionStateMap = nil;
+        _inAppStateMap = nil;
+        [_settings.osmandProPurchased set:NO];
+        [_settings.osmandMapsPurchased set:NO];
+        [_settings.fullVersionPurchased set:NO];
+
+        if (isPaidVersion != [self.class isPaidVersion] || isOsmAndProAvailable != [self.class isOsmAndProAvailable])
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+    }
+    [self requestProductsWithCompletionHandler:nil];
 }
 
 - (void) disableProduct:(NSString *)productIdentifier
@@ -1341,6 +1380,14 @@ static OASubscriptionState *EXPIRED;
             [_settings.depthContoursPurchased set:depth];
             [_settings.contourLinesPurchased set:contour];
             [_settings.wikipediaPurchased set:wiki];
+        }
+        else if ([self.class isNightlyBuild] && _externalPurchasesVerified)
+        {
+            // The receipt of Nightly is never validated and it has no App Store products,
+            // so the purchases linked to the OsmAnd Cloud account are the only source of truth
+            [_settings.osmandProPurchased set:pro];
+            [_settings.osmandMapsPurchased set:maps];
+            [_settings.fullVersionPurchased set:full];
         }
 
         for (OAProduct *p in purchased)

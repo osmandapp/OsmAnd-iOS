@@ -10,9 +10,14 @@ import UIKit
         let presenter: UIViewController
         let modals: [ModalState]
 
-        init(root: OARootViewController, navigationController: UINavigationController,
-             navigationStack: [UIViewController], topController: UIViewController?,
-             presenter: UIViewController, modals: [ModalState]) {
+        init(
+            root: OARootViewController,
+            navigationController: UINavigationController,
+            navigationStack: [UIViewController],
+            topController: UIViewController?,
+            presenter: UIViewController,
+            modals: [ModalState]
+        ) {
             self.root = root
             self.navigationController = navigationController
             self.navigationStack = navigationStack
@@ -22,13 +27,16 @@ import UIKit
         }
     }
 
-    private static var pendingTransfer: PendingTransfer?
-
     /// Presentation controllers can lose sheet height and popover anchors when moved between windows.
     private struct ModalState {
         let controller: UIViewController
+        let hadSheet: Bool
         let detents: [UISheetPresentationController.Detent]
         let selectedDetent: UISheetPresentationController.Detent.Identifier?
+        let prefersGrabberVisible: Bool
+        let preferredCornerRadius: CGFloat?
+        let prefersScrollingExpandsWhenScrolledToEdge: Bool
+        let largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
         let sourceView: UIView?
         let sourceRect: CGRect
         let barButtonItem: UIBarButtonItem?
@@ -37,8 +45,13 @@ import UIKit
         init(_ controller: UIViewController) {
             self.controller = controller
             let sheet = controller.sheetPresentationController
+            hadSheet = sheet != nil
             detents = sheet?.detents ?? []
             selectedDetent = sheet?.selectedDetentIdentifier
+            prefersGrabberVisible = sheet?.prefersGrabberVisible ?? false
+            preferredCornerRadius = sheet?.preferredCornerRadius
+            prefersScrollingExpandsWhenScrolledToEdge = sheet?.prefersScrollingExpandsWhenScrolledToEdge ?? true
+            largestUndimmedDetentIdentifier = sheet?.largestUndimmedDetentIdentifier
 
             let popover = controller.popoverPresentationController
             sourceView = popover?.sourceView
@@ -48,9 +61,15 @@ import UIKit
         }
 
         func restorePresentation() {
-            if let sheet = controller.sheetPresentationController, !detents.isEmpty {
-                sheet.detents = detents
+            if hadSheet, let sheet = controller.sheetPresentationController {
+                if !detents.isEmpty {
+                    sheet.detents = detents
+                }
                 sheet.selectedDetentIdentifier = selectedDetent
+                sheet.prefersGrabberVisible = prefersGrabberVisible
+                sheet.preferredCornerRadius = preferredCornerRadius
+                sheet.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
+                sheet.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
             }
 
             if let popover = controller.popoverPresentationController {
@@ -67,8 +86,9 @@ import UIKit
         }
     }
 
-    @objc
-    static func attach(_ rootViewController: OARootViewController, to window: UIWindow) -> Bool {
+    private static var pendingTransfer: PendingTransfer?
+
+    @objc static func attach(_ rootViewController: OARootViewController, to window: UIWindow) -> Bool {
         let navigationController = rootViewController.navigationController
             ?? OANavigationController(rootViewController: rootViewController)
         let pending = pendingTransfer
@@ -151,8 +171,11 @@ import UIKit
         root.movingBetweenWindowScenes = wasMoving
     }
 
-    private static func restoreModals(_ transfer: PendingTransfer, from presenter: UIViewController,
-                                      at index: Int) {
+    private static func restoreModals(
+        _ transfer: PendingTransfer,
+        from presenter: UIViewController,
+        at index: Int
+    ) {
         guard index < transfer.modals.count else {
             finish(transfer)
             return

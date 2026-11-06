@@ -18,6 +18,10 @@
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
+// Order of the point selected on a chart: above favorites, POI, transport stops, ruler,
+// track waypoints and start/finish icons, below destinations and my position
+static const int kHighlightedPointOrder = -200000;
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/VectorLine.h>
@@ -65,7 +69,7 @@
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
     locationMarkerBuilder.setIsAccuracyCircleSupported(false);
-    locationMarkerBuilder.setBaseOrder(self.pointsOrder - 25);
+    locationMarkerBuilder.setBaseOrder(kHighlightedPointOrder);
     locationMarkerBuilder.setIsHidden(true);
     
     _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);

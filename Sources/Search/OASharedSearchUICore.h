@@ -66,6 +66,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithShared:(OASSearchUICoreSearchResultCollection *)shared;
 
+/** Call off the main thread to prepare a visible snapshot. Returns nil when cancelled. */
+- (nullable NSArray<OASearchResult *> *)prepareVisibleResultsWithCancellation:(BOOL (^)(void))cancelled;
+
 @end
 
 @interface OASearchResult (Shared)

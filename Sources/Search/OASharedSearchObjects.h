@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable id)appObjectFor:(nullable id)sharedObject;
 
+/** Checks the same type restrictions as appObjectFor: without constructing a POI or address. */
++ (BOOL)canConvertSharedObject:(nullable id)sharedObject;
+
 /**
  The object the shared search takes for one the app puts into a result it makes itself: a poi category,
  filter or type the shared one of the same key, a poi filter of the app one the shared search can call,

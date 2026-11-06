@@ -194,6 +194,15 @@
 
 @implementation OASharedSearchObjects
 
++ (BOOL)canConvertSharedObject:(nullable id)sharedObject
+{
+    if ([sharedObject isKindOfClass:OASAmenity.class])
+        return [OAAmenitySearcher searchableTypeForSharedAmenity:sharedObject] != nil;
+    if ([sharedObject isKindOfClass:OASAbstractPoiType.class])
+        return [self poiType:sharedObject] != nil;
+    return YES;
+}
+
 + (nullable id)appObjectFor:(nullable id)sharedObject
 {
     if ([sharedObject isKindOfClass:OASCity.class])

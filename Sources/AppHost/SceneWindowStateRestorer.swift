@@ -42,6 +42,7 @@ import UIKit
         let prefersGrabberVisible: Bool
         let preferredCornerRadius: CGFloat?
         let prefersScrollingExpandsWhenScrolledToEdge: Bool
+        let widthFollowsPreferredContentSizeWhenEdgeAttached: Bool
         let largestUndimmedDetentIdentifier: UISheetPresentationController.Detent.Identifier?
         let sourceView: UIView?
         let sourceRect: CGRect
@@ -58,6 +59,7 @@ import UIKit
             prefersGrabberVisible = sheet?.prefersGrabberVisible ?? false
             preferredCornerRadius = sheet?.preferredCornerRadius
             prefersScrollingExpandsWhenScrolledToEdge = sheet?.prefersScrollingExpandsWhenScrolledToEdge ?? true
+            widthFollowsPreferredContentSizeWhenEdgeAttached = sheet?.widthFollowsPreferredContentSizeWhenEdgeAttached ?? false
             largestUndimmedDetentIdentifier = sheet?.largestUndimmedDetentIdentifier
 
             let popover = controller.popoverPresentationController
@@ -76,6 +78,7 @@ import UIKit
                 sheet.prefersGrabberVisible = prefersGrabberVisible
                 sheet.preferredCornerRadius = preferredCornerRadius
                 sheet.prefersScrollingExpandsWhenScrolledToEdge = prefersScrollingExpandsWhenScrolledToEdge
+                sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = widthFollowsPreferredContentSizeWhenEdgeAttached
                 sheet.largestUndimmedDetentIdentifier = largestUndimmedDetentIdentifier
                 sheet.delegate = sheetDelegate
             }

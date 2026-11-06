@@ -16,6 +16,7 @@
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -39,7 +40,7 @@
     int _currY;
     OsmAnd::AreaI _currArea;
     
-    BOOL _cancelled;
+    std::atomic_bool _cancelled;
     
     OASQLiteTileSource *_sqliteSource;
     std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> _onlineSource;
@@ -50,13 +51,14 @@
 {
     self = [super init];
     if (self) {
+        _cancelled = false;
         NSURLSessionConfiguration *backgroundSessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
         backgroundSessionConfiguration.timeoutIntervalForRequest = 300.0;
         backgroundSessionConfiguration.timeoutIntervalForResource = 600.0;
         backgroundSessionConfiguration.HTTPMaximumConnectionsPerHost = 70;
         _urlSession = [NSURLSession sessionWithConfiguration:backgroundSessionConfiguration
                                                                delegate:nil
-                                                          delegateQueue:[NSOperationQueue mainQueue]];
+                                                          delegateQueue:nil];
         _item = item;
         _minZoom = minZoom;
         _maxZoom = maxZoom;
@@ -90,6 +92,13 @@
         }
     }
     return self;
+}
+
+- (OAMapTileDownloader *)downloaderForRetry
+{
+    OAMapTileDownloader *downloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
+    downloader->_areasByZoomIndex = _areasByZoomIndex;
+    return downloader;
 }
 
 - (BOOL) hasNextTileId
@@ -161,11 +170,11 @@
     if (_type == EOATileRequestTypeUndefined)
         return;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [_urlSession.delegateQueue addOperationWithBlock:^{
         for (NSInteger i = 0; i < kMaxRequests; i++) {
             [self startDownloadIfPossible];
         }
-    });
+    }];
 }
 
 - (void) startDownloadIfPossible
@@ -240,26 +249,66 @@
     }
 }
 
+- (BOOL)isSuccessfulResponse:(NSURLResponse *)response location:(NSURL *)location error:(NSError *)error
+{
+    if (error || !location)
+        return NO;
+
+    if ([response isKindOfClass:NSHTTPURLResponse.class])
+    {
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        if (statusCode < 200 || statusCode >= 300)
+            return NO;
+    }
+
+    return OsmAnd::SkiaUtilities::createImageFromFile(QFileInfo(QString::fromNSString(location.path))) != nullptr;
+}
+
+- (void)onTileFailed
+{
+    if (_cancelled)
+        return;
+
+    if (_delegate)
+        [_delegate onTileFailed];
+
+    _activeDownloads--;
+    [self startDownloadIfPossible];
+}
+
 - (void) downloadTile:(NSURL *)url toPath:(NSString *)path
 {
     _activeDownloads++;
-    NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSError *err = nil;
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSString *userAgent = _onlineSource->userAgent.toNSString();
+    [request addValue:userAgent.length > 0 ? userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
+    NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        if (_cancelled)
+            return;
+
+        if (![self isSuccessfulResponse:response location:location error:error])
+        {
+            [self onTileFailed];
+            return;
+        }
+
         NSFileManager *fileManager = [NSFileManager defaultManager];
         NSString *dir = [path stringByDeletingLastPathComponent];
         [fileManager createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
         
         NSURL *targetURLDir = [NSURL fileURLWithPath:path];
         
-        if (targetURLDir && location)
+        if ([fileManager moveItemAtURL:location toURL:targetURLDir error:nil] || [fileManager fileExistsAtPath:path])
         {
-            [fileManager moveItemAtURL:location
-                                 toURL:targetURLDir
-                                 error:&err];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
-             _activeDownloads--;
+            
+            _activeDownloads--;
             [self startDownloadIfPossible];
+        }
+        else
+        {
+            [self onTileFailed];
         }
     }];
     [task resume];
@@ -274,15 +323,28 @@
     [request setHTTPMethod:@"GET"];
     [request addValue:tileSource.userAgent.length > 0 ? tileSource.userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
     NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSData *data = [NSData dataWithContentsOfFile:location.path];
-        if (data)
+        if (_cancelled)
+            return;
+
+        if (![self isSuccessfulResponse:response location:location error:error])
         {
-            [tileSource insertImage:x y:y zoom:zoom data:data];
-            [NSFileManager.defaultManager removeItemAtURL:url error:nil];
+            [self onTileFailed];
+            return;
+        }
+
+        NSData *data = [NSData dataWithContentsOfFile:location.path];
+        if (data && [tileSource insertImage:x y:y zoom:zoom data:data])
+        {
+            [NSFileManager.defaultManager removeItemAtURL:location error:nil];
             if (_delegate)
                 [_delegate onTileDownloaded:YES];
+            
             _activeDownloads--;
             [self startDownloadIfPossible];
+        }
+        else
+        {
+            [self onTileFailed];
         }
     }];
     [task resume];
@@ -290,8 +352,10 @@
 
 - (void) cancellAllRequests
 {
-    [_urlSession invalidateAndCancel];
     _cancelled = YES;
+    [_urlSession.delegateQueue addOperationWithBlock:^{
+        [_urlSession invalidateAndCancel];
+    }];
 }
 
 @end

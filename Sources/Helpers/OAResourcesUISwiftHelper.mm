@@ -114,6 +114,12 @@
     return res.sizePkg;
 }
 
+- (long long)size
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.size;
+}
+
 - (NSString *) formatedSize
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
@@ -158,6 +164,12 @@
         OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
         return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
     }
+}
+
+- (BOOL)isFree
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return [res isFree];
 }
 
 - (NSString *) resourceId
@@ -320,6 +332,28 @@
     if (downloadTask && downloadTask.resourceItem)
         return [[OAResourceSwiftItem alloc] initWithItem:downloadTask.resourceItem];
     return nil;
+}
+
++ (NSArray<OAResourceSwiftItem *> *) getInstalledMapResources
+{
+    NSMutableArray<OAResourceSwiftItem *> *swiftResources = [NSMutableArray array];
+    OsmAndAppInstance app = OsmAndApp.instance;
+    for (const auto& localResource : app.resourcesManager->getLocalResources())
+    {
+        if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed || (localResource->type != OsmAndResourceType::MapRegion && localResource->type != OsmAndResourceType::RoadMapRegion))
+            continue;
+        
+        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+        item.resourceId = localResource->id;
+        item.resourceType = localResource->type;
+        item.resource = localResource;
+        item.size = localResource->size;
+        item.worldRegion = [OAResourcesUIHelper findRegionOrAnySubregionOf:app.worldRegion thatContainsResource:localResource->id];
+        item.title = [OAResourcesUIHelper titleOfResource:localResource inRegion:item.worldRegion withRegionName:YES withResourceType:NO];
+        [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+    }
+    
+    return swiftResources;
 }
 
 + (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region

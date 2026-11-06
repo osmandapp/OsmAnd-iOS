@@ -244,7 +244,8 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
 {
     OAAppDelegate *appDelegate = [self appDelegate];
     OARootViewController *rootViewController = appDelegate.rootViewController;
-    if (appDelegate.appLaunchEvent != AppLaunchEventSetupRoot
+    if ((appDelegate.appLaunchEvent != AppLaunchEventSetupRoot
+         && appDelegate.appLaunchEvent != AppLaunchEventFirstLaunch)
         || !rootViewController.isViewLoaded
         || rootViewController.navigationController.view.window == _window)
         return;

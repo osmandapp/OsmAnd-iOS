@@ -96,6 +96,11 @@ import UIKit
 
     private static var pendingTransfer: PendingTransfer?
 
+    static func cancelModalRestoration(for root: OARootViewController) {
+        guard let transfer = pendingTransfer, transfer.root === root else { return }
+        finish(transfer)
+    }
+
     @objc static func attach(_ rootViewController: OARootViewController, to window: UIWindow) -> Bool {
         let navigationController = rootViewController.navigationController
             ?? OANavigationController(rootViewController: rootViewController)
@@ -109,13 +114,17 @@ import UIKit
                 ? navigationController.visibleViewController ?? navigationController
                 : navigationController
             var presented = presenter?.presentedViewController
-            while let modal = presented {
+            while let modal = presented, !modal.isBeingDismissed {
                 modals.append(ModalState(modal))
                 presented = modal.presentedViewController
             }
         }
 
-        let previousWindow = navigationController.view.window
+        let previousWindow = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.rootViewController === navigationController }
+            ?? navigationController.view.window
             ?? pending?.modals.first?.controller.viewIfLoaded?.window
             ?? modals.first?.controller.viewIfLoaded?.window
 
@@ -125,6 +134,9 @@ import UIKit
             return false
         }
 
+        let navigationChangedWhilePending = pending.map { transfer in
+            !navigationController.viewControllers.elementsEqual(transfer.navigationStack, by: { $0 === $1 })
+        } ?? false
         if let pending, pending.destinationWindow !== window {
             pending.destinationWindow = window
             pending.generation += 1
@@ -141,6 +153,12 @@ import UIKit
 
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
+        // Keep navigation changes made before this window transfer, such as a deep link.
+        if let pending, navigationChangedWhilePending {
+            pending.isInstallingWindow = false
+            finish(pending)
+            return true
+        }
         restoreNavigationStack(navigationStack, on: navigationController, root: rootViewController)
         pending?.isInstallingWindow = false
 
@@ -189,8 +207,8 @@ import UIKit
             finish(transfer)
             return
         }
-        restoreNavigationStack(transfer.navigationStack, on: navigationController, root: transfer.root)
-        guard navigationController.topViewController === transfer.topController else {
+        guard navigationController.viewControllers.elementsEqual(transfer.navigationStack, by: { $0 === $1 }),
+              navigationController.topViewController === transfer.topController else {
             finish(transfer)
             return
         }
@@ -199,8 +217,22 @@ import UIKit
 
     private static func restart(_ transfer: PendingTransfer) {
         guard pendingTransfer === transfer else { return }
-        guard transfer.presenter.presentedViewController != nil else {
+        var presented = transfer.presenter.presentedViewController
+        guard presented != nil else {
             resume(transfer)
+            return
+        }
+        // Dismiss only the part of the saved chain that we have already restored.
+        for modal in transfer.modals {
+            guard let controller = presented else { break }
+            guard controller === modal.controller else {
+                finish(transfer)
+                return
+            }
+            presented = controller.presentedViewController
+        }
+        guard presented == nil else {
+            finish(transfer)
             return
         }
         transfer.presenter.dismiss(animated: false) {
@@ -225,13 +257,14 @@ import UIKit
             restart(transfer)
             return
         }
-        guard index < transfer.modals.count else {
+        guard index < transfer.modals.count, presenter.presentedViewController == nil else {
             finish(transfer)
             return
         }
         let modal = transfer.modals[index]
         modal.restorePresentation()
         presenter.present(modal.controller, animated: false) {
+            guard pendingTransfer === transfer else { return }
             // The presentation controller can be recreated by present(_:animated:completion:).
             modal.restorePresentation()
             restoreModals(transfer, from: modal.controller, at: index + 1, generation: generation)

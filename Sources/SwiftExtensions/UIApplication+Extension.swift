@@ -23,13 +23,10 @@ extension UIApplication {
         // Multiple scenes can be foreground-active, and connectedScenes has no focus order.
         // Prefer the scene that currently hosts the shared root controller over a placeholder window.
         if activeScenes.count > 1,
-           let owner = (delegate as? OAAppDelegate)?
-            .rootViewController?
-            .navigationController?
-            .viewIfLoaded?
-            .window?
-            .windowScene,
-           activeScenes.contains(where: { $0 === owner }) {
+           let navigationController = (delegate as? OAAppDelegate)?.rootViewController?.navigationController,
+           let owner = activeScenes.compactMap({ $0 as? UIWindowScene }).first(where: { scene in
+               scene.windows.contains { $0.rootViewController === navigationController }
+           }) {
             return owner
         }
         return activeScenes.first

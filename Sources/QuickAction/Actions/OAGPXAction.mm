@@ -100,7 +100,7 @@ static QuickActionType *TYPE;
     UIColor *color = self.getParams[kWptColor] ? UIColorFromARGB([self.getParams[kWptColor] intValue]) : [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[self.getParams[kCategoryColor] integerValue]];
 
     OASGpxUtilitiesPointsGroup *group = [OASavingTrackHelper sharedInstance].currentTrack.pointsGroups[groupName];
-    if (group.color != 0)
+    if (!self.getParams[kWptColor] && !self.getParams[kCategoryColor] && group.color != 0)
         color = UIColorFromARGB(group.color);
 
     OAGpxWptItem* wpt = [[OAGpxWptItem alloc] init];
@@ -110,11 +110,11 @@ static QuickActionType *TYPE;
     p.lon = lon;
     p.category = groupName;
     p.time = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
-    NSString *iconName = group.iconName.length > 0 ? group.iconName : self.getParams[kWptIcon];
+    NSString *iconName = [self.getParams[kWptIcon] length] > 0 ? self.getParams[kWptIcon] : group.iconName;
     if (iconName.length > 0)
         [p setIconNameIconName:iconName];
 
-    NSString *backgroundIconName = group.backgroundType.length > 0 ? group.backgroundType : self.getParams[kWptBackgroundType];
+    NSString *backgroundIconName = [self.getParams[kWptBackgroundType] length] > 0 ? self.getParams[kWptBackgroundType] : group.backgroundType;
     if (backgroundIconName.length > 0)
         [p setBackgroundTypeBackType:backgroundIconName];
 

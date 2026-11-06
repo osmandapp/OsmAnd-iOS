@@ -2209,6 +2209,8 @@
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
 		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
 		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
+		D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000002 /* OAFavoriteIconTests.mm */; };
+		D1C609900000000000000003 /* FavoriteOriginalIconUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */; };
 		D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */; };
 /* End PBXBuildFile section */
 
@@ -5767,6 +5769,8 @@
 		FE6716631789B78626884F9C /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = az; path = az.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
 		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
+		D1C609900000000000000002 /* OAFavoriteIconTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteIconTests.mm; sourceTree = "<group>"; };
+		D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteOriginalIconUITests.swift; sourceTree = "<group>"; };
 		D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPanelMenuRestorationTests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -7002,6 +7006,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */,
 				D57820010000000000000004 /* PlanRouteHistoryFixture.swift */,
 				D57820010000000000000002 /* PlanRouteHistoryUITests.swift */,
 				D1C571210000000000000003 /* Info.plist */,
@@ -11317,6 +11322,7 @@
 			children = (
 				D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */,
 				D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */,
+				D1C609900000000000000002 /* OAFavoriteIconTests.mm */,
 			);
 			path = PointEditing;
 			sourceTree = "<group>";
@@ -13808,6 +13814,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
+				D1C609900000000000000003 /* FavoriteOriginalIconUITests.swift in Sources */,
 				D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */,
 				D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */,
 			);
@@ -13840,6 +13847,7 @@
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
 				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,
+				D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */,
 				D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */,
 				D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */,
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,

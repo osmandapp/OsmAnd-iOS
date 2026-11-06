@@ -3227,7 +3227,11 @@ typedef enum
     double lon = item.point.lon;
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
-    [_mapViewController selectWpt:item];
+    if ([_mapViewController findWpt:item.point.position])
+    {
+        item.point = _mapViewController.foundWpt;
+        item.groups = _mapViewController.foundWptGroups;
+    }
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     NSString *caption = item.point.name;

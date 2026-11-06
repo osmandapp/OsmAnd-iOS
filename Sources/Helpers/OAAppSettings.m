@@ -2397,6 +2397,32 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 
 @end
 
+@implementation OACommonDefaultSpeed
+
++ (instancetype)withKey:(NSString *)key defValue:(double)defValue
+{
+    OACommonDefaultSpeed *obj = [[OACommonDefaultSpeed alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonDefaultSpeed *)[self setupCopy:[OACommonDefaultSpeed withKey:key defValue:self.defValue]];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    // Preserve the Float precision used by Android and the speed tolerance limits.
+    return [NSString stringWithFormat:@"%.9g", (float)[self get:mode]];
+}
+
+@end
+
 @interface OACommonStringList ()
 
 @property (nonatomic) NSArray<NSString *> *defValue;
@@ -6430,7 +6456,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];
         [_profilePreferences setObject:_locationRadiusVisibility forKey:@"location_radius_visibility"];
 
-        _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
+        _defaultSpeed = [OACommonDefaultSpeed withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
         [_defaultSpeed setModeDefaultValue:@12.5 mode:OAApplicationMode.CAR];
         [_defaultSpeed setModeDefaultValue:@2.77 mode:OAApplicationMode.BICYCLE];

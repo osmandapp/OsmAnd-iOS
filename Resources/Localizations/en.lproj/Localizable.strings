@@ -5101,3 +5101,22 @@
 "opening_hours_public_holiday" = "Public holidays";
 "opening_hours_school_holiday" = "School holidays";
 "opening_hours_easter" = "Easter";
+
+"free_region_not_chosen_descr" = "The region of your first downloaded map becomes your free region.";
+"free_region_banner_descr" = "All maps of %@ are free.";
+"free_region_other_title" = "%@ is not your free region";
+"free_region_other_descr" = "The free version includes maps of one region. To download %@, maps of other regions will be deleted.";
+"free_region_will_be_deleted" = "Will be deleted";
+"free_region_maps_stay" = "The world overview map, contour lines and other plugin maps stay.";
+"free_region_delete_and_download" = "Delete and download";
+"free_region_replace_used_title" = "Free replace already used";
+"free_region_not_eligible_email_descr" = "Leave your email to replace your free region once more, or get unlimited map downloads.";
+"free_region_email_helper" = "We\'ll send OsmAnd news. You can unsubscribe at any time.";
+"free_region_email_maps_deleted" = "Maps of %@ (%@) will be deleted.";
+"free_region_send_and_replace" = "Send and replace";
+"free_region_not_eligible_buy_descr" = "Your free region is %@. To download %@ and keep your current maps, get unlimited map downloads.";
+"outdated_maps_warning_title" = "Update your maps";
+"outdated_maps_warning_descr" = "The new search needs maps of this version. Update all your maps - it is free.";
+"free_region_other_regions_need_maps_plus" = "Other regions need Maps+: %@";
+"free_version_title" = "Free version";
+"get_unlimited_downloads" = "Get unlimited downloads";

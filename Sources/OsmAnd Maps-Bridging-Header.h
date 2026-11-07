@@ -78,6 +78,8 @@
 #import "OAGPXDocumentAdapter.h"
 #import "OATravelLocalDataDbHelper.h"
 #import "SceneDelegate.h"
+#import "OANavigationController.h"
+#import "OALaunchScreenViewController.h"
 #import "OALocationIcon.h"
 #import "OrderedDictionary.h"
 #import "OAMapActions.h"

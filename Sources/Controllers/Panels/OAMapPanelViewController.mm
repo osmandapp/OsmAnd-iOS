@@ -2843,14 +2843,6 @@ typedef enum
     if (self.targetMenuView.superview && ![self isSelectingNavigationPoint])
         [self hideTargetPointMenu];
     
-    CGRect frame = self.targetMultiMenuView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
-    self.targetMultiMenuView.frame = frame;
-    
-    [self.targetMultiMenuView.layer removeAllAnimations];
-    if ([self.view.subviews containsObject:self.targetMultiMenuView])
-        [self.targetMultiMenuView removeFromSuperview];
-    
     [self.targetMultiMenuView setTargetPoints:points];
     [self.targetMultiMenuView setSelectedMapObjects:selectedObjects];
     [self.targetMultiMenuView setTouchPoint:touchPointLatLon];
@@ -3370,7 +3362,7 @@ typedef enum
 {
     __weak __typeof(self) weakSelf = self;
     [_contextMenuPresentationCoordinator processPendingPresentationWithDismissHandlers:@[
-        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(void (^completion)(BOOL)) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
@@ -3381,18 +3373,18 @@ typedef enum
                 && [strongSelf->_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
                 return NO;
 
-            [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
+            [strongSelf->_scrollableHudViewController forceHideWithCompletion:^{ completion(YES); }];
             return YES;
         }],
-        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(void (^completion)(BOOL)) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf.targetMultiMenuView.superview)
                 return NO;
 
-            [strongSelf.targetMultiMenuView hide:YES duration:0.2 onComplete:completion];
+            [strongSelf.targetMultiMenuView hide:YES duration:0.2 completion:completion];
             return YES;
         }],
-        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(void (^completion)(BOOL)) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
@@ -3400,7 +3392,7 @@ typedef enum
             // Keep the planner suspended when replacing a search result menu.
             if (![strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
                 strongSelf->_prevScrollableHudViewController = nil;
-            [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
+            [strongSelf hideTargetPointMenu:0.2 onComplete:^{ completion(YES); } hideActiveTarget:YES mapGestureAction:NO];
             return YES;
         }],
     ]];

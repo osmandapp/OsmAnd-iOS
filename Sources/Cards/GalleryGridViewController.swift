@@ -227,7 +227,7 @@ extension GalleryGridViewController: UICollectionViewDelegate {
         let actionProvider: UIContextMenuActionProvider = { [weak self] _ in
             guard let self else { return nil }
             var firstSectionItems = [UIAction]()
-            if card is WikiImageCard {
+            if GalleryContextMenuProvider.hasDetails(card: card) {
                 let detailsAction = UIAction(title: localizedString("shared_string_details"), image: .icCustomInfoOutlined) { _ in
                     GalleryContextMenuProvider.openDetailsController(card: card, rootController: self)
                 }

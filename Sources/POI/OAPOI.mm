@@ -45,6 +45,7 @@ NSString * const WIKIMEDIA_COMMONS_TAG = @"wikimedia_commons";
 NSString * const WIKIPEDIA_TAG = @"wikipedia";
 NSString * const WIKI_PHOTO_TAG = @"wiki_photo";
 NSString * const MAPILLARY_TAG = @"mapillary";
+NSString * const PANORAMAX_TAG = @"panoramax";
 NSString * const DISH_TAG = @"dish";
 NSString * const POI_REF = @"ref";
 NSString * const OSM_DELETE_VALUE = @"delete";

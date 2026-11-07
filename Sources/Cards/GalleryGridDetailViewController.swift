@@ -77,6 +77,9 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
         let link: String
         if let wikiImageCard = card as? WikiImageCard {
             link = wikiImageCard.wikiImage?.getUrlWithCommonAttributions() ?? ""
+        } else if card is PanoramaxImageCard {
+            // The Panoramax photo page, not the raw picture file.
+            link = card.url
         } else {
             link = !card.imageHiresUrl.isEmpty ? card.imageHiresUrl : card.imageUrl
         }
@@ -125,7 +128,12 @@ final class GalleryGridDetailViewController: OABaseNavbarViewController {
     }
     
     private func getSourceTypeName(card: ImageCard) -> String {
-        card is WikiImageCard ? localizedString("wikimedia") : ""
+        if card is WikiImageCard {
+            return localizedString("wikimedia")
+        } else if card is PanoramaxImageCard {
+            return localizedString("panoramax")
+        }
+        return ""
     }
 }
 

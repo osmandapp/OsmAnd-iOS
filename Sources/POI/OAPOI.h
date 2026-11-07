@@ -35,6 +35,7 @@ extern NSString * const WIKIMEDIA_COMMONS_TAG;
 extern NSString * const WIKIPEDIA_TAG;
 extern NSString * const WIKI_PHOTO_TAG;
 extern NSString * const MAPILLARY_TAG;
+extern NSString * const PANORAMAX_TAG;
 extern NSString * const DISH_TAG;
 extern NSString * const POI_REF;
 extern NSString * const OSM_DELETE_VALUE;

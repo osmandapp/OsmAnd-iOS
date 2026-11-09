@@ -123,6 +123,8 @@
 {
     switch (searchResult.objectType)
     {
+        case EOAObjectTypeSuggestion:
+            return ACImageNameIcCustomSearch;
         case EOAObjectTypeLocation:
         case EOAObjectTypePartialLocation:
         {
@@ -290,6 +292,8 @@
 {
     switch (searchResult.objectType)
     {
+        case EOAObjectTypeSuggestion:
+            return @"";
         case EOAObjectTypeCity:
         case EOAObjectTypeBoundary:
         {

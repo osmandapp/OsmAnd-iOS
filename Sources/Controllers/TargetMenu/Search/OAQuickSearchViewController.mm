@@ -297,7 +297,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if ([self getResultCollection])
     {
         [self updateSearchResult:[self getResultCollection] append:false];
-        if (self.interruptedSearch || [self.searchUICore isSearchMoreAvailable:[self.searchUICore getPhrase]])
+        if (self.interruptedSearch || [self isSearchMoreAvailable:[self.searchUICore getPhrase]])
             [self addMoreButton];
     }
     if ([self.searchQuery length] > 0)
@@ -1632,15 +1632,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if (!onSearchFinished || onSearchFinished(obj.requiredSearchPhrase))
                     {
                         [self showSearchIcon];
-                        if (![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0)
+                        if ([self isResultEmpty])
                         {
                             [self addEmptyResult];
                         }
-                        if ([self.searchUICore isSearchMoreAvailable:obj.requiredSearchPhrase])
+                        if ([self isSearchMoreAvailable:obj.requiredSearchPhrase])
                         {
                             [self addMoreButton];
                         }
-                        else if (onPublish && (![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0))
+                        else if (onPublish && [self isResultEmpty])
                         {
                             onPublish([self getResultCollection], false);
                             [self addEmptyResult];
@@ -1665,14 +1665,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                 regionResultApi = nil;
                 regionResultCollection = nil;
                 results = [NSMutableArray array];
-                [self showApiResults:apiResults phrase:phrase hasRegionCollection:hasRegionCollection onPublish:onPublish];
+                [self showApiResults:apiResults phrase:phrase api:searchApi hasRegionCollection:hasRegionCollection onPublish:onPublish];
                 break;
             }
             case EOAObjectTypeSearchApiRegionFinished:
             {
                 regionResultApi = (OASearchCoreAPI *) obj.object;
                 OASearchPhrase *regionPhrase = obj.requiredSearchPhrase;
-                regionResultCollection = [[[OASearchResultCollection alloc] initWithPhrase:regionPhrase] addSearchResults:results resortAll:YES removeDuplicates:YES];
+                regionResultCollection = [[self.searchUICore createResultCollectionForPhrase:regionPhrase api:regionResultApi]
+                    addSearchResults:results resortAll:YES removeDuplicates:YES];
                 [self showRegionResults:regionResultCollection onPublish:onPublish];
                 break;
             }
@@ -1702,21 +1703,21 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
-- (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
+- (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase api:(id)api hasRegionCollection:(BOOL)hasRegionCollection onPublish:(OAPublishCallback)onPublish
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_paused && !_cancelPrev)
         {
             BOOL append = [self getResultCollection] != nil;
+            OASearchResultCollection *apiCollection = [self.searchUICore createResultCollectionForPhrase:phrase api:api];
+            [apiCollection addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
             if (append)
             {
-                [[self getResultCollection] addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
+                [self setResultCollection:[[self getResultCollection] combineWithCollection:apiCollection resort:YES removeDuplicates:YES]];
             }
             else
             {
-                OASearchResultCollection *resCollection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
-                [resCollection addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
-                [self setResultCollection:resCollection];
+                [self setResultCollection:apiCollection];
             }
             if (!hasRegionCollection && onPublish)
             {
@@ -1831,17 +1832,42 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     }
 }
 
+- (BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return [[self getResultCollection] hasMoreSpatialSearchResults] || [self.searchUICore isSearchMoreAvailable:phrase];
+}
+
+- (BOOL)showMoreSpatialSearchResults
+{
+    OASearchResultCollection *collection = [self getResultCollection];
+    if (![collection showMoreSpatialSearchResults])
+        return NO;
+
+    [self updateSearchResult:collection append:NO];
+    if ([self isSearchMoreAvailable:collection.phrase])
+        [self addMoreButton];
+    return YES;
+}
+
+- (void)increaseSearchRadius
+{
+    if ([self showMoreSpatialSearchResults])
+        return;
+
+    if (!self.interruptedSearch)
+    {
+        OASearchSettings *settings = [self.searchUICore getSearchSettings];
+        [self.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
+    }
+    [self runCoreSearch:self.searchQuery updateResult:NO searchMore:YES];
+}
+
 - (void) addMoreButton
 {
     __weak OAQuickSearchViewController *weakSelf = self;
-    OAQuickSearchMoreListItem *moreListItem = [[OAQuickSearchMoreListItem alloc] initWithName:OALocalizedString(@"search_POI_level_btn") onClickFunction:^(id sender) {
-
-        if (!weakSelf.interruptedSearch)
-        {
-            OASearchSettings *settings = [weakSelf.searchUICore getSearchSettings];
-            [weakSelf.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
-        }
-        [weakSelf runCoreSearch:weakSelf.searchQuery updateResult:NO searchMore:YES];
+    NSString *name = OALocalizedString([[self getResultCollection] hasMoreSpatialSearchResults] ? @"show_more" : @"search_POI_level_btn");
+    OAQuickSearchMoreListItem *moreListItem = [[OAQuickSearchMoreListItem alloc] initWithName:name onClickFunction:^(id sender) {
+        [weakSelf increaseSearchRadius];
     }];
 
     if (!_paused && !_cancelPrev)
@@ -1874,9 +1900,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if (!_paused)
     {
         NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
-        if (res && [res getCurrentSearchResults].count > 0)
-            for (OASearchResult *sr in [res getCurrentSearchResults])
-                [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+        for (OASearchResult *sr in [res getVisibleSpatialSearchResults])
+            [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
 
         [self updateData:rows append:append];
     }
@@ -1960,7 +1985,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) didSelectResult:(OASearchResult *)result
 {
-    [self completeQueryWithObject:result];
+    if (result.objectType == EOAObjectTypeSuggestion)
+    {
+        NSString *query = [result.localeName stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+        [self replaceQueryWithText:[query stringByAppendingString:@" "]];
+    }
+    else
+    {
+        [self completeQueryWithObject:result];
+    }
 }
 
 - (void) didShowOnMap:(OASearchResult *)searchResult
@@ -2189,7 +2222,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (BOOL) isResultEmpty
 {
-    return ![self getResultCollection] || [[self getResultCollection] getCurrentSearchResults].count == 0;
+    return [[self getResultCollection] getVisibleSpatialSearchResults].count == 0;
 }
 
 @end

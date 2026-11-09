@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
 		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
 		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
 		D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000002 /* PlanRouteHistoryUITests.swift */; };
@@ -2275,6 +2276,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
 		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
 		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
 		D57820010000000000000002 /* PlanRouteHistoryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryUITests.swift; sourceTree = "<group>"; };
@@ -10414,6 +10416,7 @@
 				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
 				AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */,
 				EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */,
+				E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */,
 				5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */,
 				CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */,
 				B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */,
@@ -13902,6 +13905,7 @@
 				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
 				DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */,
 				A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */,
+				E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */,
 				5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */,
 				D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */,
 				0D8544693BE51C1DE2A67275 /* OASharedSearchUICoreTest.mm in Sources */,

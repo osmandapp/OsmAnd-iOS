@@ -228,4 +228,88 @@
     XCTAssertEqualObjects(sorted.lastObject, @"germany_brandenburg_europe_25_10_28.live.obf");
 }
 
+- (void)testNumericMapNamesKeepTheirOwnDistance
+{
+    NSDictionary<NSString *, NSNumber *> *distances = @{
+        @"my_area_25_10_28.obf": @1,
+        @"my_area_25_10_28_extra.obf": @2,
+        @"my_area.obf": @3,
+    };
+    NSArray *input = @[@"my_area.obf", @"my_area_26_11_06.live.obf",
+                       @"my_area_25_10_28_extra.obf", @"my_area_25_10_28.obf"];
+    NSMutableSet *measured = [NSMutableSet set];
+    NSArray *sorted = [OAObfFileList sortedForSearch:input distance:^double(NSString *resourceId) {
+        XCTAssertNotNil(distances[resourceId]);
+        XCTAssertFalse([measured containsObject:resourceId]);
+        [measured addObject:resourceId];
+        return distances[resourceId].doubleValue;
+    }];
+    XCTAssertEqualObjects(measured, [NSSet setWithArray:distances.allKeys]);
+    XCTAssertEqualObjects(sorted, (@[@"my_area_25_10_28.obf", @"my_area_25_10_28_extra.obf",
+                                     @"my_area_26_11_06.live.obf", @"my_area.obf"]));
+    XCTAssertEqualObjects([OAObfFileList sortedForSearch:input],
+                          (@[@"my_area_26_11_06.live.obf", @"my_area.obf",
+                             @"my_area_25_10_28.obf", @"my_area_25_10_28_extra.obf"]));
+}
+
+- (void)testOnlyTheTerminalDateIdentifiesALiveUpdate
+{
+    NSString *region = @"district_12_34_56_sector.obf";
+    NSArray *input = @[region, @"district_12_34_56_sector_26_11_05.live.obf",
+                       @"district_12_34_56_sector_26_11_06.live.obf", @"nearby.obf"];
+    NSArray *expected = @[@"nearby.obf", @"district_12_34_56_sector_26_11_06.live.obf",
+                          @"district_12_34_56_sector_26_11_05.live.obf", region];
+    NSMutableSet *measured = [NSMutableSet set];
+    NSArray *sorted = [OAObfFileList sortedForSearch:input distance:^double(NSString *resourceId) {
+        XCTAssertTrue([resourceId isEqualToString:region] || [resourceId isEqualToString:@"nearby.obf"]);
+        [measured addObject:resourceId];
+        return [resourceId isEqualToString:region] ? 10 : 1;
+    }];
+    XCTAssertEqualObjects(measured, ([NSSet setWithArray:@[region, @"nearby.obf"]]));
+    XCTAssertEqualObjects(sorted, expected);
+}
+
+- (void)testMalformedLiveNamesRemainIndependentFiles
+{
+    NSArray *files = @[@"my_area_25_10_28_backup.live.obf", @"my_area25_10_28.live.obf",
+                       @"_25_10_28.live.obf", @"my_area_25_10_28.live.obf.extra",
+                       @"my_area_25_10_28\n.live.obf", @"my_area.obf"];
+    NSMutableSet *measured = [NSMutableSet set];
+    NSArray *sorted = [OAObfFileList sortedForSearch:files distance:^double(NSString *resourceId) {
+        [measured addObject:resourceId];
+        return [files indexOfObject:resourceId];
+    }];
+    XCTAssertEqualObjects(measured, [NSSet setWithArray:files]);
+    XCTAssertEqualObjects(sorted, files);
+}
+
+- (void)testFileOrderingBenchmark
+{
+    NSMutableArray *files = [NSMutableArray array];
+    for (int i = 0; i < 160; i++)
+    {
+        [files addObject:[NSString stringWithFormat:@"region_%03d.obf", i]];
+        [files addObject:[NSString stringWithFormat:@"region_%03d_26_10_00.live.obf", i]];
+        [files addObject:[NSString stringWithFormat:@"region_%03d_26_11_06.live.obf", i]];
+    }
+    NSMutableArray<NSNumber *> *samples = [NSMutableArray array];
+    for (int sample = 0; sample < 8; sample++)
+    {
+        CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+        for (int repeat = 0; repeat < 10; repeat++)
+        {
+            @autoreleasepool
+            {
+                NSArray *sorted = [OAObfFileList sortedForSearch:files distance:^double(NSString *resourceId) {
+                    return resourceId.length;
+                }];
+                XCTAssertEqual(sorted.count, files.count);
+            }
+        }
+        if (sample > 0) [samples addObject:@((CFAbsoluteTimeGetCurrent() - start) * 100)];
+    }
+    [samples sortUsingSelector:@selector(compare:)];
+    NSLog(@"OAObfFileListOrderTest: 480 files, distance sort median %.3f ms", samples[samples.count / 2].doubleValue);
+}
+
 @end

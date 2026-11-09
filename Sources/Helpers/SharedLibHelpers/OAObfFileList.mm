@@ -72,11 +72,15 @@
 // date of the update. "germany_berlin_europe_25_10_28.live.obf" is (germany_berlin_europe, 0, 25_10_28).
 static NSArray *orderKey(NSString *resourceId)
 {
-    NSString *name = [[resourceId stringByReplacingOccurrencesOfString:@".live.obf" withString:@""]
-                                  stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-    NSRange date = [name rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-    if (date.location != NSNotFound && date.location > 0)
-        return @[[name substringToIndex:date.location - 1], @0, [name substringFromIndex:date.location]];
+    BOOL live = [resourceId hasSuffix:@".live.obf"];
+    NSString *suffix = live ? @".live.obf" : @".obf";
+    NSString *name = [resourceId hasSuffix:suffix] ? [resourceId substringToIndex:resourceId.length - suffix.length] : resourceId;
+    if (live)
+    {
+        NSRange date = [name rangeOfString:@"_([0-9]+_){2}[0-9]+\\z" options:NSRegularExpressionSearch];
+        if (date.location != NSNotFound && date.location > 0)
+            return @[[name substringToIndex:date.location], @0, [name substringFromIndex:date.location + 1]];
+    }
     return @[name, @1, @""];
 }
 

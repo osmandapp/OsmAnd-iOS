@@ -772,6 +772,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     [self addRegionNamesToCommonWords];
     LogStartup(@"world regions loaded");
 
+    [self loadSharedRegions];
+    LogStartup(@"shared world regions loaded");
+
     [OAManageResourcesViewController prepareData];
     LogStartup(@"manage resources view controller data prepared");
 
@@ -1278,7 +1281,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     
     if (async)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
             
             self.resourcesManager->updateRepository();
             
@@ -1374,6 +1377,23 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 - (void) loadWorldRegions
 {
     [self applyWorldRegions:[self readWorldRegions]];
+}
+
+// The regions of the shared search, and the names its common words take from them, so they are
+// read before any search. A file that cannot be read leaves them out; the C++ search has its own.
+- (void) loadSharedRegions
+{
+    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
+    OASOsmandRegions *regions = [[OASOsmandRegions alloc] initWithIsInitialized:NO];
+    [regions setLocaleLocale:[OAUtilities currentLang] ?: @"en" country:[NSLocale.currentLocale objectForKey:NSLocaleCountryCode]];
+    NSError *error = nil;
+    if (![regions prepareFileFileName:ocbfPathLib error:&error])
+    {
+        NSLog(@"Shared regions not read from %@: %@", ocbfPathLib, error);
+        [regions close];
+        return;
+    }
+    [OASOsmandRegions.companion setDefaultRegions:regions];
 }
 
 - (void) addRegionNamesToCommonWords

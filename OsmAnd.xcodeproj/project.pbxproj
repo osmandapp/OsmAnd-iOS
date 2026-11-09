@@ -1895,6 +1895,7 @@
 		EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */; };
 		EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */; };
 		A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */; };
+		5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */; };
 		0D8544693BE51C1DE2A67275 /* OASharedSearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */; };
 		DA73EF7429A3B5410071935D /* publictransportroutes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */; };
 		DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */; };
@@ -5396,6 +5397,7 @@
 		C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileListOrderTest.mm; sourceTree = "<group>"; };
 		B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchModelsTest.mm; sourceTree = "<group>"; };
 		EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchFacadeTest.mm; sourceTree = "<group>"; };
+		5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchCitiesTest.mm; sourceTree = "<group>"; };
 		B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchUICoreTest.mm; sourceTree = "<group>"; };
 		DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publictransportroutes.addon.render.xml; path = ../resources/rendering_styles/publictransportroutes.addon.render.xml; sourceTree = "<group>"; };
 		DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemoteFile.h; sourceTree = "<group>"; };
@@ -10394,6 +10396,7 @@
 				C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */,
 				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
 				EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */,
+				5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */,
 				B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */,
 			);
 			path = Search;
@@ -13876,6 +13879,7 @@
 				EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */,
 				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
 				A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */,
+				5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */,
 				0D8544693BE51C1DE2A67275 /* OASharedSearchUICoreTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,

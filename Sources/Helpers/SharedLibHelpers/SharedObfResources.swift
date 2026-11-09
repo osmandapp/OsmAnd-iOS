@@ -86,6 +86,15 @@ final class SharedObfResources: NSObject {
         return registry.getRoutingMapFiles()
     }
 
+    /// Returns the persistent POI repository for a registered resource.
+    @objc func amenityRepository(forResourceId resourceId: String) -> AmenityIndexRepository? {
+        lock.lock()
+        let path = pathsByResourceId[resourceId]
+        lock.unlock()
+        guard let path else { return nil }
+        return registry.getAmenityRepository(path: path)
+    }
+
     func travelRepositories() -> [AmenityIndexRepository] {
         repositories(forPaths: OAObfFileList.travelFilePaths())
     }

@@ -61,8 +61,8 @@
 
 
 - (void)cancelSearchCities;
+// Completes on the main queue for the latest active request; cancellation suppresses the callback.
 - (void)searchCitiesAsync:(NSString *)text
-           searchLocation:(CLLocation *)searchLocation
              allowedTypes:(NSArray<NSString *> *)allowedTypes
                 cityLimit:(NSInteger)cityLimit
                onComplete:(void (^)(NSMutableArray *amenities))onComplete;

@@ -25,6 +25,7 @@
 
 @implementation OACategoriesTableViewController
 {
+    NSUInteger _dataRequest;
     OAQuickSearchTableController *_tableController;
 }
 
@@ -58,9 +59,19 @@
     _tableController.delegate = tableDelegate;
 }
 
-- (void) generateData
+- (void)generateData
 {
-    OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+    NSUInteger request = ++_dataRequest;
+    [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (request == _dataRequest)
+                [self updateDataWithResults:res];
+        });
+    }];
+}
+
+- (void)updateDataWithResults:(OASearchResultCollection *)res
+{
     NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
     if (res)
     {

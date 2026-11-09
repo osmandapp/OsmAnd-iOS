@@ -37,6 +37,7 @@
 
 @implementation OAHistorySettingsViewController
 {
+    NSUInteger _dataRequest;
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
     OAHistoryHelper *_historyHelper;
@@ -189,10 +190,26 @@
 
 - (void)generateData
 {
-    _data = [OATableDataModel model];
+    NSUInteger request = ++_dataRequest;
+    if (_historyType != EOAHistorySettingsTypeSearch || !_isLogHistoryOn)
+    {
+        [self generateDataWithSearchResults:@[] request:request];
+        return;
+    }
+    [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO completion:^(OASearchResultCollection *res) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (request == _dataRequest)
+                [self generateDataWithSearchResults:res.getCurrentSearchResults ?: @[] request:request];
+        });
+    }];
+}
+
+- (void)generateDataWithSearchResults:(NSArray<OASearchResult *> *)searchResults request:(NSUInteger)request
+{
+    OATableDataModel *data = [OATableDataModel model];
     if (!self.tableView.editing && !_isTableViewEditing)
     {
-        OATableSectionData *switchSection = [_data createNewSection];
+        OATableSectionData *switchSection = [data createNewSection];
         [switchSection addRowFromDictionary:@{
             kCellTitleKey : [self getTitle],
             kCellTypeKey : [OASwitchTableViewCell getCellIdentifier] }
@@ -223,7 +240,7 @@
             {
                 if (_historyType == EOAHistorySettingsTypeSearch)
                 {
-                    for (OASearchResult *searchResult in [self getSearchHistoryResults])
+                    for (OASearchResult *searchResult in searchResults)
                     {
                         OAHistoryItem *historyItem = [self getHistoryEntry:searchResult];
                         if (historyItem)
@@ -251,7 +268,7 @@
                 OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
                 if (pointToNavigateBackup)
                 {
-                    OATableSectionData *prevRouteSection = [_data createNewSection];
+                    OATableSectionData *prevRouteSection = [data createNewSection];
                     [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
                     
                     OAHistoryItem *prevRouteHistoryitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
@@ -278,7 +295,7 @@
                 NSDate *sevenDaysAgo = [calendar dateByAddingUnit:NSCalendarUnitDay value:-7 toDate:today options:0];
                 NSMutableDictionary<NSString *, NSMutableArray<OASearchHistoryTableItem *> *> *monthGroups = [NSMutableDictionary dictionary];
                 
-                OATableSectionData *lastSection = [_data createNewSection];
+                OATableSectionData *lastSection = [data createNewSection];
                 lastSection.headerText = OALocalizedString(@"last_seven_days");
                 
                 for (OASearchHistoryTableItem *historyTableItem in sortedHistoryItems)
@@ -311,7 +328,7 @@
                 }
                 for (NSString *monthName in monthGroups.allKeys)
                 {
-                    OATableSectionData *monthSection = [_data createNewSection];
+                    OATableSectionData *monthSection = [data createNewSection];
                     monthSection.headerText = monthName;
                     NSMutableArray<OASearchHistoryTableItem *> *groupHistoryItems = monthGroups[monthName];
                     for (OASearchHistoryTableItem *historyItem in groupHistoryItems)
@@ -324,6 +341,9 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (request != _dataRequest)
+                return;
+            _data = data;
             [UIView transitionWithView:self.view
                               duration:.2
                                options:UIViewAnimationOptionTransitionCrossDissolve
@@ -447,16 +467,6 @@
         itemsCount += [self rowsCount:i];
     }
     return itemsCount > 0 && selectedCount == itemsCount;
-}
-
-- (NSMutableArray<OASearchResult *> *)getSearchHistoryResults
-{
-    NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
-    OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
-    OASearchResultCollection *res = [searchUICore shallowSearch:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO];
-    if (res)
-        [searchResults addObjectsFromArray:[res getCurrentSearchResults]];
-    return searchResults;
 }
 
 - (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult

@@ -15,6 +15,7 @@
 #import "OALocationServices.h"
 #import "OASearchPhrase.h"
 #import "OAObservable.h"
+#import "OAAtomicInteger.h"
 #import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
 #import "OASearchResult+cpp.h"
@@ -67,72 +68,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 {
     OAWorldRegion *worldRegion = [[OsmAndApp instance] worldRegion];
     [self processGroups:worldRegion search:phrase resultMatcher:resultMatcher];
-    NSString *fullSearchPhrase = [phrase getFullSearchPhrase];
-    
-    if (fullSearchPhrase.length > 3)
-    {
-        NSMutableArray<OASearchResult *> *searchResults = [OAQuickSearchHelper.instance searchCities:fullSearchPhrase
-                                                                                      searchLocation:[OsmAndApp instance].locationServices.lastKnownLocation
-                                                                                        allowedTypes:@[@"city", @"town"]
-                                                                                           cityLimit:10000
-                                                                                         isCancelled:^BOOL{
-            return [resultMatcher isCancelled];
-        }];
-
-        for (OASearchResult *amenity in searchResults)
-        {
-            if ([resultMatcher isCancelled])
-                break;
-
-            OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:amenity.location.coordinate.latitude
-                                                                            lon:amenity.location.coordinate.longitude];
-            if (!region || ![region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
-                continue;
-
-            NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
-            if (ids.count > 0)
-            {
-                OARepositoryResourceItem *item = [self getUninstalledMapRegionResourceFromIds:ids
-                                                                                       region:region
-                                                                                        title:amenity.localeName];
-                if (item)
-                {
-                    OASearchResult *result = [self createSearchResultWithPhrase:phrase item:item localeName:item.title];
-
-                    [self addResultIfNotExists:result
-                               existingResults:[resultMatcher getRequestResults]
-                                 resultMatcher:resultMatcher];
-                }
-            }
-        }
-    }
-
     return YES;
-}
-
-- (void)addResultIfNotExists:(OASearchResult *)result
-             existingResults:(NSArray<OASearchResult *> *)existingResults
-               resultMatcher:(OASearchResultMatcher *)resultMatcher
-{
-    if (!result || !result.resourceId)
-    {
-        return;
-    }
-    
-    for (OASearchResult *existing in existingResults)
-    {
-        if (existing.resourceId && [existing.resourceId isEqualToString:result.resourceId])
-        {
-            return;
-        }
-    }
-    
-    [resultMatcher publish:result];
-}
-
-- (NSString *)titleForObject:(OASearchResult *)obj
-{
-    return ((OARepositoryResourceItem *)obj.relatedObject).title ?: @"";
 }
 
 - (void)processGroups:(OAWorldRegion *)group
@@ -156,7 +92,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:group];
         if (ids.count > 0)
         {
-            indexItem = [self getUninstalledMapRegionResourceFromIds:ids region:region title:nil];
+            indexItem = [self getUninstalledMapRegionResourceFromIds:ids region:region];
         }
     }
     
@@ -176,7 +112,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 
 - (nullable OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
                                                               region:(OAWorldRegion *)region
-                                                               title:(nullable NSString *)title
 {
     for (NSString *resourceId in ids)
     {
@@ -186,31 +121,15 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
             BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
             if (!isInstalled)
             {
-                NSString *composeTitle;
-                if (!title)
-                {
-                    NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
-                                                                  inRegion:region
-                                                            withRegionName:YES
-                                                          withResourceType:NO];
-                    
-                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
-                                                                  inRegion:region.superregion
-                                                            withRegionName:YES
-                                                          withResourceType:NO];
-                    composeTitle = [self composeTitleWithPart:regionTitle andPart:superregionTitle];
-                }
-                else
-                {
-                    // for city/town
-                    
-                    NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
-                                                                  inRegion:region
-                                                            withRegionName:YES
-                                                          withResourceType:NO];
-                    
-                    composeTitle = [self composeTitleWithPart:title andPart:superregionTitle];
-                }
+                NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                    inRegion:region
+                                                              withRegionName:YES
+                                                            withResourceType:NO];
+                NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                         inRegion:region.superregion
+                                                                   withRegionName:YES
+                                                                 withResourceType:NO];
+                NSString *composeTitle = [self composeTitleWithPart:regionTitle andPart:superregionTitle];
                 return [self createRepositoryResourceItemWithResource:resource region:region title:composeTitle];
             }
         }
@@ -616,9 +535,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     OASearchResultCollection *_resultCollection;
     OAAutoObserverProxy* _localResourcesChangedObserver;
 
-    dispatch_queue_t _searchCitiesSerialQueue;
-    dispatch_group_t _searchCitiesGroup;
-    NSInteger _searchRequestsCount;
+    OAAtomicInteger *_searchRequestsCount;
     
     BOOL _resourcesInvalidated;
     OAAutoObserverProxy *_backgroundStateObserver;
@@ -646,9 +563,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         Class coreClass = [[OAAppSettings sharedManager].useSharedSearch get] ? OASharedSearchUICore.class : OASearchUICore.class;
         _core = [[coreClass alloc] initWithLang:lang ?: @"" transliterate:transliterate];
 
-        _searchCitiesSerialQueue = dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL);
-        _searchCitiesGroup = dispatch_group_create();
-        _searchRequestsCount = 0;
+        _searchRequestsCount = [OAAtomicInteger atomicInteger:0];
 
         _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onBackgroundStateChanged)
@@ -756,6 +671,8 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 - (void) setResourcesForSearchUICore
 {
     OsmAndAppInstance app = [OsmAndApp instance];
+    if ([_core isKindOfClass:OASharedSearchUICore.class])
+        [OASharedObfResources.shared refreshFiles];
     BOOL isCarPlayAppActive = UIApplication.sharedApplication.isCarPlayAppActive;
     [[_core getSearchSettings] setOfflineIndexes:[OAObfFileList searchResourceIdsIncludingTravel:!isCarPlayAppActive]];
     [[_core getSearchSettings] setRegions:app.worldRegion];
@@ -766,7 +683,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     if (!OsmAndApp.instance.isInBackground && _resourcesInvalidated)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self retireSharedSearchReaders];
             [self setResourcesForSearchUICore];
             _resourcesInvalidated = NO;
         });
@@ -782,28 +698,21 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self retireSharedSearchReaders];
         [self setResourcesForSearchUICore];
     });
 }
 
-// an update puts the new file at the path of the old one, which an open reader goes on reading
-- (void) retireSharedSearchReaders
-{
-    if ([_core isKindOfClass:OASharedSearchUICore.class])
-        [OASharedSearchReaders.shared retireReadersAfter:((OASharedSearchUICore *) _core).shared];
-}
-
 - (void)cancelSearchCities
 {
-    _searchRequestsCount = 0;
+    [_searchRequestsCount incrementAndGet];
 }
 
-- (NSMutableArray<OASearchResult *> *)searchCities:(NSString *)text
+- (void)searchCities:(NSString *)text
                                     searchLocation:(CLLocation *)searchLocation
                                       allowedTypes:(NSArray<NSString *> *)allowedTypes
                                          cityLimit:(NSInteger)cityLimit
                                        isCancelled:(BOOL (^)(void))isCancelled
+                                        completion:(void (^)(NSMutableArray<OASearchResult *> *))completion
 {
     OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
     NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
@@ -840,7 +749,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         return count > cityLimit || (isCancelled && isCancelled());
     };
 
-    [searchUICore shallowSearch:OASearchAmenityByNameAPI.class
+    [searchUICore shallowSearchAsync:OASearchAmenityByNameAPI.class
                            text:text
                         matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
         OASearchResult *searchResult = *object;
@@ -865,9 +774,9 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         return NO;
     } cancelledFunc:^BOOL{
         return isSearchCancelled();
-    }] resortAll:YES removeDuplicates:YES searchSettings:settings];
-
-    return amenities;
+    }] resortAll:YES removeDuplicates:YES searchSettings:settings completion:^(OASearchResultCollection *collection) {
+        completion(amenities);
+    }];
 }
 
 - (void)searchCitiesAsync:(NSString *)text
@@ -876,91 +785,62 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
                 cityLimit:(NSInteger)cityLimit
                onComplete:(void (^)(NSMutableArray *amenities))onComplete
 {
-    NSInteger searchRequestsCount = ++_searchRequestsCount;
-    dispatch_block_t searchCitiesFunc = ^{
-        dispatch_group_enter(_searchCitiesGroup);
-
-        NSMutableArray<OASearchResult *> *amenities = [self searchCities:text
-                                                           searchLocation:searchLocation
-                                                             allowedTypes:allowedTypes
-                                                                cityLimit:cityLimit
-                                                              isCancelled:^BOOL{
-            return _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
-        }];
-
-        if (_searchRequestsCount == searchRequestsCount)
-        {
-            _searchRequestsCount = 0;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (onComplete)
-                    onComplete(amenities);
-            });
-        }
-        dispatch_group_leave(_searchCitiesGroup);
-    };
-
-    dispatch_group_notify(_searchCitiesGroup, _searchCitiesSerialQueue, ^{
-        dispatch_async(_searchCitiesSerialQueue, searchCitiesFunc);
-    });
+    int request = [_searchRequestsCount incrementAndGet];
+    [self searchCities:text searchLocation:searchLocation allowedTypes:allowedTypes cityLimit:cityLimit isCancelled:^BOOL{
+        return [_searchRequestsCount get] != request;
+    } completion:^(NSMutableArray<OASearchResult *> *amenities) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([_searchRequestsCount get] == request && onComplete)
+                onComplete(amenities);
+        });
+    }];
 }
 
 - (void) searchCityLocations:(NSString *)text
-          searchLocation:(CLLocation *)searchLocation
-            searchBBox31:(QuadRect *)searchBBox31
-            allowedTypes:(NSArray<NSString *> *)allowedTypes
-                   limit:(NSInteger)limit
-              onComplete:(void (^)(NSArray<OASearchResult *> *searchResults))onComplete
+      searchLocation:(CLLocation *)searchLocation
+        searchBBox31:(QuadRect *)searchBBox31
+        allowedTypes:(NSArray<NSString *> *)allowedTypes
+               limit:(NSInteger)limit
+          onComplete:(void (^)(NSArray<OASearchResult *> *searchResults))onComplete
 {
-    NSInteger searchRequestsCount = ++_searchRequestsCount;
-    dispatch_block_t searchCitiesFunc = ^{
-        dispatch_group_enter(_searchCitiesGroup);
+    int request = [_searchRequestsCount incrementAndGet];
 
-        NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
-        BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
-        NSMutableArray *results = [NSMutableArray array];
+    NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+    BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
+    NSMutableArray *results = [NSMutableArray array];
 
-        OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
-        OASearchUICore *searchUICore = [searchHelper getCore];
-        OASearchSettings *settings = [[searchUICore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
-        settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
-        settings = [settings setSortByName:NO];
-        settings = [settings setAddressSearch:YES];
-        settings = [settings setEmptyQueryAllowed:YES];
-        settings = [settings setOriginalLocation:searchLocation];
-        settings = [settings setSearchBBox31:searchBBox31];
+    OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
+    OASearchUICore *searchUICore = [searchHelper getCore];
+    OASearchSettings *settings = [[searchUICore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
+    settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
+    settings = [settings setSortByName:NO];
+    settings = [settings setAddressSearch:YES];
+    settings = [settings setEmptyQueryAllowed:YES];
+    settings = [settings setOriginalLocation:searchLocation];
+    settings = [settings setSearchBBox31:searchBBox31];
 
-        int __block count = 0;
-        [searchUICore shallowSearch:OASearchLocationAndUrlAPI.class
-                               text:text
-                            matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
-            OASearchResult *searchResult = *object;
-            CLLocation *location = searchResult.location;
-            if (!location)
-                return NO;
-            
-            if (count++ > limit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0)
-                return NO;
-            
-            [results addObject:searchResult];
+    int __block count = 0;
+    [searchUICore shallowSearchAsync:OASearchLocationAndUrlAPI.class
+                           text:text
+                        matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+        OASearchResult *searchResult = *object;
+        CLLocation *location = searchResult.location;
+        if (!location)
             return NO;
-        } cancelledFunc:^BOOL{
-            return count > limit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
-        }] resortAll:YES removeDuplicates:YES searchSettings:settings];
+            
+        if (count++ > limit || [_searchRequestsCount get] != request)
+            return NO;
 
-        if (_searchRequestsCount == searchRequestsCount)
-        {
-            _searchRequestsCount = 0;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (onComplete)
-                    onComplete(results);
-            });
-        }
-        dispatch_group_leave(_searchCitiesGroup);
-    };
-
-    dispatch_group_notify(_searchCitiesGroup, _searchCitiesSerialQueue, ^{
-        dispatch_async(_searchCitiesSerialQueue, searchCitiesFunc);
-    });
+        [results addObject:searchResult];
+        return NO;
+    } cancelledFunc:^BOOL{
+        return count > limit || [_searchRequestsCount get] != request;
+    }] resortAll:YES removeDuplicates:YES searchSettings:settings completion:^(OASearchResultCollection *collection) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([_searchRequestsCount get] == request && onComplete)
+                onComplete(results);
+        });
+    }];
 }
 
 @end

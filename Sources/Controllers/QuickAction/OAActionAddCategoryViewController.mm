@@ -25,6 +25,7 @@
 
 @implementation OAActionAddCategoryViewController
 {
+    NSUInteger _dataRequest;
     NSArray *_data;
     NSMutableArray *_filteredData;
     NSMutableArray<NSString *> *_initialValues;
@@ -130,7 +131,17 @@
 
 - (void)generateData
 {
-    OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+    NSUInteger request = ++_dataRequest;
+    [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (request == _dataRequest)
+                [self updateDataWithResults:res];
+        });
+    }];
+}
+
+- (void)updateDataWithResults:(OASearchResultCollection *)res
+{
     NSMutableArray *rows = [NSMutableArray array];
     if (res)
     {
@@ -138,6 +149,10 @@
             [rows addObject:sr.object];
     }
     _data = [NSArray arrayWithArray:rows];
+    if (_isFiltered)
+        [self searchBar:_searchController.searchBar textDidChange:_searchController.searchBar.text ?: @""];
+    else
+        [self.tableView reloadData];
 }
 
 - (id)getItem:(NSIndexPath *)indexPath

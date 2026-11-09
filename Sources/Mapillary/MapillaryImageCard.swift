@@ -26,6 +26,10 @@ final class MapillaryImageCard: ImageCard {
 @objcMembers
 final class MapillaryAmenityImageCard: ImageCard {
 
+    override func getGalleryFullSizeUrl() -> String? {
+        getSuitableUrl()
+    }
+
     override func onCardPressed(_ mapPanel: OAMapPanelViewController) {
         OAMapillaryImageCardWrapper.onCardPressed(mapPanel, latitude: latitude, longitude: longitude, ca: ca, key: key)
     }

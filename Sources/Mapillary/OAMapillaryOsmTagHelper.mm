@@ -113,7 +113,14 @@
             });
         }
     };
-    
+
+    NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
+    if (cached && ![URLSessionManager isExpiredCachedResponse:cached])
+    {
+        completionHandler(cached.data);
+        return;
+    }
+
     [[urlSession dataTaskWithRequest:request
                 completionHandler:^(NSData * _Nullable data,
                                     NSURLResponse * _Nullable response,
@@ -128,7 +135,6 @@
             return;
         }
 
-        NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
         completionHandler(cached.data);
     }] resume];
 }

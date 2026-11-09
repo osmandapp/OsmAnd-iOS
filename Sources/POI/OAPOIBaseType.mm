@@ -63,17 +63,19 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 
 - (NSString *)iconName
 {
+    return [NSString stringWithFormat:@"mx_%@", [self iconNameInternal] ? : self.name];
+}
+
+- (NSString *)iconNameInternal
+{
     NSString *optionalTypeIcon = [OAPOIHelper.sharedInstance getPoiTypeOptionalIcon:self.name];
     NSString *additionalCategoryIcon = [OAPOIHelper.sharedInstance getPoiAdditionalCategoryIcon:self.name];
-    NSString *optionalIcon = optionalTypeIcon ? : additionalCategoryIcon;
-    return [NSString stringWithFormat:@"mx_%@", optionalIcon ? : self.name];
+    return optionalTypeIcon ? : additionalCategoryIcon;
 }
 
 - (NSString *)iconKeyName
 {
-    NSString *iconName = [self iconName];
-    NSString *keyName = self.name;
-    return [self formatKeyName:iconName ? iconName : keyName];
+    return [self formatKeyName:[self iconNameInternal] ? : self.name];
 }
 
 - (NSString *)formatKeyName:(NSString *)keyName

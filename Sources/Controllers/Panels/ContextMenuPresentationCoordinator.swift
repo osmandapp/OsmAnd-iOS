@@ -9,7 +9,7 @@
 @objcMembers
 final class ContextMenuDismissHandler: NSObject {
 
-    typealias Completion = @convention(block) () -> Void
+    typealias Completion = @convention(block) (Bool) -> Void
     typealias Handler = @convention(block) (@escaping Completion) -> Bool
 
     private let handler: Handler
@@ -26,16 +26,16 @@ final class ContextMenuDismissHandler: NSObject {
 @objcMembers
 final class ContextMenuPresentationCoordinator: NSObject {
 
-    typealias DismissCompletion = ContextMenuDismissHandler.Completion
+    typealias Presentation = @convention(block) () -> Void
 
     var isTransitionInProgress: Bool {
         transitionInProgressValue
     }
     
-    private var pendingPresentation: DismissCompletion?
+    private var pendingPresentation: Presentation?
     private var transitionInProgressValue = false
 
-    func enqueuePresentation(_ presentation: @escaping DismissCompletion) {
+    func enqueuePresentation(_ presentation: @escaping Presentation) {
         pendingPresentation = presentation
     }
 
@@ -50,26 +50,24 @@ final class ContextMenuPresentationCoordinator: NSObject {
         }
 
         for dismissHandler in dismissHandlers {
-            var completedSynchronously = false
-            let completion: DismissCompletion = { [weak self] in
+            var synchronousResult: Bool?
+            let completion: ContextMenuDismissHandler.Completion = { [weak self] dismissed in
                 guard let self else {
                     return
                 }
 
                 guard self.transitionInProgressValue else {
-                    completedSynchronously = true
+                    synchronousResult = dismissed
                     return
                 }
 
-                self.transitionInProgressValue = false
-                self.processPendingPresentation(withDismissHandlers: dismissHandlers)
+                self.finishDismissal(dismissed, with: dismissHandlers)
             }
 
             if dismissHandler.dismiss(completion: completion) {
                 transitionInProgressValue = true
-                if completedSynchronously {
-                    transitionInProgressValue = false
-                    processPendingPresentation(withDismissHandlers: dismissHandlers)
+                if let synchronousResult {
+                    finishDismissal(synchronousResult, with: dismissHandlers)
                 }
                 return
             }
@@ -77,5 +75,15 @@ final class ContextMenuPresentationCoordinator: NSObject {
 
         self.pendingPresentation = nil
         pendingPresentation()
+    }
+
+    private func finishDismissal(_ dismissed: Bool, with dismissHandlers: [ContextMenuDismissHandler]) {
+        transitionInProgressValue = false
+        if dismissed {
+            processPendingPresentation(withDismissHandlers: dismissHandlers)
+        } else {
+            // A newer show or hide superseded the dismissal and its pending presentation.
+            pendingPresentation = nil
+        }
     }
 }

@@ -284,6 +284,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     private func pairNewSensor() {
         let storyboard = UIStoryboard(name: "BLESearchViewController", bundle: nil)
         if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
+            vc.appMode = appMode
             navigationController?.pushViewController(vc, animated: true)
         }
     }

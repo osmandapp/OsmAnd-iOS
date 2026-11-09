@@ -1109,7 +1109,7 @@
 "rendering_attr_surface_ground_name" = "Neapstrādāts";
 "rendering_attr_currentTrackColor_description" = "GPX krāsa";
 "routing_attr_driving_style_speed_name" = "Īsāki maršruti";
-"routing_attr_avoid_sett_description" = "Bez bruģakmeņa";
+"routing_attr_avoid_sett_description" = "Izvairīties no šķelto akmeņu bruģa";
 "rendering_attr_hikingRoutesOSMC_description" = "Renderēt ceļus pēc OSMC trasēm";
 "rendering_value_car_name" = "Auto";
 "routing_attr_avoid_unpaved_name" = "Bez grants ceļiem";
@@ -1157,7 +1157,7 @@
 "routing_attr_prefer_motorway_name" = "Priekšroka automaģistrālēm";
 "rendering_attr_surface_cobblestone_name" = "Bruģakmens";
 "rendering_attr_highway_class_state_road_name" = "Šoseja";
-"routing_attr_avoid_sett_name" = "Bez bruģētiem ceļiem";
+"routing_attr_avoid_sett_name" = "Bez šķelto akmeņu bruģa";
 "rendering_value_translucent_lightblue_name" = "Caurspīdīgi gaiši zils";
 "rendering_attr_smoothness_good_name" = "Labs";
 "routing_attr_weight_name" = "Svara robežas";
@@ -1486,3 +1486,5 @@
 "trace_rendering" = "Renderēšanas atkļūdošanas info";
 "trace_rendering_descr" = "Rādīt renderēšanas veiktspēju";
 "shared_string_other" = "Citi";
+"routing_attr_avoid_cobblestone_name" = "Izvairīties no laukakmeņu bruģa";
+"routing_attr_avoid_cobblestone_description" = "Izvairīties no laukakmeņu bruģa";

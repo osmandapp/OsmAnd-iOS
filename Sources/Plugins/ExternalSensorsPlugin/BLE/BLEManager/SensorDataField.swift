@@ -21,7 +21,7 @@ class SensorDataField {
         self.unitNameId = unitNameId
     }
     
-    func getFormattedValue() -> FormattedValue? {
+    func getFormattedValue(appMode: OAApplicationMode? = nil) -> FormattedValue? {
         if numberValue == nil && stringValue == nil {
             return nil
         }

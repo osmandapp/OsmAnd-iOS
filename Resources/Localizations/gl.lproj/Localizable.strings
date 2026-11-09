@@ -790,7 +790,7 @@
 "routing_attr_no_new_routing_description" = "Non empregar regras de navegación engadidas na versión 1.9.";
 "routing_attr_allow_expert_name" = "Permitir rotas para expertos";
 "rendering_attr_highway_class_motorway_name" = "Autoestrada";
-"routing_attr_avoid_sett_name" = "Sen pavimento empedrado ou lastrado";
+"routing_attr_avoid_sett_name" = "Sen adoquinado";
 "rendering_value_translucent_purple_name" = "Violeta translúcido";
 "rendering_attr_hideIcons_name" = "Iconas de puntos de interese";
 "rendering_value_light_brown_name" = "Marrón claro";
@@ -964,7 +964,7 @@
 "rendering_attr_showCycleRoutes_name" = "Rotas ciclistas";
 "rendering_value_translucent_pink_name" = "Rosa translúcido";
 "rendering_attr_hideNonVehicleHighways_name" = "Estradas que non sexan para vehículos";
-"routing_attr_avoid_sett_description" = "Evitar pavimento empedrado e lastrado";
+"routing_attr_avoid_sett_description" = "Evitar adoquinado";
 "rendering_attr_streetLightingNight_name" = "Amosar só á noite";
 "app_mode_shuttle_bus" = "Transbordo de bus";
 "app_mode_scooter" = "Escúter (motocicleta)";
@@ -1861,3 +1861,5 @@
 "help_article_widgets_radius_ruler_name" = "Regra de raio e regra";
 "rotate_map_manual_opt" = "Xirado manualmente";
 "battery_saving_mode" = "Modo de aforro de batería";
+"routing_attr_avoid_cobblestone_name" = "Evitar empedrado";
+"routing_attr_avoid_cobblestone_description" = "Evitar empedrado";

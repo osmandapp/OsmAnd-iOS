@@ -2118,7 +2118,7 @@ typedef enum
 
 - (BOOL) isTopControlsVisible
 {
-    return _hudViewController.mapSettingsButton.alpha > 0;
+    return [_hudViewController isTopControlsVisible];
 }
 
 - (BOOL) contextMenuMode

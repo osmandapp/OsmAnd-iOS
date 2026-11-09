@@ -35,6 +35,7 @@
     double _latitude;
     double _longitude;
     BOOL _isPoiAdditional;
+    NSArray<NSString *> *_values;
     NSString *_textRow;
     NSInteger _textRowButtonIndex;
 }
@@ -44,6 +45,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
              lat:(double)lat
              lon:(double)lon
  isPoiAdditional:(BOOL)isPoiAdditional
+          values:(NSArray<NSString *> *)values
          textRow:(OAAmenityInfoRow *)textRow
 {
     _poiTypes = poiTypes;
@@ -51,6 +53,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     _latitude = lat;
     _longitude = lon;
     _isPoiAdditional = isPoiAdditional;
+    _values = values;
     if (textRow)
         _textRow = [[textRow.textPrefix stringByAppendingString:@": "] stringByAppendingString:[textRow.text lowercaseString]];
     [self buildViews];
@@ -72,6 +75,9 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     {
         // "Kayaks: yes" -> "Kayaks", like the values of the row
         NSString *title = _isPoiAdditional ? [PoiAdditionalLabels getGroupValueLabel:poiType] : poiType.nameLocalized;
+        NSString *value = i < _values.count ? _values[i] : nil;
+        if (value.length > 0)
+            title = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), title, value];
         OAButton *btn = [self createButton:title];
         btn.tag = i++;
         [self addSubview:btn];

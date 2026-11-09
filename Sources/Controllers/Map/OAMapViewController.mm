@@ -3125,7 +3125,10 @@ static char kMapSourceUpdateQueueKey;
     if (!self.mapViewLoaded)
         return;
 
-    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
+    BOOL batterySavingMode = [[OAAppSettings sharedManager].batterySavingMode get];
+    _mapView.renderer->setSymbolsFade(batterySavingMode ? 0 : 300, -1);
+
+    if (batterySavingMode || _attachedToCarPlayWindow)
         [_mapView limitFrameRefreshRate];
     else
         [_mapView restoreFrameRefreshRate];

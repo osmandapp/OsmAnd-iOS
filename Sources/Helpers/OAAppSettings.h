@@ -1431,6 +1431,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
 - (EOATemperatureConstant)getTemperatureUnit;
+- (EOATemperatureConstant)getTemperatureUnitForMode:(OAApplicationMode *)mode;
 
 - (BOOL)shouldHidePolygons;
 

@@ -58,6 +58,8 @@ NSString * const WIKI_LANG = @"wiki_lang";
 NSString * const WIKI_PLACE = @"wiki_place";
 NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
+static NSString * const kOsmandPhrasePrefix = @"poi_osmand_";
+
 @implementation OAPOIHelper {
 
     OsmAndAppInstance _app;
@@ -358,7 +360,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getPhraseByName:(NSString *)name withDefatultValue:(BOOL)withDefatultValue
 {
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+    NSString *phrase = [self findPhraseIn:_phrases key:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (!phrase)
     {
         return withDefatultValue ? [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "] : nil;
@@ -375,7 +377,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getPhraseENByName:(NSString *)name
 {
-    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    NSString *phrase = [self findPhraseIn:_phrasesEN key:[NSString stringWithFormat:@"poi_%@", name]];
     if (!phrase)
     {
         return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
@@ -392,7 +394,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getSynonymsByName:(NSString *)name
 {
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+    NSString *phrase = [self findPhraseIn:_phrases key:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (phrase)
     {
         int i = [phrase indexOf:@";"];
@@ -401,6 +403,15 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         }
     }
     return @"";
+}
+
+// as in Android, a type without its own phrase is translated by its key without "osmand_": poi_socket_type2_yes
+- (NSString *) findPhraseIn:(NSDictionary *)phrases key:(NSString *)key
+{
+    NSString *phrase = phrases[key];
+    if (!phrase && [key hasPrefix:kOsmandPhrasePrefix])
+        phrase = phrases[[@"poi_" stringByAppendingString:[key substringFromIndex:kOsmandPhrasePrefix.length]]];
+    return phrase;
 }
 
 - (NSString *) getPhrase:(OAPOIBaseType *)type

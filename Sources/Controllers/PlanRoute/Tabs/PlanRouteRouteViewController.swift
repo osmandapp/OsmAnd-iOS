@@ -86,6 +86,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         let horizontalInset = Self.sectionHorizontalInset
         view.backgroundColor = .clear
         tableView.backgroundColor = .viewBg
+        tableView.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.points
         tableView.dataSource = self
         tableView.delegate = self
         tableView.isEditing = true

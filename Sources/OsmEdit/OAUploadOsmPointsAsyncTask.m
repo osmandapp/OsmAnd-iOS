@@ -55,15 +55,16 @@
 
 - (void)uploadPoints
 {
-    [self uploadPoints:_points];
+    [self uploadPoints:_points allowUnconfirmedNotes:NO];
 }
 
-- (void)uploadPoints:(NSArray<OAOsmPoint *> *)points
+- (void)uploadPoints:(NSArray<OAOsmPoint *> *)points allowUnconfirmedNotes:(BOOL)allowUnconfirmedNotes
 {
     NSArray<OAOsmPoint *> *pointsForAttempt = [points copy];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSInteger lastIndex = pointsForAttempt.count - 1;
         NSMutableArray<OAOsmPoint *> *failedUploads = [NSMutableArray new];
+        BOOL requiresNoteUploadConfirmation = NO;
         for (NSInteger i = 0; i < pointsForAttempt.count; i++)
         {
             if (_interruptUploading)
@@ -92,9 +93,10 @@
             {
                 OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [_plugin getOsmNotesRemoteUtil];
                 OAOsmNotePoint *p = (OAOsmNotePoint *) osmPoint;
-                NSString *message = [util commit:p text:p.getText action:p.getAction anonymous:_loadAnonymous].warning;
-                
-                if (!message)
+                OAOsmBugResult *result = [util commit:p text:p.getText action:p.getAction anonymous:_loadAnonymous allowUnconfirmedRetry:allowUnconfirmedNotes];
+                requiresNoteUploadConfirmation |= result.requiresUploadConfirmation;
+
+                if (!result.warning)
                 {
                     [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:p];
                     [_app.osmEditsChangeObservable notifyEvent];
@@ -112,7 +114,10 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             if (!_interruptUploading)
+            {
                 _failedPoints = [failedUploads copy];
+                _requiresNoteUploadConfirmation = requiresNoteUploadConfirmation;
+            }
 
             if ([self.delegate respondsToSelector:@selector(uploadDidCompleteWithSuccess:)])
             {
@@ -134,7 +139,12 @@
 
 - (void)retryFailedPoints
 {
-    [self uploadPoints:_failedPoints];
+    [self retryFailedPointsAllowingUnconfirmedNotes:NO];
+}
+
+- (void)retryFailedPointsAllowingUnconfirmedNotes:(BOOL)allowUnconfirmedNotes
+{
+    [self uploadPoints:_failedPoints allowUnconfirmedNotes:allowUnconfirmedNotes];
 }
 
 @end

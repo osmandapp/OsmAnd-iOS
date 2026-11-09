@@ -389,7 +389,7 @@
 
 - (dispatch_queue_t)historyDataQueue
 {
-    return dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+    return dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0);
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section

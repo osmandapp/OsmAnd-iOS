@@ -7,8 +7,8 @@
 //
 
 #import "OAMeasurementToolLayer.h"
-#import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapLayers.h"
 #import "OAMapRendererView.h"
 #import "OARoutingHelper.h"
 #import "OANativeUtilities.h"
@@ -575,6 +575,16 @@
 - (NSUInteger)routeLineCountForTesting
 {
     return _collection ? _collection->getLines().size() : 0;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)routeLineCollectionForUITesting
+{
+    return _collection;
+}
+
+- (std::shared_ptr<const OsmAnd::VectorLinesCollection>)previewLineCollectionForUITesting
+{
+    return _lastLineCollection;
 }
 #endif
 

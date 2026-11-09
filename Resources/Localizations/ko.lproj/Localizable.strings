@@ -2345,7 +2345,7 @@
 "routing_attr_allow_via_ferrata_description" = "고정 케이블, 템플, 사다리 및 다리가 설치된 산길입니다.";
 "routing_attr_hazmat_category_usa_5_name" = "산화제와 유기 과산화물";
 "rendering_attr_showToll_name" = "통행료 제한 표시";
-"routing_attr_avoid_sett_description" = "포석도로 우회";
+"routing_attr_avoid_sett_description" = "다듬은 돌 포장도로 우회";
 "routing_attr_allow_via_ferrata_name" = "산비탈 루트 (비아 페라타)";
 "routing_attr_hazmat_category_usa_2_name" = "가스";
 "rendering_value_managerName_name" = "By 관리자 이름";
@@ -2354,7 +2354,7 @@
 "rendering_value_sector2_name" = "분야 2";
 "rendering_attr_lightDetail_description" = "기본: Seamark 이름 (light character.group.period), 부문에 추가 정보를 선택 1 에 3 또는 부문 1,2,3,4,5 가벼운 문자";
 "rendering_attr_padusDisplayMode_name" = "공공 토지 표시 모드";
-"routing_attr_avoid_sett_name" = "포석도로 없음";
+"routing_attr_avoid_sett_name" = "다듬은 돌 포장도로 없음";
 "rendering_value_sector3_name" = "분야 3";
 "rendering_attr_padusHideBoundaries_name" = "공공 토지 경계";
 "rendering_attr_lightDetail_name" = "라이트 디테일";
@@ -2521,8 +2521,8 @@
 "quick_action_map_overlay" = "지도 overlay 변경";
 "quick_action_map_underlay" = "지도 밑줄 변경";
 "quick_action_map_style" = "지도 스타일 변경";
-"routing_attr_avoid_cobblestone_description" = "Cobblestone를 피하십시오";
-"routing_attr_avoid_cobblestone_name" = "Cobblestone를 피하십시오";
+"routing_attr_avoid_cobblestone_description" = "둥근 돌 포장도로 피하기";
+"routing_attr_avoid_cobblestone_name" = "둥근 돌 포장도로 피하기";
 "calculate_online" = "온라인으로 계산";
 "default_buttons" = "기본값 버튼";
 "visualization_3d_wall_color" = "벽 색깔";

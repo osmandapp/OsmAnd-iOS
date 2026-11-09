@@ -21,36 +21,40 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
     WEATHER_BAND_PRECIPITATION = 5
 };
 
-@class OAMapPresentationEnvironment, OAAutoObserverProxy;
+@class OAMapPresentationEnvironment, OAAutoObserverProxy, OAApplicationMode;
 
 @interface OAWeatherBand : NSObject
 
 @property (nonatomic, readonly) EOAWeatherBand bandIndex;
 
-+ (instancetype) withWeatherBand:(EOAWeatherBand)bandIndex;
-+ (NSUnit *) getDefaultBandUnit:(EOAWeatherBand)bandIndex;
-+ (NSString *) getInternalBandUnit:(EOAWeatherBand)bandIndex;
++ (instancetype)withWeatherBand:(EOAWeatherBand)bandIndex;
++ (NSUnit *)getDefaultBandUnit:(EOAWeatherBand)bandIndex;
++ (NSString *)getInternalBandUnit:(EOAWeatherBand)bandIndex;
 
-- (BOOL) isBandVisible;
+- (BOOL)isBandVisible;
 - (void)setSelectBand:(BOOL)isSelect;
-- (NSUnit *) getBandUnit;
-- (BOOL) setBandUnit:(NSUnit *)unit;
-- (BOOL) isBandUnitAuto;
-- (void) setBandUnitAuto:(BOOL)unitAuto;
+- (NSUnit *)getBandUnit;
+- (NSUnit *)getBandUnit:(OAApplicationMode *)mode;
+- (BOOL)setBandUnit:(NSUnit *)unit;
+- (BOOL)setBandUnit:(NSUnit *)unit mode:(OAApplicationMode *)mode;
+- (BOOL)isBandUnitAuto;
+- (BOOL)isBandUnitAuto:(OAApplicationMode *)mode;
+- (void)setBandUnitAuto:(BOOL)unitAuto;
+- (void)setBandUnitAuto:(BOOL)unitAuto mode:(OAApplicationMode *)mode;
 - (NSString *)getIcon;
 - (NSString *)getMeasurementName;
-- (NSString *) getBandGeneralUnitFormat;
-- (NSString *) getBandPreciseUnitFormat;
-- (NSUnit *) getDefaultBandUnit;
-- (NSString *) getInternalBandUnit;
-- (NSArray<NSUnit *> *) getAvailableBandUnits;
-- (double) getBandOpacity;
-- (NSString *) getColorFilePath;
-- (NSString *) getContourStyleName;
-- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
+- (NSString *)getBandGeneralUnitFormat;
+- (NSString *)getBandPreciseUnitFormat;
+- (NSUnit *)getDefaultBandUnit;
+- (NSString *)getInternalBandUnit;
+- (NSArray<NSUnit *> *)getAvailableBandUnits;
+- (double)getBandOpacity;
+- (NSString *)getColorFilePath;
+- (NSString *)getContourStyleName;
+- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *)getContourLevels:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
 
-- (OAAutoObserverProxy *) createSwitchObserver:(id)owner handler:(SEL)handler;
-- (OAAutoObserverProxy *) createAlphaObserver:(id)owner handler:(SEL)handler;
+- (OAAutoObserverProxy *)createSwitchObserver:(id)owner handler:(SEL)handler;
+- (OAAutoObserverProxy *)createAlphaObserver:(id)owner handler:(SEL)handler;
 
 @end
 

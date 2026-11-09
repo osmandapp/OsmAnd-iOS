@@ -22,9 +22,10 @@
 @property (nonatomic) NSArray<SelectedMapObject *> *selectedMapObjects;
 @property (nonatomic) CLLocation *touchPoint;
 
-@property (nonatomic) OATargetPointType activeTargetType;
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
+// Reports NO when a newer show or hide supersedes this dismissal.
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration completion:(void (^)(BOOL hidden))completion;
 
 - (void)transitionToSize;
 

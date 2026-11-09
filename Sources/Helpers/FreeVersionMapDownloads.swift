@@ -166,6 +166,15 @@ final class FreeVersionMapDownloads: NSObject {
         collectLocalMaps().filter { $0.key.regionId != newRegion.regionId }.sorted { $0.key.compare($1.key) == .orderedAscending }.map { (region: $0.key, items: $0.value) }
     }
     
+    func cancelDownloads(otherThan newRegion: OAWorldRegion) {
+        let tasks = OsmAndApp.swiftInstance().downloadsManager.downloadTasks(withKeyPrefix: "resource:") as? [OADownloadTask] ?? []
+        for task in tasks {
+            if let item = OAResourcesUISwiftHelper.getResourceFrom(task), let region = getItemRegion(item), region.regionId != newRegion.regionId {
+                task.cancel()
+            }
+        }
+    }
+    
     private func sendRequest(_ url: String, params: [String: String], post: Bool, onResult: @escaping (Data?) -> Void) {
         OANetworkUtilities.sendRequest(withUrl: url, params: params, post: post) { data, response, _ in
             let result = (response as? HTTPURLResponse)?.statusCode == 200 ? data : nil

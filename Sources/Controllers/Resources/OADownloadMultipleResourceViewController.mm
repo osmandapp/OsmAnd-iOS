@@ -532,8 +532,13 @@
 
 - (void)onTopButtonPressed
 {
-    [self dismissViewController];
-    
+    [self dismissViewControllerWithAnimated:YES completion:^{
+        [self downloadSelectedResources];
+    }];
+}
+
+- (void)downloadSelectedResources
+{
     if (self.delegate)
     {
         if (_isSRTM)

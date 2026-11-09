@@ -1326,7 +1326,7 @@ includeHidden:(BOOL)includeHidden
     return countryName;
 }
 
-+ (NSArray<OAResourceItem *> *)getDownloadEnabledItems:(NSArray<OAResourceItem *> *)items
++ (NSArray<OAResourceItem *> *)getDownloadEnabledItems:(NSArray<OAResourceItem *> *)items onReplaced:(dispatch_block_t)onReplaced
 {
     NSMutableArray<OAResourceSwiftItem *> *swiftItems = [NSMutableArray array];
     for (OAResourceItem *item in items)
@@ -1340,7 +1340,8 @@ includeHidden:(BOOL)includeHidden
     
     if (check.freeItems.count == 0)
     {
-        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:[OARootViewController instance].navigationController];
+        FreeRegionBottomSheet *bottomSheet = [[FreeRegionBottomSheet alloc] initWithFreeRegion:check.freeRegion region:check.otherRegions.firstObject onReplaced:onReplaced];
+        [[OARootViewController instance].navigationController.visibleViewController showMediumToLargeSheetViewController:bottomSheet];
         return @[];
     }
     
@@ -1498,7 +1499,11 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
-    if (item.disabled || [self.class getDownloadEnabledItems:@[item]].count == 0)
+    dispatch_block_t onReplaced = ^{
+        [self.class offerDownloadAndInstallOf:item sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:silent];
+    };
+
+    if (item.disabled || [self.class getDownloadEnabledItems:@[item] onReplaced:onReplaced].count == 0)
         return;
     if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
         return;
@@ -1591,7 +1596,11 @@ includeHidden:(BOOL)includeHidden
         if (![multipleItem.items containsObject:item] || item.disabled || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
             [items removeObject:item];
     }
-    items = [[self.class getDownloadEnabledItems:items] mutableCopy];
+
+    items = [[self.class getDownloadEnabledItems:items onReplaced:^{
+        [self.class offerMultipleDownloadAndInstallOf:multipleItem selectedItems:selectedItems sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }] mutableCopy];
+
     if (items.count == 0)
         return;
 

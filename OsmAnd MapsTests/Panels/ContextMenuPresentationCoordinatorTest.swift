@@ -25,7 +25,7 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
 
     func testKeepsOnlyLatestPresentationWhileDismissalIsInProgress() {
         let coordinator = ContextMenuPresentationCoordinator()
-        var pendingDismissalCompletion: (() -> Void)?
+        var pendingDismissalCompletion: ((Bool) -> Void)?
         var dismissCount = 0
         var presentedMenus: [String] = []
 
@@ -55,7 +55,7 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         XCTAssertEqual(dismissCount, 1)
         XCTAssertEqual(presentedMenus, [])
 
-        pendingDismissalCompletion?()
+        pendingDismissalCompletion?(true)
 
         XCTAssertEqual(presentedMenus, ["second"])
         XCTAssertFalse(coordinator.isTransitionInProgress)
@@ -64,7 +64,7 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
     func testDismissesMenusOneAtATimeBeforePresenting() {
         let coordinator = ContextMenuPresentationCoordinator()
         var remainingMenus = 2
-        var pendingDismissalCompletion: (() -> Void)?
+        var pendingDismissalCompletion: ((Bool) -> Void)?
         var presentationCount = 0
 
         let dismissHandler = ContextMenuDismissHandler(handler: { completion in
@@ -84,12 +84,12 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         XCTAssertEqual(remainingMenus, 1)
         XCTAssertEqual(presentationCount, 0)
 
-        pendingDismissalCompletion?()
+        pendingDismissalCompletion?(true)
 
         XCTAssertEqual(remainingMenus, 0)
         XCTAssertEqual(presentationCount, 0)
 
-        pendingDismissalCompletion?()
+        pendingDismissalCompletion?(true)
 
         XCTAssertEqual(presentationCount, 1)
         XCTAssertFalse(coordinator.isTransitionInProgress)
@@ -103,7 +103,7 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         let dismissHandler = ContextMenuDismissHandler(handler: { completion in
             if remainingMenus > 0 {
                 remainingMenus -= 1
-                completion()
+                completion(true)
                 return true
             }
             return false
@@ -117,5 +117,46 @@ final class ContextMenuPresentationCoordinatorTest: XCTestCase {
         XCTAssertEqual(remainingMenus, 0)
         XCTAssertEqual(presentationCount, 1)
         XCTAssertFalse(coordinator.isTransitionInProgress)
+    }
+
+    func testCancelledDismissalDiscardsPendingPresentationAndAllowsNextRequest() {
+        let coordinator = ContextMenuPresentationCoordinator()
+        var pendingDismissalCompletion: ((Bool) -> Void)?
+        var presentedMenus: [String] = []
+        let dismissHandler = ContextMenuDismissHandler(handler: { completion in
+            pendingDismissalCompletion = completion
+            return true
+        })
+
+        coordinator.enqueuePresentation { presentedMenus.append("cancelled") }
+        coordinator.processPendingPresentation(with: [dismissHandler])
+        XCTAssertTrue(coordinator.isTransitionInProgress)
+
+        pendingDismissalCompletion?(false)
+        XCTAssertFalse(coordinator.isTransitionInProgress)
+        coordinator.processPendingPresentation(with: [])
+        XCTAssertTrue(presentedMenus.isEmpty)
+
+        coordinator.enqueuePresentation { presentedMenus.append("next") }
+        coordinator.processPendingPresentation(with: [])
+        XCTAssertEqual(presentedMenus, ["next"])
+    }
+
+    func testHandlesSynchronousDismissalCancellation() {
+        let coordinator = ContextMenuPresentationCoordinator()
+        let dismissHandler = ContextMenuDismissHandler(handler: { completion in
+            completion(false)
+            return true
+        })
+
+        coordinator.enqueuePresentation { XCTFail("Cancelled presentation must not run") }
+        coordinator.processPendingPresentation(with: [dismissHandler])
+        XCTAssertFalse(coordinator.isTransitionInProgress)
+        coordinator.processPendingPresentation(with: [])
+
+        var presented = false
+        coordinator.enqueuePresentation { presented = true }
+        coordinator.processPendingPresentation(with: [])
+        XCTAssertTrue(presented)
     }
 }

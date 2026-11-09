@@ -160,8 +160,8 @@ final class DescriptionDeviceHeader: UIView {
                 
                 defer {
                     completedCount += 1
-                    if completedCount == totalServices, device.deviceType == .OBD_VEHICLE_METRICS {
-                        OBDService.shared.startDispatcher()
+                    if completedCount == totalServices, let obdDevice = device as? OBDVehicleMetricsDevice {
+                        OBDService.shared.startDispatcherWhenReady(device: obdDevice)
                     }
                 }
                 

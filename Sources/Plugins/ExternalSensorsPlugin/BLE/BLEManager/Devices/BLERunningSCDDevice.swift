@@ -27,26 +27,26 @@ final class BLERunningSCDDevice: Device {
         .icCustomSensorSpeedOutlined
     }
     
-    override var getDataFields: [[String: String]]? {
+    override func dataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLERunningSensor }) as? BLERunningSensor {
             var result = [[String: String]]()
             if let lastRunningCadenceData = sensor.lastRunningCadenceData {
                 result.append([localizedString("external_device_characteristic_cadence"): String(lastRunningCadenceData.cadence) + " " + localizedString("revolutions_per_minute_unit")])
             }
             if let lastRunningSpeedData = sensor.lastRunningSpeedData {
-                if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value)) {
+                if let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastRunningSpeedData.speed.value), mode: appMode) {
                     result.append([localizedString("external_device_characteristic_speed"): String(speed)])
                 }
             }
             if let lastRunningDistanceData = sensor.lastRunningDistanceData {
                 let distanceMeters = lastRunningDistanceData.totalDistance.value / 10
-                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), with: OsmAndFormatterParams.noTrailingZeros) {
+                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), mode: appMode, with: OsmAndFormatterParams.noTrailingZeros) {
                     result.append([localizedString("external_device_characteristic_total_distance"): String(distance)])
                 }
             }
             if let lastRunningStrideLengthData = sensor.lastRunningStrideLengthData {
                 let strideLengthMeters = lastRunningStrideLengthData.strideLength.value / 100
-                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), with: OsmAndFormatterParams.noTrailingZeros) {
+                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), mode: appMode, with: OsmAndFormatterParams.noTrailingZeros) {
                     result.append([localizedString("external_device_characteristic_stride_length"): String(strideLength)])
                 }
             }

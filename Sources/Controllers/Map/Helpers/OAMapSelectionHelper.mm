@@ -65,26 +65,31 @@ static int TILE_SIZE = 256;
 
 - (MapSelectionResult *)collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation
 {
+    return [self collectObjectsFromMap:point showUnknownLocation:showUnknownLocation excludeUntouchableObjects:NO];
+}
+
+- (MapSelectionResult *)collectObjectsFromMap:(CGPoint)point showUnknownLocation:(BOOL)showUnknownLocation excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
+{
     if (!_provider)
         _provider = OARootViewController.instance.mapPanel.mapViewController.mapLayers.poiLayer;
     
     MapSelectionResult *result = [[MapSelectionResult alloc] initWithPoint:point];
-    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO];
-    [self collectObjectsFromMap:result point:point];
+    [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:NO excludeUntouchableObjects:excludeUntouchableObjects];
+    [self collectObjectsFromMap:result point:point excludeUntouchableObjects:excludeUntouchableObjects];
     
     if ([result isEmpty])
-        [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES];
+        [self collectObjectsFromLayers:result unknownLocation:showUnknownLocation secondaryObjects:YES excludeUntouchableObjects:excludeUntouchableObjects];
     
     [result groupByOsmIdAndWikidataId];
     return result;
 }
 
-- (void)collectObjectsFromMap:(MapSelectionResult *)result point:(CGPoint)point
+- (void)collectObjectsFromMap:(MapSelectionResult *)result point:(CGPoint)point excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
-    [self selectObjectsFromOpenGl:result point:point];
+    [self selectObjectsFromOpenGl:result point:point excludeUntouchableObjects:excludeUntouchableObjects];
 }
 
-- (void)collectObjectsFromLayers:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects
+- (void)collectObjectsFromLayers:(MapSelectionResult *)result unknownLocation:(BOOL)unknownLocation secondaryObjects:(BOOL)secondaryObjects excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     OAMapViewController *mapViewController = OARootViewController.instance.mapPanel.mapViewController;
     
@@ -104,14 +109,14 @@ static int TILE_SIZE = 256;
             {
                 if ([provider respondsToSelector:@selector(collectObjectsFromPoint:unknownLocation:excludeUntouchableObjects:)])
                 {
-                    [provider collectObjectsFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:NO];
+                    [provider collectObjectsFromPoint:result unknownLocation:unknownLocation excludeUntouchableObjects:excludeUntouchableObjects];
                 }
             }
         }
     }
 }
 
-- (void)selectObjectsFromOpenGl:(MapSelectionResult *)result point:(CGPoint)point
+- (void)selectObjectsFromOpenGl:(MapSelectionResult *)result point:(CGPoint)point excludeUntouchableObjects:(BOOL)excludeUntouchableObjects
 {
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     OAMapRendererView *rendererView = (OAMapRendererView *) mapVc.view;
@@ -125,7 +130,7 @@ static int TILE_SIZE = 256;
         
         const auto& symbols = [rendererView getSymbolsIn:area strict:NO];
         OAAmenitySearcher *amenitySearcher = [[OAAmenitySearcher alloc] init];
-        BOOL onlyPoints = [mapVc.mapLayers.routePlanningLayer isInMeasurementMode];
+        BOOL onlyPoints = excludeUntouchableObjects || [mapVc.mapLayers.routePlanningLayer isInMeasurementMode];
 
         for (const auto symbolInfo : symbols)
         {
@@ -159,7 +164,9 @@ static int TILE_SIZE = 256;
             else
             {
                 CLLocation *clickLatLon = [mapVc getLatLonFromElevatedPixel:point.x y:point.y];
-                result.objectLatLon = [self snapLatLonToWayGeometry:clickLatLon mapSymbol:symbolInfo.mapSymbol];
+                result.objectLatLon = excludeUntouchableObjects
+                    ? clickLatLon
+                    : [self snapLatLonToWayGeometry:clickLatLon mapSymbol:symbolInfo.mapSymbol];
             }
             
             if (cppAmenity != nullptr)
@@ -298,13 +305,28 @@ static int TILE_SIZE = 256;
         {
             [renderedObject setIconRes:symbolIcon->content.toNSString()];
         }
-        if (symbolCaption != nullptr)
-        {
-            [renderedObject setName:symbolCaption->content.toNSString()];
-        }
+        BOOL stubCaption = NO;
         for (NSString *key in tags)
         {
             renderedObject.tags[key] = tags[key];
+            if ([key hasPrefix:@"osmand_"] && [key hasSuffix:@"_stub"])
+                stubCaption = YES;
+        }
+        if (symbolCaption != nullptr)
+        {
+            if (stubCaption)
+            {
+                const auto names = obfMapObject->getCaptionsInAllLanguages();
+                for (const auto& name : OsmAnd::rangeOf(OsmAnd::constOf(names)))
+                {
+                    [renderedObject setName:name.key().toNSString() name:name.value().toNSString()];
+                }
+                [renderedObject setName:obfMapObject->getCaptionInNativeLanguage().toNSString()];
+            }
+            else
+            {
+                [renderedObject setName:symbolCaption->content.toNSString()];
+            }
         }
         return renderedObject;
     }

@@ -1255,7 +1255,7 @@
 "routing_attr_height_obstacles_description" = "Gall y llwybro osgoi gorfod mynd i fyny\'n serth.";
 "rendering_attr_currentTrackColor_description" = "Lliw GPX";
 "routing_attr_driving_style_speed_name" = "Llwybrau byrrach";
-"routing_attr_avoid_sett_description" = "Osgoi wynebau cobls";
+"routing_attr_avoid_sett_description" = "Osgoi cerrig sets";
 "rendering_attr_lessDetailed_name" = "Llai o fanylion";
 "rendering_attr_highway_class_steps_name" = "Stepiau";
 "routing_attr_avoid_tram_name" = "Dim tramiau";
@@ -1297,7 +1297,7 @@
 "routing_attr_prefer_motorway_name" = "Ffafrio traffyrdd";
 "rendering_attr_surface_cobblestone_name" = "Cobbls";
 "rendering_attr_highway_class_state_road_name" = "Ffordd y wladwriaeth";
-"routing_attr_avoid_sett_name" = "Dim wynebau cobls";
+"routing_attr_avoid_sett_name" = "Dim cerrig sets";
 "rendering_value_translucent_lightblue_name" = "Glas golau tryloyw";
 "rendering_attr_smoothness_good_name" = "Da";
 "routing_attr_weight_name" = "Cyfyngiad pwysau";
@@ -2121,3 +2121,5 @@
 "us_gallons" = "Galwyni'r Unol Daleithiau";
 "unit_of_volume_description" = "Bydd unedau a ddewiswyd yn cael eu cymhwyso i'r holl ddata sy'n gysylltiedig â chyfaint yn y proffil cyfredol.";
 "unit_of_volume" = "Uned gyfaint";
+"routing_attr_avoid_cobblestone_name" = "Osgoi coblau";
+"routing_attr_avoid_cobblestone_description" = "Osgoi coblau";

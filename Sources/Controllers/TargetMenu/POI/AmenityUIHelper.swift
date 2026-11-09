@@ -96,7 +96,8 @@ final class AmenityUIHelper: NSObject {
         }
         guard let pType = categoryTypes.first else { return nil }
         let text = categoryTypes.map { $0.nameLocalized }.joined(separator: " • ")
-        let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: entry.poiAdditional, type: poiCategory)
+        let values = categoryTypes.map { entry.getCollapsableEntryValue(key: $0.name) ?? "" }
+        let collapsableView = getPoiTypeCollapsableView(collapsed: true, categoryTypes: categoryTypes, poiAdditional: entry.poiAdditional, values: values, type: poiCategory)
 
         if entry.poiAdditional {
             var icon: UIImage?
@@ -274,9 +275,9 @@ final class AmenityUIHelper: NSObject {
         return OAAmenityInfoRow(key: Self.NAMES_ROW_KEY, icon: UIImage.templateImageNamed("ic_custom_map_languge"), textPrefix:  localizedString("shared_string_name"), text: name, hiddenUrl: nil, collapsableView: nil, textColor: nil, isWiki: false, isText: true, needLinks: false, isPhoneNumber: false, isUrl: false, order: 18000, name: "names", matchWidthDivider: matchWidthDivider, textLinesLimit: 1)
     }
 
-    private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, type: OAPOICategory?) -> OACollapsableView? {
+    private func getPoiTypeCollapsableView(collapsed: Bool, categoryTypes: [OAPOIType], poiAdditional: Bool, values: [String], type: OAPOICategory?) -> OACollapsableView? {
         let collapsableView = OACollapsableNearestPoiTypeView(defaultParameters: true)
-        collapsableView?.setData(categoryTypes, amenityPoiCategory: type, lat: latLon.latitude, lon: latLon.longitude, isPoiAdditional: poiAdditional, textRow: nil)
+        collapsableView?.setData(categoryTypes, amenityPoiCategory: type, lat: latLon.latitude, lon: latLon.longitude, isPoiAdditional: poiAdditional, values: values, textRow: nil)
         return collapsableView
     }
 

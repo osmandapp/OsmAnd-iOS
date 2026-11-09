@@ -888,29 +888,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSMutableString* text;
-    if (isUpdate)
-    {
-        text = [OALocalizedString(@"res_update_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
-    else
-    {
-        text = [OALocalizedString(@"res_install_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
+    NSString *prefix = OALocalizedString(isUpdate ? @"res_update_no_space" : @"res_install_no_space");
+    NSString *text = [NSString stringWithFormat:@"%@ %@. %@ %@",
+                      prefix,
+                      resourceName ?: @"",
+                      stringifiedSize,
+                      OALocalizedString(@"res_no_space_free")];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:text preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];

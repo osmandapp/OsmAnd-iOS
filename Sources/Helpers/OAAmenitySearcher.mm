@@ -947,6 +947,12 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     return type;
 }
 
++ (nullable OAPOIType *)searchableTypeForSharedAmenity:(OASAmenity *)amenity
+{
+    OAPOIType *type = [self parsePOITypeBySharedAmenity:amenity];
+    return !type || type.mapOnly || [OAAppSettings.sharedManager isTypeDisabled:[amenity getSubType]] ? nil : type;
+}
+
 + (nullable OAPOI *) parsePOIBySharedAmenity:(OASAmenity *)amenity
 {
     return [self parsePOIBySharedAmenity:amenity filterTypes:YES];
@@ -954,8 +960,8 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity filterTypes:(BOOL)filterTypes
 {
-    OAPOIType *type = [self.class parsePOITypeBySharedAmenity:amenity];
-    if (filterTypes && (!type || type.mapOnly || [OAAppSettings.sharedManager isTypeDisabled:[amenity getSubType]]))
+    OAPOIType *type = filterTypes ? [self searchableTypeForSharedAmenity:amenity] : [self parsePOITypeBySharedAmenity:amenity];
+    if (filterTypes && !type)
         return nil;
 
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;

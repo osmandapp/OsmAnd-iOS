@@ -49,12 +49,14 @@
 - (NSArray<CPListSection *> *)generateSections
 {
     NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
     if (![_settings.searchHistory get])
         return [self sectionsForSearchResults:@[]];
 
     [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO completion:^(OASearchResultCollection *res) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request == _dataRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
                 [self updateSections:[self sectionsForSearchResults:res.getCurrentSearchResults ?: @[]]];
         });
     }];
@@ -223,6 +225,12 @@
     [self safePopToRootTemplateAnimated:YES];
     if (completionBlock)
         completionBlock();
+}
+
+- (void)onTemplateDismissed
+{
+    ++_dataRequest;
+    [super onTemplateDismissed];
 }
 
 @end

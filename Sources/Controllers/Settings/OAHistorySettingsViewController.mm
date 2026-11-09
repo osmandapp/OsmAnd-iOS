@@ -38,6 +38,8 @@
 @implementation OAHistorySettingsViewController
 {
     NSUInteger _dataRequest;
+    BOOL _dataRequestInvalidated;
+    BOOL _needsDataReload;
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
     OAHistoryHelper *_historyHelper;
@@ -106,9 +108,20 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    BOOL needsReload = _dataRequestInvalidated && _needsDataReload;
+    _dataRequestInvalidated = NO;
     [super viewWillAppear:animated];
+    if (needsReload && !self.refreshOnAppear)
+        [self generateData];
 
     _decelerating = NO;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    _dataRequestInvalidated = YES;
+    ++_dataRequest;
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Base UI
@@ -190,15 +203,20 @@
 
 - (void)generateData
 {
+    _needsDataReload = YES;
+    if (_dataRequestInvalidated)
+        return;
     NSUInteger request = ++_dataRequest;
     if (_historyType != EOAHistorySettingsTypeSearch || !_isLogHistoryOn)
     {
         [self generateDataWithSearchResults:@[] request:request];
         return;
     }
+    __weak __typeof(self) weakSelf = self;
     [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO completion:^(OASearchResultCollection *res) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request == _dataRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
                 [self generateDataWithSearchResults:res.getCurrentSearchResults ?: @[] request:request];
         });
     }];
@@ -215,8 +233,14 @@
             kCellTypeKey : [OASwitchTableViewCell getCellIdentifier] }
         ];
     }
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-        if (_isLogHistoryOn)
+    BOOL isLogHistoryOn = _isLogHistoryOn;
+    EOAHistorySettingsType historyType = _historyType;
+    OAHistoryHelper *historyHelper = _historyHelper;
+    OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
+    OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async([self historyDataQueue], ^{
+        if (isLogHistoryOn)
         {
             CLLocation *newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
             CLLocationCoordinate2D myLocation = kCLLocationCoordinate2DInvalid;
@@ -227,9 +251,9 @@
             }
             
             NSMutableArray<OASearchHistoryTableItem *> *sortedHistoryItems = [NSMutableArray array];
-            if (_historyType == EOAHistorySettingsTypeMapMarkers)
+            if (historyType == EOAHistorySettingsTypeMapMarkers)
             {
-                NSArray<OAHistoryItem *> *mapMarkersHistoryItems = [_historyHelper getPointsHavingTypes:_historyHelper.destinationTypes limit:0];
+                NSArray<OAHistoryItem *> *mapMarkersHistoryItems = [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0];
                 for (OAHistoryItem *mapMarkerHistoryItem in mapMarkersHistoryItems)
                 {
                     OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:mapMarkerHistoryItem mapCenterCoordinate:myLocation];
@@ -238,11 +262,11 @@
             }
             else
             {
-                if (_historyType == EOAHistorySettingsTypeSearch)
+                if (historyType == EOAHistorySettingsTypeSearch)
                 {
                     for (OASearchResult *searchResult in searchResults)
                     {
-                        OAHistoryItem *historyItem = [self getHistoryEntry:searchResult];
+                        OAHistoryItem *historyItem = [OAHistorySettingsViewController getHistoryEntry:searchResult];
                         if (historyItem)
                         {
                             OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation];
@@ -250,7 +274,7 @@
                         }
                     }
                 }
-                else if (_historyType == EOAHistorySettingsTypeNavigation)
+                else if (historyType == EOAHistorySettingsTypeNavigation)
                 {
                     for (OAHistoryItem *historyItem in [[OAHistoryHelper sharedInstance] getPointsFromNavigation:0])
                     {
@@ -262,10 +286,8 @@
             
             OASearchHistoryTableItem *prevRouteHistoryTableitem;
             OATableRowData *prevRouteItem;
-            if (_historyType == EOAHistorySettingsTypeNavigation)
+            if (historyType == EOAHistorySettingsTypeNavigation)
             {
-                OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
-                OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
                 if (pointToNavigateBackup)
                 {
                     OATableSectionData *prevRouteSection = [data createNewSection];
@@ -288,7 +310,7 @@
             
             if (sortedHistoryItems.count > 0)
             {
-                [self sortSearchResults:sortedHistoryItems];
+                [OAHistorySettingsViewController sortSearchResults:sortedHistoryItems];
                 
                 NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
                 NSDate *today = [calendar startOfDayForDate:[NSDate date]];
@@ -341,22 +363,33 @@
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request != _dataRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (!self || request != self->_dataRequest)
                 return;
-            _data = data;
-            [UIView transitionWithView:self.view
-                              duration:.2
-                               options:UIViewAnimationOptionTransitionCrossDissolve
-                            animations:^
-                            {
-                                [self.tableView reloadData];
-                                [self applyLocalization];
-                                [self updateNavbar];
-                                [self updateBottomButtons];
-                            }
-                            completion:nil];
+            self->_needsDataReload = NO;
+            [self applyHistoryData:data];
         });
     });
+}
+
+- (void)applyHistoryData:(OATableDataModel *)data
+{
+    _data = data;
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                        [self.tableView reloadData];
+                        [self applyLocalization];
+                        [self updateNavbar];
+                        [self updateBottomButtons];
+                    }
+                    completion:nil];
+}
+
+- (dispatch_queue_t)historyDataQueue
+{
+    return dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0);
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section
@@ -449,7 +482,7 @@
 
 #pragma mark - Aditions
 
-- (void)sortSearchResults:(NSMutableArray<OASearchHistoryTableItem *> *)historyTableItems
++ (void)sortSearchResults:(NSMutableArray<OASearchHistoryTableItem *> *)historyTableItems
 {
     [historyTableItems sortUsingComparator:^NSComparisonResult(OASearchHistoryTableItem *h1, OASearchHistoryTableItem *h2) {
         NSTimeInterval lastTime1 = h1.item.date.timeIntervalSince1970;
@@ -469,7 +502,7 @@
     return itemsCount > 0 && selectedCount == itemsCount;
 }
 
-- (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult
++ (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult
 {
     if ([searchResult.object isKindOfClass:OAHistoryItem.class])
         return (OAHistoryItem *) searchResult.object;

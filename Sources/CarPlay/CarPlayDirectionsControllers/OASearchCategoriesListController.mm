@@ -41,9 +41,11 @@
 - (NSArray<CPListSection *> *)generateSections
 {
     NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
     [[_quickSearchHelper getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request == _dataRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
                 [self updateSections:[self sectionsForResults:res]];
         });
     }];
@@ -124,6 +126,12 @@
 
     if (completionBlock)
         completionBlock();
+}
+
+- (void)onTemplateDismissed
+{
+    ++_dataRequest;
+    [super onTemplateDismissed];
 }
 
 @end

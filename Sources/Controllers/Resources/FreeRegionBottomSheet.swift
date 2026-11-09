@@ -32,26 +32,15 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     }
     
     private var emailFooterText: String {
-        localizedString(isEmailErrorShown ? "osm_live_enter_email" : "free_region_email_helper")
+        guard !isEmailErrorShown else { return localizedString("osm_live_enter_email") }
+        let helper = localizedString("free_region_email_helper")
+        guard !mapsToDelete.isEmpty else { return helper }
+        let names = mapsToDelete.map { $0.region.name ?? "" }.joined(separator: ", ")
+        return helper + " " + String(format: localizedString("free_region_email_maps_deleted"), names, mapsToDeleteSize)
     }
     
     private var mapsToDeleteSize: String {
         OAResourcesUISwiftHelper.formatSize(mapsToDelete.flatMap(\.items).reduce(0) { $0 + $1.size() }, addZero: false)
-    }
-    
-    private var stepTitle: String {
-        step == .replace ? String(format: localizedString("free_region_other_title"), region.name) : localizedString("free_region_replace_used_title")
-    }
-    
-    private var stepDescription: String {
-        switch step {
-        case .replace:
-            String(format: localizedString("free_region_other_descr"), region.name)
-        case .email:
-            localizedString("free_region_not_eligible_email_descr")
-        case .buy:
-            String(format: localizedString("free_region_not_eligible_buy_descr"), freeRegion.name, region.name)
-        }
     }
     
     init(freeRegion: OAWorldRegion, region: OAWorldRegion, onReplaced: @escaping () -> Void) {
@@ -79,10 +68,19 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(onLeftNavbarButtonPressed))
     }
     
-    override func getTableHeaderDescriptionAttr() -> NSAttributedString {
-        let text = NSMutableAttributedString(string: stepTitle + "\n", attributes: [.font: UIFont.scaledSystemFont(ofSize: 20, weight: .semibold), .foregroundColor: UIColor.textColorPrimary])
-        text.append(NSAttributedString(string: stepDescription, attributes: [.font: UIFont.preferredFont(forTextStyle: .subheadline), .foregroundColor: UIColor.textColorSecondary]))
-        return text
+    override func getTitle() -> String {
+        step == .replace ? String(format: localizedString("free_region_other_title"), region.name) : localizedString("free_region_replace_used_title")
+    }
+    
+    override func getTableHeaderDescription() -> String {
+        switch step {
+        case .replace:
+            String(format: localizedString("free_region_other_descr"), region.name)
+        case .email:
+            localizedString("free_region_not_eligible_email_descr")
+        case .buy:
+            String(format: localizedString("free_region_not_eligible_buy_descr"), freeRegion.name, region.name)
+        }
     }
     
     override func getBottomColorScheme() -> EOABaseBottomColorScheme {
@@ -140,10 +138,6 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
             section.headerText = localizedString("shared_string_email_address")
             section.footerText = emailFooterText
             section.createNewRow().cellType = OAInputTableViewCell.reuseIdentifier
-            if !mapsToDelete.isEmpty {
-                let names = mapsToDelete.map { $0.region.name ?? "" }.joined(separator: ", ")
-                tableData.createNewSection().footerText = String(format: localizedString("free_region_email_maps_deleted"), names, mapsToDeleteSize)
-            }
         }
     }
     

@@ -1443,6 +1443,7 @@
             [self.gpxWptDelegate deleteGpxWpt:waypointItem docPath:[(OAGpxWptEditingHandler *)_pointHandler getGpxDocument].path];
 
         [_pointHandler savePoint:data newPoint:_isNewItemAdding];
+        _isUnsaved = NO;
         [self dismissViewController];
     }]];
 

@@ -39,6 +39,7 @@
     {
         _gpxWpt = gpxWpt;
         _gpxFileName = _gpxWpt.docPath;
+        _gpxDocument = _gpxWpt.gpxFile;
         _iconName = _gpxWpt.point.getIconName;
 
         [self commonInit];

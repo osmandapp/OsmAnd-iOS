@@ -1646,6 +1646,19 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
+- (BOOL)isDisplayingGpxFiles:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles
+{
+    if (_gpxFiles.count != gpxFiles.count)
+        return NO;
+
+    for (NSString *path in gpxFiles)
+    {
+        if (_gpxFiles[path] != gpxFiles[path])
+            return NO;
+    }
+    return YES;
+}
+
 - (void) refreshGpxWaypoints
 {
     [self refreshGpxWaypoints:[self collectVisibleWaypoints]];
@@ -2132,6 +2145,7 @@ colorizationScheme:(int)colorizationScheme
 
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
         wptItem.point = item;
+        wptItem.gpxFile = gpxFile;
         wptItem.groups = [self visibleWaypointGroupNames:gpxFile];
         wptItem.docPath = docPath;
         return [self getTargetPoint:wptItem touchLocation:nil];
@@ -2309,22 +2323,11 @@ colorizationScheme:(int)colorizationScheme
     {
         OAGpxWptItem *item = (OAGpxWptItem *)object;
         
-        if (item.docPath)
+        if (item.docPath.length > 0)
         {
-            item.point.lat = position.latitude;
-            item.point.lon = position.longitude;
+            [item prepareForEditing];
             item.point.position = position;
-
-            OASGpxFile *gpxFile = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
-            if (gpxFile)
-            {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:item.docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-                
-                NSDictionary<NSString *, OASGpxFile *> *dic = @{ item.docPath : gpxFile };
-                [self refreshGpxTracks:dic reset:YES];
-            }
+            [self.mapViewController updateWpts:@[item] docPath:item.docPath updateMap:YES];
         }
         else
         {

@@ -4852,7 +4852,10 @@ typedef enum
 
 - (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
-    [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
+    if (![_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName])
+        return;
+    gpxWpt.originalPoint = _mapViewController.foundWpt;
+    [_mapViewController selectWpt:gpxWpt];
 
     gpxWpt.groups = _mapViewController.foundWptGroups;
 
@@ -4886,7 +4889,7 @@ typedef enum
     
     if (gpxWptItem.point)
     {
-        [_mapViewController saveFoundWpt];
+        [_mapViewController updateWpts:@[gpxWptItem] docPath:gpxWptItem.docPath updateMap:YES];
     }
 }
 

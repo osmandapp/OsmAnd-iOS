@@ -864,6 +864,7 @@ typedef enum
 
 - (void) startDownload:(OARepositoryResourceItem *)item
 {
+    [FreeVersionMapDownloads.shared chooseFreeRegion:[[OAResourceSwiftItem alloc] initWithItem:item]];
     NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
                                                          inRegion:item.worldRegion
                                                    withRegionName:YES

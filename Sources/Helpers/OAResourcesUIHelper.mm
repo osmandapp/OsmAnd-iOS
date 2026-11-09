@@ -1326,19 +1326,27 @@ includeHidden:(BOOL)includeHidden
     return countryName;
 }
 
-+ (BOOL) checkIfDownloadEnabled:(OAWorldRegion *)region
++ (NSArray<OAResourceItem *> *)getDownloadEnabledItems:(NSArray<OAResourceItem *> *)items
 {
-    BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
-    if (!isAvailable)
+    NSMutableArray<OAResourceSwiftItem *> *swiftItems = [NSMutableArray array];
+    for (OAResourceItem *item in items)
     {
-        OAWorldRegion * globalRegion = [region getPrimarySuperregion];
-        OAProduct* product = [globalRegion getProduct];
-        if (!product)
-            product = OAIAPHelper.sharedInstance.allWorld;
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
-        return NO;
+        [swiftItems addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }
-    return isAvailable;
+    
+    FreeRegionCheck *check = [FreeVersionMapDownloads.shared check:swiftItems];
+    if (check.isAllFree)
+        return items;
+    
+    if (check.freeItems.count == 0)
+    {
+        [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.UNLIMITED_MAP_DOWNLOADS navController:[OARootViewController instance].navigationController];
+        return @[];
+    }
+    
+    NSString *regionNames = [[check.otherRegions valueForKey:@"name"] componentsJoinedByString:@", "];
+    [OAUtilities showToast:@"" details:[NSString stringWithFormat:OALocalizedString(@"free_region_other_regions_need_maps_plus"), regionNames] duration:4 inView:[UIApplication sharedApplication].mainWindow];
+    return [check.freeItems valueForKey:@"objcResourceItem"];
 }
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
@@ -1490,7 +1498,7 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
-    if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
+    if (item.disabled || [self.class getDownloadEnabledItems:@[item]].count == 0)
         return;
     if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
         return;
@@ -1580,10 +1588,10 @@ includeHidden:(BOOL)includeHidden
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
     for (OAResourceItem *item in selectedItems)
     {
-        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion])
-            || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+        if (![multipleItem.items containsObject:item] || item.disabled || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
             [items removeObject:item];
     }
+    items = [[self.class getDownloadEnabledItems:items] mutableCopy];
     if (items.count == 0)
         return;
 
@@ -1772,7 +1780,7 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
-        if ([OAResourcesInstaller isInstalling:item.resource->id.toNSString()])
+        if ([OAResourcesInstaller isInstalling:item.resource->id.toNSString()] || ![FreeVersionMapDownloads.shared canDownload:[[OAResourceSwiftItem alloc] initWithItem:item]])
             return;
 
         // Create download tasks

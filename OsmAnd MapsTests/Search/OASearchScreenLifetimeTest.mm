@@ -102,6 +102,10 @@ static OALifetimeSearchCore *lifetimeSearchCore;
 - (void)updateSections:(NSArray *)sections { self.appliedCount++; }
 @end
 
+@protocol OALifetimeCarPlayScene <CPTemplateApplicationSceneDelegate, CPInterfaceControllerDelegate, OACarPlayListLifecycleDelegate>
+- (void)dismissListControllers;
+@end
+
 // CPInterfaceController is provided by CarPlay, so the test supplies only its navigation contract.
 @interface OALifetimeCarPlayInterface : NSObject
 @property(nonatomic) NSMutableArray<CPTemplate *> *templates;
@@ -261,11 +265,11 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     return [[OALifetimeCarPlayCategories alloc] initWithInterfaceController:(id)interface];
 }
 
-- (id<CPTemplateApplicationSceneDelegate, CPInterfaceControllerDelegate>)sceneDelegateFor:(OALifetimeCarPlayInterface *)interface
+- (id<OALifetimeCarPlayScene>)sceneDelegateFor:(OALifetimeCarPlayInterface *)interface
 {
     Class sceneClass = NSClassFromString(@"OsmAnd_Maps.CarPlaySceneDelegate");
     XCTAssertNotNil(sceneClass);
-    id<CPTemplateApplicationSceneDelegate, CPInterfaceControllerDelegate> scene = [[sceneClass alloc] init];
+    id<OALifetimeCarPlayScene> scene = [[sceneClass alloc] init];
     [scene templateApplicationScene:nil didConnectInterfaceController:(id)interface toWindow:nil];
     XCTAssertEqual(interface.delegate, scene);
     return scene;
@@ -322,7 +326,7 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     }
 }
 
-- (void)testCarPlayBackAndPopToRootInvalidateEveryRemovedScreen
+- (void)testCarPlayPopToRootInvalidatesEveryRemovedScreen
 {
     OALifetimeCarPlayInterface *interface = [[OALifetimeCarPlayInterface alloc] init];
     id<CPInterfaceControllerDelegate> scene = [self sceneDelegateFor:interface];
@@ -341,6 +345,30 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     [self drainMainQueue];
     for (id controller in controllers)
         XCTAssertEqual([controller appliedCount], 0u);
+}
+
+- (void)testCarPlayBackInvalidatesOnlyTheRemovedScreen
+{
+    for (NSInteger screen = 0; screen < 3; screen++)
+    {
+        OALifetimeCarPlayInterface *interface = [[OALifetimeCarPlayInterface alloc] init];
+        id<CPInterfaceControllerDelegate> scene = [self sceneDelegateFor:interface];
+        id parent = [self carPlayScreen:2 interface:interface];
+        [parent present];
+        NSUInteger parentRequest = lifetimeSearchCore.completions.count - 1;
+        id child = [self carPlayScreen:screen interface:interface];
+        [child present];
+        NSUInteger childRequest = lifetimeSearchCore.completions.count - 1;
+        // Completion is already queued when the user presses Back.
+        [self completeRequest:childRequest];
+        CPTemplate *childTemplate = interface.templates.lastObject;
+        [interface.templates removeLastObject];
+        [scene templateDidDisappear:childTemplate animated:NO];
+        [self completeRequest:parentRequest];
+        [self drainMainQueue];
+        XCTAssertEqual([child appliedCount], 0u);
+        XCTAssertEqual([parent appliedCount], 1u);
+    }
 }
 
 - (void)testCarPlayCoveredScreenKeepsItsRequestAndCanReturn
@@ -389,6 +417,8 @@ static OALifetimeSearchCore *lifetimeSearchCore;
 {
     OALifetimeCarPlayInterface *first = [[OALifetimeCarPlayInterface alloc] init];
     OALifetimeCarPlayInterface *second = [[OALifetimeCarPlayInterface alloc] init];
+    id<OALifetimeCarPlayScene> firstScene = [self sceneDelegateFor:first];
+    id<OALifetimeCarPlayScene> secondScene = [self sceneDelegateFor:second];
     NSMutableArray *controllers = [NSMutableArray array];
     for (NSInteger screen = 0; screen < 3; screen++)
     {
@@ -398,13 +428,53 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     }
     id other = [self carPlayScreen:2 interface:second];
     [other present];
-    [NSNotificationCenter.defaultCenter postNotificationName:OACarPlayDidDisconnectNotification object:first];
+    // Exercise the scene's disconnect cleanup without changing the host app's map or routing state.
+    [firstScene dismissListControllers];
     for (NSUInteger request = 0; request < 4; request++)
         [self completeRequest:request];
     [self drainMainQueue];
     for (id controller in controllers)
         XCTAssertEqual([controller appliedCount], 0u);
     XCTAssertEqual([other appliedCount], 1u);
+    XCTAssertEqual(second.delegate, secondScene);
+}
+
+- (void)testCarPlayReconnectDoesNotDeliverOldResultsToNewScreens
+{
+    OALifetimeCarPlayInterface *first = [[OALifetimeCarPlayInterface alloc] init];
+    id<OALifetimeCarPlayScene> scene = [self sceneDelegateFor:first];
+    id oldController = [self carPlayScreen:2 interface:first];
+    [oldController present];
+    [self completeRequest:0];
+    [scene dismissListControllers];
+    first.delegate = nil;
+
+    OALifetimeCarPlayInterface *second = [[OALifetimeCarPlayInterface alloc] init];
+    [scene templateApplicationScene:nil didConnectInterfaceController:(id)second toWindow:nil];
+    id newController = [self carPlayScreen:2 interface:second];
+    [newController present];
+    [self completeRequest:0];
+    [self completeRequest:1];
+    [self drainMainQueue];
+    XCTAssertEqual([oldController appliedCount], 0u);
+    XCTAssertEqual([newController appliedCount], 1u);
+    XCTAssertEqual(second.delegate, scene);
+}
+
+- (void)testCarPlaySceneDoesNotRegisterAnotherInterfacesController
+{
+    OALifetimeCarPlayInterface *first = [[OALifetimeCarPlayInterface alloc] init];
+    OALifetimeCarPlayInterface *second = [[OALifetimeCarPlayInterface alloc] init];
+    id<OALifetimeCarPlayScene> firstScene = [self sceneDelegateFor:first];
+    id<OALifetimeCarPlayScene> secondScene = [self sceneDelegateFor:second];
+    id controller = [self carPlayScreen:2 interface:second];
+    [controller present];
+    [firstScene registerListController:controller];
+    [firstScene dismissListControllers];
+    [self completeRequest:0];
+    [self drainMainQueue];
+    XCTAssertEqual([controller appliedCount], 1u);
+    XCTAssertEqual(second.delegate, secondScene);
 }
 
 - (OALifetimePreparedHistoryController *)historyWithQueue:(dispatch_queue_t)queue
@@ -498,6 +568,7 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     for (NSInteger screen = 0; screen < 3; screen++)
     {
         OALifetimeCarPlayInterface *interface = [[OALifetimeCarPlayInterface alloc] init];
+        id<OALifetimeCarPlayScene> scene = [self sceneDelegateFor:interface];
         __weak id weakController;
         @autoreleasepool
         {
@@ -508,6 +579,8 @@ static OALifetimeSearchCore *lifetimeSearchCore;
         }
         XCTAssertNil(weakController);
         [self drainMainQueue];
+        [scene dismissListControllers];
+        XCTAssertEqual(interface.delegate, scene);
     }
 }
 

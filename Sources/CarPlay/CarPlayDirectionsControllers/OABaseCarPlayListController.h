@@ -10,14 +10,20 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-FOUNDATION_EXPORT NSNotificationName const OACarPlayTemplatesDidChangeNotification;
-FOUNDATION_EXPORT NSNotificationName const OACarPlayDidDisconnectNotification;
+@class OABaseCarPlayListController;
+
+@protocol OACarPlayListLifecycleDelegate <NSObject>
+- (void)registerListController:(OABaseCarPlayListController *)controller;
+@end
 
 @interface OABaseCarPlayListController : OABaseCarPlayInterfaceController
 
 @property (nonatomic, readonly) NSString *screenTitle;
+@property (nonatomic, readonly, nullable) CPListTemplate *listTemplate;
 
 - (void) updateSections:(NSArray<CPListSection *> *)sections;
+
+- (void)dismissTemplate;
 
 // Called when this template leaves the navigation stack, or CarPlay disconnects.
 - (void)onTemplateDismissed;

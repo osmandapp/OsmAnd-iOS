@@ -1897,16 +1897,15 @@ colorizationScheme:(int)colorizationScheme
         }
         // NOTE: The old logic called processPoints during each initialization of the document (OAGPXDocument -> OASGpxFile). This was necessary for the correct recalculation for getPointsToDisplay. Now this is handled by recalculateProcessPoint. If recalculation is needed, call [document recalculateProcessPoint
         [document recalculateProcessPoint];
-        NSArray<OASWptPt *> *points;
+        NSArray<OASWptPt *> *points = nil;
         for (OASTrkSegment *segment in [document getPointsToDisplayWithIsJoinSegments:isJointSegments])
         {
-            points = [self findLineInPolygon31:touchPolygon31 points:[segment points]];
+            points = [self findLineInPolygon31:touchPolygon31 points:segment.points];
             if (points)
                 break;
         }
-        
         if (points)
-            [result collect:gpxDataItem ? : [OASavingTrackHelper sharedInstance].currentTrack provider:self];
+            [result collect:gpxDataItem ?: currentTrackGpxFile provider:self];
     }
 }
 

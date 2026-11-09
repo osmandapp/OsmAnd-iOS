@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateViewVisibility;
 - (void)updateButtonsAppearance;
+- (void)refreshQuickActionButtons;
 - (BOOL)isActionSheetVisible;
 - (BOOL)isQuickActionButtonVisible;
 - (void)hideActionsSheetAnimated:(void (^ _Nullable)(void))completion;

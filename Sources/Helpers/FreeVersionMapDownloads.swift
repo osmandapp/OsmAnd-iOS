@@ -71,6 +71,7 @@ final class FreeVersionMapDownloads: NSObject {
     
     private let lock = NSRecursiveLock()
     private var preferences: [String: Any]?
+    private var canWritePreferences = true
     private var isRegionsLoaded: Bool {
         OsmAndApp.swiftInstance().worldRegion != nil
     }
@@ -273,39 +274,40 @@ final class FreeVersionMapDownloads: NSObject {
         edit { $0[Self.regionKey] = regionId }
     }
     
-    private func loadPreferences() -> [String: Any]? {
+    private func loadPreferences() -> [String: Any] {
         if let preferences { return preferences }
+        var values: [String: Any] = [:]
         let url = preferencesURL
-        guard FileManager.default.fileExists(atPath: url.path) else {
-            preferences = [:]
-            return preferences
-        }
-        do {
-            let data = try Data(contentsOf: url)
-            guard let values = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
-                NSLog("Failed to read the free region: invalid preferences format")
-                return nil
+        if FileManager.default.fileExists(atPath: url.path) {
+            do {
+                let data = try Data(contentsOf: url)
+                guard let loadedValues = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
+                    throw CocoaError(.propertyListReadCorrupt)
+                }
+                values = loadedValues
+            } catch {
+                canWritePreferences = false
+                NSLog("Failed to read the free region: %@", error.localizedDescription)
             }
-            preferences = values
-            return preferences
-        } catch {
-            NSLog("Failed to read the free region: %@", error.localizedDescription)
-            return nil
         }
+        
+        preferences = values
+        return values
     }
     
     private func preference(_ key: String) -> Any? {
         lock.lock()
         defer { lock.unlock() }
-        return loadPreferences()?[key]
+        return loadPreferences()[key]
     }
     
     private func edit(_ change: (inout [String: Any]) -> Void) {
         lock.lock()
         defer { lock.unlock() }
-        guard var values = loadPreferences() else { return }
+        var values = loadPreferences()
         change(&values)
         preferences = values
+        guard canWritePreferences else { return }
         var url = preferencesURL
         do {
             let data = try PropertyListSerialization.data(fromPropertyList: values, format: .xml, options: 0)

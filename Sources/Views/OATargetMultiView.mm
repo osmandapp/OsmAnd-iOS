@@ -29,6 +29,10 @@
 @end
 
 @implementation OATargetMultiView
+{
+    NSObject *_hideAnimationToken;
+    void (^_hideCompletion)(BOOL hidden);
+}
 
 - (instancetype) init
 {
@@ -175,12 +179,13 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    [self cancelHide];
+    [self.layer removeAllAnimations];
     //[self applyMapInteraction:self.frame.size.height];
+    CGRect frame = [self getFrame];
     
     if (animated)
     {
-        CGRect frame = [self getFrame];
-        
         [UIView animateWithDuration:0.3 animations:^{
 
             self.frame = frame;
@@ -195,20 +200,6 @@
     }
     else
     {
-        CGRect frame = self.frame;
-        if ([self isLandscape])
-        {
-            frame.size.height = DeviceScreenHeight;
-            frame.size.width = kInfoViewLanscapeWidth;
-            frame.origin.y = 0.0;
-        }
-        else
-        {
-            frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
-            frame.size.width = DeviceScreenWidth;
-            frame.origin.y = DeviceScreenHeight - frame.size.height;
-        }
-        
         self.frame = frame;
         
         if (onComplete)
@@ -221,6 +212,24 @@
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    [self hide:animated duration:duration completion:^(BOOL hidden) {
+        if (hidden && onComplete)
+            onComplete();
+    }];
+}
+
+- (void)cancelHide
+{
+    _hideAnimationToken = nil;
+    void (^completion)(BOOL) = _hideCompletion;
+    _hideCompletion = nil;
+    if (completion)
+        completion(NO);
+}
+
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration completion:(void (^)(BOOL hidden))completion
+{
+    [self cancelHide];
     if (self.superview)
     {
         CGRect frame = self.frame;
@@ -231,17 +240,23 @@
         
         if (animated && duration > 0.0)
         {
+            NSObject *hideAnimationToken = [NSObject new];
+            _hideAnimationToken = hideAnimationToken;
+            _hideCompletion = [completion copy];
             [UIView animateWithDuration:duration animations:^{
                 
                 self.frame = frame;
                 
             } completion:^(BOOL finished) {
-                // An interrupted hide must not remove a picker that has been shown again.
-                if (finished)
-                    [self removeFromSuperview];
-                
-                if (onComplete)
-                    onComplete();
+                // A newer show or hide supersedes this request, even if its animation completes later.
+                if (_hideAnimationToken != hideAnimationToken)
+                    return;
+
+                _hideAnimationToken = nil;
+                _hideCompletion = nil;
+                [self removeFromSuperview];
+                if (completion)
+                    completion(YES);
             }];
         }
         else
@@ -250,8 +265,8 @@
             
             [self removeFromSuperview];
             
-            if (onComplete)
-                onComplete();
+            if (completion)
+                completion(YES);
         }
     }
 }

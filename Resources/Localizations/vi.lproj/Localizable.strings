@@ -2636,3 +2636,5 @@
 "download_roads_only_maps" = "Bản đồ chỉ có đường";
 "arrived_at_intermediate_point" = "Đã đến điểm đến trung gian";
 "map_widget_intermediate_distance" = "Điểm đến trung gian";
+"routing_attr_avoid_sett_name" = "Tránh đường lát đá khối";
+"routing_attr_avoid_sett_description" = "Tránh đường lát đá khối";

@@ -29,6 +29,7 @@
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoriteGroup.h"
 #import "OAGpxWptItem.h"
 #import "OABuilding.h"
 #import "OAStreet.h"
@@ -846,6 +847,15 @@
                     
                     [self setCellDistanceDirection:cell item:item];
                 }
+                return cell;
+            }
+            case EOAObjectTypeFavoriteGroup:
+            {
+                OAFavoriteGroup *group = (OAFavoriteGroup *)res.object;
+                OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:[item getName]
+                    tableView:self.tableView typeName:[OAQuickSearchListItem getTypeName:res]
+                    icon:[UIImage imageNamed:ACImageNameIcCustomFavorites]];
+                cell.leftIconView.tintColor = group.color;
                 return cell;
             }
             case EOAObjectTypePoiType:

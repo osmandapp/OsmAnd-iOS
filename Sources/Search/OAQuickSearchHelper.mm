@@ -94,7 +94,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
         NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:group];
         if (ids.count > 0)
         {
-            indexItem = [self getUninstalledMapRegionResourceFromIds:ids region:region];
+            indexItem = [OAResourcesUIHelper uninstalledMapFromResourceIds:ids region:region];
         }
     }
     
@@ -110,60 +110,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
             [self processGroups:subregion search:phrase resultMatcher:resultMatcher];
         }
     }
-}
-
-- (nullable OARepositoryResourceItem *)getUninstalledMapRegionResourceFromIds:(NSArray<NSString *> *)ids
-                                                              region:(OAWorldRegion *)region
-{
-    for (NSString *resourceId in ids)
-    {
-        const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-        {
-            BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
-            if (!isInstalled)
-            {
-                NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
-                                                                    inRegion:region
-                                                              withRegionName:YES
-                                                            withResourceType:NO];
-                NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
-                                                                         inRegion:region.superregion
-                                                                   withRegionName:YES
-                                                                 withResourceType:NO];
-                NSString *composeTitle = [self composeTitleWithPart:regionTitle andPart:superregionTitle];
-                return [self createRepositoryResourceItemWithResource:resource region:region title:composeTitle];
-            }
-        }
-    }
-    return nil;
-}
-
-- (NSString *)composeTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2
-{
-    if (part1.length > 0 && part2.length > 0)
-    {
-        return [NSString stringWithFormat:@"%@, %@", part1, part2];
-    }
-    return part1.length > 0 ? part1 : part2;
-}
-
-- (OARepositoryResourceItem *)createRepositoryResourceItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
-                                                                region:(OAWorldRegion *)region
-                                                                 title:(NSString *)title
-{
-    OARepositoryResourceItem *item = [OARepositoryResourceItem new];
-    item.resourceId = resource->id;
-    item.resourceType = resource->type;
-    item.title = title;
-    item.resource = resource;
-    NSString *downloadKey = [@"resource:" stringByAppendingString:resource->id.toNSString()];
-    item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:downloadKey] firstObject];
-    item.size = resource->size;
-    item.sizePkg = resource->packageSize;
-    item.worldRegion = region;
-    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
-    return item;
 }
 
 - (OASearchResult *)createSearchResultWithPhrase:(OASearchPhrase *)phrase

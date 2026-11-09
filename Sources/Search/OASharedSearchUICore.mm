@@ -7,6 +7,11 @@
 
 #import "OASharedSearchUICore.h"
 #import "OASharedSearchObjects.h"
+#import "OASharedSearchAppAPIs.h"
+#import "OAQuickSearchHelper.h"
+#import "OASearchResult+cpp.h"
+#import "OAFavoriteItem.h"
+#import "OAResourcesUIHelper.h"
 #import "OASearchCoreFactory.h"
 #import "OASearchWord.h"
 #import "OANameStringMatcher.h"
@@ -470,6 +475,19 @@
     result.preferredZoom = shared.preferredZoom;
     result.impreciseCoordinates = [shared hasImpreciseCoordinates];
 
+    // Keep the original app objects needed to render and open platform results.
+    if (result.objectType == EOAObjectTypeFavorite && [result.object isKindOfClass:OAFavoriteItem.class])
+        result.favorite = ((OAFavoriteItem *) result.object).favorite;
+    if (result.objectType == EOAObjectTypeWpt)
+    {
+        if ([result.object isKindOfClass:OASWptPt.class])
+            result.wpt = (OASWptPt *) result.object;
+        if ([result.relatedObject isKindOfClass:OASGpxFile.class])
+            result.relatedGpx = (OASGpxFile *) result.relatedObject;
+    }
+    if (result.objectType == EOAObjectTypeIndexItem && [result.relatedObject isKindOfClass:OARepositoryResourceItem.class])
+        result.resourceId = ((OARepositoryResourceItem *) result.relatedObject).resourceId.toNSString();
+
     if (shared.file)
         result.resourceId = [OASharedObfResources.shared resourceIdsOf:@[shared.file]].firstObject;
     NSString *resource = [shared getResourceType].name;
@@ -495,7 +513,12 @@
     OASSearchPhrase *phrase = [self.requiredSearchPhrase isKindOfClass:OASharedSearchPhrase.class]
         ? ((OASharedSearchPhrase *) self.requiredSearchPhrase).shared : nil;
     OASSearchResult *shared = phrase ? [[OASSearchResult alloc] initWithSp:phrase] : [[OASSearchResult alloc] init];
-    shared.object = [OASharedSearchObjects sharedObjectFor:self.object];
+    id object = self.object;
+    if (!object && self.objectType == EOAObjectTypeFavorite && self.favorite)
+        object = [[OAFavoriteItem alloc] initWithFavorite:std::const_pointer_cast<OsmAnd::IFavoriteLocation>(self.favorite)];
+    else if (!object && self.objectType == EOAObjectTypeWpt)
+        object = self.wpt;
+    shared.object = [OASharedSearchObjects sharedObjectFor:object];
     shared.objectType = [OASharedSearchObjects sharedObjectType:self.objectType];
     shared.priority = self.priority;
     shared.priorityDistance = self.priorityDistance;
@@ -505,7 +528,7 @@
     shared.cityName = self.cityName;
     shared.localeRelatedObjectName = self.localeRelatedObjectName;
     shared.distRelatedObjectName = self.distRelatedObjectName;
-    shared.relatedObject = [OASharedSearchObjects sharedObjectFor:self.relatedObject];
+    shared.relatedObject = [OASharedSearchObjects sharedObjectFor:self.relatedObject ?: self.relatedGpx];
     shared.location = [OASharedSearchObjects sharedObjectFor:self.location];
     shared.preferredZoom = self.preferredZoom;
     if (self.otherNames)
@@ -668,9 +691,13 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
     [_shared doInitUseSpatialSearch:useSpatialSearch searchRulesDir:searchRulesDir];
 }
 
-// the apis of the app search with the C++ search's phrase: theirs for the shared search come next
+// Registration keeps the app's class identifiers; searches run the corresponding shared API.
 - (void)registerAPI:(OASearchCoreAPI *)api
 {
+    Class sharedClass = [OASharedSearchAppAPIs sharedClassForAppClass:api.class];
+    NSAssert(sharedClass, @"No shared search API for %@", NSStringFromClass(api.class));
+    if (sharedClass)
+        [_shared registerAPIApi:[[sharedClass alloc] init]];
 }
 
 - (OASearchCoreAPI *)getApiByClass:(Class)cl
@@ -690,7 +717,7 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
         NSStringFromClass(OASearchStreetByCityAPI.class) : OASSearchCoreFactorySearchStreetByCityAPI.class,
         NSStringFromClass(OASearchBuildingAndIntersectionsByStreetAPI.class) : OASSearchCoreFactorySearchBuildingAndIntersectionsByStreetAPI.class,
     };
-    Class sharedClass = sharedClasses[NSStringFromClass(cl)];
+    Class sharedClass = sharedClasses[NSStringFromClass(cl)] ?: [OASharedSearchAppAPIs sharedClassForAppClass:cl];
     if (!sharedClass)
         return nil;
     for (id<OASSearchCoreAPI> api in [_shared getApis])

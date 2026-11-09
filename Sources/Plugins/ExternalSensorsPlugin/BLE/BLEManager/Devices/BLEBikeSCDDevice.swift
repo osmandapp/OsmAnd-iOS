@@ -58,7 +58,7 @@ final class BLEBikeSCDDevice: Device {
         setWheelCircumference(wheelCircumference: wheelCircumference)
     }
     
-    override func getDataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
+    override func dataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
             var result = [[String: String]]()
             if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {

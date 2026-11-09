@@ -39,7 +39,7 @@ final class BLEHeartRateDevice: Device {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
     
-    override func getDataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
+    override func dataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
         if let sensor = sensors.compactMap({ $0 as? BLEHeartRateSensor }).first {
             if let lastHeartRateData = sensor.lastHeartRateData {
                 return [[localizedString("map_widget_ant_heart_rate"):

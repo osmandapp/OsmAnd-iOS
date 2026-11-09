@@ -135,7 +135,7 @@ class Device: NSObject {
         }
     }
     
-    func getDataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
+    func dataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
         nil
     }
 

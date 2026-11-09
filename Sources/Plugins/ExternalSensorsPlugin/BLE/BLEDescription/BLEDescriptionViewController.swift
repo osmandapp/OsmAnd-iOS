@@ -97,7 +97,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 }
             }
             // Received Data
-            if let receivedData = device.getDataFields(appMode: appMode), !receivedData.isEmpty {
+            if let receivedData = device.dataFields(appMode: appMode), !receivedData.isEmpty {
                 let receivedDataSection = tableData.createNewSection()
                 receivedDataSection.headerText = localizedString("external_device_details_received_data").uppercased()
                 receivedDataSection.key = SectionKey.receivedData.rawValue

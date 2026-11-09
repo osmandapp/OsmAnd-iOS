@@ -27,7 +27,7 @@ final class BLERunningSCDDevice: Device {
         .icCustomSensorSpeedOutlined
     }
     
-    override func getDataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
+    override func dataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLERunningSensor }) as? BLERunningSensor {
             var result = [[String: String]]()
             if let lastRunningCadenceData = sensor.lastRunningCadenceData {

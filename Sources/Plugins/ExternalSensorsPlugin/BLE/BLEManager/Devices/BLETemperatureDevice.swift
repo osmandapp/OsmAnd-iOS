@@ -39,7 +39,7 @@ final class BLETemperatureDevice: Device {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
     
-    override func getDataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
+    override func dataFields(appMode: OAApplicationMode?) -> [[String: String]]? {
         if let sensor = sensors.first(where: { $0 is BLETemperatureSensor }) as? BLETemperatureSensor {
             if let lastTemperatureData = sensor.lastTemperatureData {
                 return [[localizedString("shared_string_temperature"):

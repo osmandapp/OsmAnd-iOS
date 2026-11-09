@@ -26,6 +26,7 @@
 @implementation OACategoriesTableViewController
 {
     NSUInteger _dataRequest;
+    BOOL _dataRequestInvalidated;
     OAQuickSearchTableController *_tableController;
 }
 
@@ -49,8 +50,16 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    _dataRequestInvalidated = NO;
     [super viewWillAppear:animated];
     [self reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    _dataRequestInvalidated = YES;
+    ++_dataRequest;
+    [super viewDidDisappear:animated];
 }
 
 -(void)setTableDelegate:(id<OAQuickSearchTableDelegate>)tableDelegate
@@ -61,10 +70,14 @@
 
 - (void)generateData
 {
+    if (_dataRequestInvalidated)
+        return;
     NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
     [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request == _dataRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
                 [self updateDataWithResults:res];
         });
     }];

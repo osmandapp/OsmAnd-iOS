@@ -193,6 +193,7 @@
 #import "OATrackMenuHeaderView.h"
 #import "OACarPlayMapViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
+#import "OABaseCarPlayListController.h"
 #import "OACarPlayActiveViewController.h"
 #import "OACarPlayPurchaseViewController.h"
 #import "OADirectionAppearanceViewController.h"

@@ -109,9 +109,11 @@
         [_searchUICore updateSettings:[settings setRadiusLevel:1]];
     
     NSUInteger request = ++_searchRequest;
+    __weak __typeof(self) weakSelf = self;
     [_searchUICore shallowSearchAsync:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES completion:^(OASearchResultCollection *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request == _searchRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_searchRequest)
                 [self updateSearchResult:result];
         });
     }];
@@ -242,6 +244,12 @@
 
     if (completionBlock)
         completionBlock();
+}
+
+- (void)onTemplateDismissed
+{
+    ++_searchRequest;
+    [super onTemplateDismissed];
 }
 
 @end

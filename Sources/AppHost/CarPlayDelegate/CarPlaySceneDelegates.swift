@@ -161,6 +161,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         
         windowToAttach = window
         carPlayInterfaceController = interfaceController
+        interfaceController.delegate = self
         shouldCenterOnMyLocation = true
         if isWaitingForConfiguration, isForegroundScene {
             isWaitingForConfiguration = false
@@ -170,6 +171,8 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
+        NotificationCenter.default.post(name: .OACarPlayDidDisconnect, object: interfaceController)
+        interfaceController.delegate = nil
         
         CarPlayService.shared.disconnectScene(.app)
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
@@ -188,6 +191,13 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
             windowToAttach = nil
             carPlayInterfaceController = nil
         }
+    }
+}
+
+extension CarPlaySceneDelegate: CPInterfaceControllerDelegate {
+    func templateDidDisappear(_ aTemplate: CPTemplate, animated: Bool) {
+        guard let carPlayInterfaceController else { return }
+        NotificationCenter.default.post(name: .OACarPlayTemplatesDidChange, object: carPlayInterfaceController)
     }
 }
 

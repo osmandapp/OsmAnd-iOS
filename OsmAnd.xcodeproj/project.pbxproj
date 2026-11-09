@@ -2220,6 +2220,7 @@
 		D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */; };
 		31BD3D43BB3E4BE0B51EF0EE /* OASharedAmenitySearcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */; };
 		DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */; };
+		D9F147600000000000000002 /* OASearchScreenLifetimeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D9F147600000000000000001 /* OASearchScreenLifetimeTest.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5791,6 +5792,7 @@
 		C6C07FA17F7C4FE0B4BC42E7 /* OASharedAmenitySearcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedAmenitySearcher.h; sourceTree = "<group>"; };
 		E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedAmenitySearcher.mm; sourceTree = "<group>"; };
 		AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedAmenitySearcherTest.mm; sourceTree = "<group>"; };
+		D9F147600000000000000001 /* OASearchScreenLifetimeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchScreenLifetimeTest.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -10395,6 +10397,7 @@
 				74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */,
 				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
 				AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */,
+				D9F147600000000000000001 /* OASearchScreenLifetimeTest.mm */,
 				EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */,
 				E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */,
 				5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */,
@@ -13878,6 +13881,7 @@
 				BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */,
 				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
 				DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */,
+				D9F147600000000000000002 /* OASearchScreenLifetimeTest.mm in Sources */,
 				A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */,
 				E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */,
 				5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */,

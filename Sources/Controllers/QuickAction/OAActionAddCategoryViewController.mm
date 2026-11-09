@@ -26,6 +26,8 @@
 @implementation OAActionAddCategoryViewController
 {
     NSUInteger _dataRequest;
+    BOOL _dataRequestInvalidated;
+    BOOL _needsDataReload;
     NSArray *_data;
     NSMutableArray *_filteredData;
     NSMutableArray<NSString *> *_initialValues;
@@ -64,7 +66,11 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    BOOL needsReload = _dataRequestInvalidated && _needsDataReload;
+    _dataRequestInvalidated = NO;
     [super viewWillAppear:animated];
+    if (needsReload && !self.refreshOnAppear)
+        [self generateData];
     
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchBar.delegate = self;
@@ -72,6 +78,13 @@
     _searchController.hidesNavigationBarDuringPresentation = NO;
     self.navigationItem.searchController = _searchController;
     [self setupSearchControllerWithFilter:NO];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    _dataRequestInvalidated = YES;
+    ++_dataRequest;
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Base UI
@@ -131,11 +144,19 @@
 
 - (void)generateData
 {
+    _needsDataReload = YES;
+    if (_dataRequestInvalidated)
+        return;
     NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
     [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (request == _dataRequest)
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
+            {
+                self->_needsDataReload = NO;
                 [self updateDataWithResults:res];
+            }
         });
     }];
 }

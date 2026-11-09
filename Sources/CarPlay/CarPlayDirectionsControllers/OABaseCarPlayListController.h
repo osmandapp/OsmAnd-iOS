@@ -10,11 +10,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSNotificationName const OACarPlayTemplatesDidChangeNotification;
+FOUNDATION_EXPORT NSNotificationName const OACarPlayDidDisconnectNotification;
+
 @interface OABaseCarPlayListController : OABaseCarPlayInterfaceController
 
 @property (nonatomic, readonly) NSString *screenTitle;
 
 - (void) updateSections:(NSArray<CPListSection *> *)sections;
+
+// Called when this template leaves the navigation stack, or CarPlay disconnects.
+- (void)onTemplateDismissed;
 
 @end
 

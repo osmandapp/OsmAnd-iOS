@@ -1080,7 +1080,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Вельмі дрэнная";
 "routing_attr_prefer_unpaved_name" = "Аддаваць перавагу грунтавым дарогам";
 "rendering_attr_highway_class_cycleway_name" = "Роварная дарожка";
-"routing_attr_avoid_sett_name" = "Без брукаваных дарог";
+"routing_attr_avoid_sett_name" = "Без брукаванкі (цёсаны камень)";
 "rendering_attr_showAccess_name" = "Паказаць абмежаванні доступу і аплату";
 "rendering_attr_contourColorScheme_name" = "Каляровая схема гарызанталяў";
 "rendering_attr_hideAccess_name" = "Абмежаванні доступу";
@@ -1088,7 +1088,7 @@
 "routing_attr_avoid_share_taxi_description" = "Пазбягаць маршрутных таксі";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Сеткі вузлоў";
 "routing_attr_allow_expert_name" = "Дазволіць трасы для экспертаў";
-"routing_attr_avoid_sett_description" = "Пазбягаць брукаваных дарог";
+"routing_attr_avoid_sett_description" = "Пазбягаць брукаванкі (цёсаны камень)";
 "routing_attr_avoid_motorway_description" = "Пазбягаць аўтамагістраляў";
 "rendering_attr_smoothness_very_horrible_name" = "Вельмі жудасная";
 "rendering_value_translucent_yellow_name" = "Празрысты жоўты";
@@ -2883,3 +2883,5 @@
 "shared_string_large" = "Вялікі";
 "years_3" = "Тры гады";
 "open_till_short" = "Да";
+"routing_attr_avoid_cobblestone_name" = "Пазбягаць брукаванкі (круглякі)";
+"routing_attr_avoid_cobblestone_description" = "Пазбягаць брукаванкі (круглякі)";

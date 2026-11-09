@@ -808,6 +808,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         CGFloat rowHeight;
         if ([row.typeName isEqualToString:kCollapseDetailsRowType])
             continue;
+
         if (row.isHtml)
         {
             rowHeight = 230.0;
@@ -1622,7 +1623,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             cell.titleLabel.text = OALocalizedString(@"shared_string_details").upperCase;
         return cell;
     }
-    else if ([info.typeName isEqualToString:kDescriptionRowType])
+    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionRowType])
     {
         OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -1633,6 +1634,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             [cell leftIconVisibility:NO];
             [cell clearButtonVisibility:NO];
         }
+        BOOL isShortDescription = [info.typeName isEqualToString:kShortDescriptionRowType];
+        cell.textView.textContainer.maximumNumberOfLines = isShortDescription ? 10 : 0;
+        cell.textView.textContainer.lineBreakMode = isShortDescription ? NSLineBreakByTruncatingTail : NSLineBreakByWordWrapping;
+        [cell setCustomLeftSeparatorInset:isShortDescription];
         NSString *label = info.text;
         if (label.length == 0)
         {
@@ -1645,6 +1650,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
             cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.textView.text = label;
+            if (isShortDescription)
+                return cell;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
             CGFloat h = MIN(188.0, s.height + 10.0);
@@ -1653,7 +1660,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         }
         return cell;
     }
-    else if ([info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionTravelRowType])
+    else if ([info.typeName isEqualToString:kShortDescriptionTravelRowType])
     {
         OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -1677,6 +1684,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             h = MAX(48.0, h);
             info.height = h;
         }
+        cell.textView.textContainer.maximumNumberOfLines = 0;
+        cell.textView.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
+        [cell setCustomLeftSeparatorInset:NO];
         return cell;
     } else if ([info.typeName isEqualToString:kShortDescriptionWikiRowType])
     {
@@ -1859,6 +1869,25 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAAmenityInfoRow *info = _rows[indexPath.row];
+    if (![info.typeName isEqualToString:kShortDescriptionRowType])
+        return;
+    
+    CGFloat textLeading = ([cell isDirectionRTL] ? CGRectGetWidth(cell.bounds) - CGRectGetMaxX(cell.contentView.frame) : CGRectGetMinX(cell.contentView.frame)) + cell.contentView.directionalLayoutMargins.leading;
+    cell.separatorInset = UIEdgeInsetsMake(0., MIN(tableView.separatorInset.left, textLeading), 0., 0.);
+    CGFloat height = ceil(cell.bounds.size.height);
+    if (info.height == height)
+        return;
+    
+    info.height = height;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.delegate contentHeightChanged];
+    });
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
@@ -1872,6 +1901,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
+    if ([info.typeName isEqualToString:kShortDescriptionRowType])
+        return UITableViewAutomaticDimension;
+
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     return [self heightForInfoRow:info];
 }
@@ -1881,6 +1913,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     OAAmenityInfoRow *info = _rows[indexPath.row];
     if (info.collapsable)
         [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+
     return info.height;
 }
 
@@ -2006,7 +2039,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kCommentRowType])
+    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kCommentRowType])
     {
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;

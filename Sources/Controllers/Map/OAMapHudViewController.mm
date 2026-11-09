@@ -1899,6 +1899,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     });
 }
 
+- (BOOL)isTopControlsVisible
+{
+    return _hudButtonsVisible && ![_mapPanelViewController isTargetBackButtonVisible];
+}
+
 - (void) updateTopControlsVisibility:(BOOL)animated
 {
     BOOL isDashboardVisible = [_mapPanelViewController isDashboardVisible];

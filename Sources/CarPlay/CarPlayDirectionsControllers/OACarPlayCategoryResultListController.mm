@@ -231,7 +231,7 @@
     OASearchResult *searchResult = searchItem.getSearchResult;
     if (searchResult.objectType == EOAObjectTypePoi)
     {
-        NSString *address = searchResult.alternateName;
+        NSString *address = searchResult.addressName;
         if (address.length > 0 && ![address isEqualToString:historyName.name])
         {
             historyName.address = address;

@@ -43,6 +43,22 @@
     return paths;
 }
 
++ (NSDictionary<NSString *, NSString *> *)pathsByResourceIdFor:(NSArray<NSString *> *)resourceIds
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @{};
+
+    NSMutableDictionary<NSString *, NSString *> *pathsByResourceId = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in resourceIds)
+    {
+        const auto resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+        if (resource && !resource->localPath.isEmpty())
+            pathsByResourceId[resourceId] = resource->localPath.toNSString();
+    }
+    return pathsByResourceId;
+}
+
 // in the order of the installed resources, which the sort starts from
 + (NSArray<NSString *> *)searchResourceIdsIncludingTravel:(BOOL)includeTravel
                                                     paths:(nullable NSMutableDictionary<NSString *, NSString *> *)pathsByResourceId

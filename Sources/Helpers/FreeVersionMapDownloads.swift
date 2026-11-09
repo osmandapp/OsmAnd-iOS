@@ -48,6 +48,7 @@ final class FreeVersionMapDownloads: NSObject {
     private static let preferencesName = "net.osmand.free_region"
     private static let regionKey = "region"
     private static let replacesKey = "replaces"
+    private static let migratedKey = "migrated"
     private static let federations: Set<String> = ["northamerica_us", "northamerica_canada", "russia", "southamerica_brazil", "asia_india", "asia_china", "australia-oceania-all_australia-oceania"]
     private static let replaceURL = "https://osmand.net/api/replace-download-map"
     private static let registerEmailURL = "https://osmand.net/subscription/register_email"
@@ -63,6 +64,7 @@ final class FreeVersionMapDownloads: NSObject {
     var freeRegion: OAWorldRegion? {
         lock.lock()
         defer { lock.unlock() }
+        migrateIfNeeded()
         guard let regionId = preference(Self.regionKey) as? String, !regionId.isEmpty else { return nil }
         return OsmAndApp.swiftInstance().worldRegion?.getFlattenedSubregion(regionId)
     }
@@ -248,6 +250,22 @@ final class FreeVersionMapDownloads: NSObject {
         }
         
         return result
+    }
+    
+    private func migrateIfNeeded() {
+        guard preference(Self.migratedKey) as? Bool != true, isFreeVersion, isRegionsLoaded else { return }
+        edit { $0[Self.migratedKey] = true }
+        guard (preference(Self.regionKey) as? String ?? "").isEmpty else { return }
+        let mapSizes = collectLocalMaps().mapValues { items in items.reduce(0) { $0 + $1.size() } }
+        if let region = getLocationRegion(Array(mapSizes.keys)) ?? mapSizes.max(by: { $0.value < $1.value })?.key {
+            storeFreeRegion(region)
+        }
+    }
+    
+    private func getLocationRegion(_ candidates: [OAWorldRegion]) -> OAWorldRegion? {
+        guard let location = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, !candidates.isEmpty else { return nil }
+        let regions = OsmAndApp.swiftInstance().worldRegion?.getWorldRegions(at: location.coordinate.latitude, longitude: location.coordinate.longitude) ?? []
+        return regions.lazy.compactMap { self.getFreeRegionOf($0) }.first { candidates.contains($0) }
     }
     
     private func storeFreeRegion(_ region: OAWorldRegion) {

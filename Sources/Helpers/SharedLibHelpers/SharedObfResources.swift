@@ -21,6 +21,7 @@ final class SharedObfResources: NSObject {
     // Old results and phrases still need to identify a file after it has been removed.
     private var resourceIdsByPath: [String: String] = [:]
     private var useLiveForRouting = false
+    private var cachedAmenitySearcher: AmenitySearcher?
     private var resourcesObserver: OAAutoObserverProxy?
 
     private override init() {
@@ -49,6 +50,7 @@ final class SharedObfResources: NSObject {
         }
         useLiveForRouting = OAAppSettings.sharedManager().useOsmLiveForRouting
         registry.setFiles(files: Array(files.values))
+        cachedAmenitySearcher = nil
     }
 
     /// Readers for the requested resources, in the registry's file-version order.
@@ -93,6 +95,22 @@ final class SharedObfResources: NSObject {
         lock.unlock()
         guard let path else { return nil }
         return registry.getAmenityRepository(path: path)
+    }
+
+    /// A search context over the registry's persistent repositories. Resource updates replace
+    /// the context; an in-flight caller keeps its own snapshot until the request finishes.
+    @objc func amenitySearcher() -> AmenitySearcher {
+        lock.lock()
+        defer { lock.unlock() }
+        if let cachedAmenitySearcher { return cachedAmenitySearcher }
+        let searcher = AmenitySearcher(mapPoiTypes: OAPOIHelper.sharedInstance().kPoiTypes)
+        for repository in registry.getAmenityRepositories() {
+            if let resourceId = resourceIdsByPath[repository.getFile().path()] {
+                searcher.addAmenityRepository(fileName: resourceId, repository: repository)
+            }
+        }
+        cachedAmenitySearcher = searcher
+        return searcher
     }
 
     func travelRepositories() -> [AmenityIndexRepository] {

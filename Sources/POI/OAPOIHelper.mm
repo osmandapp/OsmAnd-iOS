@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
@@ -900,9 +901,7 @@ static NSString * const kOsmandPhrasePrefix = @"poi_osmand_";
     QString enName;
     for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(localizedNames)))
     {
-        QString key = entry.key().trimmed().toLower();
-        if (key.startsWith(QStringLiteral("name:")))
-            key = key.mid(5);
+        QString key = OANormalizeLocalizedNameKey(entry.key());
 
         if (!lang.isNull() && key == lang)
             nameLocalized = entry.value();

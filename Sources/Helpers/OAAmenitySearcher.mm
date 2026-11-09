@@ -10,6 +10,7 @@
 // git revision c3d7a8a378dc84251eb7ca72dd10958af86d2225
 
 #import "OAAmenitySearcher.h"
+#import "OASharedAmenitySearcher.h"
 #import "OAPOIHelper.h"
 #import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
@@ -261,6 +262,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 - (nullable BaseDetailsObject *)searchDetailedObject:(id)object
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher searchDetailedObject:object];
+
     OAAmenitySearcherRequest *request;
     if ([object isKindOfClass:[OAMapObject class]])
     {
@@ -325,6 +329,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 - (nullable BaseDetailsObject *)searchDetailedObjectWithRequest:(OAAmenitySearcherRequest *)request
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher searchDetailedRequest:request];
+
     if (request.latLon == nil)
     {
         return nil;
@@ -912,7 +919,7 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 + (nullable OAPOIType *) parsePOITypeBySharedAmenity:(OASAmenity *)amenity
 {
     NSString *subType = [amenity getSubType];
-    if (subType.length == 0 || [[OAAppSettings sharedManager] isTypeDisabled:subType])
+    if (subType.length == 0)
         return nil;
 
     NSString *category = [amenity getType].keyName;
@@ -942,15 +949,20 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (nullable OAPOI *) parsePOIBySharedAmenity:(OASAmenity *)amenity
 {
+    return [self parsePOIBySharedAmenity:amenity filterTypes:YES];
+}
+
++ (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity filterTypes:(BOOL)filterTypes
+{
     OAPOIType *type = [self.class parsePOITypeBySharedAmenity:amenity];
-    if (!type || type.mapOnly)
+    if (filterTypes && (!type || type.mapOnly || [OAAppSettings.sharedManager isTypeDisabled:[amenity getSubType]]))
         return nil;
 
     NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
     OASKLatLon *location = [amenity getLocation];
 
     OAPOI *poi = [[OAPOI alloc] init];
-    poi.obfId = (unsigned long long) amenity.id.longLongValue;
+    poi.obfId = amenity.id ? (unsigned long long) amenity.id.longLongValue : [OAMapObject getInvalidObfId];
     poi.latitude = location.latitude;
     poi.longitude = location.longitude;
     poi.name = [amenity getName];
@@ -990,21 +1002,42 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     poi.subType = [amenity getSubType];
 
     if (poi.name.length == 0)
-        poi.name = type.nameLocalized;
+        poi.name = type.nameLocalized ?: @"";
     if (poi.nameLocalized.length == 0)
-        poi.nameLocalized = type.nameLocalized;
+        poi.nameLocalized = type.nameLocalized ?: @"";
     if (poi.enName.length == 0)
-        poi.enName = type.nameLocalizedEN;
+        poi.enName = type.nameLocalizedEN ?: @"";
 
-    if (names.count == 0)
+    if (names.count == 0 && type)
     {
         NSString *transliterated = type.nameLocalized.length > 0 ? OsmAnd::ICU::transliterateToLatin(QString::fromNSString(type.nameLocalized)).toNSString() : @"";
         [names setObject:transliterated forKey:@""];
-        [names setObject:type.nameLocalized forKey:lang ? lang : @""];
-        [names setObject:type.nameLocalizedEN forKey:@"en"];
+        [names setObject:type.nameLocalized ?: @"" forKey:lang ? lang : @""];
+        [names setObject:type.nameLocalizedEN ?: @"" forKey:@"en"];
     }
     poi.localizedNames = names;
     poi.regionName = [amenity getRegionName] ?: @"";
+    poi.sharedAmenity = amenity;
+    poi.mapIconName = [amenity getMapIconName];
+    poi.wikiIconUrl = [amenity getWikiIconUrl];
+    poi.wikiImageStubUrl = [amenity getWikiImageStubUrl];
+    [poi updateContentLocales:[amenity getSupportedContentLocales]];
+    OASKTIntArrayList *xx = [amenity getX];
+    OASKTIntArrayList *yy = [amenity getY];
+    for (int i = 0; i < MIN([xx size], [yy size]); i++)
+        [poi addLocation:[xx getIndex:i] y:[yy getIndex:i]];
+    OASAmenityRoutePoint *routePoint = [amenity getRoutePoint];
+    if (routePoint)
+    {
+        OAPOIRoutePoint *point = [[OAPOIRoutePoint alloc] init];
+        point.deviateDistance = routePoint.deviateDistance;
+        point.deviationDirectionRight = routePoint.deviationDirectionRight;
+        if (routePoint.pointA)
+            point.pointA = [[CLLocation alloc] initWithLatitude:routePoint.pointA.latitude longitude:routePoint.pointA.longitude];
+        if (routePoint.pointB)
+            point.pointB = [[CLLocation alloc] initWithLatitude:routePoint.pointB.latitude longitude:routePoint.pointB.longitude];
+        poi.routePoint = point;
+    }
     return poi;
 }
 
@@ -1182,6 +1215,18 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (OAPOI *)findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+    {
+        __block OAPOI *found;
+        [self findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil lat:lat lon:lon
+            radius:15 includeTravel:YES matcher:nil publish:^BOOL(OAPOI *poi) {
+                if ([poi.name isEqualToString:name] || [poi.localizedNames.allValues containsObject:name])
+                    found = poi;
+                return found != nil;
+            }];
+        return found;
+    }
+
     auto keyword = QString::fromNSString(name);
     OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
     const auto& searchCriteria = std::make_shared<OsmAnd::AmenitiesInAreaSearch::Criteria>();
@@ -1219,6 +1264,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                                    location:(nullable CLLocation *)location
                                     matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher searchByName:name resourceId:resourceId location:location matcher:matcher];
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& localResource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
     if (!localResource)
@@ -1283,6 +1331,18 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (OAPOI *) findPOIByOsmId:(uint64_t)osmId lat:(double)lat lon:(double)lon
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+    {
+        __block OAPOI *found;
+        [self findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil lat:lat lon:lon
+            radius:15 includeTravel:YES matcher:nil publish:^BOOL(OAPOI *poi) {
+                if (poi.getOsmId == osmId)
+                    found = poi;
+                return found != nil;
+            }];
+        return found;
+    }
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     
@@ -1322,6 +1382,18 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+    {
+        __block OAPOI *found;
+        [self findPOI:OASearchPoiTypeFilter.acceptAllPoiTypeFilter additionalFilter:nil lat:lat lon:lon
+            radius:15 includeTravel:YES matcher:nil publish:^BOOL(OAPOI *poi) {
+                if ([poi.toStringEn isEqualToString:originName])
+                    found = poi;
+                return found != nil;
+            }];
+        return found;
+    }
+
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     
@@ -1375,6 +1447,18 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (NSArray<OAPOI *> *) findPOIsByTagName:(nullable NSString *)tagName name:(nullable NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(nullable NSString *)typeName bbox31:(OsmAnd::AreaI)bbox31
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+    {
+        OASearchPoiTypeFilter *filter = [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *category, NSString *subtype) {
+            return (!categoryName || [category.name isEqualToString:categoryName]) && (!typeName || [subtype isEqualToString:typeName]);
+        } emptyFunction:^BOOL { return NO; } getTypesFunction:nil];
+        OAResultMatcher *matcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *object) {
+            OAPOI *poi = *object;
+            return (!tagName || poi.values[tagName]) && (!name || [poi.name isEqualToString:name] || [poi.localizedNames.allValues containsObject:name]);
+        } cancelledFunc:^BOOL { return NO; }];
+        return [self findPOI:filter additionalFilter:nil bbox31:bbox31 currentLocation:location includeTravel:YES matcher:matcher publish:nil];
+    }
+
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
@@ -1558,6 +1642,11 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                         rightLongitude:(double)rightLongitude
                                matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher searchAmenities:filter additionalFilter:nil
+            topLatitude:topLatitude leftLongitude:leftLongitude bottomLatitude:bottomLatitude rightLongitude:rightLongitude
+            includeTravel:YES matcher:matcher publish:nil];
+
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
     if (filter && ![filter isEmpty])
     {
@@ -1671,6 +1760,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher mergeAmenities:amenities];
+
     if (amenities.count < 2)
         return amenities;
 
@@ -1731,6 +1823,23 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
                        matcher:(OAResultMatcher<OAPOI *> *)matcher
                        publish:(BOOL(^)(OAPOI *poi))publish
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+    {
+        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox31.topLeft);
+        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox31.bottomRight);
+        const BOOL bounded = bbox31.width() != 0 && bbox31.height() != 0;
+        OAResultMatcher *distanceMatcher = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *object) {
+            OAPOI *poi = *object;
+            const auto position = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(poi.latitude, poi.longitude));
+            poi.distanceMeters = OsmAnd::Utilities::squareDistance31(currentLocation, position);
+            return !matcher || [matcher publish:poi];
+        } cancelledFunc:^BOOL { return matcher && matcher.isCancelled; }];
+        return [OASharedAmenitySearcher searchAmenities:searchFilter additionalFilter:additionalFilter
+            topLatitude:bounded ? topLeft.latitude : 85.0511287798066 leftLongitude:bounded ? topLeft.longitude : -180
+            bottomLatitude:bounded ? bottomRight.latitude : -85.0511287798066 rightLongitude:bounded ? bottomRight.longitude : 180
+            includeTravel:includeTravel matcher:distanceMatcher publish:publish];
+    }
+
     NSMutableSet<NSNumber *> *openAmenities = [NSMutableSet new];
     NSMutableSet<NSNumber *> *closedAmenities = [NSMutableSet new];
     NSMutableArray<OAPOI *> *actualAmenities = [NSMutableArray array];
@@ -1832,6 +1941,10 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (NSArray<OAPOI *> *) findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher searchByName:query topLatitude:topLatitude leftLongitude:leftLongitude
+            bottomLatitude:bottomLatitude rightLongitude:rightLongitude matcher:matcher];
+
     OACollatorStringMatcher *mt = [[OACollatorStringMatcher alloc] initWithPart:query mode:CHECK_STARTS_FROM_SPACE];
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
     OsmAndAppInstance _app = [OsmAndApp instance];
@@ -1895,6 +2008,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 + (NSArray<OAPOI *> *) searchPOIsOnThePath:(NSArray<CLLocation *> *)locations radius:(double)radius filter:(OASearchPoiTypeFilter *)filter matcher:(OAResultMatcher<OAPOI *> *)matcher
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher searchOnPath:locations radius:radius filter:filter matcher:matcher];
+
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
     if (locations && locations.count > 0 && filter && ![filter isEmpty])
     {
@@ -2028,6 +2144,9 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 - (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+        return [OASharedAmenitySearcher appAmenities:[OASharedObfResources.shared.amenitySearcher searchRoutePartOfRouteId:routeId]];
+
     NSMutableArray<OAPOI *> *result = [NSMutableArray new];
     QString qRouteMebersIdKey = QString::fromNSString(ROUTE_MEMBERS_IDS);
     QString qRouteId = QString::fromNSString(routeId);
@@ -2077,6 +2196,19 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
 
 - (NSDictionary<NSString *, NSArray<OAPOI *> *> *)searchRouteMembers:(NSString *)multipleSearch
 {
+    if ([OAAppSettings.sharedManager.useSharedSearch get])
+    {
+        NSDictionary *members = [OASharedObfResources.shared.amenitySearcher searchRouteMembersMultipleSearch:multipleSearch];
+        NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:members.count];
+        for (NSString *key in members)
+        {
+            // Native consumers use an absent key for a route with no matching members.
+            if ([members[key] isKindOfClass:NSArray.class])
+                result[key] = [OASharedAmenitySearcher appAmenities:members[key]];
+        }
+        return result;
+    }
+
     NSMutableArray<OAPOI *> *result = [NSMutableArray new];
     QString qRouteIdKey = QString::fromNSString(ROUTE_ID);
     

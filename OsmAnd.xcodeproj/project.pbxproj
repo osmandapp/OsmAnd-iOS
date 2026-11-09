@@ -2222,6 +2222,8 @@
 		D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */; };
 		D609152ABC68498BBF4CC2FE /* OASharedSearchAppAPIs.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */; };
 		D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */; };
+		31BD3D43BB3E4BE0B51EF0EE /* OASharedAmenitySearcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */; };
+		DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -5795,6 +5797,9 @@
 		77CF376424AD4290B198F52E /* OASharedSearchAppAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchAppAPIs.h; sourceTree = "<group>"; };
 		B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIs.mm; sourceTree = "<group>"; };
 		CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIsTest.mm; sourceTree = "<group>"; };
+		C6C07FA17F7C4FE0B4BC42E7 /* OASharedAmenitySearcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedAmenitySearcher.h; sourceTree = "<group>"; };
+		E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedAmenitySearcher.mm; sourceTree = "<group>"; };
+		AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedAmenitySearcherTest.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -10126,6 +10131,8 @@
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				32EB34472E462D58004F7C75 /* OAAmenitySearcher.h */,
 				32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */,
+				C6C07FA17F7C4FE0B4BC42E7 /* OASharedAmenitySearcher.h */,
+				E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */,
 				32F6B3902E47A842007F3902 /* OAAmenitySearcher+cpp.h */,
 				32E080C12FAB2DC50095A278 /* SearchByRouteIdTask.swift */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
@@ -10402,6 +10409,7 @@
 				74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */,
 				C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */,
 				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
+				AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */,
 				EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */,
 				5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */,
 				CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */,
@@ -13063,6 +13071,7 @@
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */,
+				31BD3D43BB3E4BE0B51EF0EE /* OASharedAmenitySearcher.mm in Sources */,
 				CE7787D6302C70D300BEA7A6 /* SwissGridApproximation.swift in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				C5D3D2B22EE006A100664956 /* ShareLinkItem.swift in Sources */,
@@ -13887,6 +13896,7 @@
 				BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */,
 				EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */,
 				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
+				DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */,
 				A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */,
 				5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */,
 				D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */,

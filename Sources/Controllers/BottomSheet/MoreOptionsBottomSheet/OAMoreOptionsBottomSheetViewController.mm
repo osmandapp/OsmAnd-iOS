@@ -512,6 +512,13 @@
     [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
 }
 
+- (void)additionalSetup
+{
+    [super additionalSetup];
+    if (@available(iOS 26.0, *))
+        self.tableView.topEdgeEffect.hidden = YES;
+}
+
 - (OATargetPoint *)targetPoint
 {
     return self.customParam;

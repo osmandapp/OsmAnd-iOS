@@ -83,7 +83,19 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (void) viewWillLayoutSubviews
 {
     if (![self.tableView isSliding] && !_showing && !_hiding)
+    {
         [self updateLayout:NO];
+        if (self.navbarView.superview)
+        {
+            CGRect navbarFrame = [self navbarViewFrame];
+            if (!CGRectEqualToRect(self.navbarView.frame, navbarFrame))
+            {
+                self.navbarView.frame = navbarFrame;
+                self.navbarGradientBackgroundView.frame = navbarFrame;
+                [self updateTableHeaderForNavbarFrame:navbarFrame];
+            }
+        }
+    }
 }
 
 - (CGFloat) calculateTableHeight
@@ -172,10 +184,14 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (CGRect)navbarViewFrame
 {
     CGSize screenSize = [self screenSize];
-    CGFloat navBarHeight = self.parentViewController.view.safeAreaInsets.top;
+    UIEdgeInsets safeInsets = self.parentViewController.view.safeAreaInsets;
+    CGFloat navBarHeight = safeInsets.top;
     if (![OAUtilities isLandscapeIpadAware])
     {
-        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
+        // On Duo the system bar occupies the right safe area while the app keeps a portrait layout.
+        BOOL hasRightSystemBar = OAUtilities.isIPhone && !OAUtilities.isLandscape && safeInsets.top == 0. && safeInsets.right > 0.;
+        CGFloat width = screenSize.width - (hasRightSystemBar ? safeInsets.right : 0.);
+        return CGRectMake(0.0, 0.0, width, kOADashboardNavbarHeight + navBarHeight);
     }
     else
     {

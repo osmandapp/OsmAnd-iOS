@@ -1557,7 +1557,7 @@
 "add_online_source" = "Добавить онлайн-источник";
 "gpx_analyze" = "Анализировать";
 "osmand_parking_warning" = "Предупреждение";
-"map_transparency" = "Прозрачность основной карты";
+"map_transparency" = "Видимость основной карты";
 "srtm_color_scheme" = "Цветовая схема";
 "shared_string_zoom_levels" = "Уровни масштаба";
 "shared_string_appearance" = "Внешний вид";

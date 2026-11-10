@@ -1559,7 +1559,7 @@
 "map_settings_contour_zoom_level_descr" = "Veldu aðdráttarstig frá og með hverju hæðarlínur verða birtar";
 "map_settings_line_density" = "Þéttleiki línu";
 "srtm_color_scheme" = "Litastef";
-"map_transparency" = "Gegnsæi grunnkorts";
+"map_transparency" = "Sýnileiki grunnkorts";
 "arrows_direction_to_markers" = "Örvar sýna stefnu á virkt kortamerki ef það er fyrir utan skjáinn. Stefnulínur teikna línu í átt að virkum kortamerkjum.";
 "allow_3d_descr" = "Virkjaðu þetta til að geta skoðað kortið í 2.5D fjarvídd";
 "shared_string_two" = "Tvö";

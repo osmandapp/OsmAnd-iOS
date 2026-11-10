@@ -1166,7 +1166,7 @@
 "app_mode_ufo" = "Štopanje NLP (brisača obvezna)";
 "open_in_browser_wiki" = "Odpri prispevek na spletni strani";
 "app_mode_offroad" = "Terenska vožnja (po brezpotju)";
-"map_transparency" = "Prozornost osnovnega zemljevida";
+"map_transparency" = "Vidljivost osnovnega zemljevida";
 "app_mode_shuttle_bus" = "Prevoz z minibusom";
 "allow_3d" = "Dovoljen 2.5D pogled";
 "base_profile_descr_public_transport" = "Za uporabo javnega prevoza";

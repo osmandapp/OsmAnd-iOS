@@ -182,7 +182,7 @@
     [self applyViewLayout];
     [self setNeedsLayout];
     _slOverlay.value = _app.data.overlayAlpha;
-    _slUnderlay.value = _app.data.underlayAlpha;
+    _slUnderlay.value = 1 - _app.data.underlayAlpha;
 }
 
 - (IBAction)btnExitPressed:(id)sender
@@ -201,7 +201,7 @@
 - (IBAction)slUnderlayChanged:(id)sender
 {
     UISlider *slider = sender;
-    _app.data.underlayAlpha = slider.value;
+    _app.data.underlayAlpha = 1 - slider.value;
 }
 
 @end

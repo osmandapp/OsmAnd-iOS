@@ -1328,7 +1328,7 @@
 "open_in_browser_wiki" = "線上開啟文章";
 "index_name_antarctica" = "南極洲";
 "osmand_parking_warning" = "警示";
-"map_transparency" = "底圖透明度";
+"map_transparency" = "底圖可見度";
 "exit_at" = "離開於";
 "public_transport_warning_title" = "大眾運輸導航目前處於測試階段，可能會出現錯誤和不準確的情況。";
 "active_markers" = "活躍標記";

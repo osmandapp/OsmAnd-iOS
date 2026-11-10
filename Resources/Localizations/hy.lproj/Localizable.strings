@@ -405,7 +405,7 @@
 "daynight_mode_night" = "Գիշերային";
 "map_widget_renderer" = "Քարտեզի ոճը";
 "shared_string_online_maps" = "Առցանց քարտեզներ";
-"map_transparency" = "Հիմնական քարտեզը թափանցիկությունը";
+"map_transparency" = "Հիմնական քարտեզի տեսանելիությունը";
 "mapillary" = "Մափիլարի(Mapillary)";
 "add_online_source" = "Ավելացնել առցանց աղբյուր";
 "srtm_color_scheme" = "Գունային սխեմա";

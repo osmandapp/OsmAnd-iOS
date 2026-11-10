@@ -111,7 +111,7 @@
 "routing_engine_vehicle_type_driving" = "Lái xe";
 "shared_string_show_on_map" = "Hiện trên bản đồ";
 "daynight_mode_night" = "Đêm";
-"map_transparency" = "Độ trong suốt bản đồ cơ sở";
+"map_transparency" = "Mức độ nhìn thấy bản đồ cơ sở";
 
 // Intro
 "next_proceed" = "Tiếp";

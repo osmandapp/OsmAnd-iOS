@@ -1546,7 +1546,7 @@
 "map_settings_line_density" = "Densidade de sas lìnias";
 "shared_string_appearance" = "Aparèntzia";
 "srtm_color_scheme" = "Ischema de colores";
-"map_transparency" = "Trasparèntzia mapa de base";
+"map_transparency" = "Visibilidade de sa mapa de base";
 "public_transport_ped_route_title" = "Cust\'àndala a pede est pagu prus o mancu de %@, e diat pòdere èssere prus lestra de su trasportu pùblicu";
 "board_at" = "Àrtzia in";
 "avoid_transport_type" = "Istransi castas de trasportu";

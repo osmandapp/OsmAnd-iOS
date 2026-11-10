@@ -10,6 +10,7 @@
 #import "OAStreet.h"
 #import "OACity.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 @interface OABuilding ()
 
@@ -45,8 +46,20 @@
     return self;
 }
 
+- (instancetype)initWithSharedBuilding:(OASBuilding *)building
+{
+    self = [super initWithSharedAddress:building type:ADDRESS_TYPE_BUILDING];
+    if (self)
+    {
+        _sharedBuilding = building;
+    }
+    return self;
+}
+
 - (OAStreet *) street
 {
+    if (_sharedBuilding)
+        return nil;
     if (!_street && self.building->street)
     {
         _street = [[OAStreet alloc] initWithStreet:self.building->street];
@@ -56,6 +69,8 @@
 
 - (OACity *) city
 {
+    if (_sharedBuilding)
+        return nil;
     if (!_city && self.building->streetGroup)
     {
         _city = [[OACity alloc] initWithCity:self.building->streetGroup];
@@ -65,6 +80,8 @@
 
 - (NSString *) postcode
 {
+    if (_sharedBuilding)
+        return [_sharedBuilding getPostcode] ?: @"";
     return self.building->postcode.toNSString();
 }
 

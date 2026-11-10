@@ -210,6 +210,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (BOOL) updateMetadata:(nullable OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
+// Called on the main thread. The callback receives selected files followed by the recording track.
+- (void)readSearchableGpxFiles:(void (^)(NSArray<OASGpxFile *> *files, NSArray<NSString *> *paths))reader;
 
 // Synchronously commits a short renderer/view mutation on the main thread.
 // Do not perform file I/O, DB/cache/network work, dispatch_sync, or notifications here.

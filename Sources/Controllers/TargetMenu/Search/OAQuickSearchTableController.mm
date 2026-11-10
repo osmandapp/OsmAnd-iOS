@@ -29,6 +29,7 @@
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoriteGroup.h"
 #import "OAGpxWptItem.h"
 #import "OABuilding.h"
 #import "OAStreet.h"
@@ -669,6 +670,13 @@
     {
         switch (res.objectType)
         {
+            case EOAObjectTypeSuggestion:
+            {
+                OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:[item getName]
+                    tableView:tableView typeName:@"" icon:[UIImage templateImageNamed:[OAQuickSearchListItem getIconName:res]]];
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+                return cell;
+            }
             case EOAObjectTypeLocation:
             case EOAObjectTypeGpxTrack:
             {
@@ -813,7 +821,9 @@
                             cell.titleIcon.image = shieldIcon;
                     }
                     
-                    [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                    NSString *address = res.addressName;
+                    [cell.descView setText:address.length > 0 ? [OAQuickSearchListItem getPoiTypeNameWithoutAddress:res] : [OAQuickSearchListItem getTypeName:res]];
+                    cell.addressView.text = address;
                     if (poi.hasOpeningHours)
                     {
                         [cell.openingHoursView setText:poi.openingHours];
@@ -844,6 +854,15 @@
                     
                     [self setCellDistanceDirection:cell item:item];
                 }
+                return cell;
+            }
+            case EOAObjectTypeFavoriteGroup:
+            {
+                OAFavoriteGroup *group = (OAFavoriteGroup *)res.object;
+                OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:[item getName]
+                    tableView:self.tableView typeName:[OAQuickSearchListItem getTypeName:res]
+                    icon:[UIImage imageNamed:ACImageNameIcCustomFavorites]];
+                cell.leftIconView.tintColor = group.color;
                 return cell;
             }
             case EOAObjectTypePoiType:

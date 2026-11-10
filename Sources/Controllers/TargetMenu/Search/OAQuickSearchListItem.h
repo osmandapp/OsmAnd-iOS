@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 + (NSString *)getIconName:(OASearchResult *)searchResult;
 + (NSString *)getItemIcon:(OAPointDescription *)pd;
 + (NSString *)getTypeName:(OASearchResult *)searchResult;
+// the type of a poi without its address or city, for a list that shows the address on a line of its own
++ (NSString *)getPoiTypeNameWithoutAddress:(OASearchResult *)searchResult;
 
 
 - (OADistanceDirection *)getEvaluatedDistanceDirection:(BOOL)decelerating;

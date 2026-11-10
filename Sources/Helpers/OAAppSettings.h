@@ -1431,6 +1431,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonWidgetDisplayPriority *)registerWidgetDisplayPriorityPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonSunPositionMode *)registerSunPositionModePreference:(NSString *)key defValue:(int)defValue;
 - (EOATemperatureConstant)getTemperatureUnit;
+- (EOATemperatureConstant)getTemperatureUnitForMode:(OAApplicationMode *)mode;
 
 - (BOOL)shouldHidePolygons;
 
@@ -1595,6 +1596,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonLong *userIosIdExpiredTime;
 @property (nonatomic) OACommonBoolean *useOldRouting;
 @property (nonatomic) OACommonBoolean *useSharedRouting;
+@property (nonatomic) OACommonBoolean *useSharedSearch;
+@property (nonatomic) OACommonBoolean *useSpatialTextSearch;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
 
 @property (nonatomic) OACommonBoolean *wikiShowImagePreviews;

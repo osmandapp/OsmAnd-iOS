@@ -372,6 +372,13 @@ static const NSInteger _buttonsCount = 4;
     [self.customController applyGradient:useGradient alpha:alpha];
 }
 
+- (CGFloat)effectiveStatusBarHeight
+{
+    UIWindow *window = self.window ?: self.parentView.window ?: [OARootViewController instance].view.window;
+    CGFloat safeAreaTop = MAX(self.safeAreaInsets.top, window.safeAreaInsets.top);
+    return MAX(safeAreaTop, window.windowScene.statusBarManager.statusBarFrame.size.height);
+}
+
 - (void) updateToolbarFrame:(BOOL)landscape
 {
     if (_toolbarAnimating)
@@ -433,7 +440,7 @@ static const NSInteger _buttonsCount = 4;
     [self.parentView addSubview:self.customController.navBar];
     
     BOOL showTopControls = [self.customController showTopControls];
-    _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
+    _toolbarHeight = showTopControls ? _customController.getNavBarHeight : [self effectiveStatusBarHeight];
     
     [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
     
@@ -482,7 +489,7 @@ static const NSInteger _buttonsCount = 4;
         else
             newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
      
-        _toolbarHeight = OAUtilities.getStatusBarHeight;
+        _toolbarHeight = [self effectiveStatusBarHeight];
 
         [self.menuViewDelegate targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
 
@@ -704,7 +711,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) clearCustomControllerIfNeeded
 {
     _rotationInProgress = NO;
-    _toolbarHeight = OAUtilities.getStatusBarHeight;
+    _toolbarHeight = [self effectiveStatusBarHeight];
     
     _bottomBarVisible = NO;
     _bottomBarHeight = 0.;
@@ -950,7 +957,7 @@ static const NSInteger _buttonsCount = 4;
         if ([self isLandscape])
         {
             frame.origin.x = -DeviceScreenWidth;
-            frame.origin.y = OAUtilities.getStatusBarHeight;
+            frame.origin.y = 0.;
             self.frame = frame;
 
             frame.origin.x = 0.0;
@@ -983,10 +990,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         CGRect frame = self.frame;
-        if ([self isLandscape])
-            frame.origin.y = OAUtilities.getStatusBarHeight;
-        else
-            frame.origin.y = 0;
+        frame.origin.y = 0.;
         
         self.frame = frame;
         CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
@@ -1346,7 +1350,7 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
-    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight - self.customController.detailsButtonHeight, width, containerViewHeight);
+    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [self effectiveStatusBarHeight]) : DeviceScreenHeight - containerViewHeight - self.customController.detailsButtonHeight, width, containerViewHeight);
     CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.0;
     
     if (self.customController && [self.customController hasContent])
@@ -2369,7 +2373,7 @@ static const NSInteger _buttonsCount = 4;
     if (alpha > 0)
     {
         CGFloat a = _fullOffset;
-        CGFloat c = self.contentOffset.y - [OAUtilities getStatusBarHeight];
+        CGFloat c = self.contentOffset.y - [self effectiveStatusBarHeight];
         alpha = c / a;
         if (alpha < 0)
             alpha = 0.0;
@@ -2388,7 +2392,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat alpha = self.alpha;
     if (alpha > 0 && ![self isLandscape])
     {
-        CGFloat a = _headerY - [OAUtilities getStatusBarHeight];
+        CGFloat a = _headerY - [self effectiveStatusBarHeight];
         CGFloat b = _headerY - self.customController.navBar.frame.size.height;
         CGFloat c = self.contentOffset.y + self.customController.navBar.frame.size.height;
         alpha = (c - b) / (a - b);

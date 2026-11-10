@@ -1392,6 +1392,10 @@ static const NSInteger _buttonsCount = 4;
         _topOverscrollView.hidden = YES;
     }
     _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
+    if (self.customController && ![self.customController hasContent])
+        _bottomOverscrollView.backgroundColor = self.customController.contentView.backgroundColor;
+    else
+        _bottomOverscrollView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
 
     self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
     self.contentInset = UIEdgeInsetsMake(0, 0, self.customController ? self.customController.keyboardSize.height : 0, 0);

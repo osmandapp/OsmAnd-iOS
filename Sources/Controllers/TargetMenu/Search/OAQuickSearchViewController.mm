@@ -141,6 +141,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 @implementation OAQuickSearchViewController
 {
     UIPanGestureRecognizer *_tblMove;
+    UITapGestureRecognizer *_dismissEditingTap;
 
     UIImageView *_leftImgView;
     UIActivityIndicatorView *_activityIndicatorView;
@@ -198,6 +199,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _dismissEditingTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissTextEditing:)];
+    _dismissEditingTap.cancelsTouchesInView = NO;
+    _dismissEditingTap.delegate = self;
+    [self.view addGestureRecognizer:_dismissEditingTap];
     self.tableView.separatorColor = [SeparatorAppearance color];
 
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -958,6 +963,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 }
 
 -(void)moveGestureDetected:(id)sender
+{
+    [self.textField resignFirstResponder];
+}
+
+- (void)dismissTextEditing:(UITapGestureRecognizer *)gestureRecognizer
 {
     [self.textField resignFirstResponder];
 }
@@ -2057,6 +2067,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 }
 
 #pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return gestureRecognizer != _dismissEditingTap || ![touch.view isDescendantOfView:self.textField];
+}
 
 - (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {

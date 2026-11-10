@@ -1735,6 +1735,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         if (!_downloadView)
         {
             self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
+            _downloadView.alpha = self.contextMenuMode ? 0. : 1.;
             _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
             _downloadView.layer.cornerRadius = 5.0;
@@ -1824,9 +1825,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         : (isInContextMenuVisible || (!isWeatherToolbarVisible && !isDashboardVisible && !isRouteInfoVisible && !isTargetToHideVisible));
     BOOL isPanelAllowed = isButtonsVisible && !self.contextMenuMode && !isScrollableHudVisible && _mapPanelViewController.activeTargetType != OATargetChangePosition;
     _hudButtonsVisible = isButtonsVisible;
+    if (isRouteInfoVisible || self.contextMenuMode)
+        _statusBarView.alpha = 0.;
 
     void (^mainBlock)(void) = ^{
-        _statusBarView.alpha = isTopPanelVisible || isToolbarVisible ? 1. : 0.;
+        _statusBarView.alpha = !isRouteInfoVisible && !self.contextMenuMode && (isTopPanelVisible || isToolbarVisible) ? 1. : 0.;
         _mapSettingsButton.alpha = [self shouldShowConfigureMap] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
         BOOL showCompassButton = [self shouldShowCompass] && isButtonsVisible;
         _compassButton.alpha = showCompassButton ? 1. : 0.;
@@ -1834,7 +1837,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             _compassButton.hidden = NO;
 
         _searchButton.alpha = [self shouldShowSearch] && isButtonsVisible && !isTargetBackButtonVisible ? 1. : 0.;
-        _downloadView.alpha = isButtonsVisible ? 1. : 0.;
+        _downloadView.alpha = isButtonsVisible && !self.contextMenuMode ? 1. : 0.;
         
         if (_toolbarViewController && _toolbarViewController.view.superview)
             _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
@@ -2075,6 +2078,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 {
     if (!self.contextMenuMode)
         self.contextMenuMode = YES;
+    _statusBarView.alpha = 0.;
+    _statusBarView.userInteractionEnabled = NO;
+    _downloadView.alpha = 0.;
+    _downloadView.userInteractionEnabled = NO;
     [self updateMapModeButton];
 }
 

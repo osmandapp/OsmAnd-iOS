@@ -367,7 +367,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 + (CGFloat)calculateY
 {
     if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44.0 : 44.0;
+        return [OAUtilities isIPad] ? [OAUtilities getTopMargin] + 44.0 : 44.0;
 
     return DeviceScreenHeight - (241. + [[self class] bottomOffset]);
 }
@@ -375,7 +375,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 + (CGFloat)calculateYOutScreen
 {
     if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44 - 1 : 44 - 1.;
+        return [OAUtilities isIPad] ? [OAUtilities getTopMargin] + 44.0 - 1.0 : 44.0 - 1.0;
 
     return DeviceScreenHeight + 241. + [[self class] bottomOffset];
 }

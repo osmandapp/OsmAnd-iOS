@@ -589,6 +589,12 @@
     [self updateNavBarSubviewsLayout];
 }
 
+- (CGFloat)statusBarHeight
+{
+    UIWindow *window = [OARootViewController instance].view.window;
+    return MAX(self.view.safeAreaInsets.top, window.safeAreaInsets.top);
+}
+
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {

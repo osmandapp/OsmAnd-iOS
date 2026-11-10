@@ -52,6 +52,9 @@ final class ImageViewerController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         
         scrollView.contentInsetAdjustmentBehavior = .never
+        if #available(iOS 17.0, *) {
+            scrollView.allowsKeyboardScrolling = false
+        }
         
         view.addSubview(scrollView)
         scrollView.bindFrameToSuperview()

@@ -184,6 +184,20 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     }
 }
 
+- (void)updateTableHeaderForNavbarFrame:(CGRect)navbarFrame
+{
+    UIView *headerView = self.tableView.tableHeaderView;
+    CGFloat headerHeight = [self getInitialPosY];
+    if (headerView && (headerView.frame.size.height != headerHeight || headerView.frame.size.width != navbarFrame.size.width))
+    {
+        CGRect headerFrame = headerView.frame;
+        headerFrame.size.width = navbarFrame.size.width;
+        headerFrame.size.height = headerHeight;
+        headerView.frame = headerFrame;
+        self.tableView.tableHeaderView = headerView;
+    }
+}
+
 - (void) show:(UIViewController *)rootViewController parentViewController:(OADashboardViewController *)parentViewController animated:(BOOL)animated;
 {
     _showing = YES;
@@ -210,6 +224,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     CGRect frame = [self contentViewFrame];
     CGRect navbarFrame = [self navbarViewFrame];
+    [self updateTableHeaderForNavbarFrame:navbarFrame];
     if ([self isMainScreen] && [OAUtilities isPortrait] && [OAUtilities isIPhone])
     {
         frame.origin.y = DeviceScreenHeight + 10.0;
@@ -260,7 +275,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
                 _navbarGradientBackgroundView.frame = [self navbarViewFrame];
             }
             
-            _navbarView.frame = [self navbarViewFrame];
+            CGRect finalNavbarFrame = [self navbarViewFrame];
+            _navbarView.frame = finalNavbarFrame;
+            [self updateTableHeaderForNavbarFrame:finalNavbarFrame];
             self.view.frame = [self contentViewFrame];
             
         } completion:^(BOOL finished) {
@@ -275,7 +292,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     }
     else
     {
-        _navbarView.frame = [self navbarViewFrame];
+        CGRect finalNavbarFrame = [self navbarViewFrame];
+        _navbarView.frame = finalNavbarFrame;
+        [self updateTableHeaderForNavbarFrame:finalNavbarFrame];
         self.view.frame = [self contentViewFrame];
         
         [self didMoveToParentViewController:rootViewController];

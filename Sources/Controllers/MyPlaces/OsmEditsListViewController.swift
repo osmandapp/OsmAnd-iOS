@@ -89,7 +89,7 @@ final class OsmEditsListViewController: UIViewController, MyPlacesScrollResettab
             poiType = translatedNames[poiTypeString]
         }
         var content = cell.defaultContentConfiguration()
-        content.image = poiType?.icon().resizedTemplateImage(with: imageSize) ?? .icCustomOsmNoteUnresolved.withRenderingMode(.alwaysOriginal)
+        content.image = poiType?.icon()?.resizedTemplateImage(with: imageSize) ?? .icCustomOsmNoteUnresolved.withRenderingMode(.alwaysOriginal)
         content.text = item.title
         content.secondaryText = item.descr
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()

@@ -1398,6 +1398,11 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
 
     _downloadMapWidget = widget;
+    if (self.contextMenuMode)
+    {
+        _downloadMapWidget.alpha = 0.;
+        _downloadMapWidget.userInteractionEnabled = NO;
+    }
     if (![self.view.subviews containsObject:_downloadMapWidget])
     {
         [self.view addSubview:_downloadMapWidget];
@@ -1857,7 +1862,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
             [self.rightWidgetsView showShadow:self.mapInfoController.rightPanelController.view.alpha == 1.];
         }
         if (self.downloadMapWidget)
-            self.downloadMapWidget.alpha = isButtonsVisible ? 1. : 0.;
+            self.downloadMapWidget.alpha = isButtonsVisible && !self.contextMenuMode ? 1. : 0.;
         
         [self updateTopButtonsLayoutY];
 
@@ -2082,6 +2087,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     _statusBarView.userInteractionEnabled = NO;
     _downloadView.alpha = 0.;
     _downloadView.userInteractionEnabled = NO;
+    _downloadMapWidget.alpha = 0.;
+    _downloadMapWidget.userInteractionEnabled = NO;
     [self updateMapModeButton];
 }
 

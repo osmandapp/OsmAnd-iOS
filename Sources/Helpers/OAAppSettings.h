@@ -1014,6 +1014,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *settingMapLanguageTranslit;
 
 @property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
+@property (assign, nonatomic) BOOL shouldShowOutdatedMapsWarning;
 
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;

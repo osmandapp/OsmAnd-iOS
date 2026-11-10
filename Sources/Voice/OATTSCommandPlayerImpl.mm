@@ -85,12 +85,7 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
     if ([_vrt isMute])
         return;
 
-    NSMutableString *toSpeak = [[NSMutableString alloc] init];
-    NSArray<NSString *> *uterrances = [builder getUtterances];
-
-    for (NSString *utterance in uterrances)
-        [toSpeak appendString:utterance];
-
+    NSString *toSpeak = [[builder getUtterances] componentsJoinedByString:@" "];
     dispatch_async(_speechQueue, ^{
         if (self->_isCleared)
             return;

@@ -310,7 +310,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
-        animator?.addCompletion { [weak self] in
+        let applyDeferredUpdates = { [weak self] in
             guard let self else { return }
             if self.shouldUpdateTable {
                 self.sortTracks()
@@ -318,6 +318,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 self.shouldUpdateTable = false
             }
             self.isContextMenuVisible = false
+        }
+        // No animator on macOS ("Designed for iPad"): the menu is already closed
+        if let animator {
+            animator.addCompletion(applyDeferredUpdates)
+        } else {
+            applyDeferredUpdates()
         }
     }
     
@@ -516,10 +522,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                            renameToNewName: track.gpxFileName,
                            deleteOriginalFile: false,
                            openTrack: false,
-                           trackItem: track)
-        updateContent()
-        updateBottomButtons()
-        delegate?.onVisibleTracksUpdate()
+                           trackItem: track) { [weak self] _ in
+            self?.updateContent()
+            self?.updateBottomButtons()
+            self?.delegate?.onVisibleTracksUpdate()
+        }
     }
     
     private func updateContent() {
@@ -895,7 +902,7 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
                 let trackItem = TrackItem(file: selectedTrack.file)
                 trackItem.dataItem = selectedTrack
                 
-                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem)
+                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem, completion: nil)
                 updateContent()
                 delegate?.onVisibleTracksUpdate()
             }

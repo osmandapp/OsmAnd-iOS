@@ -79,7 +79,7 @@
     
         for (NSString *link in imageLinks)
         {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
                 
                 [self fetchSingleImageByURL:link customKey:nil downloadMode:downloadMode onlyNow:onlyNow onComplete:^(NSString *imageData) {
                     
@@ -194,7 +194,7 @@
 
 - (void) downloadImage:(NSString *)url customKey:(NSString *)customKey onComplete:(void (^)(NSString *imageData))onComplete
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
         if (imageData)
         {

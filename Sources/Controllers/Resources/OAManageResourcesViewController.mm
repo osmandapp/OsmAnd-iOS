@@ -41,6 +41,7 @@
 #import "OADownloadMultipleResourceViewController+cpp.h"
 #import "OAResourcesUISwiftHelper.h"
 #import "OASearchResult.h"
+#import "OsmAndSharedWrapper.h"
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherForecastDetailsViewController.h"
@@ -1691,6 +1692,7 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
 {
     @synchronized(_dataLock)
     {
+        [OAQuickSearchHelper.instance cancelSearchCities];
         // If case searchString is empty, there are no results
         if (searchString == nil || searchString.length == 0)
         {
@@ -1755,46 +1757,77 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         }
         
         [OAQuickSearchHelper.instance searchCitiesAsync:searchString
-                                         searchLocation:_app.locationServices.lastKnownLocation
                                            allowedTypes:@[@"city", @"town"]
                                               cityLimit:kSearchCityLimit
                                              onComplete:^(NSMutableArray *searchResults) {
-            NSMutableArray *regionsByCity = [NSMutableArray array];
-            for (OASearchResult *amenity in searchResults)
-            {
-                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
-                if (region)
-                {
-                    NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
-                    if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
-                    {
-                        amenity.relatedObject = searchResult.firstObject;
-                        [regionsByCity addObject:amenity];
-                    }
-                    else
-                    {
-                        [regionsByCity addObjectsFromArray:searchResult];
-                    }
-                }
-            }
+            NSArray *regionsByCity = [self citySearchRows:searchResults excludingRows:resultByContains];
             if (regionsByCity.count > 0)
             {
-                [regionsByCity sortUsingComparator:^NSComparisonResult(id a, id b) {
-                    NSString *titleA = [self titleForObject:a];
-                    NSString *titleB = [self titleForObject:b];
-                    
-                    NSComparisonResult titleCompare = [titleA localizedCaseInsensitiveCompare:titleB];
-                    if (titleCompare == NSOrderedSame)
-                        return [[self subtitleForObject:a] localizedCaseInsensitiveCompare:[self subtitleForObject:b]];
-                    
-                    return titleCompare;
-                }];
                 _searchResults = [resultByContains arrayByAddingObjectsFromArray:regionsByCity];
                 [_tableView reloadData];
             }
             [self.view removeSpinner];
         }];
     }
+}
+
+- (NSArray *)citySearchRows:(NSArray<OASearchResult *> *)cities excludingRows:(NSArray *)matchedRows
+{
+    // a map or a region is shown once: by the first city leading to it, or not at all when it is in the list already
+    NSMutableSet<NSString *> *shownRows = [NSMutableSet set];
+    for (id row in matchedRows)
+    {
+        NSString *key = [self keyOfSearchRow:row];
+        if (key)
+            [shownRows addObject:key];
+        // a region in the list leads to its maps too
+        const auto citRegionResources = [row isKindOfClass:OAWorldRegion.class] ? _resourcesByRegions.constFind((OAWorldRegion *) row) : _resourcesByRegions.cend();
+        if (citRegionResources != _resourcesByRegions.cend())
+        {
+            for (const auto& resource : citRegionResources->allResources)
+                [shownRows addObject:resource->id.toNSString()];
+        }
+    }
+    NSMutableArray *regionsByCity = [NSMutableArray array];
+    for (OASearchResult *amenity in cities)
+    {
+        OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+        if (region)
+        {
+            NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+            if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+            {
+                amenity.relatedObject = searchResult.firstObject;
+                searchResult = @[amenity];
+            }
+            for (id row in searchResult)
+            {
+                NSString *key = [self keyOfSearchRow:row];
+                if (!key || ![shownRows containsObject:key])
+                {
+                    if (key)
+                        [shownRows addObject:key];
+                    [regionsByCity addObject:row];
+                }
+            }
+        }
+    }
+    [regionsByCity sortUsingComparator:^NSComparisonResult(id a, id b) {
+        // cities go before towns and regions
+        BOOL isCityA = [self isCitySearchRow:a];
+        if (isCityA != [self isCitySearchRow:b])
+            return isCityA ? NSOrderedAscending : NSOrderedDescending;
+
+        NSString *titleA = [self titleForObject:a];
+        NSString *titleB = [self titleForObject:b];
+
+        NSComparisonResult titleCompare = [titleA localizedCaseInsensitiveCompare:titleB];
+        if (titleCompare == NSOrderedSame)
+            return [[self subtitleForObject:a] localizedCaseInsensitiveCompare:[self subtitleForObject:b]];
+
+        return titleCompare;
+    }];
+    return regionsByCity;
 }
 
 - (NSString *)titleForObject:(id)obj
@@ -1812,6 +1845,26 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         return ((OASearchResult *)obj).localeName;
     }
     return @"";
+}
+
+// what a row of the search leads to: a map, by itself or by a city, or a region
+- (nullable NSString *)keyOfSearchRow:(id)row
+{
+    if ([row isKindOfClass:OASearchResult.class])
+        row = ((OASearchResult *) row).relatedObject;
+    if ([row isKindOfClass:OAResourceItem.class])
+        return ((OAResourceItem *) row).resourceId.toNSString();
+    if ([row isKindOfClass:OAWorldRegion.class])
+        return ((OAWorldRegion *) row).regionId;
+    return nil;
+}
+
+- (BOOL)isCitySearchRow:(id)row
+{
+    if (![row isKindOfClass:OASearchResult.class])
+        return NO;
+    NSObject *object = ((OASearchResult *) row).object;
+    return [object isKindOfClass:OASAmenity.class] && [[(OASAmenity *) object getSubType] isEqualToString:@"city"];
 }
 
 - (NSString *)subtitleForObject:(id)obj

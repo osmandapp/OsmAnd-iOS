@@ -29,6 +29,7 @@
 
 @implementation OACarPlayHistoryListController
 {
+    NSUInteger _dataRequest;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAHistoryItem *_prevRouteHistoryitem;
@@ -47,21 +48,32 @@
 
 - (NSArray<CPListSection *> *)generateSections
 {
+    NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
+    if (![_settings.searchHistory get])
+        return [self sectionsForSearchResults:@[]];
+
+    [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO completion:^(OASearchResultCollection *res) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
+                [self updateSections:[self sectionsForSearchResults:res.getCurrentSearchResults ?: @[]]];
+        });
+    }];
+    return @[];
+}
+
+- (NSArray<CPListSection *> *)sectionsForSearchResults:(NSArray<OASearchResult *> *)searchResults
+{
     NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
     NSMutableArray<CPListItem *> *listItems = [NSMutableArray array];
 
     BOOL navigationHistoryEnabled = [_settings.navigationHistory get];
     if ([_settings.searchHistory get])
     {
-        NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
-        OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
-        OASearchResultCollection *res = [searchUICore shallowSearch:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO];
-        if (res)
-            [searchResults addObjectsFromArray:[res getCurrentSearchResults]];
-
         for (OASearchResult *searchResult in searchResults)
         {
-            OAHistoryItem *historyItem;
+            OAHistoryItem *historyItem = nil;
             if ([searchResult.object isKindOfClass:OAHistoryItem.class])
                 historyItem = (OAHistoryItem *) searchResult.object;
             else if ([searchResult.relatedObject isKindOfClass:OAHistoryItem.class])
@@ -213,6 +225,12 @@
     [self safePopToRootTemplateAnimated:YES];
     if (completionBlock)
         completionBlock();
+}
+
+- (void)onTemplateDismissed
+{
+    ++_dataRequest;
+    [super onTemplateDismissed];
 }
 
 @end

@@ -386,7 +386,9 @@
 {
     [super viewWillDisappear:animated];
     _isViewVisible = YES;
-    [self restoreNavControllerHistoryIfNeeded];
+    // Moving to another scene also calls viewWillDisappear; it must not restore the Tracks list.
+    if (![OARootViewController instance].movingBetweenWindowScenes)
+        [self restoreNavControllerHistoryIfNeeded];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection

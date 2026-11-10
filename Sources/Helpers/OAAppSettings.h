@@ -528,6 +528,10 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @end
 
+@interface OACommonDefaultSpeed : OACommonDouble
+
+@end
+
 @interface OACommonStringList : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;

@@ -4169,6 +4169,29 @@ static char kMapSourceUpdateQueueKey;
     if (!storedPoints)
         return NO;
 
+    // Roll back in place on write failure: editors and the renderer retain these objects.
+    NSArray<OASWptPt *> *previousPoints = [gpxFile.getPointsList copy];
+    NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *previousGroups = [gpxFile.pointsGroups copy];
+    NSArray<NSString *> *previousGroupNames = gpxFile.pointsGroups.allKeys;
+    NSMutableDictionary<NSString *, NSArray<OASWptPt *> *> *previousGroupPoints = [NSMutableDictionary dictionary];
+    for (NSString *key in previousGroups)
+        previousGroupPoints[key] = [previousGroups[key].points copy];
+    NSMutableArray<OASWptPt *> *previousValues = [NSMutableArray arrayWithCapacity:storedPoints.count];
+    if (!deleting)
+    {
+        for (OASWptPt *point in storedPoints)
+        {
+            OASWptPt *previous = [[OASWptPt alloc] initWithWptPt:point];
+            previous.extensionsWriters = point.extensionsWriters
+                ? [OASMutableDictionary dictionaryWithDictionary:point.extensionsWriters] : nil;
+            [previousValues addObject:previous];
+        }
+    }
+    NSString *previousAuthor = gpxFile.author;
+    NSString *previousPath = gpxFile.path;
+    int64_t previousModifiedTime = gpxFile.modifiedTime;
+    int64_t previousPointsModifiedTime = gpxFile.pointsModifiedTime;
+
     if (deleting)
         [self removeStoredWaypoints:storedPoints inGpxFile:gpxFile];
     else
@@ -4178,7 +4201,32 @@ static char kMapSourceUpdateQueueKey;
 
     gpxFile.author = [OAAppVersion getFullVersionWithAppName];
     if ([OASGpxUtilities.shared writeGpxFileFile:[[OASKFile alloc] initWithFilePath:path] gpxFile:gpxFile])
+    {
+        [previousValues enumerateObjectsUsingBlock:^(OASWptPt *previous, NSUInteger index, BOOL *stop) {
+            OASWptPt *point = storedPoints[index];
+            // Restore exact values; updatePoint rounds coordinates and merges extensions.
+            point.lat = previous.lat;
+            point.lon = previous.lon;
+            point.time = previous.time;
+            point.name = previous.name;
+            point.desc = previous.desc;
+            point.category = previous.category;
+            point.extensions = previous.extensions;
+            point.extensionsWriters = previous.extensionsWriters;
+        }];
+        [gpxFile setPointsListPoints:previousPoints];
+        [gpxFile.pointsGroups removeAllObjects];
+        for (NSString *key in previousGroupNames)
+        {
+            gpxFile.pointsGroups[key] = previousGroups[key];
+            [previousGroups[key].points setArray:previousGroupPoints[key]];
+        }
+        gpxFile.author = previousAuthor;
+        gpxFile.path = previousPath;
+        gpxFile.modifiedTime = previousModifiedTime;
+        gpxFile.pointsModifiedTime = previousPointsModifiedTime;
         return NO;
+    }
 
     [items enumerateObjectsUsingBlock:^(OAGpxWptItem *item, NSUInteger index, BOOL *stop) {
         // Keep the open editor's references in sync only after saving the current document.

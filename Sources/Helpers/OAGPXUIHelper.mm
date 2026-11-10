@@ -824,6 +824,22 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
 }
 
+- (BOOL)writeGpxCopy:(OASGpxFile *)gpxFile withName:(NSString *)name toPath:(NSString *)path
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path])
+        return NO;
+
+    OASGpxFile *copiedGpx = [gpxFile clone];
+    [copiedGpx updateTrackNameNewName:name];
+    if ([OASGpxUtilities.shared writeGpxFileFile:[[OASKFile alloc] initWithFilePath:path] gpxFile:copiedGpx])
+    {
+        [fileManager removeItemAtPath:path error:nil];
+        return NO;
+    }
+    return YES;
+}
+
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
@@ -906,11 +922,14 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     else
     {
-        NSError *err = nil;
-        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:&err];
-        if (err)
+        NSString *copiedName = newName.stringByDeletingPathExtension;
+        BOOL renameInside = !gpxFile.error && gpxFile.isOsmAndOrigin && ![copiedName isEqualToString:gpxFile.metadata.name];
+        BOOL copied = renameInside
+            ? [self writeGpxCopy:gpxFile withName:copiedName toPath:destinationPath]
+            : [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+        if (!copied)
         {
-            NSLog(@"copyItemAtPath: %@ toPath: %@ ", sourcePath, destinationPath);
+            NSLog(@"copyGPXToNewFolder failed: %@ toPath: %@ ", sourcePath, destinationPath);
             return;
         }
         

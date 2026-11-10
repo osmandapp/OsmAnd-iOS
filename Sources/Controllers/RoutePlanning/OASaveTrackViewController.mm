@@ -141,7 +141,7 @@
 
     if (_duplicate)
     {
-        NSRange range = [_fileName rangeOfString:@"_copy\\s*\\d*$" options:NSRegularExpressionSearch];
+        NSRange range = [_fileName rangeOfString:@"_copy(\\s[(]\\d+[)])?$" options:NSRegularExpressionSearch];
         if (range.location == NSNotFound)
             _fileName = [_fileName stringByAppendingString:@"_copy"];
 
@@ -150,9 +150,6 @@
         while ([[NSFileManager defaultManager] fileExistsAtPath:[[path stringByAppendingPathComponent:_fileName]
                 stringByAppendingPathExtension:@"gpx"]])
         {
-            if ([_fileName hasSuffix:@"_copy"])
-                _fileName = [_fileName stringByAppendingString:@" 1"];
-
             _fileName = [OAUtilities createNewFileName:_fileName];
         }
     }

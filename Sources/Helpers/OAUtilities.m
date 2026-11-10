@@ -2873,39 +2873,17 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSString *) createNewFileName:(NSString *)oldName
 {
-    NSString *ext = oldName.pathExtension;
-    NSString *nameWithoutExt = oldName.stringByDeletingPathExtension;
+    NSString *extension = oldName.pathExtension;
+    NSString *name = oldName.stringByDeletingPathExtension;
     
-    NSMutableString *numberSection = [NSMutableString string];
-    NSInteger i = nameWithoutExt.length - 1;
-    BOOL hasNameNumberSection = NO;
-    NSCharacterSet *numericSet = [NSCharacterSet decimalDigitCharacterSet];
-    do {
-        unichar c = [nameWithoutExt characterAtIndex:i];
-        if ([numericSet characterIsMember:c])
-        {
-            [numberSection insertString:[NSString stringWithFormat:@"%C", c] atIndex:0];
-        }
-        else if (c == ' ' && numberSection.length > 0)
-        {
-            hasNameNumberSection = YES;
-            break;
-        }
-        else
-        {
-            break;
-        }
-        i--;
-    } while (i >= 0);
-    NSInteger newNumberValue = (hasNameNumberSection ? [numberSection integerValue] : 0) + 1;
-    
-    NSString *newName;
-    if (newNumberValue == 1)
-        newName = [[NSString stringWithFormat:@"%@ %ld", nameWithoutExt, newNumberValue] stringByAppendingPathExtension:ext];
-    else
-        newName = [[NSString stringWithFormat:@"%@ %ld", [nameWithoutExt substringToIndex:i], newNumberValue] stringByAppendingPathExtension:ext];
-    
-    return newName;
+    NSRange counterRange = [name rangeOfString:@"\\s[(]\\d+[)]$" options:NSRegularExpressionSearch];
+    if (counterRange.location != NSNotFound)
+    {
+        NSInteger counter = [[name substringWithRange:NSMakeRange(counterRange.location + 2, counterRange.length - 3)] integerValue];
+        NSString *prefix = [name substringToIndex:counterRange.location + 2];
+        return [[NSString stringWithFormat:@"%@%ld)", prefix, counter + 1] stringByAppendingPathExtension:extension];
+    }
+    return [[name stringByAppendingString:@" (2)"] stringByAppendingPathExtension:extension];
 }
 
 + (NSString *)convertToPermittedFileName:(NSString *)filename {

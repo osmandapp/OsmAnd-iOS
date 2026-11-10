@@ -7,12 +7,37 @@
 
 #import "OAObfFileList.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
 @implementation OAObfFileList
+
++ (NSDictionary<NSString *, OASObfReaderRegistryObfFile *> *)filesForSharedRegistry
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @{};
+
+    NSMutableDictionary<NSString *, OASObfReaderRegistryObfFile *> *files = [NSMutableDictionary dictionary];
+    BOOL useLiveForRouting = OAAppSettings.sharedManager.useOsmLiveForRouting;
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+    {
+        NSString *path = resource->localPath.toNSString();
+        if (![path.lowercaseString hasSuffix:@".obf"])
+            continue;
+
+        BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
+        BOOL travel = resource->type == OsmAnd::ResourcesManager::ResourceType::Travel;
+        BOOL live = resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion;
+        files[resource->id.toNSString()] = [[OASObfReaderRegistryObfFile alloc] initWithPath:path
+            useForRouting:installed && !travel && (!live || useLiveForRouting)
+            useForPublicTransport:installed && !travel && !live];
+    }
+    return files;
+}
 
 + (NSArray<NSString *> *)travelFilePaths
 {
@@ -41,6 +66,22 @@
             [paths addObject:path];
     }
     return paths;
+}
+
++ (NSDictionary<NSString *, NSString *> *)pathsByResourceIdFor:(NSArray<NSString *> *)resourceIds
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @{};
+
+    NSMutableDictionary<NSString *, NSString *> *pathsByResourceId = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in resourceIds)
+    {
+        const auto resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+        if (resource && !resource->localPath.isEmpty())
+            pathsByResourceId[resourceId] = resource->localPath.toNSString();
+    }
+    return pathsByResourceId;
 }
 
 // in the order of the installed resources, which the sort starts from

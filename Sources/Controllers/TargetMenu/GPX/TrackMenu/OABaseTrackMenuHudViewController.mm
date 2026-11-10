@@ -455,6 +455,19 @@
     return YES;
 }
 
+- (CGFloat)getStatusBarHeight
+{
+    UIWindow *window = self.view.window ?: [OARootViewController instance].view.window;
+    CGFloat safeAreaTop = MAX(self.view.safeAreaInsets.top, window.safeAreaInsets.top);
+    return MAX(safeAreaTop, window.windowScene.statusBarManager.statusBarFrame.size.height);
+}
+
+- (CGFloat)additionalLandscapeOffset
+{
+    // The status bar background already offsets the menu content in side presentation.
+    return 0.;
+}
+
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];

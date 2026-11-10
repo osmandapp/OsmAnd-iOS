@@ -31,13 +31,10 @@ final class ImageCarouselViewController: UIPageViewController {
     }
     
     override var keyCommands: [UIKeyCommand]? {
-        let previous = UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(didPressLeftArrow(_:)))
-        let next = UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(didPressRightArrow(_:)))
-        if #available(iOS 15.0, *) {
-            previous.wantsPriorityOverSystemBehavior = true
-            next.wantsPriorityOverSystemBehavior = true
-        }
-        return [previous, next]
+        [
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(didPressLeftArrow)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(didPressRightArrow))
+        ]
     }
     
     // MARK: - Init
@@ -81,17 +78,6 @@ final class ImageCarouselViewController: UIPageViewController {
             }
             configureNavigationBarButtons()
         }
-
-        if #available(iOS 17.0, *) {
-            view.subviews.compactMap { $0 as? UIScrollView }.forEach {
-                $0.allowsKeyboardScrolling = false
-            }
-        }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
@@ -353,7 +339,6 @@ extension ImageCarouselViewController: UIPageViewControllerDelegate {
             currentIndex = vc.index
             updatePage(index: currentIndex)
             configureNavigationRightBarButtonItemButtons()
-            becomeFirstResponder()
         }
     }
     
@@ -392,16 +377,14 @@ extension ImageCarouselViewController {
             guard let self, completed else { return }
             currentIndex = targetVC.index
             updatePage(index: currentIndex)
-            configureNavigationRightBarButtonItemButtons()
-            becomeFirstResponder()
         }
     }
     
-    @objc private func didPressLeftArrow(_ command: UIKeyCommand) {
+    @objc private func didPressLeftArrow() {
         navigate(to: .reverse)
     }
     
-    @objc private func didPressRightArrow(_ command: UIKeyCommand) {
+    @objc private func didPressRightArrow() {
         navigate(to: .forward)
     }
 }

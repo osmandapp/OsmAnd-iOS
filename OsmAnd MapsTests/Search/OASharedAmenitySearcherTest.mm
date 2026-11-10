@@ -270,28 +270,58 @@ static OAPOI *fixturePoi;
         resourceId:@"missing-i4-resource.obf" location:nil matcher:nil].count, 0u);
 }
 
+- (NSArray<CLLocation *> *)pathThroughFixture
+{
+    // Cross multiple search tiles so the fixture lies inside the search bounds.
+    return @[[[CLLocation alloc] initWithLatitude:fixturePoi.latitude - .01 longitude:fixturePoi.longitude - .01],
+             fixturePoi.getLocation,
+             [[CLLocation alloc] initWithLatitude:fixturePoi.latitude + .01 longitude:fixturePoi.longitude + .01]];
+}
+
+- (void)testPathSearchFindsFixtureWithoutOtherMaps
+{
+    id<OASAmenityIndexRepository> repository = [OASharedObfResources.shared amenityRepositoryForResourceId:fixturePath.lastPathComponent];
+    NSMutableArray<OASKLocation *> *path = [NSMutableArray array];
+    for (CLLocation *location in [self pathThroughFixture])
+        [path addObject:[[OASKLocation alloc] initWithProvider:nil latitude:location.coordinate.latitude longitude:location.coordinate.longitude]];
+    NSArray<OASAmenity *> *results = [repository searchAmenitiesOnThePathLocations:path radius:100
+        filter:OASSearchRequest.companion.ACCEPT_ALL_POI_TYPE_FILTER matcher:nil];
+    BOOL foundFixture = NO;
+    for (OASAmenity *amenity in results)
+    {
+        if (amenity.getOsmId.unsignedLongLongValue == fixturePoi.getOsmId)
+        {
+            foundFixture = YES;
+            XCTAssertNotNil(amenity.getRoutePoint);
+            XCTAssertLessThanOrEqual(amenity.getRoutePoint.deviateDistance, 100);
+        }
+    }
+    XCTAssertTrue(foundFixture, @"Path search must find its fixture POI without relying on other installed maps.");
+}
+
 - (void)testPathSearchReturnsRouteMetadataAndHonorsMatcher
 {
-    NSArray *path = @[[[CLLocation alloc] initWithLatitude:fixturePoi.latitude - .001 longitude:fixturePoi.longitude],
-                     [[CLLocation alloc] initWithLatitude:fixturePoi.latitude + .001 longitude:fixturePoi.longitude]];
+    NSArray<CLLocation *> *path = [self pathThroughFixture];
     NSArray<OAPOI *> *results = [OAAmenitySearcher searchPOIsOnThePath:path radius:100
         filter:OASearchPoiTypeFilter.acceptAllPoiTypeFilter matcher:nil];
-    XCTAssertGreaterThan(results.count, 0u);
+    BOOL foundFixture = NO;
     for (OAPOI *poi in results)
     {
+        foundFixture |= poi.getOsmId == fixturePoi.getOsmId;
         XCTAssertNotNil(poi.routePoint);
         XCTAssertNotNil(poi.routePoint.pointA);
         XCTAssertNotNil(poi.routePoint.pointB);
         XCTAssertLessThanOrEqual(poi.routePoint.deviateDistance, 100);
     }
-    __block NSUInteger calls = 0;
+    XCTAssertTrue(foundFixture, @"Results must include the fixture POI.");
+    __block BOOL rejectedFixture = NO;
     OAResultMatcher *reject = [[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *object) {
-        calls++;
+        rejectedFixture |= (*object).getOsmId == fixturePoi.getOsmId;
         return NO;
     } cancelledFunc:^BOOL { return NO; }];
     XCTAssertEqual([OAAmenitySearcher searchPOIsOnThePath:path radius:100
         filter:OASearchPoiTypeFilter.acceptAllPoiTypeFilter matcher:reject].count, 0u);
-    XCTAssertGreaterThan(calls, 0u);
+    XCTAssertTrue(rejectedFixture, @"The rejecting matcher must receive the fixture POI.");
 }
 
 - (void)testDetailedRequestRetainsRelationRadiusAndTags

@@ -2276,9 +2276,7 @@
                      renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
                   deleteOriginalFile:NO
                            openTrack:YES
-                           trackItem:self.gpx
-                             gpxFile:self.doc
-            updatedTrackItemСallback:nil];
+                           trackItem:self.gpx];
 }
 
 #pragma mark - OASegmentSelectionDelegate

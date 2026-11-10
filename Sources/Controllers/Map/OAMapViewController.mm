@@ -4136,6 +4136,8 @@ static char kMapSourceUpdateQueueKey;
         if ([path isEqualToString:oldPath])
         {
             gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
+            if (gpxFile.isOsmAndOrigin && metadata.name)
+                [gpxFile updateTrackNameNewName:metadata.name];
 
             [_selectedGpxHelper removeGpxFileWith:oldPath];
             [_selectedGpxHelper addGpxFile:gpxFile for:docPath];
@@ -4157,6 +4159,8 @@ static char kMapSourceUpdateQueueKey;
     {
         OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
         gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
+        if (gpxFile.isOsmAndOrigin && metadata.name)
+            [gpxFile updateTrackNameNewName:metadata.name];
 
         OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
         gpxFile.author = [OAAppVersion getFullVersionWithAppName];

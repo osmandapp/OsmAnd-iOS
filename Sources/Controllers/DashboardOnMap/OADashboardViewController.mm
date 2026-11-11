@@ -21,6 +21,8 @@
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
+static const CGFloat kOADashboardNavbarHeight = 48.0;
+static const CGFloat kOADashboardNavbarMinimumTopInset = 12.0;
 
 @interface OADashboardViewController () <OATableViewDelegate>
 {
@@ -185,7 +187,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 {
     CGSize screenSize = [self screenSize];
     UIEdgeInsets safeInsets = self.parentViewController.view.safeAreaInsets;
-    CGFloat navBarHeight = safeInsets.top;
+    CGFloat navBarHeight = MAX(safeInsets.top, kOADashboardNavbarMinimumTopInset);
     if (![OAUtilities isLandscapeIpadAware])
     {
         return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);

@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                        trackItem:(OASTrackItem *)trackItem
-                completion:(void (^_Nullable)(OASTrackItem *copiedTrackItem))completion;
+                completion:(void (^_Nullable)(OASTrackItem *updatedTrackItem))completion;
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(nullable NSString *)newFileName

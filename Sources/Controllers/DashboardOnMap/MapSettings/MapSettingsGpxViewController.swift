@@ -310,7 +310,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
-        let applyDeferredUpdates = { [weak self] in
+        animator?.addCompletion { [weak self] in
             guard let self else { return }
             if self.shouldUpdateTable {
                 self.sortTracks()
@@ -318,12 +318,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 self.shouldUpdateTable = false
             }
             self.isContextMenuVisible = false
-        }
-        // No animator on macOS ("Designed for iPad"): the menu is already closed
-        if let animator {
-            animator.addCompletion(applyDeferredUpdates)
-        } else {
-            applyDeferredUpdates()
         }
     }
     

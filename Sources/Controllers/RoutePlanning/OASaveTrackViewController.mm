@@ -146,7 +146,7 @@
         while ([[NSFileManager defaultManager] fileExistsAtPath:[[path stringByAppendingPathComponent:_fileName]
                 stringByAppendingPathExtension:@"gpx"]])
         {
-            _fileName = [OAUtilities createNewFileName:_fileName];
+            _fileName = [[OAUtilities createNewFileName:[_fileName stringByAppendingPathExtension:@"gpx"]] stringByDeletingPathExtension];
         }
     }
 

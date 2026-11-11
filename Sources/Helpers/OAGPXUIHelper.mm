@@ -867,7 +867,7 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                  trackItem:(OASTrackItem *)trackItem
-                completion:(void (^_Nullable)(OASTrackItem *copiedTrackItem))completion
+                completion:(void (^_Nullable)(OASTrackItem *updatedTrackItem))completion
 {
     [self copyGPXToNewFolder:newFolderName
              renameToNewName:newFileName

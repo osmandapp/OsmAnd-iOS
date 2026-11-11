@@ -1464,7 +1464,8 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void) updateTopButtonsLayoutY
 {
     BOOL hasSideToolbar = [OAUtilities isLandscape] && ![OAUtilities isIPad]
-        && _mapPanelViewController.activeTargetType != OATargetRoutePlanning;
+        && _mapPanelViewController.activeTargetType != OATargetRoutePlanning
+        && ![_mapPanelViewController isTopToolbarSearchVisible];
     BOOL contextMenuMode = self.contextMenuMode || _mapPanelViewController.suspendedPlanRouteController != nil;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
     CGFloat baseMin = self.statusBarViewHeightConstraint.constant;

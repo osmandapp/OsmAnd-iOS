@@ -890,7 +890,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     CGFloat statusBarHeight = MAX(10., self.view.safeAreaInsets.top);
     UIEdgeInsets margins = self.view.layoutMargins;
     CGFloat contentWidth = self.view.bounds.size.width - margins.left - margins.right;
-    CGFloat cancelWidth = self.btnCancel.bounds.size.width;
+    CGFloat cancelWidth = MAX(self.btnCancel.bounds.size.width,
+            ceil([self.btnCancel sizeThatFits:CGSizeMake(CGFLOAT_MAX, self.btnCancel.bounds.size.height)].width) + 8.);
     topViewFrame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
 
     _textField.hidden = !showInputView;
@@ -899,8 +900,32 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _searchNearCenterView.hidden = !showMapCenterSearch;
     _tabs.hidden = !showTabs;
 
-    _barActionView.frame = CGRectMake(0.0, showInputView ? 40.0 + statusBarHeight : statusBarHeight, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
+    _barActionView.frame = CGRectMake(0.0, showInputView ? 40.0 + statusBarHeight : statusBarHeight, topViewFrame.size.width, _barActionView.bounds.size.height);
     [self adjustViewPosition:_searchNearCenterView byHeight:showInputView ? 40.0 : 0.0];
+
+    CGFloat actionLeft = MAX(margins.left, self.view.safeAreaInsets.left);
+    CGFloat actionRight = self.view.bounds.size.width - MAX(margins.right, self.view.safeAreaInsets.right);
+    CGRect actionImageFrame = _barActionImageView.frame;
+    actionImageFrame.origin.x = actionLeft;
+    _barActionImageView.frame = actionImageFrame;
+    CGRect actionLeftButtonFrame = _barActionLeftImageButton.frame;
+    actionLeftButtonFrame.origin.x = actionLeft;
+    _barActionLeftImageButton.frame = actionLeftButtonFrame;
+    CGRect actionRightButtonFrame = _barActionImageButton.frame;
+    actionRightButtonFrame.origin.x = actionRight - actionRightButtonFrame.size.width;
+    _barActionImageButton.frame = actionRightButtonFrame;
+    CGRect actionTextFrame = _barActionTextButton.frame;
+    actionTextFrame.origin.x = CGRectGetMaxX(actionImageFrame);
+    actionTextFrame.size.width = MAX(0., CGRectGetMinX(actionRightButtonFrame) - actionTextFrame.origin.x);
+    _barActionTextButton.frame = actionTextFrame;
+
+    CGRect nearbyButtonFrame = _btnMyLocation.frame;
+    nearbyButtonFrame.origin.x = actionRight - nearbyButtonFrame.size.width;
+    _btnMyLocation.frame = nearbyButtonFrame;
+    CGRect nearbyLabelFrame = _lbSearchNearCenter.frame;
+    nearbyLabelFrame.origin.x = actionLeft + 10.;
+    nearbyLabelFrame.size.width = MAX(0., nearbyButtonFrame.origin.x - nearbyLabelFrame.origin.x);
+    _lbSearchNearCenter.frame = nearbyLabelFrame;
 
     [self adjustViewPosition:_btnCancel byHeight:kCancelButtonY];
     [self adjustViewPosition:_leftImageButton byHeight:kLeftImageButtonY];
@@ -917,9 +942,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     else
     {
         self.leftImageButton.hidden = YES;
-        self.textField.frame = CGRectMake(margins.left, 5 + statusBarHeight, contentWidth - cancelWidth - 8, self.textField.frame.size.height);
+        self.textField.frame = CGRectMake(margins.left, 5 + statusBarHeight, MAX(0., contentWidth - cancelWidth - 8), self.textField.frame.size.height);
         self.tabs.frame = CGRectMake(margins.left, self.tabs.frame.origin.y, contentWidth, self.tabs.frame.size.height);
-        self.btnCancel.frame = CGRectMake(self.view.bounds.size.width - margins.right - cancelWidth, self.btnCancel.frame.origin.y, self.btnCancel.frame.size.width, self.btnCancel.frame.size.height);
+        self.btnCancel.frame = CGRectMake(self.view.bounds.size.width - margins.right - cancelWidth, self.btnCancel.frame.origin.y, cancelWidth, self.btnCancel.frame.size.height);
     }
 
     _topView.frame = topViewFrame;

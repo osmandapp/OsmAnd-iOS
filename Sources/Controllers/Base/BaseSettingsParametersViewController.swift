@@ -148,10 +148,9 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
         toolBarView.addSubview(applyButton)
 
         NSLayoutConstraint.activate([
-            applyButton.centerXAnchor.constraint(equalTo: toolBarView.centerXAnchor),
             applyButton.topAnchor.constraint(equalTo: toolBarView.topAnchor),
-            applyButton.leadingAnchor.constraint(equalTo: toolBarView.leadingAnchor, constant: applyButtonHorizontalMargin),
-            applyButton.trailingAnchor.constraint(equalTo: toolBarView.trailingAnchor, constant: -applyButtonHorizontalMargin),
+            applyButton.leadingAnchor.constraint(equalTo: toolBarView.safeAreaLayoutGuide.leadingAnchor, constant: applyButtonHorizontalMargin),
+            applyButton.trailingAnchor.constraint(equalTo: toolBarView.safeAreaLayoutGuide.trailingAnchor, constant: -applyButtonHorizontalMargin),
             applyButton.heightAnchor.constraint(equalToConstant: applyButtonHeight)
         ])
     }

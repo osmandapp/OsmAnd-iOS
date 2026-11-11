@@ -19,7 +19,6 @@
 #import "OAResourcesUIHelper.h"
 #import "OAMapCreatorHelper.h"
 #import "OADownloadTask.h"
-#import "OAIAPHelper.h"
 #import "OAPluginsHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAWeatherHelper.h"
@@ -322,18 +321,7 @@ NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallin
                 success = _app.resourcesManager->installFromRepository(resourceId, filePath);
                 if (success)
                 {
-                    if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".obf"] && ![[nsResourceId lowercaseString] hasSuffix:@"live.obf"])
-                    {
-                        OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
-                        const auto resource = _app.resourcesManager->getResourceInRepository(resourceId);
-                        bool free = resource && resource->free;
-                        if (!free)
-                        {
-                            if (!match || ![match isInPurchasedArea])
-                                [OAIAPHelper decreaseFreeMapsCount];
-                        }
-                    }
-                    else if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
+                    if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".tifsqlite"])
                     {
                         OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
                         [[OAWeatherHelper sharedInstance] setupDownloadStateFinished:match regionId:match.regionId];

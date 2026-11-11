@@ -955,24 +955,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
 }
 
-+ (BOOL) checkIfDownloadAvailable
-{
-    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
-    return ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]);
-}
-
-+ (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
-{
-    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
-    const auto res = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(region.regionId));
-    bool free = res && res->free;
-
-    if (region.regionId == nil || [region isInPurchasedArea] || free || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
-        return YES;
-
-    return NO;
-}
-
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
 {
     [self startBackgroundDownloadOf:resource->url.toNSURL() resourceId:resource->id.toNSString() resourceName:name];

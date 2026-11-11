@@ -337,16 +337,6 @@
     _superregion = superregion;
 }
 
-- (OAWorldRegion *) getPrimarySuperregion
-{
-    OAWorldRegion *primarySuperregion = _superregion;
-    while (primarySuperregion.superregion.regionId)
-    {
-        primarySuperregion = primarySuperregion.superregion;
-    }
-    return primarySuperregion;
-}
-
 - (OAWorldRegion *) makeImmutable
 {
     if (![_subregions isKindOfClass:[NSArray class]])

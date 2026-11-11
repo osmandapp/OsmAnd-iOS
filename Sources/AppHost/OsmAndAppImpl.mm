@@ -450,18 +450,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     if (resetSettings)
     {
         LogStartup(@"resetSettings start");
-        int freeMaps = -1;
-        if ([defaults objectForKey:@"freeMapsAvailable"]) {
-            freeMaps = (int)[defaults integerForKey:@"freeMapsAvailable"];
-        }
-
         NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
         [defaults removePersistentDomainForName:appDomain];
         [defaults synchronize];
-
-        if (freeMaps != -1) {
-            [defaults setInteger:freeMaps forKey:@"freeMapsAvailable"];
-        }
 
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];

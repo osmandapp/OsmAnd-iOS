@@ -69,15 +69,26 @@
     [self.contentView addSubview:_label];
 }
 
+- (void)setContentRightInset:(CGFloat)contentRightInset
+{
+    CGFloat inset = MAX(0., contentRightInset);
+    if (_contentRightInset != inset)
+    {
+        _contentRightInset = inset;
+        [self setNeedsLayout];
+    }
+}
+
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
     CGFloat leftMargin = OAUtilities.getLeftMargin;
     BOOL hasIcon = _iconView != nil && _iconView.superview != nil;
     if (hasIcon)
     {
         _iconView.frame = CGRectMake(20.0 + leftMargin, 8.0, 30.0, 30.0);
     }
-    CGFloat w = self.bounds.size.width - 40. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0) - 20.;
+    CGFloat w = MAX(1., self.bounds.size.width - 40. - leftMargin * 2 - (hasIcon ? 30.0 : 0.0) - 20. - self.contentRightInset);
     CGFloat height = _label.attributedText.length > 0 ? [OAUtilities calculateTextBounds:_label.attributedText width:w].height : [self.class getTextHeight:_label.text width:w];
     if (_label.text.length > 0)
     {
@@ -119,6 +130,13 @@
         return [self.class getTextHeight:text width:width - 40.0 - OAUtilities.getLeftMargin * 2] + 5.0;
     else
         return 0.01;
+}
+
++ (CGFloat) getHeight:(NSString *)text width:(CGFloat)width contentRightInset:(CGFloat)contentRightInset
+{
+    if (text.length > 0)
+        return [self.class getTextHeight:text width:MAX(1., width - 60. - OAUtilities.getLeftMargin * 2 - contentRightInset)] + 5.;
+    return 0.01;
 }
 
 + (CGFloat) getTextHeight:(NSString *)text width:(CGFloat)width

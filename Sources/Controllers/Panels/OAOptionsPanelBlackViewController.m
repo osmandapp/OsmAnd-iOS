@@ -280,17 +280,19 @@
 {
     UIButtonConfiguration *config = btn.configuration;
     NSDirectionalEdgeInsets contentInsets = config.contentInsets;
+    CGFloat leftSafeInset = MAX(self.view.safeAreaInsets.left,
+            MAX(self.parentViewController.view.safeAreaInsets.left, self.view.window.safeAreaInsets.left));
     
     if ([btn isDirectionRTL])
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         contentInsets.leading = 10;
-        contentInsets.trailing = [OAUtilities getLeftMargin];
+        contentInsets.trailing = leftSafeInset;
     }
     else
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        contentInsets.leading = [OAUtilities getLeftMargin] + 10;
+        contentInsets.leading = leftSafeInset + 10;
         contentInsets.trailing = 0;
     }
     

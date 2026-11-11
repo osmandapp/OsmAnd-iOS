@@ -188,10 +188,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     CGFloat navBarHeight = safeInsets.top;
     if (![OAUtilities isLandscapeIpadAware])
     {
-        // On Duo the system bar occupies the right safe area while the app keeps a portrait layout.
-        BOOL hasRightSystemBar = OAUtilities.isIPhone && !OAUtilities.isLandscape && safeInsets.top == 0. && safeInsets.right > 0.;
-        CGFloat width = screenSize.width - (hasRightSystemBar ? safeInsets.right : 0.);
-        return CGRectMake(0.0, 0.0, width, kOADashboardNavbarHeight + navBarHeight);
+        return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
     }
     else
     {

@@ -154,7 +154,6 @@ final class OACrashReportPromptCoordinator: NSObject {
             sheet.prefersGrabberVisible = false
             sheet.preferredCornerRadius = 20
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
         }
 
         presentedPrompt = prompt

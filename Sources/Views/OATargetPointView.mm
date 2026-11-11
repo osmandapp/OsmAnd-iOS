@@ -379,6 +379,12 @@ static const NSInteger _buttonsCount = 4;
     return MAX(safeAreaTop, window.windowScene.statusBarManager.statusBarFrame.size.height);
 }
 
+- (CGFloat)effectiveRightSafeAreaInset
+{
+    UIWindow *window = self.window ?: self.parentView.window ?: [OARootViewController instance].view.window;
+    return MAX(MAX(self.safeAreaInsets.right, self.parentView.safeAreaInsets.right), window.safeAreaInsets.right);
+}
+
 - (void) updateToolbarFrame:(BOOL)landscape
 {
     if (_toolbarAnimating)
@@ -1195,6 +1201,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
     CGFloat topLabelY = _targetPoint.type == OATargetRouteDetails ? 16.0 : 20.0;
     CGFloat controlButtonsHeight = [self calculateControlButtonsHeight];
+    CGFloat rightSafe = landscape ? 0. : [self effectiveRightSafeAreaInset];
     
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
@@ -1212,7 +1219,7 @@ static const NSInteger _buttonsCount = 4;
         textX += 10.0;
     CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLandscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
-    CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
+    CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin] - rightSafe;
     
     _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
     CGFloat addressHeight = [OAUtilities calculateTextBounds:_addressLabel.text width:labelPreferredWidth font:_addressLabel.font].height;
@@ -1309,6 +1316,9 @@ static const NSInteger _buttonsCount = 4;
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     
     _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
+    CGRect imageFrame = _imageView.frame;
+    imageFrame.origin.x = width - rightSafe - kMargin - imageFrame.size.width;
+    _imageView.frame = imageFrame;
     _controlButtonsView.hidden = controlButtonsHeight == 0;
     if (!_controlButtonsView.hidden)
     {
@@ -1320,7 +1330,7 @@ static const NSInteger _buttonsCount = 4;
         _controlButtonRight.enabled = self.customController.rightControlButton && !self.customController.rightControlButton.disabled;
         _controlButtonDownload.enabled = self.customController.downloadControlButton && !self.customController.downloadControlButton.disabled;
         CGFloat x = itemsX;
-        CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin]) / 2.0;
+        CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin] - rightSafe) / 2.0;
         CGFloat downloadY = 4.0;
         CGRect leftControlButtonFrame = CGRectMake(x, 4.0, w, 32.0);
         x += w + 8.0;
@@ -1339,11 +1349,11 @@ static const NSInteger _buttonsCount = 4;
             if (![_controlButtonDownload isDirectionRTL])
                 _controlButtonDownload.frame = CGRectMake(itemsX, downloadY, w, 32.0);
             else
-                _controlButtonDownload.frame = CGRectMake(width - itemsX - w, downloadY, w, 32.0);
+                _controlButtonDownload.frame = CGRectMake(width - rightSafe - kMargin - w, downloadY, w, 32.0);
         }
         if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden && !_downloadCancelButton.hidden)
         {
-            CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin;
+            CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin - rightSafe;
             _downloadProgressLabel.frame = CGRectMake(itemsX, downloadY, viewWidth, 17.0);
             _downloadCancelButton.frame = CGRectMake(viewWidth - 15.0, CGRectGetMaxY(_downloadProgressLabel.frame) - 10.0, 30.0, 30.0);
             _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth - _downloadCancelButton.frame.size.width - 16.0, 5.0);
@@ -1441,7 +1451,7 @@ static const NSInteger _buttonsCount = 4;
     _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, infoViewHeight + heightWithMargin);
     _buttonsColoredView.frame = CGRectMake(0.0, kOATargetPointButtonsViewHeight, width, _buttonsView.frame.size.height - kOATargetPointButtonsViewHeight);
 
-    CGFloat backViewWidth = (_buttonsView.frame.size.width - leftSafe - kMargin * 2 - kButtonsSideMargin * (_buttonsCount - 1)) / _buttonsCount;
+    CGFloat backViewWidth = (_buttonsView.frame.size.width - leftSafe - rightSafe - kMargin * 2 - kButtonsSideMargin * (_buttonsCount - 1)) / _buttonsCount;
     CGFloat x = leftSafe + kMargin;
     if ([_backViewRoute isDirectionRTL])
     {
@@ -1451,7 +1461,7 @@ static const NSInteger _buttonsCount = 4;
         x += backViewWidth + kButtonsSideMargin;
         _backView2.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
         x += backViewWidth + kButtonsSideMargin;
-        _backView1.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        _backView1.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin - rightSafe, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
     }
     else
     {
@@ -1461,7 +1471,7 @@ static const NSInteger _buttonsCount = 4;
         x += backViewWidth + kButtonsSideMargin;
         _backView3.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
         x += backViewWidth + kButtonsSideMargin;
-        _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin - rightSafe, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
     }
     if (_backView4.hidden)
         _backView4.hidden = NO;
@@ -1513,7 +1523,7 @@ static const NSInteger _buttonsCount = 4;
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin - rightSafe, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
     }
     else
     {
@@ -1521,7 +1531,7 @@ static const NSInteger _buttonsCount = 4;
         [_buttonRoute setImage:[UIImage imageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
+        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin - rightSafe, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
     [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];

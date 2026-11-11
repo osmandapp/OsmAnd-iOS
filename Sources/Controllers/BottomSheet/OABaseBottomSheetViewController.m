@@ -123,6 +123,13 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     [self show:self.animateShow];
 }
 
+- (void)viewSafeAreaInsetsDidChange
+{
+    [super viewSafeAreaInsetsDidChange];
+    if (self.bottomSheetView)
+        [self layoutSubviews];
+}
+
 - (BOOL) animateShow
 {
     return YES;
@@ -188,7 +195,10 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     else
     {
         f.size.height = [self getViewHeight];
-        f.size.width = OAUtilities.isIPad && !OAUtilities.isWindowed ? kOABottomSheetWidthIPad : DeviceScreenWidth;
+        CGFloat rightSafeInset = MAX(self.view.safeAreaInsets.right, self.view.window.safeAreaInsets.right);
+        f.size.width = OAUtilities.isIPad && !OAUtilities.isWindowed
+                ? kOABottomSheetWidthIPad
+                : DeviceScreenWidth - rightSafeInset;
         f.origin = CGPointMake(0, DeviceScreenHeight - f.size.height);
         
         CGRect buttonsFrame = _buttonsView.frame;

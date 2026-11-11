@@ -2144,14 +2144,14 @@ static const double d180PI = 180.0 / M_PI_2;
     if (NSThread.isMainThread)
     {
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        CGFloat screenHeigth = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
-        return screenHeigth - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        CGFloat screenHeight = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
+        return screenHeight - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     }
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        CGFloat screenHeigth = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
-        result = screenHeigth - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        CGFloat screenHeight = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
+        result = screenHeight - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     });
     return result;
 }

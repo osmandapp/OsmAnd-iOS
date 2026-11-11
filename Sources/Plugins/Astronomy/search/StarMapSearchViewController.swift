@@ -1168,10 +1168,6 @@ final class StarMapSearchViewController: UIViewController {
             dismiss(animated: true)
         }
     }
-    
-    deinit {
-        StarMapSearchProgressHUD.hide(from: view, animated: true)
-    }
 }
 
 extension StarMapSearchViewController: UISearchBarDelegate {

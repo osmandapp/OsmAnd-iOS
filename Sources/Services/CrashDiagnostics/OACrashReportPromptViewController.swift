@@ -83,6 +83,11 @@ final class OACrashReportPromptViewController: UIViewController, UIAdaptivePrese
     private var didFinish = false
     private var isSending = false
 
+    @available(iOS 27.1, *)
+    override var preferredVerticalBarBehavior: UIVerticalBarBehavior {
+        .disabled
+    }
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }

@@ -69,6 +69,11 @@ typedef enum : NSUInteger {
 }
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    return UIVerticalBarBehaviorDisabled;
+}
+
 - (UIViewController *)childViewControllerForPreferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
 {
     return self.centerPanel;

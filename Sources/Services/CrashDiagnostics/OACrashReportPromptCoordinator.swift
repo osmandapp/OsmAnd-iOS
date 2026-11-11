@@ -131,6 +131,7 @@ final class OACrashReportPromptCoordinator: NSObject {
 
         let navigationController = UINavigationController(rootViewController: prompt)
         navigationController.modalPresentationStyle = .pageSheet
+        navigationController.modalPresentationCapturesStatusBarAppearance = true
         navigationController.presentationController?.delegate = prompt
         if let sheet = navigationController.sheetPresentationController {
             if UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory {

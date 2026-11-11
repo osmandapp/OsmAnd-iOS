@@ -1461,10 +1461,17 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].appMapThemeColor;
 }
 
-- (void) updateTopButtonsLayoutY
+- (void)updateTopButtonsLayoutY
 {
+    OATargetPointType targetType = _mapPanelViewController.activeTargetType;
+    BOOL isRouteTargetSelection = targetType == OATargetRouteStartSelection
+        || targetType == OATargetRouteFinishSelection
+        || targetType == OATargetRouteIntermediateSelection
+        || targetType == OATargetHomeSelection
+        || targetType == OATargetWorkSelection;
     BOOL hasSideToolbar = [OAUtilities isLandscape] && ![OAUtilities isIPad]
-        && _mapPanelViewController.activeTargetType != OATargetRoutePlanning
+        && targetType != OATargetRoutePlanning
+        && !isRouteTargetSelection
         && ![_mapPanelViewController isTopToolbarSearchVisible];
     BOOL contextMenuMode = self.contextMenuMode || _mapPanelViewController.suspendedPlanRouteController != nil;
     BOOL isTargetMode = _mapPanelViewController.activeTargetType == OATargetChangePosition;
@@ -1472,7 +1479,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     CGFloat ctxToolbarH = 0.0;
     if (_mapPanelViewController.scrollableHudViewController)
         ctxToolbarH = [_mapPanelViewController.scrollableHudViewController getNavbarHeight];
-    else if ([_mapPanelViewController isTopToolbarActive])
+    else if (isRouteTargetSelection || [_mapPanelViewController isTopToolbarActive])
         ctxToolbarH = [_mapPanelViewController getTargetToolbarHeight];
     
     BOOL isToolbarVisible = !_mapInfoController.weatherToolbarVisible && _toolbarViewController && _toolbarViewController.view.superview;

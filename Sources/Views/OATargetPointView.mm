@@ -31,6 +31,7 @@
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
+#import "OARouteTargetSelectionViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
@@ -602,8 +603,14 @@ static const NSInteger _buttonsCount = 4;
     return self.superview && [self getTopToolbarAlpha] == 1.;
 }
 
-- (CGFloat) toolbarHeight
+- (CGFloat)toolbarHeight
 {
+    if ([self.customController isKindOfClass:OARouteTargetSelectionViewController.class])
+    {
+        BOOL toolbarVisible = self.superview && !_hiding && !self.customController.navBar.hidden;
+        return toolbarVisible ? CGRectGetHeight(self.customController.navBar.bounds) : [self effectiveStatusBarHeight];
+    }
+
     return _toolbarHeight;
 }
 

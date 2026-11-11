@@ -8,7 +8,6 @@
 
 #import "OAManageResourcesViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import <MBProgressHUD.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocationServices.h"
@@ -21,8 +20,6 @@
 #import "OAFreeMemoryView.h"
 #import "OAAnalyticsHelper.h"
 #import "OAChoosePlanHelper.h"
-#import "OASubscribeEmailView.h"
-#import "OANetworkUtilities.h"
 #import "OASQLiteTileSource.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAPlugin.h"
@@ -69,7 +66,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -115,7 +112,6 @@ static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
     NSMutableArray *_allSubregionItems;
 
     NSInteger _freeMemorySection;
-    NSInteger _subscribeEmailSection;
 
     NSMutableArray *_regionMapItems;
     NSMutableArray *_localRegionMapItems;
@@ -160,20 +156,14 @@ static BOOL ResourceMatchesRegion(BOOL isTravelRegion,
     
     uint64_t _totalInstalledSize;
 
-    MBProgressHUD *_refreshRepositoryProgressHUD;
-    
     BOOL _isSearching;
     BOOL _doNotSearch;
     BOOL hideUpdateButton;
-    
     BOOL _doDataUpdate;
     BOOL _doDataUpdateReload;
-    
     BOOL _displayBanner;
     OASubscriptionBannerCardView *_subscriptionBannerView;
     OAFreeMemoryView *_freeMemoryView;
-    BOOL _displaySubscribeEmailView;
-    OASubscribeEmailView *_subscribeEmailView;
     NSInteger _subscriptionBannerSection;
 
     BOOL _srtmDisabled;
@@ -309,13 +299,7 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     [self registerCells];
     [self setupDownloadingCellHelper];
 
-    // Only the e-mail subscription still uses it; touches pass through so it never blocks the list
-    _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    _refreshRepositoryProgressHUD.userInteractionEnabled = NO;
-    [self.view addSubview:_refreshRepositoryProgressHUD];
-    
     _displayBanner = ![self shouldHideBanner];
-    _displaySubscribeEmailView = ![self shouldHideEmailSubscription];
     
     _customRegions = [OAPluginsHelper getCustomDownloadRegions];
     if ([self.region isKindOfClass:OACustomRegion.class])
@@ -328,8 +312,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     [self prepareContent];
 
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0)];
-    _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
-    _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchBar.delegate = self;
     _searchController.obscuresBackgroundDuringPresentation = NO;
@@ -403,6 +385,7 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
 
     [self applySafeAreaMargins];
     
+    [self setupSubscriptionBanner];
     [self.tableView reloadData];
     if (_downloadingCellResourceHelper)
         [_downloadingCellResourceHelper refreshCellSpinners];
@@ -468,7 +451,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        [_subscribeEmailView updateColorForCALayer];
         _horizontalLine.backgroundColor = [[SeparatorAppearance color] CGColor];
         [self.tableView reloadData];
     }
@@ -534,11 +516,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
 - (BOOL) shouldHideBanner
 {
     return _currentScope == kLocalResourcesScope || [OAIAPHelper isPaidVersion] || (self.region == _app.worldRegion && [_iapHelper inAppMapsPurchased].count > 0) || (self.region != _app.worldRegion && [self.region isInPurchasedArea]) || [self.region.regionId isEqualToString:_otherRegionId] || [self.region.regionId isEqualToString:_travelRegionId] || [self.region isKindOfClass:OACustomRegion.class];
-}
-
-- (BOOL) shouldHideEmailSubscription
-{
-    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class] || [self shouldDisplayFreeMapsMessage];
 }
 
 - (BOOL) shouldDisplayWeatherForecast:(OAWorldRegion *)region
@@ -612,11 +589,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         _displayBanner = NO;
         needUpdateContent = YES;
     }
-    if ([self shouldHideEmailSubscription] && _displaySubscribeEmailView)
-    {
-        _displaySubscribeEmailView = NO;
-        needUpdateContent = YES;
-    }
     
     if (needUpdateContent)
         [self updateContent];
@@ -647,18 +619,9 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     if ([self.region isKindOfClass:OACustomRegion.class])
         return;
 
-    int freeMaps = [OAIAPHelper freeMapsAvailable];
-    EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
-
-    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType && _subscriptionBannerView.freeMapsCount == freeMaps)
+    if (!_subscriptionBannerView)
     {
-        [_subscriptionBannerView updateFrame];
-        return;
-    }
-
-    if (!_subscriptionBannerView || _subscriptionBannerView.type != bannerType)
-    {
-        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:bannerType];
+        _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:EOASubscriptionBannerFree];
         _subscriptionBannerView.delegate = self;
     }
 
@@ -1507,7 +1470,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         _travelMapsSection = -1;
         _regionMapSection = -1;
         _subscriptionBannerSection = -1;
-        _subscribeEmailSection = -1;
         _localResourcesSection = -1;
         _resourcesSection = -1;
         _astronomyResourcesSection = -1;
@@ -1540,9 +1502,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         
         if ([self shouldDisplayFreeMapsMessage])
             _freeMapsBannerSection = _lastUnusedSectionIndex++;
-        
-        if (_displaySubscribeEmailView)
-            _subscribeEmailSection = _lastUnusedSectionIndex++;
 
         if (_currentScope == kAllResourcesScope && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
@@ -2201,9 +2160,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     if (section == _freeMemorySection)
         return _freeMemoryView;
 
-    if (section == _subscribeEmailSection)
-        return _subscribeEmailView;
-
     return nil;
 }
 
@@ -2218,9 +2174,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
     if (section == _freeMemorySection)
         return _freeMemoryView.bounds.size.height;
 
-    if (section == _subscribeEmailSection)
-        return [_subscribeEmailView updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]].size.height;
-
     if (section == 0)
         return 56.0;
     
@@ -2233,13 +2186,11 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_displaySubscribeEmailView ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTravelItems.count > 0 ? 1 : 0) + (_localAstronomyItems.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + (_localOnlineTileSources.count > 0 ? 1 : 0) + (_localTravelItems.count > 0 ? 1 : 0) + (_localAstronomyItems.count > 0 ? 1 : 0) + (_localTerrainMapSources.count > 0 ? 1 : 0) + 1;
 
     NSInteger sectionsCount = 0;
 
     if (_subscriptionBannerSection >= 0)
-        sectionsCount++;
-    if (_subscribeEmailSection >= 0)
         sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
@@ -3532,82 +3483,6 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         
         resourceInfoViewController.localItem = item;
     }
-}
-
-#pragma mark -
-
-- (void) doSubscribe:(NSString *)email
-{
-    [_refreshRepositoryProgressHUD show:YES];
-    NSDictionary<NSString *, NSString *> *params = @{ @"os" : @"ios", @"email" : email };
-    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/subscription/register_email" params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
-     {
-         dispatch_async(dispatch_get_main_queue(), ^{
-             BOOL error = YES;
-             if (response && data)
-             {
-                 @try
-                 {
-                     NSMutableDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-                     if (map)
-                     {
-                         NSString *responseEmail = [map objectForKey:@"email"];
-                         if ([email caseInsensitiveCompare:responseEmail] == NSOrderedSame)
-                         {
-                             [OAIAPHelper increaseFreeMapsCount:3];
-                             [[OAAppSettings sharedManager].emailSubscribed set:YES];
-                             
-                             if (_displaySubscribeEmailView)
-                             {
-                                 _displaySubscribeEmailView = NO;
-                                 [self updateContent];
-                             }
-
-                             error = NO;
-                             [OAAnalyticsHelper logEvent:@"subscribed_by_email"];
-                         }
-                     }
-                 }
-                 @catch (NSException *e)
-                 {
-                     // ignore
-                 }
-             }
-             [_refreshRepositoryProgressHUD hide:YES];
-             if (error)
-             {
-                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"shared_string_unexpected_error") preferredStyle:UIAlertControllerStyleAlert];
-                 [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-                 [self presentViewController:alert animated:YES completion:nil];
-             }
-         });
-     }];
-}
-
-#pragma mark OASubscribeEmailViewDelegate
-
-- (void) subscribeEmailButtonPressed
-{
-    [OAAnalyticsHelper logEvent:@"subscribe_email_pressed"];
-
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_email_address") message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString *email = alert.textFields.firstObject.text;
-        if (email.length == 0 || ![email isValidEmail]) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_live_enter_email") preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-        else
-            [self doSubscribe:email];
-    }]];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = OALocalizedString(@"shared_string_email_address");
-        textField.keyboardType = UIKeyboardTypeEmailAddress;
-    }];
-    
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - OASubscriptionBannerCardViewDelegate

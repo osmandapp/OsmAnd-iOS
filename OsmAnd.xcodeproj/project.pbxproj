@@ -1791,7 +1791,6 @@
 		DA5A850926C563A900F274C7 /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */; };
 		DA5A850A26C563A900F274C7 /* OARoutingProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806526C563A500F274C7 /* OARoutingProgressView.m */; };
 		DA5A850B26C563A900F274C7 /* OAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806626C563A500F274C7 /* OAButton.m */; };
-		DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */; };
 		DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806A26C563A500F274C7 /* OAScrollView.m */; };
 		DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806E26C563A500F274C7 /* OAUserInteractionPassThroughView.m */; };
 		DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806F26C563A500F274C7 /* OAUserInteractionInterceptorView.m */; };
@@ -5196,7 +5195,6 @@
 		DA5A804226C563A500F274C7 /* OADistanceDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADistanceDirection.h; sourceTree = "<group>"; };
 		DA5A804426C563A500F274C7 /* OARouteInfoLegendItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteInfoLegendItemView.xib; sourceTree = "<group>"; };
 		DA5A804526C563A500F274C7 /* OAButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAButton.h; sourceTree = "<group>"; };
-		DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscribeEmailView.h; sourceTree = "<group>"; };
 		DA5A804726C563A500F274C7 /* OADownloadProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadProgressView.m; sourceTree = "<group>"; };
 		DA5A804826C563A500F274C7 /* UITableViewCell+getTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+getTableView.h"; sourceTree = "<group>"; };
 		DA5A804926C563A500F274C7 /* OARoutingProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingProgressView.h; sourceTree = "<group>"; };
@@ -5226,7 +5224,6 @@
 		DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+getTableView.m"; sourceTree = "<group>"; };
 		DA5A806526C563A500F274C7 /* OARoutingProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARoutingProgressView.m; sourceTree = "<group>"; };
 		DA5A806626C563A500F274C7 /* OAButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAButton.m; sourceTree = "<group>"; };
-		DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASubscribeEmailView.m; sourceTree = "<group>"; };
 		DA5A806826C563A500F274C7 /* OATableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATableView.h; sourceTree = "<group>"; };
 		DA5A806926C563A500F274C7 /* OAUserInteractionInterceptorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUserInteractionInterceptorProtocol.h; sourceTree = "<group>"; };
 		DA5A806A26C563A500F274C7 /* OAScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScrollView.m; sourceTree = "<group>"; };
@@ -10034,8 +10031,6 @@
 				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
 				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
 				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
-				DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */,
-				DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */,
 				CA4ED7ECFD074988CD7DE369 /* OASubscriptionBannerCardView.h */,
 				CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */,
 				B0D61B47A8DC2B61A93099E6 /* OATabBar.h */,
@@ -12758,7 +12753,6 @@
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
-				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA8DC3922A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift in Sources */,
 				FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */,
 				C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */,

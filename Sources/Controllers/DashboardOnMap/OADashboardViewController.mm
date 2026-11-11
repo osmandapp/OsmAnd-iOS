@@ -226,6 +226,10 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     [rootViewController addChildViewController:self];
     [self willMoveToParentViewController:rootViewController];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+        [rootViewController setNeedsUpdateOfVerticalBarConfiguration];
+#endif
     
     CGRect parentFrame;
     CGRect parentNavbarFrame;
@@ -424,7 +428,14 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         self.parentVC = nil;
     }
     
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    UIViewController *parentViewController = self.parentViewController;
+#endif
     [self removeFromParentViewController];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+        [parentViewController setNeedsUpdateOfVerticalBarConfiguration];
+#endif
     [self.navbarView removeFromSuperview];
     [self.view removeFromSuperview];
     

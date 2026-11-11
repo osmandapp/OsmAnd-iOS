@@ -14,10 +14,12 @@
                 <outlet property="cancelButton" destination="QhW-pU-MvI" id="TYC-Z0-0NG"/>
                 <outlet property="cancelButtonContainerView" destination="oxa-g3-ykx" id="cTD-yy-2Gr"/>
                 <outlet property="cancelButtonLeadingConstraint" destination="iCY-Se-LUa" id="SbJ-Hp-0gS"/>
+                <outlet property="cancelButtonTopConstraint" destination="X3e-5q-FwP" id="Cpj-8A-Wq9"/>
                 <outlet property="contentContainer" destination="ea6-OY-jeV" id="dG7-pL-iUA"/>
                 <outlet property="resetButton" destination="bi8-A0-uUG" id="BuL-VD-WBn"/>
                 <outlet property="resetButtonContainerView" destination="MUk-Oc-R9w" id="Kde-KQ-24c"/>
                 <outlet property="resetButtonTrailingConstraint" destination="j1P-Om-qOr" id="oAJ-eb-Af3"/>
+                <outlet property="resetButtonTopConstraint" destination="lWt-rn-9Nc" id="LJ9-c4-BS8"/>
                 <outlet property="scrollableView" destination="kYV-Y2-Ihm" id="EAv-LH-2j7"/>
                 <outlet property="statusBarBackgroundView" destination="v0q-31-q7p" id="eHP-3Z-2lq"/>
                 <outlet property="tableView" destination="Gwu-hY-lMd" id="BId-bl-Hkd"/>

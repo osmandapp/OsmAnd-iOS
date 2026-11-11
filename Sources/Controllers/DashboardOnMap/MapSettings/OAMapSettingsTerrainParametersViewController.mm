@@ -39,7 +39,11 @@ static const NSInteger kElevationMaxMeters = 2000;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *resetButtonTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *resetButtonTopConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *landscapeBackButtonTopConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *landscapeResetButtonTopConstraint;
 
 @property (nonatomic) OAMapPanelViewController *mapPanel;
 @property (nonatomic) OAConcurrentArray<OASPaletteItemGradient *> *sortedPaletteColorItems;
@@ -439,10 +443,9 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self.toolBarView addSubview:_applyButton];
 
     [NSLayoutConstraint activateConstraints:@[
-        [_applyButton.centerXAnchor constraintEqualToAnchor:self.toolBarView.centerXAnchor],
         [_applyButton.topAnchor constraintEqualToAnchor:self.toolBarView.topAnchor],
-        [_applyButton.leadingAnchor constraintEqualToAnchor:self.toolBarView.leadingAnchor constant:20.0],
-        [_applyButton.trailingAnchor constraintEqualToAnchor:self.toolBarView.trailingAnchor constant:-20.0],
+        [_applyButton.leadingAnchor constraintEqualToAnchor:self.toolBarView.safeAreaLayoutGuide.leadingAnchor constant:20.0],
+        [_applyButton.trailingAnchor constraintEqualToAnchor:self.toolBarView.safeAreaLayoutGuide.trailingAnchor constant:-20.0],
         [_applyButton.heightAnchor constraintEqualToConstant:44.0]
     ]];
 }
@@ -486,11 +489,25 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    BOOL isLandscape = [self isLandscape];
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] + 10.;
     CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
-    CGFloat defaultPadding = 13.;
-    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
-    self.resetButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
+    CGFloat cornerPadding = 40.;
+    self.backButtonLeadingConstraint.constant = isLandscape ? (isRTL ? cornerPadding : landscapeWidthAdjusted) : commonMargin;
+    self.resetButtonTrailingConstraint.constant = isLandscape ? (isRTL ? landscapeWidthAdjusted : cornerPadding) : commonMargin;
+
+    // On a landscape phone the buttons are on the map side of the camera cutout.
+    // Anchor them to the view so a deep top safe area cannot cover grid labels.
+    BOOL useMapTop = isLandscape && !OAUtilities.isIPad;
+    if (useMapTop && !self.landscapeBackButtonTopConstraint)
+    {
+        self.landscapeBackButtonTopConstraint = [self.backButtonContainerView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:16.];
+        self.landscapeResetButtonTopConstraint = [self.doneButtonContainerView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:16.];
+    }
+    self.backButtonTopConstraint.active = !useMapTop;
+    self.resetButtonTopConstraint.active = !useMapTop;
+    self.landscapeBackButtonTopConstraint.active = useMapTop;
+    self.landscapeResetButtonTopConstraint.active = useMapTop;
 }
 
 - (void)hide

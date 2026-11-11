@@ -40,7 +40,11 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     @IBOutlet private weak var doneButtonContainerView: UIView!
     @IBOutlet private weak var resetButton: UIButton!
     @IBOutlet private var backButtonLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet private var backButtonTopConstraint: NSLayoutConstraint!
     @IBOutlet private var resetButtonTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet private var resetButtonTopConstraint: NSLayoutConstraint!
+    private var landscapeBackButtonTopConstraint: NSLayoutConstraint?
+    private var landscapeResetButtonTopConstraint: NSLayoutConstraint?
     
     private let settingsType: Buildings3DSettingsType
     private let plugin: OASRTMPlugin? = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin
@@ -140,11 +144,22 @@ final class MapSettingsBuildings3DParametersViewController: OABaseScrollableHudV
     
     override func doAdditionalLayout() {
         let isRTL = backButtonContainerView.isDirectionRTL()
-        let landscapeWidthAdjusted = getLandscapeViewWidth() - OAUtilities.getLeftMargin() + 10.0
+        let landscape = isLandscape()
+        let landscapeWidthAdjusted = getLandscapeViewWidth() + 10.0
         let commonMargin = OAUtilities.getLeftMargin() + 10.0
-        let defaultPadding = 13.0
-        backButtonLeadingConstraint.constant = isLandscape() ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin
-        resetButtonTrailingConstraint.constant = isLandscape() ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin
+        let cornerPadding: CGFloat = 40
+        backButtonLeadingConstraint.constant = landscape ? (isRTL ? cornerPadding : landscapeWidthAdjusted) : commonMargin
+        resetButtonTrailingConstraint.constant = landscape ? (isRTL ? landscapeWidthAdjusted : cornerPadding) : commonMargin
+
+        let useMapTop = landscape && !OAUtilities.isIPad()
+        if useMapTop && landscapeBackButtonTopConstraint == nil {
+            landscapeBackButtonTopConstraint = backButtonContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
+            landscapeResetButtonTopConstraint = doneButtonContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
+        }
+        backButtonTopConstraint.isActive = !useMapTop
+        resetButtonTopConstraint.isActive = !useMapTop
+        landscapeBackButtonTopConstraint?.isActive = useMapTop
+        landscapeResetButtonTopConstraint?.isActive = useMapTop
     }
     
     override func hide() {

@@ -335,6 +335,7 @@ extension WidgetPanelViewController {
         }
         
         updateWidgetSizes()
+        delegate?.onPanelSizeChanged()
     }
     
     func widgetClicked(_ widget: OABaseWidgetView) {

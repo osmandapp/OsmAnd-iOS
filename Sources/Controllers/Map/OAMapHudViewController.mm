@@ -2192,6 +2192,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 - (void)coalescedWidgetsUpdate:(NSNumber *)animatedNumber
 {
     _lastWidgetsUpdateTime = CACurrentMediaTime();
+    [self.view layoutIfNeeded];
     [self updateControlsLayout:animatedNumber.boolValue];
     [_mapHudLayout updateButtons];
 }

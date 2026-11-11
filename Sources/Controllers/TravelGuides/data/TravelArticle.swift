@@ -14,7 +14,7 @@ import OsmAndShared
 class TravelArticle: NSObject {
     
     static let IMAGE_ROOT_URL = "https://upload.wikimedia.org/wikipedia/commons/"
-    static let THUMB_PREFIX = "320px-"
+    static let THUMB_PREFIX = "330px-"
     static let REGULAR_PREFIX = "1280px-" //1280, 1024, 800
     
     var file: String?

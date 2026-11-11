@@ -2182,7 +2182,11 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         return _freeMemoryView.bounds.size.height;
 
     if (section == _subscribeEmailSection)
-        return [_subscribeEmailView updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]].size.height;
+    {
+        CGFloat margin = [OAUtilities getLeftMargin];
+        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0., MAX(margin, tableView.safeAreaInsets.left), 0., MAX(margin, tableView.safeAreaInsets.right));
+        return [_subscribeEmailView updateFrame:tableView.bounds.size.width contentInsets:contentInsets].size.height;
+    }
 
     if (section == 0)
         return 56.0;

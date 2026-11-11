@@ -105,13 +105,17 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
         NSLog(@"[OATTSCommandPlayerImpl] Cannot play commands during a phone call");
         [_pendingPhrases removeAllObjects];
     }
+    if (_pendingPhrases.count > 0 && ![self activateAudioSession])
+    {
+        NSLog(@"[OATTSCommandPlayerImpl] Dropping %lu voice prompts: audio session is not active", (unsigned long)_pendingPhrases.count);
+        [_pendingPhrases removeAllObjects];
+    }
     if (_pendingPhrases.count == 0)
     {
         [self deactivateAudioSession];
         return;
     }
 
-    [self activateAudioSession];
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:_pendingPhrases.firstObject];
     [_pendingPhrases removeObjectAtIndex:0];
     utterance.voice = [self voiceToUse];
@@ -128,6 +132,8 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
         return;
 
     _currentUtterance = nil;
+    if (_isStopRequested)
+        _synthesizer = [self createSynthesizer];
     [self speakNextPhrase];
 }
 
@@ -171,7 +177,7 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
     });
 }
 
-- (void)activateAudioSession
+- (BOOL)activateAudioSession
 {
     AVAudioSessionCategoryOptions options = AVAudioSessionCategoryOptionDuckOthers;
     if ([[OAAppSettings sharedManager].pauseSpokenAudio get])
@@ -185,12 +191,16 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
     if (!categorySet)
     {
         NSLog(@"[OATTSCommandPlayerImpl] Error setting audio session category: %@", categoryError.localizedDescription);
-        return;
+        return NO;
     }
 
     NSError *activationError = nil;
     if (![_audioSession setActive:YES error:&activationError])
+    {
         NSLog(@"[OATTSCommandPlayerImpl] Error activating audio session: %@", activationError.localizedDescription);
+        return NO;
+    }
+    return YES;
 }
 
 - (void)deactivateAudioSession
@@ -216,7 +226,7 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
             return;
 
         self->_isStopRequested = YES;
-        [self replaceSynthesizer];
+        [self stopSynthesizer:self->_synthesizer];
         [self watchSpeechWithTimeout:kSpeechProgressTimeout];
     });
 }
@@ -230,7 +240,7 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
             return;
 
         self->_currentUtterance = nil;
-        [self stopSynthesizer:self->_synthesizer];
+        [self->_synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
         [self deactivateAudioSession];
     });
 }

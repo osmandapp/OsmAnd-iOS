@@ -15,10 +15,12 @@
                 <outlet property="applyButtonContainerView" destination="5xy-Xx-QjC" id="ljA-LX-IWX"/>
                 <outlet property="applyButtonTrailingConstraint" destination="UHN-wF-pDk" id="q2J-TN-sbZ"/>
                 <outlet property="applyNavBarButton" destination="wYg-bp-8sh" id="DsJ-b5-DWQ"/>
+                <outlet property="applyNavBarTrailingConstraint" destination="dqc-6S-nWJ" id="Ias-J8-mJx"/>
                 <outlet property="backButton" destination="OQn-2U-8QY" id="GvQ-OQ-0dr"/>
                 <outlet property="backButtonContainerView" destination="ZNq-to-nq3" id="pua-VM-mU3"/>
                 <outlet property="backButtonLeadingConstraint" destination="QKW-sr-AxL" id="5dE-Ic-loc"/>
                 <outlet property="backNavBarButton" destination="gJn-N4-lwR" id="gOG-Wr-gSO"/>
+                <outlet property="backNavBarLeadingConstraint" destination="lwI-Za-0ce" id="Ptd-wy-wLz"/>
                 <outlet property="contentContainer" destination="QyC-iu-oJ2" id="Gae-uA-qdV"/>
                 <outlet property="descriptionNavBarView" destination="ijY-eK-eks" id="9DP-O9-0fA"/>
                 <outlet property="scrollableView" destination="ZPG-6u-And" id="Vi4-H7-kba"/>
@@ -26,6 +28,7 @@
                 <outlet property="statusBarBackgroundView" destination="Y3O-U6-e8m" id="cAF-E1-kGg"/>
                 <outlet property="tableView" destination="q0C-gd-VKg" id="6A1-BE-OFa"/>
                 <outlet property="titleNavBarView" destination="9Au-o2-zyP" id="d0B-E2-sG7"/>
+                <outlet property="titleNavBarCenterConstraint" destination="Bzo-g9-cYQ" id="xud-L3-nTr"/>
                 <outlet property="titleView" destination="Q2K-uE-JRg" id="KUY-tq-SaZ"/>
                 <outlet property="toolBarView" destination="jRx-Ug-Yby" id="EVl-aq-9zO"/>
                 <outlet property="topHeaderContainerView" destination="hZH-Ok-pp1" id="auA-4m-NMn"/>

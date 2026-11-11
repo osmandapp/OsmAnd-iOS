@@ -207,6 +207,9 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyButtonTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backNavBarLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyNavBarTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleNavBarCenterConstraint;
 
 @property (nonatomic) OAGPXTableData *tableData;
 @property (nonatomic) NSInteger sectionColors;
@@ -748,6 +751,23 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)doAdditionalLayout
 {
+    CGRect guideFrame = self.view.safeAreaLayoutGuide.layoutFrame;
+    CGFloat leftInset = CGRectGetMinX(guideFrame);
+    CGFloat rightInset = CGRectGetWidth(self.view.bounds) - CGRectGetMaxX(guideFrame);
+    UIWindow *window = self.view.window;
+    if (window)
+    {
+        CGRect viewFrame = [self.view convertRect:self.view.bounds toView:window];
+        CGRect windowSafeFrame = UIEdgeInsetsInsetRect(window.bounds, window.safeAreaInsets);
+        leftInset = MAX(leftInset, CGRectGetMinX(windowSafeFrame) - CGRectGetMinX(viewFrame));
+        rightInset = MAX(rightInset, CGRectGetMaxX(viewFrame) - CGRectGetMaxX(windowSafeFrame));
+    }
+    CGFloat missingLeftInset = MAX(0., leftInset - CGRectGetMinX(guideFrame));
+    CGFloat missingRightInset = MAX(0., rightInset - (CGRectGetWidth(self.view.bounds) - CGRectGetMaxX(guideFrame)));
+    self.backNavBarLeadingConstraint.constant = 12. + missingLeftInset;
+    self.applyNavBarTrailingConstraint.constant = 12. + missingRightInset;
+    self.titleNavBarCenterConstraint.constant = (missingLeftInset - missingRightInset) / 2.;
+
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
     self.backButtonLeadingConstraint.constant = [self isLandscape]
             ? (isRTL ? 0. : [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.)

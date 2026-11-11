@@ -32,7 +32,6 @@
 #import "OAGPXDatabase.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAAppSettings.h"
-#import "OAAmenitySearcher.h"
 #import "OAPOI.h"
 #import "OrderedDictionary.h"
 #import "OAGPXAppearanceCollection.h"
@@ -92,6 +91,8 @@
     NSArray<UIColor *> *_groupColors;
     NSArray<NSNumber *> *_groupHidden;
     NSString *_selectedIconName;
+    NSString *_originalIconKey;
+    BOOL _iconSelectedByUser;
     NSInteger _selectedBackgroundIndex;
     
     NSInteger _selectCategorySectionIndex;
@@ -288,7 +289,7 @@
     }
 
     _selectedIconName = iconName.length > 0 ? iconName : DEFAULT_ICON_NAME_KEY;
-    [_poiIconCollectionHandler setIconName:_selectedIconName];
+    [self selectIconInController];
 
     NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName ?: @""];
     _selectedBackgroundIndex = backgroundIndex != NSNotFound ? backgroundIndex : [_backgroundIconNames indexOfObject:DEFAULT_ICON_SHAPE_KEY];
@@ -301,6 +302,9 @@
 - (void)postInit
 {
     _initialName = self.name;
+    // An existing favorite keeps its icon when it is moved to another folder.
+    _iconSelectedByUser = !_isNewItemAdding;
+    _originalIconKey = [self retrieveOriginalIconKey];
     if (_editPointType == EOAEditPointTypeWaypoint && !_selectedWaypointGroupKey)
         _selectedWaypointGroupKey = @"";
     _initialGroupName = _editPointType == EOAEditPointTypeWaypoint ? _selectedWaypointGroupKey : self.groupTitle;
@@ -313,6 +317,18 @@
     [self setupColors];
     [self setupIconHandler];
     [self setupIcons];
+}
+
+- (NSString *)retrieveOriginalIconKey
+{
+    if (_editPointType != EOAEditPointTypeFavorite || !_isNewItemAdding)
+        return nil;
+
+    NSString *iconName = [_pointHandler getIcon];
+    if (iconName.length == 0)
+        return nil;
+
+    return iconName;
 }
 
 - (void)registerNotifications
@@ -484,22 +500,15 @@
 
 - (void)setupIcons
 {
-    NSString *pointIconName = [_pointHandler getIcon];
-    _selectedIconName = pointIconName ?: [self defaultIconName];
-    
     NSString *groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
-    OAFavoriteGroup *selectedGroup = [OAFavoritesHelper groupByTrimmedName:groupName];
-    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite && selectedGroup.iconName.length > 0 && (pointIconName.length == 0 || ![selectedGroup.iconName isEqualToString:DEFAULT_ICON_NAME_KEY]))
-        _selectedIconName = selectedGroup.iconName;
-
-    if (!_selectedIconName) {
-        if (_isNewItemAdding && selectedGroup)
-            _selectedIconName = selectedGroup.iconName;
-        else if (!_selectedIconName || _selectedIconName.length == 0)
-            _selectedIconName = DEFAULT_ICON_NAME_KEY;
-    }
-
-    [_poiIconCollectionHandler setIconName:_selectedIconName];
+    OAFavoriteGroup *selectedGroup = _editPointType == EOAEditPointTypeFavorite
+        ? [OAFavoritesHelper groupByTrimmedName:groupName] : nil;
+    NSString *pointIconName = [_pointHandler getIcon];
+    _selectedIconName = _editPointType == EOAEditPointTypeFavorite
+        ? [self initialIconName:selectedGroup]
+        : (pointIconName.length > 0 ? pointIconName : [self defaultIconName]);
+    [self selectIconInController];
+    
     _backgroundIconNames = [OAFavoritesHelper getFlatBackgroundIconNamesList];
     _backgroundContourIconNames = [OAFavoritesHelper getFlatBackgroundContourIconNamesList];
 
@@ -517,6 +526,8 @@
 - (void) setupIconHandler
 {
     _poiIconCollectionHandler = [[PoiIconCollectionHandler alloc] init];
+    if (_originalIconKey.length > 0)
+        [_poiIconCollectionHandler setOriginalIcon:_originalIconKey];
     _poiIconCollectionHandler.delegate = self;
     _poiIconCollectionHandler.hostVC = self;
     _poiIconCollectionHandler.customTitle = OALocalizedString(@"profile_icon");
@@ -1203,13 +1214,6 @@
     [self.tableView endUpdates];
 }
 
-- (void)onPoiSelected:(NSString *)poiName;
-{
-    _wasChanged = YES;
-    _selectedIconName = poiName;
-    [self applyLocalization];
-}
-
 #pragma mark - OAShapesTableViewCellDelegate
 
 - (void)iconChanged:(NSInteger)tag
@@ -1339,7 +1343,7 @@
                              backgroundIconName:backgroundIconName];
             group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
         }
-        resolvedIconName = iconName.length > 0 ? iconName : [self iconNameForGroup:group];
+        resolvedIconName = _iconSelectedByUser ? _selectedIconName : [self iconNameForGroup:group];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
@@ -1352,8 +1356,8 @@
     _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:backgroundIconName];
     
     _selectedIconName = resolvedIconName;
-    [_poiIconCollectionHandler setIconName:resolvedIconName];
-    [self onPoiSelected:resolvedIconName];
+    [self selectIconInController];
+    [self applyLocalization];
 
     self.groupTitle = editedGroupName;
     _needToScrollToSelectedColor = YES;
@@ -1486,7 +1490,7 @@
     {
         NSString *iconName = [_poiIconCollectionHandler getSelectedItem];
         if (iconName)
-            _selectedIconName = iconName;
+            [self onIconSelectedFromPalette:iconName];
     }
     else if (collectionView == [_colorCollectionHandler getCollectionView])
     {
@@ -1553,14 +1557,17 @@
     [self updateSubviewHeight:subviewHeight];
 }
 
-- (NSString *)getPreselectedIconName
+- (NSString *)preselectedIconName
 {
     return (!_pointHandler || !_isNewItemAdding) ? nil : [_pointHandler getIcon];
 }
 
 - (NSString *)defaultIconName
 {
-    NSString *preselectedIconName = [self getPreselectedIconName];
+    if (_editPointType == EOAEditPointTypeFavorite)
+        return DEFAULT_ICON_NAME_KEY;
+
+    NSString *preselectedIconName = [self preselectedIconName];
     if (preselectedIconName && preselectedIconName.length > 0)
         return preselectedIconName;
     else if (_poiIconCollectionHandler.lastUsedIcons && _poiIconCollectionHandler.lastUsedIcons.count > 0)
@@ -1568,25 +1575,64 @@
     return DEFAULT_ICON_NAME_KEY;
 }
 
+- (void)onIconSelectedFromPalette:(NSString *)iconName
+{
+    _iconSelectedByUser = YES;
+    _selectedIconName = iconName;
+}
+
+// Folder icon chosen by the user. The default star counts as no icon (Original).
++ (NSString *)chosenGroupIconName:(OAFavoriteGroup *)group
+{
+    NSString *iconName = group.iconName;
+    NSString *iconKey = [iconName hasPrefix:@"mx_"] ? [iconName substringFromIndex:3] : iconName;
+    if (iconName.length == 0 || [iconKey isEqualToString:DEFAULT_ICON_NAME_KEY]
+        || [UIImage imageNamedOrMxIcon:iconName] == nil)
+        return nil;
+
+    return iconName;
+}
+
 - (NSString *)iconNameForGroup:(OAFavoriteGroup *)group
 {
-    if (group.iconName.length > 0)
-        return group.iconName;
+    NSString *iconName = [self.class chosenGroupIconName:group];
+    if (iconName != nil)
+        return iconName;
 
-    OAFavoriteItem *favorite = [(OAFavoriteEditingHandler *) _pointHandler getFavoriteItem];
-    NSString *originName = [favorite getAmenityOriginName];
-    if (originName.length > 0)
-    {
-        OAPOI *poi = [OAAmenitySearcher findPOIByOriginName:originName
-                                                    lat:[favorite getLatitude]
-                                                    lon:[favorite getLongitude]];
-        NSString *iconName = [OABasePointEditingHandler getPoiIconName:poi];
-        if (iconName.length > 0)
-            return iconName;
-    }
+    // The POI icon that the editor set for a new point.
+    iconName = [_pointHandler getIcon];
+    if (iconName.length > 0)
+        return iconName;
 
-    NSString *iconName = [favorite getIcon];
-    return iconName.length > 0 ? iconName : [self defaultIconName];
+    // A point without its own icon gets the folder icon, as when the editor opens.
+    iconName = group.iconName;
+    if (iconName.length > 0 && [UIImage imageNamedOrMxIcon:iconName] != nil)
+        return iconName;
+
+    return [self defaultIconName];
+}
+
+- (NSString *)initialIconName:(OAFavoriteGroup *)group
+{
+    NSString *iconName = nil;
+    // A new point follows the icon chosen for the folder.
+    NSString *groupIconName = _isNewItemAdding ? [self.class chosenGroupIconName:group] : nil;
+    if (groupIconName != nil)
+        iconName = groupIconName;
+    if (iconName.length == 0)
+        iconName = [_pointHandler getIcon];
+    if (iconName.length == 0 && group.iconName.length > 0 && [UIImage imageNamedOrMxIcon:group.iconName] != nil)
+        iconName = group.iconName;
+    if (iconName.length == 0)
+        iconName = [self defaultIconName];
+
+    return iconName;
+}
+
+- (void)selectIconInController
+{
+    // Unlike Android's palette callback, this updates selection without reporting a user pick.
+    [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
 - (void)deleteItemWithAlertView
@@ -1612,13 +1658,15 @@
     {
         groupName = [OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle];
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
-        if (group)
+        if (group || groupName.length == 0)
         {
-            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[group.color toARGBNumber]];
+            UIColor *groupColor = group.color ?: [OADefaultFavorite getDefaultColor];
+            _selectedColorItem = [_appearanceCollection getColorItemWithValue:[groupColor toARGBNumber]];
             _isNewColorSelected = NO;
-            _selectedIconName = [self iconNameForGroup:group];
-            [_poiIconCollectionHandler setIconName:_selectedIconName];
-            _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType];
+            // An icon picked by the user is kept, otherwise the icon follows the folder.
+            _selectedIconName = _iconSelectedByUser ? _selectedIconName : [self iconNameForGroup:group];
+            [self selectIconInController];
+            _selectedBackgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: DEFAULT_ICON_SHAPE_KEY];
         }
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)

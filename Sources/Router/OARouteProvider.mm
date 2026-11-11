@@ -847,7 +847,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         if (vl.length() > 0)
             paramsR[key] = vl;
     }
-    double defaultSpeed = params.mode.getDefaultSpeed;
+    double defaultSpeed = [params.mode defaultSpeed];
     if (defaultSpeed > 0)
         paramsR[GeneralRouterConstants::DEFAULT_SPEED] = [NSString stringWithFormat:@"%f", defaultSpeed].UTF8String;
     double minSpeed = params.mode.getMinSpeed;
@@ -1382,7 +1382,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         if (vl.length > 0)
             paramsR[key] = vl;
     }
-    double defaultSpeed = params.mode.getDefaultSpeed;
+    double defaultSpeed = [params.mode defaultSpeed];
     if (defaultSpeed > 0)
         paramsR[routerNames.DEFAULT_SPEED] = [NSString stringWithFormat:@"%f", defaultSpeed];
     double minSpeed = params.mode.getMinSpeed;
@@ -1914,7 +1914,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
     }
     [points addObject:[[OALocation alloc] initWithProvider:@"" location:routeParams.end]];
     OALocation *lastAdded = nil;
-    float speed = [routeParams.mode getDefaultSpeed];
+    float speed = [routeParams.mode defaultSpeed];
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray new];
     while(points.count > 0)
     {
@@ -1988,7 +1988,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
                     CLLocation *endLoc = [[CLLocation alloc] initWithLatitude:end.coordinate.latitude longitude:end.coordinate.longitude];
                     locations = @[start, endLoc];
                 }
-                route = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:routeParams.mode.getDefaultSpeed
+                route = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[routeParams.mode defaultSpeed]
                                                                                              points:[self.class coordsToLatLons:locations]]];
             }
             [gpxRouteLocations addObjectsFromArray:locations];

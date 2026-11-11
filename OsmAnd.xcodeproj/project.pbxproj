@@ -1275,7 +1275,7 @@
 		DA5A825426C563A700F274C7 /* OAAutoZoomMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9526C563A100F274C7 /* OAAutoZoomMapViewController.m */; };
 		DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9626C563A100F274C7 /* OAArrivalAnnouncementViewController.m */; };
 		DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */; };
-		DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */; };
+		DA5A825826C563A700F274C7 /* SpeedLimitToleranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */; };
 		DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */; };
 		DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7BA226C563A100F274C7 /* OABaseSettingsViewController.m */; };
 		DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7BA326C563A100F274C7 /* OAOsmEditingSettingsViewController.mm */; };
@@ -2049,6 +2049,7 @@
 		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */; };
 		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
+		C0D6A8012C00A00100000001 /* SceneWindowStateRestorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6A8022C00A00100000001 /* SceneWindowStateRestorer.swift */; };
 		FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */; };
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */; };
@@ -2222,6 +2223,8 @@
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
 		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
 		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
+		D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000002 /* OAFavoriteIconTests.mm */; };
+		D1C609900000000000000003 /* FavoriteOriginalIconUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */; };
 		D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */; };
 		D609152ABC68498BBF4CC2FE /* OASharedSearchAppAPIs.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */; };
 		D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */; };
@@ -4314,7 +4317,6 @@
 		DA5A7B8226C563A100F274C7 /* OAAutoCenterMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAutoCenterMapViewController.m; sourceTree = "<group>"; };
 		DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVehicleParametersSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7B8426C563A100F274C7 /* OADefaultSpeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADefaultSpeedViewController.mm; sourceTree = "<group>"; };
-		DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASpeedLimitToleranceViewController.h; sourceTree = "<group>"; };
 		DA5A7B8626C563A100F274C7 /* OAVoicePromptsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoicePromptsViewController.h; sourceTree = "<group>"; };
 		DA5A7B8826C563A100F274C7 /* OANavigationLanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationLanguageViewController.m; sourceTree = "<group>"; };
 		DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScreenAlertsViewController.m; sourceTree = "<group>"; };
@@ -4333,7 +4335,7 @@
 		DA5A7B9926C563A100F274C7 /* OARecalculateRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARecalculateRouteViewController.h; sourceTree = "<group>"; };
 		DA5A7B9A26C563A100F274C7 /* OARouteParameterValuesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteParameterValuesViewController.h; sourceTree = "<group>"; };
 		DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAvoidPreferParametersViewController.mm; sourceTree = "<group>"; };
-		DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASpeedLimitToleranceViewController.m; sourceTree = "<group>"; };
+		DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedLimitToleranceViewController.swift; sourceTree = "<group>"; };
 		DA5A7B9D26C563A100F274C7 /* OADefaultSpeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADefaultSpeedViewController.h; sourceTree = "<group>"; };
 		DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACreateProfileViewController.mm; sourceTree = "<group>"; };
 		DA5A7BA026C563A100F274C7 /* OACreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACreateProfileViewController.h; sourceTree = "<group>"; };
@@ -5606,6 +5608,7 @@
 		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		C0D6A8022C00A00100000001 /* SceneWindowStateRestorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneWindowStateRestorer.swift; sourceTree = "<group>"; };
 		FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxLoadOperation.swift; sourceTree = "<group>"; };
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionConfigProvider.swift; sourceTree = "<group>"; };
@@ -5799,6 +5802,8 @@
 		FE6716631789B78626884F9C /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = az; path = az.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
 		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
+		D1C609900000000000000002 /* OAFavoriteIconTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteIconTests.mm; sourceTree = "<group>"; };
+		D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteOriginalIconUITests.swift; sourceTree = "<group>"; };
 		D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPanelMenuRestorationTests.mm; sourceTree = "<group>"; };
 		77CF376424AD4290B198F52E /* OASharedSearchAppAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchAppAPIs.h; sourceTree = "<group>"; };
 		B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIs.mm; sourceTree = "<group>"; };
@@ -7042,6 +7047,7 @@
 			isa = PBXGroup;
 			children = (
 				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */,
 				D57820010000000000000004 /* PlanRouteHistoryFixture.swift */,
 				D57820010000000000000002 /* PlanRouteHistoryUITests.swift */,
 				D1C571210000000000000003 /* Info.plist */,
@@ -7657,6 +7663,7 @@
 				DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */,
 				FA44BF682A72F810000D2F5F /* SceneDelegate.h */,
 				FA44BF672A72F810000D2F5F /* SceneDelegate.mm */,
+				C0D6A8022C00A00100000001 /* SceneWindowStateRestorer.swift */,
 				FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */,
 				DA5A79B526C563A000F274C7 /* Localization.h */,
 				DA5A79BF26C563A000F274C7 /* main.m */,
@@ -8365,8 +8372,7 @@
 				DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */,
 				321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */,
 				321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */,
-				DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */,
-				DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */,
+				DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */,
 				DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */,
 				DA5A7B7726C563A100F274C7 /* OAVehicleParametersSettingsViewController.mm */,
 				DA5A7B7326C563A100F274C7 /* OAVehicleParametersViewController.h */,
@@ -11377,6 +11383,7 @@
 			children = (
 				D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */,
 				D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */,
+				D1C609900000000000000002 /* OAFavoriteIconTests.mm */,
 			);
 			path = PointEditing;
 			sourceTree = "<group>";
@@ -12218,6 +12225,7 @@
 				46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */,
 				32C41F542E0C4CEF00E9941C /* OAHeightDataLoader.mm in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
+				C0D6A8012C00A00100000001 /* SceneWindowStateRestorer.swift in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,
 				DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */,
@@ -12334,7 +12342,7 @@
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
 				CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */,
-				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
+				DA5A825826C563A700F274C7 /* SpeedLimitToleranceViewController.swift in Sources */,
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */,
@@ -13876,6 +13884,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
+				D1C609900000000000000003 /* FavoriteOriginalIconUITests.swift in Sources */,
 				D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */,
 				D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */,
 			);
@@ -13918,6 +13927,7 @@
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
 				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,
+				D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */,
 				D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */,
 				D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */,
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,

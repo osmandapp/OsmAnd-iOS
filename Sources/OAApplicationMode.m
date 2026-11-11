@@ -328,13 +328,13 @@ static int PROFILE_TRUCK = 1000;
 
 - (BOOL) hasFastSpeed
 {
-    return [self getDefaultSpeed] > 10;
+    return [self defaultSpeed] > 10;
 }
 
 - (NSInteger) getOffRouteDistance
 {
     // used to be: 50/14 - 350 m, 10/2.7 - 50 m, 4/1.11 - 20 m
-    double speed = MAX([self getDefaultSpeed], 0.3f);
+    double speed = MAX([self defaultSpeed], 0.3f);
     // become: 50 kmh - 280 m, 10 kmh - 55 m, 4 kmh - 22 m
     return (NSInteger) (speed * 20);
 }
@@ -342,7 +342,7 @@ static int PROFILE_TRUCK = 1000;
 - (NSInteger) getMinDistanceForTurn
 {
     // used to be: 50 kmh - 35 m, 10 kmh - 15 m, 4 kmh - 5 m, 10 kmh - 20 m, 400 kmh - 100 m,
-    float speed = MAX([self getDefaultSpeed], 0.3f);
+    float speed = MAX([self defaultSpeed], 0.3f);
     // 2 sec + 7 m: 50 kmh - 35 m, 10 kmh - 12 m, 4 kmh - 9 m, 400 kmh - 230 m
     return (int) (7 + speed * 2);
 }
@@ -401,9 +401,24 @@ static int PROFILE_TRUCK = 1000;
     return [OAAppSettings.sharedManager.profileIconName set:iconName mode:self];
 }
 
-- (double) getDefaultSpeed
+- (double)defaultSpeed
 {
     return [OAAppSettings.sharedManager.defaultSpeed get:self];
+}
+
+- (float)minSpeedToleranceLimit
+{
+    return MAX(-(float)[self defaultSpeed] / 2, -10.f / 3.6f);
+}
+
+- (float)maxSpeedToleranceLimit
+{
+    return MIN((float)[self defaultSpeed], 20.f / 3.6f);
+}
+
+- (BOOL)isSpeedToleranceBigRange
+{
+    return ([self maxSpeedToleranceLimit] - [self minSpeedToleranceLimit]) * 3.6 > 6;
 }
 
 - (void) setDefaultSpeed:(double) defaultSpeed

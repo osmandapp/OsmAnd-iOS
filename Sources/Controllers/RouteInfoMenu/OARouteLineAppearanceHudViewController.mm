@@ -210,6 +210,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backNavBarLeadingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *applyNavBarTrailingConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleNavBarCenterConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *titleNavBarBottomConstraint;
 
 @property (nonatomic) OAGPXTableData *tableData;
 @property (nonatomic) NSInteger sectionColors;
@@ -238,7 +239,6 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     OARoutingHelper *_routingHelper;
     NSObject *_dataLock;
 
-    CGFloat _originalStatusBarHeight;
     BOOL _nightMode;
     NSString *_selectedDayNightMode;
 
@@ -540,11 +540,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)setupButtonsNavigationBarView
 {
+    [self updateNavigationBarHeight];
     [self.statusBarBackgroundView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
-    _originalStatusBarHeight = self.statusBarBackgroundView.frame.size.height;
-
     [self.titleNavBarView setText:OALocalizedString(@"customize_route_line")];
     [self.descriptionNavBarView setText:_appMode.name];
+    [self.titleNavBarView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
+    [self.descriptionNavBarView setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
 
     BOOL isRTL = [self.statusBarBackgroundView isDirectionRTL];
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
@@ -562,6 +563,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
                                                     attributes:@{ NSFontAttributeName:[UIFont preferredFontForTextStyle:UIFontTextStyleBody] }]
                                      forState:UIControlStateNormal];
+    [self.backNavBarButton setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
     self.backNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
             [self.backNavBarButton.titleLabel.leadingAnchor constraintEqualToAnchor:self.backNavBarButton.leadingAnchor constant:20.],
@@ -579,6 +581,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
                                                     attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]
                                       forState:UIControlStateNormal];
+    [self.applyNavBarButton setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+    [self.titleNavBarView.superview setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
 
     self.applyNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -746,11 +750,27 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (CGFloat)getStatusBarHeight
 {
-    return [OAUtilities isIPad] ?  [OAUtilities getStatusBarHeight] : _originalStatusBarHeight;
+    return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] : [self navigationBarHeight];
+}
+
+- (CGFloat)navigationBarHeight
+{
+    BOOL landscapePhone = ![OAUtilities isIPad] && CGRectGetWidth(self.view.bounds) > CGRectGetHeight(self.view.bounds);
+    return landscapePhone ? 128. : 100.;
+}
+
+- (void)updateNavigationBarHeight
+{
+    CGFloat height = [self navigationBarHeight];
+    CGRect frame = self.statusBarBackgroundView.frame;
+    frame.size.height = height;
+    self.statusBarBackgroundView.frame = frame;
+    self.titleNavBarBottomConstraint.constant = height - 100.;
 }
 
 - (void)doAdditionalLayout
 {
+    [self updateNavigationBarHeight];
     CGRect guideFrame = self.view.safeAreaLayoutGuide.layoutFrame;
     CGFloat leftInset = CGRectGetMinX(guideFrame);
     CGFloat rightInset = CGRectGetWidth(self.view.bounds) - CGRectGetMaxX(guideFrame);

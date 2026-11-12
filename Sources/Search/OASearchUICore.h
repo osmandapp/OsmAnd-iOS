@@ -24,6 +24,8 @@
 - (NSArray<OASearchResult *> *) getCurrentSearchResults;
 /** Results currently visible in the search list. Classic search exposes its complete collection. */
 - (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults;
+/** Whether the collection preserves spatial ordering and visibility levels. */
+- (BOOL)isSkipSorting;
 - (BOOL)hasMoreSpatialSearchResults;
 - (BOOL)showMoreSpatialSearchResults;
 - (void) sortSearchResults;

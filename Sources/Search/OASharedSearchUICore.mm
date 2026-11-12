@@ -706,6 +706,14 @@ static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
             [_appResults removeObjectForKey:result];
 }
 
+- (BOOL)isSkipSorting
+{
+    @synchronized (self)
+    {
+        return [_shared isSkipSorting];
+    }
+}
+
 - (BOOL)hasMoreSpatialSearchResults
 {
     @synchronized (self)

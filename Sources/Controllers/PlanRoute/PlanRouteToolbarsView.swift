@@ -39,7 +39,6 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         didSet { saveButton.isEnabled = isSaveButtonEnabled }
     }
 
-    private let backgroundContainerView = UIView()
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomCancel)
     private let optionsButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomOverflowMenuStroke)
@@ -59,14 +58,13 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         closeButton.updateColors(forPressedState: false)
         optionsButton.updateColors(forPressedState: false)
         saveButton.updateColors(forPressedState: false)
-        backgroundContainerView.backgroundColor = closeButton.backgroundColor
-        titleLabel.textColor = closeButton.tintColor
     }
 
     private func setupView() {
         backgroundColor = .clear
 
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
+        titleLabel.textColor = .white
         updateMapTheme()
         titleLabel.textAlignment = .natural
         titleLabel.adjustsFontForContentSizeCategory = true
@@ -82,8 +80,6 @@ final class PlanRouteTopToolbarView: TouchesPassView {
             $0.translatesAutoresizingMaskIntoConstraints = false
             addSubview($0)
         }
-
-        setupBackgroundView()
 
         let inset = Self.edgeInset
         NSLayoutConstraint.activate([
@@ -102,20 +98,6 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         optionsButton.accessibilityLabel = localizedString("shared_string_options")
         closeButton.addTarget(self, action: #selector(onCloseTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(onSaveTapped), for: .touchUpInside)
-    }
-
-    private func setupBackgroundView() {
-        backgroundContainerView.layer.cornerRadius = PlanRouteButtonFactory.toolbarButtonSize / 2
-        backgroundContainerView.isUserInteractionEnabled = false
-        backgroundContainerView.translatesAutoresizingMaskIntoConstraints = false
-        insertSubview(backgroundContainerView, at: 0)
-
-        NSLayoutConstraint.activate([
-            backgroundContainerView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -12),
-            backgroundContainerView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 12),
-            backgroundContainerView.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            backgroundContainerView.heightAnchor.constraint(equalTo: closeButton.heightAnchor)
-        ])
     }
 
     @objc private func onCloseTapped() {

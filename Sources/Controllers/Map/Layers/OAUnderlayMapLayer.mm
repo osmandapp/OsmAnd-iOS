@@ -123,7 +123,7 @@
         OsmAnd::MapLayerConfiguration config;
         BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
         float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
-        config.setOpacityFactor(alpha);
+        config.setOpacityFactor(1 - alpha);
         [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
     }];
 }
@@ -142,7 +142,7 @@
                 OsmAnd::MapLayerConfiguration config;
                 BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
                 float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
-                config.setOpacityFactor(alpha);
+                config.setOpacityFactor(1 - alpha);
                 [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
                 
                 [self.mapView resetProviderFor:self.layerIndex];

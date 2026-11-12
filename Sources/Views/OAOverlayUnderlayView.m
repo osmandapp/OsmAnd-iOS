@@ -48,7 +48,7 @@
 {
     _app = [OsmAndApp instance];
     _lbOverlay.text = OALocalizedString(@"map_settings_over");
-    _lbUnderlay.text = OALocalizedString(@"map_settings_under");
+    _lbUnderlay.text = OALocalizedString(@"shared_string_map");
     self.layer.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.8].CGColor;
     self.layer.cornerRadius = 5.0;
     [self updateView];

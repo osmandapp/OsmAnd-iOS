@@ -449,6 +449,12 @@
     [self updateLayout];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self updateLayout];
+}
+
 - (void) updateLayout
 {
     CGFloat width = self.bounds.size.width;

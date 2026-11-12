@@ -479,7 +479,10 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
 
-    _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    UIEdgeInsets safeInsets = _mapHudViewController.view.safeAreaInsets;
+    CGFloat availableWidth = MAX(0., _mapHudViewController.view.bounds.size.width - safeInsets.left - safeInsets.right);
+    CGFloat panelWidth = [OAUtilities isLandscapeIpadAware] ? MIN(kInfoViewLandscapeWidthPad, availableWidth) : availableWidth;
+    _mapHudViewController.topWidgetsViewWidthConstraint.constant = panelWidth;
 
     if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
         [[OARootViewController instance].mapPanel updateToolbar];
@@ -522,7 +525,7 @@
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
     }
 
-    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = panelWidth;
     if (hasBottomWidgets)
     {
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;

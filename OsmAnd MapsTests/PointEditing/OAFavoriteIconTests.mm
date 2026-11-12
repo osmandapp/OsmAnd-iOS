@@ -7,6 +7,8 @@
 #import "OAFavoriteEditingHandler.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
+#import "OAFavoritesHelperBridge.h"
+#import "OAFavoriteFolderBridgeItem.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAAppSettings.h"
 #import "OAAppDelegate.h"
@@ -399,6 +401,40 @@
         [completion fulfill];
     }];
     [self waitForExpectations:@[completion] timeout:5];
+}
+
+- (void)testGroupCreatedInFavoriteEditorAppearsInMyPlacesWithoutSavingPoint
+{
+    OAFavoriteGroup *source = [self groupWithIcon:@"" pointIcons:@[]];
+    OAEditPointViewController *editor = [self newPointEditorInGroup:source fromPOI:YES];
+    NSString *name = [@"Favorite editor group " stringByAppendingString:NSUUID.UUID.UUIDString];
+    NSPredicate *matchingGroup = [NSPredicate predicateWithFormat:@"groupName == %@", name];
+    OAFavoritesHelperBridge *bridge = OAFavoritesHelperBridge.shared;
+    // Prime the same folder cache used by My Places before creating the group.
+    XCTAssertEqual([[bridge.favoriteFolders filteredArrayUsingPredicate:matchingGroup] count], 0u);
+    [self addTeardownBlock:^{
+        OAFavoriteGroup *group = [OAFavoritesHelper groupByName:name];
+        if (group)
+            [OAFavoritesHelper deleteFavoriteGroups:@[group] andFavoritesItems:nil isNewFavorite:YES];
+        [OAFavoritesHelper notifyFavoritesStorageChanged];
+    }];
+    XCTestExpectation *foldersUpdated = [self expectationForNotification:@"FavoritesStorageChangedNotification"
+                                                                 object:nil handler:^BOOL(NSNotification *notification) {
+        return [[bridge.favoriteFolders filteredArrayUsingPredicate:matchingGroup] count] == 1;
+    }];
+
+    // Done in the child group editor calls this delegate before the favorite is saved.
+    [(id<OAEditorDelegate>)editor addNewItemWithName:name iconName:@"" color:UIColor.blueColor backgroundIconName:@"square"];
+    [self waitForExpectations:@[foldersUpdated] timeout:5];
+
+    OAFavoriteGroup *group = [OAFavoritesHelper groupByName:name];
+    XCTAssertNotNil(group);
+    XCTAssertEqual(group.points.count, 0u);
+    XCTAssertEqualObjects(editor.groupTitle, name);
+    NSArray<OAFavoriteFolderBridgeItem *> *folders = [bridge.favoriteFolders filteredArrayUsingPredicate:matchingGroup];
+    XCTAssertEqual(folders.count, 1u);
+    XCTAssertEqual(folders.firstObject.pointsCount, 0u);
+    XCTAssertEqualObjects(folders.firstObject.color, UIColor.blueColor);
 }
 
 - (void)testNewPOIUsesOriginalIconAndFolderColorAndShape

@@ -116,7 +116,7 @@ final class PoiAdditionalLabels: NSObject {
     }
 
     // A button of an expanded group, by the shared rules as android: "Not allowed" for "Smoking: not allowed".
-    static func getButtonLabel(_ type: OAPOIType) -> String {
+    static func buttonLabel(for type: OAPOIType) -> String {
         guard let sharedType = OAPOIHelper.sharedInstance().kPoiTypes.getAnyPoiAdditionalTypeByKey(name: type.name) as? PoiType else {
             return type.nameLocalized ?? ""
         }

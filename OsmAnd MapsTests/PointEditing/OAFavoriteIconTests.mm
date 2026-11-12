@@ -437,6 +437,103 @@
     XCTAssertEqualObjects(folders.firstObject.color, UIColor.blueColor);
 }
 
+- (void)testLastUsedIconsDoNotDuplicatePOIIconAfterManualSelection
+{
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:@[@"barrier_gate"]];
+    OAFavoriteGroup *group = [self storedGroupWithIcon:@"" pointIcons:@[]];
+    OAPOI *poi = [OAPOI new];
+    poi.name = @"Test defibrillator";
+    poi.latitude = 48.45;
+    poi.longitude = 35.05;
+    poi.type = [[OAPOIHelper sharedInstance] getPoiTypeByName:@"defibrillator"];
+    poi.mapIconName = @"defibrillator";
+    OAEditPointViewController *editor = [self newPointEditorInGroup:group poi:poi];
+    XCTAssertEqualObjects([editor valueForKey:@"selectedIconName"], @"defibrillator");
+    [self saveNewPointEditor:editor inGroup:group expectedIcon:@"defibrillator"];
+    NSArray<NSString *> *expected = @[@"defibrillator", @"barrier_gate"];
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, expected);
+
+    OAEditPointViewController *reopened = [[OAFavoriteIconTestPointEditor alloc] initWithFavorite:group.points.firstObject];
+    [reopened loadViewIfNeeded];
+    [self bindPointIconCell:reopened];
+    PoiIconCollectionHandler *icons = [reopened valueForKey:@"poiIconCollectionHandler"];
+    NSUInteger categoryIndex = [icons.categories indexOfObjectPassingTest:^BOOL(IconsAppearanceCategory *category, NSUInteger index, BOOL *stop) {
+        return [category.iconKeys containsObject:@"mx_defibrillator"];
+    }];
+    XCTAssertNotEqual(categoryIndex, NSNotFound);
+    if (categoryIndex == NSNotFound)
+        return;
+    IconsAppearanceCategory *category = icons.categories[categoryIndex];
+    [icons selectCategory:category.key];
+    NSIndexPath *path = [NSIndexPath indexPathForRow:[category.iconKeys indexOfObject:@"mx_defibrillator"] inSection:0];
+    OAIconsPaletteCell *cell = icons.hostCell;
+    XCTAssertNotNil(cell);
+    [cell collectionView:cell.collectionView didSelectItemAtIndexPath:path];
+    XCTAssertEqualObjects([reopened valueForKey:@"selectedIconName"], @"mx_defibrillator");
+    [reopened onRightNavbarButtonPressed];
+
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, expected);
+    XCTAssertEqualObjects(icons.lastUsedIcons, expected);
+    XCTAssertEqualObjects(icons.categoriesByKeyName[icons.lastUsedKey].iconKeys, expected);
+    PoiIconCollectionHandler *reloaded = [PoiIconCollectionHandler new];
+    XCTAssertEqualObjects(reloaded.lastUsedIcons, expected);
+    [reloaded setIconName:@"mx_defibrillator"];
+    XCTAssertEqualObjects(reloaded.selectedCatagoryKey, reloaded.lastUsedKey);
+    XCTAssertEqualObjects([reloaded getSelectedItem], @"defibrillator");
+}
+
+- (void)testLastUsedIconsMigrateExistingAliasesInMostRecentOrder
+{
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:@[
+        @"mx_defibrillator", @"defibrillator", @"mx_assembly_point", @"amenity_school",
+        @"mx_xmas_pyramid", @"barrier_gate", @"special_star", @"tourism_hostel", @"shop_car",
+        @"mx_blood_donation", @"mx_amenity_biergarten", @"activities_electric_bike"
+    ]];
+    NSArray<NSString *> *expected = @[
+        @"defibrillator", @"assembly_point", @"amenity_school", @"xmas_pyramid", @"barrier_gate",
+        @"special_star", @"tourism_hostel", @"shop_car", @"blood_donation", @"amenity_biergarten",
+        @"activities_electric_bike"
+    ];
+    PoiIconCollectionHandler *icons = [PoiIconCollectionHandler new];
+    XCTAssertEqualObjects(icons.lastUsedIcons, expected);
+    XCTAssertEqualObjects(icons.categoriesByKeyName[icons.lastUsedKey].iconKeys, expected);
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, expected);
+    for (NSString *icon in expected)
+        XCTAssertNotNil([UIImage templateImageNamed:icon], @"%@", icon);
+
+    PoiIconCollectionHandler *reopened = [PoiIconCollectionHandler new];
+    XCTAssertEqualObjects(reopened.lastUsedIcons, expected);
+    XCTAssertEqualObjects(reopened.categoriesByKeyName[reopened.lastUsedKey].iconKeys, expected);
+}
+
+- (void)testLastUsedIconsKeepRecencyAndLimitWithMixedNames
+{
+    NSArray<NSString *> *initial = @[
+        @"defibrillator", @"assembly_point", @"amenity_school", @"xmas_pyramid", @"barrier_gate",
+        @"special_star", @"tourism_hostel", @"shop_car", @"blood_donation", @"amenity_biergarten",
+        @"activities_electric_bike", @"ic_action_car_dark"
+    ];
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:initial];
+    PoiIconCollectionHandler *icons = [PoiIconCollectionHandler new];
+    [icons addIconToLastUsed:@"mx_barrier_gate"];
+    [icons addIconToLastUsed:@"barrier_gate"];
+    NSArray<NSString *> *expected = @[
+        @"barrier_gate", @"defibrillator", @"assembly_point", @"amenity_school", @"xmas_pyramid",
+        @"special_star", @"tourism_hostel", @"shop_car", @"blood_donation", @"amenity_biergarten",
+        @"activities_electric_bike", @"ic_action_car_dark"
+    ];
+    XCTAssertEqualObjects(icons.lastUsedIcons, expected);
+    [icons addIconToLastUsed:@"mx_special_bicycle"];
+    expected = @[
+        @"special_bicycle", @"barrier_gate", @"defibrillator", @"assembly_point", @"amenity_school",
+        @"xmas_pyramid", @"special_star", @"tourism_hostel", @"shop_car", @"blood_donation",
+        @"amenity_biergarten", @"activities_electric_bike"
+    ];
+    XCTAssertEqualObjects(icons.lastUsedIcons, expected);
+    XCTAssertEqualObjects(icons.categoriesByKeyName[icons.lastUsedKey].iconKeys, expected);
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, expected);
+}
+
 - (void)testNewPOIUsesOriginalIconAndFolderColorAndShape
 {
     OAFavoriteGroup *group = [self storedGroupWithIcon:@"" pointIcons:@[]];

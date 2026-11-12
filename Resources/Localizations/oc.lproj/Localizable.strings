@@ -2260,14 +2260,14 @@
 "routeInfo_surface_name" = "Superficia";
 "routing_attr_allow_expert_name" = "Permetre lei percors expèrts";
 "rendering_attr_showRunningRoutes_name" = "Percors actuaus";
-"routing_attr_avoid_sett_description" = "Evitar lei caladats e lei peiradas";
+"routing_attr_avoid_sett_description" = "Evitar lei pavats";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sensa restriccions)";
 "transport_hazmat_no_desc" = "Rotas e galariás enebidas au transpòrt de matèrias perilhosas.";
 "settings_item_read_error" = "S'es pas poscut legir %@.";
 "login_footer_full_text" = "Besonh d'ajuda ? Nos podètz contactar a \nsupport@osmand.net";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Planier";
 "routing_attr_piste_type_nordic_description" = "Percors d\'esquilh nordic ò de fons.";
-"routing_attr_avoid_sett_name" = "Sensa peirada nimai caladat";
+"routing_attr_avoid_sett_name" = "Sensa pavats";
 "routeInfo_piste_type_name" = "Mena de dralha";
 "routeInfo_steepness_name" = "Inclinason";
 "routing_attr_allow_advanced_description" = "Vias dificilas, amb espachas perilhosas e estiradas de pendent sobde.";
@@ -2721,3 +2721,5 @@
 "map_widget_distance" = "Distància";
 "shared_string_view_all" = "Tot visualizar";
 "add_hidden_group_info" = "Lo ponch ajustat se tròba dins \"1%@\". Desamagar lo grop seleccionat per lo visualizar sus la mapa.";
+"routing_attr_avoid_cobblestone_name" = "Evitar lei caladats";
+"routing_attr_avoid_cobblestone_description" = "Evitar lei caladats";

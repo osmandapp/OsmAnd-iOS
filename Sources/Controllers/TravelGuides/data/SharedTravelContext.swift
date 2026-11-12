@@ -11,8 +11,7 @@ import OsmAndShared
 /// What the shared `TravelObfHelper` asks of the app: which obf files to search, the language, and
 /// where the map is looking.
 ///
-/// Deciding which files are installed and in what order they are consulted stays here, because it
-/// depends on downloads and map settings that OsmAndShared knows nothing about.
+/// Supplies the installed travel resources and app settings to the shared helper.
 final class SharedTravelContext: NSObject, TravelObfContext {
 
     static let shared = SharedTravelContext()
@@ -22,11 +21,11 @@ final class SharedTravelContext: NSObject, TravelObfContext {
     }
 
     func getWikivoyageRepositories() -> [AmenityIndexRepository] {
-        SharedObfReaders.shared.travelRepositories()
+        SharedObfResources.shared.travelRepositories()
     }
 
     func getTravelGpxRepositories() -> [AmenityIndexRepository] {
-        SharedObfReaders.shared.travelAndMapRepositories()
+        SharedObfResources.shared.travelAndMapRepositories()
     }
 
     func getLanguage() -> String {
@@ -95,7 +94,7 @@ final class SharedTravelBookmarks: NSObject, TravelBookmarks {
 enum SharedTravelArticles {
 
     private static let appBySharedArticle =
-        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>.weakToWeakObjects()
+        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>(keyOptions: [.weakMemory, .objectPointerPersonality], valueOptions: .weakMemory)
     private static let lock = NSLock()
 
     // MARK: - Articles

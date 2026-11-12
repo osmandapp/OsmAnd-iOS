@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAPOI.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
@@ -57,6 +58,8 @@ NSString * const WIKI_LANG = @"wiki_lang";
 NSString * const WIKI_PLACE = @"wiki_place";
 NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
+static NSString * const kOsmandPhrasePrefix = @"poi_osmand_";
+
 @implementation OAPOIHelper {
 
     OsmAndAppInstance _app;
@@ -100,6 +103,8 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     NSString *xml = [[OASPlatformUtil.shared getOsmAndContext] getAssetAsStringName:@"poi_types.xml"];
     OASMapPoiTypes *types = [[OASMapPoiTypes alloc] initWithResourceName:nil];
     [types doInitFromStringXml:xml];
+    // the phrases are handed over: this runs inside the first sharedInstance, which the translator cannot call
+    [types setPoiTranslatorPoiTranslator:[[SharedPoiTranslator alloc] initWithPhrases:_phrases enPhrases:_phrasesEN poiTypes:types]];
     [OASMapPoiTypes.companion setDefaultTypes:types];
     _kPoiTypes = types;
 }
@@ -218,7 +223,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     }
 }
 
-- (NSDictionary *) loadPhraseFileForLanguage:(NSString *)langguageCode
++ (NSDictionary<NSString *, NSString *> *) loadPhraseFileForLanguage:(NSString *)langguageCode
 {
     NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:[NSString stringWithFormat:@"phrases/%@", langguageCode]];
 
@@ -236,19 +241,19 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     if (!_phrases)
     {
         NSString *fullLanguageCode = [[NSLocale preferredLanguages] firstObject];
-        _phrases = [self loadPhraseFileForLanguage:fullLanguageCode];
+        _phrases = [self.class loadPhraseFileForLanguage:fullLanguageCode];
         
         if (!_phrases)
         {
             NSLog(@"ERROR: Not found phrases translation file at path: %@", [NSString stringWithFormat:@"phrases/%@/phrases.xml", fullLanguageCode]);
             NSString *primaryLanguageCode = [OAUtilities currentLang];
-            _phrases = [self loadPhraseFileForLanguage:primaryLanguageCode];
+            _phrases = [self.class loadPhraseFileForLanguage:primaryLanguageCode];
         }
     }
     
     if (!_phrasesEN)
     {
-        _phrasesEN = [self loadPhraseFileForLanguage:@"en"];
+        _phrasesEN = [self.class loadPhraseFileForLanguage:@"en"];
     }
 
     if (_phrases.count > 0)
@@ -355,7 +360,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getPhraseByName:(NSString *)name withDefatultValue:(BOOL)withDefatultValue
 {
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+    NSString *phrase = [self findPhraseIn:_phrases key:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (!phrase)
     {
         return withDefatultValue ? [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "] : nil;
@@ -372,7 +377,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getPhraseENByName:(NSString *)name
 {
-    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    NSString *phrase = [self findPhraseIn:_phrasesEN key:[NSString stringWithFormat:@"poi_%@", name]];
     if (!phrase)
     {
         return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
@@ -389,7 +394,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
 
 - (NSString *) getSynonymsByName:(NSString *)name
 {
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+    NSString *phrase = [self findPhraseIn:_phrases key:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (phrase)
     {
         int i = [phrase indexOf:@";"];
@@ -398,6 +403,15 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
         }
     }
     return @"";
+}
+
+// as in Android, a type without its own phrase is translated by its key without "osmand_": poi_socket_type2_yes
+- (NSString *) findPhraseIn:(NSDictionary *)phrases key:(NSString *)key
+{
+    NSString *phrase = phrases[key];
+    if (!phrase && [key hasPrefix:kOsmandPhrasePrefix])
+        phrase = phrases[[@"poi_" stringByAppendingString:[key substringFromIndex:kOsmandPhrasePrefix.length]]];
+    return phrase;
 }
 
 - (NSString *) getPhrase:(OAPOIBaseType *)type
@@ -887,9 +901,7 @@ NSString * const ROUTE_ARTICLE_POINT = @"route_article_point";
     QString enName;
     for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(localizedNames)))
     {
-        QString key = entry.key().trimmed().toLower();
-        if (key.startsWith(QStringLiteral("name:")))
-            key = key.mid(5);
+        QString key = OANormalizeLocalizedNameKey(entry.key());
 
         if (!lang.isNull() && key == lang)
             nameLocalized = entry.value();

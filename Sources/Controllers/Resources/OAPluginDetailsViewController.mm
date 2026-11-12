@@ -437,7 +437,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     else if ([_product isKindOfClass:OAOsmEditingProduct.class])
         return [[OAOsmEditingSettingsViewController alloc] init];
     else if ([_product isKindOfClass:OAWeatherProduct.class])
-        return [[OAWeatherSettingsViewController alloc] init];
+        return [[OAWeatherSettingsViewController alloc] initWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
     else if ([_product isKindOfClass:OAOsmandDevelopmentProduct.class])
         return [[OAOsmandDevelopmentViewController alloc] init];
     else if ([_product isKindOfClass:OAWikiProduct.class])

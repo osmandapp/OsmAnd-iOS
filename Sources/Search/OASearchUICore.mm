@@ -28,6 +28,7 @@
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMemoryLog.h"
+#import "OASharedSearchUICore.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -56,6 +57,8 @@ typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
 };
 
 @interface OASearchUICore ()
+
+- (OASearchResultCollection *)performShallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings;
 
 @end
 
@@ -259,6 +262,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (instancetype)initWithPhrase:(OASearchPhrase *)phrase
 {
+    // a collection of results of the shared search is one as well
+    if (![self isKindOfClass:OASharedSearchResultCollection.class] && [phrase isKindOfClass:OASharedSearchPhrase.class])
+        return [[OASharedSearchResultCollection alloc] initWithPhrase:phrase];
+
     self = [super init];
     if (self)
     {
@@ -518,6 +525,21 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     return unique;
 }
 
+- (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults
+{
+    return [self getCurrentSearchResults];
+}
+
+- (BOOL)hasMoreSpatialSearchResults
+{
+    return NO;
+}
+
+- (BOOL)showMoreSpatialSearchResults
+{
+    return NO;
+}
+
 - (NSArray<OASearchResult *> *) getCurrentSearchResults
 {
     return [NSArray arrayWithArray:_searchResults];
@@ -541,7 +563,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
     for (OASearchResult *s in _searchResults) {
         const auto amenity = std::dynamic_pointer_cast<const OsmAnd::Amenity>(s.amenity);
-        if (!amenity || (s.alternateName && s.alternateName.length > 0)) {
+        if (!amenity || s.addressName.length > 0) {
             continue;
         }
         [OASearchResultCollection updateSearchResultAddress:s amenity:amenity dominatedCity:dominatedCity];
@@ -721,7 +743,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     QString qStreetName = [OASearchResultCollection getAdditionalInfo:amenity key:"addr_street"];
     if (qStreetName.isEmpty())
     {
-        s.alternateName = city;
+        s.addressName = city;
     }
     else
     {
@@ -733,7 +755,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             addr = [NSString stringWithFormat:@"%@ %@", streetName, hno];
         }
-        s.alternateName = [self createAddressString:s.cityName mainCity:mainCity dominatedCity:dominatedCity addr:addr];
+        s.addressName = [self createAddressString:s.cityName mainCity:mainCity dominatedCity:dominatedCity addr:addr];
     }
 }
 
@@ -782,17 +804,35 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     return nil;
 }
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher completion:(void (^)(OASearchResultCollection *))completion
 {
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES];
+    [self shallowSearchAsync:cl text:text matcher:matcher resortAll:YES removeDuplicates:YES completion:completion];
 }
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates completion:(void (^)(OASearchResultCollection *))completion
 {
-    return [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:_searchSettings];
+    [self shallowSearchAsync:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:[self getSearchSettings] completion:completion];
 }
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings completion:(void (^)(OASearchResultCollection *))completion
+{
+    OASearchSettings *settings = [[OASearchSettings alloc] initWithSettings:searchSettings];
+    dispatch_async(_taskQueue, ^{
+        OASearchResultCollection *collection = nil;
+        @try
+        {
+            collection = [self performShallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:settings];
+        }
+        @catch (NSException *error)
+        {
+            NSLog(@"OASearchUICore.shallowSearchAsync error %@", error);
+        }
+        if (completion)
+            completion(collection);
+    });
+}
+
+- (OASearchResultCollection *) performShallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
 {
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)
@@ -858,6 +898,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     [_apis addObject:api];
 }
 
+
+- (OASearchResultCollection *)createResultCollectionForPhrase:(OASearchPhrase *)phrase api:(id)api
+{
+    return [[OASearchResultCollection alloc] initWithPhrase:phrase];
+}
 
 - (OASearchResultCollection *) getCurrentSearchResult
 {

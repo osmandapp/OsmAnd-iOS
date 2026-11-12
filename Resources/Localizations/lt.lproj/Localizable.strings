@@ -1640,8 +1640,8 @@
 "route_maneuvers_desc" = "Navigacijos valdikliai įjungiami navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimo arba likęs laikas, kiti posūkiai, kryptis, esamos gatvės pavadinimas, eismo juostų informacija, maksimalus greitis, artėjimo įspėjimai, LV, kelio taškai.";
 "navigation_points_desc" = "Navigacijos valdikliai yra įjungti navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimas ar likęs laikas, kiti posūkiai, posūkis, esamos/kitos gatvės pavadinimas, juostos informacija, maksimalus greitis, įspėjimai apie artėjimą, LV, kelio taškai.";
 "magnetic_bearing_widget_desc" = "Kampas tarp magnetinės šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
-"routing_attr_avoid_cobblestone_description" = "Vengti trinkelių";
-"routing_attr_avoid_cobblestone_name" = "Vengti trinkelių";
+"routing_attr_avoid_cobblestone_description" = "Vengti lauko akmenų grindinio";
+"routing_attr_avoid_cobblestone_name" = "Vengti lauko akmenų grindinio";
 "track_3d_empty_view_description" = "Naršykite trasą interaktyviu 3D formatu! Vizualizuokite aukštį, greitį ir daugiau tiesiogiai žemėlapyje.";
 "auto_zoom" = "Automatinis priartinimas";
 "default_buttons" = "Numatytieji mygtukai";
@@ -1752,3 +1752,5 @@
 "trace_rendering" = "Techninė atvaizdavimo informacija";
 "x" = "X (buvęs Twitter)";
 "poi_cuisine" = "Virtuvė";
+"routing_attr_avoid_sett_name" = "Be akmens trinkelių";
+"routing_attr_avoid_sett_description" = "Vengia akmens trinkelių";

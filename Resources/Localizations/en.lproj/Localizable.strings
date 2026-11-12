@@ -570,6 +570,7 @@
 "default_speed_system_descr" = "Define unit of speed.";
 "speed_limit_exceed" = "Speed limit tolerance";
 "speed_limit_exceed_message" = "Choose speed limit tolerance margin, above which you will receive a voice warning.";
+"selected_value" = "Selected value";
 "wake_on_voice" = "Turn screen on";
 "wake_on_voice_descr" = "Turn on device screen (if off) when approaching a turn.";
 "voice_pref_title" = "Voice";
@@ -1915,6 +1916,8 @@
 
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
+"osm_note_upload_uncertain_message" = "The result of a previous note upload could not be confirmed. The note may already exist on OpenStreetMap. Sending again may create a duplicate note. Choose Retry to check again without resending, or Send again to upload it again.";
+"osm_note_send_again" = "Send again";
 "exit_without_saving" = "Exit without saving?";
 "unsaved_changes_will_be_lost" = "Any unsaved changes will be lost. Continue?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
@@ -1933,6 +1936,9 @@
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
 "routing_engine_shared" = "Route with OsmAndShared";
+"search_engine_shared" = "Search with OsmAndShared";
+"use_spatial_search" = "Use spatial text search";
+"use_spatial_search_description" = "Replace the standard quick search APIs with the experimental spatial text search engine.";
 "auto_zoom_smooth" = "Smooth";
 "auto_zoom_discrete" = "Discrete";
 "osmand_depelopment_simulate_location_section" = "Simulate";
@@ -4899,6 +4905,7 @@
 "astro_offline_knowledge_base_description" = "Download the extended database to access Wikipedia articles and deep sky catalogs offline.";
 "astro_today_visibility" = "Today visibility";
 "astro_visibility_show_today" = "Show today visibility";
+"astro_city_time_utc_offset" = "%1$@ time (%2$@)";
 "astro_schedule_show_current_week" = "Show current week";
 "astro_schedule_next_day_note" = "⁺¹ Next day.";
 "astro_rise" = "Rise";
@@ -5099,3 +5106,5 @@
 "opening_hours_public_holiday" = "Public holidays";
 "opening_hours_school_holiday" = "School holidays";
 "opening_hours_easter" = "Easter";
+"download_complete" = "Download complete";
+"download_complete_with_errors" = "Download complete with errors";

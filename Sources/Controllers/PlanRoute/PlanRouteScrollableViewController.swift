@@ -1138,6 +1138,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
 
     private func crosshairCenterY(sheetHeight: CGFloat, screenHeight: CGFloat? = nil) -> CGFloat {
         let targetScreenHeight = screenHeight ?? currentScreenHeight
+        guard !usesSidePanelLayout else { return targetScreenHeight / 2 }
         let coveredHeight: CGFloat
         if pointEditingView == nil {
             coveredHeight = min(sheetHeight, height(for: .expanded, screenHeight: targetScreenHeight))

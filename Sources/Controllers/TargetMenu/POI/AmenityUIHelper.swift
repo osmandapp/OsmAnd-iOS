@@ -115,8 +115,8 @@ final class AmenityUIHelper: NSObject {
                 icon = .icDescription
             }
             // "Name: value" values: "Smoking" over "No", "Rented boats" over "Kayaks"
-            let label = PoiAdditionalLabels.getCardGroupLabel(categoryTypes)
-            let row = OAAmenityInfoRow(key: entry.key, icon: icon, textPrefix: label.prefix ?? pType.poiAdditionalCategoryLocalized, text: label.text, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(entry.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
+            let group = AmenityTagEntriesBuilder.shared.buildPoiTypesGroupEntry(key: entry.key, name: pType.name, textPrefix: pType.poiAdditionalCategoryLocalized, types: entry.collapsablePoiTypes ?? [], typeEntries: entry.collapsableEntries, order: entry.order, iconId: 0, iconNameCandidates: [], fallbackIconId: 0, poiAdditional: true, collapsableCategory: entry.collapsableCategory)
+            let row = OAAmenityInfoRow(key: entry.key, icon: icon, textPrefix: group.textPrefix, text: group.text, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(entry.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
             row.collapsed = collapsableView?.collapsed ?? true
             return row
         }

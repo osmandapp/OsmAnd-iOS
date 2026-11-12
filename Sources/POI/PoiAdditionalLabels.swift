@@ -21,7 +21,6 @@ final class PoiAdditionalLabels: NSObject {
                                                    "separated", "isolated", "dedicated"]
     // states that mean the property is there
     private static let acceptedValues: Set<String> = [yes, "only", "designated"]
-    private static let separator = " • "
 
     // [name, value] or nil if the translation is not "Name: value"
     static func splitNameValue(_ translation: String?) -> [String]? {
@@ -116,47 +115,11 @@ final class PoiAdditionalLabels: NSObject {
         }
     }
 
-    // POI card: values of one group. Values of one property: "Smoking" over "No" or "Allowed • Outside only";
-    // options of a list keep the group name (nil prefix) over "Kayaks • Canoe: limited • Cash".
-    static func getCardGroupLabel(_ types: [OAPOIType]) -> (prefix: String?, text: String) {
-        let nameValues = types.map { splitNameValue($0.nameLocalized) }
-        if let first = types.first, let propertyName = nameValues[0]?[0], isOneTagGroup(first),
-           nameValues.allSatisfy({ $0?[0].caseInsensitiveCompare(propertyName) == .orderedSame }) {
-            let values = nameValues.compactMap { $0.map { OAUtilities.capitalizeFirstLetter($0[1]) ?? $0[1] } }
-            return (propertyName, values.joined(separator: separator))
-        }
-        return (nil, types.map { getGroupValueLabel($0) }.joined(separator: separator))
-    }
-
-    // A value inside a group of several values: "Kayaks" for yes, "Kayaks: limited" otherwise, "Cash" as it is.
-    static func getGroupValueLabel(_ type: OAPOIType) -> String {
-        let translation = type.nameLocalized ?? ""
-        guard let nameValue = splitNameValue(translation) else { return translation }
-        return isYesValue(type) ? nameValue[0] : translation
-    }
-
     // A button of an expanded group, by the shared rules as android: "Not allowed" for "Smoking: not allowed".
     static func getButtonLabel(_ type: OAPOIType) -> String {
         guard let sharedType = OAPOIHelper.sharedInstance().kPoiTypes.getAnyPoiAdditionalTypeByKey(name: type.name) as? PoiType else {
             return type.nameLocalized ?? ""
         }
         return AmenityTagEntriesBuilder.shared.getValueLabelParts(type: sharedType).tagValue
-    }
-
-    // all values of the group are one tag (smoking=yes/no/outside), not a list of options (boat:kayak:rental, ...)
-    private static func isOneTagGroup(_ type: OAPOIType) -> Bool {
-        guard let category = type.poiAdditionalCategory, let parent = type.parentType else { return true }
-        let additionals = (parent.poiAdditionals ?? []) + (parent.poiAdditionalsCategorized ?? [])
-        let tags = Set(additionals.filter { $0.poiAdditionalCategory == category }.compactMap { $0.getOsmTag() })
-        return tags.count <= 1
-    }
-
-    private static func isYesValue(_ type: OAPOIType) -> Bool {
-        if type.getOsmValue() == yes {
-            return true
-        }
-        let enTranslation = type.nameLocalizedEN ?? ""
-        let value = splitNameValue(enTranslation)?[1] ?? enTranslation
-        return yes.caseInsensitiveCompare(value) == .orderedSame
     }
 }

@@ -101,6 +101,8 @@ static const NSTimeInterval kSynthesizerStopTimeout = 1.0;
     if (_currentUtterance)
         return;
 
+    if ([_vrt isMute])
+        [_pendingPhrases removeAllObjects];
     if (_pendingPhrases.count > 0 && [self hasActiveCall])
     {
         NSLog(@"[OATTSCommandPlayerImpl] Cannot play commands during a phone call");
@@ -167,14 +169,20 @@ static const NSTimeInterval kSynthesizerStopTimeout = 1.0;
 
 - (void)replaceSynthesizer
 {
+    [self discardSynthesizer];
+    _synthesizer = [self createSynthesizer];
+}
+
+- (void)discardSynthesizer
+{
     AVSpeechSynthesizer *synthesizer = _synthesizer;
+    _synthesizer = nil;
     dispatch_block_t stopSpeaking = dispatch_block_create((dispatch_block_flags_t)0, ^{
         [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
     });
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), stopSpeaking);
     if (dispatch_block_wait(stopSpeaking, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSynthesizerStopTimeout * NSEC_PER_SEC))) != 0)
         NSLog(@"[OATTSCommandPlayerImpl] Speech synthesizer did not stop in %.0f s", kSynthesizerStopTimeout);
-    _synthesizer = [self createSynthesizer];
 }
 
 - (void)stopSynthesizer:(AVSpeechSynthesizer *)synthesizer
@@ -247,7 +255,7 @@ static const NSTimeInterval kSynthesizerStopTimeout = 1.0;
             return;
 
         self->_currentUtterance = nil;
-        [self->_synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+        [self discardSynthesizer];
         [self deactivateAudioSession];
     });
 }

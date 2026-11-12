@@ -4854,10 +4854,10 @@ typedef enum
 
 #pragma mark - OAGpxWptEditingHandlerDelegate
 
-- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
+- (BOOL)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
     if (![_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName])
-        return;
+        return NO;
     gpxWpt.originalPoint = _mapViewController.foundWpt;
     [_mapViewController selectWpt:gpxWpt];
 
@@ -4875,12 +4875,15 @@ typedef enum
             [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
         [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     }
+    return YES;
 }
 
-- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (BOOL)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
-    [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
+    if (![_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap])
+        return NO;
     [self.targetMenuView applyTargetObjectChanges];
+    return YES;
 }
 
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
@@ -4888,13 +4891,9 @@ typedef enum
     [_mapViewController deleteWpts:@[gpxWptItem] docPath:docPath];
 }
 
-- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
+- (BOOL)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
-    
-    if (gpxWptItem.point)
-    {
-        [_mapViewController updateWpts:@[gpxWptItem] docPath:gpxWptItem.docPath updateMap:YES];
-    }
+    return gpxWptItem.point && [_mapViewController updateWpts:@[gpxWptItem] docPath:gpxWptItem.docPath updateMap:YES];
 }
 
 #pragma mark - OAOpenAddTrackDelegate

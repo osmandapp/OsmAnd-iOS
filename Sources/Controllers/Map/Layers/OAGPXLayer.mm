@@ -2317,7 +2317,7 @@ colorizationScheme:(int)colorizationScheme
     return NO;
 }
 
-- (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
@@ -2326,8 +2326,13 @@ colorizationScheme:(int)colorizationScheme
         if (item.docPath.length > 0)
         {
             [item prepareForEditing];
+            CLLocationCoordinate2D previousPosition = item.point.position;
             item.point.position = position;
-            [self.mapViewController updateWpts:@[item] docPath:item.docPath updateMap:YES];
+            if (![self.mapViewController updateWpts:@[item] docPath:item.docPath updateMap:YES])
+            {
+                item.point.position = previousPosition;
+                return NO;
+            }
         }
         else
         {
@@ -2336,7 +2341,9 @@ colorizationScheme:(int)colorizationScheme
             item.point.position = position;
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
+        return YES;
     }
+    return NO;
 }
 
 - (UIImage *)getPointIcon:(id)object

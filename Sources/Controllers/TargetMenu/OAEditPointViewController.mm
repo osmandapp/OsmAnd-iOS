@@ -1084,7 +1084,6 @@
 
 - (void)onRightNavbarButtonPressed
 {
-    _isUnsaved = NO;
     if (_wasChanged || _isNewItemAdding)
     {
         OAPointEditingData *data = [[OAPointEditingData alloc] init];
@@ -1126,7 +1125,8 @@
             data.name = savingName;
             data.category = savingGroup;
 
-            [_pointHandler savePoint:data newPoint:_isNewItemAdding];
+            if (![self savePoint:data newPoint:_isNewItemAdding])
+                return;
         }
         else
         {
@@ -1134,7 +1134,8 @@
             savingName = [savingName trim];
             data.name = savingName;
             data.category = savingGroup;
-            [_pointHandler savePoint:data newPoint:NO];
+            if (![self savePoint:data newPoint:NO])
+                return;
         }
         if (_editPointType == EOAEditPointTypeFavorite && _isNewColorSelected)
             [_appearanceCollection selectColor:_selectedColorItem];
@@ -1143,8 +1144,19 @@
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
         }
     }
+    _isUnsaved = NO;
     [self.delegate saveTapped];
     [self dismissViewController];
+}
+
+- (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
+{
+    if ([_pointHandler savePoint:data newPoint:newPoint])
+        return YES;
+
+    _isUnsaved = YES;
+    _renamedPointAlertMessage = nil;
+    return NO;
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
@@ -1349,7 +1361,8 @@
     {
         if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-        [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
+        if (![((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES])
+            _isUnsaved = YES;
         _selectedWaypointGroupKey = editedGroupName;
     }
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];

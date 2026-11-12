@@ -273,7 +273,7 @@
     return [_gpxWpt.point getAddress];
 }
 
-- (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
+- (BOOL)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save
 {
     _gpxWpt.point.category = groupName.length > 0 ? groupName : nil;
     OASInt *colorToSave = [[OASInt alloc] initWithInt:[color toARGBNumber]];
@@ -295,8 +295,7 @@
         _newGroupColor = nil;
     }
 
-    if (save && self.gpxWptDelegate)
-        [self.gpxWptDelegate saveItemToStorage:_gpxWpt];
+    return !save || [self.gpxWptDelegate saveItemToStorage:_gpxWpt];
 }
 
 - (void)deleteItem
@@ -310,7 +309,7 @@
     [self deleteItem];
 }
 
-- (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
+- (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
     [_gpxWpt.point setName:data.name.length > 0 ? data.name : nil];
     [_gpxWpt.point setDesc:data.descr.length > 0 ? data.descr : nil];
@@ -324,16 +323,9 @@
     
     _gpxWpt.docPath = _gpxFileName;
 
-    if (newPoint)
-    {
-        if (self.gpxWptDelegate)
-            [self.gpxWptDelegate saveGpxWpt:_gpxWpt gpxFileName:_gpxFileName];
-    }
-    else
-    {
-        if (self.gpxWptDelegate)
-            [self.gpxWptDelegate updateGpxWpt:_gpxWpt docPath:_gpxFileName updateMap:YES];
-    }
+    return newPoint
+        ? [self.gpxWptDelegate saveGpxWpt:_gpxWpt gpxFileName:_gpxFileName]
+        : [self.gpxWptDelegate updateGpxWpt:_gpxWpt docPath:_gpxFileName updateMap:YES];
 }
 
 @end

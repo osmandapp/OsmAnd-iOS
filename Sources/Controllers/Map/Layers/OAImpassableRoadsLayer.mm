@@ -234,14 +234,16 @@ static const int START_ZOOM = 10;
     return [object isKindOfClass:OAAvoidRoadInfo.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
         OAAvoidRoadInfo *roadInfo = (OAAvoidRoadInfo *)object;
         [_avoidRoads removeImpassableRoad:roadInfo];
         [_avoidRoads addImpassableRoad:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] skipWritingSettings:NO appModeKey:nil];
+        return YES;
     }
+    return NO;
 }
 
 - (void)setPointVisibility:(id)object hidden:(BOOL)hidden

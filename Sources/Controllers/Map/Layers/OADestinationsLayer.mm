@@ -712,10 +712,10 @@
     return [object isKindOfClass:OADestination.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (!object || ![self isObjectMovable:object])
-        return;
+        return NO;
 
     OADestination *dest = (OADestination *)object;
     OADestination *destCopy = [dest copy];
@@ -747,6 +747,7 @@
         [strongSelf->_destinationLayerWidget moveMarker:-1];
         [strongSelf drawDestinationLines];
     }];
+    return YES;
 }
 
 - (UIImage *)getPointIcon:(id)object

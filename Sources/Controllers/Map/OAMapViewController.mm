@@ -3773,7 +3773,7 @@ static char kMapSourceUpdateQueueKey;
     self.foundWptDocPath = item.docPath;
 }
 
-- (BOOL) deleteFoundWpt
+- (BOOL)deleteFoundWpt
 {
     if (!self.foundWpt)
         return NO;
@@ -3781,7 +3781,8 @@ static char kMapSourceUpdateQueueKey;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        [helper deleteWpt:self.foundWpt];
+        if (![helper deleteWpt:self.foundWpt])
+            return NO;
         
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -4144,11 +4145,21 @@ static char kMapSourceUpdateQueueKey;
     if (docPath.length == 0)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        for (OAGpxWptItem *item in items)
+        if (deleting)
         {
-            if (deleting)
-                [helper deleteWpt:item.originalPoint];
-            else
+            NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithCapacity:items.count];
+            for (OAGpxWptItem *item in items)
+            {
+                if (!item.originalPoint)
+                    return NO;
+                [points addObject:item.originalPoint];
+            }
+            if (![helper deleteWpts:points])
+                return NO;
+        }
+        else
+        {
+            for (OAGpxWptItem *item in items)
             {
                 [helper saveWpt:item.point];
                 [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];

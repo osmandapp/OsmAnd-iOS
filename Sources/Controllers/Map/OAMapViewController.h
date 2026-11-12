@@ -122,7 +122,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (BOOL) findWpt:(CLLocationCoordinate2D)location;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
 - (void)selectWpt:(OAGpxWptItem *)item;
-- (BOOL) deleteFoundWpt;
+- (BOOL)deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(nullable NSString *)gpxFileName;
 - (NSArray<OASWptPt *> *)getPointsOf:(nullable NSString *)gpxFileName groupName:(NSString *)groupName;

@@ -73,8 +73,8 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
     int i = 0;
     for (OAPOIType *poiType in _poiTypes)
     {
-        // "Kayaks: yes" -> "Kayaks", like the values of the row
-        NSString *title = _isPoiAdditional ? [PoiAdditionalLabels getGroupValueLabel:poiType] : poiType.nameLocalized;
+        // "Kayaks: yes" -> "Kayaks", like the values of the row; "Smoking: not allowed" -> "Not allowed"
+        NSString *title = _isPoiAdditional ? [PoiAdditionalLabels getButtonLabel:poiType] : poiType.nameLocalized;
         NSString *value = i < _values.count ? _values[i] : nil;
         if (value.length > 0)
             title = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), title, value];

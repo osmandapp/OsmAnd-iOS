@@ -9,6 +9,8 @@
 // Labels of additional property values written as "Name: value" in phrases.xml ("Fridge: yes",
 // "Smoking: not allowed", "Kayaks: yes"). A translation without the separator is shown as it is.
 
+import OsmAndShared
+
 @objcMembers
 final class PoiAdditionalLabels: NSObject {
 
@@ -131,6 +133,14 @@ final class PoiAdditionalLabels: NSObject {
         let translation = type.nameLocalized ?? ""
         guard let nameValue = splitNameValue(translation) else { return translation }
         return isYesValue(type) ? nameValue[0] : translation
+    }
+
+    // A button of an expanded group, by the shared rules as android: "Not allowed" for "Smoking: not allowed".
+    static func getButtonLabel(_ type: OAPOIType) -> String {
+        guard let sharedType = OAPOIHelper.sharedInstance().kPoiTypes.getAnyPoiAdditionalTypeByKey(name: type.name) as? PoiType else {
+            return type.nameLocalized ?? ""
+        }
+        return AmenityTagEntriesBuilder.shared.getValueLabelParts(type: sharedType).tagValue
     }
 
     // all values of the group are one tag (smoking=yes/no/outside), not a list of options (boat:kayak:rental, ...)

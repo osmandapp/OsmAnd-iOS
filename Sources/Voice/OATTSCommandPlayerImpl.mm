@@ -20,6 +20,7 @@
 
 static const NSTimeInterval kSpeechProgressTimeout = 5.0;
 static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
+static const NSTimeInterval kSynthesizerStopTimeout = 1.0;
 
 @implementation OATTSCommandPlayerImpl {
     AVSpeechSynthesizer *_synthesizer;
@@ -166,7 +167,13 @@ static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
 
 - (void)replaceSynthesizer
 {
-    [self stopSynthesizer:_synthesizer];
+    AVSpeechSynthesizer *synthesizer = _synthesizer;
+    dispatch_block_t stopSpeaking = dispatch_block_create((dispatch_block_flags_t)0, ^{
+        [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    });
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), stopSpeaking);
+    if (dispatch_block_wait(stopSpeaking, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSynthesizerStopTimeout * NSEC_PER_SEC))) != 0)
+        NSLog(@"[OATTSCommandPlayerImpl] Speech synthesizer did not stop in %.0f s", kSynthesizerStopTimeout);
     _synthesizer = [self createSynthesizer];
 }
 

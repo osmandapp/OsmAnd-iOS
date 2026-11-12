@@ -46,6 +46,8 @@
                 <constraint firstItem="A1P-Vs-se2" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="Ghx-Lr-gQU"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="A1P-Vs-se2" secondAttribute="bottom" constant="8" id="Hfx-LJ-0Ns"/>
                 <constraint firstItem="OeK-3a-th4" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="AEY-gd-Mue"/>
+                <constraint firstItem="OeK-3a-th4" firstAttribute="top" relation="greaterThanOrEqual" secondItem="vUN-kp-3ea" secondAttribute="top" constant="8" id="Rmb-0h-gDj"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="OeK-3a-th4" secondAttribute="bottom" constant="8" id="Vcf-1d-aQz"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="OeK-3a-th4" secondAttribute="trailing" constant="20" id="AXx-Ra-aaO"/>
                 <constraint firstItem="OeK-3a-th4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" priority="1" constant="20" id="DeY-Yt-Vof"/>
                 <constraint firstItem="A1P-Vs-se2" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="NDs-8E-aUi"/>

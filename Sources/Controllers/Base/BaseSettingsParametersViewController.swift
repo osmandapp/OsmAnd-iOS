@@ -26,6 +26,8 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     
     var applyButton = UIButton(type: .system)
     var tableData = OATableDataModel()
+
+    private lazy var portraitTopConstraints: [NSLayoutConstraint] = [cancelButtonTopConstraint, resetButtonTopConstraint]
     
     override var initialMenuHeight: CGFloat {
         OAUtilities.calculateScreenHeight() / 2 + OAUtilities.getBottomMargin()
@@ -106,10 +108,9 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
             landscapeCancelTopConstraint = cancelButtonContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
             landscapeResetTopConstraint = resetButtonContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
         }
-        cancelButtonTopConstraint.isActive = !useMapTop
-        resetButtonTopConstraint.isActive = !useMapTop
-        landscapeCancelTopConstraint?.isActive = useMapTop
-        landscapeResetTopConstraint?.isActive = useMapTop
+        let landscapeTopConstraints = [landscapeCancelTopConstraint, landscapeResetTopConstraint].compactMap { $0 }
+        NSLayoutConstraint.deactivate(useMapTop ? portraitTopConstraints : landscapeTopConstraints)
+        NSLayoutConstraint.activate(useMapTop ? landscapeTopConstraints : portraitTopConstraints)
     }
 
     override func getToolbarHeight() -> CGFloat {

@@ -349,7 +349,6 @@ static NSString * const kFavoritesStorageChangedNotification = @"FavoritesStorag
                                   color:color
                                iconName:iconName
                      backgroundIconName:backgroundIconName];
-    [OAFavoritesHelper notifyFavoritesStorageChanged];
     [OAFavoritesHelper saveCurrentPointsIntoFile];
     return YES;
 }

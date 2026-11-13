@@ -140,12 +140,32 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         return UIMenu(title: "", children: [topMenu, bottomMenu])
     }
     
+    override func addIconToLastUsed(_ iconKey: String) {
+        // Match Android's icon keys; mx_ belongs to the drawable resource name.
+        super.addIconToLastUsed(iconKey.removePrefix("mx_"))
+    }
+
     override func saveLastUsed(_ icons: [String]) {
         OAAppSettings.sharedManager().lastUsedFavIcons.set(icons)
     }
     
     override func lastUsed() -> [String] {
-        return OAAppSettings.sharedManager().lastUsedFavIcons.get()
+        let storedIcons = OAAppSettings.sharedManager().lastUsedFavIcons.get()
+        var icons: [String] = []
+        // Older iOS builds stored both prefixed and unprefixed names. Keep the newest occurrence.
+        for storedIcon in storedIcons {
+            let iconKey = storedIcon.removePrefix("mx_")
+            if !iconKey.isEmpty && !icons.contains(iconKey) {
+                icons.append(iconKey)
+                if icons.count == lastUsedIconsLimit {
+                    break
+                }
+            }
+        }
+        if icons != storedIcons {
+            saveLastUsed(icons)
+        }
+        return icons
     }
 
     func setOriginalIcon(_ iconName: String) {

@@ -13,9 +13,8 @@ final class OutdatedMapsWarning: NSObject {
     private static var isChecking = false
 
     func showAfterUpgrade() {
-        // TODO: When the new search is on by default, remove the useSharedSearch check. If that happens after 5.5, set VERSION_5_5 in OsmAndAppImpl to that version. https://github.com/osmandapp/OsmAnd-iOS/issues/6134
         let settings = OAAppSettings.sharedManager()
-        guard settings.shouldShowOutdatedMapsWarning, settings.useSharedSearch.get(), !settings.shouldShowWhatsNewScreen, !AppEnvironment.isUITesting, !UIApplication.shared.isAnyCarPlaySceneActive, !Self.isChecking else { return }
+        guard settings.shouldShowOutdatedMapsWarning, settings.useSharedSearch.get(), settings.useSpatialTextSearch.get(), !settings.shouldShowWhatsNewScreen, !AppEnvironment.isUITesting, !UIApplication.shared.isAnyCarPlaySceneActive, !Self.isChecking else { return }
         Self.isChecking = true
         DispatchQueue.global(qos: .utility).async {
             let needsWarning = self.hasMapsWithoutSpatialSearch()

@@ -20,6 +20,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     private let freeRegion: OAWorldRegion
     private let region: OAWorldRegion
     private let mapsToDelete: [(region: OAWorldRegion, items: [OAResourceSwiftItem])]
+    private let mapPaths: [String: String]
     private let onReplaced: () -> Void
     
     private var step = Step.replace
@@ -48,6 +49,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         self.region = region
         self.onReplaced = onReplaced
         mapsToDelete = FreeVersionMapDownloads.shared.collectMapsToDelete(region)
+        mapPaths = OAObfFileList.pathsByResourceId(for: mapsToDelete.flatMap(\.items).map { $0.resourceId() })
         super.init()
     }
     
@@ -230,7 +232,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         setLoading(true)
         FreeVersionMapDownloads.shared.requestReplace(from: freeRegion, to: region) { [weak self] answer in
             guard let self else { return }
-            self.setLoading(false)
+            self.setLoading(answer == .ok)
             switch answer {
             case .ok:
                 self.applyReplace()
@@ -265,14 +267,16 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     
     private func applyReplace() {
         let items = mapsToDelete.flatMap(\.items)
-        FreeVersionMapDownloads.shared.replaceFreeRegion(region)
         FreeVersionMapDownloads.shared.cancelDownloads(otherThan: region)
-        dismiss(animated: true) { [onReplaced] in
-            if items.isEmpty {
-                onReplaced()
-            } else {
-                OAResourcesUISwiftHelper.deleteResources(of: items, progressHUD: nil, executeAfterSuccess: onReplaced)
+        OAResourcesUISwiftHelper.deleteResources(of: items, progressHUD: nil) {
+            guard self.mapPaths.count == items.count, self.mapPaths.values.allSatisfy({ access($0, F_OK) == -1 && errno == ENOENT }) else {
+                self.setLoading(false)
+                OAUtilities.showToast(localizedString("shared_string_unexpected_error"), details: nil, duration: 4, in: self.view)
+                return
             }
+
+            FreeVersionMapDownloads.shared.replaceFreeRegion(self.region)
+            self.dismiss(animated: true, completion: self.onReplaced)
         }
     }
     

@@ -870,7 +870,7 @@ typedef enum
                                                    withRegionName:YES
                                                  withResourceType:YES];
     
-    [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
+    [OAResourcesUIHelper startDownloadOf:item.resource resourceName:resourceName resourceItem:item onTaskCreated:nil onTaskResumed:nil];
 }
 
 - (void) findLocation:(BOOL)searchLocationByIp

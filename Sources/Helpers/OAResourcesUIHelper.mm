@@ -2140,6 +2140,9 @@ includeHidden:(BOOL)includeHidden
                     OALog(@"Failed to uninstall resource %@ from %@",
                             item.resourceId.toNSString(),
                             item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
+
+                    if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
+                        app.resourcesManager->rescanUnmanagedStoragePaths(true);
                 }
                 else
                 {

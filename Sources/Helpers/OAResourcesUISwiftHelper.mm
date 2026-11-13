@@ -338,12 +338,19 @@
 {
     NSMutableArray<OAResourceSwiftItem *> *swiftResources = [NSMutableArray array];
     OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager->isRepositoryAvailable())
+        return nil;
+
     for (const auto& localResource : app.resourcesManager->getLocalResources())
     {
         if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed || app.resourcesManager->isLocalResourceHidden(localResource))
             continue;
 
         if (localResource->type != OsmAndResourceType::MapRegion && localResource->type != OsmAndResourceType::RoadMapRegion)
+            continue;
+
+        const auto repositoryResource = app.resourcesManager->getResourceInRepository(localResource->id);
+        if (repositoryResource && repositoryResource->free)
             continue;
         
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];

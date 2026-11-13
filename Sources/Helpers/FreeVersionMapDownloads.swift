@@ -166,7 +166,8 @@ final class FreeVersionMapDownloads: NSObject {
     }
     
     func collectMapsToDelete(_ newRegion: OAWorldRegion) -> [(region: OAWorldRegion, items: [OAResourceSwiftItem])] {
-        collectLocalMaps().filter { $0.key.regionId != newRegion.regionId }.sorted { $0.key.compare($1.key) == .orderedAscending }.map { (region: $0.key, items: $0.value) }
+        guard let items = OAResourcesUISwiftHelper.getInstalledMapResources() else { return [] }
+        return collectLocalMaps(items).filter { $0.key.regionId != newRegion.regionId }.sorted { $0.key.compare($1.key) == .orderedAscending }.map { (region: $0.key, items: $0.value) }
     }
     
     func cancelDownloads(otherThan newRegion: OAWorldRegion) {
@@ -241,10 +242,9 @@ final class FreeVersionMapDownloads: NSObject {
         return nil
     }
     
-    private func collectLocalMaps() -> [OAWorldRegion: [OAResourceSwiftItem]] {
+    private func collectLocalMaps(_ items: [OAResourceSwiftItem]) -> [OAWorldRegion: [OAResourceSwiftItem]] {
         var result: [OAWorldRegion: [OAResourceSwiftItem]] = [:]
-        let items = OAResourcesUISwiftHelper.getInstalledMapResources().sorted { $0.resourceId() < $1.resourceId() }
-        for item in items {
+        for item in items.sorted(by: { $0.resourceId() < $1.resourceId() }) {
             if let region = getRegionByDownloadName(getDownloadName(item.resourceId())) {
                 result[region, default: []].append(item)
             }
@@ -254,10 +254,10 @@ final class FreeVersionMapDownloads: NSObject {
     }
     
     private func migrateIfNeeded() {
-        guard preference(Self.migratedKey) as? Bool != true, isFreeVersion, isRegionsLoaded else { return }
+        guard preference(Self.migratedKey) as? Bool != true, isFreeVersion, isRegionsLoaded, let items = OAResourcesUISwiftHelper.getInstalledMapResources() else { return }
         edit { $0[Self.migratedKey] = true }
         guard (preference(Self.regionKey) as? String ?? "").isEmpty else { return }
-        let mapSizes = collectLocalMaps().mapValues { items in items.reduce(0) { $0 + $1.size() } }
+        let mapSizes = collectLocalMaps(items).mapValues { items in items.reduce(0) { $0 + $1.size() } }
         if let region = getLocationRegion(Array(mapSizes.keys)) ?? mapSizes.max(by: { $0.value < $1.value })?.key {
             storeFreeRegion(region)
         }

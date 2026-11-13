@@ -41,12 +41,14 @@ final class PlanRouteGroupData: NSObject {
     let distance: Double
     let lastGlobalIndex: Int
     let points: [PlanRoutePointData]
+    let profilePointIndexes: [NSNumber]
     
-    init(appMode: OAApplicationMode?, distance: Double, lastGlobalIndex: Int, points: [PlanRoutePointData]) {
+    init(appMode: OAApplicationMode?, distance: Double, lastGlobalIndex: Int, points: [PlanRoutePointData], profilePointIndexes: [NSNumber]) {
         self.appMode = appMode
         self.distance = distance
         self.lastGlobalIndex = lastGlobalIndex
         self.points = points
+        self.profilePointIndexes = profilePointIndexes
     }
 }
 

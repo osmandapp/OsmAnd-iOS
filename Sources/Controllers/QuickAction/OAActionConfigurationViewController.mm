@@ -44,10 +44,13 @@
 #import "GeneratedAssetSymbols.h"
 
 #import <AudioToolbox/AudioServices.h>
+#import <math.h>
 
 #define KEY_MESSAGE @"message"
 
 @interface OAActionConfigurationViewController () <OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate, OAKeyboardHintBarDelegate, ActionAddTerrainColorSchemeDelegate>
+
+- (CGFloat)footerRightSafeInset;
 
 @end
 
@@ -71,6 +74,7 @@
     OAEditPOIData *_poiData;
     
     BOOL _keyAssignmentFlow;
+    CGFloat _footerRightInset;
 }
 
 #pragma mark - Initialization
@@ -144,6 +148,26 @@
     
     _hintView = [[OAKeyboardHintBar alloc] init];
     _hintView.delegate = self;
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGFloat rightInset = [self footerRightSafeInset];
+    if (fabs(rightInset - _footerRightInset) > 0.5)
+    {
+        _footerRightInset = rightInset;
+        for (NSInteger section = 0; section < self.tableView.numberOfSections; section++)
+        {
+            OATableViewCustomFooterView *footer = (OATableViewCustomFooterView *)[self.tableView footerViewForSection:section];
+            if ([footer isKindOfClass:OATableViewCustomFooterView.class])
+                footer.contentRightInset = rightInset;
+        }
+        [UIView performWithoutAnimation:^{
+            [self.tableView beginUpdates];
+            [self.tableView endUpdates];
+        }];
+    }
 }
 
 #pragma mark - Base UI
@@ -300,6 +324,7 @@
         text = @"";
     
     OATableViewCustomFooterView *vw = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    vw.contentRightInset = [self footerRightSafeInset];
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
@@ -322,6 +347,16 @@
     return vw;
 }
 
+- (CGFloat)footerRightSafeInset
+{
+    UIWindow *window = self.view.window;
+    if (!window)
+        return MAX(self.view.safeAreaInsets.right, self.tableView.safeAreaInsets.right);
+    CGRect tableFrame = [self.tableView convertRect:self.tableView.bounds toView:window];
+    CGFloat safeRight = CGRectGetMaxX(window.bounds) - window.safeAreaInsets.right;
+    return MAX(MAX(self.view.safeAreaInsets.right, self.tableView.safeAreaInsets.right), MAX(0., CGRectGetMaxX(tableFrame) - safeRight));
+}
+
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
     NSString *title = _data.allKeys[section];
@@ -342,7 +377,9 @@
     }
     else
     {
-        return [OATableViewCustomFooterView getHeight:url ? [NSString stringWithFormat:@"%@ %@", text, OALocalizedString(@"shared_string_read_more")] : text width:self.tableView.bounds.size.width];
+        return [OATableViewCustomFooterView getHeight:url ? [NSString stringWithFormat:@"%@ %@", text, OALocalizedString(@"shared_string_read_more")] : text
+                                             width:self.tableView.bounds.size.width
+                                 contentRightInset:[self footerRightSafeInset]];
     }
 }
 

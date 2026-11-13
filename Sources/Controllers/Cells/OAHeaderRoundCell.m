@@ -30,7 +30,7 @@
 
 - (void) applyCornerRadius
 {
-    CGFloat width = self.bounds.size.width - 40.;
+    CGFloat width = self.contentView.bounds.size.width - 40.;
     CGFloat height = self.bounds.size.height;
     _contentContainer.frame = CGRectMake(20., 0., width, height);
     UIRectCorner corners;

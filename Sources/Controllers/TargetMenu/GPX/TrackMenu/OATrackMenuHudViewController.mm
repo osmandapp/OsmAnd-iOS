@@ -3190,7 +3190,7 @@
     if ([self shouldScrollInAllModes])
         return;
 
-    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != [OAUtilities getStatusBarHeight])
+    if (scrollView.contentOffset.y <= 0 || self.contentContainer.frame.origin.y != self.view.safeAreaInsets.top)
         [scrollView setContentOffset:CGPointZero animated:NO];
 
     BOOL shouldShow = self.tableView.contentOffset.y > 0;

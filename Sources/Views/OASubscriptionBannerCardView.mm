@@ -123,16 +123,26 @@
     [self updateFrame];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self updateFrame];
+    self.contentView.frame = self.bounds;
+}
+
 - (void)updateFrame
 {
+    CGFloat viewWidth = self.bounds.size.width > 0. ? self.bounds.size.width : DeviceScreenWidth;
+    CGFloat leftInset = self.safeAreaInsets.left;
+    CGFloat availableWidth = viewWidth - leftInset - self.safeAreaInsets.right;
     BOOL isFree = _type == EOASubscriptionBannerFree;
 
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleLabel.attributedText
-                                                  width:DeviceScreenWidth - [OAUtilities getLeftMargin] * 2 - kPaddingOnSideOfContent - 16. - kIconSideSize];
-    self.titleLabel.frame = CGRectMake([OAUtilities getLeftMargin] + 20., 16., titleSize.width, titleSize.height);
+                                                  width:availableWidth - kPaddingOnSideOfContent - 16. - kIconSideSize];
+    self.titleLabel.frame = CGRectMake(leftInset + 20., 16., titleSize.width, titleSize.height);
 
     CGSize buttonSize = [OAUtilities calculateTextBounds:[self.buttonView attributedTitleForState:UIControlStateNormal]
-                                                   width:DeviceScreenWidth - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent + 12.) * 2 - kButtonIconSideSize - 16.];
+                                                   width:availableWidth - (kPaddingOnSideOfContent + 12.) * 2 - kButtonIconSideSize - 16.];
 
     if (isFree && buttonSize.height < kButtonPrimaryHeight)
         buttonSize.height = kButtonPrimaryHeight;
@@ -147,12 +157,12 @@
 
     if (isFree || _type == EOASubscriptionBannerNoFree)
     {
-        self.iconView.frame = CGRectMake(DeviceScreenWidth - [OAUtilities getLeftMargin] - 10. - kIconSideSize, 16., kIconSideSize, kIconSideSize);
+        self.iconView.frame = CGRectMake(leftInset + availableWidth - 10. - kIconSideSize, 16., kIconSideSize, kIconSideSize);
         CGFloat imageBlockHeight = self.iconView.frame.origin.y + kIconSideSize + 12.;
         CGFloat textBlockHeight = self.titleLabel.frame.origin.y + titleSize.height + 3.;
         CGSize descriptionSize = [OAUtilities calculateTextBounds:self.descriptionLabel.attributedText
-                                                            width:DeviceScreenWidth - [OAUtilities getLeftMargin] * 2 - kPaddingOnSideOfContent - 16. - kIconSideSize];
-        self.descriptionLabel.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent, textBlockHeight, descriptionSize.width, descriptionSize.height);
+                                                            width:availableWidth - kPaddingOnSideOfContent - 16. - kIconSideSize];
+        self.descriptionLabel.frame = CGRectMake(leftInset + kPaddingOnSideOfContent, textBlockHeight, descriptionSize.width, descriptionSize.height);
         textBlockHeight += descriptionSize.height;
         textBlockHeight += 12.;
 
@@ -160,16 +170,16 @@
 
         if (isFree)
         {
-            self.separatorView.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent,
+            self.separatorView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
                                                   height,
-                                                  DeviceScreenWidth - [OAUtilities getLeftMargin] - kPaddingOnSideOfContent,
+                                                  availableWidth - kPaddingOnSideOfContent,
                                                   kSeparatorHeight);
             height += kSeparatorHeight;
         }
 
-        self.buttonView.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent,
+        self.buttonView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
                                            height,
-                                           DeviceScreenWidth - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent) * 2,
+                                           availableWidth - (kPaddingOnSideOfContent) * 2,
                                            buttonSize.height);
         height += buttonSize.height;
 
@@ -180,15 +190,15 @@
     }
     else if (_type == EOASubscriptionBannerUpdates)
     {
-        self.iconView.frame = CGRectMake(DeviceScreenWidth - [OAUtilities getLeftMargin] - 10. - kIconSideSize, 10., kIconSideSize, kIconSideSize);
+        self.iconView.frame = CGRectMake(leftInset + availableWidth - 10. - kIconSideSize, 10., kIconSideSize, kIconSideSize);
         CGFloat imageBlockHeight = self.iconView.frame.origin.y + kIconSideSize + 10.;
         CGFloat textBlockHeight = self.titleLabel.frame.origin.y + titleSize.height + 10.;
 
         height = textBlockHeight > imageBlockHeight ? textBlockHeight : imageBlockHeight;
 
-        self.buttonView.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent,
+        self.buttonView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
                                            height,
-                                           DeviceScreenWidth - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent) * 2,
+                                           availableWidth - (kPaddingOnSideOfContent) * 2,
                                            buttonSize.height);
         height += buttonSize.height;
         height += 16.;
@@ -202,8 +212,8 @@
     CGFloat iconWidth = isFree ? 0. : kButtonIconSideSize;
     
     CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
-                                                          width:DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 - iconWidth].width;
-    CGFloat imagePadding = DeviceScreenWidth - ((kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 + buttonTitleWidth + iconWidth);
+                                                          width:availableWidth - (kPaddingOnSideOfContent + contentHorizontalInset) * 2 - iconWidth].width;
+    CGFloat imagePadding = availableWidth - ((kPaddingOnSideOfContent + contentHorizontalInset) * 2 + buttonTitleWidth + iconWidth);
     
     UIButtonConfiguration *configuration = UIButtonConfiguration.plainButtonConfiguration;
     configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;

@@ -11,10 +11,14 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     @IBOutlet weak var cancelButtonContainerView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var cancelButtonLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var cancelButtonTopConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var resetButtonContainerView: UIView!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var resetButtonTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var resetButtonTopConstraint: NSLayoutConstraint!
+    private var landscapeCancelTopConstraint: NSLayoutConstraint?
+    private var landscapeResetTopConstraint: NSLayoutConstraint?
 
     let mapPanel: OAMapPanelViewController = OARootViewController.instance().mapPanel
     let hideDuration: TimeInterval = 0.2
@@ -22,6 +26,8 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     
     var applyButton = UIButton(type: .system)
     var tableData = OATableDataModel()
+
+    private lazy var portraitTopConstraints: [NSLayoutConstraint] = [cancelButtonTopConstraint, resetButtonTopConstraint]
     
     override var initialMenuHeight: CGFloat {
         OAUtilities.calculateScreenHeight() / 2 + OAUtilities.getBottomMargin()
@@ -40,7 +46,7 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     private let applyButtonHorizontalMargin: CGFloat = 20
     private let applyButtonHeight: CGFloat = 44
     private let additionalOffset: CGFloat = 10
-    private let buttonDefaultPadding = 13.0
+    private let landscapeCornerPadding: CGFloat = 40
     private let buttonCornerRadius: CGFloat = 12
     private let buttonPadding: CGFloat = 0
     
@@ -88,11 +94,23 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
     
     override func doAdditionalLayout() {
         let isRTL = cancelButtonContainerView.isDirectionRTL()
-        let landscapeWidthAdjusted = getLandscapeViewWidth() - OAUtilities.getLeftMargin() + additionalOffset
+        let landscape = isLandscape()
+        let landscapeWidthAdjusted = getLandscapeViewWidth() + additionalOffset
         let commonMargin = OAUtilities.getLeftMargin() + additionalOffset
         
-        cancelButtonLeadingConstraint.constant = isLandscape() ? (isRTL ? buttonDefaultPadding : landscapeWidthAdjusted) : commonMargin
-        resetButtonTrailingConstraint.constant = isLandscape() ? (isRTL ? landscapeWidthAdjusted : buttonDefaultPadding) : commonMargin
+        cancelButtonLeadingConstraint.constant = landscape ? (isRTL ? landscapeCornerPadding : landscapeWidthAdjusted) : commonMargin
+        resetButtonTrailingConstraint.constant = landscape ? (isRTL ? landscapeWidthAdjusted : landscapeCornerPadding) : commonMargin
+
+        // On a landscape phone the buttons are on the map side of the camera cutout.
+        // Anchor them to the view so a deep top safe area cannot cover map labels.
+        let useMapTop = landscape && !OAUtilities.isIPad()
+        if useMapTop && landscapeCancelTopConstraint == nil {
+            landscapeCancelTopConstraint = cancelButtonContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
+            landscapeResetTopConstraint = resetButtonContainerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
+        }
+        let landscapeTopConstraints = [landscapeCancelTopConstraint, landscapeResetTopConstraint].compactMap { $0 }
+        NSLayoutConstraint.deactivate(useMapTop ? portraitTopConstraints : landscapeTopConstraints)
+        NSLayoutConstraint.activate(useMapTop ? landscapeTopConstraints : portraitTopConstraints)
     }
 
     override func getToolbarHeight() -> CGFloat {
@@ -148,10 +166,9 @@ class BaseSettingsParametersViewController: OABaseScrollableHudViewController {
         toolBarView.addSubview(applyButton)
 
         NSLayoutConstraint.activate([
-            applyButton.centerXAnchor.constraint(equalTo: toolBarView.centerXAnchor),
             applyButton.topAnchor.constraint(equalTo: toolBarView.topAnchor),
-            applyButton.leadingAnchor.constraint(equalTo: toolBarView.leadingAnchor, constant: applyButtonHorizontalMargin),
-            applyButton.trailingAnchor.constraint(equalTo: toolBarView.trailingAnchor, constant: -applyButtonHorizontalMargin),
+            applyButton.leadingAnchor.constraint(equalTo: toolBarView.safeAreaLayoutGuide.leadingAnchor, constant: applyButtonHorizontalMargin),
+            applyButton.trailingAnchor.constraint(equalTo: toolBarView.safeAreaLayoutGuide.trailingAnchor, constant: -applyButtonHorizontalMargin),
             applyButton.heightAnchor.constraint(equalToConstant: applyButtonHeight)
         ])
     }

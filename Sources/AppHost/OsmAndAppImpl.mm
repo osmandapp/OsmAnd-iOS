@@ -1242,6 +1242,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 {
     NSString *voiceProvider = [[OAAppSettings sharedManager].voiceProvider get:applicationMode];
     OAVoiceRouter *vrt = [OARoutingHelper sharedInstance].getVoiceRouter;
+    [[vrt getPlayer] clear];
     [vrt setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:vrt voiceProvider:voiceProvider]];
 }
 

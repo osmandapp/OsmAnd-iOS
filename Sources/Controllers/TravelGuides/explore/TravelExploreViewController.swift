@@ -97,6 +97,13 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     override func getTitle() -> String! {
         localizedString("shared_string_travel_guides")
     }
+
+    override func hideFirstHeader() -> Bool {
+        guard tableData.sectionCount() > 0 else {
+            return true
+        }
+        return tableData.sectionData(for: 0).headerText.isEmpty
+    }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         if let optionsButton = createRightNavbarButton(nil, iconName: "ic_navbar_overflow_menu_stroke", action: #selector(onOptionsButtonClicked), menu: nil) {
@@ -419,6 +426,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                 } else {
                     cell.descriptionVisibility(false)
                 }
+                cell.textStackView.isHidden = false
                 
                 if let iconName = item.iconName {
                     cell.rightIconView.image = UIImage.templateImageNamed(iconName)

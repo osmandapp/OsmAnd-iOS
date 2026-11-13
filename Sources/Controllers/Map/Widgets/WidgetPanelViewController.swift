@@ -63,6 +63,17 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
                                                    layoutMode: ScreenLayoutMode?)?
     
     // swiftlint:enable all
+
+    var hasLeadingMarkerBar: Bool {
+        let visibleWidgets: [OABaseWidgetView]
+        if isHorizontal {
+            visibleWidgets = widgetPages.flatMap { $0 }
+        } else {
+            guard widgetPages.indices.contains(currentIndex) else { return false }
+            visibleWidgets = widgetPages[currentIndex]
+        }
+        return visibleWidgets.first { !$0.isHidden } is OADestinationBarWidget
+    }
     
     // MARK: - Init
     
@@ -428,6 +439,7 @@ extension WidgetPanelViewController {
     
     func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) {
         updateWidgetSizes()
+        delegate?.onPanelSizeChanged()
     }
     
     func widgetClicked(_ widget: OABaseWidgetView) {

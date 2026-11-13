@@ -894,6 +894,33 @@ static const CGFloat kDefaultBarButtonEdgeInset = 12.;
                                                           tintColor:nil
                                                     parentViewWidth:self.view.frame.size.width];
     }
+    if (tableHeaderView)
+    {
+        UIWindow *window = self.view.window;
+        CGRect viewFrame = window ? [self.view convertRect:self.view.bounds toView:window] : CGRectZero;
+        CGFloat rightInset = window
+                ? MAX(0., CGRectGetMaxX(viewFrame) - (CGRectGetMaxX(window.bounds) - window.safeAreaInsets.right))
+                : self.view.safeAreaInsets.right;
+        if (rightInset > 0.)
+        {
+            for (UIView *subview in tableHeaderView.subviews)
+            {
+                if (![subview isKindOfClass:UILabel.class])
+                    continue;
+                UILabel *label = (UILabel *)subview;
+                CGRect labelFrame = label.frame;
+                CGFloat bottomOffset = CGRectGetHeight(tableHeaderView.frame) - CGRectGetMaxY(labelFrame);
+                labelFrame.size.width = MAX(1., labelFrame.size.width - rightInset);
+                labelFrame.size.height = [OAUtilities calculateTextBounds:label.attributedText width:labelFrame.size.width].height;
+                label.frame = labelFrame;
+                label.autoresizingMask = UIViewAutoresizingNone;
+                CGRect headerFrame = tableHeaderView.frame;
+                headerFrame.size.height = CGRectGetMaxY(labelFrame) + bottomOffset;
+                tableHeaderView.frame = headerFrame;
+                break;
+            }
+        }
+    }
     if (![self useCustomTableViewHeader])
     {
         self.tableView.tableHeaderView = tableHeaderView;

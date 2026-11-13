@@ -1982,6 +1982,7 @@
 		DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC849B226CF967C00018091 /* OADownloadMapWidget.mm */; };
 		DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */; };
 		DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACBB96325D2BEA200378C47 /* CarPlay.framework */; };
+		6091CA11000000000000A001 /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6091CA11000000000000A002 /* CallKit.framework */; };
 		DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACF784327E3441600A8A218 /* OABackupHelper.mm */; };
 		DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2203D2913AF010052B967 /* OATableCollapsableRowData.m */; };
 		DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */; };
@@ -5524,6 +5525,7 @@
 		DAC849B326CF967C00018091 /* OADownloadMapWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMapWidget.h; sourceTree = "<group>"; };
 		DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMapWidget.xib; sourceTree = "<group>"; };
 		DACBB96325D2BEA200378C47 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
+		6091CA11000000000000A002 /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		DACF784227E3441600A8A218 /* OABackupHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupHelper.h; sourceTree = "<group>"; };
 		DACF784327E3441600A8A218 /* OABackupHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABackupHelper.mm; sourceTree = "<group>"; };
 		DAD2203C2913AF010052B967 /* OATableCollapsableRowData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableCollapsableRowData.h; sourceTree = "<group>"; };
@@ -5831,6 +5833,7 @@
 				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
 				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
 				DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */,
+				6091CA11000000000000A001 /* CallKit.framework in Frameworks */,
 				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
@@ -6810,6 +6813,7 @@
 				DA578C4B266263D2007A086E /* libqtpcre2.a */,
 				81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */,
 				DACBB96325D2BEA200378C47 /* CarPlay.framework */,
+				6091CA11000000000000A002 /* CallKit.framework */,
 				DA80DACE251E3440008E6267 /* UIKit.framework */,
 				DA80DAC5251E2D57008E6267 /* Foundation.framework */,
 				DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */,

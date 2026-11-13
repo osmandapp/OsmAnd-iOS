@@ -669,10 +669,6 @@ final class StarMapMyDataViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-    
-    deinit {
-        StarMapSearchProgressHUD.hide(from: view, animated: true)
-    }
 }
 
 // MARK: - UISearchBarDelegate

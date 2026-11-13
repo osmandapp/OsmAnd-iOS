@@ -52,10 +52,10 @@
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="kmc-u8-uR7" secondAttribute="bottom" constant="9" id="FOp-nC-Lfw"/>
                 <constraint firstItem="OKS-FL-Rwe" firstAttribute="centerY" secondItem="j5u-2X-hOB" secondAttribute="centerY" id="G2u-nZ-cBn"/>
                 <constraint firstItem="uq0-fh-3wu" firstAttribute="centerY" secondItem="j5u-2X-hOB" secondAttribute="centerY" priority="751" id="Rot-Hy-EmZ"/>
-                <constraint firstItem="kmc-u8-uR7" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leadingMargin" id="ZbY-6U-0nc"/>
+                <constraint firstItem="kmc-u8-uR7" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" constant="16" id="ZbY-6U-0nc"/>
                 <constraint firstItem="kmc-u8-uR7" firstAttribute="top" secondItem="uq0-fh-3wu" secondAttribute="bottom" constant="1" id="bqf-Cf-2aa"/>
                 <constraint firstItem="OKS-FL-Rwe" firstAttribute="leading" secondItem="uq0-fh-3wu" secondAttribute="trailing" constant="8" id="jDL-KZ-zMB"/>
-                <constraint firstItem="uq0-fh-3wu" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leadingMargin" id="nye-G8-f1g"/>
+                <constraint firstItem="uq0-fh-3wu" firstAttribute="leading" secondItem="j5u-2X-hOB" secondAttribute="leading" constant="16" id="nye-G8-f1g"/>
                 <constraint firstAttribute="trailing" secondItem="OKS-FL-Rwe" secondAttribute="trailing" constant="9" id="p3T-nb-YhR"/>
             </constraints>
             <size key="customSize" width="391" height="191"/>

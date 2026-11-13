@@ -471,7 +471,7 @@ final class MapHudLayout: NSObject {
             let available = max(0, getAdjustedWidth())
             let desiredWidth = OAUtilities.isPortrait() ? available : min(available, containerView.bounds.width * 0.5)
             let x = leftInset + externalLeftOverlayPx + (available - desiredWidth) / 2.0
-            let y = topInset
+            let y = max(topInset, max(containerView.safeAreaInsets.top, containerView.window?.safeAreaInsets.top ?? 0))
             let height = view.bounds.height > 0 ? view.bounds.height : 155.0
             let newFrame = CGRect(x: x, y: y, width: desiredWidth, height: height)
             if view.frame != newFrame {

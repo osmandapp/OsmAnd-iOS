@@ -11,6 +11,8 @@ import CoreLocation
 import OsmAndShared
 
 final class PlanRouteScrollableViewController: OABaseScrollableHudViewController {
+    private static let inlineLayoutMinimumWidth: CGFloat = 540
+    private static let inlineLayoutMaximumHeight: CGFloat = 520
     private static let topPartViewHeight: CGFloat = 50
     private static let sheetGrabberAreaHeight: CGFloat = 16
     private static let bottomToolbarReservedHeight: CGFloat = 60
@@ -31,8 +33,10 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private static let phoneMapToolbarBottomInset: CGFloat = 20
     private static let phoneMapToolbarHorizontalInset: CGFloat = 20
 
+    @objc private(set) var isSaving = false
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        .lightContent
+        OAAppSettings.sharedManager().isAppMapNightMode ? .lightContent : .darkContent
     }
 
     override var currentState: EOADraggableMenuState {
@@ -82,6 +86,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private let tabs = PlanRouteTab.allCases
     private let routeTypeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomQuestionmark)
     private weak var currentTabViewController: UIViewController?
+    private let savingProgressView = UIActivityIndicatorView(style: .large)
     private var sheetState: EOADraggableMenuState
     private var selectedTab: PlanRouteTab = .default
     private var sheetHeightConstraint: NSLayoutConstraint?
@@ -104,11 +109,15 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     private var routeTypeButtonBottomSheetLeftConstraint: NSLayoutConstraint?
     private var routeTypeButtonSidePanelLeftConstraint: NSLayoutConstraint?
     private var sheetPanRecognizer: UIPanGestureRecognizer?
+    private var inlineLayout = false
+    private var stackedConstraints: [NSLayoutConstraint] = []
+    private var inlineConstraints: [NSLayoutConstraint] = []
     private var panStartHeight: CGFloat = 0
     private var navControllerHistory: [UIViewController] = []
     private var trackMenuState: OATrackMenuViewControllerState?
     private var isForceHiding = false
     private var isClosing = false
+    private var isMapCursorSuspended = false
     private var isPendingSaveAsCopy = false
     private var pendingSegmentPointIndexes: [Int]?
     private var pointEditingView: OAInfoBottomView?
@@ -311,6 +320,25 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         reloadData()
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        let bounds = view.safeAreaLayoutGuide.layoutFrame
+        let minimumWidth = Self.inlineLayoutMinimumWidth
+        let maximumHeight = Self.inlineLayoutMaximumHeight
+        let inline = !usesSidePanelLayout && bounds.width >= minimumWidth
+            && view.bounds.height < maximumHeight && bounds.width > view.bounds.height
+        guard inline != inlineLayout, !stackedConstraints.isEmpty else { return }
+        inlineLayout = inline
+        NSLayoutConstraint.deactivate(inline ? stackedConstraints : inlineConstraints)
+        NSLayoutConstraint.activate(inline ? inlineConstraints : stackedConstraints)
+        let height = approximationHeight ?? pointEditingHeight ?? height(for: sheetState)
+        sheetHeightConstraint?.constant = height
+        routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
+            ? -routeTypeButtonBottomInset(for: sheetState) : -(height + 12)
+        updateCrosshair(sheetHeight: height)
+        refreshMapControls()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyLayoutMode(for: view.bounds.size)
@@ -326,7 +354,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         routeTypeButtonBottomConstraint?.constant = pointEditingHeight == nil
             ? -routeTypeButtonBottomInset(for: sheetState)
             : -(height + 12)
-        updateCrosshair(sheetHeight: height, preserveMapPosition: true)
+        updateCrosshair(sheetHeight: height, preserveMapPosition: !isMapCursorSuspended)
+        isMapCursorSuspended = false
         if animated {
             sheetView.transform = usesSidePanelLayout
                 ? CGAffineTransform(translationX: -sidePanelMapInset, y: 0)
@@ -402,7 +431,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     override func getNavbarHeight() -> CGFloat {
-        OAUtilities.getStatusBarHeight() + PlanRouteTopToolbarView.contentHeight
+        view.safeAreaInsets.top + PlanRouteTopToolbarView.contentHeight
     }
 
     override func getToolbarHeight() -> CGFloat {
@@ -481,6 +510,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     @objc func suspendMapCursor() {
+        isMapCursorSuspended = true
         // While a result menu is visible, the route layer follows the map center.
         dataProvider.setCrosshairPosition(screenPoint: .zero)
     }
@@ -561,7 +591,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         sheetView.addSubview(grabberView)
         NSLayoutConstraint.activate([
             grabberView.topAnchor.constraint(equalTo: sheetView.topAnchor, constant: 8),
-            grabberView.centerXAnchor.constraint(equalTo: sheetView.centerXAnchor),
+            grabberView.centerXAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.centerXAnchor),
             grabberView.widthAnchor.constraint(equalToConstant: 36),
             grabberView.heightAnchor.constraint(equalToConstant: 5)
         ])
@@ -604,14 +634,23 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             sheetView.addSubview(contentView)
         }
         sheetView.bringSubviewToFront(bottomToolbar)
-        NSLayoutConstraint.activate([
-            segmentControl.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
-            segmentControl.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor, constant: horizontalInset),
-            segmentControl.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor, constant: -horizontalInset),
-
+        inlineConstraints = [
+            topPartView.trailingAnchor.constraint(equalTo: segmentControl.leadingAnchor, constant: -8),
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.centerXAnchor),
+            segmentControl.centerYAnchor.constraint(equalTo: topPartView.centerYAnchor),
+            tabContainerView.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 12)
+        ]
+        stackedConstraints = [
+            topPartView.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor),
             tabContainerView.topAnchor.constraint(equalTo: segmentControl.bottomAnchor, constant: 12),
-            tabContainerView.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
-            tabContainerView.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
+            segmentControl.topAnchor.constraint(equalTo: topPartView.bottomAnchor, constant: 8),
+            segmentControl.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor, constant: horizontalInset)
+        ]
+        NSLayoutConstraint.activate(stackedConstraints)
+        NSLayoutConstraint.activate([
+            segmentControl.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor, constant: -horizontalInset),
+            tabContainerView.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor),
+            tabContainerView.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor),
             tabContainerView.bottomAnchor.constraint(equalTo: sheetView.bottomAnchor)
         ])
     }
@@ -641,8 +680,8 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         bottomToolbar.translatesAutoresizingMaskIntoConstraints = false
         sheetView.addSubview(bottomToolbar)
         NSLayoutConstraint.activate([
-            bottomToolbar.leadingAnchor.constraint(equalTo: sheetView.leadingAnchor),
-            bottomToolbar.trailingAnchor.constraint(equalTo: sheetView.trailingAnchor),
+            bottomToolbar.leadingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leadingAnchor),
+            bottomToolbar.trailingAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.trailingAnchor),
             bottomToolbar.bottomAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             bottomToolbar.heightAnchor.constraint(equalToConstant: PlanRouteButtonFactory.bottomButtonHeight)
         ])
@@ -1201,14 +1240,11 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         if shouldRestoreMapPosition {
             OAMapViewTrackingUtilities.instance().updateMapPosition()
         }
-        if shouldRestoreMapPosition {
-            OAMapViewTrackingUtilities.instance().updateMapPosition()
-        }
     }
 
     private func height(for state: EOADraggableMenuState, screenHeight: CGFloat? = nil) -> CGFloat {
         let targetScreenHeight = screenHeight ?? currentScreenHeight
-        let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + 8 + segmentControl.intrinsicContentSize.height + 12
+        let collapsed = Self.sheetGrabberAreaHeight + Self.topPartViewHeight + (inlineLayout ? 0 : 8 + segmentControl.intrinsicContentSize.height) + 12
             + PlanRouteButtonFactory.bottomButtonHeight + 8 + OAUtilities.getBottomMargin()
         switch state {
         case .initial:
@@ -1357,7 +1393,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleClose() {
-        guard !isClosing, presentedViewController == nil else { return }
+        guard !isClosing, !isSaving, presentedViewController == nil else { return }
         guard dataProvider.hasChanges else {
             hide()
             return
@@ -1375,7 +1411,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleSave() {
-        guard ensureRouteHasPoints() else { return }
+        guard !isClosing, !isSaving, presentedViewController == nil, ensureRouteHasPoints() else { return }
         let fileName: String
         let folder: String?
         switch dataProvider.mode {
@@ -1386,6 +1422,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
             fileName = existingFileName
             folder = dataProvider.editTrackFolder
         }
+        beginSaving()
         dataProvider.saveAs(fileName: fileName, folder: folder, showOnMap: true, simplified: false) { [weak self] success, filePath in
             self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
@@ -1408,6 +1445,7 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
     }
 
     private func handleMenuAction(_ action: PlanRouteMenuAction) {
+        guard !isClosing, !isSaving, presentedViewController == nil else { return }
         switch action {
         case .saveAs:
             guard ensureRouteHasPoints() else { return }
@@ -1539,7 +1577,26 @@ final class PlanRouteScrollableViewController: OABaseScrollableHudViewController
         present(alert, animated: true)
     }
 
+    private func beginSaving() {
+        isSaving = true
+        view.isUserInteractionEnabled = false
+        savingProgressView.frame = view.bounds
+        savingProgressView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        savingProgressView.isUserInteractionEnabled = false
+        view.addSubview(savingProgressView)
+        savingProgressView.startAnimating()
+    }
+
+    private func finishSaving() {
+        isSaving = false
+        view.isUserInteractionEnabled = !isClosing
+        savingProgressView.stopAnimating()
+        savingProgressView.removeFromSuperview()
+    }
+
     private func handleSaveResult(success: Bool, filePath: String?, fallbackFileName: String) {
+        finishSaving()
+        guard !isClosing else { return }
         guard success else {
             showSaveError()
             return
@@ -1670,6 +1727,8 @@ extension PlanRouteScrollableViewController: OAInfoBottomViewDelegate {
 // MARK: - OASaveTrackViewControllerDelegate
 extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
     func onSave(asNewTrack fileName: String, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
+        guard !isClosing, !isSaving else { return }
+        beginSaving()
         let onComplete: (Bool, String?) -> Void = { [weak self] success, filePath in
             self?.handleSaveResult(success: success, filePath: filePath, fallbackFileName: fileName)
         }
@@ -1687,8 +1746,12 @@ extension PlanRouteScrollableViewController: OASaveTrackViewControllerDelegate {
 // MARK: - OAOpenAddTrackDelegate
 extension PlanRouteScrollableViewController: OAOpenAddTrackDelegate {
     func onFileSelected(_ gpxFilePath: String) {
+        guard !isClosing, !isSaving else { return }
+        beginSaving()
         dataProvider.appendToTrack(filePath: gpxFilePath) { [weak self] success in
             guard let self else { return }
+            finishSaving()
+            guard !isClosing else { return }
             guard success else {
                 showSaveError()
                 return

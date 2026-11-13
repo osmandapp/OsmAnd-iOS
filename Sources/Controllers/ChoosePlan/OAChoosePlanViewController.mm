@@ -62,8 +62,10 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     UILabel *_labelNotIncluded;
     UIView *_lastIncludedView;
     UIView *_backgroundAboveScrollViewContainer;
+    UIView *_rightContentBackgroundView;
     NSArray<OAFeatureCardRow *> *_includedRows;
     NSArray<OAFeatureCardRow *> *_notIncludedRows;
+    UIBarButtonItem *_rightNavbarSafeAreaSpacer;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -116,6 +118,10 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
     self.scrollView.delegate = self;
     self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    _rightContentBackgroundView = [[UIView alloc] init];
+    _rightContentBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    _rightContentBackgroundView.userInteractionEnabled = NO;
+    [self.view insertSubview:_rightContentBackgroundView belowSubview:self.scrollView];
 
     NSString *title = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
     if (@available(iOS 26.0, *))
@@ -324,18 +330,42 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         extraNavigationBarHeight = [OAUtilities getTopMargin];
 
     navigationBarHeight = kNavigationBarHeight + extraNavigationBarHeight;
+    if (@available(iOS 26.0, *))
+    {
+        UINavigationBar *navigationBar = self.navigationController.navigationBar;
+        if (navigationBar && !navigationBar.hidden && navigationBar.window)
+        {
+            CGRect navigationBarFrame = [navigationBar convertRect:navigationBar.bounds toView:self.view];
+            navigationBarHeight = MAX(navigationBarHeight, CGRectGetMaxY(navigationBarFrame));
+        }
+    }
     CGFloat separatorHeight = [SeparatorAppearance thicknessForView:self.viewNavigationSeparator];
+    CGFloat rightSafeInset = MAX(self.view.safeAreaInsets.right, self.view.window.safeAreaInsets.right);
+    if (@available(iOS 26.0, *))
+        _rightNavbarSafeAreaSpacer.width = rightSafeInset > 0. ? kMargin : 0.;
 
     self.viewNavigationBar.frame = CGRectMake(0., 0., self.view.frame.size.width, navigationBarHeight);
     [self.view bringSubviewToFront:self.viewNavigationBar];
 
+    CGFloat previousTopInset = self.scrollView.contentInset.top;
+    BOOL wasAtTop = self.scrollView.contentOffset.y <= -previousTopInset + 1.;
     self.scrollView.contentInset = UIEdgeInsetsMake(
             navigationBarHeight,
             0.,
             [OAUtilities getBottomMargin] + 52.,
             0.
     );
-    self.scrollView.frame = CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height);
+    if (wasAtTop && fabs(previousTopInset - navigationBarHeight) > 0.5)
+        self.scrollView.contentOffset = CGPointMake(self.scrollView.contentOffset.x, -navigationBarHeight);
+    // Keep the scrolling cards clear of the side system UI on devices with
+    // an asymmetric safe area (for example iPhone Duo in landscape).
+    self.scrollView.frame = CGRectMake(0., 0.,
+            self.view.bounds.size.width - rightSafeInset,
+            self.view.bounds.size.height);
+    // The system navbar button slightly overlaps the content edge. Extend only
+    // its white background; keep the scrollable controls inside the safe area.
+    _rightContentBackgroundView.frame = CGRectMake(CGRectGetMaxX(self.scrollView.frame),
+            0., MIN(12., rightSafeInset), self.view.bounds.size.height);
     CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
     backgroundFrame.origin.y = -self.scrollView.contentInset.top;
     backgroundFrame.size.height = self.scrollView.contentInset.top;
@@ -349,7 +379,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     self.buttonNavigationBack.frame = frame;
 
     frame = self.buttonNavigationRestore.frame;
-    frame.origin.x = self.viewNavigationBar.frame.size.width - self.buttonNavigationRestore.frame.size.width - 10. - [OAUtilities getLeftMargin];
+    frame.origin.x = self.viewNavigationBar.frame.size.width - self.buttonNavigationRestore.frame.size.width - 10. - rightSafeInset;
     frame.origin.y = navigationBarHeight - navigationBarHeight / 2 - self.buttonNavigationRestore.frame.size.height / 2;
     if (_type == EOAChooseSubscription)
         frame.origin.y += [OAUtilities getTopMargin] / 2;
@@ -376,6 +406,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
 
 - (void)updateScrollViewContainerSize
 {
+    CGFloat contentWidth = self.scrollView.bounds.size.width;
     if ([self.scrollView isDirectionRTL])
     {
         _labelIncludes.transform = CGAffineTransformMakeScale(-1.0, 1.0);
@@ -392,32 +423,32 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         if ([view isKindOfClass:[OABaseFeatureCardView class]])
         {
             OABaseFeatureCardView *card = (OABaseFeatureCardView *) view;
-            y += [card updateFrame:y width:self.view.frame.size.width];
+            y += [card updateFrame:y width:contentWidth];
         }
     }
     self.scrollViewContainerView.frame = CGRectMake(
             0.,
             0.,
-            self.view.frame.size.width,
+            contentWidth,
             CGRectGetMaxY(self.scrollViewContainerView.subviews.lastObject.frame)
     );
 
     if (_type == EOAChooseSubscription)
     {
         CGSize subscriptionManagementSize = [OAUtilities calculateTextBounds:_subscriptionManagement.text
-                                                                       width:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                                       width:contentWidth - (20. + [OAUtilities getLeftMargin]) * 2
                                                                         font:_subscriptionManagement.font];
         _subscriptionManagement.frame = CGRectMake(
                 20. + [OAUtilities getLeftMargin],
                 self.scrollViewContainerView.frame.size.height + 20.,
-                self.view.frame.size.width - 20. * 2 - [OAUtilities getLeftMargin] * 2,
+                contentWidth - 20. * 2 - [OAUtilities getLeftMargin] * 2,
                 subscriptionManagementSize.height
         );
 
         [_buttonTermsOfUse updateFrame:_subscriptionManagement.frame.origin.y + _subscriptionManagement.frame.size.height
-                                 width:self.view.frame.size.width];
+                                 width:contentWidth];
         [_buttonPrivacyPolicy updateFrame:_buttonTermsOfUse.frame.origin.y + _buttonTermsOfUse.frame.size.height
-                                    width:self.view.frame.size.width];
+                                    width:contentWidth];
     }
 
     self.buttonRestore.frame = CGRectMake(
@@ -425,7 +456,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
             _type == EOAChooseSubscription
                     ? _buttonPrivacyPolicy.frame.origin.y + _buttonPrivacyPolicy.frame.size.height + 5.
                     : self.scrollViewContainerView.frame.size.height + 20.,
-            self.view.frame.size.width - kMargin * 2 - [OAUtilities getLeftMargin] * 2,
+            contentWidth - kMargin * 2 - [OAUtilities getLeftMargin] * 2,
             self.buttonRestore.frame.size.height
     );
 
@@ -434,7 +465,7 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         self.buttonLater.frame = CGRectMake(
                 kMargin + [OAUtilities getLeftMargin],
                 CGRectGetMaxY(self.buttonRestore.frame) + kMargin,
-                self.view.frame.size.width - kMargin * 2 - [OAUtilities getLeftMargin] * 2,
+                contentWidth - kMargin * 2 - [OAUtilities getLeftMargin] * 2,
                 self.buttonLater.frame.size.height
         );
     }
@@ -444,51 +475,51 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
         _viewIncludesSeparator.frame = CGRectMake(
                 0.,
                 self.buttonRestore.frame.origin.y + self.buttonRestore.frame.size.height + 20.,
-                self.view.frame.size.width,
+                contentWidth,
                 separatorHeight
         );
 
         CGSize includesSize = [OAUtilities calculateTextBounds:_labelIncludes.text
-                                                         width:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                         width:contentWidth - (20. + [OAUtilities getLeftMargin]) * 2
                                                           font:_labelIncludes.font];
         CGFloat includesVerticalOffset = includesSize.height > kMinRowHeight ? 9. : (kMinRowHeight - includesSize.height) / 2;
         _labelIncludes.frame = CGRectMake(
                 20. + [OAUtilities getLeftMargin],
                 _viewIncludesSeparator.frame.origin.y + separatorHeight,
-                self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2,
+                contentWidth - (20. + [OAUtilities getLeftMargin]) * 2,
                 includesSize.height + includesVerticalOffset * 2
         );
 
         y = _labelIncludes.frame.origin.y + _labelIncludes.frame.size.height;
         for (OAFeatureCardRow *cardRow in _includedRows)
         {
-            y += [cardRow updateFrame:y width:self.view.frame.size.width] + 36.;
+            y += [cardRow updateFrame:y width:contentWidth] + 36.;
         }
 
         BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
         if (isMaps)
         {
             CGSize notIncludedSize = [OAUtilities calculateTextBounds:_labelNotIncluded.text
-                                                                width:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                                width:contentWidth - (20. + [OAUtilities getLeftMargin]) * 2
                                                                  font:_labelNotIncluded.font];
             CGFloat notIncludedVerticalOffset = notIncludedSize.height > kMinRowHeight ? 9. : (kMinRowHeight - notIncludedSize.height) / 2;
             _labelNotIncluded.frame = CGRectMake(
                     20. + [OAUtilities getLeftMargin],
                     _includedRows.lastObject.frame.origin.y + _includedRows.lastObject.frame.size.height + 32.,
-                    self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2,
+                    contentWidth - (20. + [OAUtilities getLeftMargin]) * 2,
                     notIncludedSize.height + notIncludedVerticalOffset * 2
             );
 
             y = _labelNotIncluded.frame.origin.y + _labelNotIncluded.frame.size.height;
             for (OAFeatureCardRow *cardRow in _notIncludedRows)
             {
-                y += [cardRow updateFrame:y width:self.view.frame.size.width] + 36.;
+                y += [cardRow updateFrame:y width:contentWidth] + 36.;
             }
         }
     }
 
     self.scrollView.contentSize = CGSizeMake(
-            self.view.frame.size.width,
+            contentWidth,
             CGRectGetMaxY(_type == EOAChoosePlan ? self.buttonLater.frame : _lastIncludedView.frame) + kMargin
     );
 }
@@ -514,7 +545,9 @@ static const CGFloat kDefaultBarButtonHeight = 30.0;
     [rightButton addTarget:self action:@selector(helpButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *rightNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
-    [self.navigationItem setRightBarButtonItem:rightNavbarButton animated:YES];
+    _rightNavbarSafeAreaSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    _rightNavbarSafeAreaSpacer.width = 0.;
+    [self.navigationItem setRightBarButtonItems:@[_rightNavbarSafeAreaSpacer, rightNavbarButton] animated:YES];
 }
 
 - (void)updateAppearance

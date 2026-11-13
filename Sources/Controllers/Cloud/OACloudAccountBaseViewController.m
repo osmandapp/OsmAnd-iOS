@@ -80,6 +80,13 @@
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (fabs(CGRectGetWidth(self.tableView.tableFooterView.frame) - CGRectGetWidth(self.tableView.bounds)) > 0.5)
+        [self setupTableFooterView];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -131,7 +138,15 @@
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorActive] range:coloredRange];
-    UIView *footer = [OAUtilities setupTableHeaderViewWithText:attributedString tintColor:nil icon:nil iconFrameSize:0. iconBackgroundColor:nil iconContentMode:UIViewContentModeCenter];
+    UIView *footer = [OAUtilities setupTableHeaderViewWithText:attributedString
+                                                    tintColor:nil
+                                                         icon:nil
+                                                iconFrameSize:0.
+                                  iconBackgroundColor:nil
+                                              iconContentMode:UIViewContentModeCenter
+                                                 iconYOffset:0.
+                                         parentViewWidth:CGRectGetWidth(self.tableView.bounds)
+                                           contentInsets:UIEdgeInsetsZero];
     [footer addGestureRecognizer:_tapRecognizer];
     for (UIView *vw in footer.subviews)
     {
@@ -140,7 +155,12 @@
             UILabel *label = (UILabel *) vw;
             label.textAlignment = NSTextAlignmentCenter;
             label.autoresizingMask = UIViewAutoresizingNone;
-            label.frame = CGRectMake(20. + OAUtilities.getLeftMargin, 0., footer.frame.size.width - 40. - (OAUtilities.getLeftMargin * 2), footer.frame.size.height);
+            CGFloat labelWidth = footer.frame.size.width - 40.;
+            CGFloat labelHeight = [label sizeThatFits:CGSizeMake(labelWidth, CGFLOAT_MAX)].height;
+            label.frame = CGRectMake(20., 0., labelWidth, labelHeight + 16.);
+            CGRect footerFrame = footer.frame;
+            footerFrame.size.height = CGRectGetHeight(label.frame);
+            footer.frame = footerFrame;
         }
     }
     self.tableView.tableFooterView = footer;

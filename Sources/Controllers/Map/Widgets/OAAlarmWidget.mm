@@ -213,6 +213,10 @@
                 else
                     locImgId = ACImageNameWarningsRailways;
             }
+            else if (alarm.type == AIT_TRAM)
+            {
+                locImgId = ACImageNameWarningsTram;
+            }
             else if (alarm.type == AIT_PEDESTRIAN)
             {
                 if (americanSigns)

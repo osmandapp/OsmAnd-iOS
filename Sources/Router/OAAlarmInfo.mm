@@ -93,6 +93,10 @@
     {
         alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_RAILWAY locationIndex:locInd];
     }
+    else if ([@"railway" isEqualToString:ruleType.getTag] && [@"tram_level_crossing" isEqualToString:ruleType.getValue])
+    {
+        alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_TRAM locationIndex:locInd];
+    }
     else if ([@"crossing" isEqualToString:ruleType.getTag] && [@"uncontrolled" isEqualToString:ruleType.getValue])
     {
         alarmInfo = [[OAAlarmInfo alloc] initWithType:AIT_PEDESTRIAN locationIndex:locInd];
@@ -133,6 +137,7 @@
         case AIT_BORDER_CONTROL:
             return 3;
         case AIT_RAILWAY:
+        case AIT_TRAM:
             return 4;
         case AIT_TRAFFIC_CALMING:
             return 5;
@@ -183,6 +188,8 @@
             return @"MAXIMUM";
         case AIT_RED_LIGHT_CAMERA:
             return @"RED_LIGHT_CAMERA";
+        case AIT_TRAM:
+            return @"TRAM";
 
         default:
             return @"";
@@ -216,6 +223,8 @@
             return OALocalizedString(@"traffic_warning");
         case AIT_RED_LIGHT_CAMERA:
             return OALocalizedString(@"traffic_warning_red_light_camera");
+        case AIT_TRAM:
+            return OALocalizedString(@"traffic_warning_tram");
             
         default:
             return @"";

@@ -9,6 +9,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OASObfReaderRegistryObfFile;
+
 /**
  The installed obf files the shared travel code reads, by full path.
 
@@ -18,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface OAObfFileList : NSObject
 
+/** Installed OBF paths and routing eligibility, keyed by the app's resource identifiers. */
++ (NSDictionary<NSString *, OASObfReaderRegistryObfFile *> *)filesForSharedRegistry;
+
 /** Wikivoyage: the installed `.travel.obf` files. */
 + (NSArray<NSString *> *)travelFilePaths;
 
@@ -26,6 +31,30 @@ NS_ASSUME_NONNULL_BEGIN
  collections live in ordinary map files, not only in travel ones.
  */
 + (NSArray<NSString *> *)travelAndMapFilePaths;
+
+/**
+ What the search reads, by resource id: map regions, their wikipedia and live update files, and travel
+ files if asked for. In the order of `sortedForSearch:`.
+ */
++ (NSArray<NSString *> *)searchResourceIdsIncludingTravel:(BOOL)includeTravel;
+
+/** The same files as `searchResourceIdsIncludingTravel:`, by full path, those that are on disk. */
++ (NSArray<NSString *> *)searchFilePathsIncludingTravel:(BOOL)includeTravel;
+
+/** The installed files of these resources by full path, keyed by resource id; those not installed are left out. */
++ (NSDictionary<NSString *, NSString *> *)pathsByResourceIdFor:(NSArray<NSString *> *)resourceIds;
+
+/**
+ Resource ids of obf files in the order the search reads them: regions by name, each after its live
+ updates, the newest update first. The same order whatever order the ids come in.
+ */
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds;
+
+/**
+ The same files nearest first, for a search around a point: by `distance`, each region still right after
+ its live updates, the newest first. Updates whose region is not among the files come last.
+ */
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds distance:(double (^)(NSString *resourceId))distance;
 
 /**
  The installed file with this name, by full path, or nil when it is not installed.

@@ -495,47 +495,50 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
             NSString *names = [_url substringFromIndex:[@"osmand-show-poi:" length]];
             if ([names length] > 0) {
                 NSMutableArray *objects = [NSMutableArray array];
-                for (NSString *type : [names componentsSeparatedByString:@","])
+                dispatch_group_t searches = dispatch_group_create();
+                for (NSString *type in [names componentsSeparatedByString:@","])
                 {
-                    OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:type matcher:nil];
-                    if (res)
-                    {
+                    dispatch_group_enter(searches);
+                    [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:type matcher:nil completion:^(OASearchResultCollection *res) {
                         for (OASearchResult *sr in [res getCurrentSearchResults])
                         {
                             if ([[sr.localeName lowerCase] isEqualToString:type])
                                 [objects addObject:sr.object];
                         }
-                    }
+                        dispatch_group_leave(searches);
+                    }];
                 }
-                OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
-                OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-                [helper clearSelectedPoiFilters];
-                for (NSObject *object in objects)
-                {
-                    if ([object isKindOfClass:[OAPOIUIFilter class]])
+                dispatch_group_notify(searches, dispatch_get_main_queue(), ^{
+                    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+                    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+                    [helper clearSelectedPoiFilters];
+                    for (NSObject *object in objects)
                     {
-                        [helper addSelectedPoiFilter:(OAPOIUIFilter *) object];
+                        if ([object isKindOfClass:[OAPOIUIFilter class]])
+                        {
+                            [helper addSelectedPoiFilter:(OAPOIUIFilter *) object];
+                        }
+                        else if ([object isKindOfClass:[OAPOIFilter class]])
+                        {
+                            OAPOIFilter *poiFilter = (OAPOIFilter *) object;
+                            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
+                            [helper addSelectedPoiFilter:uiFilter];
+                        }
+                        else if ([object isKindOfClass:[OAPOIType class]])
+                        {
+                            OAPOIType *poiType = (OAPOIType *) object;
+                            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiType idSuffix:@""];
+                            [helper addSelectedPoiFilter:uiFilter];
+                        }
+                        else if ([object isKindOfClass:[OAPOICategory class]])
+                        {
+                            OAPOICategory *poiCategory = (OAPOICategory *) object;
+                            OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
+                            [helper addSelectedPoiFilter:uiFilter];
+                        }
                     }
-                    else if ([object isKindOfClass:[OAPOIFilter class]])
-                    {
-                        OAPOIFilter *poiFilter = (OAPOIFilter *) object;
-                        OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiFilter idSuffix:@""];
-                        [helper addSelectedPoiFilter:uiFilter];
-                    }
-                    else if ([object isKindOfClass:[OAPOIType class]])
-                    {
-                        OAPOIType *poiType = (OAPOIType *) object;
-                        OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiType idSuffix:@""];
-                        [helper addSelectedPoiFilter:uiFilter];
-                    }
-                    else if ([object isKindOfClass:[OAPOICategory class]])
-                    {
-                        OAPOICategory *poiCategory = (OAPOICategory *) object;
-                        OAPOIUIFilter *uiFilter = [[OAPOIUIFilter alloc] initWithBasePoiType:poiCategory idSuffix:@""];
-                        [helper addSelectedPoiFilter:uiFilter];
-                    }
-                }
-                [mapVC updatePoiLayer];
+                    [mapVC updatePoiLayer];
+                });
             }
         }
         else if ([_url hasPrefix:@"show-choose-plan:"])

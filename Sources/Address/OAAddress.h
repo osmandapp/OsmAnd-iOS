@@ -10,6 +10,8 @@
 
 #include <OsmAndCore/Data/Address.h>
 
+@class OASMapObject;
+
 typedef NS_ENUM(NSInteger, EOAAddressType)
 {
     ADDRESS_TYPE_UNDEFINED = 0,
@@ -23,6 +25,9 @@ typedef NS_ENUM(NSInteger, EOAAddressType)
 
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Address> address;
 
+// The same address out of the shared search, which the getters read instead of the C++ one
+@property (nonatomic, readonly) OASMapObject *sharedAddress;
+
 @property (nonatomic, readonly) EOAAddressType addressType;
 
 @property (nonatomic, readonly) unsigned long long addrId;
@@ -33,6 +38,7 @@ typedef NS_ENUM(NSInteger, EOAAddressType)
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *localizedNames;
 
 - (instancetype)initWithAddress:(const std::shared_ptr<const OsmAnd::Address>&)address;
+- (instancetype)initWithSharedAddress:(OASMapObject *)address type:(EOAAddressType)type;
 
 - (NSString *) getName:(NSString *)lang transliterate:(BOOL)transliterate;
 - (NSString *) getNameQ:(QString)lang transliterate:(BOOL)transliterate;

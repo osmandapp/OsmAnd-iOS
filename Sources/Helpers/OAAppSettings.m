@@ -493,6 +493,8 @@ static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_ord
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 static NSString * const useSharedRoutingKey = @"useSharedRoutingKey";
+static NSString * const useSharedSearchKey = @"useSharedSearchKey";
+static NSString * const useSpatialTextSearchKey = @"useSpatialTextSearchKey";
 static NSString * const simulateOBDDataKey = @"simulateOBDDataKey";
 
 static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
@@ -2393,6 +2395,32 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
     return [NSString stringWithFormat:@"%.1f", [self get:mode]];
+}
+
+@end
+
+@implementation OACommonDefaultSpeed
+
++ (instancetype)withKey:(NSString *)key defValue:(double)defValue
+{
+    OACommonDefaultSpeed *obj = [[OACommonDefaultSpeed alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonDefaultSpeed *)[self setupCopy:[OACommonDefaultSpeed withKey:key defValue:self.defValue]];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    // Preserve the Float precision used by Android and the speed tolerance limits.
+    return [NSString stringWithFormat:@"%.9g", (float)[self get:mode]];
 }
 
 @end
@@ -6430,7 +6458,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_profilePreferences setObject:_viewAngleVisibility forKey:@"view_angle_visibility"];
         [_profilePreferences setObject:_locationRadiusVisibility forKey:@"location_radius_visibility"];
 
-        _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
+        _defaultSpeed = [OACommonDefaultSpeed withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
         [_defaultSpeed setModeDefaultValue:@12.5 mode:OAApplicationMode.CAR];
         [_defaultSpeed setModeDefaultValue:@2.77 mode:OAApplicationMode.BICYCLE];
@@ -7211,6 +7239,12 @@ static NSString *kOfflineKey = @"OFFLINE";
         
         _useSharedRouting = [[[OACommonBoolean withKey:useSharedRoutingKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_useSharedRouting forKey:@"use_shared_routing"];
+
+        _useSharedSearch = [[[OACommonBoolean withKey:useSharedSearchKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useSharedSearch forKey:@"use_shared_search"];
+
+        _useSpatialTextSearch = [[[OACommonBoolean withKey:useSpatialTextSearchKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useSpatialTextSearch forKey:@"use_spatial_search"];
         
         _simulateOBDData = [[[OACommonBoolean withKey:simulateOBDDataKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_simulateOBDData forKey:@"simulate_obd_data"];

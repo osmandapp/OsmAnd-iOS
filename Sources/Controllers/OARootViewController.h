@@ -22,6 +22,8 @@ static NSString * kCommandNavigationScreenClose = @"keyCommandNavigationScreenCl
 @property (nonatomic, weak, readonly) OAMapPanelViewController* mapPanel;
 @property(readonly) BOOL isMenuOpened;
 @property (nonatomic) NSString *token;
+// Prevents view lifecycle callbacks from resetting UI state during a window-scene transfer.
+@property (nonatomic, assign) BOOL movingBetweenWindowScenes;
 
 @property (readonly) OAAutoObserverProxy *keyCommandUpdateObserver;
 

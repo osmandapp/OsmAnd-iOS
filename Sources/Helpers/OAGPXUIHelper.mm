@@ -1043,7 +1043,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
             }
 
             if (doc.author && [doc.author containsString:@"OsmAnd"])
-                metadata.name = newName;
+                [doc updateTrackNameNewName:newName];
 
             BOOL gpxSaved = [OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
             doc.path = newPath;

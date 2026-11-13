@@ -441,6 +441,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     // An empty icon means Original, including the initial selection for a new folder.
     _selectedIconName = self.editIconName ?: @"";
     self.editIconName = _selectedIconName;
+    // Mixed point icons may display Original without changing the folder's saved default.
     [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
@@ -597,6 +598,23 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     return ![self.editBackgroundIconName isEqualToString:originalBackgroundIconName];
 }
 
+- (UIColor *)appearanceColor
+{
+    return [_colorCollectionHandler isOriginalSelected] ? nil : self.editColor;
+}
+
+- (NSString *)appearanceIconName
+{
+    return [_poiIconCollectionHandler.selectedCatagoryKey isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY]
+        ? @"" : self.editIconName;
+}
+
+- (NSString *)appearanceBackgroundIconName
+{
+    return [_backgroundIconNames containsObject:_shapesCollectionHandler.selectedCatagoryKey]
+        ? self.editBackgroundIconName : nil;
+}
+
 - (void)changeSaveButtonAvailabilityWithGroup
 {
     [self changeButtonAvailability:_saveBarButton
@@ -707,16 +725,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
 {
+    self.editIconName = [category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY] ? @"" : _selectedIconName;
+    _wasChanged = YES;
+
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath)
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    if ([category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY])
-    {
-        _selectedIconName = @"";
-        self.editIconName = _selectedIconName;
-        _wasChanged = YES;
-    }
     [self changeSaveButtonAvailabilityWithGroup];
 }
 

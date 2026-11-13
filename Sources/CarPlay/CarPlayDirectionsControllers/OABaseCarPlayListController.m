@@ -12,7 +12,7 @@
 
 @implementation OABaseCarPlayListController
 {
-    CPListTemplate *_listTemplate;
+    BOOL _templateDismissed;
 }
 
 
@@ -23,7 +23,11 @@
 
 - (void) present
 {
+    _templateDismissed = NO;
     _listTemplate = [[CPListTemplate alloc] initWithTitle:self.screenTitle sections:[self generateSections]];
+    id delegate = self.interfaceController.delegate;
+    if ([delegate conformsToProtocol:@protocol(OACarPlayListLifecycleDelegate)])
+        [(id<OACarPlayListLifecycleDelegate>)delegate registerListController:self];
     [self safePushTemplate:_listTemplate animated:YES];
 }
 
@@ -34,7 +38,20 @@
 
 - (void) updateSections:(NSArray<CPListSection *> *)sections
 {
-    [_listTemplate updateSections:sections];
+    if (!_templateDismissed)
+        [_listTemplate updateSections:sections];
+}
+
+- (void)dismissTemplate
+{
+    if (_templateDismissed)
+        return;
+    _templateDismissed = YES;
+    [self onTemplateDismissed];
+}
+
+- (void)onTemplateDismissed
+{
 }
 
 @end

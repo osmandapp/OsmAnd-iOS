@@ -19,11 +19,36 @@
 // But we can use workaround. Load cached image in code. Transform it's data to base64 string. Inject this string to html like this:
 // <img src=BASE64_STRING>
 
+static NSString * const kWikimediaThumbnailSize = @"330px-";
+
+static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
+{
+    static NSRegularExpression *regex;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regex = [NSRegularExpression regularExpressionWithPattern:@"((?:https?:)?//upload\\.wikimedia\\.org/[^\\s\"'<>]*?/)320px-"
+                                                          options:NSRegularExpressionCaseInsensitive
+                                                            error:nil];
+    });
+    return regex;
+}
+
 @implementation OAWebImagesCacheHelper
 {
     sqlite3 *_database;
     dispatch_queue_t _dbQueue;
     NSString *_dbFilePath;
+}
+
++ (NSString *)normalizeLegacyWikimediaThumbnailUrls:(NSString *)html
+{
+    if (html.length == 0)
+        return html;
+
+    return [LegacyWikimediaThumbnailRegex() stringByReplacingMatchesInString:html
+                                                                     options:0
+                                                                       range:NSMakeRange(0, html.length)
+                                                                withTemplate:[NSString stringWithFormat:@"$1%@", kWikimediaThumbnailSize]];
 }
 
 - (instancetype) init
@@ -79,7 +104,7 @@
     
         for (NSString *link in imageLinks)
         {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
                 
                 [self fetchSingleImageByURL:link customKey:nil downloadMode:downloadMode onlyNow:onlyNow onComplete:^(NSString *imageData) {
                     
@@ -194,7 +219,7 @@
 
 - (void) downloadImage:(NSString *)url customKey:(NSString *)customKey onComplete:(void (^)(NSString *imageData))onComplete
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
         if (imageData)
         {

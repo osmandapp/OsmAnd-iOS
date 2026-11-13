@@ -120,8 +120,8 @@ final class SegmentRouteSettingsViewController: UIViewController {
         view.addSubview(segmentControl)
         NSLayoutConstraint.activate([
             segmentControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            segmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            segmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            segmentControl.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            segmentControl.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
     }
 

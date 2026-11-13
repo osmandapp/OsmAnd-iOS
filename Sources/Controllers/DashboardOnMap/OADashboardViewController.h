@@ -10,8 +10,6 @@
 #import "OADashboardScreen.h"
 #import "OATableView.h"
 
-#define kOADashboardNavbarHeight 44.0
-
 @interface OADashboardViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navbarView;

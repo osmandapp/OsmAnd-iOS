@@ -45,8 +45,9 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomCancel)
     private let optionsButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomOverflowMenuStroke)
-    private let dimmingView = UIView()
     private let backgroundMaskLayer = CAGradientLayer()
+
+    private var hasHinge = false
 
     private lazy var saveButton = PlanRouteButtonFactory.primaryButton(title: localizedString("shared_string_save"))
 
@@ -133,13 +134,21 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         backgroundMaskLayer.startPoint = CGPoint(x: 0.5, y: 0)
         backgroundMaskLayer.endPoint = CGPoint(x: 0.5, y: 1)
         backgroundContainerView.layer.mask = backgroundMaskLayer
+
+        if #available(iOS 27.1, *) {
+            addInteraction(UIHingeInteraction { [weak self] _, update in
+                guard let self else { return }
+                hasHinge = update.hinge != nil
+                updateBackgroundLayers()
+            })
+        }
     }
 
     private func updateBackgroundLayers() {
-        let isCompactLayout = traitCollection.verticalSizeClass == .compact
-        backgroundContainerView.isHidden = isCompactLayout
+        let hidesBackground = hasHinge || traitCollection.verticalSizeClass == .compact
+        backgroundContainerView.isHidden = hidesBackground
 
-        guard !isCompactLayout else { return }
+        guard !hidesBackground else { return }
         backgroundMaskLayer.frame = backgroundContainerView.bounds
         backgroundMaskLayer.colors = [
             UIColor.black.withAlphaComponent(Self.backgroundFirstAlpha).cgColor,

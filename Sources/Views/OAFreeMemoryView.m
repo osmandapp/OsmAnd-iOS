@@ -40,11 +40,13 @@
 
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
+    [self setNeedsDisplay];
     [_titleLabel sizeToFit];
     [_freeMemLabel sizeToFit];
     
-    _titleLabel.frame = CGRectMake(15.0, 10.0, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
-    _freeMemLabel.frame = CGRectMake(self.frame.size.width - _freeMemLabel.bounds.size.width - 15.0, 10.0, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
+    _titleLabel.frame = CGRectMake(self.safeAreaInsets.left + 15.0, 10.0, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
+    _freeMemLabel.frame = CGRectMake(self.bounds.size.width - self.safeAreaInsets.right - _freeMemLabel.bounds.size.width - 15.0, 10.0, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
 }
 
 - (void) commonInit
@@ -178,7 +180,7 @@
 - (void) drawRect:(CGRect)rect
 {
     double radius = 3.0f;
-    CGRect frame = CGRectMake(15, 35, DeviceScreenWidth - 30, 20);
+    CGRect frame = CGRectMake(self.safeAreaInsets.left + 15., 35., self.bounds.size.width - self.safeAreaInsets.left - self.safeAreaInsets.right - 30., 20.);
 
     if (!_hasValues)
     {

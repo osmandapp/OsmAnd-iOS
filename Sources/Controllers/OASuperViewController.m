@@ -10,10 +10,12 @@
 #import "OABaseNavbarViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OASuperViewController
 {
     BOOL _isScreenLoaded;
+    UIView *_navbarTopBackgroundView;
     UIContentSizeCategory _contentSizeCategory;
     NSMutableArray<OAAutoObserverProxy *> *_observers;
 }
@@ -84,12 +86,56 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
+    [self updateNavbarTopBackground];
 
     if (!_isScreenLoaded)
     {
         _isScreenLoaded = YES;
         _contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
     }
+}
+
+- (void)updateNavbarTopBackground
+{
+    UINavigationBar *navbar = self.navigationController.navigationBar;
+    UIView *container = self.navigationController.view;
+    CGRect navbarFrame = [navbar convertRect:navbar.bounds toView:container];
+    UIEdgeInsets safeInsets = container.window.safeAreaInsets;
+    CGFloat topInset = safeInsets.top;
+    CGFloat gap = MAX(0., CGRectGetMinY(navbarFrame) - topInset);
+    UIColor *backgroundColor = navbar.scrollEdgeAppearance.backgroundColor ?: navbar.standardAppearance.backgroundColor;
+    UIColor *orangeColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    BOOL fillGap = safeInsets.left + safeInsets.right > 0. && topInset == 0. && gap > 0.
+        && [[backgroundColor resolvedColorWithTraitCollection:self.traitCollection] isEqual:[orangeColor resolvedColorWithTraitCollection:self.traitCollection]] && !navbar.hidden
+        && self.navigationController.topViewController == self;
+    if (fillGap)
+    {
+        if (!_navbarTopBackgroundView)
+        {
+            _navbarTopBackgroundView = [[UIView alloc] init];
+            _navbarTopBackgroundView.userInteractionEnabled = NO;
+        }
+        if (_navbarTopBackgroundView.superview != container)
+            [container addSubview:_navbarTopBackgroundView];
+        _navbarTopBackgroundView.backgroundColor = backgroundColor;
+        _navbarTopBackgroundView.frame = CGRectMake(0., topInset, container.bounds.size.width, gap);
+    }
+    else
+    {
+        [_navbarTopBackgroundView removeFromSuperview];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self updateNavbarTopBackground];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [_navbarTopBackgroundView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning

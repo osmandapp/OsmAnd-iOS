@@ -474,9 +474,35 @@ typedef enum
     return [self.hudViewController isOverlayUnderlayViewVisible];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    return UIVerticalBarBehaviorDisabled;
+}
+
+- (UIViewController *)childViewControllerForPreferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    for (UIViewController *controller in self.childViewControllers.reverseObjectEnumerator)
+    {
+        if ([controller isKindOfClass:OADashboardViewController.class])
+            return controller;
+    }
+    return nil;
+}
+#endif
+
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden)
+    if (_dashboard)
+    {
+        for (UIViewController *controller in self.childViewControllers.reverseObjectEnumerator)
+        {
+            if ([controller isKindOfClass:OADashboardViewController.class])
+                return controller.preferredStatusBarStyle;
+        }
+        return _dashboard.preferredStatusBarStyle;
+    }
+    else if (!_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
     else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
                                         (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||

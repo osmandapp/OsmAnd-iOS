@@ -190,6 +190,7 @@
 @implementation OABaseTrackMenuHudViewController
 {
     CGFloat _cachedYViewPort;
+    BOOL _wasLeftSidePresentation;
 }
 
 - (instancetype)initWithGpx:(OASTrackItem *)gpx
@@ -379,14 +380,13 @@
     [self changeHud:[self getViewHeight]];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)updateLayoutCurrentState
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    __weak __typeof(self) weakSelf = self;
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        if (![weakSelf isLandscape])
-            [weakSelf goExpanded];
-    } completion:nil];
+    BOOL leftSidePresentation = self.isLeftSidePresentation;
+    [super updateLayoutCurrentState];
+    if (_wasLeftSidePresentation && !leftSidePresentation)
+        [self updateShowingState:EOADraggableMenuStateExpanded];
+    _wasLeftSidePresentation = leftSidePresentation;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -453,6 +453,19 @@
 - (BOOL)showStatusBarWhenFullScreen
 {
     return YES;
+}
+
+- (CGFloat)getStatusBarHeight
+{
+    UIWindow *window = self.view.window ?: [OARootViewController instance].view.window;
+    CGFloat safeAreaTop = MAX(self.view.safeAreaInsets.top, window.safeAreaInsets.top);
+    return MAX(safeAreaTop, window.windowScene.statusBarManager.statusBarFrame.size.height);
+}
+
+- (CGFloat)additionalLandscapeOffset
+{
+    // The status bar background already offsets the menu content in side presentation.
+    return 0.;
 }
 
 - (void)doAdditionalLayout

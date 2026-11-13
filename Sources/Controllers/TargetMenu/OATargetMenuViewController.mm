@@ -589,6 +589,20 @@
     [self updateNavBarSubviewsLayout];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self applySafeAreaMargins];
+    [self updateNavBarSubviewsLayout];
+}
+
+- (CGFloat)statusBarHeight
+{
+    UIWindow *window = self.view.window ?: [OARootViewController instance].view.window;
+    CGFloat safeAreaTop = MAX(self.view.safeAreaInsets.top, window.safeAreaInsets.top);
+    return MAX(safeAreaTop, window.windowScene.statusBarManager.statusBarFrame.size.height);
+}
+
 -(void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
@@ -604,7 +618,8 @@
 {
     CGRect buttonFrame = self.buttonBack.frame;
     buttonFrame.origin.x = 16.0 + [OAUtilities getLeftMargin];
-    buttonFrame.origin.y = [[OARootViewController instance].mapPanel.hudViewController getHudMinTopOffset];
+    CGFloat navigationTop = [self statusBarHeight] + ([self getNavBarHeight] - buttonFrame.size.height) / 2.;
+    buttonFrame.origin.y = MAX(navigationTop, [[OARootViewController instance].mapPanel.hudViewController getHudMinTopOffset]);
     self.buttonBack.frame = buttonFrame;
 }
 

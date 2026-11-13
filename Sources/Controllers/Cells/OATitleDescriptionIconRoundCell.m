@@ -94,13 +94,13 @@ static UIFont *_descrFont;
 
 - (void) applyCornerRadius
 {
-    CGFloat width = self.bounds.size.width - 40.;
+    CGFloat width = self.contentView.bounds.size.width - 40.;
     if (_hasLeftMargin && (_bottomCorners || _topCorners))
-        width -= [OAUtilities getLeftMargin];
-    CGFloat height = [self.class getHeight:_titleView.text descr:_descrView.text cellWidth:self.bounds.size.width];
+        width -= MAX(0., [OAUtilities getLeftMargin] - self.contentView.frame.origin.x);
+    CGFloat height = [self.class getHeight:_titleView.text descr:_descrView.text cellWidth:self.contentView.bounds.size.width];
     _contentContainer.frame = CGRectMake(20., 0., width, height);
     
-    CGFloat textWidth = self.bounds.size.width - 5*cellMargin - maxButtonWidth;
+    CGFloat textWidth = self.contentView.bounds.size.width - 5*cellMargin - maxButtonWidth;
     CGFloat titleHeight = [self.class getViewHeightWithWidth:textWidth text:_titleView.text font:_titleFont];
     CGFloat descHeight = [self.class getViewHeightWithWidth:textWidth text:textForOneLineLabel font:_descrFont];
     

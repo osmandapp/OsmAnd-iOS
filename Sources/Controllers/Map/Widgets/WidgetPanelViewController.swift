@@ -59,6 +59,17 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     private var dayNightObserver: OAAutoObserverProxy!
     
     // swiftlint:enable all
+
+    var hasLeadingMarkerBar: Bool {
+        let visibleWidgets: [OABaseWidgetView]
+        if isHorizontal {
+            visibleWidgets = widgetPages.flatMap { $0 }
+        } else {
+            guard widgetPages.indices.contains(currentIndex) else { return false }
+            visibleWidgets = widgetPages[currentIndex]
+        }
+        return visibleWidgets.first { !$0.isHidden } is OADestinationBarWidget
+    }
     
     // MARK: - Init
     
@@ -100,10 +111,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         delegate?.onPanelSizeChanged()
-    }
-    
-    deinit {
-        dayNightObserver.detach()
     }
     
     // MARK: - Public Functions
@@ -308,6 +315,10 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             }
         }
     }
+
+    deinit {
+        dayNightObserver.detach()
+    }
 }
 
 // MARK: - OAWidgetListener
@@ -324,6 +335,7 @@ extension WidgetPanelViewController {
         }
         
         updateWidgetSizes()
+        delegate?.onPanelSizeChanged()
     }
     
     func widgetClicked(_ widget: OABaseWidgetView) {

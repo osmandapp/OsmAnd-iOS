@@ -157,8 +157,8 @@
         [NSLayoutConstraint activateConstraints:@[
             [subview.topAnchor constraintEqualToAnchor:containerView.topAnchor constant:[self subviewMargin].top],
             [subview.bottomAnchor constraintEqualToAnchor:containerView.bottomAnchor constant:[self subviewMargin].bottom],
-            [subview.leadingAnchor constraintEqualToAnchor:containerView.leadingAnchor constant:[self subviewMargin].left],
-            [subview.trailingAnchor constraintEqualToAnchor:containerView.trailingAnchor constant:[self subviewMargin].right],
+            [subview.leadingAnchor constraintEqualToAnchor:containerView.safeAreaLayoutGuide.leadingAnchor constant:[self subviewMargin].left],
+            [subview.trailingAnchor constraintEqualToAnchor:containerView.safeAreaLayoutGuide.trailingAnchor constant:[self subviewMargin].right],
             _subviewHeightConstraint,
         ]];
 
@@ -196,7 +196,7 @@
 
 - (UIEdgeInsets)subviewMargin
 {
-    return UIEdgeInsetsMake(8, [OAUtilities getLeftMargin] + 20, -8, -[OAUtilities getLeftMargin] - 20);
+    return UIEdgeInsetsMake(8, 20, -8, -20);
 }
 
 @end

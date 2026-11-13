@@ -123,3 +123,69 @@
 }
 
 @end
+
+@interface OASPrimaryCollatorTest : XCTestCase
+@end
+
+@implementation OASPrimaryCollatorTest
+
+- (void)testEnglishRegionOrderMatchesAndroid
+{
+    XCTAssertEqualObjects(NSLocale.currentLocale.languageCode, @"en", @"This fixture uses the Android en_US baseline");
+    id<OASKCollator> collator = [OASKCollatorKt primaryCollator];
+    NSComparator compare = ^NSComparisonResult(NSString *a, NSString *b) {
+        return (NSComparisonResult)[collator compareSource:a target:b];
+    };
+    NSArray<NSString *> *norway = @[
+        @"Agder",
+        @"Akershus",
+        @"Bouvet Island",
+        @"Buskerud",
+        @"Finnmark",
+        @"Innlandet",
+        @"Møre og Romsdal",
+        @"Nordland",
+        @"Oslo",
+        @"Østfold",
+        @"Rogaland",
+        @"Svalbard",
+        @"Telemark",
+        @"Troms",
+        @"Trøndelag",
+        @"Vestfold",
+        @"Vestland"
+    ];
+    XCTAssertEqualObjects([norway sortedArrayUsingComparator:compare], norway, @"Norway: Android English order");
+    NSArray<NSString *> *poland = @[
+        @"Greater Poland Voivodeship",
+        @"Holy Cross Voivodeship",
+        @"Kuyavian-Pomeranian Voivodeship",
+        @"Lesser Poland Voivodeship",
+        @"Łódź Voivodeship",
+        @"Lower Silesian Voivodeship",
+        @"Lublin Voivodeship",
+        @"Lubusz Voivodeship",
+        @"Masovian Voivodeship",
+        @"Opole Voivodeship",
+        @"Podlachian Voivodeship",
+        @"Pomeranian Voivodeship",
+        @"Silesian Voivodeship",
+        @"Subcarpathian Voivodeship",
+        @"Warmian-Masurian Voivodeship",
+        @"West Pomeranian Voivodeship"
+    ];
+    XCTAssertEqualObjects([poland sortedArrayUsingComparator:compare], poland, @"Poland: Android English order");
+    NSArray<NSString *> *greenland = @[
+        @"Greenland (central-west)",
+        @"Greenland (north-east)",
+        @"Greenland (north-west)",
+        @"Greenland (north)",
+        @"Greenland (south-east)",
+        @"Greenland (south-west)"
+    ];
+    XCTAssertEqualObjects([greenland sortedArrayUsingComparator:compare], greenland, @"Greenland: Android English order");
+    XCTAssertEqual([collator compareSource:@"Café" target:@"CAFE"], 0);
+    XCTAssertTrue([collator equalsSource:@"NC 42" target:@"NC 42"]);
+}
+
+@end

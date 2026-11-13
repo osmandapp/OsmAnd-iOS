@@ -59,14 +59,15 @@ NS_ASSUME_NONNULL_BEGIN
            renameToNewName:(nullable NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
-                       trackItem:(OASTrackItem *)trackItem;
+                       trackItem:(OASTrackItem *)trackItem
+                completion:(void (^_Nullable)(OASTrackItem *updatedTrackItem))completion;
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(nullable NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                  trackItem:(OASTrackItem *)trackItem
-                   gpxFile:(OASGpxFile *)gpxFile
+                   gpxFile:(nullable OASGpxFile *)gpxFile
   updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))updatedTrackItemСallback;
 
 - (void) renameTrack:(nullable OASGpxDataItem *)gpx

@@ -1377,13 +1377,16 @@ includeHidden:(BOOL)includeHidden
     
     if (check.freeItems.count == 0)
     {
-        UIViewController *visibleController = [OARootViewController instance].navigationController.visibleViewController;
-        if (![visibleController.childViewControllers.firstObject isKindOfClass:FreeRegionBottomSheet.class])
+        UINavigationController *navigationController = [OARootViewController instance].navigationController;
+        for (UIViewController *presented = navigationController.presentedViewController; presented; presented = presented.presentedViewController)
         {
-            FreeRegionBottomSheet *bottomSheet = [[FreeRegionBottomSheet alloc] initWithFreeRegion:check.freeRegion region:check.otherRegions.firstObject onReplaced:onReplaced];
-            [visibleController showMediumToLargeSheetViewController:bottomSheet];
+            if ([presented isKindOfClass:UINavigationController.class]
+                && [((UINavigationController *)presented).viewControllers.firstObject isKindOfClass:FreeRegionBottomSheet.class])
+                return @[];
         }
 
+        FreeRegionBottomSheet *bottomSheet = [[FreeRegionBottomSheet alloc] initWithFreeRegion:check.freeRegion region:check.otherRegions.firstObject onReplaced:onReplaced];
+        [navigationController.visibleViewController showMediumToLargeSheetViewController:bottomSheet];
         return @[];
     }
     

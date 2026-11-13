@@ -10,14 +10,22 @@ import UIKit
 
 @objcMembers
 final class OutdatedMapsWarning: NSObject {
+    private static var isChecking = false
+
     func showAfterUpgrade() {
         // TODO: When the new search is on by default, remove the useSharedSearch check. If that happens after 5.5, set VERSION_5_5 in OsmAndAppImpl to that version. https://github.com/osmandapp/OsmAnd-iOS/issues/6134
-        guard OAAppSettings.sharedManager().shouldShowOutdatedMapsWarning, OAAppSettings.sharedManager().useSharedSearch.get() else { return }
-        OAAppSettings.sharedManager().shouldShowOutdatedMapsWarning = false
+        let settings = OAAppSettings.sharedManager()
+        guard settings.shouldShowOutdatedMapsWarning, settings.useSharedSearch.get(), !settings.shouldShowWhatsNewScreen, !AppEnvironment.isUITesting, !UIApplication.shared.isAnyCarPlaySceneActive, !Self.isChecking else { return }
+        Self.isChecking = true
         DispatchQueue.global(qos: .utility).async {
-            guard self.hasMapsWithoutSpatialSearch() else { return }
+            let needsWarning = self.hasMapsWithoutSpatialSearch()
             DispatchQueue.main.async {
-                self.show()
+                Self.isChecking = false
+                if needsWarning {
+                    self.show()
+                } else {
+                    settings.shouldShowOutdatedMapsWarning = false
+                }
             }
         }
     }
@@ -33,13 +41,15 @@ final class OutdatedMapsWarning: NSObject {
     }
     
     private func show() {
-        guard let root = OARootViewController.instance(), root.navigationController?.visibleViewController === root else { return }
+        guard OAAppSettings.sharedManager().shouldShowOutdatedMapsWarning, !UIApplication.shared.isAnyCarPlaySceneActive, let root = OARootViewController.instance(), root.navigationController?.visibleViewController === root, root.viewIfLoaded?.window != nil, root.presentedViewController == nil else { return }
         let alert = UIAlertController(title: localizedString("outdated_maps_warning_title"), message: localizedString("outdated_maps_warning_descr"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("first_time_continue"), style: .cancel))
         alert.addAction(UIAlertAction(title: localizedString("shared_string_update"), style: .default) { _ in
             self.openUpdates()
         })
-        root.present(alert, animated: true)
+        root.present(alert, animated: true) {
+            OAAppSettings.sharedManager().shouldShowOutdatedMapsWarning = false
+        }
     }
     
     private func openUpdates() {

@@ -309,6 +309,12 @@
     [self deleteItem];
 }
 
+- (BOOL)replacePoint:(OAGpxWptItem *)existingItem newPoint:(BOOL)newPoint
+{
+    _gpxWpt.docPath = _gpxFileName;
+    return [self.gpxWptDelegate replaceGpxWpt:existingItem withItem:_gpxWpt newPoint:newPoint];
+}
+
 - (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
     [_gpxWpt.point setName:data.name.length > 0 ? data.name : nil];

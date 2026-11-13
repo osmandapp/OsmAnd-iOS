@@ -1685,6 +1685,43 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return YES;
 }
 
+- (BOOL)replaceGpxWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
+{
+    OASGpxFile *gpxFile = [self isDraftGpxPath:item.docPath] ? _draftGpxFile : [self editingContext].gpxData.gpxFile;
+    BOOL removingPoint = !newPoint && existingItem.originalPoint != item.originalPoint;
+    NSArray<OASWptPt *> *storedPoints = [OAGpxWptItem storedPointsForItems:removingPoint ? @[existingItem, item] : @[existingItem]
+                                                             inGpxFile:gpxFile];
+    if (!item.point || storedPoints.count == 0)
+        return NO;
+
+    NSMutableArray<OASWptPt *> *remaining = [gpxFile.getPointsList mutableCopy];
+    if (removingPoint)
+        [remaining removeObjectIdenticalTo:storedPoints.lastObject];
+    NSUInteger index = [remaining indexOfObjectIdenticalTo:storedPoints.firstObject];
+    BOOL replaced = [self executePoiStateCommandWithBeforeState:_editingPoiStateSnapshot operation:^BOOL{
+        storedPoints.firstObject.position = item.point.position;
+        [gpxFile setPointsListPoints:remaining];
+        if (removingPoint)
+        {
+            for (OASGpxUtilitiesPointsGroup *group in gpxFile.pointsGroups.allValues)
+                [group.points removeObjectIdenticalTo:storedPoints.lastObject];
+        }
+        gpxFile.modifiedTime = (int64_t)(NSDate.date.timeIntervalSince1970 * 1000.0);
+        gpxFile.pointsModifiedTime = gpxFile.modifiedTime;
+        [self restorePoiStateSnapshot:[self makePoiStateSnapshot]];
+        return YES;
+    }];
+    if (replaced)
+    {
+        // Restoring the committed snapshot creates copies; bind the editor to that point.
+        item.point = gpxFile.getPointsList[index];
+        item.gpxFile = gpxFile;
+        item.groups = gpxFile.pointsGroups.allKeys;
+        _editingPoiStateSnapshot = nil;
+    }
+    return replaced;
+}
+
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
 {
     [self executePoiStateCommandWithBeforeState:nil operation:^BOOL{

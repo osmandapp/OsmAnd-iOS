@@ -4886,6 +4886,25 @@ typedef enum
     return YES;
 }
 
+- (BOOL)replaceGpxWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
+{
+    if (![_mapViewController replaceWpt:existingItem withItem:item newPoint:newPoint])
+        return NO;
+    if (newPoint && item.docPath.length == 0)
+    {
+        if (![[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
+            [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
+        if (!_mapViewController.recTrackShowing)
+            [_mapViewController showRecGpxTrack:YES];
+    }
+    [_mapViewController selectWpt:item];
+    self.targetMenuView.targetPoint.type = OATargetWpt;
+    self.targetMenuView.targetPoint.targetObj = item;
+    [self.targetMenuView updateTargetPointType:OATargetWpt];
+    [self.targetMenuView applyTargetObjectChanges];
+    return YES;
+}
+
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
 {
     [_mapViewController deleteWpts:@[gpxWptItem] docPath:docPath];

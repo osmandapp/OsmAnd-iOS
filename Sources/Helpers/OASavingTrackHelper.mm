@@ -1070,37 +1070,79 @@ static const NSInteger kDBVersion = 1;
     });
 }
 
-- (void)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
+- (BOOL)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation
 {
-    double lat = wpt.lat;
-    double lon = wpt.lon;
-    long time = wpt.time;
-    dispatch_async(dbQueue, ^{
-        sqlite3_stmt *statement;
-        
-        const char *dbpath = [databasePath UTF8String];
-        
-        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+    return [self updatePointCoordinates:wpt newLocation:newLocation removingPoint:nil];
+}
+
+- (BOOL)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation removingPoint:(OASWptPt *)removedPoint
+{
+    NSArray<OASWptPt *> *storedPoints = _currentTrack.getPointsList;
+    if (!wpt || [storedPoints indexOfObjectIdenticalTo:wpt] == NSNotFound
+        || (removedPoint && (removedPoint == wpt || [storedPoints indexOfObjectIdenticalTo:removedPoint] == NSNotFound)))
+        return NO;
+
+    __block BOOL updated = NO;
+    dispatch_sync(dbQueue, ^{
+        NSNumber *rowId = [_waypointRowIds objectForKey:wpt];
+        NSNumber *removedRowId = removedPoint ? [_waypointRowIds objectForKey:removedPoint] : nil;
+        if (!rowId || (removedPoint && !removedRowId && ![_unpersistedWaypoints containsObject:removedPoint]))
+            return;
+
+        // Replace moves the existing point and removes the edited point in one transaction.
+        updated = sqlite3_open(databasePath.UTF8String, &tracksDB) == SQLITE_OK
+            && sqlite3_exec(tracksDB, "BEGIN IMMEDIATE", NULL, NULL, NULL) == SQLITE_OK;
+        sqlite3_stmt *statement = NULL;
+        NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=? WHERE rowid=?", POINT_NAME, POINT_COL_LAT, POINT_COL_LON];
+        if (updated)
+            updated = sqlite3_prepare_v2(tracksDB, query.UTF8String, -1, &statement, NULL) == SQLITE_OK;
+        if (updated)
         {
-            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=? WHERE %@=? AND %@=? AND %@=%ld", POINT_NAME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_LAT, POINT_COL_LON, POINT_COL_DATE, time];
-            
-            const char *update_stmt = [query UTF8String];
-            
-            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
             sqlite3_bind_double(statement, 1, newLocation.latitude);
             sqlite3_bind_double(statement, 2, newLocation.longitude);
-            sqlite3_bind_double(statement, 3, lat);
-            sqlite3_bind_double(statement, 4, lon);
-            
-            int res = sqlite3_step(statement);
-            if (res != SQLITE_OK && res != SQLITE_DONE)
-                NSLog(@"updatePointCoordinates failed: sqlite3_step=%d", res);
-            
+            sqlite3_bind_int64(statement, 3, rowId.longLongValue);
+            updated = sqlite3_step(statement) == SQLITE_DONE && sqlite3_changes(tracksDB) == 1;
+        }
+        sqlite3_finalize(statement);
+        if (updated && removedRowId)
+        {
+            statement = NULL;
+            query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE rowid=?", POINT_NAME];
+            updated = sqlite3_prepare_v2(tracksDB, query.UTF8String, -1, &statement, NULL) == SQLITE_OK;
+            if (updated)
+            {
+                sqlite3_bind_int64(statement, 1, removedRowId.longLongValue);
+                updated = sqlite3_step(statement) == SQLITE_DONE && sqlite3_changes(tracksDB) == 1;
+            }
             sqlite3_finalize(statement);
-            
-            sqlite3_close(tracksDB);
+        }
+        if (updated)
+            updated = sqlite3_exec(tracksDB, "COMMIT", NULL, NULL, NULL) == SQLITE_OK;
+        if (!updated)
+            sqlite3_exec(tracksDB, "ROLLBACK", NULL, NULL, NULL);
+        sqlite3_close(tracksDB);
+        if (updated && removedPoint)
+        {
+            [_waypointRowIds removeObjectForKey:removedPoint];
+            [_unpersistedWaypoints removeObject:removedPoint];
         }
     });
+    if (!updated)
+        return NO;
+
+    wpt.position = newLocation;
+    if (removedPoint)
+    {
+        NSMutableArray<OASWptPt *> *remaining = [storedPoints mutableCopy];
+        [remaining removeObjectIdenticalTo:removedPoint];
+        [_currentTrack setPointsListPoints:remaining];
+        for (OASGpxUtilitiesPointsGroup *group in _currentTrack.pointsGroups.allValues)
+            [group.points removeObjectIdenticalTo:removedPoint];
+        points = (int)remaining.count;
+    }
+    _currentTrack.modifiedTime = (long)(NSDate.date.timeIntervalSince1970 * 1000.0);
+    _currentTrack.pointsModifiedTime = _currentTrack.modifiedTime;
+    return YES;
 }
 
 - (void) doUpdatePointsLat:(double)lat

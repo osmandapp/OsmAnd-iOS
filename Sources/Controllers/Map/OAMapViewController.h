@@ -208,6 +208,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (BOOL)replaceWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint;
 - (BOOL) updateMetadata:(nullable OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;

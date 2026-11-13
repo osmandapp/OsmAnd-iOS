@@ -1443,23 +1443,14 @@
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 
-        OAPointEditingData *data = [[OAPointEditingData alloc] init];
-
-        data.descr = waypointItem.point.desc;
-        data.address = [waypointItem.point getAddress];
-        data.color = waypointItem.color ? waypointItem.color : UIColorFromARGB([waypointItem.point getColor]);
-        data.backgroundIcon = [waypointItem.point getBackgroundType];
-        data.icon = [waypointItem.point getIconName];
-        data.category = waypointItem.point.category;
-        data.name = waypointItem.point.name;
-
-        if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
+        if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
-        if (self.gpxWptDelegate)
-            [self.gpxWptDelegate deleteGpxWpt:waypointItem docPath:[(OAGpxWptEditingHandler *)_pointHandler getGpxDocument].path];
-
-        [_pointHandler savePoint:data newPoint:_isNewItemAdding];
+        if (![(OAGpxWptEditingHandler *)_pointHandler replacePoint:waypointItem newPoint:_isNewItemAdding])
+        {
+            _isUnsaved = YES;
+            return;
+        }
         _isUnsaved = NO;
         [self dismissViewController];
     }]];

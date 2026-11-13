@@ -2337,7 +2337,8 @@ colorizationScheme:(int)colorizationScheme
         else
         {
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-            [helper updatePointCoordinates:item.point newLocation:position];
+            if (![helper updatePointCoordinates:item.originalPoint newLocation:position])
+                return NO;
             item.point.position = position;
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }

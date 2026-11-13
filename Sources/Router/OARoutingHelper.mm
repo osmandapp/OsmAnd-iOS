@@ -167,12 +167,7 @@ static BOOL _isDeviatedFromRoute = false;
 - (void) setPauseNavigation:(BOOL) b
 {
     _isPauseNavigation = b;
-    if (b)
-    {
-        // TODO notifications
-        //app.getNotificationHelper().updateTopNotification();
-        //app.getNotificationHelper().refreshNotifications();
-    }
+    [LiveActivityManager.shared refresh];
     [[ScreenAwakeService shared] updateIdleTimer];
 }
 
@@ -236,13 +231,37 @@ static BOOL _isDeviatedFromRoute = false;
     _isPausedDueToCarPlayDisconnect = NO;
     _isFollowingMode = follow;
     _isPauseNavigation = false;
-    if (!follow)
-    {
-        // TODO notifications
-        //app.getNotificationHelper().updateTopNotification();
-        //app.getNotificationHelper().refreshNotifications();
-    }
     [[ScreenAwakeService shared] updateIdleTimer];
+    [LiveActivityManager.shared refresh];
+}
+
+// Copy the snapshot asynchronously so callers never wait for the routing lock.
+- (void)readNavigationSnapshotWithCompletion:(void (^)(NavigationSnapshot *snapshot))completion
+{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
+        NavigationSnapshot *snapshot;
+        @synchronized (self)
+        {
+            OANextDirectionInfo *nextDirectionInfo = [self getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+            OARouteDirectionInfo *routeDirection = nextDirectionInfo.directionInfo;
+            OASTurnType *turnType = routeDirection.turnType ?: [OASTurnType.companion straight];
+            snapshot = [[NavigationSnapshot alloc] initWithTurnTypeValue:turnType.value
+                                                               turnAngle:turnType.turnAngle
+                                                              exitNumber:turnType.exitOut
+                                                                  turnID:nextDirectionInfo ? nextDirectionInfo.directionInfoInd : -1
+                                                            turnDistance:nextDirectionInfo ? nextDirectionInfo.distanceTo : -1
+                                                             instruction:routeDirection.turnType ? [OARouteCalculationResult toString:turnType shortName:YES] : OALocalizedString(@"shared_string_navigation")
+                                                              streetName:routeDirection.streetName.length > 0 ? routeDirection.streetName : (routeDirection.ref ?: @"")
+                                                           totalDistance:[self->_route getWholeDistance]
+                                                       remainingDistance:[self getLeftDistance]
+                                                       remainingDuration:[self getLeftTime]
+                                                       isRouteCalculated:[self isRouteCalculated]
+                                                     isDeviatedFromRoute:[OARoutingHelper isDeviatedFromRoute]
+                                                          routeDeviation:[self getRouteDeviation]
+                                                        calculationError:[self getLastRouteCalcErrorShort] ?: @""];
+        }
+        completion(snapshot);
+    });
 }
 
 - (BOOL) isRoutePlanningMode
@@ -370,6 +389,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (void) newRouteCalculated:(BOOL)newRoute
 {
+    [LiveActivityManager.shared refresh];
     dispatch_async(dispatch_get_main_queue(), ^{
         for (id<OARouteInformationListener> l in [self currentListeners])
             [l newRouteIsCalculated:newRoute];

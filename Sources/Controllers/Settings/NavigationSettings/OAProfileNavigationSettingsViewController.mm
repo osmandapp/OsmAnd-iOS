@@ -33,6 +33,8 @@
 
 #define kOsmAndNavigation @"osmand_navigation"
 
+static const CGFloat kOpenSettingsRowHeight = 44.0;
+
 @interface OAProfileNavigationSettingsViewController () <OARouteLineAppearanceViewControllerDelegate>
 
 @end
@@ -46,6 +48,16 @@
 }
 
 #pragma mark - Initialization
+
+- (void)registerNotifications
+{
+    [self addNotification:LiveActivityManager.authorizationDidChangeNotification selector:@selector(onLiveActivityAuthorizationChanged)];
+}
+
+- (void)registerCells
+{
+    [self addCell:OASwitchTableViewCell.reuseIdentifier];
+}
 
 - (void)commonInit
 {
@@ -115,6 +127,7 @@
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_during_navigation"),
         @"key" : @"mapBehavior",
+        @"footer" : OALocalizedString(@"change_map_behavior"),
     }];
     [detailedTrackArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
@@ -127,6 +140,31 @@
     [tableData addObject:navigationArr];
     [tableData addObject:otherArr];
     [tableData addObject:detailedTrackArr];
+
+    if (@available(iOS 16.2, *))
+    {
+        BOOL areActivitiesEnabled = LiveActivityManager.shared.areActivitiesEnabled;
+        NSMutableArray *liveActivityRows = [NSMutableArray arrayWithObject:@{
+            @"key" : @"live_activity",
+            @"type" : OASwitchTableViewCell.reuseIdentifier,
+            @"title" : OALocalizedString(@"live_activity"),
+            @"value" : _settings.navigationLiveActivityEnabled,
+            @"enabled" : @(areActivitiesEnabled),
+            @"footer" : OALocalizedString(areActivitiesEnabled ? @"navigation_live_activity_description" : @"live_activity_system_disabled")
+        }];
+        if (!areActivitiesEnabled)
+        {
+            [liveActivityRows addObject:@{
+                @"key" : @"open_live_activity_settings",
+                @"type" : OASimpleTableViewCell.reuseIdentifier,
+                @"title" : OALocalizedString(@"ant_plus_open_settings"),
+                @"titleColor" : [UIColor colorNamed:ACColorNameTextColorActive],
+                @"accessoryType" : @(UITableViewCellAccessoryNone),
+                @"height" : @(kOpenSettingsRowHeight)
+            }];
+        }
+        [tableData addObject:liveActivityRows];
+    }
 
     _data = [NSArray arrayWithArray:tableData];
 }
@@ -146,18 +184,19 @@
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    switch (section)
-    {
-        case 1:
-            return OALocalizedString(@"change_map_behavior");
-        default:
-            return @"";
-    }
+    return _data[section].firstObject[@"footer"] ?: @"";
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSNumber *height = item[@"height"];
+    return height ? height.doubleValue : UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
@@ -195,12 +234,36 @@
         }
         if (cell)
         {
-            [cell leftIconVisibility:![item[@"key"] isEqualToString:@"mapBehavior"]];
+            [cell leftIconVisibility:[item[@"icon"] length] > 0];
             cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = item[@"titleColor"] ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessoryType = item[@"accessoryType"] ? (UITableViewCellAccessoryType) [item[@"accessoryType"] integerValue] : UITableViewCellAccessoryDisclosureIndicator;
+            cell.accessibilityTraits = UIAccessibilityTraitButton;
+            if (item[@"height"])
+            {
+                cell.topContentSpaceView.hidden = YES;
+                cell.bottomContentSpaceView.hidden = YES;
+            }
         }
+        return cell;
+    }
+    else if ([cellType isEqualToString:OASwitchTableViewCell.reuseIdentifier])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:OASwitchTableViewCell.reuseIdentifier];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        BOOL enabled = !item[@"enabled"] || [item[@"enabled"] boolValue];
+        cell.titleLabel.text = item[@"title"];
+        cell.titleLabel.textColor = [UIColor colorNamed:enabled ? ACColorNameTextColorPrimary : ACColorNameTextColorSecondary];
+        cell.userInteractionEnabled = enabled;
+        cell.switchView.enabled = enabled;
+        cell.switchView.on = [((OACommonBoolean *)item[@"value"]) get:self.appMode];
+        cell.switchView.accessibilityLabel = item[@"title"];
+        cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+        [cell.switchView removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
+        [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         return cell;
     }
     
@@ -216,7 +279,11 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
-    if ([itemKey isEqualToString:@"routeLineAppearance"])
+    if ([itemKey isEqualToString:@"open_live_activity_settings"])
+    {
+        [UIApplication.sharedApplication openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
+    }
+    else if ([itemKey isEqualToString:@"routeLineAppearance"])
     {
         if (self.openFromRouteInfo)
         {
@@ -260,6 +327,27 @@
 }
 
 #pragma mark - OASettingsDataDelegate
+
+- (void)onLiveActivityAuthorizationChanged
+{
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (void)applyParameter:(UISwitch *)sender
+{
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    OACommonBoolean *value = item[@"value"];
+    if (value == _settings.navigationLiveActivityEnabled && !LiveActivityManager.shared.areActivitiesEnabled)
+    {
+        sender.on = [value get:self.appMode];
+        [self onLiveActivityAuthorizationChanged];
+        return;
+    }
+    [value set:sender.on mode:self.appMode];
+    [LiveActivityManager.shared refresh];
+}
 
 - (void)onSettingsChanged
 {

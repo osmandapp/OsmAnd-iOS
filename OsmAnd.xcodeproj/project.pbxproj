@@ -6,7 +6,22 @@
 	objectVersion = 60;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		CF52F38733A14564B0D62FBB /* OsmAndShared */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 4F2781459CD3442198CFFC6B /* Build configuration list for PBXAggregateTarget "OsmAndShared" */;
+			buildPhases = (
+				053CBFB62B9C907500E8C400 /* Compile OsmAnd Shared Library */,
+			);
+			dependencies = (
+			);
+			name = OsmAndShared;
+			productName = OsmAndShared;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
+		04D9FE7F2088432384F6A643 /* LiveActivitySessionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809DAD78C2E34976B759BB62 /* LiveActivitySessionState.swift */; };
 		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
 		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
 		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
@@ -18,7 +33,6 @@
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
-		0A5E1C0D2F7A10000000A001 /* OANativeRoutingMemoryGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
 		0575058E292D254500FEECD4 /* weather.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0575058D292D254500FEECD4 /* weather.addon.render.xml */; };
@@ -45,6 +59,8 @@
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
 		0A2571A226F253620079774F /* OATrackMenuHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */; };
 		0A3EE20E275E4EE600C8B772 /* OAFoldersCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */; };
+		0A5E1C0D2F7A10000000A001 /* OANativeRoutingMemoryGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */; };
+		0A5E1C0D2F7A10000000B001 /* OARemovePointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */; };
 		0A832603270BE0E3006B8946 /* OATitleSwitchRoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A832602270BE0E3006B8946 /* OATitleSwitchRoundCell.xib */; };
 		0A9BCF17272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A9BCF16272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib */; };
 		0A9ED66C27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */; };
@@ -54,6 +70,9 @@
 		0AC13D2B271602F000142BFD /* OAAddWaypointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC13D2A271602F000142BFD /* OAAddWaypointViewController.xib */; };
 		0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */; };
 		0AD1F3BA26CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0AD1F3B926CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm */; };
+		0DE39BF7864B2DF6E2B5C4AF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
+		0EACBEE6C24FB1216C606B48 /* InstallAttribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */; };
+		1F0A028BAC621ADD13894487 /* BaseLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85297AD2AE314D2CBB563735 /* BaseLiveActivity.swift */; };
 		228EDAF170A7A81DF3A85783 /* UIImage+RouteActivityIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */; };
 		2702BC612EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */; };
 		2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */; };
@@ -161,9 +180,13 @@
 		27FA9F572F45B9040064B5BE /* MapUnderlayAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FA9F562F45B9040064B5BE /* MapUnderlayAction.swift */; };
 		27FB159B2EF307DC0054F4DC /* ButtonAppearanceParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FB159A2EF307DC0054F4DC /* ButtonAppearanceParams.swift */; };
 		27FD5F102EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27FD5F0F2EB12A8F002114F7 /* ProfileAppearanceIconSizeViewController.swift */; };
+		2A8BC60B3F570E7A29CE9C16 /* OARouteIntermediatePointsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */; };
 		2C1E55492FB75748008D311C /* OASearchAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C1E55482FB75744008D311C /* OASearchAlgorithms.mm */; };
+		2C3F9611877D5B5FB1EFC39C /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED78B13D068AC5FB078A93A /* LiveActivityManager.swift */; };
 		2C8E8A562D5104E600746A69 /* OAArabicNormalizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */; };
+		2CC1F537BE7D67C4EE775C87 /* TrackRecordingSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731932FAB122AAA702A3997B /* TrackRecordingSnapshot.swift */; };
 		2CFF22942F7AB48A000C5477 /* OARegionPriorityProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2CFF22932F7AB479000C5477 /* OARegionPriorityProvider.mm */; };
+		2EC8437EBE8A05757F50A7F7 /* NavigationLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9670DED7334E51936366F484 /* NavigationLiveActivity.swift */; };
 		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
 		3202C5932D6647CB0094AC8B /* ItemsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */; };
 		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
@@ -187,7 +210,6 @@
 		32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */; };
 		32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */; };
 		3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
-		4452B88BEBDEF179C92E49EF /* PoiAdditionalLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */; };
 		32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32190FD72D4909850006E91C /* RenderedObjectHelper.swift */; };
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
@@ -346,6 +368,9 @@
 		32FF4C332C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */; };
 		32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */; };
 		32FF4C362C1A32D200246B36 /* DownloadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */; };
+		35D1085B7F2830939C7E2DA0 /* TrackRecordingLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6FF13161B6BC4C26EB7035 /* TrackRecordingLiveActivity.swift */; };
+		4452B88BEBDEF179C92E49EF /* PoiAdditionalLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */; };
+		4473450E2D3241BABB2D8D24 /* UIBezierPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2289EA5BC0D043419F630EA9 /* UIBezierPath+Extension.swift */; };
 		4603FD222AD4B97600525A93 /* OABaseNavbarSubviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4603FD212AD4B97600525A93 /* OABaseNavbarSubviewViewController.m */; };
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
@@ -499,10 +524,14 @@
 		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
 		54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955032F4E950100549501 /* WidgetPanelAppearance.swift */; };
 		54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */; };
+		64B0053DFA8640C281A8569D /* LiveActivityPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3A7E332733470882F0A760 /* LiveActivityPhase.swift */; };
+		682F705C70DF4F4A9E3F0EE9 /* LiveActivitiesBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8148C914E8461887AE36FC /* LiveActivitiesBundle.swift */; };
+		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
 		818F239B2C04EBF100A488C9 /* marine.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 818F239A2C04EBF000A488C9 /* marine.render.xml */; };
 		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
 		81E0C9432D37DE5B00BC7D85 /* bundled_assets.json in Resources */ = {isa = PBXBuildFile; fileRef = 81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */; };
 		81E0C9462D37DFCD00BC7D85 /* OABundledAsetts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E0C9452D37DFC700BC7D85 /* OABundledAsetts.swift */; };
+		83D7206D17B643F5BA6274AD /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84185A801AA99FFF00F70328 /* StoreKit.framework */; };
 		8424317C1AEEBEEB00925821 /* phrases in Resources */ = {isa = PBXBuildFile; fileRef = 842431791AEEBEEB00925821 /* phrases */; };
 		8433947B1FF4FA38006205A5 /* ding.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 843394761FF4FA37006205A5 /* ding.aiff */; };
@@ -548,6 +577,7 @@
 		8AE943B327A28BE900961319 /* OAWeatherRasterLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8AE943B227A28BE900961319 /* OAWeatherRasterLayer.mm */; };
 		8AF348772779D88100A64824 /* libproj_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF348762779D88100A64824 /* libproj_static.a */; };
 		8EBE587727297A320075B834 /* test-resources in Resources */ = {isa = PBXBuildFile; fileRef = 8EBE587627297A310075B834 /* test-resources */; };
+		94845DE0E34DE198D58C0028 /* LiveActivityContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F4DF18E376EF53B8E222BF /* LiveActivityContent.swift */; };
 		9A3A2ACC2C2C44B500B28C43 /* OATopIndexFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */; };
 		9F4844A72FD0000100484401 /* AisTrackerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A32FD0000100484401 /* AisTrackerPlugin.swift */; };
 		9F4844A82FD0000100484401 /* AisTrackerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844A42FD0000100484401 /* AisTrackerSettingsViewController.swift */; };
@@ -562,8 +592,8 @@
 		9F4844D12FD0000100484401 /* AisTrackerProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4844D02FD0000100484401 /* AisTrackerProduct.swift */; };
 		9F5A00032FD0000100484401 /* AisObjectDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F5A00022FD0000100484401 /* AisObjectDrawable.mm */; };
 		A11CE00233EF000100000002 /* ListFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE00133EF000100000001 /* ListFormatter+Extension.swift */; };
+		A2788E394BBF4ABCA5EC33AE /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722F131D18FC4A68BBDEBDEE /* ActivityView.swift */; };
 		A47DBB8A019961E55988667C /* OARouteCalculationResultTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */; };
-		2A8BC60B3F570E7A29CE9C16 /* OARouteIntermediatePointsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */; };
 		A5A500022F50000100000002 /* AstronomyPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500012F50000100000001 /* AstronomyPlugin.swift */; };
 		A5A500062F50000100000006 /* AstronomyPluginSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500052F50000100000005 /* AstronomyPluginSettings.swift */; };
 		A5A500082F50000100000008 /* AstroDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A500072F50000100000007 /* AstroDataProvider.swift */; };
@@ -612,6 +642,8 @@
 		A5A504052F51000200000405 /* StarMapCatalogsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503052F51000200000305 /* StarMapCatalogsAdapter.swift */; };
 		A5A504062F51000200000406 /* StarMapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A503062F51000200000306 /* StarMapSearchViewController.swift */; };
 		A5C7E00133F0000100C0DE01 /* RouteChartSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C7E00033F0000100C0DE01 /* RouteChartSynchronizer.swift */; };
+		A5F80831CC3223A785FAED06 /* LiveActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFFCF5D54A4FAA135A358A /* LiveActivityAttributes.swift */; };
+		A8DE7EC78CF3462385DBCDBB /* ActivitySymbolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D19C95DDD34C11B45F99CB /* ActivitySymbolView.swift */; };
 		B0D6100B2E010FD6F3088B80 /* OATrackMenuHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61823DCC461FF03FE8103 /* OATrackMenuHeaderView.mm */; };
 		B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D618034074DE575CDAACDD /* OAAddWaypointViewController.mm */; };
 		B0D610C833B6EA61B1C74268 /* OADeleteWaypointsGroupBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B0D61BD47F1716F617480A05 /* OADeleteWaypointsGroupBottomSheetViewController.mm */; };
@@ -642,9 +674,12 @@
 		B247455827E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B247455627E6470A00C18C3F /* OATwoFilledButtonsTableViewCell.xib */; };
 		B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.mm */; };
 		B24745C127F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B24745BF27F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib */; };
+		B296E417B0A34D76865D21D1 /* ScreenAwakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B296E417B0A34D76865D21D2 /* ScreenAwakeService.swift */; };
+		B2A5694292224E8DA317C643 /* LiveActivityKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DE0FB6068E466395C5B8E9 /* LiveActivityKind.swift */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB27270119CB38D7007C5613 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FC19CB38D7007C5613 /* fonts */; };
 		BB27270419CB38D7007C5613 /* stubs in Resources */ = {isa = PBXBuildFile; fileRef = BB2726FD19CB38D7007C5613 /* stubs */; };
+		BB4D60CDE56F4E5C9CBF2948 /* NavigationSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F97ED115AFA461697FC94D2 /* NavigationSnapshot.swift */; };
 		BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
 		BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
@@ -666,9 +701,9 @@
 		C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */; };
 		C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */; };
 		C0D3C00C2F60000100C0D30C /* OACrashReportPromptViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */; };
-		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
 		C0D3C0102F60000100C0D310 /* OAMemoryLog.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0122F60000100C0D312 /* OAMemoryLog.mm */; };
 		C0D3C0112F60000100C0D311 /* OACrashReportSender.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D3C0142F60000100C0D314 /* OACrashReportSender.mm */; };
+		C0D517770001000000000003 /* OAFavoritesBackupMerger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */; };
 		C0DA57122FE9000100C0DA57 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */; };
 		C0DA57152FE9000200C0DA57 /* UITestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57132FE9000200C0DA57 /* UITestState.swift */; };
 		C0DA57162FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */; };
@@ -795,6 +830,7 @@
 		C5C472F82ED6E52300682CAB /* TripRecordingElevationWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */; };
 		C5C472FA2ED72FCF00682CAB /* TripRecordingElevationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */; };
 		C5C472FC2ED87F9900682CAB /* TripRecordingTimeWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C472FB2ED87F9900682CAB /* TripRecordingTimeWidget.swift */; };
+		C5C58153306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */; };
 		C5C81F842E4F2EC7009D3439 /* MapSettingsButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */; };
 		C5C81F862E4F61AB009D3439 /* SearchButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */; };
 		C5C81F8A2E532DCE009D3439 /* ZoomOutButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */; };
@@ -817,6 +853,8 @@
 		C5EB56FB2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB56FA2FD18B8A00D01657 /* FavoriteListViewController+Delegates.swift */; };
 		C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */; };
 		C5EE465B2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */; };
+		C857AE9D3A1840C79F038933 /* ActivityTurnShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B05F7C0DE7146AC8B8B99C1 /* ActivityTurnShape.swift */; };
+		C9DC1E0718B34DB2B0C46BBB /* TurnPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3554D5AA38944F1ABFB947C /* TurnPaths.swift */; };
 		CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB13C1566E5C9A2B0D3E /* OADeleteAllFilesCommand.mm */; };
 		CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */; };
 		CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED355FD3FAEA8F4F74263 /* OAWeatherBandSettingsViewController.mm */; };
@@ -855,6 +893,7 @@
 		CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */; };
 		CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED6B983C859FE4CF11CA1 /* OACollectionViewFlowLayout.m */; };
 		CA4EDF67F88C1EDA037C0E3B /* OAWeatherToolbar.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDD1F641FDF3A3C7BB25C /* OAWeatherToolbar.mm */; };
+		CBA2717CA97E24938F50EB79 /* LiveActivities.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = EF181C12F12D8A6E38D9FC87 /* LiveActivities.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CE0BA2093045A00300089B64 /* DescriptionDeviceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */; };
 		CE2AAB2B2FBF281000A5D22E /* CancelableScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2AAB2A2FBF281000A5D22E /* CancelableScrollView.swift */; };
 		CE4075A32FC48BD9004224AA /* BasePoiIconCollectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4075A22FC48BD6004224AA /* BasePoiIconCollectionHandler.swift */; };
@@ -921,18 +960,29 @@
 		D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */; };
 		D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */; };
 		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
+		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
+		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
 		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
-		D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000010 /* AmenityCardRowsTests.swift */; };
 		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
+		D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000010 /* AmenityCardRowsTests.swift */; };
 		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */; };
 		D1C573510000000000000001 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
 		D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
 		D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */; };
-		D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */; };
 		D1C573520000000000000001 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
 		D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
+		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
+		D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */; };
+		D1C584800000000000000001 /* Profiles/OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* Profiles/OALocationIconTests.m */; };
+		D1C5848A0000000000000001 /* Profiles/Model3dHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5848A0000000000000002 /* Profiles/Model3dHelperTests.swift */; };
+		D1C585900000000000000001 /* Helpers/OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* Helpers/OAReverseGeocoderStopTests.mm */; };
+		D1C586500000000000000001 /* Helpers/UtilitiesUrlQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C586500000000000000002 /* Helpers/UtilitiesUrlQueryTests.swift */; };
+		D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */; };
+		D1C608080000000000000001 /* Helpers/OAFreeMapsCountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C608080000000000000002 /* Helpers/OAFreeMapsCountTests.m */; };
+		D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000002 /* PlanRouteHistoryUITests.swift */; };
+		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
 		D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */; };
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
@@ -966,8 +1016,6 @@
 		D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */; };
 		D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */; };
 		D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */; };
-		ED6086000000000000000003 /* PlanRouteScrollableViewController+UITesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */; };
-		ED6086000000000000000001 /* PlanRouteUITestStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000002 /* PlanRouteUITestStateView.swift */; };
 		D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */; };
 		D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */; };
 		D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */; };
@@ -980,6 +1028,7 @@
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
 		D7BF047A2FD2DB4400BABB31 /* TracksIndexingTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */; };
+		D7D74763192B4F04BF6E8887 /* ActivityTurnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9487490E45FD4614B3666614 /* ActivityTurnView.swift */; };
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
 		D7EE6720301782CA0047F171 /* OAReorderSegmentCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
@@ -1544,7 +1593,6 @@
 		DA5A83D926C563A800F274C7 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */; };
 		DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */; };
 		DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */; };
-		C5C58153306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */; };
 		DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */; };
 		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */; };
 		DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */; };
@@ -1640,7 +1688,6 @@
 		DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EDB26C563A400F274C7 /* OARulerByTapControlLayer.mm */; };
 		DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */; };
 		DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */; };
-		ED6086000000000000000005 /* OAMeasurementToolLayer+UITesting.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */; };
 		DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */; };
 		DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE426C563A400F274C7 /* OAGPXRecLayer.mm */; };
 		DA5A845B26C563A900F274C7 /* OADestinationsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE626C563A400F274C7 /* OADestinationsLayer.mm */; };
@@ -1703,7 +1750,6 @@
 		DA5A849B26C563A900F274C7 /* OAClearPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7026C563A500F274C7 /* OAClearPointsCommand.mm */; };
 		DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7326C563A500F274C7 /* OAMeasurementModeCommand.mm */; };
 		DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7426C563A500F274C7 /* OARemovePointCommand.mm */; };
-		0A5E1C0D2F7A10000000B001 /* OARemovePointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */; };
 		DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7526C563A500F274C7 /* OAReversePointsCommand.mm */; };
 		DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7826C563A500F274C7 /* OAChangeRouteModeCommand.mm */; };
 		DA5A84A026C563A900F274C7 /* OAReorderPointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7926C563A500F274C7 /* OAReorderPointCommand.mm */; };
@@ -1820,7 +1866,6 @@
 		DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */; };
 		DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */; };
 		DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */; };
-		0EACBEE6C24FB1216C606B48 /* InstallAttribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */; };
 		DA5A853426C563A900F274C7 /* OASettingsExporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */; };
 		DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */; };
 		DA5A853726C563A900F274C7 /* OADefaultFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80AF26C563A600F274C7 /* OADefaultFavorite.m */; };
@@ -2004,6 +2049,9 @@
 		DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */; };
 		DAF50C70299D111B006AAF2E /* osmassistant.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */; };
 		E15829768D8BA09FF2202074 /* OACppRouteConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */; };
+		ED6086000000000000000001 /* PlanRouteUITestStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000002 /* PlanRouteUITestStateView.swift */; };
+		ED6086000000000000000003 /* PlanRouteScrollableViewController+UITesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */; };
+		ED6086000000000000000005 /* OAMeasurementToolLayer+UITesting.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */; };
 		F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 731A97689A654400B3FE08E0 /* OAObfFileList.mm */; };
 		FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */; };
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
@@ -2217,9 +2265,17 @@
 		FAF068332C3BC6840054BBEA /* WeatherContoursButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */; };
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
-		B296E417B0A34D76865D21D1 /* ScreenAwakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B296E417B0A34D76865D21D2 /* ScreenAwakeService.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
+		B3B21F42214045D197FE4E7A /* OATurnResource.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F2026C563A400F274C7 /* OATurnResource.m */; };
+		D9DC63BE3BB45F468A8DFD3D /* LiveActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDFFCF5D54A4FAA135A358A /* LiveActivityAttributes.swift */; };
+		651F7D1256ED4F11907A072C /* LiveActivityKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DE0FB6068E466395C5B8E9 /* LiveActivityKind.swift */; };
+		8F5A4084145D412C9FBE1C1C /* TurnPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3554D5AA38944F1ABFB947C /* TurnPaths.swift */; };
+		AED698C84A9E4DFCAAAF479A /* UIBezierPath+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2289EA5BC0D043419F630EA9 /* UIBezierPath+Extension.swift */; };
+		D57C4306A35B4DA3A671C2A6 /* LiveActivityPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3A7E332733470882F0A760 /* LiveActivityPhase.swift */; };
+		708799EA621EDD0936589A0C /* LiveActivityContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F4DF18E376EF53B8E222BF /* LiveActivityContent.swift */; };
+		A2DFED0FB8E242E3BD99E54F /* OATurnPathHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3326C563A400F274C7 /* OATurnPathHelper.mm */; };
+		1D50D0B7076D2632684D9997 /* LiveActivityCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA30B6419A32E358FA267A45 /* LiveActivityCoordinator.swift */; };
 		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
 		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
 		D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000002 /* OAFavoriteIconTests.mm */; };
@@ -2233,6 +2289,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AB0599FC916244C19255A008 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CF52F38733A14564B0D62FBB;
+			remoteInfo = OsmAndShared;
+		};
+		CAE4BBE88ED3EDA0A6C55D0A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83C2ABEDF63A79E2F583F9B3;
+			remoteInfo = LiveActivities;
+		};
 		D1C571210000000000000006 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
@@ -2277,9 +2347,21 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E2972FC7E0186820D383175C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CBA2717CA97E24938F50EB79 /* LiveActivities.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01DE0FB6068E466395C5B8E9 /* LiveActivityKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityKind.swift; sourceTree = "<group>"; };
 		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
 		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
 		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
@@ -2295,8 +2377,6 @@
 		040A97D4493C89D048F33E9F /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteRecalculationHelper.h; sourceTree = "<group>"; };
 		051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteRecalculationHelper.mm; sourceTree = "<group>"; };
-		0A5E1C0D2F7A10000000A002 /* OANativeRoutingMemoryGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANativeRoutingMemoryGuard.h; sourceTree = "<group>"; };
-		0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANativeRoutingMemoryGuard.mm; sourceTree = "<group>"; };
 		0513AA362A9B530A00CFA2A0 /* OADestinationBarWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationBarWidget.h; sourceTree = "<group>"; };
 		0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationBarWidget.mm; sourceTree = "<group>"; };
 		05541D94299267900014AEF8 /* contourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = contourlines.addon.render.xml; path = ../resources/rendering_styles/contourlines.addon.render.xml; sourceTree = "<group>"; };
@@ -2332,6 +2412,11 @@
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
 		0A2571A126F253620079774F /* OATrackMenuHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuHeaderView.xib; sourceTree = "<group>"; };
 		0A3EE20D275E4EE600C8B772 /* OAFoldersCollectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFoldersCollectionView.xib; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000A002 /* OANativeRoutingMemoryGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANativeRoutingMemoryGuard.h; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANativeRoutingMemoryGuard.mm; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000B002 /* OARemovePointsCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemovePointsCommand.h; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARemovePointsCommand.mm; sourceTree = "<group>"; };
+		0A6FF13161B6BC4C26EB7035 /* TrackRecordingLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRecordingLiveActivity.swift; sourceTree = "<group>"; };
 		0A832602270BE0E3006B8946 /* OATitleSwitchRoundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATitleSwitchRoundCell.xib; sourceTree = "<group>"; };
 		0A9BCF16272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuadItemsWithTitleDescIconCell.xib; sourceTree = "<group>"; };
 		0A9E222F041791C1D15A1AA5 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = id; path = id.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -2346,6 +2431,7 @@
 		0AD1F3B926CC0D6F00EE4DFD /* OAMapSettingsRoutesScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapSettingsRoutesScreen.mm; sourceTree = "<group>"; };
 		0C8182EBDA7908CDF274FA4D /* ars */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ars; path = ars.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0E4DA44079A941CF8E86B30B /* HashHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashHelper.swift; sourceTree = "<group>"; };
+		0E8148C914E8461887AE36FC /* LiveActivitiesBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivitiesBundle.swift; sourceTree = "<group>"; };
 		148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverter.mm; sourceTree = "<group>"; };
 		153B5979A977684A360DBEE5 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nb; path = nb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		17B920021BF64FC6825F4B37 /* SharedObfResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfResources.swift; sourceTree = "<group>"; };
@@ -2353,6 +2439,7 @@
 		180F303DB967BA6C58C6A762 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = is; path = is.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		18D8B041AE3F505150D22288 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		21D6D5267C249A7783FE069E /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tt; path = tt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		2289EA5BC0D043419F630EA9 /* UIBezierPath+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBezierPath+Extension.swift"; sourceTree = "<group>"; };
 		2702BC5F2EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBottomValuesSliderTableViewCell.swift; sourceTree = "<group>"; };
 		2702BC602EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TopBottomValuesSliderTableViewCell.xib; sourceTree = "<group>"; };
 		2709E3B12EFEE09B0036E686 /* BaseAppearanceIconCollectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAppearanceIconCollectionHandler.swift; sourceTree = "<group>"; };
@@ -2471,6 +2558,7 @@
 		2C8E8A552D5104E600746A69 /* OAArabicNormalizer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAArabicNormalizer.mm; sourceTree = "<group>"; };
 		2CF2F7A82F76E2DE000B0508 /* OARegionPriorityProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARegionPriorityProvider.h; sourceTree = "<group>"; };
 		2CFF22932F7AB479000C5477 /* OARegionPriorityProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARegionPriorityProvider.mm; sourceTree = "<group>"; };
+		2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteIntermediatePointsTest.mm; sourceTree = "<group>"; };
 		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
 		3202C5922D6647C90094AC8B /* ItemsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsCollectionViewController.swift; sourceTree = "<group>"; };
 		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
@@ -2529,7 +2617,6 @@
 		32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.h; sourceTree = "<group>"; };
 		32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.m; sourceTree = "<group>"; };
 		3216E9522BA097BD0087D0EF /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
-		D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalLabels.swift; sourceTree = "<group>"; };
 		32190FD72D4909850006E91C /* RenderedObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectHelper.swift; sourceTree = "<group>"; };
 		32190FD92D490B460006E91C /* OAMapUtils+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMapUtils+cpp.h"; sourceTree = "<group>"; };
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
@@ -2778,7 +2865,9 @@
 		3D3CE050EAE7CFA8AB354C9B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3D511879AF069E81F7982D8D /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bs; path = bs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3DE3B13BBDADBDC5240B9609 /* pa-Arab-PK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "pa-Arab-PK"; path = "pa-Arab-PK.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		3F97ED115AFA461697FC94D2 /* NavigationSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSnapshot.swift; sourceTree = "<group>"; };
 		400806DB6FEE9C994A9B7849 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = kn; path = kn.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		42F4DF18E376EF53B8E222BF /* LiveActivityContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityContent.swift; sourceTree = "<group>"; };
 		45AC48A519E6DD944908C94B /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ckb; path = ckb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		4603FD202AD4B93C00525A93 /* OABaseNavbarSubviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseNavbarSubviewViewController.h; sourceTree = "<group>"; };
 		4603FD212AD4B97600525A93 /* OABaseNavbarSubviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseNavbarSubviewViewController.m; sourceTree = "<group>"; };
@@ -2972,6 +3061,7 @@
 		4DFDDB75D4EA6F7B59FE5697 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "en-GB"; path = "en-GB.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		4E099E8A5743C59D1488372B /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ia; path = ia.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavoriteGroupViewController.swift; sourceTree = "<group>"; };
+		4FDFFCF5D54A4FAA135A358A /* LiveActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityAttributes.swift; sourceTree = "<group>"; };
 		51DEDD0911429C69632A4E57 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsAppearanceViewController.swift; sourceTree = "<group>"; };
 		54A955032F4E950100549501 /* WidgetPanelAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetPanelAppearance.swift; sourceTree = "<group>"; };
@@ -2979,6 +3069,7 @@
 		581529BA816B777BDDE596DF /* sat */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sat; path = sat.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		58806C4CDEB8F77A22ADEC62 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fi; path = fi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		5A7EE1C71CD0E3F432652780 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = gl; path = gl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		5B05F7C0DE7146AC8B8B99C1 /* ActivityTurnShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTurnShape.swift; sourceTree = "<group>"; };
 		5D6F1BE77A7230834CE6799E /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = oc; path = oc.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		5F144201EE72EAFA4C8F8ED4 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sk; path = sk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		63A3CE4608C61BF21E2E0CC3 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = lt; path = lt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -2988,15 +3079,20 @@
 		646882CB0339B1A7DF05FF76 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ca; path = ca.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		661C1AE4BA42FE0D238CC2E3 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = et; path = et.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		693861DCB8D9EFE3E8E2BEE1 /* OARouteCalculationResultTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteCalculationResultTest.mm; sourceTree = "<group>"; };
-		2D8C0EA34D4C77FE6AD4B4BE /* OARouteIntermediatePointsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteIntermediatePointsTest.mm; sourceTree = "<group>"; };
 		6965E6758C40DC31F74EA9B9 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sl; path = sl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6A95B0B2F6F783059E18100C /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = an; path = an.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6D3A7E332733470882F0A760 /* LiveActivityPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityPhase.swift; sourceTree = "<group>"; };
 		6D8EAECD4057EDB5E827CB61 /* sc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sc; path = sc.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		714EA706A5C69DE963B4727D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		722F131D18FC4A68BBDEBDEE /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		7291F98BFA40BEC8CB471FCC /* es-AR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-AR"; path = "es-AR.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		731932FAB122AAA702A3997B /* TrackRecordingSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRecordingSnapshot.swift; sourceTree = "<group>"; };
 		731A97689A654400B3FE08E0 /* OAObfFileList.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileList.mm; sourceTree = "<group>"; };
 		767A4E80BA269E1BDF870978 /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hsb; path = hsb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		78B06D7258F7B0F623FEFE76 /* te */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = te; path = te.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		79D19C95DDD34C11B45F99CB /* ActivitySymbolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitySymbolView.swift; sourceTree = "<group>"; };
+		808F06CCEE5B4BE18FAF4B8E /* LiveActivities-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LiveActivities-Bridging-Header.h"; sourceTree = "<group>"; };
+		809DAD78C2E34976B759BB62 /* LiveActivitySessionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivitySessionState.swift; sourceTree = "<group>"; };
 		818F239A2C04EBF000A488C9 /* marine.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = marine.render.xml; path = ../resources/rendering_styles/marine.render.xml; sourceTree = "<group>"; };
 		81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGeographicLib_STATIC.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E0C9422D37DE5A00BC7D85 /* bundled_assets.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = bundled_assets.json; path = ../resources/bundled_assets.json; sourceTree = "<group>"; };
@@ -3054,6 +3150,7 @@
 		84F1F9B21DE826B9001AA520 /* OsmAnd Maps.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OsmAnd Maps.entitlements"; sourceTree = "<group>"; };
 		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		85297AD2AE314D2CBB563735 /* BaseLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseLiveActivity.swift; sourceTree = "<group>"; };
 		89E61A559D91206415D331D2 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sv; path = sv.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		8A0DF07B23942D47000A1D4B /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A16B96D211886110052B161 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3088,8 +3185,11 @@
 		8AF348762779D88100A64824 /* libproj_static.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libproj_static.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BD9FA9C2F7AD66558B5B407 /* UIImage+RouteActivityIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+RouteActivityIcon.swift"; sourceTree = "<group>"; };
 		8EBE587627297A310075B834 /* test-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "test-resources"; path = "../resources/test-resources"; sourceTree = "<group>"; };
+		8ED78B13D068AC5FB078A93A /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
+		9487490E45FD4614B3666614 /* ActivityTurnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTurnView.swift; sourceTree = "<group>"; };
 		9529A7312A270F2817D6230C /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nn; path = nn.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		964BD60A86A740C16A76A246 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fa; path = fa.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		9670DED7334E51936366F484 /* NavigationLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLiveActivity.swift; sourceTree = "<group>"; };
 		9A3A2ACA2C2C448300B28C43 /* OATopIndexFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATopIndexFilter.h; sourceTree = "<group>"; };
 		9A3A2ACB2C2C44B500B28C43 /* OATopIndexFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATopIndexFilter.mm; sourceTree = "<group>"; };
 		9C102C0285A946359E1BE6A4 /* OAObfFileList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAObfFileList.h; sourceTree = "<group>"; };
@@ -3221,7 +3321,9 @@
 		B24745BD27F862C200C18C3F /* OAWeatherLayerSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWeatherLayerSettingsViewController.h; sourceTree = "<group>"; };
 		B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherLayerSettingsViewController.mm; sourceTree = "<group>"; };
 		B24745BF27F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherLayerSettingsViewController.xib; sourceTree = "<group>"; };
+		B296E417B0A34D76865D21D2 /* ScreenAwakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenAwakeService.swift; sourceTree = "<group>"; };
 		B2FD90AEAE486BD70154D985 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = eo; path = eo.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		B888FCD4C1477C59334F19AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA8FDA1094A60093CE1E33D1 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		BADF4F0A4699AC62A53D2722 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = he; path = he.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -3265,12 +3367,12 @@
 		C0D3C0062F60000100C0D306 /* OACrashReportRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportRepository.swift; sourceTree = "<group>"; };
 		C0D3C0092F60000100C0D309 /* OACrashReportPromptCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptCoordinator.swift; sourceTree = "<group>"; };
 		C0D3C00A2F60000100C0D30A /* OACrashReportPromptViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OACrashReportPromptViewController.swift; sourceTree = "<group>"; };
-		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
-		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
 		C0D3C0122F60000100C0D312 /* OAMemoryLog.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMemoryLog.mm; sourceTree = "<group>"; };
 		C0D3C0132F60000100C0D313 /* OAMemoryLog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMemoryLog.h; sourceTree = "<group>"; };
 		C0D3C0142F60000100C0D314 /* OACrashReportSender.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACrashReportSender.mm; sourceTree = "<group>"; };
 		C0D3C0152F60000100C0D315 /* OACrashReportSender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACrashReportSender.h; sourceTree = "<group>"; };
+		C0D517770001000000000001 /* OAFavoritesBackupMerger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoritesBackupMerger.h; sourceTree = "<group>"; };
+		C0D517770001000000000002 /* OAFavoritesBackupMerger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesBackupMerger.mm; sourceTree = "<group>"; };
 		C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		C0DA57132FE9000200C0DA57 /* UITestState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestState.swift; sourceTree = "<group>"; };
 		C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAccessibilityIdentifier.swift; sourceTree = "<group>"; };
@@ -3503,6 +3605,7 @@
 		C5C472F72ED6E52300682CAB /* TripRecordingElevationWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingElevationWidgetState.swift; sourceTree = "<group>"; };
 		C5C472F92ED72FCF00682CAB /* TripRecordingElevationWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingElevationWidget.swift; sourceTree = "<group>"; };
 		C5C472FB2ED87F9900682CAB /* TripRecordingTimeWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripRecordingTimeWidget.swift; sourceTree = "<group>"; };
+		C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		C5C81F832E4F2EC6009D3439 /* MapSettingsButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsButtonState.swift; sourceTree = "<group>"; };
 		C5C81F852E4F61AB009D3439 /* SearchButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButtonState.swift; sourceTree = "<group>"; };
 		C5C81F892E532DCE009D3439 /* ZoomOutButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomOutButtonState.swift; sourceTree = "<group>"; };
@@ -3677,11 +3780,14 @@
 		CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateGridFormatBridge.swift; sourceTree = "<group>"; };
 		CFAD0317D259939278620F4D /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = da; path = da.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D086857B31B2466506C886C1 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cy; path = cy.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalLabels.swift; sourceTree = "<group>"; };
 		D11B1870D2F27BC8784B9B6E /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = eu; path = eu.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursParserTest.swift; sourceTree = "<group>"; };
 		D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpeningHoursParserTestSupport.h; sourceTree = "<group>"; };
 		D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OpeningHoursParserTestSupport.mm; sourceTree = "<group>"; };
 		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
+		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
+		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
 		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
 		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
 		D1C571200000000000000010 /* AmenityCardRowsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityCardRowsTests.swift; sourceTree = "<group>"; };
@@ -3691,9 +3797,19 @@
 		D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteEditingBridgeTest.mm; sourceTree = "<group>"; };
 		D1C573510000000000000003 /* PlanRouteTrackSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSource.swift; sourceTree = "<group>"; };
 		D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSourceTests.swift; sourceTree = "<group>"; };
-		D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileSelectionTests.swift; sourceTree = "<group>"; };
 		D1C573520000000000000003 /* PlanRoutePresentationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePresentationContext.swift; sourceTree = "<group>"; };
+		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
+		D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileSelectionTests.swift; sourceTree = "<group>"; };
+		D1C584800000000000000002 /* Profiles/OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
+		D1C5848A0000000000000002 /* Profiles/Model3dHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles/Model3dHelperTests.swift; sourceTree = "<group>"; };
+		D1C585900000000000000002 /* Helpers/OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
+		D1C586500000000000000002 /* Helpers/UtilitiesUrlQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/UtilitiesUrlQueryTests.swift; sourceTree = "<group>"; };
+		D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPanelMenuRestorationTests.mm; sourceTree = "<group>"; };
+		D1C608080000000000000002 /* Helpers/OAFreeMapsCountTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Helpers/OAFreeMapsCountTests.m; sourceTree = "<group>"; };
+		D3554D5AA38944F1ABFB947C /* TurnPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurnPaths.swift; sourceTree = "<group>"; };
 		D3CA6B52398C60EDCB0357E5 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		D57820010000000000000002 /* PlanRouteHistoryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryUITests.swift; sourceTree = "<group>"; };
+		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
 		D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeTracksByViewController.swift; sourceTree = "<group>"; };
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
@@ -3728,8 +3844,6 @@
 		D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiState.swift; sourceTree = "<group>"; };
 		D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteScrollableViewController.swift; sourceTree = "<group>"; };
 		D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteToolbarsView.swift; sourceTree = "<group>"; };
-		ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlanRouteScrollableViewController+UITesting.swift"; sourceTree = "<group>"; };
-		ED6086000000000000000002 /* PlanRouteUITestStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteUITestStateView.swift; sourceTree = "<group>"; };
 		D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTopPartView.swift; sourceTree = "<group>"; };
 		D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBetweenPointsViewController.swift; sourceTree = "<group>"; };
 		D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingsViewController.swift; sourceTree = "<group>"; };
@@ -4765,7 +4879,6 @@
 		DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditGroupViewController.mm; sourceTree = "<group>"; };
 		DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
 		DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditDescriptionViewController.h; sourceTree = "<group>"; };
-		C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		DA5A7E1626C563A300F274C7 /* OAEditGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditGroupViewController.h; sourceTree = "<group>"; };
 		DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditDescriptionViewController.m; sourceTree = "<group>"; };
 		DA5A7E1C26C563A300F274C7 /* OACollapsableTransportStopRoutesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableTransportStopRoutesView.h; sourceTree = "<group>"; };
@@ -4918,8 +5031,6 @@
 		DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapLayers.h; sourceTree = "<group>"; };
 		DA5A7EDD26C563A400F274C7 /* OAGPXRecLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXRecLayer.h; sourceTree = "<group>"; };
 		DA5A7EDE26C563A400F274C7 /* OAFavoritesLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoritesLayer.h; sourceTree = "<group>"; };
-		ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "OAMeasurementToolLayer+UITesting.mm"; sourceTree = "<group>"; };
-		ED6086000000000000000007 /* OAMeasurementToolLayer+UITesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMeasurementToolLayer+UITesting.h"; sourceTree = "<group>"; };
 		DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementToolLayer.h; sourceTree = "<group>"; };
 		DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmBugsLayer.mm; sourceTree = "<group>"; };
 		DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOverlayMapLayer.mm; sourceTree = "<group>"; };
@@ -5069,8 +5180,6 @@
 		DA5A7F8226C563A500F274C7 /* OAMeasurementCommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMeasurementCommandManager.m; sourceTree = "<group>"; };
 		DA5A7F8326C563A500F274C7 /* OAMovePointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMovePointCommand.h; sourceTree = "<group>"; };
 		DA5A7F8426C563A500F274C7 /* OARemovePointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARemovePointCommand.h; sourceTree = "<group>"; };
-		0A5E1C0D2F7A10000000B002 /* OARemovePointsCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemovePointsCommand.h; sourceTree = "<group>"; };
-		0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARemovePointsCommand.mm; sourceTree = "<group>"; };
 		DA5A7F8526C563A500F274C7 /* OAApplyGpxApproximationCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAApplyGpxApproximationCommand.h; sourceTree = "<group>"; };
 		DA5A7F8626C563A500F274C7 /* OAAddPointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddPointCommand.h; sourceTree = "<group>"; };
 		DA5A7F8726C563A500F274C7 /* OAPlanningPopupBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPlanningPopupBaseViewController.m; sourceTree = "<group>"; };
@@ -5274,7 +5383,6 @@
 		DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsImporter.mm; sourceTree = "<group>"; };
 		DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUIHelper.mm; sourceTree = "<group>"; };
 		DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiImageHelper.h; sourceTree = "<group>"; };
-		FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallAttribution.swift; sourceTree = "<group>"; };
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
 		DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapTileDownloader.h; sourceTree = "<group>"; };
@@ -5557,6 +5665,11 @@
 		EA0BF41256DE1E07C28D7155 /* ro-RO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "ro-RO"; path = "ro-RO.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		EAC8A43D12C579F29C4E47B5 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hu; path = hu.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EB41278547A52127E54178D8 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = vi; path = vi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		ED6086000000000000000002 /* PlanRouteUITestStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteUITestStateView.swift; sourceTree = "<group>"; };
+		ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlanRouteScrollableViewController+UITesting.swift"; sourceTree = "<group>"; };
+		ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "OAMeasurementToolLayer+UITesting.mm"; sourceTree = "<group>"; };
+		ED6086000000000000000007 /* OAMeasurementToolLayer+UITesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMeasurementToolLayer+UITesting.h"; sourceTree = "<group>"; };
+		EF181C12F12D8A6E38D9FC87 /* LiveActivities.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LiveActivities.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2856D04C6F0F24FE34218F1 /* sr-Latn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "sr-Latn"; path = "sr-Latn.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		F4DAF879D8C110409C34F4C2 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ml; path = ml.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		F52CCEB92721719E4F3E96B6 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hr; path = hr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -5794,11 +5907,12 @@
 		FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherContoursButton.swift; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
-		B296E417B0A34D76865D21D2 /* ScreenAwakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenAwakeService.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		FBE1901A4990A9A6519E879E /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ur; path = ur.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallAttribution.swift; sourceTree = "<group>"; };
 		FE6716631789B78626884F9C /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = az; path = az.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		CA30B6419A32E358FA267A45 /* LiveActivityCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityCoordinator.swift; sourceTree = "<group>"; };
 		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
 		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
 		D1C609900000000000000002 /* OAFavoriteIconTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteIconTests.mm; sourceTree = "<group>"; };
@@ -5814,6 +5928,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9A30AE615726A32949E4CC61 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBA3AF66197FC4BB0039D991 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6328,6 +6449,23 @@
 			path = settings;
 			sourceTree = "<group>";
 		};
+		3BF318991C9F20C96E35E58B /* LiveActivities */ = {
+			isa = PBXGroup;
+			children = (
+				CA30B6419A32E358FA267A45 /* LiveActivityCoordinator.swift */,
+				809DAD78C2E34976B759BB62 /* LiveActivitySessionState.swift */,
+				8ED78B13D068AC5FB078A93A /* LiveActivityManager.swift */,
+				85297AD2AE314D2CBB563735 /* BaseLiveActivity.swift */,
+				9670DED7334E51936366F484 /* NavigationLiveActivity.swift */,
+				0A6FF13161B6BC4C26EB7035 /* TrackRecordingLiveActivity.swift */,
+				42F4DF18E376EF53B8E222BF /* LiveActivityContent.swift */,
+				01DE0FB6068E466395C5B8E9 /* LiveActivityKind.swift */,
+				6D3A7E332733470882F0A760 /* LiveActivityPhase.swift */,
+				4FDFFCF5D54A4FAA135A358A /* LiveActivityAttributes.swift */,
+			);
+			path = LiveActivities;
+			sourceTree = "<group>";
+		};
 		46624E6F2993B20100F425AE /* Base */ = {
 			isa = PBXGroup;
 			children = (
@@ -6597,6 +6735,7 @@
 			isa = PBXGroup;
 			children = (
 				DAEA9DB82840F48700362C4D /* libskia_static.a */,
+				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -6778,6 +6917,7 @@
 				BB098CF21793F7FD00423944 /* Products */,
 				8A41EAD02309AD2C002F2515 /* Recovered References */,
 				DA7F2587231A68CD00E54F77 /* Libraries */,
+				C3E1AFE07D6C0D1CBF6EEF38 /* LiveActivities */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6787,6 +6927,7 @@
 				BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */,
 				DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */,
 				D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */,
+				EF181C12F12D8A6E38D9FC87 /* LiveActivities.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -6952,6 +7093,37 @@
 			path = CrashDiagnostics;
 			sourceTree = "<group>";
 		};
+		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
+			);
+			path = AppEnvironment;
+			sourceTree = "<group>";
+		};
+		C0DA57182FE9000200C0DA57 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
+				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		C3E1AFE07D6C0D1CBF6EEF38 /* LiveActivities */ = {
+			isa = PBXGroup;
+			children = (
+				5B05F7C0DE7146AC8B8B99C1 /* ActivityTurnShape.swift */,
+				9487490E45FD4614B3666614 /* ActivityTurnView.swift */,
+				808F06CCEE5B4BE18FAF4B8E /* LiveActivities-Bridging-Header.h */,
+				0E8148C914E8461887AE36FC /* LiveActivitiesBundle.swift */,
+				722F131D18FC4A68BBDEBDEE /* ActivityView.swift */,
+				79D19C95DDD34C11B45F99CB /* ActivitySymbolView.swift */,
+				B888FCD4C1477C59334F19AF /* Info.plist */,
+			);
+			path = LiveActivities;
+			sourceTree = "<group>";
+		};
 		CE79CF223025CFDE00B3BA15 /* Coordinates */ = {
 			isa = PBXGroup;
 			children = (
@@ -6977,23 +7149,6 @@
 				CEFC9E7330373A5300D224E4 /* CoordinateGridFormatBridge.swift */,
 			);
 			path = Coordinates;
-            sourceTree = "<group>";
-        };
-		C0DA57172FE9000200C0DA57 /* AppEnvironment */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57102FE9000100C0DA57 /* AppEnvironment.swift */,
-			);
-			path = AppEnvironment;
-			sourceTree = "<group>";
-		};
-		C0DA57182FE9000200C0DA57 /* UITests */ = {
-			isa = PBXGroup;
-			children = (
-				C0DA57142FE9000200C0DA57 /* UITestAccessibilityIdentifier.swift */,
-				C0DA57132FE9000200C0DA57 /* UITestState.swift */,
-			);
-			path = UITests;
 			sourceTree = "<group>";
 		};
 		CE7AC19F2FE02A2600495411 /* MapPreviewRenderer */ = {
@@ -7032,6 +7187,15 @@
 			path = Import;
 			sourceTree = "<group>";
 		};
+		D1C564400000000000000005 /* PointEditing */ = {
+			isa = PBXGroup;
+			children = (
+				D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */,
+				D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */,
+			);
+			path = PointEditing;
+			sourceTree = "<group>";
+		};
 		D1C571200000000000000006 /* Panels */ = {
 			isa = PBXGroup;
 			children = (
@@ -7058,7 +7222,6 @@
 			isa = PBXGroup;
 			children = (
 				D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */,
-				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
 				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
 				D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */,
 			);
@@ -7308,6 +7471,7 @@
 				DA5A790726C5639F00F274C7 /* Transport */,
 				DA5A804326C563A500F274C7 /* Views */,
 				DA5A7A9626C563A000F274C7 /* Voice */,
+				3BF318991C9F20C96E35E58B /* LiveActivities */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -7685,6 +7849,8 @@
 		DA5A79C426C563A000F274C7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3F97ED115AFA461697FC94D2 /* NavigationSnapshot.swift */,
+				731932FAB122AAA702A3997B /* TrackRecordingSnapshot.swift */,
 				DA5A79CC26C563A000F274C7 /* OAFavoriteItem.h */,
 				DA5A79C526C563A000F274C7 /* OAFavoriteItem.mm */,
 				DA5A79CA26C563A000F274C7 /* OAGpxWptItem.h */,
@@ -10394,6 +10560,11 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				D1C608080000000000000002 /* Helpers/OAFreeMapsCountTests.m */,
+				D1C584800000000000000002 /* Profiles/OALocationIconTests.m */,
+				D1C5848A0000000000000002 /* Profiles/Model3dHelperTests.swift */,
+				D1C586500000000000000002 /* Helpers/UtilitiesUrlQueryTests.swift */,
+				D1C585900000000000000002 /* Helpers/OAReverseGeocoderStopTests.mm */,
 				D1C608080000000000000002 /* OAFreeMapsCountTests.m */,
 				D1C584800000000000000002 /* OALocationIconTests.m */,
 				D1C5848A0000000000000002 /* Model3dHelperTests.swift */,
@@ -10588,6 +10759,7 @@
 				CE72E161301264DE00E89264 /* UIImage+CarPlay.swift */,
 				32BC95722CC021CE00FEEAB8 /* UIFont+Extension.swift */,
 				CEAF081A2FD9226C0048A74A /* Array+Extension.swift */,
+				2289EA5BC0D043419F630EA9 /* UIBezierPath+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -10858,6 +11030,8 @@
 				FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */,
 				9C102C0285A946359E1BE6A4 /* OAObfFileList.h */,
 				731A97689A654400B3FE08E0 /* OAObfFileList.mm */,
+				17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */,
+				D3554D5AA38944F1ABFB947C /* TurnPaths.swift */,
 				17B920021BF64FC6825F4B37 /* SharedObfResources.swift */,
 				0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */,
 			);
@@ -11389,7 +11563,28 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		83C2ABEDF63A79E2F583F9B3 /* LiveActivities */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2CB777D37C834FE7A0F2617A /* Build configuration list for PBXNativeTarget "LiveActivities" */;
+			buildPhases = (
+				225BD3CDCB117CFE20416B62 /* Sources */,
+				9A30AE615726A32949E4CC61 /* Frameworks */,
+				1B4D7F74FA8E3D580BC17AB1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BBEE88A018694F92A9EA5137 /* PBXTargetDependency */,
+			);
+			name = LiveActivities;
+			productName = LiveActivities;
+			productReference = EF181C12F12D8A6E38D9FC87 /* LiveActivities.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
@@ -11397,18 +11592,20 @@
 				FAFD24032D3684370023C91F /* Link Qt Script (arm_device || arm_simulator) */,
 				DA8713222994F6760087BC7F /* Download regions.ocbf */,
 				8401FCFC1EE4723B00238915 /* Copy phrases */,
-				053CBFB62B9C907500E8C400 /* Compile OsmAnd Shared Library */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				FA45668A2AFB839000B07165 /* Run Script: SwiftLint */,
 				DA7F2596231A697300E54F77 /* Embed Frameworks */,
 				05DCE54A304D8925005DA649 /* Exclude ANGLE frameworks for Release */,
+				E2972FC7E0186820D383175C /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				FAB2B14D2C787E4400B59B7A /* PBXTargetDependency */,
+				BAA3BBB77B00F5DF1237F699 /* PBXTargetDependency */,
+				56F69A500CF747819278ADB7 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			packageProductDependencies = (
@@ -11462,10 +11659,18 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				CLASSPREFIX = OA;
 				LastUpgradeCheck = 2660;
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
+					DA72AB882508F40F00851313 = {
+						LastSwiftMigration = 1620;
+						TestTargetID = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
+						CreatedOnToolsVersion = 11.7;
+					};
+					D1C571210000000000000007 = {
+						TestTargetID = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
+						CreatedOnToolsVersion = 26.6;
+					};
 					BBA3AF30197FC4BB0039D991 = {
 						LastSwiftMigration = 1020;
 						SystemCapabilities = {
@@ -11477,16 +11682,8 @@
 							};
 						};
 					};
-					D1C571210000000000000007 = {
-						CreatedOnToolsVersion = 26.6;
-						TestTargetID = BBA3AF30197FC4BB0039D991;
-					};
-					DA72AB882508F40F00851313 = {
-						CreatedOnToolsVersion = 11.7;
-						LastSwiftMigration = 1620;
-						TestTargetID = BBA3AF30197FC4BB0039D991;
-					};
 				};
+				CLASSPREFIX = OA;
 			};
 			buildConfigurationList = BB098CEC1793F7FD00423944 /* Build configuration list for PBXProject "OsmAnd" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -11587,8 +11784,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = FA6116132C787B7C005C3ABD /* Products */;
 					ProjectRef = FA6116102C787B7C005C3ABD /* Charts.xcodeproj */;
+					ProductGroup = FA6116132C787B7C005C3ABD /* Products */;
 				},
 			);
 			projectRoot = "";
@@ -11596,6 +11793,8 @@
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
 				DA72AB882508F40F00851313 /* OsmAnd MapsTests */,
 				D1C571210000000000000007 /* OsmAnd MapsUITests */,
+				83C2ABEDF63A79E2F583F9B3 /* LiveActivities */,
+				CF52F38733A14564B0D62FBB /* OsmAndShared */,
 			);
 		};
 /* End PBXProject section */
@@ -11611,6 +11810,15 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1B4D7F74FA8E3D580BC17AB1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0DE39BF7864B2DF6E2B5C4AF /* Images.xcassets in Resources */,
+				83D7206D17B643F5BA6274AD /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBA3AF82197FC4BB0039D991 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -12006,7 +12214,8 @@
 /* Begin PBXShellScriptBuildPhase section */
 		053CBFB62B9C907500E8C400 /* Compile OsmAnd Shared Library */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
@@ -12120,10 +12329,32 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		225BD3CDCB117CFE20416B62 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C857AE9D3A1840C79F038933 /* ActivityTurnShape.swift in Sources */,
+				D7D74763192B4F04BF6E8887 /* ActivityTurnView.swift in Sources */,
+				682F705C70DF4F4A9E3F0EE9 /* LiveActivitiesBundle.swift in Sources */,
+				A2788E394BBF4ABCA5EC33AE /* ActivityView.swift in Sources */,
+				A8DE7EC78CF3462385DBCDBB /* ActivitySymbolView.swift in Sources */,
+				AED698C84A9E4DFCAAAF479A /* UIBezierPath+Extension.swift in Sources */,
+				A2DFED0FB8E242E3BD99E54F /* OATurnPathHelper.mm in Sources */,
+				B3B21F42214045D197FE4E7A /* OATurnResource.m in Sources */,
+				708799EA621EDD0936589A0C /* LiveActivityContent.swift in Sources */,
+				651F7D1256ED4F11907A072C /* LiveActivityKind.swift in Sources */,
+				8F5A4084145D412C9FBE1C1C /* TurnPaths.swift in Sources */,
+				D57C4306A35B4DA3A671C2A6 /* LiveActivityPhase.swift in Sources */,
+				D9DC63BE3BB45F468A8DFD3D /* LiveActivityAttributes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BBA3AF34197FC4BB0039D991 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D50D0B7076D2632684D9997 /* LiveActivityCoordinator.swift in Sources */,
+				2CC1F537BE7D67C4EE775C87 /* TrackRecordingSnapshot.swift in Sources */,
 				C0D3C0012F60000100C0D301 /* OACrashDiagnosticsManager.swift in Sources */,
 				C0D3C0022F60000100C0D302 /* OACrashReportRepository.swift in Sources */,
 				C0D3C00B2F60000100C0D30B /* OACrashReportPromptCoordinator.swift in Sources */,
@@ -13873,6 +14104,18 @@
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,
+				04D9FE7F2088432384F6A643 /* LiveActivitySessionState.swift in Sources */,
+				2C3F9611877D5B5FB1EFC39C /* LiveActivityManager.swift in Sources */,
+				1F0A028BAC621ADD13894487 /* BaseLiveActivity.swift in Sources */,
+				2EC8437EBE8A05757F50A7F7 /* NavigationLiveActivity.swift in Sources */,
+				BB4D60CDE56F4E5C9CBF2948 /* NavigationSnapshot.swift in Sources */,
+				35D1085B7F2830939C7E2DA0 /* TrackRecordingLiveActivity.swift in Sources */,
+				4473450E2D3241BABB2D8D24 /* UIBezierPath+Extension.swift in Sources */,
+				94845DE0E34DE198D58C0028 /* LiveActivityContent.swift in Sources */,
+				B2A5694292224E8DA317C643 /* LiveActivityKind.swift in Sources */,
+				C9DC1E0718B34DB2B0C46BBB /* TurnPaths.swift in Sources */,
+				64B0053DFA8640C281A8569D /* LiveActivityPhase.swift in Sources */,
+				A5F80831CC3223A785FAED06 /* LiveActivityAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13902,6 +14145,11 @@
 				C1A55E0B77300000000000B1 /* OASharedGpxApproximationTest.mm in Sources */,
 				C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */,
 				C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */,
+				D1C584800000000000000001 /* Profiles/OALocationIconTests.m in Sources */,
+				D1C5848A0000000000000001 /* Profiles/Model3dHelperTests.swift in Sources */,
+				D1C586500000000000000001 /* Helpers/UtilitiesUrlQueryTests.swift in Sources */,
+				D1C585900000000000000001 /* Helpers/OAReverseGeocoderStopTests.mm in Sources */,
+				D1C608080000000000000001 /* Helpers/OAFreeMapsCountTests.m in Sources */,
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
 				D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */,
 				D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */,
@@ -13941,6 +14189,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		56F69A500CF747819278ADB7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF52F38733A14564B0D62FBB /* OsmAndShared */;
+			targetProxy = AB0599FC916244C19255A008 /* PBXContainerItemProxy */;
+		};
+		BAA3BBB77B00F5DF1237F699 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83C2ABEDF63A79E2F583F9B3 /* LiveActivities */;
+			targetProxy = CAE4BBE88ED3EDA0A6C55D0A /* PBXContainerItemProxy */;
+		};
 		D1C57121000000000000000C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */;
@@ -13955,6 +14213,11 @@
 			isa = PBXTargetDependency;
 			name = DGCharts;
 			targetProxy = FAB2B14C2C787E4400B59B7A /* PBXContainerItemProxy */;
+		};
+		BBEE88A018694F92A9EA5137 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CF52F38733A14564B0D62FBB /* OsmAndShared */;
+			targetProxy = AB0599FC916244C19255A008 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -14231,6 +14494,348 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		27FC89D2309A01C8005948B7 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "OsmAnd MapsTests";
+			};
+			name = Nightly;
+		};
+		27FC89D3309A01C8005948B7 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "OsmAnd MapsUITests";
+			};
+			name = Nightly;
+		};
+		27FC89D4309A01C8005948B7 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = LiveActivities;
+				GCC_PREPROCESSOR_DEFINITIONS = "OSMAND_LIVE_ACTIVITIES=1";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Sources/AppHost",
+					"$(SRCROOT)/Sources/Controllers/Map/Widgets",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					OsmAndShared,
+					"-lsqlite3",
+					"-lxml2",
+					"-lz",
+				);
+			};
+			name = Nightly;
+		};
+		27FC89D5309A01C8005948B7 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = OsmAndShared;
+			};
+			name = Nightly;
+		};
+		31E4356AB3F8251FA5C18731 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MARKETING_VERSION = 4.7.4;
+				GCC_PREPROCESSOR_DEFINITIONS = "OSMAND_LIVE_ACTIVITIES=1";
+				CURRENT_PROJECT_VERSION = 4.7.4.2;
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.LiveActivities;
+				CLANG_ENABLE_MODULES = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SUPPORTS_MACCATALYST = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					OsmAndShared,
+					"-lsqlite3",
+					"-lxml2",
+					"-lz",
+				);
+				INFOPLIST_PREPROCESS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				LIBRARY_SEARCH_PATHS = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Sources/AppHost",
+					"$(SRCROOT)/Sources/Controllers/Map/Widgets",
+				);
+				SWIFT_VERSION = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "LiveActivities/LiveActivities-Bridging-Header.h";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				INFOPLIST_FILE = LiveActivities/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+			};
+			name = Debug;
+		};
+		69499129CECB9EEF2B16917E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MARKETING_VERSION = 4.7.4;
+				GCC_PREPROCESSOR_DEFINITIONS = "OSMAND_LIVE_ACTIVITIES=1";
+				CURRENT_PROJECT_VERSION = 4.7.4.2;
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.LiveActivities;
+				CLANG_ENABLE_MODULES = YES;
+				SUPPORTS_MACCATALYST = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILT_PRODUCTS_DIR)",
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					OsmAndShared,
+					"-lsqlite3",
+					"-lxml2",
+					"-lz",
+				);
+				INFOPLIST_PREPROCESS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				LIBRARY_SEARCH_PATHS = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Sources/AppHost",
+					"$(SRCROOT)/Sources/Controllers/Map/Widgets",
+				);
+				SWIFT_VERSION = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "LiveActivities/LiveActivities-Bridging-Header.h";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				INFOPLIST_FILE = LiveActivities/Info.plist;
+				GENERATE_INFOPLIST_FILE = YES;
+			};
+			name = Release;
+		};
+		96BEC63A9F1A4C729F904462 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORKS_FOLDER_PATH = Frameworks;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+			};
+			name = Release;
+		};
+		A1A1A1A10000000000000001 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COMPRESS_PNG_FILES = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				COPY_PHASE_STRIP = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LM67P5MQ23;
+				ENABLE_BITCODE = NO;
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
+					"${PROJECT_DIR}/../core/externals/protobuf/upstream.patched/src",
+					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
+					/usr/include/libxml2,
+					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
+					"${PROJECT_DIR}/../core-legacy/native/src",
+					"${PROJECT_DIR}/../core-legacy/native/include",
+					"${PROJECT_DIR}/../core-legacy/native/src/proto",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREFIX_HEADER = "";
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
+					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/Release",
+					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+				);
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "c99 c++17";
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGL_RENDERERS_SUPPORTED OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX";
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.nightly;
+				PRODUCT_NAME = "";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				STRIP_PNG_TEXT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "$(ARCHS_STANDARD)";
+				WARNING_CFLAGS = (
+					"-Wno-conversion",
+					"-Wno-shorten-64-to-32",
+				);
+			};
+			name = Nightly;
+		};
+		A1A1A1A10000000000000002 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.nightly;
+				SUPPORTS_MACCATALYST = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
+				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps.nightly";
+				MARKETING_VERSION = 4.7.4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
+					"$(PROJECT_DIR)/Libraries/Charts/build/Release-iphonesimulator",
+					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Release-iphonesimulator",
+				);
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				APP_DISPLAY_NAME = "OsmAnd Nightly";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconNightly;
+				CODE_SIGN_STYLE = Automatic;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static_standalone",
+					"-larchive_static",
+					"-licu4c_static",
+					"-lprotobuf_static",
+					"-lgdal_static",
+					"-lskia_static",
+					"-lexpat_static",
+					"-lgif_static",
+					"-ljpeg_static",
+					"-lpng_static",
+					"-lz_static",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
+				OBJROOT = "$SYMROOT";
+				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"-framework",
+					libEGL,
+					"-framework",
+					libGLESv2,
+				);
+				WRAPPER_EXTENSION = app;
+				CODE_SIGN_ENTITLEMENTS = "OsmAnd Nightly.entitlements";
+				CLANG_ENABLE_MODULES = YES;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
+					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(PROJECT_DIR)/Libraries/ANGLE/include",
+				);
+				TARGETED_DEVICE_FAMILY = "1,2";
+				KOTLIN_FRAMEWORK_BUILD_TYPE = release;
+				CURRENT_PROJECT_VERSION = 4.7.4.2;
+				WARNING_CFLAGS = "";
+				PROVISIONING_PROFILE = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+					"OSMAND_USE_ANGLE=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				APP_URL_SCHEME = "osmandmaps-nightly";
+			};
+			name = Nightly;
+		};
 		BB098D0C1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -14441,139 +15046,29 @@
 			};
 			name = Release;
 		};
-		A1A1A1A10000000000000001 /* Nightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = NO;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = NO;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				COMPRESS_PNG_FILES = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				COPY_PHASE_STRIP = YES;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = LM67P5MQ23;
-				ENABLE_BITCODE = NO;
-				ENABLE_MODULE_VERIFIER = YES;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"BUILD_$(CONFIGURATION)",
-					"$(inherited)",
-					"$(PLATFORM_DEFINITIONS)",
-					"GLES_SILENCE_DEPRECATION=1",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
-				);
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
-					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
-					"${PROJECT_DIR}/../core/externals/skia/upstream.patched",
-					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
-					"${PROJECT_DIR}/../core/externals/harfbuzz/upstream.patched/src",
-					"${PROJECT_DIR}/../core/externals/protobuf/upstream.patched/src",
-					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
-					/usr/include/libxml2,
-					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
-					"${PROJECT_DIR}/../core-legacy/native/src",
-					"${PROJECT_DIR}/../core-legacy/native/include",
-					"${PROJECT_DIR}/../core-legacy/native/src/proto",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				INFOPLIST_PREFIX_HEADER = "";
-				INFOPLIST_PREPROCESS = YES;
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
-					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/Release",
-					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
-					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
-				);
-				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "c99 c++17";
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGL_RENDERERS_SUPPORTED OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX";
-				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.nightly;
-				PRODUCT_NAME = "";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos;
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				STRIP_PNG_TEXT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "$(ARCHS_STANDARD)";
-				WARNING_CFLAGS = (
-					"-Wno-conversion",
-					"-Wno-shorten-64-to-32",
-				);
-			};
-			name = Nightly;
-		};
 		BBA3AFEC197FC4BB0039D991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APP_DISPLAY_NAME = "OsmAnd Maps";
-				APP_URL_SCHEME = osmandmaps;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				SUPPORTS_MACCATALYST = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.7.4.2;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
+				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
+				MARKETING_VERSION = 4.7.4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
 					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
-					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				APP_DISPLAY_NAME = "OsmAnd Maps";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"BUILD_$(CONFIGURATION)",
 					"DEBUG=1",
@@ -14582,33 +15077,9 @@
 					"GLES_SILENCE_DEPRECATION=1",
 					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
-				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
-					"BUILD_$(CONFIGURATION)",
-					"DEBUG=1",
-					"$(inherited)",
-					"$(PLATFORM_DEFINITIONS)",
-					"GLES_SILENCE_DEPRECATION=1",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
-					"OSMAND_USE_ANGLE=1",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"$(PROJECT_DIR)/Libraries/ANGLE/include",
-				);
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				MARKETING_VERSION = 4.7.4;
-				OBJROOT = $SYMROOT;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -14623,6 +15094,11 @@
 					"-lpng_static",
 					"-lz_static",
 				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				OBJROOT = "$SYMROOT";
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
 					"-framework",
@@ -14630,49 +15106,69 @@
 					"-framework",
 					libGLESv2,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = app;
+				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
+				CLANG_ENABLE_MODULES = YES;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
+					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(PROJECT_DIR)/Libraries/ANGLE/include",
+				);
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CURRENT_PROJECT_VERSION = 4.7.4.2;
+				WARNING_CFLAGS = "";
+				PROVISIONING_PROFILE = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"BUILD_$(CONFIGURATION)",
+					"DEBUG=1",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+					"OSMAND_USE_ANGLE=1",
+				);
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				APP_URL_SCHEME = osmandmaps;
 			};
 			name = Debug;
 		};
 		BBA3AFED197FC4BB0039D991 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APP_DISPLAY_NAME = "OsmAnd Maps";
-				APP_URL_SCHEME = osmandmaps;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
+					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
+				);
+				SUPPORTS_MACCATALYST = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.7.4.2;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
+				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
+				MARKETING_VERSION = 4.7.4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Libraries/Charts/build/Debug-iphonesimulator",
 					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Debug-iphonesimulator",
 				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
-					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				APP_DISPLAY_NAME = "OsmAnd Maps";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"BUILD_$(CONFIGURATION)",
 					"$(inherited)",
@@ -14680,32 +15176,9 @@
 					"GLES_SILENCE_DEPRECATION=1",
 					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
 				);
-				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
-					"BUILD_$(CONFIGURATION)",
-					"$(inherited)",
-					"$(PLATFORM_DEFINITIONS)",
-					"GLES_SILENCE_DEPRECATION=1",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
-					"OSMAND_USE_ANGLE=1",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"$(PROJECT_DIR)/Libraries/ANGLE/include",
-				);
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				MARKETING_VERSION = 4.7.4;
-				OBJROOT = $SYMROOT;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
+				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -14720,6 +15193,11 @@
 					"-lpng_static",
 					"-lz_static",
 				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
+				OBJROOT = "$SYMROOT";
 				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
 					"$(inherited)",
 					"-framework",
@@ -14727,115 +15205,41 @@
 					"-framework",
 					libGLESv2,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WARNING_CFLAGS = "";
 				WRAPPER_EXTENSION = app;
+				CODE_SIGN_ENTITLEMENTS = "OsmAnd Maps.entitlements";
+				CLANG_ENABLE_MODULES = YES;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
+					"\"$(SDKROOT)/usr/include/libxml2\"",
+					"$(PROJECT_DIR)/Libraries/ANGLE/include",
+				);
+				TARGETED_DEVICE_FAMILY = "1,2";
+				CURRENT_PROJECT_VERSION = 4.7.4.2;
+				WARNING_CFLAGS = "";
+				PROVISIONING_PROFILE = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"BUILD_$(CONFIGURATION)",
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+					"GLES_SILENCE_DEPRECATION=1",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+					"OSMAND_USE_ANGLE=1",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				APP_URL_SCHEME = osmandmaps;
 			};
 			name = Release;
-		};
-		A1A1A1A10000000000000002 /* Nightly */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconNightly;
-				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = YES;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "OsmAnd Nightly.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4.7.4.2;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)",
-					"$(PROJECT_DIR)/Libraries/Charts/build/Release-iphonesimulator",
-					"$(PROJECT_DIR)/Libraries/Charts/build/EagerLinkingTBDs/Release-iphonesimulator",
-				);
-				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/libEGL.xcframework/ios-arm64-simulator",
-					"$(PROJECT_DIR)/libGLESv2.xcframework/ios-arm64-simulator",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"BUILD_$(CONFIGURATION)",
-					"$(inherited)",
-					"$(PLATFORM_DEFINITIONS)",
-					"GLES_SILENCE_DEPRECATION=1",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
-				);
-				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
-					"BUILD_$(CONFIGURATION)",
-					"$(inherited)",
-					"$(PLATFORM_DEFINITIONS)",
-					"GLES_SILENCE_DEPRECATION=1",
-					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
-					"OSMAND_USE_ANGLE=1",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"${PROJECT_DIR}/Sources/ThirdPart/**\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"$(PROJECT_DIR)/Libraries/ANGLE/include",
-				);
-				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps.nightly";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
-				KOTLIN_FRAMEWORK_BUILD_TYPE = release;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)",
-				);
-				MARKETING_VERSION = 4.7.4;
-				OBJROOT = $SYMROOT;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lOsmAndCore_static_standalone",
-					"-larchive_static",
-					"-licu4c_static",
-					"-lprotobuf_static",
-					"-lgdal_static",
-					"-lskia_static",
-					"-lexpat_static",
-					"-lgif_static",
-					"-ljpeg_static",
-					"-lpng_static",
-					"-lz_static",
-				);
-				"OTHER_LDFLAGS[sdk=iphonesimulator*]" = (
-					"$(inherited)",
-					"-framework",
-					libEGL,
-					"-framework",
-					libGLESv2,
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.maps.nightly;
-				APP_DISPLAY_NAME = "OsmAnd Nightly";
-				APP_URL_SCHEME = "osmandmaps-nightly";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WARNING_CFLAGS = "";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Nightly;
 		};
 		D1C57121000000000000000D /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -14937,6 +15341,16 @@
 				TEST_TARGET_NAME = "OsmAnd Maps";
 			};
 			name = Release;
+		};
+		D9EFA0C35E274834B5E9CF09 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				FRAMEWORKS_FOLDER_PATH = Frameworks;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+			};
+			name = Debug;
 		};
 		DA72AB902508F41000851313 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -15096,6 +15510,26 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2CB777D37C834FE7A0F2617A /* Build configuration list for PBXNativeTarget "LiveActivities" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31E4356AB3F8251FA5C18731 /* Debug */,
+				69499129CECB9EEF2B16917E /* Release */,
+				27FC89D4309A01C8005948B7 /* Nightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F2781459CD3442198CFFC6B /* Build configuration list for PBXAggregateTarget "OsmAndShared" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D9EFA0C35E274834B5E9CF09 /* Debug */,
+				96BEC63A9F1A4C729F904462 /* Release */,
+				27FC89D5309A01C8005948B7 /* Nightly */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		BB098CEC1793F7FD00423944 /* Build configuration list for PBXProject "OsmAnd" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -15121,6 +15555,7 @@
 			buildConfigurations = (
 				D1C57121000000000000000D /* Debug */,
 				D1C57121000000000000000E /* Release */,
+				27FC89D3309A01C8005948B7 /* Nightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -15130,6 +15565,7 @@
 			buildConfigurations = (
 				DA72AB902508F41000851313 /* Debug */,
 				DA72AB912508F41000851313 /* Release */,
+				27FC89D2309A01C8005948B7 /* Nightly */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

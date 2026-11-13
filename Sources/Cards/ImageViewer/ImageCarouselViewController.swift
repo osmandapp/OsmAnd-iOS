@@ -281,6 +281,12 @@ final class ImageCarouselViewController: UIPageViewController {
                 return
             }
             url = imageURL
+        case let mapillaryCard as MapillaryAmenityImageCard:
+            guard let viewerURL = URL(string: mapillaryCard.url) else {
+                NSLog("Error: Invalid URL: \(mapillaryCard.url)")
+                return
+            }
+            url = viewerURL
         default:
             return
         }

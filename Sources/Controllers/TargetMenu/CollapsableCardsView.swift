@@ -135,6 +135,8 @@ final class CollapsableCardsView: OACollapsableView {
     }
     
     private func configureBottomButton() {
+        bottomButton?.removeFromSuperview()
+        bottomButton = nil
         guard !сardsFilter.cardsIsEmpty else { return }
         
         switch contentType {

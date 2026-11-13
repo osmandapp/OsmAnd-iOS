@@ -674,6 +674,24 @@
     }
 }
 
+- (BOOL)getWeatherUseOfflineData:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        return [_weatherUseOfflineDataProfile get:mode];
+    }
+}
+
+- (void)setWeatherUseOfflineData:(BOOL)weatherUseOfflineData mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        [_weatherUseOfflineDataProfile set:weatherUseOfflineData mode:mode];
+        if (mode == [OAAppSettings sharedManager].applicationMode.get)
+            [_weatherUseOfflineDataChangeObservable notifyEventWithKey:self andValue:@(weatherUseOfflineData)];
+    }
+}
+
 - (BOOL) weatherTemp
 {
     @synchronized(_lock)
@@ -840,7 +858,7 @@
     @synchronized(_lock)
     {
         NSUnitSpeed *unit = (NSUnitSpeed *)[_weatherWindAnimationUnitProfile get];
-        if (self.weatherWindUnitAuto)
+        if (self.weatherWindAnimationUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
             if (![unit.symbol isEqualToString:current.symbol])
@@ -1135,51 +1153,105 @@
     }
 }
 
-- (void) resetWeatherSettings
+- (void)resetWeatherSettings:(OAApplicationMode *)mode
 {
     @synchronized(_lock)
     {
-        [_weatherUseOfflineDataProfile resetToDefault];
+        [_weatherUseOfflineDataProfile resetModeToDefault:mode];
         
-        [_weatherTempProfile resetToDefault];
-        [_weatherTempToolbarProfile resetToDefault];
-        [_weatherTempAlphaProfile resetToDefault];
-        [_weatherTempToolbarAlphaProfile resetToDefault];
+        [_weatherTempProfile resetModeToDefault:mode];
+        [_weatherTempToolbarProfile resetModeToDefault:mode];
+        [_weatherTempAlphaProfile resetModeToDefault:mode];
+        [_weatherTempToolbarAlphaProfile resetModeToDefault:mode];
         
-        [_weatherPressureProfile resetToDefault];
-        [_weatherPressureToolbarProfile resetToDefault];
-        [_weatherPressureUnitProfile resetToDefault];
-        [_weatherPressureUnitAutoProfile resetToDefault];
-        [_weatherPressureAlphaProfile resetToDefault];
-        [_weatherPressureToolbarAlphaProfile resetToDefault];
+        [_weatherPressureProfile resetModeToDefault:mode];
+        [_weatherPressureToolbarProfile resetModeToDefault:mode];
+        [_weatherPressureUnitProfile resetModeToDefault:mode];
+        [_weatherPressureUnitAutoProfile resetModeToDefault:mode];
+        [_weatherPressureAlphaProfile resetModeToDefault:mode];
+        [_weatherPressureToolbarAlphaProfile resetModeToDefault:mode];
         
-        [_weatherWindProfile resetToDefault];
-        [_weatherWindToolbarProfile resetToDefault];
-        [_weatherWindUnitProfile resetToDefault];
-        [_weatherWindUnitAutoProfile resetToDefault];
-        [_weatherWindAlphaProfile resetToDefault];
-        [_weatherWindToolbarAlphaProfile resetToDefault];
+        [_weatherWindProfile resetModeToDefault:mode];
+        [_weatherWindToolbarProfile resetModeToDefault:mode];
+        [_weatherWindUnitProfile resetModeToDefault:mode];
+        [_weatherWindUnitAutoProfile resetModeToDefault:mode];
+        [_weatherWindAlphaProfile resetModeToDefault:mode];
+        [_weatherWindToolbarAlphaProfile resetModeToDefault:mode];
         
-        [_weatherCloudProfile resetToDefault];
-        [_weatherCloudToolbarProfile resetToDefault];
-        [_weatherCloudUnitProfile resetToDefault];
-        [_weatherCloudUnitAutoProfile resetToDefault];
-        [_weatherCloudAlphaProfile resetToDefault];
-        [_weatherCloudToolbarAlphaProfile resetToDefault];
+        [_weatherCloudProfile resetModeToDefault:mode];
+        [_weatherCloudToolbarProfile resetModeToDefault:mode];
+        [_weatherCloudUnitProfile resetModeToDefault:mode];
+        [_weatherCloudUnitAutoProfile resetModeToDefault:mode];
+        [_weatherCloudAlphaProfile resetModeToDefault:mode];
+        [_weatherCloudToolbarAlphaProfile resetModeToDefault:mode];
         
-        [_weatherSourceProfile resetToDefault];
-        [_weatherWindAnimationProfile resetToDefault];
-        [_weatherWindAnimationToolbarProfile resetToDefault];
-        [_weatherWindAnimationUnitProfile resetToDefault];
-        [_weatherWindAnimationAlphaProfile resetToDefault];
-        [_weatherWindAnimationUnitAutoProfile resetToDefault];
+        [_weatherSourceProfile resetModeToDefault:mode];
+        [_weatherWindAnimationProfile resetModeToDefault:mode];
+        [_weatherWindAnimationToolbarProfile resetModeToDefault:mode];
+        [_weatherWindAnimationUnitProfile resetModeToDefault:mode];
+        [_weatherWindAnimationAlphaProfile resetModeToDefault:mode];
+        [_weatherWindAnimationUnitAutoProfile resetModeToDefault:mode];
         
-        [_weatherPrecipProfile resetToDefault];
-        [_weatherPrecipToolbarProfile resetToDefault];
-        [_weatherPrecipUnitProfile resetToDefault];
-        [_weatherPrecipUnitAutoProfile resetToDefault];
-        [_weatherPrecipAlphaProfile resetToDefault];
-        [_weatherPrecipToolbarAlphaProfile resetToDefault];
+        [_weatherPrecipProfile resetModeToDefault:mode];
+        [_weatherPrecipToolbarProfile resetModeToDefault:mode];
+        [_weatherPrecipUnitProfile resetModeToDefault:mode];
+        [_weatherPrecipUnitAutoProfile resetModeToDefault:mode];
+        [_weatherPrecipAlphaProfile resetModeToDefault:mode];
+        [_weatherPrecipToolbarAlphaProfile resetModeToDefault:mode];
+    }
+}
+
+- (OACommonUnit *)weatherUnitProfile:(EOAWeatherBand)band
+{
+    return @{
+        @(WEATHER_BAND_CLOUD): _weatherCloudUnitProfile,
+        @(WEATHER_BAND_PRESSURE): _weatherPressureUnitProfile,
+        @(WEATHER_BAND_WIND_SPEED): _weatherWindUnitProfile,
+        @(WEATHER_BAND_PRECIPITATION): _weatherPrecipUnitProfile,
+        @(WEATHER_BAND_WIND_ANIMATION): _weatherWindAnimationUnitProfile
+    }[@(band)];
+}
+
+- (OACommonBoolean *)weatherUnitAutoProfile:(EOAWeatherBand)band
+{
+    return @{
+        @(WEATHER_BAND_CLOUD): _weatherCloudUnitAutoProfile,
+        @(WEATHER_BAND_PRESSURE): _weatherPressureUnitAutoProfile,
+        @(WEATHER_BAND_WIND_SPEED): _weatherWindUnitAutoProfile,
+        @(WEATHER_BAND_PRECIPITATION): _weatherPrecipUnitAutoProfile,
+        @(WEATHER_BAND_WIND_ANIMATION): _weatherWindAnimationUnitAutoProfile
+    }[@(band)];
+}
+
+- (NSUnit *)getWeatherUnit:(EOAWeatherBand)band mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        return [[self weatherUnitProfile:band] get:mode];
+    }
+}
+
+- (void)setWeatherUnit:(NSUnit *)unit band:(EOAWeatherBand)band mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        [[self weatherUnitProfile:band] set:unit mode:mode];
+    }
+}
+
+- (BOOL)getWeatherUnitAuto:(EOAWeatherBand)band mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        return [[self weatherUnitAutoProfile:band] get:mode];
+    }
+}
+
+- (void)setWeatherUnitAuto:(BOOL)unitAuto band:(EOAWeatherBand)band mode:(OAApplicationMode *)mode
+{
+    @synchronized(_lock)
+    {
+        [[self weatherUnitAutoProfile:band] set:unitAuto mode:mode];
     }
 }
 

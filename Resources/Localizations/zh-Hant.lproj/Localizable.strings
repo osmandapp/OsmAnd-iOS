@@ -1099,7 +1099,7 @@
 "rendering_attr_tracktype_grade1_name" = "堅實（有鋪面）";
 "rendering_attr_surfaceIntegrity_name" = "路面狀況";
 "routing_attr_driving_style_prefer_unpaved_description" = "在計算路徑時，相較於有鋪面的道路，較偏好無鋪面的道路。";
-"routing_attr_avoid_sett_description" = "避免枕木";
+"routing_attr_avoid_sett_description" = "避開方石路面";
 "rendering_value_americanRoadAtlas_name" = "美國道路地圖集";
 "rendering_value_translucent_lightblue_name" = "半透明的淡藍色";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "平地";
@@ -1242,7 +1242,7 @@
 "rendering_attr_highway_class_motorway_name" = "高速公路";
 "routing_attr_relief_smoothness_factor_plains_name" = "小丘陵";
 "routing_attr_avoid_motorway_description" = "避開高速公路";
-"routing_attr_avoid_sett_name" = "避免枕木";
+"routing_attr_avoid_sett_name" = "避開方石路面";
 "routing_attr_allow_advanced_name" = "允許進階路徑";
 "routing_attr_allow_skating_only_name" = "僅限滑冰式路徑";
 "rendering_attr_contourWidth_description" = "等高線的線寬";
@@ -1328,7 +1328,7 @@
 "open_in_browser_wiki" = "線上開啟文章";
 "index_name_antarctica" = "南極洲";
 "osmand_parking_warning" = "警示";
-"map_transparency" = "底圖透明度";
+"map_transparency" = "底圖可見度";
 "exit_at" = "離開於";
 "public_transport_warning_title" = "大眾運輸導航目前處於測試階段，可能會出現錯誤和不準確的情況。";
 "active_markers" = "活躍標記";
@@ -3255,8 +3255,8 @@
 "vertical_exaggeration" = "垂直誇大";
 "shared_string_scale" = "比例尺";
 "required_maps" = "所需的地圖";
-"routing_attr_avoid_cobblestone_description" = "避免鵝卵石";
-"routing_attr_avoid_cobblestone_name" = "避免鵝卵石";
+"routing_attr_avoid_cobblestone_description" = "避開鵝卵石路面";
+"routing_attr_avoid_cobblestone_name" = "避開鵝卵石路面";
 "rendering_value_dark_orange_name" = "深橘色";
 "custom_map_button_name_present" = "如此按鈕已存在";
 "auto_zoom_discrete" = "分離";

@@ -1480,7 +1480,7 @@
 "open_in_browser_wiki" = "Abrir artigo online";
 "srtm_color_scheme" = "Esquema de cores";
 "how_to_open_wiki_title" = "Como se abre artigos da Wikipédia\?";
-"map_transparency" = "Transparência do mapa base";
+"map_transparency" = "Visibilidade do mapa base";
 "shared_string_appearance" = "Aparência";
 "osmand_parking_warning" = "Alerta";
 "exit_at" = "Desembarque em";
@@ -3313,8 +3313,8 @@
 "shared_string_millimeters" = "Milímetros";
 "edit_tilesource_maxzoom" = "Zoom máximo";
 "edit_tilesource_minzoom" = "Zoom mínimo";
-"routing_attr_avoid_cobblestone_name" = "Evitar paralelepípedos";
-"routing_attr_avoid_cobblestone_description" = "Evitar paralelepípedos";
+"routing_attr_avoid_cobblestone_name" = "Evitar pedras arredondadas";
+"routing_attr_avoid_cobblestone_description" = "Evitar calçamento de pedras arredondadas";
 "shared_string_limit" = "Limite";
 "dangerous_goods_description" = "Em algumas estradas e túneis é proibido o transporte de materiais perigosos.";
 "step_by_step" = "Curva a curva";

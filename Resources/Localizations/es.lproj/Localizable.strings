@@ -1494,7 +1494,7 @@
 "app_mode_utv" = "En paralelo";
 "app_mode_car" = "Automóvil";
 "app_mode_camper" = "Casa rodante (camper)";
-"map_transparency" = "Transparencia del mapa base";
+"map_transparency" = "Visibilidad del mapa base";
 "how_to_open_wiki_title" = "¿Cómo abrir artículos de Wikipedia?";
 "app_mode_helicopter" = "Helicóptero";
 "app_mode_pickup_truck" = "Camioneta";

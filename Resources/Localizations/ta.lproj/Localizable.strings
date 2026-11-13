@@ -244,7 +244,7 @@
 "map_magnifier" = "வரைபடத்தின் உருப்பெருக்கம்";
 "text_size" = "உரை அளவு";
 "shared_string_online_maps" = "நிகழ்நிலை வரைபடம்";
-"map_transparency" = "அடிப்படை வரைபடத்தின் வெளிப்படைத்தன்மை";
+"map_transparency" = "அடிப்படை வரைபடத்தின் தெரிவுநிலை";
 
 // Intro
 "next_proceed" = "அடுத்தது";
@@ -1207,7 +1207,7 @@
 "routing_attr_avoid_tunnels_description" = "சுரங்கங்களைத் தவிர்க்கவும்";
 "routing_attr_height_obstacles_description" = "திட்டமிடப்பட்ட பயண நேரம் உயர தாக்கத்தை பிரதிபலிக்கும். ரூட்டிங் விருப்பம் செங்குத்தான மேல்நோக்கி தவிர்க்க உதவும்:";
 "routing_attr_driving_style_speed_name" = "குறுகிய வழிகள்";
-"routing_attr_avoid_sett_description" = "குடியேறுவதைத் தவிர்க்கிறது";
+"routing_attr_avoid_sett_description" = "செதுக்கிய கல் பதிப்பைத் தவிர்க்கிறது";
 "rendering_attr_tramTrainRoutes_name" = "டிராம் மற்றும் ரயில் வழிகள்";
 "rendering_attr_highway_class_track_name" = "மின்தடம்";
 "routing_attr_driving_style_prefer_unpaved_name" = "செப்பனிடப்படாத சாலைகளை விரும்புங்கள்";
@@ -2140,7 +2140,7 @@
 "routing_attr_length_description" = "பாதைகளில் அனுமதிக்கப்பட வேண்டிய வாகன நீளத்தைக் குறிப்பிடவும்.";
 "announcement_time_passing" = "கடந்து";
 "restart_is_required" = "மாற்றத்தைப் பயன்படுத்த மறுதொடக்கம் தேவை.";
-"routing_attr_avoid_cobblestone_name" = "கோப்ச்டோனைத் தவிர்க்கவும்";
+"routing_attr_avoid_cobblestone_name" = "கூழாங்கல் பாதைகளைத் தவிர்க்கவும்";
 "help_article_plugins_custom_name" = "தனிப்பயன் தொகுப்பு";
 "audionotes_plugin_name" = "ஆடியோ/வீடியோ குறிப்புகள்";
 "shared_string_accessibility" = "அணுகல்";
@@ -2909,7 +2909,7 @@
 "shared_string_activity" = "செய்கைப்பாடு";
 "weather_wind_kilimeters_per_hour" = "ஒரு மணி நேரத்திற்கு கிலோமீட்டர்";
 "rendering_attr_surface_cobblestone_name" = "கோப்ச்டோன்";
-"routing_attr_avoid_sett_name" = "இல்லை";
+"routing_attr_avoid_sett_name" = "செதுக்கிய கல் பதிப்பு இல்லை";
 "preferred_terrain" = "விருப்பமான நிலப்பரப்பு";
 "backup_error_user_is_already_registered" = "இந்த மின்னஞ்சல் முகவரி மற்றொரு கணக்கில் பயன்பாட்டில் உள்ளது";
 "osmand_cloud_create_account_descr" = "தயவுசெய்து உங்கள் மின்னஞ்சல் முகவரியை உள்ளிடவும், சரிபார்ப்புக் குறியீடு அங்கு அனுப்பப்படும்,\n உங்கள் எல்லா தரவும் அதனுடன் இணைக்கப்படும்.";
@@ -3267,7 +3267,7 @@
 "upward_gradient" = "மேல்நோக்கி சாய்வு";
 "weather_source_ecmwf_description" = "நடுத்தர தூர வானிலை முன்னறிவிப்புகளுக்கான ஐரோப்பிய நடுவண்";
 "weather_source_GFS_description" = "சுற்றுச்சூழல் கணிப்புக்கான தேசிய மையங்களிலிருந்து உலகளாவிய முன்னறிவிப்பு அமைப்பு";
-"routing_attr_avoid_cobblestone_description" = "கோப்ச்டோனைத் தவிர்க்கவும்";
+"routing_attr_avoid_cobblestone_description" = "கூழாங்கல் பாதைகளைத் தவிர்க்கவும்";
 "rendering_attr_showDirtbikeTrails_name" = "அழுக்கு பைக் தடங்கள்";
 "add_widget_above" = "மேலே விட்செட்டைச் சேர்க்கவும்";
 "delete_widget" = "விட்செட்டை நீக்கவா?";

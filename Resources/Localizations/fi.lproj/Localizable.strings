@@ -485,7 +485,7 @@
 "shared_string_none" = "Ei mitään";
 "shared_string_online_maps" = "Online kartat";
 "shared_string_transparency" = "Läpinäkyvyys";
-"map_transparency" = "Peruskartan läpinäkyvyys";
+"map_transparency" = "Peruskartan näkyvyys";
 "street_level_imagery" = "Katutason kuvat";
 "shared_string_terrain" = "Maasto";
 "shared_string_legend" = "Selite";

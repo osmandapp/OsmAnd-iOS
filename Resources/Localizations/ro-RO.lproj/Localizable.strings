@@ -718,7 +718,7 @@
 "app_mode_horse" = "Cal";
 "app_mode_personal_transporter" = "Transportator personal";
 "app_mode_wagon" = "Căruță";
-"map_transparency" = "Transparență hartă de bază";
+"map_transparency" = "Vizibilitate hartă de bază";
 "app_mode_car" = "Condus";
 "app_mode_bicycle" = "Ciclism";
 "app_mode_scooter" = "Scuter";
@@ -3290,9 +3290,9 @@
 "shared_string_item" = "Element";
 "default_buttons" = "Butoane standard";
 "dangerous_goods_description" = "Pe unele drumuri și tuneluri este interzis transportul de materiale periculoase.";
-"routing_attr_avoid_cobblestone_name" = "Evită piatra cubică";
+"routing_attr_avoid_cobblestone_name" = "Evită caldarâmul";
 "rendering_value_dark_orange_name" = "Portocaliu închis";
-"routing_attr_avoid_cobblestone_description" = "Evită piatra cubică";
+"routing_attr_avoid_cobblestone_description" = "Evită caldarâmul";
 "shared_string_class" = "Clasă";
 "avoid_pt_types" = "Evitare tipuri de transport…";
 "dangerous_goods" = "Mărfuri periculoase";

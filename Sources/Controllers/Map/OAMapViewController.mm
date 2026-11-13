@@ -3125,7 +3125,10 @@ static char kMapSourceUpdateQueueKey;
     if (!self.mapViewLoaded)
         return;
 
-    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
+    BOOL batterySavingMode = [[OAAppSettings sharedManager].batterySavingMode get];
+    _mapView.renderer->setSymbolsFade(batterySavingMode ? 0 : 300, -1);
+
+    if (batterySavingMode || _attachedToCarPlayWindow)
         [_mapView limitFrameRefreshRate];
     else
         [_mapView restoreFrameRefreshRate];
@@ -3521,29 +3524,27 @@ static char kMapSourceUpdateQueueKey;
     }
 }
 
-- (void)setWptData:(OASearchWptAPI *)wptApi {
-    NSMutableArray *paths = [NSMutableArray array];
-    NSMutableArray *gpxDocs = [NSMutableArray array];
+- (void)setWptData:(OASearchWptAPI *)wptApi
+{
+    [self readSearchableGpxFiles:^(NSArray<OASGpxFile *> *files, NSArray<NSString *> *paths) {
+        [wptApi setWptData:files paths:paths];
+    }];
+}
 
-    for (NSString *key in _selectedGpxHelper.activeGpx.allKeys)
+- (void)readSearchableGpxFiles:(void (^)(NSArray<OASGpxFile *> *, NSArray<NSString *> *))reader
+{
+    NSAssert(NSThread.isMainThread, @"Read the visible GPX selection on the main thread");
+    NSMutableArray<NSString *> *paths = [NSMutableArray array];
+    NSMutableArray<OASGpxFile *> *files = [NSMutableArray array];
+    NSDictionary<NSString *, OASGpxFile *> *selected = _selectedGpxHelper.activeGpx;
+    for (NSString *path in selected)
     {
-        id value = _selectedGpxHelper.activeGpx[key];
-        if (value == nil)
-        {
-            continue;
-        }
-        
-        [paths addObject:key];
-        
-        [gpxDocs addObject:value];
+        [paths addObject:path];
+        [files addObject:selected[path]];
     }
-    
-    if (_gpxFilesRec && _gpxFilesRec.count > 0)
-    {
-        [gpxDocs addObjectsFromArray:_gpxFilesRec];
-    }
-    
-    [wptApi setWptData:[gpxDocs copy] paths:paths];
+    if (_gpxFilesRec.count > 0)
+        [files addObjectsFromArray:_gpxFilesRec];
+    reader([files copy], [paths copy]);
 }
 
 - (BOOL)hasWptAt:(CLLocationCoordinate2D)location
@@ -4135,6 +4136,8 @@ static char kMapSourceUpdateQueueKey;
         if ([path isEqualToString:oldPath])
         {
             gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
+            if (gpxFile.isOsmAndOrigin && metadata.name)
+                [gpxFile updateTrackNameNewName:metadata.name];
 
             [_selectedGpxHelper removeGpxFileWith:oldPath];
             [_selectedGpxHelper addGpxFile:gpxFile for:docPath];
@@ -4156,6 +4159,8 @@ static char kMapSourceUpdateQueueKey;
     {
         OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
         gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
+        if (gpxFile.isOsmAndOrigin && metadata.name)
+            [gpxFile updateTrackNameNewName:metadata.name];
 
         OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
         gpxFile.author = [OAAppVersion getFullVersionWithAppName];

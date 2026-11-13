@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmAndFormatter.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OALocationConvert.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -14,6 +15,30 @@
 #include <GeographicLib/GeoCoords.hpp>
 
 #define MIN_DURATION_FOR_DATE_FORMAT (48 * 60)
+
+static const int kSecondsInHour = 3600;
+
+@interface OASpeedToleranceValue : NSObject
+
+@property (nonatomic, readonly) float value;
+@property (nonatomic, readonly) NSInteger decimalPlaces;
+
+@end
+
+@implementation OASpeedToleranceValue
+
+- (instancetype)initWithValue:(float)value decimalPlaces:(NSInteger)decimalPlaces
+{
+    self = [super init];
+    if (self)
+    {
+        _value = value;
+        _decimalPlaces = decimalPlaces;
+    }
+    return self;
+}
+
+@end
 
 @implementation OAOsmAndFormatter
 
@@ -348,7 +373,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
     [valueUnitArray addObject:formattedValue];
     [valueUnitArray addObject:unit];
 
-    return [OAUtilities getFormattedValue:formattedValue unit:unit];
+    return [OAUtilities formattedValue:formattedValue unit:unit];
 }
 
 + (BOOL) isCleanValue:(float)meters inUnits:(float)unitsInOneMeter
@@ -402,11 +427,21 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
+    return [self getFormattedSpeed:metersperseconds mode:nil valueUnitArray:valueUnitArray];
+}
+
++ (NSString *)getFormattedSpeed:(float)metersperseconds mode:(OAApplicationMode *)mode
+{
+    return [self getFormattedSpeed:metersperseconds mode:mode valueUnitArray:nil];
+}
+
++ (NSString *)getFormattedSpeed:(float)metersperseconds mode:(OAApplicationMode *)mode valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
+{
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    OAApplicationMode *mode = [settings.applicationMode get];
+    OAApplicationMode *appMode = mode ?: [settings.applicationMode get];
     return [self getFormattedSpeed:metersperseconds
-                       speedSystem:[settings.speedSystem get:mode]
-                             drive:[mode hasFastSpeed]
+                       speedSystem:[settings.speedSystem get:appMode]
+                             drive:[appMode hasFastSpeed]
                     valueUnitArray:valueUnitArray];
 }
 
@@ -450,7 +485,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         {
             [valueUnitArray addObject:@"-"];
             [valueUnitArray addObject:_unitsMinKm];
-            return [OAUtilities getFormattedValue:@"-" unit:_unitsMinKm];
+            return [OAUtilities formattedValue:@"-" unit:_unitsMinKm];
         }
         float minPerKm = METERS_IN_KILOMETER / (metersperseconds * 60);
         if (minPerKm >= 10)
@@ -463,7 +498,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
             NSString *value = [self getFormattedDurationShort:seconds fullForm:NO];
             [valueUnitArray addObject:value];
             [valueUnitArray addObject:_unitsMinKm];
-            return [OAUtilities getFormattedValue:value unit:_unitsMinKm];
+            return [OAUtilities formattedValue:value unit:_unitsMinKm];
         }
     }
     else if (speedSystem == MINUTES_PER_MILE)
@@ -472,7 +507,7 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
         {
             [valueUnitArray addObject:@"-"];
             [valueUnitArray addObject:_unitsMinMi];
-            return [OAUtilities getFormattedValue:@"-" unit:_unitsMinMi];
+            return [OAUtilities formattedValue:@"-" unit:_unitsMinMi];
         }
         float minPerM = (METERS_IN_ONE_MILE) / (metersperseconds * 60);
         if (minPerM >= 10)
@@ -526,6 +561,109 @@ static NSString *kLTRMark = @"\u200e";  // left-to-right mark
 + (NSString *)getFormattedLowSpeed:(float)speed unit:(NSString *)unit valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
+}
+
++ (NSString *)speedToleranceString:(float)metersperseconds
+                       speedSystem:(EOASpeedConstant)speedSystem
+                      hasFastSpeed:(BOOL)hasFastSpeed
+                    valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray
+{
+    FormattedValue *formattedValue = [self formattedSpeedToleranceValue:metersperseconds speedSystem:speedSystem hasFastSpeed:hasFastSpeed];
+    [valueUnitArray addObject:formattedValue.value];
+    [valueUnitArray addObject:formattedValue.unit];
+    return [OAUtilities formattedValue:formattedValue.value unit:formattedValue.unit];
+}
+
++ (FormattedValue *)formattedSpeedToleranceValue:(float)metersperseconds
+                                   speedSystem:(EOASpeedConstant)speedSystem
+                                  hasFastSpeed:(BOOL)hasFastSpeed
+{
+    speedSystem = [self speedModeForPaceMode:speedSystem];
+    OASpeedToleranceValue *tolerance = [self calculateSpeedTolerance:metersperseconds speedSystem:speedSystem hasFastSpeed:hasFastSpeed];
+    NSNumberFormatter *formatter = [NSNumberFormatter speedToleranceFormatterWithDecimalPlaces:tolerance.decimalPlaces];
+    NSString *value = [formatter stringFromNumber:@(tolerance.value)];
+    NSString *unit = speedSystem == FEET_PER_SECOND ? _unitsfts : [OASpeedConstant toShortString:speedSystem];
+    return [[FormattedValue alloc] initWithValueSrc:tolerance.value value:value unit:unit];
+}
+
++ (OASpeedToleranceValue *)calculateSpeedTolerance:(float)metersperseconds
+                                     speedSystem:(EOASpeedConstant)speedSystem
+                                    hasFastSpeed:(BOOL)hasFastSpeed
+{
+    float kmh = metersperseconds * 3.6f;
+    float speed;
+    switch (speedSystem)
+    {
+        case MILES_PER_HOUR:
+            speed = kmh * METERS_IN_KILOMETER / (float)METERS_IN_ONE_MILE;
+            break;
+        case NAUTICALMILES_PER_HOUR:
+            speed = kmh * METERS_IN_KILOMETER / (float)METERS_IN_ONE_NAUTICALMILE;
+            break;
+        case METERS_PER_SECOND:
+            speed = metersperseconds;
+            break;
+        case FEET_PER_SECOND:
+            speed = metersperseconds * FEET_IN_ONE_METER;
+            break;
+        default:
+            speed = kmh;
+            break;
+    }
+    BOOL shouldRoundToInteger = speedSystem == METERS_PER_SECOND || speedSystem == FEET_PER_SECOND
+        ? speed >= 10
+        : speed >= 20 || hasFastSpeed;
+    float roundingMultiplier = shouldRoundToInteger ? 1.f : 10.f;
+
+    float scaledSpeed = speed * roundingMultiplier;
+    float lowerInteger = floorf(scaledSpeed);
+    float upperInteger = ceilf(scaledSpeed);
+    // Choose the nearest integer; on a tie, choose the greater one, as Android Math.round does.
+    int roundedSpeed = scaledSpeed - lowerInteger < upperInteger - scaledSpeed ? lowerInteger : upperInteger;
+    return [[OASpeedToleranceValue alloc] initWithValue:roundedSpeed / roundingMultiplier decimalPlaces:shouldRoundToInteger ? 0 : 1];
+}
+
++ (EOASpeedConstant)speedModeForPaceMode:(EOASpeedConstant)speedSystem
+{
+    if (speedSystem == MINUTES_PER_KILOMETER)
+        return KILOMETERS_PER_HOUR;
+    if (speedSystem == MINUTES_PER_MILE)
+        return MILES_PER_HOUR;
+    return speedSystem;
+}
+
++ (float)mpSFromFormattedValue:(float)value speedSystem:(EOASpeedConstant)speedSystem
+{
+    return (value * [self metersInModeUnit:speedSystem] / METERS_IN_KILOMETER) / 3.6f;
+}
+
++ (float)metersInModeUnit:(EOASpeedConstant)speedFormat
+{
+    float metersInUnit = 0.f;
+
+    switch (speedFormat)
+    {
+        case MILES_PER_HOUR:
+        case MINUTES_PER_MILE:
+            metersInUnit = METERS_IN_ONE_MILE;
+            break;
+        case KILOMETERS_PER_HOUR:
+        case MINUTES_PER_KILOMETER:
+            metersInUnit = METERS_IN_KILOMETER;
+            break;
+        case METERS_PER_SECOND:
+            metersInUnit = 1.f * kSecondsInHour;
+            break;
+        case NAUTICALMILES_PER_HOUR:
+            metersInUnit = METERS_IN_ONE_NAUTICALMILE;
+            break;
+        case FEET_PER_SECOND:
+            metersInUnit = 1.f * kSecondsInHour / (float)FEET_IN_ONE_METER;
+            break;
+        default:
+            break;
+    }
+    return metersInUnit;
 }
 
 + (double) calculateRoundedDist:(double)baseMetersDist

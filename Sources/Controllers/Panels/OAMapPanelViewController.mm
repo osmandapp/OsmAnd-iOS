@@ -132,6 +132,14 @@ static float kMaxZoom = 22.0f;
 static NSString *topIndexBrandPrefix = @"top_index_brand";
 static int MAX_ZOOM_OUT_STEPS = 2;
 
+static NSArray<NSNumber *> * const kNavigationPointSelectionTypes = @[
+    @(OATargetRouteStartSelection),
+    @(OATargetRouteFinishSelection),
+    @(OATargetRouteIntermediateSelection),
+    @(OATargetHomeSelection),
+    @(OATargetWorkSelection)
+];
+
 typedef enum
 {
     EOATargetPoint = 0,
@@ -1149,6 +1157,7 @@ typedef enum
     [self removeGestureRecognizers];
 
     [self.hudViewController hideWeatherToolbarIfNeeded];
+    [self.targetMultiMenuView hide:NO duration:0 onComplete:nil];
 
     if (self.targetMenuView.superview)
     {
@@ -1790,6 +1799,34 @@ typedef enum
         [self goToTargetPointDefault];
 }
 
+- (BOOL)isSelectingNavigationPoint
+{
+    return [kNavigationPointSelectionTypes containsObject:@(_activeTargetType)];
+}
+
+- (BOOL)processNavigationPointSelection:(NSArray<OATargetPoint *> *)targetPoints
+{
+    if (!self.canPresentNewContextMenu || ![self isSelectingNavigationPoint] || targetPoints.count == 0)
+        return NO;
+
+    // Consume taps while Select on map is closing instead of opening a new picker or context menu.
+    if ([self.targetMenuView isHiding])
+        return YES;
+
+    if (targetPoints.count == 1)
+    {
+        // Apply the selection before the presentation queue closes its menu and clears the active target.
+        [self processTargetPoint:targetPoints.firstObject];
+    }
+    else
+    {
+        for (OATargetPoint *targetPoint in targetPoints)
+            [self applyTargetPointController:targetPoint];
+        [self showMultiContextMenu:nil points:targetPoints selectedObjects:nil];
+    }
+    return YES;
+}
+
 - (BOOL) processTargetPoint:(OATargetPoint *)targetPoint
 {
     if (!_activeTargetType)
@@ -1846,7 +1883,6 @@ typedef enum
                 [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:pointDescription];
             }
 
-            [self hideTargetPointMenu];
             BOOL fullScreen = (_activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection) && !_app.data.pointToNavigate; // We need to show full screen only if there aren't enough points count to build the route
             [self showRouteInfo:fullScreen];
             
@@ -2082,7 +2118,7 @@ typedef enum
 
 - (BOOL) isTopControlsVisible
 {
-    return _hudViewController.mapSettingsButton.alpha > 0;
+    return [_hudViewController isTopControlsVisible];
 }
 
 - (BOOL) contextMenuMode
@@ -2240,6 +2276,10 @@ typedef enum
     if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
     {
         poi = self.targetMenuView.targetPoint.targetObj;
+    }
+    else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:BaseDetailsObject.class])
+    {
+        poi = ((BaseDetailsObject *) self.targetMenuView.targetPoint.targetObj).syntheticAmenity;
     }
     else if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OATransportStop.class])
     {
@@ -2803,18 +2843,10 @@ typedef enum
     if (_dashboard)
         [self closeDashboard];
     
-    if (self.targetMenuView.superview)
+    // Keep Select on map active underneath the picker so closing it allows another selection.
+    if (self.targetMenuView.superview && ![self isSelectingNavigationPoint])
         [self hideTargetPointMenu];
     
-    CGRect frame = self.targetMultiMenuView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
-    self.targetMultiMenuView.frame = frame;
-    
-    [self.targetMultiMenuView.layer removeAllAnimations];
-    if ([self.view.subviews containsObject:self.targetMultiMenuView])
-        [self.targetMultiMenuView removeFromSuperview];
-    
-    [self.targetMultiMenuView setActiveTargetType:_activeTargetType];
     [self.targetMultiMenuView setTargetPoints:points];
     [self.targetMultiMenuView setSelectedMapObjects:selectedObjects];
     [self.targetMultiMenuView setTouchPoint:touchPointLatLon];
@@ -3334,7 +3366,7 @@ typedef enum
 {
     __weak __typeof(self) weakSelf = self;
     [_contextMenuPresentationCoordinator processPendingPresentationWithDismissHandlers:@[
-        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(void (^completion)(BOOL)) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf->_scrollableHudViewController)
                 return NO;
@@ -3345,18 +3377,18 @@ typedef enum
                 && [strongSelf->_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
                 return NO;
 
-            [strongSelf->_scrollableHudViewController forceHideWithCompletion:completion];
+            [strongSelf->_scrollableHudViewController forceHideWithCompletion:^{ completion(YES); }];
             return YES;
         }],
-        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(void (^completion)(BOOL)) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf.targetMultiMenuView.superview)
                 return NO;
 
-            [strongSelf.targetMultiMenuView hide:YES duration:0.2 onComplete:completion];
+            [strongSelf.targetMultiMenuView hide:YES duration:0.2 completion:completion];
             return YES;
         }],
-        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(dispatch_block_t completion) {
+        [[ContextMenuDismissHandler alloc] initWithHandler:^BOOL(void (^completion)(BOOL)) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf || !strongSelf.targetMenuView.superview)
                 return NO;
@@ -3364,7 +3396,7 @@ typedef enum
             // Keep the planner suspended when replacing a search result menu.
             if (![strongSelf->_prevScrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
                 strongSelf->_prevScrollableHudViewController = nil;
-            [strongSelf hideTargetPointMenu:0.2 onComplete:completion hideActiveTarget:YES mapGestureAction:NO];
+            [strongSelf hideTargetPointMenu:0.2 onComplete:^{ completion(YES); } hideActiveTarget:YES mapGestureAction:NO];
             return YES;
         }],
     ]];

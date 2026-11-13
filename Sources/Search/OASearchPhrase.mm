@@ -11,6 +11,7 @@
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
 #import "OASearchSettings.h"
+#import "OAObfFileList.h"
 #import "OAUtilities.h"
 #import "QuadRect.h"
 #import "OACollatorStringMatcher.h"
@@ -919,35 +920,11 @@ static NSCache<NSString*, NSNumber*> *sCommonWordWeightCache = nil;
     CLLocation *ll = [self getLastTokenLocation];
     if (ll)
     {
-        [_indexes sortUsingComparator:^NSComparisonResult(NSString * _Nonnull id1, NSString * _Nonnull id2) {
-            NSString *first = [[id1 stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-            NSString *second = [[id2 stringByReplacingOccurrencesOfString:@".live.obf" withString:@""] stringByReplacingOccurrencesOfString:@".obf" withString:@""];
-            NSRange rangeFirst = [first rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-            NSRange rangeSecond = [second rangeOfString:@"([0-9]+_){2}[0-9]+" options:NSRegularExpressionSearch];
-            if (rangeFirst.location != NSNotFound && rangeSecond.location == NSNotFound)
-            {
-                NSString *base = [first substringToIndex:rangeFirst.location - 1];
-                if ([base isEqualToString:second])
-                    return NSOrderedAscending;
-            }
-            else if (rangeFirst.location == NSNotFound && rangeSecond.location != NSNotFound)
-            {
-                NSString *base = [second substringToIndex:rangeSecond.location - 1];
-                if ([base isEqualToString:first])
-                    return NSOrderedDescending;
-            }
-            else if (rangeFirst.location != NSNotFound && rangeSecond.location != NSNotFound)
-            {
-                return [first compare:second];
-            }
-            
-            CLLocation *rc1 = [self getLocation:id1];
-            CLLocation *rc2 = [self getLocation:id2];
-            double d1 = !rc1 ? 10000000.0 : [rc1 distanceFromLocation:ll];
-            double d2 = !rc2 ? 10000000.0 : [rc2 distanceFromLocation:ll];
-            return [[NSNumber numberWithDouble:d1] compare:[NSNumber numberWithDouble:d2]];
-            
+        NSArray<NSString *> *sorted = [OAObfFileList sortedForSearch:_indexes distance:^double(NSString *resourceId) {
+            CLLocation *location = [self getLocation:resourceId];
+            return location ? [location distanceFromLocation:ll] : 10000000.0;
         }];
+        _indexes = [NSMutableArray arrayWithArray:sorted];
     }
 }
 

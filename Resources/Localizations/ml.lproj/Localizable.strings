@@ -416,7 +416,7 @@
 "daynight_mode_night" = "\"രാത്രി \"";
 "map_widget_renderer" = "ഭൂപടത്തിന്റെ ശൈലി";
 "shared_string_online_maps" = "ഓണ്‍ലൈന്‍ ഭൂപടങ്ങള്‍";
-"map_transparency" = "അടിസ്ഥാന ഭൂപടത്തിന്റെ സുതാര്യത";
+"map_transparency" = "അടിസ്ഥാന ഭൂപടത്തിന്റെ ദൃശ്യത";
 "mapillary" = "\"മാപ്പില്ലാരി \"";
 "srtm_color_scheme" = "നിറങ്ങളുടെ സ്കീം";
 "shared_string_appearance" = "ദൃശ്യരൂപം";
@@ -992,7 +992,7 @@
 "rendering_attr_surface_ground_name" = "ഗ്രൗണ്ട്";
 "rendering_attr_currentTrackColor_description" = "ജിപിഎക്സ് നിറം";
 "routing_attr_driving_style_speed_name" = "ദൂരം കുറഞ്ഞ പാതകള്‍";
-"routing_attr_avoid_sett_description" = "കല്ല് പാകിയത് ഒഴിവാക്കുക (cobblestone and sett)";
+"routing_attr_avoid_sett_description" = "ചെത്തിയ കല്ല് പാകിയ വഴി ഒഴിവാക്കുന്നു";
 "rendering_attr_hikingRoutesOSMC_description" = "OSMC ട്രെയ്സ് അനുസരിച്ച് പാതകൾ റെണ്ടര്‍ ചെയ്യുക.";
 "rendering_value_car_name" = "കാര്‍";
 "routing_attr_avoid_unpaved_name" = "\" ടാര്‍ ചെയ്യാത്ത(പാകാത്ത) റോഡുകള്‍ ഒഴിവാക്കുക \"";
@@ -1032,7 +1032,7 @@
 "routing_attr_prefer_motorway_name" = "അതിവേഗപാതകള്‍ തെരഞ്ഞെടുക്കുക";
 "rendering_attr_surface_cobblestone_name" = "കല്ല് പാകിയത്";
 "rendering_attr_highway_class_state_road_name" = "സ്റ്റേറ്റ് റോഡ്";
-"routing_attr_avoid_sett_name" = "കല്ല് പാകിയത് ഒഴിവാക്കുക (cobblestone and sett)";
+"routing_attr_avoid_sett_name" = "ചെത്തിയ കല്ല് പാകിയ വഴി ഒഴിവാക്കുക";
 "rendering_value_translucent_lightblue_name" = "\"മങ്ങിയ ഇളം നീല \"";
 "rendering_attr_smoothness_good_name" = "നല്ലത്";
 "routing_attr_weight_name" = "\"ഭാരപരിധി \"";
@@ -1269,3 +1269,5 @@
 "trace_rendering" = "റെണ്ടറിങ്ങ് ഡീബഗ് വിവരങ്ങള്‍";
 "trace_rendering_descr" = "റെണ്ടറിങ്ങ് പെര്‍ഫോമന്‍സ് കാണിക്കുക";
 "average" = "ശരാശരി";
+"routing_attr_avoid_cobblestone_name" = "ഉരുളൻ കല്ല് പാകിയ വഴി ഒഴിവാക്കുക";
+"routing_attr_avoid_cobblestone_description" = "ഉരുളൻ കല്ല് പാകിയ വഴി ഒഴിവാക്കുക";

@@ -81,71 +81,74 @@ final class VehicleMetricsPlugin: OAPlugin {
     }
     
     func getWidgetConvertedValue(type: OBDDataComputer.OBDTypeWidget, data: Any?) -> Any? {
+        let mode = settings.applicationMode.get()
         switch type {
         case .speed:
-            return getConvertedSpeed(data.asFloat)
+            return getConvertedSpeed(data.asFloat, mode: mode)
         case .fuelLeftKm:
-            return getConvertedDistance(data.asFloat)
+            return getConvertedDistance(data.asFloat, mode: mode)
         case .temperatureIntake, .engineOilTemperature, .temperatureAmbient, .temperatureCoolant:
-            return getConvertedTemperature(data: data.asFloat)
+            return getConvertedTemperature(data: data.asFloat, mode: mode)
         case .fuelLeftLiter:
-            return getFormattedVolume(data.asFloat)
+            return getFormattedVolume(data.asFloat, mode: mode)
         case .fuelConsumptionRateLiterHour:
-            return getFormatVolumePerHour(literPerHour: data.asFloat)
+            return getFormatVolumePerHour(literPerHour: data.asFloat, mode: mode)
         case .fuelConsumptionRateLiterKm:
-            return getFormatVolumePerDistance(litersPer100km: data.asFloat)
+            return getFormatVolumePerDistance(litersPer100km: data.asFloat, mode: mode)
         case .engineRuntime:
             return getFormattedTime(time: data.asInt)
         case .fuelConsumptionRateSensor, .batteryVoltage, .adapterBatteryVoltage, .fuelType, .fuelConsumptionRatePercentHour, .fuelLeftPercent, .calculatedEngineLoad, .throttlePosition, .vin, .fuelPressure, .rpm:
             return data
         case .fuelConsumptionRateMPerLiter:
-            return getFormatDistancePerVolume(metersPerLiter: data.asFloat)
+            return getFormatDistancePerVolume(metersPerLiter: data.asFloat, mode: mode)
         default:
             return data
         }
     }
     
-    func getWidgetUnit(_ computerWidget: OBDDataComputer.OBDTypeWidget) -> String? {
+    func getWidgetUnit(_ computerWidget: OBDDataComputer.OBDTypeWidget, appMode: OAApplicationMode? = nil) -> String? {
+        let mode = appMode ?? settings.applicationMode.get()
         switch computerWidget {
         case .speed:
-            return getSpeedUnit()
+            return getSpeedUnit(mode)
         case .rpm:
             return localizedString("rpm_unit")
         case .fuelPressure:
             return localizedString("kpa_unit")
         case .fuelLeftKm:
-            return getDistanceUnit()
+            return getDistanceUnit(mode)
         case .calculatedEngineLoad,
                 .throttlePosition,
                 .fuelLeftPercent:
             return localizedString("percent_unit")
         case .fuelLeftLiter:
-            return OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get())
+            return OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get(mode))
         case .fuelConsumptionRatePercentHour:
             return localizedString("percent_hour")
         case .fuelConsumptionRateLiterHour:
-            return getFormatVolumePerHourUnit()
+            return getFormatVolumePerHourUnit(mode)
         case .fuelConsumptionRateSensor:
             return localizedString("liter_per_hour")
         case .temperatureCoolant,
                 .temperatureIntake,
                 .engineOilTemperature,
                 .temperatureAmbient:
-            return OATemperatureConstant.getUnitSymbol(getTemperatureUnit())
+            return OATemperatureConstant.getUnitSymbol(getTemperatureUnit(mode))
         case .batteryVoltage, .adapterBatteryVoltage:
             return localizedString("unit_volt")
         case .fuelType, .engineRuntime, .vin:
             return nil
         case .fuelConsumptionRateLiterKm:
-            return getFormatVolumePerDistanceUnit()
+            return getFormatVolumePerDistanceUnit(mode)
         case .fuelConsumptionRateMPerLiter:
-            return getFormatDistancePerVolumeUnit()
+            return getFormatDistancePerVolumeUnit(mode)
         default:
             return nil
         }
     }
     
-    func getWidgetValue(computerWidget: OBDDataComputer.OBDComputerWidget) -> String {
+    func getWidgetValue(computerWidget: OBDDataComputer.OBDComputerWidget, appMode: OAApplicationMode? = nil) -> String {
+        let mode = appMode ?? settings.applicationMode.get()
         let data = computerWidget.computeValue()
 
         if let dataStr = data as? String, dataStr == "N/A" {
@@ -167,23 +170,23 @@ final class VehicleMetricsPlugin: OAPlugin {
         switch computerWidget.type {
         case .speed:
             // Float
-            convertedData = getConvertedSpeed(data.asFloat)
+            convertedData = getConvertedSpeed(data.asFloat, mode: mode)
             // Float
         case .fuelLeftKm:
             // Float
-            convertedData = getConvertedDistance(data.asFloat)
+            convertedData = getConvertedDistance(data.asFloat, mode: mode)
         case .temperatureIntake, .engineOilTemperature, .temperatureAmbient, .temperatureCoolant:
             // Float
-            convertedData = getConvertedTemperature(data: data.asFloat)
+            convertedData = getConvertedTemperature(data: data.asFloat, mode: mode)
         case .fuelLeftLiter:
             // Float
-            convertedData = getFormattedVolume(data.asFloat)
+            convertedData = getFormattedVolume(data.asFloat, mode: mode)
         case .fuelConsumptionRateLiterHour:
             // Float
-            convertedData = getFormatVolumePerHour(literPerHour: data.asFloat)
+            convertedData = getFormatVolumePerHour(literPerHour: data.asFloat, mode: mode)
         case .fuelConsumptionRateLiterKm:
             // Float
-            convertedData = getFormatVolumePerDistance(litersPer100km: data.asFloat)
+            convertedData = getFormatVolumePerDistance(litersPer100km: data.asFloat, mode: mode)
         case .engineRuntime:
             // String
             convertedData = getFormattedTime(time: data.asInt)
@@ -201,7 +204,7 @@ final class VehicleMetricsPlugin: OAPlugin {
             // Float
             convertedData = data.asFloat
         case .fuelConsumptionRateMPerLiter:
-            convertedData = getFormatDistancePerVolume(metersPerLiter: data.asFloat)
+            convertedData = getFormatDistancePerVolume(metersPerLiter: data.asFloat, mode: mode)
         default:
             break
         }
@@ -239,12 +242,12 @@ final class VehicleMetricsPlugin: OAPlugin {
 // MARK: - Formatters
 extension VehicleMetricsPlugin {
     
-    private func getSpeedUnit() -> String {
-        OASpeedConstant.toShortString(settings.speedSystem.get())
+    private func getSpeedUnit(_ mode: OAApplicationMode) -> String {
+        OASpeedConstant.toShortString(settings.speedSystem.get(mode))
     }
     
-    private func getDistanceUnit() -> String {
-        switch settings.metricSystem.get() {
+    private func getDistanceUnit(_ mode: OAApplicationMode) -> String {
+        switch settings.metricSystem.get(mode) {
         case .KILOMETERS_AND_METERS:
             return localizedString("km")
         case .NAUTICAL_MILES_AND_METERS, .NAUTICAL_MILES_AND_FEET:
@@ -254,25 +257,25 @@ extension VehicleMetricsPlugin {
         }
     }
     
-    private func getTemperatureUnit() -> EOATemperatureConstant {
-        settings.getTemperatureUnit()
+    private func getTemperatureUnit(_ mode: OAApplicationMode) -> EOATemperatureConstant {
+        settings.getTemperatureUnit(for: mode)
     }
     
-    private func getFormatVolumePerHourUnit() -> String? {
-        let volumeUnit = OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get())
+    private func getFormatVolumePerHourUnit(_ mode: OAApplicationMode) -> String? {
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get(mode))
         
         return String(format: localizedString("ltr_or_rtl_combine_via_slash"),
                       volumeUnit,
                       localizedString("int_hour"))
     }
     
-    private func getFormatVolumePerDistanceUnit() -> String {
-        let volumeUnit = OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get())
-        return String(format: localizedString("ltr_or_rtl_combine_via_slash"), volumeUnit, "100\(getDistanceUnit())")
+    private func getFormatVolumePerDistanceUnit(_ mode: OAApplicationMode) -> String {
+        let volumeUnit = OAVolumeConstant.getUnitSymbol(settings.volumeUnits.get(mode))
+        return String(format: localizedString("ltr_or_rtl_combine_via_slash"), volumeUnit, "100\(getDistanceUnit(mode))")
     }
     
-    private func getFormatDistancePerVolumeUnit() -> String {
-        let mc = settings.metricSystem.get()
+    private func getFormatDistancePerVolumeUnit(_ mode: OAApplicationMode) -> String {
+        let mc = settings.metricSystem.get(mode)
         let distanceUnit: String
         let isMileMetrics = [EOAMetricsConstant.MILES_AND_FEET, EOAMetricsConstant.MILES_AND_YARDS, EOAMetricsConstant.MILES_AND_METERS].contains(where: { mc == $0 })
         
@@ -284,7 +287,7 @@ extension VehicleMetricsPlugin {
             distanceUnit = localizedString("km")
         }
         
-        let volume = settings.volumeUnits.get()
+        let volume = settings.volumeUnits.get(mode)
         let volumeUnit = OAVolumeConstant.getUnitSymbol(volume)
         
         if isMileMetrics && [EOAVolumeConstant.US_GALLONS, EOAVolumeConstant.IMPERIAL_GALLONS].contains(where: { volume == $0 }) {
@@ -294,9 +297,9 @@ extension VehicleMetricsPlugin {
         }
     }
     
-    private func getFormatDistancePerVolume(metersPerLiter: Float) -> Float {
-        let mc = settings.metricSystem.get()
-        let volumeUnit = settings.volumeUnits.get()
+    private func getFormatDistancePerVolume(metersPerLiter: Float, mode: OAApplicationMode) -> Float {
+        let mc = settings.metricSystem.get(mode)
+        let volumeUnit = settings.volumeUnits.get(mode)
         return getFormatDistancePerVolume(metersPerLiter: metersPerLiter, mc: mc, volumeUnit: volumeUnit)
     }
     
@@ -316,11 +319,11 @@ extension VehicleMetricsPlugin {
         return metersPerLiter / litersInVolume / distanceInMeters
     }
     
-    private func getFormatVolumePerDistance(litersPer100km: Float) -> Float {
-        let volumeUnit = settings.volumeUnits.get()
+    private func getFormatVolumePerDistance(litersPer100km: Float, mode: OAApplicationMode) -> Float {
+        let volumeUnit = settings.volumeUnits.get(mode)
         let volumeResult = OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: litersPer100km)
         
-        let metricConstant = settings.metricSystem.get()
+        let metricConstant = settings.metricSystem.get(mode)
         
         switch metricConstant {
         case EOAMetricsConstant.MILES_AND_YARDS,
@@ -341,15 +344,15 @@ extension VehicleMetricsPlugin {
         OAOsmAndFormatter.getFormattedTimeRuntime(time)
     }
 
-    private func getFormatVolumePerHour(literPerHour: Float) -> Float {
-        let volumeUnit = settings.volumeUnits.get()
+    private func getFormatVolumePerHour(literPerHour: Float, mode: OAApplicationMode) -> Float {
+        let volumeUnit = settings.volumeUnits.get(mode)
         
         return OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: literPerHour)
     }
     
-    private func getConvertedTemperature(data: Float) -> Float {
+    private func getConvertedTemperature(data: Float, mode: OAApplicationMode) -> Float {
         let temperature = data
-        switch getTemperatureUnit() {
+        switch getTemperatureUnit(mode) {
         case .CELSIUS, .SYSTEM_DEFAULT:
             return temperature
         case .FAHRENHEIT:
@@ -359,22 +362,22 @@ extension VehicleMetricsPlugin {
         }
     }
     
-    private func getFormattedVolume(_ data: Float) -> Float {
-        let volumeUnit = settings.volumeUnits.get()
+    private func getFormattedVolume(_ data: Float, mode: OAApplicationMode) -> Float {
+        let volumeUnit = settings.volumeUnits.get(mode)
         return OAOsmAndFormatter.convertLiterToVolumeUnit(withVolumeUnit: volumeUnit, value: data)
     }
     
-    private func getConvertedSpeed(_ speed: Float) -> Float {
+    private func getConvertedSpeed(_ speed: Float, mode: OAApplicationMode) -> Float {
         let speedInMetersPerSecond: Float = speed * 1000 / 3600
-        let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(speedInMetersPerSecond).components(separatedBy: " ")
+        let formattedAverageSpeed = OAOsmAndFormatter.getFormattedSpeed(speedInMetersPerSecond, mode: mode).components(separatedBy: " ")
         guard let value = formattedAverageSpeed.first, let floatValue = Float(value) else {
             return 0
         }
         return floatValue
     }
 
-    private func getConvertedDistance(_ distance: Float) -> Float {
-        let formattedValue = OAOsmAndFormatter.getFormattedDistance(distance).components(separatedBy: " ")
+    private func getConvertedDistance(_ distance: Float, mode: OAApplicationMode) -> Float {
+        let formattedValue = OAOsmAndFormatter.getFormattedDistance(distance, mode: mode).components(separatedBy: " ")
         
         guard let value = formattedValue.first, let floatValue = Float(value) else {
             return 0

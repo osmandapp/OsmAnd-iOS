@@ -1429,7 +1429,7 @@
 "app_mode_utv" = "Lato per lato";
 "app_mode_ufo" = "OVNI";
 "how_to_open_wiki_title" = "Come aprire gli articoli di Wikipedia?";
-"map_transparency" = "Trasparenza mappa di base";
+"map_transparency" = "Visibilità della mappa di base";
 "srtm_color_scheme" = "Schema colori";
 "context_menu_points_of_group" = "Tutti i punti del gruppo";
 "app_mode_default" = "Scorri la mappa";

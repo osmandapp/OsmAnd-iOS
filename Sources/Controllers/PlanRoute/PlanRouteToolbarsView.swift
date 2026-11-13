@@ -13,6 +13,8 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 
     private static let edgeInset: CGFloat = 16
     private static let buttonSpacing: CGFloat = 8
+    private static let backgroundFirstAlpha: CGFloat = 0.7
+    private static let backgroundSecondAlpha: CGFloat = 0.55
 
     var onClose: (() -> Void)?
     var onSave: (() -> Void)?
@@ -43,6 +45,9 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomCancel)
     private let optionsButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomOverflowMenuStroke)
+    private let backgroundMaskLayer = CAGradientLayer()
+
+    private var hasHinge = false
 
     private lazy var saveButton = PlanRouteButtonFactory.primaryButton(title: localizedString("shared_string_save"))
 
@@ -55,18 +60,29 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateBackgroundLayers()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard backgroundContainerView.bounds.size != .zero else { return }
+        updateBackgroundLayers()
+    }
+
     func updateMapTheme() {
         closeButton.updateColors(forPressedState: false)
         optionsButton.updateColors(forPressedState: false)
         saveButton.updateColors(forPressedState: false)
-        backgroundContainerView.backgroundColor = closeButton.backgroundColor
-        titleLabel.textColor = closeButton.tintColor
     }
 
     private func setupView() {
         backgroundColor = .clear
+        setupBackgroundView()
 
         titleLabel.font = .scaledSystemFont(ofSize: 17, weight: .semibold, maximumSize: 22)
+        titleLabel.textColor = .white
         updateMapTheme()
         titleLabel.textAlignment = .natural
         titleLabel.adjustsFontForContentSizeCategory = true
@@ -83,8 +99,6 @@ final class PlanRouteTopToolbarView: TouchesPassView {
             addSubview($0)
         }
 
-        setupBackgroundView()
-
         let inset = Self.edgeInset
         NSLayoutConstraint.activate([
             closeButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: inset),
@@ -94,8 +108,8 @@ final class PlanRouteTopToolbarView: TouchesPassView {
             trailingStack.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
 
             titleLabel.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            titleLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingStack.leadingAnchor, constant: -20)
+            titleLabel.leadingAnchor.constraint(equalTo: closeButton.trailingAnchor, constant: 18),
+            titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: trailingStack.leadingAnchor, constant: -Self.buttonSpacing)
         ])
 
         closeButton.accessibilityLabel = localizedString("shared_string_close")
@@ -105,17 +119,42 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     }
 
     private func setupBackgroundView() {
-        backgroundContainerView.layer.cornerRadius = PlanRouteButtonFactory.toolbarButtonSize / 2
+        backgroundContainerView.backgroundColor = .black
         backgroundContainerView.isUserInteractionEnabled = false
         backgroundContainerView.translatesAutoresizingMaskIntoConstraints = false
         insertSubview(backgroundContainerView, at: 0)
 
         NSLayoutConstraint.activate([
-            backgroundContainerView.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -12),
-            backgroundContainerView.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 12),
-            backgroundContainerView.centerYAnchor.constraint(equalTo: closeButton.centerYAnchor),
-            backgroundContainerView.heightAnchor.constraint(equalTo: closeButton.heightAnchor)
+            backgroundContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            backgroundContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            backgroundContainerView.topAnchor.constraint(equalTo: topAnchor),
+            backgroundContainerView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+
+        backgroundMaskLayer.startPoint = CGPoint(x: 0.5, y: 0)
+        backgroundMaskLayer.endPoint = CGPoint(x: 0.5, y: 1)
+        backgroundContainerView.layer.mask = backgroundMaskLayer
+
+        if #available(iOS 27.1, *) {
+            addInteraction(UIHingeInteraction { [weak self] _, update in
+                guard let self else { return }
+                hasHinge = update.hinge != nil
+                updateBackgroundLayers()
+            })
+        }
+    }
+
+    private func updateBackgroundLayers() {
+        let hidesBackground = hasHinge || traitCollection.verticalSizeClass == .compact
+        backgroundContainerView.isHidden = hidesBackground
+
+        guard !hidesBackground else { return }
+        backgroundMaskLayer.frame = backgroundContainerView.bounds
+        backgroundMaskLayer.colors = [
+            UIColor.black.withAlphaComponent(Self.backgroundFirstAlpha).cgColor,
+            UIColor.black.withAlphaComponent(Self.backgroundSecondAlpha).cgColor,
+            UIColor.clear.cgColor
+        ]
     }
 
     @objc private func onCloseTapped() {

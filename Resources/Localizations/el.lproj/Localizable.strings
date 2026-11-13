@@ -854,7 +854,7 @@
 "app_mode_pickup_truck" = "Ημιφορτηγό";
 "app_mode_pedestrian" = "Περίπατος";
 "app_mode_default" = "Επισκόπηση χάρτη";
-"map_transparency" = "Διαφάνεια βασικού χάρτη";
+"map_transparency" = "Ορατότητα βασικού χάρτη";
 "how_to_open_wiki_title" = "Πώς να ανοίξετε τα άρθρα της Βικιπαίδειας;";
 "open_in_browser_wiki" = "Άνοιγμα άρθρου στο διαδίκτυο";
 "app_mode_camper" = "Τροχόσπιτο";

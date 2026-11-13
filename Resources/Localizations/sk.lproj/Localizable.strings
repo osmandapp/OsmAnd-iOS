@@ -1427,7 +1427,7 @@
 "shared_string_clear_cache" = "Vymazať vyrovnávaciu pamäť";
 "selected_roads" = "Vybrané cesty";
 "no_active_route" = "Žiadna aktívna trasa";
-"map_transparency" = "Priehľadnosť základnej mapy";
+"map_transparency" = "Viditeľnosť základnej mapy";
 "stats_select_graph_data" = "Zvoľte údaje grafu";
 "displayed_route_save" = "Uložiť do stôp OsmAnd";
 "select_work_point" = "Zvoľte bod pracoviska";

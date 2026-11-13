@@ -947,7 +947,7 @@
 "shared_string_appearance" = "外观";
 "osmand_parking_warning" = "警告";
 "context_menu_points_of_group" = "该分组的所有点";
-"map_transparency" = "基础地图透明度";
+"map_transparency" = "基础地图可见度";
 "routing_attr_width_description" = "指定路线上允许的车辆宽度。";
 "app_mode_skiing" = "滑雪";
 "open_in_browser_wiki" = "在线打开条目";

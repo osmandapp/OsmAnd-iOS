@@ -1216,7 +1216,7 @@
 "app_mode_car" = "Autóvezetés";
 "app_mode_pedestrian" = "Gyaloglás";
 "app_mode_subway" = "Metró";
-"map_transparency" = "Alaptérkép átlátszósága";
+"map_transparency" = "Alaptérkép láthatósága";
 "active_markers" = "Aktív jelölők";
 "exit_at" = "Leszállás itt:";
 "public_transport_warning_title" = "A tömegközlekedési útvonaltervezés jelenleg béta tesztelési állapotban van, hibák és pontatlanságok előfordulhatnak.";

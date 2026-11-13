@@ -756,6 +756,7 @@
         for (OASWptPt *gpxWpt in self.doc.getPointsList)
         {
             OAGpxWptItem *gpxWptItem = [OAGpxWptItem withGpxWpt:gpxWpt];
+            gpxWptItem.gpxFile = self.doc;
             if (!self.isCurrentTrack)
                 gpxWptItem.docPath = self.doc.path;
             if (gpxWpt.category.length == 0)
@@ -794,6 +795,7 @@
         for (OASWptPt *rtePt in [self.doc getRoutePoints])
         {
             OAGpxWptItem *rtePtItem = [OAGpxWptItem withGpxWpt:rtePt];
+            rtePtItem.gpxFile = self.doc;
             if (!self.isCurrentTrack)
                 rtePtItem.docPath = self.doc.path;
             rtePtItem.routePoint = YES;

@@ -192,7 +192,9 @@ static NSString *kBackupSuffix = @"_osmand_backup";
 - (void)completeTrackLoadingForFilePath:(NSString *)absoluteFilePath
                                 gpxFile:(OASGpxFile *)gpxFile
 {
-    _activeGpx[absoluteFilePath] = gpxFile;
+    // A waypoint edit may have supplied the saved document while this load was running.
+    if (![self containsGpxFileWith:absoluteFilePath])
+        _activeGpx[absoluteFilePath] = gpxFile;
     [self removeFilePathFromLoadingQueue:absoluteFilePath];
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }

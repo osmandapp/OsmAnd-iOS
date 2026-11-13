@@ -462,7 +462,7 @@ static const int START_ZOOM = 10;
     return [object isKindOfClass:OAOsmPoint.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
@@ -478,7 +478,9 @@ static const int START_ZOOM = 10;
             [[OAOsmBugsDBHelper sharedDatabase] updateOsmBugLocation:point.getId newPosition:position];
         }
         [self.app.osmEditsChangeObservable notifyEvent];
+        return YES;
     }
+    return NO;
 }
 
 - (void)getOsmNoteBitmap:(sk_sp<SkImage> &)bitmap

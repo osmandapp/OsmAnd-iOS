@@ -1495,17 +1495,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return _draftGpxFile != nil && (filePath.length == 0 || [_draftGpxPath isEqualToString:filePath]);
 }
 
-- (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
+- (BOOL)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || operation == nil)
-        return;
+        return NO;
     
     PlanRoutePoiStateSnapshot *stateBefore = beforeState ?: [self makePoiStateSnapshot];
     if (!operation())
-        return;
+        return NO;
     
     [self commitPoiStateCommandFromState:stateBefore toState:[self makePoiStateSnapshot]];
+    return YES;
 }
 
 - (void)commitPoiStateCommandFromState:(nullable PlanRoutePoiStateSnapshot *)beforeState toState:(nullable PlanRoutePoiStateSnapshot *)afterState
@@ -1667,20 +1668,58 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 #pragma mark - OAGpxWptEditingHandlerDelegate
 
-- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
+- (BOOL)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
-    [self executePoiStateCommandWithBeforeState:nil operation:^BOOL{
+    return [self executePoiStateCommandWithBeforeState:nil operation:^BOOL{
         return [self performSaveGpxWpt:gpxWpt gpxFileName:gpxFileName];
     }];
 }
 
-- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (BOOL)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot ?: [self makePoiStateSnapshot];
     PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = nil;
+    return YES;
+}
+
+- (BOOL)replaceGpxWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
+{
+    OASGpxFile *gpxFile = [self isDraftGpxPath:item.docPath] ? _draftGpxFile : [self editingContext].gpxData.gpxFile;
+    BOOL removingPoint = !newPoint && existingItem.originalPoint != item.originalPoint;
+    NSArray<OASWptPt *> *storedPoints = [OAGpxWptItem storedPointsForItems:removingPoint ? @[existingItem, item] : @[existingItem]
+                                                             inGpxFile:gpxFile];
+    if (!item.point || storedPoints.count == 0)
+        return NO;
+
+    NSMutableArray<OASWptPt *> *remaining = [gpxFile.getPointsList mutableCopy];
+    if (removingPoint)
+        [remaining removeObjectIdenticalTo:storedPoints.lastObject];
+    NSUInteger index = [remaining indexOfObjectIdenticalTo:storedPoints.firstObject];
+    BOOL replaced = [self executePoiStateCommandWithBeforeState:_editingPoiStateSnapshot operation:^BOOL{
+        storedPoints.firstObject.position = item.point.position;
+        [gpxFile setPointsListPoints:remaining];
+        if (removingPoint)
+        {
+            for (OASGpxUtilitiesPointsGroup *group in gpxFile.pointsGroups.allValues)
+                [group.points removeObjectIdenticalTo:storedPoints.lastObject];
+        }
+        gpxFile.modifiedTime = (int64_t)(NSDate.date.timeIntervalSince1970 * 1000.0);
+        gpxFile.pointsModifiedTime = gpxFile.modifiedTime;
+        [self restorePoiStateSnapshot:[self makePoiStateSnapshot]];
+        return YES;
+    }];
+    if (replaced)
+    {
+        // Restoring the committed snapshot creates copies; bind the editor to that point.
+        item.point = gpxFile.getPointsList[index];
+        item.gpxFile = gpxFile;
+        item.groups = gpxFile.pointsGroups.allKeys;
+        _editingPoiStateSnapshot = nil;
+    }
+    return replaced;
 }
 
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
@@ -1690,16 +1729,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }];
 }
 
-- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
+- (BOOL)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
     if (_editingPoiStateSnapshot == nil)
-        return;
+        return YES;
 
     PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot;
     PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = afterState;
+    return YES;
 }
 
 - (void)saveAs:(NSString *)fileName

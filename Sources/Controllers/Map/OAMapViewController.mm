@@ -3734,7 +3734,46 @@ static char kMapSourceUpdateQueueKey;
     return NO;
 }
 
-- (BOOL) deleteFoundWpt
+- (void)selectWpt:(OAGpxWptItem *)item
+{
+    OASGpxFile *gpxFile = item.gpxFile;
+    NSString *docPath = item.docPath;
+    if (!gpxFile && docPath.length > 0)
+    {
+        gpxFile = [_selectedGpxHelper getGpxFileFor:docPath];
+        if (!gpxFile && [[OAUtilities absoluteGpxPathForPath:_gpxFilePathTemp] isEqualToString:[OAUtilities absoluteGpxPathForPath:docPath]])
+            gpxFile = _gpxFilesTemp.firstObject;
+    }
+    else if (!gpxFile && [_selectedGpxHelper findGpxFile:&gpxFile path:&docPath containingWaypoint:item.point])
+    {
+        item.docPath = docPath;
+    }
+
+    if (gpxFile)
+    {
+        if ([gpxFile.getPointsList indexOfObjectIdenticalTo:item.originalPoint] != NSNotFound)
+            item.gpxFile = gpxFile;
+        if (item.docPath.length == 0 && !gpxFile.isShowCurrentTrack && gpxFile.path.length > 0)
+            item.docPath = gpxFile.path;
+        NSMutableSet<NSString *> *groups = [NSMutableSet set];
+        for (OASWptPt *point in gpxFile.getPointsList)
+        {
+            if (point.category.length > 0 && !gpxFile.pointsGroups[point.category].isHidden)
+                [groups addObject:point.category];
+        }
+        item.groups = groups.allObjects;
+    }
+
+    // Copy the selected waypoint so edits do not change its stored group before updateWpts:.
+    if (item.docPath.length > 0)
+        [item prepareForEditing];
+
+    self.foundWpt = item.point;
+    self.foundWptGroups = item.groups;
+    self.foundWptDocPath = item.docPath;
+}
+
+- (BOOL)deleteFoundWpt
 {
     if (!self.foundWpt)
         return NO;
@@ -3742,7 +3781,8 @@ static char kMapSourceUpdateQueueKey;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        [helper deleteWpt:self.foundWpt];
+        if (![helper deleteWpt:self.foundWpt])
+            return NO;
         
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3913,7 +3953,7 @@ static char kMapSourceUpdateQueueKey;
                 gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
-                self.foundWpt = wpt;
+                self.foundWpt = w;
                 self.foundWptDocPath = gpxFileName;
                 
                 NSMutableSet *groups = [NSMutableSet set];
@@ -3950,6 +3990,8 @@ static char kMapSourceUpdateQueueKey;
             gpxFile.author = [OAAppVersion getFullVersionWithAppName];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
+            self.foundWpt = w;
+            self.foundWptDocPath = gpxFileName;
             NSMutableSet *groups = [NSMutableSet set];
             for (OASWptPt *loc in gpxFile.getPointsList)
             {
@@ -3965,7 +4007,7 @@ static char kMapSourceUpdateQueueKey;
         }
     }
     
-    return YES;
+    return NO;
 }
 
 - (NSArray<OASWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
@@ -4007,21 +4049,172 @@ static char kMapSourceUpdateQueueKey;
         return @[];
 }
 
-- (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (OASGpxFile *)waypointGpxFileForPath:(NSString *)path
 {
-    if (items.count == 0)
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+    if (![file exists] || [file isDirectory])
+        return nil;
+    // Persist into the current document; the editor's copy may predate other changes.
+    OASGpxFile *gpxFile = [_selectedGpxHelper getGpxFileFor:path];
+    if (!gpxFile && [[OAUtilities absoluteGpxPathForPath:_gpxFilePathTemp] isEqualToString:path])
+        gpxFile = _gpxFilesTemp.firstObject;
+    if (!gpxFile)
+        gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
+    return gpxFile.error ? nil : gpxFile;
+}
+
+- (void)syncWaypointGpxFile:(OASGpxFile *)gpxFile atPath:(NSString *)path updateMap:(BOOL)updateMap
+{
+    BOOL isVisible = [_selectedGpxHelper containsGpxFileWith:path]
+        || [[OAAppSettings sharedManager] isGpxVisible:[OAUtilities getGpxShortPath:path]];
+    if (isVisible)
+        [_selectedGpxHelper addGpxFile:gpxFile for:path];
+
+    __block BOOL isTemporary = NO;
+    [self runWithRenderSync:^{
+        isTemporary = _gpxFilesTemp.count > 0
+            && [[OAUtilities absoluteGpxPathForPath:_gpxFilePathTemp] isEqualToString:path];
+        if (isTemporary)
+            _gpxFilesTemp[0] = gpxFile;
+    }];
+
+    if (updateMap && (isVisible || isTemporary))
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // Preserve track geometry unless the layer still holds different documents.
+            if ([_mapLayers.gpxMapLayer isDisplayingGpxFiles:[self gpxFilesForMap]])
+                [_mapLayers.gpxMapLayer refreshGpxWaypoints];
+            else
+                [self initRendererWithGpxTracks];
+        });
+    }
+}
+
+- (BOOL)writeWaypointGpxFile:(OASGpxFile *)gpxFile atPath:(NSString *)path
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if (![manager isWritableFileAtPath:path])
+        return NO;
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSURL *directory = [manager URLForDirectory:NSItemReplacementDirectory inDomain:NSUserDomainMask
+                              appropriateForURL:url create:YES error:nil];
+    if (!directory)
+        return NO;
+    NSURL *replacement = [directory URLByAppendingPathComponent:url.lastPathComponent];
+    gpxFile.path = path;
+    // A failed serialization must not truncate the saved track.
+    BOOL saved = ![OASGpxUtilities.shared writeGpxFileFile:[[OASKFile alloc] initWithFilePath:replacement.path] gpxFile:gpxFile]
+        && [manager replaceItemAtURL:url withItemAtURL:replacement backupItemName:nil options:0 resultingItemURL:nil error:nil];
+    [manager removeItemAtURL:directory error:nil];
+    return saved;
+}
+
+- (void)updateStoredWaypoint:(OASWptPt *)point withPoint:(OASWptPt *)newPoint inGpxFile:(OASGpxFile *)gpxFile sourceFile:(OASGpxFile *)sourceFile
+{
+    int64_t previousTime = point.time;
+    NSString *previousGroup = point.category ?: @"";
+    [point updatePointPt:newPoint];
+    point.time = previousTime;
+
+    // Group edits can change category before saving. Resolve memberships by identity,
+    // since the shared updateWptPt removes the first equal point from a group.
+    NSString *groupName = point.category ?: @"";
+    for (NSString *key in gpxFile.pointsGroups.allKeys)
+    {
+        if (![key isEqualToString:groupName])
+            [gpxFile.pointsGroups[key].points removeObjectIdenticalTo:point];
+    }
+    OASGpxUtilitiesPointsGroup *group = gpxFile.pointsGroups[groupName];
+    if (!group)
+    {
+        OASGpxUtilitiesPointsGroup *sourceGroup = sourceFile.pointsGroups[groupName];
+        group = sourceGroup
+            ? [[OASGpxUtilitiesPointsGroup alloc] initWithName:groupName iconName:sourceGroup.iconName
+                                             backgroundType:sourceGroup.backgroundType color:sourceGroup.color
+                                                     hidden:sourceGroup.hidden pinned:sourceGroup.pinned]
+            : [[OASGpxUtilitiesPointsGroup alloc] initWithPoint:point];
+        gpxFile.pointsGroups[groupName] = group;
+    }
+    if ([group.points indexOfObjectIdenticalTo:point] == NSNotFound)
+        [group.points addObject:point];
+    if (sourceFile && ![previousGroup isEqualToString:groupName] && !sourceFile.pointsGroups[previousGroup]
+        && gpxFile.pointsGroups[previousGroup].points.count == 0)
+        [gpxFile.pointsGroups removeObjectForKey:previousGroup];
+
+    gpxFile.modifiedTime = (long)(NSDate.date.timeIntervalSince1970 * 1000.0);
+    gpxFile.pointsModifiedTime = gpxFile.modifiedTime;
+}
+
+- (BOOL)updateWpts:(NSArray<OAGpxWptItem *> *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+{
+    return [self applyWaypointChanges:items deletingItems:@[] docPath:docPath updateMap:updateMap];
+}
+
+- (BOOL)deleteWpts:(NSArray<OAGpxWptItem *> *)items docPath:(NSString *)docPath
+{
+    return [self applyWaypointChanges:@[] deletingItems:items docPath:docPath updateMap:YES];
+}
+
+- (BOOL)replaceWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
+{
+    if (!existingItem.originalPoint || !item.point || (!newPoint && !item.originalPoint))
+        return NO;
+    BOOL removingPoint = !newPoint && existingItem.originalPoint != item.originalPoint;
+    OAGpxWptItem *replacement = [OAGpxWptItem withGpxWpt:existingItem.originalPoint];
+    replacement.gpxFile = existingItem.gpxFile;
+    replacement.docPath = item.docPath;
+    [replacement prepareForEditing];
+    replacement.point.position = item.point.position;
+
+    if (item.docPath.length == 0)
+    {
+        if (![OASavingTrackHelper.sharedInstance updatePointCoordinates:replacement.originalPoint
+                                                           newLocation:item.point.position
+                                                         removingPoint:removingPoint ? item.originalPoint : nil])
+            return NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        });
+    }
+    else if (![self applyWaypointChanges:@[replacement] deletingItems:removingPoint ? @[item] : @[]
+                                docPath:item.docPath updateMap:YES])
+    {
+        return NO;
+    }
+
+    item.point = item.docPath.length > 0 ? replacement.point : replacement.originalPoint;
+    item.originalPoint = replacement.originalPoint;
+    item.gpxFile = replacement.gpxFile;
+    item.groups = item.gpxFile.pointsGroups.allKeys;
+    return YES;
+}
+
+- (BOOL)applyWaypointChanges:(NSArray<OAGpxWptItem *> *)items deletingItems:(NSArray<OAGpxWptItem *> *)deletedItems docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+{
+    if (items.count == 0 && deletedItems.count == 0)
         return NO;
 
+    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     if (docPath.length == 0)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+        if (deletedItems.count > 0)
+        {
+            NSMutableArray<OASWptPt *> *points = [NSMutableArray arrayWithCapacity:deletedItems.count];
+            for (OAGpxWptItem *item in deletedItems)
+            {
+                if (!item.originalPoint)
+                    return NO;
+                [points addObject:item.originalPoint];
+            }
+            if (![helper deleteWpts:points])
+                return NO;
+        }
         for (OAGpxWptItem *item in items)
         {
             [helper saveWpt:item.point];
             [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
         }
-
         if (updateMap)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -4031,93 +4224,99 @@ static char kMapSourceUpdateQueueKey;
         return YES;
     }
 
-    BOOL found = NO;
-    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
-    for (NSString *key in activeGpx) {
-        OASGpxFile *value = activeGpx[key];
+    NSString *path = [OAUtilities absoluteGpxPathForPath:docPath];
+    OASGpxFile *gpxFile = [self waypointGpxFileForPath:path];
+    NSArray<OAGpxWptItem *> *allItems = [items arrayByAddingObjectsFromArray:deletedItems];
+    NSArray<OASWptPt *> *storedPoints = [OAGpxWptItem storedPointsForItems:allItems inGpxFile:gpxFile];
+    if (!storedPoints)
+        return NO;
+    NSArray<OASWptPt *> *removedPoints = [storedPoints subarrayWithRange:NSMakeRange(items.count, deletedItems.count)];
 
-        if (value == nil)
-        {
-            continue;
-        }
+    NSArray<OASWptPt *> *previousPoints = [gpxFile.getPointsList copy];
+    NSDictionary<NSString *, OASGpxUtilitiesPointsGroup *> *previousGroups = [gpxFile.pointsGroups copy];
+    NSArray<NSString *> *previousGroupNames = gpxFile.pointsGroups.allKeys;
+    NSString *previousAuthor = gpxFile.author;
+    NSString *previousPath = gpxFile.path;
+    int64_t previousModifiedTime = gpxFile.modifiedTime;
+    int64_t previousPointsModifiedTime = gpxFile.pointsModifiedTime;
 
-
-        NSString *path = key;
-        if ([path isEqualToString:docPath])
-        {
-            OASGpxFile *gpxFile = value;
-
-            for (OAGpxWptItem *item in items)
-            {
-                for (OASWptPt *loc in gpxFile.getPointsList)
-                {
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
-                    {
-                        [gpxFile updateWptPtExistingPoint:loc newWpt:item.point updateTimestamp:NO];
-                        OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
-                        found = YES;
-                        break;
-                    }
-                }
-            }
-            
-            if (found)
-            {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-                
-                // update map
-                if (updateMap)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [_mapLayers.gpxMapLayer refreshGpxWaypoints];
-                    });
-                }
-            }
-            
-            return found;
-        }
-    }
-    
-    if (_gpxFilesTemp.count != 0)
+    // Serialize waypoint copies; the writer can also change extensionsWriters on unedited points.
+    NSMapTable<OASWptPt *, OASWptPt *> *copies = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality
+                                                                  valueOptions:NSPointerFunctionsStrongMemory];
+    NSMutableArray<OASWptPt *> *editedPoints = [NSMutableArray arrayWithCapacity:previousPoints.count];
+    for (OASWptPt *original in previousPoints)
     {
-        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
-
-        for (OAGpxWptItem *item in items)
-        {
-            for (OASWptPt *loc in gpxFile.getPointsList)
-            {
-                if ([OAUtilities doublesEqualUpToDigits:5 source:loc.position.latitude destination:item.point.lat] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:loc.position.longitude destination:item.point.lon])
-                {
-                    [gpxFile updateWptPtExistingPoint:loc newWpt:item.point updateTimestamp:NO];
-                    OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-                    [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
-                    found = YES;
-                    break;
-                }
-            }
-        }
-        
-        if (found)
-        {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            
-            // update map
-            if (updateMap)
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //[self showTempGpxTrack:docPath];
-                });
-            
-        }
+        OASWptPt *copy = [[OASWptPt alloc] initWithWptPt:original];
+        copy.extensionsWriters = original.extensionsWriters
+            ? [OASMutableDictionary dictionaryWithDictionary:original.extensionsWriters] : nil;
+        [copies setObject:copy forKey:original];
+        [editedPoints addObject:copy];
     }
-    
-    return found;
+    [gpxFile setPointsListPoints:editedPoints];
+    for (NSString *key in previousGroupNames)
+    {
+        OASGpxUtilitiesPointsGroup *group = previousGroups[key];
+        OASGpxUtilitiesPointsGroup *copy = [[OASGpxUtilitiesPointsGroup alloc] initWithName:group.name iconName:group.iconName
+                                                                         backgroundType:group.backgroundType color:group.color
+                                                                                 hidden:group.hidden pinned:group.pinned];
+        for (OASWptPt *point in group.points)
+            [copy.points addObject:[copies objectForKey:point] ?: point];
+        gpxFile.pointsGroups[key] = copy;
+    }
+    [items enumerateObjectsUsingBlock:^(OAGpxWptItem *item, NSUInteger index, BOOL *stop) {
+        [self updateStoredWaypoint:[copies objectForKey:storedPoints[index]] withPoint:item.point inGpxFile:gpxFile sourceFile:item.gpxFile];
+    }];
+    if (removedPoints.count > 0)
+    {
+        NSMutableArray<OASWptPt *> *removedCopies = [NSMutableArray arrayWithCapacity:removedPoints.count];
+        for (OASWptPt *point in removedPoints)
+            [removedCopies addObject:[copies objectForKey:point]];
+        [self removeStoredWaypoints:removedCopies inGpxFile:gpxFile];
+    }
+    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+    BOOL saved = [self writeWaypointGpxFile:gpxFile atPath:path];
+
+    [gpxFile setPointsListPoints:previousPoints];
+    [gpxFile.pointsGroups removeAllObjects];
+    for (NSString *key in previousGroupNames)
+        gpxFile.pointsGroups[key] = previousGroups[key];
+    gpxFile.author = previousAuthor;
+    gpxFile.path = previousPath;
+    gpxFile.modifiedTime = previousModifiedTime;
+    gpxFile.pointsModifiedTime = previousPointsModifiedTime;
+    if (!saved)
+        return NO;
+
+    // Commit to the existing objects so the editor and renderer retain valid references.
+    [items enumerateObjectsUsingBlock:^(OAGpxWptItem *item, NSUInteger index, BOOL *stop) {
+        [self updateStoredWaypoint:storedPoints[index] withPoint:item.point inGpxFile:gpxFile sourceFile:item.gpxFile];
+    }];
+    if (removedPoints.count > 0)
+        [self removeStoredWaypoints:removedPoints inGpxFile:gpxFile];
+    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+    gpxFile.path = path;
+
+    [allItems enumerateObjectsUsingBlock:^(OAGpxWptItem *item, NSUInteger index, BOOL *stop) {
+        BOOL deleting = index >= items.count;
+        OASWptPt *originalPoint = storedPoints[index];
+        if (item.gpxFile && item.gpxFile != gpxFile)
+        {
+            originalPoint = item.originalPoint;
+            if (deleting)
+                [self removeStoredWaypoints:@[originalPoint] inGpxFile:item.gpxFile];
+            else
+                [self updateStoredWaypoint:originalPoint withPoint:storedPoints[index] inGpxFile:item.gpxFile sourceFile:nil];
+        }
+        item.originalPoint = deleting ? nil : originalPoint;
+        if (!deleting)
+        {
+            item.gpxFile = item.gpxFile ?: gpxFile;
+            [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
+        }
+    }];
+
+    [self syncWaypointGpxFile:gpxFile atPath:path updateMap:updateMap];
+    return YES;
 }
 
 - (BOOL)updateMetadata:(OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath
@@ -4172,110 +4371,23 @@ static char kMapSourceUpdateQueueKey;
     return NO;
 }
 
-- (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath
+- (void)removeStoredWaypoints:(NSArray<OASWptPt *> *)points inGpxFile:(OASGpxFile *)gpxFile
 {
-    if (items.count == 0)
-        return NO;
-
-    if (!docPath)
+    // Shared deleteWptPt uses equality, which can remove another collocated waypoint.
+    NSMutableArray<OASWptPt *> *remainingPoints = [gpxFile.getPointsList mutableCopy];
+    for (OASWptPt *point in points)
+        [remainingPoints removeObjectIdenticalTo:point];
+    [gpxFile setPointsListPoints:remainingPoints];
+    for (OASGpxUtilitiesPointsGroup *group in gpxFile.pointsGroups.allValues)
     {
-        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        for (OAGpxWptItem *item in items)
-        {
-            [helper deleteWpt:item.point];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
-        });
-        return YES;
+        for (OASWptPt *point in points)
+            [group.points removeObjectIdenticalTo:point];
     }
-
-    BOOL found = NO;
-    NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
-    for (NSString *key in activeGpx) {
-        OASGpxFile *value = activeGpx[key];
-
-        if (value == nil)
-        {
-            continue;
-        }
-
-
-        NSString *path = key;
-        if ([path isEqualToString:docPath])
-        {
-            OASGpxFile *gpxFile = value;
-
-            for (OAGpxWptItem *item in items)
-            {
-                for (int i = 0; i < gpxFile.getPointsList.count; i++)
-                {
-                    OASWptPt *w = gpxFile.getPointsList[i];
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
-                    {
-                        [gpxFile deleteWptPtPoint:w];
-                        found = YES;
-                        break;
-                    }
-                }
-            }
-            
-            if (found)
-            {
-                
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-                
-                // update map
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self initRendererWithGpxTracks];
-                });
-                
-                return YES;
-            }
-        }
-    }
-
-    if (_gpxFilesTemp.count != 0)
-    {
-        OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
-
-        for (OAGpxWptItem *item in items)
-        {
-            for (int i = 0; i < gpxFile.getPointsList.count; i++)
-            {
-                OASWptPt *w = gpxFile.getPointsList[i];
-                if ([OAUtilities doublesEqualUpToDigits:5 source:w.position.latitude destination:item.point.lat] &&
-                    [OAUtilities doublesEqualUpToDigits:5 source:w.position.longitude destination:item.point.lon])
-                {
-                    [gpxFile deleteWptPtPoint:w];
-                    found = YES;
-                    break;
-                }
-            }
-        }
-        
-        if (found)
-        {
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            
-            // update map
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self initRendererWithGpxTracks];
-            });
-            
-            return YES;
-        }
-    }
-    
-    return NO;
+    gpxFile.modifiedTime = (long)(NSDate.date.timeIntervalSince1970 * 1000.0);
+    gpxFile.pointsModifiedTime = gpxFile.modifiedTime;
 }
 
-- (void) initRendererWithGpxTracks
+- (NSDictionary<NSString *, OASGpxFile *> *)gpxFilesForMap
 {
     NSMutableDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [NSMutableDictionary dictionary];
     NSDictionary<NSString *, OASGpxFile *> *activeGpx = [_selectedGpxHelper.activeGpx copy];
@@ -4300,6 +4412,12 @@ static char kMapSourceUpdateQueueKey;
             gpxFilesDic[tempGpxFilePath] = tempGpxFile;
         }
     }
+    return gpxFilesDic;
+}
+
+- (void)initRendererWithGpxTracks
+{
+    NSDictionary<NSString *, OASGpxFile *> *gpxFilesDic = [self gpxFilesForMap];
     [self runWithRenderSync:^{
         [_mapLayers.gpxMapLayer refreshGpxTracks:gpxFilesDic reset:YES];
     }];

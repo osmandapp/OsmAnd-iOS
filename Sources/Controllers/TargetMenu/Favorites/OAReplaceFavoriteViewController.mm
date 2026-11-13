@@ -84,6 +84,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             OAGpxWptItem *itemData = [[OAGpxWptItem alloc] init];
             itemData.point = point;
+            itemData.gpxFile = _gpxDocument;
             [self setDistanceAndDirections:itemData];
             [arr addObject:itemData];
         }

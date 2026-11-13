@@ -1872,7 +1872,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         OASearchSettings *settings = [self.searchUICore getSearchSettings];
         [self.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
     }
-    [self runCoreSearch:self.searchQuery updateResult:NO searchMore:YES];
+    // A wider spatial search returns the previous rows again; replace that collection.
+    BOOL spatialResults = [[self getResultCollection] isSkipSorting];
+    [self runCoreSearch:self.searchQuery updateResult:NO searchMore:!spatialResults];
 }
 
 - (void) addMoreButton

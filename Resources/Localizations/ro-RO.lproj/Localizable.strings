@@ -718,7 +718,7 @@
 "app_mode_horse" = "Cal";
 "app_mode_personal_transporter" = "Transportator personal";
 "app_mode_wagon" = "Căruță";
-"map_transparency" = "Transparență hartă de bază";
+"map_transparency" = "Vizibilitate hartă de bază";
 "app_mode_car" = "Condus";
 "app_mode_bicycle" = "Ciclism";
 "app_mode_scooter" = "Scuter";

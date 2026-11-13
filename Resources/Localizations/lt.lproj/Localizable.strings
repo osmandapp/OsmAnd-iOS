@@ -440,7 +440,7 @@
 "daynight_mode_night" = "Naktis";
 "map_widget_renderer" = "Atvaizdavimo stilius";
 "shared_string_online_maps" = "Interneto žemėlapiai";
-"map_transparency" = "Bazinio žemėlapio skaidrumas";
+"map_transparency" = "Bazinio žemėlapio matomumas";
 "srtm_color_scheme" = "Spalvų schema";
 "shared_string_appearance" = "Išvaizda";
 "settings_app_theme" = "Programos tema";

@@ -446,7 +446,7 @@ static NSInteger kButtonsSection;
             if (_mapSettingType == EMapSettingOverlay)
                 cell.sliderView.value = _app.data.overlayAlpha;
             else if (_mapSettingType == EMapSettingUnderlay)
-                cell.sliderView.value = _app.data.underlayAlpha;
+                cell.sliderView.value = 1 - _app.data.underlayAlpha;
             cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
@@ -522,7 +522,7 @@ static NSInteger kButtonsSection;
     if (_mapSettingType == EMapSettingOverlay)
         _app.data.overlayAlpha = slider.value;
     else if (_mapSettingType == EMapSettingUnderlay)
-        _app.data.underlayAlpha = slider.value;
+        _app.data.underlayAlpha = 1 - slider.value;
 }
 
 - (void) turnLayerOnOff:(id)sender

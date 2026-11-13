@@ -1518,7 +1518,7 @@
 "map_settings_contour_zoom_level_descr" = "Vælg zoomniveau, hvorfra højdekurver vises";
 "map_settings_line_density" = "Linjetæthed";
 "srtm_color_scheme" = "Farveskema";
-"map_transparency" = "Gennemsigtighed for basiskort";
+"map_transparency" = "Synlighed for basiskort";
 "map_coords" = "Kort: Lat %.5f Lon %.5f";
 "transport_stops" = "Stoppesteder";
 "by_transport_type" = "Med %@";

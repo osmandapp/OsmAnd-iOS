@@ -456,7 +456,7 @@
 "daynight_mode_night" = "Nakts";
 "map_widget_renderer" = "Renderēšanas veids";
 "shared_string_online_maps" = "Tiešsaistes kartes";
-"map_transparency" = "Bāzes kartes caurspīdīgums";
+"map_transparency" = "Bāzes kartes redzamība";
 "srtm_color_scheme" = "Krāsu shēma";
 "shared_string_appearance" = "Izskats";
 "settings_app_theme" = "Lietotnes motīvs";

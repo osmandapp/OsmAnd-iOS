@@ -585,7 +585,7 @@
 "map_settings_offline" = "სტილები ინტერნეტგარეშე რუკებისთვის";
 "shared_string_online_maps" = "მიმდინარე რუკები";
 "shared_string_transparency" = "გამჭვირვალობა";
-"map_transparency" = "ბაზური რუკის გამჭირვალობა";
+"map_transparency" = "ბაზური რუკის ხილვადობა";
 "map_settings_avail_lay" = "ხელმისაწვდომ ფენები";
 "street_level_imagery" = "ქუჩის დონის სურათები";
 "shared_string_terrain" = "რელიეფი";

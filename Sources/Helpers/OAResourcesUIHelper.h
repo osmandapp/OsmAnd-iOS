@@ -252,8 +252,6 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 
 + (OAWorldRegion *) findRegionOrAnySubregionOf:(OAWorldRegion*)region thatContainsResource:(const QString&)resourceId;
 + (NSString *) getCountryName:(OAResourceItem *)item;
-+ (BOOL) checkIfDownloadAvailable;
-+ (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
 + (BOOL) isInOutdatedResourcesList:(NSString *)resourceId;
 
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate

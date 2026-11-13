@@ -864,12 +864,13 @@ typedef enum
 
 - (void) startDownload:(OARepositoryResourceItem *)item
 {
+    [FreeVersionMapDownloads.shared chooseFreeRegion:[[OAResourceSwiftItem alloc] initWithItem:item]];
     NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
                                                          inRegion:item.worldRegion
                                                    withRegionName:YES
                                                  withResourceType:YES];
     
-    [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
+    [OAResourcesUIHelper startDownloadOf:item.resource resourceName:resourceName resourceItem:item onTaskCreated:nil onTaskResumed:nil];
 }
 
 - (void) findLocation:(BOOL)searchLocationByIp

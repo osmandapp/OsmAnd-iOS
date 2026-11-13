@@ -37,6 +37,12 @@
     [self.leftIconView setImage:[UIImage imageNamed:ACImageNameIcCustomPoi]];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[OutdatedMapsWarning new] showAfterUpgrade];
+}
+
 - (void) adjustFrame
 {
     if (!OAUtilities.isLandscapeIpadAware && [self screenHeight] > 0.75 * DeviceScreenHeight)

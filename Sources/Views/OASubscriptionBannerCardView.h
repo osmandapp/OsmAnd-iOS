@@ -11,7 +11,6 @@
 typedef NS_ENUM(NSInteger, EOASubscriptionBannerType)
 {
     EOASubscriptionBannerFree = 0,
-    EOASubscriptionBannerNoFree,
     EOASubscriptionBannerUpdates
 };
 
@@ -24,7 +23,6 @@ typedef NS_ENUM(NSInteger, EOASubscriptionBannerType)
 @interface OASubscriptionBannerCardView : UIView
 
 @property (nonatomic, assign, readonly) EOASubscriptionBannerType type;
-@property (nonatomic, assign) NSInteger freeMapsCount;
 
 - (instancetype)initWithType:(EOASubscriptionBannerType)type;
 

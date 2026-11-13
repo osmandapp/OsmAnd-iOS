@@ -86,6 +86,7 @@
 #define VERSION_4_4_1 4.41
 #define VERSION_4_7_4 4.74
 #define VERSION_4_7_5 4.75
+#define VERSION_5_5 5.5
 
 #define kAppData @"app_data"
 #define kBuildVersion @"buildVersion"
@@ -449,18 +450,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     if (resetSettings)
     {
         LogStartup(@"resetSettings start");
-        int freeMaps = -1;
-        if ([defaults objectForKey:@"freeMapsAvailable"]) {
-            freeMaps = (int)[defaults integerForKey:@"freeMapsAvailable"];
-        }
-
         NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
         [defaults removePersistentDomainForName:appDomain];
         [defaults synchronize];
-
-        if (freeMaps != -1) {
-            [defaults setInteger:freeMaps forKey:@"freeMapsAvailable"];
-        }
 
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
@@ -673,6 +665,11 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
         {
             [OAAppSettings sharedManager].requireUploadPurchases = YES;
             LogStartup(@"version < 4.7.5 migration done");
+        }
+        if (prevVersion < VERSION_5_5)
+        {
+            [OAAppSettings sharedManager].shouldShowOutdatedMapsWarning = YES;
+            LogStartup(@"version < 5.5 migration done");
         }
 
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];

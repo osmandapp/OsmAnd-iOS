@@ -93,6 +93,7 @@ static NSString * const lastReceiptValidationDateKey = @"lastReceiptValidationDa
 static NSString * const eligibleForIntroductoryPriceKey = @"eligibleForIntroductoryPriceKey";
 static NSString * const eligibleForSubscriptionOfferKey = @"eligibleForSubscriptionOfferKey";
 static NSString * const shouldShowWhatsNewScreenKey = @"shouldShowWhatsNewScreenKey";
+static NSString * const shouldShowOutdatedMapsWarningKey = @"shouldShowOutdatedMapsWarningKey";
 
 static NSString * const mapSettingTrackRecordingKey = @"mapSettingTrackRecordingKey";
 
@@ -6231,6 +6232,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_mapperLiveUpdatesExpireTime forKey:@"mapper_live_updates_expire_time"];
         
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
+        _shouldShowOutdatedMapsWarning = [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowOutdatedMapsWarningKey];
         
         // Widgets
         _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[WidgetsPanel leftPanel] originalOrder]]];
@@ -7754,6 +7756,12 @@ static NSString *kOfflineKey = @"OFFLINE";
 {
     _shouldShowWhatsNewScreen = shouldShowWhatsNewScreen;
     [[NSUserDefaults standardUserDefaults] setBool:_shouldShowWhatsNewScreen forKey:shouldShowWhatsNewScreenKey];
+}
+
+- (void)setShouldShowOutdatedMapsWarning:(BOOL)shouldShowOutdatedMapsWarning
+{
+    _shouldShowOutdatedMapsWarning = shouldShowOutdatedMapsWarning;
+    [[NSUserDefaults standardUserDefaults] setBool:_shouldShowOutdatedMapsWarning forKey:shouldShowOutdatedMapsWarningKey];
 }
 
 // Map Settings

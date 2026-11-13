@@ -649,6 +649,7 @@ static char kMapSourceUpdateQueueKey;
     if ([OASubscriptionCancelViewController shouldShowDialog])
         [OASubscriptionCancelViewController showInstance:self.navigationController];
     
+    [[OutdatedMapsWarning new] showAfterUpgrade];
     if (_app.initialURLMapState)
     {
         OsmAnd::PointI centerPoint(_app.initialURLMapState.target31.x,

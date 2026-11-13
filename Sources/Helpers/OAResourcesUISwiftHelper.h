@@ -54,11 +54,13 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (NSString *) type;
 - (EOAOAResourceSwiftItemType) resourceType;
 - (long long) sizePkg;
+- (long long)size;
 - (NSString *) formatedSize;
 - (NSString *) formatedSizePkg;
 - (UIImage *) icon;
 - (NSString *) iconName;
 - (BOOL) isInstalled;
+- (BOOL)isFree;
 - (id<OADownloadTask>) downloadTask;
 - (void) refreshDownloadTask;
 - (BOOL) isOutdatedItem;
@@ -91,6 +93,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames;
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region resourceTypes:(NSArray<NSNumber *> *)resourceTypes;
++ (NSArray<OAResourceSwiftItem *> *)getInstalledMapResources;
 
 + (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask;
 

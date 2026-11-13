@@ -22,7 +22,6 @@
 #import "OAPOILayer.h"
 #import "OADownloadTask.h"
 #import "OAMapViewState.h"
-#import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "Localization.h"
 #import "OALog.h"
@@ -189,9 +188,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                     break;
                 }
             }
-            [OAIAPHelper initializeFreeMapsCount:mapInstalled];
 
-            if (!mapInstalled && !AppEnvironment.isUITesting)
+            if (!mapInstalled && !AppEnvironment.isUITesting && (!FreeVersionMapDownloads.shared.isFreeVersion || !FreeVersionMapDownloads.shared.freeRegion))
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
                 LogStartup(@"initialize: first launch detected (no maps)");

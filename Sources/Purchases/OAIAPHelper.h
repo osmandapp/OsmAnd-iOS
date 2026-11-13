@@ -8,8 +8,6 @@
 
 #import <StoreKit/StoreKit.h>
 
-#define kFreeMapsAvailableTotal 7
-
 @class OAProduct, OASubscription, OASubscriptionList, OAFunctionalAddon, OAExportSettingsType, OAExternalSubscription, OAExternalProduct;
 @class OAWidgetType;
 
@@ -173,11 +171,6 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (void)checkBackupPurchase;
 
 - (BOOL)isCarPlayAvailable;
-
-+ (int)freeMapsAvailable;
-+ (void)initializeFreeMapsCount:(BOOL)mapInstalled;
-+ (void)increaseFreeMapsCount:(int)count;
-+ (void)decreaseFreeMapsCount;
 
 + (BOOL)isPaidVersion;
 

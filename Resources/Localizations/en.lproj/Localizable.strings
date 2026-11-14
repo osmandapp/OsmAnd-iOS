@@ -1234,6 +1234,7 @@
 "map_transparency" = "Base map visibility";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
+"panoramax" = "Panoramax";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
 "enable_3d_objects" = "3D buildings";

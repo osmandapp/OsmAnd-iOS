@@ -508,7 +508,6 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        // read once: the results of one search cannot go to the other
         Class coreClass = [[OAAppSettings sharedManager].useSharedSearch get] ? OASharedSearchUICore.class : OASearchUICore.class;
         _core = [[coreClass alloc] initWithLang:lang ?: @"" transliterate:transliterate];
 
@@ -542,7 +541,23 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 
 - (OASearchUICore *) getCore
 {
-    return _core;
+    @synchronized (self)
+    {
+        BOOL useSharedSearch = [[OAAppSettings sharedManager].useSharedSearch get];
+        if ([_core isKindOfClass:OASharedSearchUICore.class] != useSharedSearch)
+        {
+            [_core cancelSearch:NO];
+            [self cancelSearchCities];
+            _resultCollection = nil;
+
+            NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
+            Class coreClass = useSharedSearch ? OASharedSearchUICore.class : OASearchUICore.class;
+            _core = [[coreClass alloc] initWithLang:lang ?: @"" transliterate:transliterate];
+            [self initSearchUICore];
+        }
+        return _core;
+    }
 }
 
 - (OASearchResultCollection *) getResultCollection

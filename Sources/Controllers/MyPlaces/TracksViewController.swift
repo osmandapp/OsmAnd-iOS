@@ -2336,7 +2336,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             let newPathCount = oldPath.count
             let oldPathString = visibleGpx[i]
             let modifiedString = newPath + oldPathString.dropFirst(newPathCount)
-            visibleGpx[i] = modifiedString.decomposedStringWithCanonicalMapping
+            visibleGpx[i] = modifiedString
         }
         settings.mapSettingVisibleGpx.set(visibleGpx)
     }

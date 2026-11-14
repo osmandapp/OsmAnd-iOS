@@ -7975,7 +7975,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         }
         if (!containsPath)
         {
-            [arr addObject:filePath.decomposedStringWithCanonicalMapping];
+            [arr addObject:filePath];
             added = YES;
         }
     }
@@ -8023,15 +8023,22 @@ static NSString *kOfflineKey = @"OFFLINE";
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
+// The database matches paths literally, while a stored path can differ from it in Unicode normalization form
+- (nullable OASGpxDataItem *) getCachedVisibleGpxItem:(NSString *)absoluteFilepath
+{
+    OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+    return [db getCachedGPXItem:absoluteFilepath]
+        ?: [db getCachedGPXItem:absoluteFilepath.precomposedStringWithCanonicalMapping]
+        ?: [db getCachedGPXItem:absoluteFilepath.decomposedStringWithCanonicalMapping];
+}
+
 - (void) hideRemovedGpx
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx.get];
-    NSMutableArray *arrToDelete = [NSMutableArray array];
-    for (NSString *filepath in arr)
+    NSMutableOrderedSet<NSString *> *visiblePaths = [NSMutableOrderedSet orderedSet];
+    for (NSString *filepath in _mapSettingVisibleGpx.get)
     {
-        NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:filepath];
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getCachedGPXItem:absoluteGpxFilepath];
+        OASGpxDataItem *gpx = [self getCachedVisibleGpxItem:[app.gpxPath stringByAppendingPathComponent:filepath]];
         NSString *fileName = filepath.lastPathComponent;
         NSString *filenameWithoutPrefix = nil;
         if ([fileName hasSuffix:@"_osmand_backup"])
@@ -8039,13 +8046,9 @@ static NSString *kOfflineKey = @"OFFLINE";
 
         NSString *existingFilepath = filenameWithoutPrefix ?: gpx.gpxFilePath;
         NSString *path = existingFilepath ? [app.gpxPath stringByAppendingPathComponent:existingFilepath] : nil;
-        if (!path || ![[NSFileManager defaultManager] fileExistsAtPath:path] || !gpx)
-            [arrToDelete addObject:filepath];
+        if (path && gpx && [[NSFileManager defaultManager] fileExistsAtPath:path])
+            [visiblePaths addObject:gpx.gpxFilePath];
     }
-    [arr removeObjectsInArray:arrToDelete];
-    NSMutableOrderedSet<NSString *> *visiblePaths = [NSMutableOrderedSet orderedSet];
-    for (NSString *path in arr)
-        [visiblePaths addObject:path.decomposedStringWithCanonicalMapping];
     [self.mapSettingVisibleGpx set:visiblePaths.array];
 }
 

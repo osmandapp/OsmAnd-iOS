@@ -171,6 +171,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (void)onBackupPurchaseRequested;
 - (void)checkBackupPurchase:(void(^)(BOOL))onComplete;
 - (void)checkBackupPurchase;
+/** Nightly only: applies the purchases of the linked OsmAnd Cloud account after login, clears them after logout. */
+- (void)onCloudAccountChanged;
 
 - (BOOL)isCarPlayAvailable;
 

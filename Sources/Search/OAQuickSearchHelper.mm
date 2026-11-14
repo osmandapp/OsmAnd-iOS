@@ -560,14 +560,14 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     [self setResourcesForSearchUICore];
     if ([_core isKindOfClass:OASharedSearchUICore.class])
     {
-        // made again when the spatial search is switched
+        // The app's shared engine always uses the spatial search APIs.
         OASharedSearchUICore *core = (OASharedSearchUICore *) _core;
         [core.shared clearAPIs];
         [core.shared resetSearch];
         _resultCollection = nil;
         // the rules files rules*.xml of resources/abbr
         NSString *searchRulesDir = [NSBundle.mainBundle pathForResource:@"abbr" ofType:nil];
-        [core initApiUseSpatialSearch:[[OAAppSettings sharedManager].useSpatialTextSearch get] searchRulesDir:searchRulesDir ?: @""];
+        [core initApiUseSpatialSearch:YES searchRulesDir:searchRulesDir ?: @""];
     }
     else
     {

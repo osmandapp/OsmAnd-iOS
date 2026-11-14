@@ -59,7 +59,7 @@ NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
 NSString *const kBLEScanerKey = @"kBLEScanerKey";
 NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
-NSString *const kNewSearchKey = @"kNewSearchKey";
+NSString *const kSpatialSearchKey = @"kSpatialSearchKey";
 
 
 #pragma mark - Initialization
@@ -198,7 +198,7 @@ NSString *const kNewSearchKey = @"kNewSearchKey";
     searchSection.headerText = OALocalizedString(@"shared_string_search");
     [searchSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kNewSearchKey,
+        kCellKeyKey : kSpatialSearchKey,
         kCellTitleKey : OALocalizedString(@"use_spatial_search"),
         kCellDescrKey : OALocalizedString(@"restart_is_required"),
         @"isOn" : @([[OAAppSettings sharedManager].useSharedSearch get])
@@ -337,7 +337,7 @@ NSString *const kNewSearchKey = @"kNewSearchKey";
         [[OAAppSettings sharedManager].showPrimitivesDebugInfo set:sender.isOn];
         [[_app mapSettingsChangeObservable] notifyEvent];
     }
-    else if ([item.key isEqualToString:kNewSearchKey])
+    else if ([item.key isEqualToString:kSpatialSearchKey])
     {
         // the search core reads it once, when the app starts
         [[OAAppSettings sharedManager].useSharedSearch set:sender.isOn];

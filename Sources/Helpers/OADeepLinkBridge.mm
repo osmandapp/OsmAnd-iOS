@@ -16,6 +16,15 @@
 #import "OANativeUtilities.h"
 #import "OAManageResourcesViewController.h"
 #import "OAOutdatedResourcesViewController.h"
+#import "OsmAndApp.h"
+#import "OAAppData.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
+#import "OARendererRegistry.h"
+#import "OAIndexConstants.h"
+#import "OAMapSource.h"
+
+#include <OsmAndCore/Map/UnresolvedMapStyle.h>
 
 static NSString * const kResourcesStoryboardName = @"Resources";
 static NSString * const kOutdatedResourcesStoryboardIdentifier = @"OutdatedResourcesViewController";
@@ -103,6 +112,40 @@ static NSInteger const kLocalResourcesScope = 1;
 + (UIViewController *)mapsAndResourcesUpdatesViewController
 {
     return [[UIStoryboard storyboardWithName:kResourcesStoryboardName bundle:nil] instantiateViewControllerWithIdentifier:kOutdatedResourcesStoryboardIdentifier];
+}
+
++ (OAMapSource *)offlineMapSourceWithStyleName:(NSString *)styleName
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
+    const auto localResources = app.resourcesManager->getLocalResources();
+    for (const auto& resource : localResources)
+    {
+        if (resource->type != OsmAnd::ResourcesManager::ResourceType::MapStyle)
+            continue;
+
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        if (mapStyle->name.endsWith(QStringLiteral(".addon")))
+            continue;
+
+        NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:mapStyle->title.toNSString()];
+        if (![mapStyleInfo[@"title"] isEqualToString:styleName])
+            continue;
+
+        OAMapSource *mapSource = [app.data lastMapSourceByResourceId:resource->id.toNSString()];
+        if (!mapSource)
+        {
+            mapSource = [[OAMapSource alloc] initWithResource:[[mapStyleInfo[@"id"] lowercaseString] stringByAppendingString:RENDERER_INDEX_EXT]
+                                                   andVariant:mode.variantKey
+                                                         name:mapStyleInfo[@"title"]];
+        }
+        else if (![mapSource.name isEqualToString:mapStyleInfo[@"title"]])
+        {
+            mapSource.name = mapStyleInfo[@"title"];
+        }
+        return mapSource;
+    }
+    return nil;
 }
 
 @end

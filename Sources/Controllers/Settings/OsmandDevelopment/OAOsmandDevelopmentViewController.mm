@@ -30,8 +30,6 @@
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
 #import "OASwitchTableViewCell.h"
-#import "OAQuickSearchHelper.h"
-#import "OASharedSearchUICore.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
@@ -61,8 +59,7 @@ NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
 NSString *const kBLEScanerKey = @"kBLEScanerKey";
 NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
-NSString *const kSharedSearchKey = @"kSharedSearchKey";
-NSString *const kSpatialTextSearchKey = @"kSpatialTextSearchKey";
+NSString *const kNewSearchKey = @"kNewSearchKey";
 
 
 #pragma mark - Initialization
@@ -201,17 +198,10 @@ NSString *const kSpatialTextSearchKey = @"kSpatialTextSearchKey";
     searchSection.headerText = OALocalizedString(@"shared_string_search");
     [searchSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kSharedSearchKey,
-        kCellTitleKey : OALocalizedString(@"search_engine_shared"),
+        kCellKeyKey : kNewSearchKey,
+        kCellTitleKey : OALocalizedString(@"use_spatial_search"),
         kCellDescrKey : OALocalizedString(@"restart_is_required"),
         @"isOn" : @([[OAAppSettings sharedManager].useSharedSearch get])
-    }];
-    [searchSection addRowFromDictionary:@{
-        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kSpatialTextSearchKey,
-        kCellTitleKey : OALocalizedString(@"use_spatial_search"),
-        kCellDescrKey : OALocalizedString(@"use_spatial_search_description"),
-        @"isOn" : @([[OAAppSettings sharedManager].useSpatialTextSearch get])
     }];
     [_data addSection:searchSection];
     
@@ -347,18 +337,10 @@ NSString *const kSpatialTextSearchKey = @"kSpatialTextSearchKey";
         [[OAAppSettings sharedManager].showPrimitivesDebugInfo set:sender.isOn];
         [[_app mapSettingsChangeObservable] notifyEvent];
     }
-    else if ([item.key isEqualToString:kSharedSearchKey])
+    else if ([item.key isEqualToString:kNewSearchKey])
     {
         // the search core reads it once, when the app starts
         [[OAAppSettings sharedManager].useSharedSearch set:sender.isOn];
-    }
-    else if ([item.key isEqualToString:kSpatialTextSearchKey])
-    {
-        [[OAAppSettings sharedManager].useSpatialTextSearch set:sender.isOn];
-        // the C++ search has no spatial one
-        OAQuickSearchHelper *searchHelper = OAQuickSearchHelper.instance;
-        if ([[searchHelper getCore] isKindOfClass:OASharedSearchUICore.class])
-            [searchHelper initSearchUICore];
     }
 }
 

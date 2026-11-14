@@ -200,7 +200,6 @@ NSString *const kSpatialTextSearchKey = @"kSpatialTextSearchKey";
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellKeyKey : kSpatialTextSearchKey,
         kCellTitleKey : OALocalizedString(@"use_spatial_search"),
-        kCellDescrKey : OALocalizedString(@"restart_is_required"),
         @"isOn" : @([[OAAppSettings sharedManager].useSharedSearch get])
     }];
     [_data addSection:searchSection];
@@ -339,7 +338,6 @@ NSString *const kSpatialTextSearchKey = @"kSpatialTextSearchKey";
     }
     else if ([item.key isEqualToString:kSpatialTextSearchKey])
     {
-        // the search core reads it once, when the app starts
         [[OAAppSettings sharedManager].useSharedSearch set:sender.isOn];
     }
 }

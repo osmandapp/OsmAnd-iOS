@@ -516,8 +516,7 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         
         switch filterType {
         case .length, .duration, .timeInMotion, .averageSpeed, .maxSpeed, .averageAltitude, .maxAltitude, .uphill, .downhill, .maxSensorSpeed, .averageSensorSpeed, .maxSensorHeartRate, .averageSensorHeartRate, .maxSensorCadence, .averageSensorCadence, .maxSensorBicyclePower, .averageSensorBicyclePower, .maxSensorTemperature, .averageSensorTemperature:
-            rangeFilterType?.setValueFrom(from: String(Int(currentValueFrom)), updateListeners_: false)
-            rangeFilterType?.setValueTo(to: String(Int(currentValueTo)), updateListeners: false)
+            applyRangeFilterValues()
         case .dateCreation:
             if let dateFrom = dateCreationFromValue, let dateTo = dateCreationToValue {
                 dateCreationFilterType?.valueFrom = dateFrom
@@ -532,6 +531,28 @@ final class TracksFilterDetailsViewController: OABaseNavbarViewController {
         baseFiltersResult = baseFilters.performFiltering()
         baseFilters.onFilterChanged()
         super.onLeftNavbarButtonPressed()
+    }
+    
+    // Slider values are whole display units, while the filter keeps exact values: writing an untouched
+    // bound back would cut off the tracks at the limits of the range
+    private func applyRangeFilterValues() {
+        guard let rangeFilterType else { return }
+        let valueFrom = Int(currentValueFrom)
+        let valueTo = Int(currentValueTo)
+        let isValueFromChanged = valueFrom != TracksSearchFilter.getDisplayValueFrom(filter: rangeFilterType)
+        let isValueToChanged = valueTo != TracksSearchFilter.getDisplayValueTo(filter: rangeFilterType)
+        
+        if valueFrom <= Int(currentMinValue) {
+            rangeFilterType.clearValueFrom(updateListeners: false)
+        } else if isValueFromChanged {
+            rangeFilterType.setValueFrom(from: String(valueFrom), updateListeners_: false)
+        }
+        
+        if valueTo >= Int(currentMaxValue) {
+            rangeFilterType.clearValueTo(updateListeners: false)
+        } else if isValueToChanged {
+            rangeFilterType.setValueTo(to: String(valueTo), updateListeners: false)
+        }
     }
     
     @objc private func onOutsideCellsTapped() {

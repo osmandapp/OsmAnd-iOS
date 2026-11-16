@@ -72,6 +72,7 @@ final class FreeVersionMapDownloads: NSObject {
     private let lock = NSRecursiveLock()
     private var preferences: [String: Any]?
     private var canWritePreferences = true
+    private var undeletedPaths = [String: String]()
     private var isRegionsLoaded: Bool {
         OsmAndApp.swiftInstance().worldRegion != nil
     }
@@ -90,14 +91,20 @@ final class FreeVersionMapDownloads: NSObject {
         }
     }
     
-    func replaceFreeRegion(_ region: OAWorldRegion) {
-        lock.lock()
-        defer { lock.unlock() }
-        guard let regionId = region.regionId else { return }
+    func replaceFreeRegion(_ region: OAWorldRegion, deletingMaps: ([OAResourceSwiftItem]) -> Void) -> Bool {
+        guard let regionId = region.regionId, let maps = collectMapsToDelete(region) else { return false }
+        let items = maps.flatMap(\.items)
+        let paths = OAObfFileList.pathsByResourceId(for: items.map { $0.resourceId() })
+        guard paths.count == items.count else { return false }
+        deletingMaps(items)
+        undeletedPaths = undeletedPaths.merging(paths) { $1 }.filter { access($0.value, F_OK) == 0 || errno != ENOENT }
+        guard undeletedPaths.keys.allSatisfy({ getRegionByDownloadName(getDownloadName($0))?.regionId == regionId }) else { return false }
         edit { values in
             values[Self.regionKey] = regionId
             values[Self.replacesKey] = (values[Self.replacesKey] as? Int ?? 0) + 1
         }
+
+        return true
     }
     
     func check(_ items: [OAResourceSwiftItem]) -> FreeRegionCheck {
@@ -165,9 +172,14 @@ final class FreeVersionMapDownloads: NSObject {
         }
     }
     
-    func collectMapsToDelete(_ newRegion: OAWorldRegion) -> [(region: OAWorldRegion, items: [OAResourceSwiftItem])] {
-        guard let items = OAResourcesUISwiftHelper.getInstalledMapResources() else { return [] }
+    func collectMapsToDelete(_ newRegion: OAWorldRegion) -> [(region: OAWorldRegion, items: [OAResourceSwiftItem])]? {
+        guard let items = OAResourcesUISwiftHelper.getInstalledMapResources() else { return nil }
         return collectLocalMaps(items).filter { $0.key.regionId != newRegion.regionId }.sorted { $0.key.compare($1.key) == .orderedAscending }.map { (region: $0.key, items: $0.value) }
+    }
+
+    func canInstallMap(_ resourceId: String) -> Bool {
+        guard isFreeVersion, replacesCount > 0, let region = getRegionByDownloadName(getDownloadName(resourceId)), let freeRegion else { return true }
+        return region == freeRegion
     }
     
     func cancelDownloads(otherThan newRegion: OAWorldRegion) {

@@ -2104,9 +2104,10 @@ includeHidden:(BOOL)includeHidden
     [self offerDeleteResourceOf:item viewController:viewController progressHUD:progressHUD executeAfterSuccess:nil];
 }
 
-+ (void)deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
++ (void)deleteResourcesSynchronously:(NSArray<OALocalResourceItem *> *)items
 {
-    dispatch_block_t proc = ^{
+    @autoreleasepool
+    {
         OsmAndAppInstance app = [OsmAndApp instance];
         BOOL shouldClearAstronomyCache = NO;
         for (OALocalResourceItem *item in items)
@@ -2172,7 +2173,13 @@ includeHidden:(BOOL)includeHidden
             AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getPlugin:AstronomyPlugin.class];
             [plugin clearCachedData];
         }
+    }
+}
 
++ (void)deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
+{
+    dispatch_block_t proc = ^{
+        [self deleteResourcesSynchronously:items];
         if (block)
             dispatch_async(dispatch_get_main_queue(), block);
     };

@@ -38,9 +38,6 @@ NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallin
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy *_backgroundStateObserver;
-
-    NSObject *_sync;
-    
     OAWorldRegion *_lastDownloadedRegionInBackground;
 }
 
@@ -49,8 +46,6 @@ NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallin
     self = [super init];
     if (self)
     {
-        _sync = [[NSObject alloc] init];
-        
         _app = [OsmAndApp instance];
 
         _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -300,9 +295,32 @@ NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallin
     return failed;
 }
 
++ (void)replaceFreeRegion:(OAWorldRegion *)region completion:(void (^)(BOOL))completion
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        BOOL replaced;
+        @synchronized (OAResourcesInstaller.class)
+        {
+            replaced = [FreeVersionMapDownloads.shared replaceFreeRegion:region deletingMaps:^(NSArray<OAResourceSwiftItem *> *items) {
+                [OAResourcesUIHelper deleteResourcesSynchronously:[items valueForKey:@"objcResourceItem"]];
+            }];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{ completion(replaced); });
+    });
+}
+
+- (BOOL)canInstallResource:(const QString&)resourceId
+{
+    const auto resource = _app.resourcesManager->getResourceInRepository(resourceId);
+    if (!resource || resource->free || (resource->type != OsmAndResourceType::MapRegion && resource->type != OsmAndResourceType::RoadMapRegion))
+        return YES;
+
+    return _app.resourcesManager->isResourceInstalled(resourceId) || [FreeVersionMapDownloads.shared canInstallMap:resourceId.toNSString()];
+}
+
 - (void) processResource:(id<OADownloadTask>)task
 {
-    @synchronized(_sync)
+    @synchronized (OAResourcesInstaller.class)
     {
         NSString* localPath = task.targetPath;
         NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
@@ -312,7 +330,7 @@ NSString *const OAResourceInstallingFinishedNotification = @"OAResourceInstallin
 
         OALog(@"Going to install/update of %@", nsResourceId);
         // Try to install only in case of successful download
-        if (task.error == nil)
+        if (task.error == nil && [self canInstallResource:resourceId])
         {
             // Install or update given resource
             success = _app.resourcesManager->updateFromFile(resourceId, filePath);

@@ -20,7 +20,6 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     private let freeRegion: OAWorldRegion
     private let region: OAWorldRegion
     private let mapsToDelete: [(region: OAWorldRegion, items: [OAResourceSwiftItem])]
-    private let mapPaths: [String: String]
     private let onReplaced: () -> Void
     
     private var step = Step.replace
@@ -48,8 +47,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         self.freeRegion = freeRegion
         self.region = region
         self.onReplaced = onReplaced
-        mapsToDelete = FreeVersionMapDownloads.shared.collectMapsToDelete(region)
-        mapPaths = OAObfFileList.pathsByResourceId(for: mapsToDelete.flatMap(\.items).map { $0.resourceId() })
+        mapsToDelete = FreeVersionMapDownloads.shared.collectMapsToDelete(region) ?? []
         super.init()
     }
     
@@ -266,16 +264,14 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     }
     
     private func applyReplace() {
-        let items = mapsToDelete.flatMap(\.items)
         FreeVersionMapDownloads.shared.cancelDownloads(otherThan: region)
-        OAResourcesUISwiftHelper.deleteResources(of: items, progressHUD: nil) {
-            guard self.mapPaths.count == items.count, self.mapPaths.values.allSatisfy({ access($0, F_OK) == -1 && errno == ENOENT }) else {
+        OAResourcesInstaller.replaceFreeRegion(region) { replaced in
+            guard replaced else {
                 self.setLoading(false)
                 OAUtilities.showToast(localizedString("shared_string_unexpected_error"), details: nil, duration: 4, in: self.view)
                 return
             }
 
-            FreeVersionMapDownloads.shared.replaceFreeRegion(self.region)
             self.dismiss(animated: true, completion: self.onReplaced)
         }
     }

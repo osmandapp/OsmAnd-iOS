@@ -1672,7 +1672,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         BOOL isShortDescription = [info.typeName isEqualToString:kShortDescriptionRowType];
         cell.textView.textContainer.maximumNumberOfLines = isShortDescription ? 10 : 0;
         cell.textView.textContainer.lineBreakMode = isShortDescription ? NSLineBreakByTruncatingTail : NSLineBreakByWordWrapping;
-        [cell setCustomLeftSeparatorInset:isShortDescription];
+        [cell setCustomLeftSeparatorInset:YES];
         NSString *label = info.text;
         if (label.length == 0)
         {
@@ -1907,11 +1907,15 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
-    if (![info.typeName isEqualToString:kShortDescriptionRowType])
+    BOOL isShortDescription = [info.typeName isEqualToString:kShortDescriptionRowType];
+    if (!isShortDescription && ![info.typeName isEqualToString:kDescriptionRowType])
         return;
     
     CGFloat textLeading = ([cell isDirectionRTL] ? CGRectGetWidth(cell.bounds) - CGRectGetMaxX(cell.contentView.frame) : CGRectGetMinX(cell.contentView.frame)) + cell.contentView.directionalLayoutMargins.leading;
     cell.separatorInset = UIEdgeInsetsMake(0., MIN(tableView.separatorInset.left, textLeading), 0., 0.);
+    if (!isShortDescription)
+        return;
+    
     CGFloat height = ceil(cell.bounds.size.height);
     if (info.height == height)
         return;

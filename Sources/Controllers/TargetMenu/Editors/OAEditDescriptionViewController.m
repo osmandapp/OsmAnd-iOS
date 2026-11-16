@@ -187,7 +187,7 @@
         }
         if (![textHtml containsString:@"<header"])
         {
-            NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><style> body { font-family: -apple-system; font-size: 17px; color:#000009} b {font-family: -apple-system; font-weight: bolder; font-size: 17px; color:#000000 }</style></header><head></head><div class=\"main\">%@</div>";
+            NSString *head = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><style> :root { color-scheme: light dark; } body { font-family: -apple-system; font-size: 17px; } b {font-family: -apple-system; font-weight: bolder; font-size: 17px; }</style></header><head></head><div class=\"main\">%@</div>";
             textHtml = [NSString stringWithFormat:head, textHtml];
         }
         [_webView loadHTMLString:textHtml  baseURL:nil];

@@ -80,15 +80,6 @@ static const NSInteger kMaxDeflateRatio = 1032;
 {
     OABackupInfo *info = [[OABackupInfo alloc] init];
     NSDictionary<NSString *, OAUploadedFileInfo *> *uploadedFileInfos = [OABackupDbHelper.sharedDatabase getUploadedFileInfoMap];
-    NSMutableDictionary<NSString *, OAUploadedFileInfo *> *uploadedFileInfosWithNormalizedNames = [NSMutableDictionary dictionaryWithCapacity:uploadedFileInfos.count];
-    for (NSString *originalKey in uploadedFileInfos)
-    {
-        NSString *normalizedKey = originalKey.precomposedStringWithCanonicalMapping;
-        OAUploadedFileInfo *info = uploadedFileInfos[originalKey];
-        OAUploadedFileInfo *existing = uploadedFileInfosWithNormalizedNames[normalizedKey];
-        if (existing == nil || info.uploadTime > existing.uploadTime)
-            uploadedFileInfosWithNormalizedNames[normalizedKey] = info;
-    }
     /*
      operationLog.log("=== localFiles ===");
      for (LocalFile localFile : localFiles.values()) {
@@ -145,8 +136,7 @@ static const NSInteger kMaxDeflateRatio = 1032;
         }
         else if (!remoteFile.isDeleted)
         {
-            NSString *uploadedFileInfoKey = [NSString stringWithFormat:@"%@___%@", remoteFile.type, remoteFile.name];
-            OAUploadedFileInfo *fileInfo = uploadedFileInfosWithNormalizedNames[uploadedFileInfoKey.precomposedStringWithCanonicalMapping];
+            OAUploadedFileInfo *fileInfo = uploadedFileInfos[[OABackupDbHelper getUploadedFileInfoKey:remoteFile.type name:remoteFile.name]];
             // suggest to remove only if file exists in db
             if (fileInfo != nil && fileInfo.uploadTime >= remoteFile.updatetimems)
             {

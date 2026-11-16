@@ -622,7 +622,7 @@
 
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary
 {
-    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfo:[OASettingsItemType typeName:type] name:fileName];
+    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfoMap][[OABackupDbHelper getUploadedFileInfoKey:[OASettingsItemType typeName:type] name:fileName]];
     return [self generateTimeString:info.uploadTime summary:summary];
 }
 

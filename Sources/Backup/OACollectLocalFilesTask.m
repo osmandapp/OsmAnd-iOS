@@ -48,14 +48,6 @@
         
         NSMutableArray<OALocalFile *> *result = [NSMutableArray array];
         _infos = [_dbHelper getUploadedFileInfoMap];
-        NSMutableDictionary<NSString *, OAUploadedFileInfo *> *normalized = [NSMutableDictionary dictionaryWithCapacity:_infos.count];
-        [_infos enumerateKeysAndObjectsUsingBlock:^(NSString *key, OAUploadedFileInfo *info, BOOL *stop) {
-            NSString *normalizedKey = key.precomposedStringWithCanonicalMapping;
-            OAUploadedFileInfo *existing = normalized[normalizedKey];
-            if (existing == nil || info.uploadTime > existing.uploadTime)
-                normalized[normalizedKey] = info;
-        }];
-        _infos = normalized;
         NSArray<OASettingsItem *> *localItems = [self getLocalItems];
         NSFileManager *fileManager = NSFileManager.defaultManager;
         [_operationLog log:@"getLocalItems"];
@@ -180,9 +172,7 @@
     
     if (_infos != nil)
     {
-        NSString *typeName = [OASettingsItemType typeName:item.type];
-        NSString *key = [NSString stringWithFormat:@"%@___%@", typeName, fileName.precomposedStringWithCanonicalMapping];
-        OAUploadedFileInfo *fileInfo = _infos[key];
+        OAUploadedFileInfo *fileInfo = _infos[[OABackupDbHelper getUploadedFileInfoKey:[OASettingsItemType typeName:item.type] name:fileName]];
         if (fileInfo)
         {
             localFile.uploadTime = fileInfo.uploadTime;

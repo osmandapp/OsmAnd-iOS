@@ -362,7 +362,7 @@
         case EOAFileSettingsItemFileSubtypeGpx:
         {
             OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
+            OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath.decomposedStringWithCanonicalMapping];
             if (![gpxDbHelper hasGpxDataItemFile:file])
                 [gpxDbHelper addItem:[[OASGpxDataItem alloc] initWithFile:file]];
             break;

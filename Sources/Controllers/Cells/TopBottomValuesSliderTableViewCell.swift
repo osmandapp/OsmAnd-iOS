@@ -21,17 +21,19 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
     @IBOutlet private var topLabelsTopConstraint: NSLayoutConstraint!
     @IBOutlet private var topLabelsTrailingConstraint: NSLayoutConstraint!
     @IBOutlet private var valuesTopConstraint: NSLayoutConstraint!
-    
-    private let valueTopInset: CGFloat = 13
-    private let buttonTopInset: CGFloat = 7
-    private let valueTrailingInset: CGFloat = 20
-    private let buttonTrailingInset: CGFloat = 9
-    private let valueBottomSpacing: CGFloat = 13
-    private let buttonBottomSpacing: CGFloat = 5
-    private let valueHorizontalSpacing: CGFloat = 16
-    private let buttonHorizontalSpacing: CGFloat = 5
-    private let labelLineCount = 1
-    private let minimumFontScaleFactor: CGFloat = 0.3
+
+    private enum Constants {
+        static let valueTopInset: CGFloat = 13
+        static let buttonTopInset: CGFloat = 7
+        static let valueTrailingInset: CGFloat = 20
+        static let buttonTrailingInset: CGFloat = 9
+        static let valueBottomSpacing: CGFloat = 13
+        static let buttonBottomSpacing: CGFloat = 5
+        static let valueHorizontalSpacing: CGFloat = 16
+        static let buttonHorizontalSpacing: CGFloat = 5
+        static let labelLineCount = 1
+        static let minimumFontScaleFactor: CGFloat = 0.3
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -96,18 +98,18 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
     private func updateLabelsLayout() {
         guard let topLabelsStackView else { return }
         let showsValue = !topRightLabel.isHidden
-        topLabelsTopConstraint.constant = showsValue ? valueTopInset : buttonTopInset
-        topLabelsTrailingConstraint.constant = showsValue ? valueTrailingInset : buttonTrailingInset
-        valuesTopConstraint.constant = showsValue ? valueBottomSpacing : buttonBottomSpacing
-        topLabelsStackView.spacing = showsValue ? valueHorizontalSpacing : buttonHorizontalSpacing
+        topLabelsTopConstraint.constant = showsValue ? Constants.valueTopInset : Constants.buttonTopInset
+        topLabelsTrailingConstraint.constant = showsValue ? Constants.valueTrailingInset : Constants.buttonTrailingInset
+        valuesTopConstraint.constant = showsValue ? Constants.valueBottomSpacing : Constants.buttonBottomSpacing
+        topLabelsStackView.spacing = showsValue ? Constants.valueHorizontalSpacing : Constants.buttonHorizontalSpacing
         topLabelsStackView.alignment = showsValue ? .firstBaseline : .center
         topLabelsStackView.distribution = .fillProportionally
         topRightButton.contentHorizontalAlignment = .trailing
         topRightButton.configuration?.titleLineBreakMode = .byTruncatingTail
         for label in [topLeftLabel, topRightLabel, topRightButton.titleLabel] {
-            label?.numberOfLines = labelLineCount
+            label?.numberOfLines = Constants.labelLineCount
             label?.adjustsFontSizeToFitWidth = true
-            label?.minimumScaleFactor = minimumFontScaleFactor
+            label?.minimumScaleFactor = Constants.minimumFontScaleFactor
             label?.baselineAdjustment = showsValue ? .alignBaselines : .alignCenters
         }
     }

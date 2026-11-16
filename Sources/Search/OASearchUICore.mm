@@ -530,6 +530,11 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     return [self getCurrentSearchResults];
 }
 
+- (BOOL)isSkipSorting
+{
+    return NO;
+}
+
 - (BOOL)hasMoreSpatialSearchResults
 {
     return NO;

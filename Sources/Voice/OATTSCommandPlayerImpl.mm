@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
+#import <CallKit/CallKit.h>
 #import "OATTSCommandPlayerImpl.h"
 #import "OACommandBuilder.h"
 #import "OAVoiceRouter.h"
@@ -17,13 +18,32 @@
 
 #include <JavaScriptCore/JavaScriptCore.h>
 
+static const NSTimeInterval kSpeechProgressTimeout = 5.0;
+static const NSTimeInterval kSpeechSecondsPerCharacter = 0.2;
+static const NSTimeInterval kSynthesizerStopTimeout = 1.0;
+
 @implementation OATTSCommandPlayerImpl {
     AVSpeechSynthesizer *_synthesizer;
     OAVoiceRouter *_vrt;
     NSString *_voiceProvider;
     JSContext *_context;
     AVAudioSession *_audioSession;
-    BOOL _isInterrupted;
+    dispatch_queue_t _speechQueue;
+    NSMutableArray<NSString *> *_pendingPhrases;
+    AVSpeechUtterance *_currentUtterance;
+    NSUInteger _speechWatchToken;
+    BOOL _isStopRequested;
+    BOOL _isCleared;
+}
+
++ (dispatch_queue_t)speechQueue
+{
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("net.osmand.voice-prompts", DISPATCH_QUEUE_SERIAL);
+    });
+    return queue;
 }
 
 - (instancetype) init
@@ -41,13 +61,13 @@
     self = [super init];
     if (self)
     {
-        _synthesizer = [[AVSpeechSynthesizer alloc] init];
-        _synthesizer.delegate = self;
+        _synthesizer = [self createSynthesizer];
         _audioSession = [AVAudioSession sharedInstance];
         _vrt = voiceRouter;
         _voiceProvider = provider == nil ? @"" : provider;
-        _isInterrupted = NO;
-        
+        _speechQueue = [self.class speechQueue];
+        _pendingPhrases = [NSMutableArray array];
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(handleAudioSessionInterruption:)
                                                      name:AVAudioSessionInterruptionNotification
@@ -65,43 +85,179 @@
 {
     if ([_vrt isMute])
         return;
-    
-    if (_isInterrupted)
+
+    NSString *toSpeak = [[builder getUtterances] componentsJoinedByString:@" "];
+    dispatch_async(_speechQueue, ^{
+        if (self->_isCleared)
+            return;
+
+        [self->_pendingPhrases addObject:toSpeak];
+        [self speakNextPhrase];
+    });
+}
+
+- (void)speakNextPhrase
+{
+    if (_currentUtterance)
+        return;
+
+    if ([_vrt isMute])
+        [_pendingPhrases removeAllObjects];
+    if (_pendingPhrases.count > 0 && [self hasActiveCall])
     {
-        NSLog(@"[OATTSCommandPlayerImpl] Cannot play commands: Audio session is currently interrupted.");
+        NSLog(@"[OATTSCommandPlayerImpl] Cannot play commands during a phone call");
+        [_pendingPhrases removeAllObjects];
+    }
+    if (_pendingPhrases.count > 0 && ![self activateAudioSession])
+    {
+        NSLog(@"[OATTSCommandPlayerImpl] Dropping %lu voice prompts: audio session is not active", (unsigned long)_pendingPhrases.count);
+        [_pendingPhrases removeAllObjects];
+    }
+    if (_pendingPhrases.count == 0)
+    {
+        [self deactivateAudioSession];
         return;
     }
-    
+
+    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:_pendingPhrases.firstObject];
+    [_pendingPhrases removeObjectAtIndex:0];
+    utterance.voice = [self voiceToUse];
+    utterance.prefersAssistiveTechnologySettings = YES;
+    _currentUtterance = utterance;
+    _isStopRequested = NO;
+    [_synthesizer speakUtterance:utterance];
+    [self watchSpeechWithTimeout:kSpeechProgressTimeout];
+}
+
+- (void)finishUtterance:(AVSpeechUtterance *)utterance
+{
+    if (_currentUtterance != utterance)
+        return;
+
+    _currentUtterance = nil;
+    if (_isStopRequested)
+        _synthesizer = [self createSynthesizer];
+    [self speakNextPhrase];
+}
+
+- (void)watchSpeechWithTimeout:(NSTimeInterval)timeout
+{
+    NSUInteger watchToken = ++_speechWatchToken;
+    __weak OATTSCommandPlayerImpl *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), _speechQueue, ^{
+        [weakSelf handleSpeechTimeout:watchToken];
+    });
+}
+
+- (void)handleSpeechTimeout:(NSUInteger)watchToken
+{
+    if (watchToken != _speechWatchToken || !_currentUtterance)
+        return;
+
+    NSLog(@"[OATTSCommandPlayerImpl] Speech synthesizer got stuck, recreating it");
+    [self replaceSynthesizer];
+    _currentUtterance = nil;
+    [self speakNextPhrase];
+}
+
+- (AVSpeechSynthesizer *)createSynthesizer
+{
+    AVSpeechSynthesizer *synthesizer = [[AVSpeechSynthesizer alloc] init];
+    synthesizer.delegate = self;
+    return synthesizer;
+}
+
+- (void)replaceSynthesizer
+{
+    [self discardSynthesizer];
+    _synthesizer = [self createSynthesizer];
+}
+
+- (void)discardSynthesizer
+{
+    AVSpeechSynthesizer *synthesizer = _synthesizer;
+    _synthesizer = nil;
+    dispatch_block_t stopSpeaking = dispatch_block_create((dispatch_block_flags_t)0, ^{
+        [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    });
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), stopSpeaking);
+    if (dispatch_block_wait(stopSpeaking, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kSynthesizerStopTimeout * NSEC_PER_SEC))) != 0)
+        NSLog(@"[OATTSCommandPlayerImpl] Speech synthesizer did not stop in %.0f s", kSynthesizerStopTimeout);
+}
+
+- (void)stopSynthesizer:(AVSpeechSynthesizer *)synthesizer
+{
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        [synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryImmediate];
+    });
+}
+
+- (BOOL)activateAudioSession
+{
+    AVAudioSessionCategoryOptions options = AVAudioSessionCategoryOptionDuckOthers;
+    if ([[OAAppSettings sharedManager].pauseSpokenAudio get])
+        options |= AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers;
+
     NSError *categoryError = nil;
-    AVAudioSessionCategoryOptions option = [[OAAppSettings sharedManager].pauseSpokenAudio get] ? AVAudioSessionCategoryOptionInterruptSpokenAudioAndMixWithOthers : AVAudioSessionCategoryOptionDuckOthers;
     BOOL categorySet = [_audioSession setCategory:AVAudioSessionCategoryPlayback
                                              mode:AVAudioSessionModeVoicePrompt
-                                          options:option
+                                          options:options
                                             error:&categoryError];
     if (!categorySet)
     {
         NSLog(@"[OATTSCommandPlayerImpl] Error setting audio session category: %@", categoryError.localizedDescription);
-        return;
+        return NO;
     }
-    
+
     NSError *activationError = nil;
-    BOOL activated = [_audioSession setActive:YES error:&activationError];
-    if (!activated)
+    if (![_audioSession setActive:YES error:&activationError])
     {
         NSLog(@"[OATTSCommandPlayerImpl] Error activating audio session: %@", activationError.localizedDescription);
-        return;
+        return NO;
     }
-    
-    NSMutableString *toSpeak = [[NSMutableString alloc] init];
-    NSArray<NSString *> *uterrances = [builder getUtterances];
-    
-    for (NSString *utterance in uterrances)
-        [toSpeak appendString:utterance];
-    
-    AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:toSpeak];
-    utterance.voice = [self voiceToUse];
-    utterance.prefersAssistiveTechnologySettings = YES;
-    [_synthesizer speakUtterance:utterance];
+    return YES;
+}
+
+- (void)deactivateAudioSession
+{
+    [_audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+}
+
+- (BOOL)hasActiveCall
+{
+    for (CXCall *call in [[CXCallObserver alloc] init].calls)
+    {
+        if (!call.hasEnded)
+            return YES;
+    }
+    return NO;
+}
+
+- (void)stop
+{
+    dispatch_async(_speechQueue, ^{
+        [self->_pendingPhrases removeAllObjects];
+        if (!self->_currentUtterance || self->_isStopRequested)
+            return;
+
+        self->_isStopRequested = YES;
+        [self stopSynthesizer:self->_synthesizer];
+        [self watchSpeechWithTimeout:kSpeechProgressTimeout];
+    });
+}
+
+- (void)clear
+{
+    dispatch_async(_speechQueue, ^{
+        self->_isCleared = YES;
+        [self->_pendingPhrases removeAllObjects];
+        if (!self->_currentUtterance)
+            return;
+
+        self->_currentUtterance = nil;
+        [self discardSynthesizer];
+        [self deactivateAudioSession];
+    });
 }
 
 - (AVSpeechSynthesisVoice *)voiceToUse
@@ -133,10 +289,36 @@
     return commandBuilder;
 }
 
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didStartSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    dispatch_async(_speechQueue, ^{
+        if (self->_currentUtterance != utterance || self->_isStopRequested)
+            [self stopSynthesizer:synthesizer];
+        else
+            [self watchSpeechWithTimeout:kSpeechProgressTimeout + utterance.speechString.length * kSpeechSecondsPerCharacter];
+    });
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer willSpeakRangeOfSpeechString:(NSRange)characterRange utterance:(AVSpeechUtterance *)utterance
+{
+    dispatch_async(_speechQueue, ^{
+        if (self->_currentUtterance == utterance && !self->_isStopRequested)
+            [self watchSpeechWithTimeout:kSpeechProgressTimeout];
+    });
+}
+
 - (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
 {
-    if (!_isInterrupted)
-        [_audioSession setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
+    dispatch_async(_speechQueue, ^{
+        [self finishUtterance:utterance];
+    });
+}
+
+- (void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didCancelSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+    dispatch_async(_speechQueue, ^{
+        [self finishUtterance:utterance];
+    });
 }
 
 - (BOOL)supportsStructuredStreetNames
@@ -148,32 +330,20 @@
 
 - (void)handleAudioSessionInterruption:(NSNotification *)notification
 {
-    if (!notification)
-        return;
-
     NSDictionary *info = notification.userInfo;
     AVAudioSessionInterruptionType type = (AVAudioSessionInterruptionType)[info[AVAudioSessionInterruptionTypeKey] unsignedIntegerValue];
+    AVAudioSessionInterruptionReason reason = (AVAudioSessionInterruptionReason)[info[AVAudioSessionInterruptionReasonKey] unsignedIntegerValue];
+    if (type != AVAudioSessionInterruptionTypeBegan || reason == AVAudioSessionInterruptionReasonAppWasSuspended)
+        return;
 
-    if (type == AVAudioSessionInterruptionTypeBegan)
-    {
-        _isInterrupted = YES;
-        if ([_synthesizer isSpeaking])
-            [_synthesizer stopSpeakingAtBoundary:AVSpeechBoundaryWord];
-    }
-    else
-    {
-        AVAudioSessionInterruptionOptions options = [info[AVAudioSessionInterruptionOptionKey] unsignedIntegerValue];
-        _isInterrupted = NO;
-        if (options == AVAudioSessionInterruptionOptionShouldResume)
-        {
-            NSError *error = nil;
-            BOOL activated = [_audioSession setActive:YES error:&error];
-            if (!activated)
-                NSLog(@"[OATTSCommandPlayerImpl] Error reactivating audio session: %@", error.localizedDescription);
-            else
-                NSLog(@"[OATTSCommandPlayerImpl] Audio session reactivated successfully.");
-        }
-    }
+    dispatch_async(_speechQueue, ^{
+        [self->_pendingPhrases removeAllObjects];
+        if (!self->_currentUtterance)
+            return;
+
+        [self replaceSynthesizer];
+        self->_currentUtterance = nil;
+    });
 }
 
 @end

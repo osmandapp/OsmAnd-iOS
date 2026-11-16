@@ -1404,7 +1404,7 @@
 "select_map_style" = "Choisissez un style de carte";
 "shared_string_zoom_levels" = "Niveaux de zoom";
 "context_menu_points_of_group" = "Tous les points du groupe";
-"map_transparency" = "Transparence de la carte";
+"map_transparency" = "Visibilité de la carte";
 "srtm_color_scheme" = "Couleur du thème";
 "shared_string_appearance" = "Apparence";
 "res_expire_warning" = "Le délai d'expiration doit être un nombre compris entre 0 et 10 000 000";

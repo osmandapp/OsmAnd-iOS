@@ -29,8 +29,8 @@
             <viewLayoutGuide key="safeArea" id="yH7-8w-lGh"/>
             <color key="backgroundColor" name="viewBg"/>
             <constraints>
-                <constraint firstItem="YtK-gC-49g" firstAttribute="trailing" secondItem="K3o-j2-Txl" secondAttribute="trailing" id="Fcc-20-cN8"/>
-                <constraint firstItem="YtK-gC-49g" firstAttribute="leading" secondItem="K3o-j2-Txl" secondAttribute="leading" id="ZhN-eX-WSi"/>
+                <constraint firstItem="YtK-gC-49g" firstAttribute="trailing" secondItem="yH7-8w-lGh" secondAttribute="trailing" id="Fcc-20-cN8"/>
+                <constraint firstItem="YtK-gC-49g" firstAttribute="leading" secondItem="yH7-8w-lGh" secondAttribute="leading" id="ZhN-eX-WSi"/>
                 <constraint firstAttribute="bottom" secondItem="YtK-gC-49g" secondAttribute="bottom" id="nnI-de-P67"/>
                 <constraint firstItem="YtK-gC-49g" firstAttribute="top" secondItem="K3o-j2-Txl" secondAttribute="top" id="ysu-99-jd6"/>
             </constraints>

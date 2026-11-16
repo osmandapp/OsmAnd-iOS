@@ -261,12 +261,12 @@
     if (_editPointType == EOAEditPointTypeFavorite)
     {
         OAFavoriteGroup *group = [OAFavoritesHelper groupByTrimmedName:groupName];
-        if ([group hasColor])
+        if (!params[kCategoryColor] && [group hasColor])
             selectedColor = group.color;
 
-        if (group.iconName.length > 0)
+        if (iconName.length == 0)
             iconName = group.iconName;
-        if (group.backgroundType.length > 0)
+        if (backgroundIconName.length == 0)
             backgroundIconName = group.backgroundType;
 
         self.groupTitle = [OAFavoriteGroup getDisplayName:group ? group.name : groupName];
@@ -277,11 +277,11 @@
             groupName = @"";
 
         OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
-        if (group.color != 0)
+        if (!params[kWptColor] && !params[kCategoryColor] && group.color != 0)
             selectedColor = UIColorFromARGB(group.color);
-        if (group.iconName.length > 0)
+        if (iconName.length == 0)
             iconName = group.iconName;
-        if (group.backgroundType.length > 0)
+        if (backgroundIconName.length == 0)
             backgroundIconName = group.backgroundType;
 
         _selectedWaypointGroupKey = groupName;

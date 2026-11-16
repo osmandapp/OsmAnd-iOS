@@ -1231,7 +1231,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "shared_string_online_maps" = "Online maps";
 "shared_string_transparency" = "Transparency";
-"map_transparency" = "Base map transparency";
+"map_transparency" = "Base map visibility";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
@@ -1936,9 +1936,7 @@
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
 "routing_engine_shared" = "Route with OsmAndShared";
-"search_engine_shared" = "Search with OsmAndShared";
 "use_spatial_search" = "Use spatial text search";
-"use_spatial_search_description" = "Replace the standard quick search APIs with the experimental spatial text search engine.";
 "auto_zoom_smooth" = "Smooth";
 "auto_zoom_discrete" = "Discrete";
 "osmand_depelopment_simulate_location_section" = "Simulate";

@@ -539,7 +539,7 @@
 "map_widget_renderer" = "Stil na kartata";
 "shared_string_online_maps" = "Karti na internet";
 "shared_string_transparency" = "Transparentnost";
-"map_transparency" = "Transparentnost na osnovnata karta";
+"map_transparency" = "Vidlivost na osnovnata karta";
 "street_level_imagery" = "Sliki na nivo na ulica";
 "shared_string_terrain" = "Teren";
 "shared_string_legend" = "Legenda";

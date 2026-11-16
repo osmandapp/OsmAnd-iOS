@@ -594,7 +594,7 @@
 "city_type_suburb" = "교외";
 "map_widget_left" = "왼쪽 패널";
 "routing_attr_no_new_routing_name" = "No v1.9 라우팅 규칙";
-"map_transparency" = "언더레이 투명도";
+"map_transparency" = "기본 지도 가시성";
 "app_mode_truck" = "트럭";
 "map_markers_other" = "기타 마커";
 "shared_string_is_open" = "열기";

@@ -233,14 +233,15 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         
     }
 
-    _priceButton.frame = CGRectMake(_detailsView.frame.size.width - _priceButton.frame.size.width - 15.0, 15.0, _priceButton.frame.size.width, _priceButton.frame.size.height);
+    _priceButton.frame = CGRectMake(_detailsView.bounds.size.width - _detailsView.safeAreaInsets.right - _priceButton.frame.size.width - 15.0, 15.0, _priceButton.frame.size.width, _priceButton.frame.size.height);
 
     _buttonDeleteCustomPlugin.frame = CGRectMake(CGRectGetMinX(_priceButton.frame) - 16. - 30., CGRectGetMinY(_priceButton.frame) + 5.0, 30., 30.);
 
-    _descLabel.frame = CGRectMake(15.0, 85.0, w - 30.0, _descLabel.frame.size.height);
-    _descTextView.frame = CGRectMake(10.0, 105.0, w - 20.0, _detailsView.frame.size.height - 105.0);
+    CGFloat contentWidth = _detailsView.bounds.size.width - _detailsView.safeAreaInsets.left - _detailsView.safeAreaInsets.right;
+    _descLabel.frame = CGRectMake(_detailsView.safeAreaInsets.left + 15.0, 85.0, contentWidth - 30.0, _descLabel.frame.size.height);
+    _descTextView.frame = CGRectMake(_detailsView.safeAreaInsets.left + 10.0, 105.0, contentWidth - 20.0, _detailsView.frame.size.height - 105.0);
 
-    _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, [SeparatorAppearance thicknessForView:self.view]);
+    _horizontalLineDesc.frame = CGRectMake(_detailsView.safeAreaInsets.left + 15.0, 70.0, contentWidth - 30.0, [SeparatorAppearance thicknessForView:self.view]);
 }
 
 - (void) updatePurchaseButton
@@ -328,7 +329,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     [self.priceButton sizeToFit];
     CGSize priceSize = CGSizeMake(MAX(kPriceButtonMinTextWidth, self.priceButton.bounds.size.width + (!purchased ? kPriceButtonTextInset * 2.0 : 0.0)), kPriceButtonMinTextHeight);
     CGRect priceFrame = self.priceButton.frame;
-    priceFrame.origin = CGPointMake(_detailsView.frame.size.width - priceSize.width - kPriceButtonRectBorder, 15.0);
+    priceFrame.origin = CGPointMake(_detailsView.bounds.size.width - _detailsView.safeAreaInsets.right - priceSize.width - kPriceButtonRectBorder, 15.0);
     priceFrame.size = priceSize;
     self.priceButton.frame = priceFrame;
 }

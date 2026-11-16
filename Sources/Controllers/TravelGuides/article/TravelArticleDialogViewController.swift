@@ -472,7 +472,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         sb += "<div class=\"main" + nightModeClass + "\">\n"
         sb += "<h1>" + (article.title ?? "") + "</h1>"
-        sb += article.content ?? ""
+        sb += OAWebImagesCacheHelper.normalizeLegacyWikimediaThumbnailUrls(article.content ?? "")
         
         sb += FOOTER_INNER
         

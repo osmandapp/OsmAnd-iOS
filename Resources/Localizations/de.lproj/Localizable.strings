@@ -1524,7 +1524,7 @@
 "map_settings_contour_zoom_level_descr" = "Zoomstufe wählen, ab der die Konturlinien angezeigt werden sollen";
 "map_settings_line_density" = "Liniendichte";
 "srtm_color_scheme" = "Farbschema";
-"map_transparency" = "Kartentransparenz";
+"map_transparency" = "Sichtbarkeit der Basiskarte";
 "map_coords" = "Karte: Breite %.5f Länge %.5f";
 "transport_stops" = "Haltestellen";
 "by_transport_type" = "Von %@";

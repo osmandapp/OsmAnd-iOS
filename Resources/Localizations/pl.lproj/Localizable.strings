@@ -1511,7 +1511,7 @@
 "app_mode_subway" = "Metro";
 "app_mode_car" = "Jazda";
 "shared_string_appearance" = "Wygląd";
-"map_transparency" = "Przezroczystość mapy podstawowej";
+"map_transparency" = "Widoczność mapy podstawowej";
 "srtm_color_scheme" = "Zestaw kolorów";
 "app_mode_personal_transporter" = "Transporter osobisty";
 "app_mode_taxi" = "Taksówka";

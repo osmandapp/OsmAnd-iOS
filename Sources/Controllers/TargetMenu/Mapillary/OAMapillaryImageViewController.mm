@@ -25,6 +25,10 @@
 
 #include <OsmAndCore.h>
 
+static const CGFloat kMapillaryNavbarHeight = 48.0;
+static const CGFloat kMapillaryNavbarMinimumTopInset = 12.0;
+static const CGFloat kMapillaryNavbarHorizontalInset = 16.0;
+
 @interface OAMapillaryImageViewController () <WKScriptMessageHandler, WKNavigationDelegate>
 
 @end
@@ -74,6 +78,16 @@
     _webView.navigationDelegate = nil;
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self applySafeAreaMargins];
+    [self adjustNavBarWidth];
+    _webView.frame = [self getWebViewFrame:[OAUtilities isLandscape]];
+    [self layoutNoInternetView];
+    [self adjustTitlePosition];
+}
+
 - (void) adjustNavBarWidth
 {
     CGRect frame = _navBarView.frame;
@@ -93,14 +107,17 @@
     
 }
 
-- (void) adjustTitlePosition
+- (void)adjustTitlePosition
 {
+    UIEdgeInsets safeInsets = _navBarView.safeAreaInsets;
+    CGRect buttonFrame = _closeButton.frame;
+    buttonFrame.origin.x = safeInsets.left + kMapillaryNavbarHorizontalInset;
+    _closeButton.frame = buttonFrame;
+
     CGRect titleFrame = _titleView.frame;
-    if ([OAUtilities isLandscape])
-        titleFrame.size.width = DeviceScreenWidth / 2 - 45.0 * 2 + [OAUtilities getLeftMargin];
-    else
-        titleFrame.size.width = DeviceScreenWidth - 45.0 * 2;
-    
+    titleFrame.origin.x = CGRectGetMaxX(buttonFrame);
+    titleFrame.size.width = MAX(0.0, _navBarView.bounds.size.width - titleFrame.origin.x
+                               - safeInsets.right - kMapillaryNavbarHorizontalInset - buttonFrame.size.width);
     _titleView.frame = titleFrame;
 }
 
@@ -127,10 +144,10 @@
     [self.view addSubview:_webView];
 }
 
-- (void) applySafeAreaMargins
+- (void)applySafeAreaMargins
 {
     CGRect frame = _navBarView.frame;
-    frame.size.height = defaultNavBarHeight + [OAUtilities getStatusBarHeight];
+    frame.size.height = kMapillaryNavbarHeight + MAX(self.view.safeAreaInsets.top, kMapillaryNavbarMinimumTopInset);
     
     CGRect webViewFrame = _webView.frame;
     webViewFrame.origin.y = frame.size.height;

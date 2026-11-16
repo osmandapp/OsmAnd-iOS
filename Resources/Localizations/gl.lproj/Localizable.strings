@@ -978,7 +978,7 @@
 "app_mode_horse" = "Cabalo";
 "index_name_antarctica" = "Antártida";
 "srtm_color_scheme" = "Esquema de cores";
-"map_transparency" = "Transparencia do mapa base";
+"map_transparency" = "Visibilidade do mapa base";
 "app_mode_ufo" = "OVNI";
 "shared_string_appearance" = "Aparencia";
 "osmand_parking_warning" = "Aviso";

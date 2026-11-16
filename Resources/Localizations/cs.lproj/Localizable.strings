@@ -4444,3 +4444,17 @@
 "delete_segment" = "Odstranit segment";
 "plan_route_change_for_whole_segment" = "Změnit pro celý segment";
 "plan_route_change_for_whole_track" = "Změnit pro celou stopu";
+
+"ios_release_5_5" = "• Nové formáty souřadnic včetně systémů EPSG, lokátoru Maidenhead a švýcarské sítě (Swiss Grid)\n
+• Samostatná rozložení widgetů pro režim na výšku a na šířku a k tomu široké nebo kompaktní horní a dolní panely\n
+• Přizpůsobitelný vzhled panelů widgetů: velikost widgetů, ikony, barva textu a pozadí\n
+• Nová nastavení CarPlay pro orientaci mapy a snímkovou frekvenci\n
+• Položka Doma je nyní dostupná jedním klepnutím z nabídky Navigace v CarPlay\n
+• Přidáno nastavení „Ponechat obrazovku zapnutou“ pro každý profil\n
+• Popisky vrstevnic mohou směřovat do kopce, jako na topografických mapách\n
+• Úplná nastavení vzhledu při úpravě více oblíbených položek najednou\n
+• Nastavení tolerance překročení rychlosti pomocí posuvníku\n
+• Rychlejší načítání velkých knihoven tras s ukazatelem průběhu indexování\n
+• Opraveno obnovování smazaných map a oblíbených položek po vysypání koše OsmAnd Cloud\n
+• Opraven pokles nadmořské výšky na 0 u tras zaznamenaných na pozadí\n
+• Opraveny konflikty synchronizace OsmAnd Cloud po aktualizaci map na více zařízeních\n";

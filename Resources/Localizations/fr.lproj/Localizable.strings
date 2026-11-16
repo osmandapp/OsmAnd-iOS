@@ -4582,3 +4582,17 @@
 "unlock_custom_colors" = "Débloquer les couleurs personnalisées";
 "opening_hours_public_holiday" = "Jours fériés";
 "opening_hours_school_holiday" = "Vacances scolaires";
+
+"ios_release_5_5" = "• Nouveaux formats de coordonnées, dont les systèmes EPSG, le localisateur Maidenhead et la grille suisse (Swiss Grid)\n
+• Dispositions de widgets distinctes pour les modes portrait et paysage, avec des panneaux supérieur et inférieur larges ou compacts\n
+• Apparence personnalisable des panneaux de widgets : taille des widgets, icônes, couleurs du texte et de l'arrière-plan\n
+• Nouveaux paramètres CarPlay pour l'orientation de la carte et la fréquence d'images\n
+• Accès à Domicile en un seul geste depuis le menu Navigation de CarPlay\n
+• Ajout du paramètre « Garder l'écran allumé » pour chaque profil\n
+• Les étiquettes des courbes de niveau peuvent être orientées vers le haut de la pente, comme sur les cartes topographiques\n
+• Paramètres d'apparence complets lors de la modification de plusieurs favoris à la fois\n
+• Réglage de la marge de tolérance aux limitations de vitesse à l'aide d'un curseur\n
+• Chargement plus rapide des grandes bibliothèques de traces, avec un indicateur de progression de l'indexation\n
+• Correction de la restauration des cartes et favoris supprimés lors du vidage de la poubelle OsmAnd Cloud\n
+• Correction de l'altitude tombant à 0 dans les traces enregistrées en arrière-plan\n
+• Correction des conflits de synchronisation OsmAnd Cloud après la mise à jour des cartes sur plusieurs appareils\n";

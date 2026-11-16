@@ -4600,3 +4600,17 @@
 "navigate_point_format_maidenhead" = "Maidenhead";
 "shared_string_recent" = "Seneste";
 "coordinate_format_select_other" = "Vælg et andet format";
+
+"ios_release_5_5" = "• Nye koordinatformater, herunder EPSG-systemer, Maidenhead-lokator og schweizisk koordinatsystem (Swiss Grid)\n
+• Separate widgetlayouts til Portræt og Landskab samt brede eller kompakte paneler øverst og nederst\n
+• Tilpasseligt udseende for widgetpaneler: widgetstørrelse, ikoner samt tekst- og baggrundsfarver\n
+• Nye CarPlay-indstillinger for kortretning og billedhastighed\n
+• Hjem er nu kun ét tryk væk i menuen Navigation i CarPlay\n
+• Tilføjet indstillingen \"Hold skærmen tændt\" for hver profil\n
+• Etiketter på højdekurver kan vende op ad bakke, som på topografiske kort\n
+• Fulde udseendeindstillinger ved redigering af flere favoritter på én gang\n
+• Indstil tolerancen for hastighedsgrænse med en skyder\n
+• Hurtigere indlæsning af store sporbiblioteker med en statusindikator for indeksering\n
+• Rettet, at tømning af OsmAnd Cloud-papirkurven gendannede slettede kort og favoritter\n
+• Rettet, at højden faldt til 0 i spor optaget i baggrunden\n
+• Rettet synkroniseringskonflikter i OsmAnd Cloud efter opdatering af kort på flere enheder\n";

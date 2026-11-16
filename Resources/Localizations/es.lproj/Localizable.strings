@@ -4250,3 +4250,17 @@
 "ais_ship_type_hsc_hazard_b" = "HSC, carga peligrosa de categoría B";
 "ais_ship_type_hsc_hazard_c" = "HSC, carga peligrosa de categoría C";
 "ais_ship_type_hsc_hazard_d" = "HSC, carga peligrosa de categoría D";
+
+"ios_release_5_5" = "• Nuevos formatos de coordenadas, incluidos los sistemas EPSG, el localizador Maidenhead y la cuadrícula suiza (Swiss Grid)\n
+• Diseños de widgets independientes para vertical y horizontal, con paneles superior e inferior en estilo Ancho o Compacto\n
+• Apariencia personalizable de los paneles de widgets: tamaño de los widgets, iconos y colores del texto y del fondo\n
+• Nuevos ajustes de CarPlay para la orientación del mapa y la frecuencia de fotogramas\n
+• Casa ahora a un toque desde el menú Navegación de CarPlay\n
+• Añadido el ajuste «Mantener la pantalla encendida» para cada perfil\n
+• Las etiquetas de las curvas de nivel pueden orientarse cuesta arriba, como en los mapas topográficos\n
+• Ajustes de apariencia completos al editar varios Favoritos a la vez\n
+• Ajusta la tolerancia del límite de velocidad con un control deslizante\n
+• Carga más rápida de bibliotecas de tracks grandes, con indicador de progreso de indexación\n
+• Corregido un error por el que vaciar la papelera de OsmAnd Cloud restauraba mapas y Favoritos eliminados\n
+• Corregida la caída de la altitud a 0 en tracks grabados en segundo plano\n
+• Corregidos los conflictos de sincronización de OsmAnd Cloud tras actualizar mapas en varios dispositivos\n";

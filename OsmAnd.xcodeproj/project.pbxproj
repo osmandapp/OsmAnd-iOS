@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1928A110000000000000001 /* SteppedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1928A110000000000000002 /* SteppedSlider.swift */; };
 		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
 		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
 		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
@@ -2281,6 +2282,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1928A110000000000000002 /* SteppedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteppedSlider.swift; sourceTree = "<group>"; };
 		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
 		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
 		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
@@ -10034,6 +10036,7 @@
 				CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */,
 				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
 				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
+				D1928A110000000000000002 /* SteppedSlider.swift */,
 				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
 				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
 				DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */,
@@ -13320,6 +13323,7 @@
 				CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
+				D1928A110000000000000001 /* SteppedSlider.swift in Sources */,
 				2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
 				32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */,

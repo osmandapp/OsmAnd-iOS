@@ -37,7 +37,6 @@
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kType = @"type";
-static NSString * const kName = @"name";
 static NSString * const kParams = @"params";
 static NSString * const kId = @"id";
 static NSString * const kActionType = @"actionType";

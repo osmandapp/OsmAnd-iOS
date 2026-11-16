@@ -439,7 +439,7 @@
 "map_widget_renderer" = "Стил на картата";
 "shared_string_online_maps" = "Карти през интернет";
 "shared_string_transparency" = "Прозрачност";
-"map_transparency" = "Прозрачност на базовата карта";
+"map_transparency" = "Видимост на базовата карта";
 "street_level_imagery" = "Снимки от улицата";
 "shared_string_terrain" = "Терен";
 "shared_string_legend" = "Легенда";

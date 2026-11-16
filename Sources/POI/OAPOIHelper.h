@@ -19,7 +19,7 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name", @"int_name", @"n
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
-@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter;
+@class OASearchPoiTypeFilter, OAPOIUIFilter, OATopIndexFilter, OASMapPoiTypes;
 
 @protocol OAPOISearchDelegate
 
@@ -37,6 +37,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, readonly) OAPOICategory *otherPoiCategory;
 @property (nonatomic, readonly) OAPOICategory *otherMapCategory;
 @property (nonatomic, readonly) NSArray<OAPOIFilter *> *poiFilters;
+@property (nonatomic, readonly) OASMapPoiTypes *kPoiTypes;
 
 + (nonnull OAPOIHelper *) sharedInstance;
 
@@ -60,6 +61,9 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (NSString *) getPoiTypeOptionalIcon:(NSString *)type;
 - (nullable NSString *) getPoiAdditionalCategoryIcon:(nullable NSString *)category;
 - (NSString *) replaceDeprecatedSubtype:(NSString *)subtype;
+
+/** The phrases of a language, `poi_<key>` to the name and its synonyms, or nil when the app has none for it. */
++ (nullable NSDictionary<NSString *, NSString *> *) loadPhraseFileForLanguage:(NSString *)languageCode;
 
 - (nullable NSString *) getPhraseByName:(NSString *)name;
 - (nullable NSString *) getPhraseByName:(NSString *)name withDefatultValue:(BOOL)withDefatultValue;

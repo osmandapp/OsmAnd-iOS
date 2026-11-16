@@ -41,10 +41,8 @@ final class LockScreenAction: OAQuickAction {
     }
     
     override func execute() {
-        if let buttonsController = OARootViewController.instance().mapPanel.hudViewController?.floatingButtonsController, buttonsController.isActionSheetVisible() {
-            buttonsController.hideActionsSheetAnimated()
-        }
         LockHelper.shared.toggleLockScreen()
+        OARootViewController.instance().mapPanel.hudViewController?.floatingButtonsController.refreshQuickActionButtons()
         showToast()
     }
     

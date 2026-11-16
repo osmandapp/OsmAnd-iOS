@@ -403,7 +403,8 @@
     CGFloat leftMargin = 20. + leftSafeMargin;
     CGFloat contentMargin = 20. * 2 + leftSafeMargin;
 
-    CGRect headerFrame = CGRectMake(0., 0., width, 0.);
+    CGRect headerFrame = self.frame;
+    headerFrame.size = CGSizeMake(width, 0.);
 
     headerFrame.size.height += 6.;
     headerFrame.size.height += self.sliderView.frame.size.height;

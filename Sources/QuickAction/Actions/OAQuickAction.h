@@ -12,6 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 static NSString * const kSectionNoName = @"no_name";
 static NSString * const kDialog = @"dialog";
+static NSString * const kName = @"name";
+static NSString * const kCategoryName = @"category_name";
+static NSString * const kCategoryColor = @"category_color";
+static NSString * const kCategoryIcon = @"category_icon";
+static NSString * const kCategoryBackgroundIcon = @"category_background_icon";
+static NSString * const kWptColor = @"wpt_color";
+static NSString * const kWptIcon = @"wpt_icon";
+static NSString * const kWptBackgroundType = @"wpt_background_type";
+static NSString * const kAppearance = @"appearance";
+static NSString * const kAppearanceColor = @"appearance_color";
+static NSString * const kAppearanceIcon = @"appearance_icon";
+static NSString * const kAppearanceBackground = @"appearance_background";
 
 @class OrderedDictionary, QuickActionType;
 

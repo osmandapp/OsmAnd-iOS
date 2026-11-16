@@ -635,7 +635,7 @@
 "map_settings_offline" = "Stilar för offlinekartor";
 "shared_string_online_maps" = "Online-kartor";
 "shared_string_transparency" = "Transparens";
-"map_transparency" = "Transparens för baskartan";
+"map_transparency" = "Synlighet för baskartan";
 "map_settings_avail_lay" = "Tillgängliga lager";
 "street_level_imagery" = "Bilder på gatunivå";
 "shared_string_terrain" = "Terräng";

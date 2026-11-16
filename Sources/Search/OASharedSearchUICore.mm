@@ -1,0 +1,1176 @@
+//
+//  OASharedSearchUICore.mm
+//  OsmAnd
+//
+//  Copyright © 2026 OsmAnd. All rights reserved.
+//
+
+#import "OASharedSearchUICore.h"
+#import "OASharedSearchObjects.h"
+#import "OASharedSearchAppAPIs.h"
+#import "OAQuickSearchHelper.h"
+#import "OASearchResult+cpp.h"
+#import "OAFavoriteItem.h"
+#import "OAResourcesUIHelper.h"
+#import "OASearchCoreFactory.h"
+#import "OASearchWord.h"
+#import "OANameStringMatcher.h"
+#import "OAResultMatcher.h"
+#import "OAAtomicInteger.h"
+#import "OAObfFileList.h"
+#import "OAPOIHelper.h"
+#import "OAWorldRegion.h"
+#import "QuadRect.h"
+#import "OsmAndSharedWrapper.h"
+#import "OsmAnd_Maps-Swift.h"
+
+/** A name matcher of the shared search where the search screens take one of the app. */
+@interface OASharedNameStringMatcher : OANameStringMatcher
+
+- (instancetype)initWithShared:(OASNameStringMatcher *)shared;
+
+@end
+
+@implementation OASharedNameStringMatcher
+{
+    OASNameStringMatcher *_shared;
+}
+
+- (instancetype)initWithShared:(OASNameStringMatcher *)shared
+{
+    self = [super init];
+    if (self)
+        _shared = shared;
+    return self;
+}
+
+- (BOOL)matches:(NSString *)name
+{
+    return name && [_shared matchesName:name];
+}
+
+- (BOOL)matchesMap:(NSArray<NSString *> *)map
+{
+    return [_shared matchesMap:map];
+}
+
+@end
+
+@implementation OASharedSearchSettings
+{
+    // the ids the readers were opened for, kept to open them again after a change of the installed maps
+    NSArray<NSString *> *_resourceIds;
+    BOOL _addressSearch;
+    OAWorldRegion *_regions;
+}
+
+- (instancetype)initWithShared:(OASSearchSettings *)shared
+{
+    self = [super init];
+    if (self)
+        _shared = shared;
+    return self;
+}
+
+- (instancetype)initWithSettings:(OASearchSettings *)s
+{
+    OASharedSearchSettings *settings = (OASharedSearchSettings *) s;
+    return [settings copyWithShared:[[OASSearchSettings alloc] initWithS:settings.shared]];
+}
+
+- (OASharedSearchSettings *)copyWithShared:(OASSearchSettings *)shared
+{
+    OASharedSearchSettings *s = [[OASharedSearchSettings alloc] initWithShared:shared];
+    s->_resourceIds = _resourceIds;
+    s->_addressSearch = _addressSearch;
+    s->_regions = _regions;
+    return s;
+}
+
++ (OASharedSearchSettings *)settingsOfJSON:(NSString *)json
+{
+    id object = [OASKotlinx_serialization_jsonJsonDefault.shared parseToJsonElementString:json];
+    return [[OASharedSearchSettings alloc] initWithShared:[OASSearchSettings.companion parseJSONJson:object]];
+}
+
+- (OASSearchSettings *)sharedWithCurrentReaders
+{
+    // settings made of the shared ones, as those of a phrase, may hold readers of any time before
+    if (![OASharedObfResources.shared areCurrentSearchReaders:[_shared getOfflineIndexes]])
+        [self setOfflineIndexes:[self getOfflineIndexes]];
+    return _shared;
+}
+
+- (NSArray<NSString *> *)getOfflineIndexes
+{
+    return _resourceIds ?: [OASharedObfResources.shared resourceIdsOf:[_shared getOfflineIndexes]];
+}
+
+- (void)setOfflineIndexes:(NSArray<NSString *> *)resourceIds
+{
+    [self setOfflineIndexes:resourceIds preparedReaders:[OASharedObfResources.shared searchReadersForResourceIds:resourceIds ?: @[]]];
+}
+
+- (void)setOfflineIndexes:(NSArray<NSString *> *)resourceIds preparedReaders:(NSArray<OASBinaryMapIndexReader *> *)readers
+{
+    _resourceIds = [resourceIds copy] ?: @[];
+    [_shared setOfflineIndexesOfflineIndexes:readers];
+}
+
+- (int)getRadiusLevel
+{
+    return [_shared getRadiusLevel];
+}
+
+- (OASearchSettings *)setRadiusLevel:(int)radiusLevel
+{
+    return [self copyWithShared:[_shared setRadiusLevelRadiusLevel:radiusLevel]];
+}
+
+- (NSString *)getLang
+{
+    return [_shared getLang];
+}
+
+- (OASearchSettings *)setLang:(NSString *)lang transliterateIfMissing:(BOOL)transliterateIfMissing
+{
+    return [self copyWithShared:[_shared setLangLang:lang transliterateIfMissing:transliterateIfMissing]];
+}
+
+- (BOOL)isTransliterate
+{
+    return [_shared isTransliterate];
+}
+
+- (NSString *)getRegionLang
+{
+    return [_shared getRegionLang];
+}
+
+- (int)getTotalLimit
+{
+    return [_shared getTotalLimit];
+}
+
+- (OASearchSettings *)setTotalLimit:(int)totalLimit
+{
+    return [self copyWithShared:[_shared setTotalLimitTotalLimit:totalLimit]];
+}
+
+- (CLLocation *)getOriginalLocation
+{
+    return [OASharedSearchObjects appObjectFor:[_shared getOriginalLocation]];
+}
+
+- (OASearchSettings *)setOriginalLocation:(CLLocation *)l
+{
+    // the shared settings throw on dropping a location they have: the copy keeps it, and
+    // the callers that may hand nil in, those of the cities search, set the location they search around next
+    if (!l && [_shared getOriginalLocation])
+        return [self copyWithShared:[[OASSearchSettings alloc] initWithS:_shared]];
+    return [self copyWithShared:[_shared setOriginalLocationL:[OASharedSearchObjects sharedObjectFor:l]]];
+}
+
+- (QuadRect *)getSearchBBox31
+{
+    OASKQuadRect *r = [_shared getSearchBBox31];
+    return r ? [[QuadRect alloc] initWithLeft:r.left top:r.top right:r.right bottom:r.bottom] : nil;
+}
+
+- (OASearchSettings *)setSearchBBox31:(QuadRect *)searchBBox31
+{
+    OASKQuadRect *r = searchBBox31 ? [[OASKQuadRect alloc] initWithLeft:searchBBox31.left top:searchBBox31.top right:searchBBox31.right bottom:searchBBox31.bottom] : nil;
+    return [self copyWithShared:[_shared setSearchBBox31SearchBBox31:r]];
+}
+
+- (NSArray<OAObjectType *> *)getSearchTypes
+{
+    OASKotlinArray<OASObjectType *> *types = [_shared getSearchTypes];
+    if (!types)
+        return nil;
+    NSMutableArray<OAObjectType *> *result = [NSMutableArray array];
+    for (int i = 0; i < types.size; i++)
+        [result addObject:[OAObjectType withType:[OASharedSearchObjects appObjectType:[types getIndex:i]]]];
+    return result;
+}
+
+- (BOOL)isCustomSearch
+{
+    return [_shared isCustomSearch];
+}
+
+- (OASearchSettings *)setSearchTypes:(NSArray<OAObjectType *> *)searchTypes
+{
+    NSMutableArray<OASObjectType *> *shared = [NSMutableArray array];
+    for (OAObjectType *type in searchTypes)
+    {
+        OASObjectType *sharedType = [OASharedSearchObjects sharedObjectType:type.type];
+        if (sharedType)
+            [shared addObject:sharedType];
+    }
+    OASKotlinArray<OASObjectType *> *types = [OASKotlinArray arrayWithSize:(int32_t) shared.count init:^id(OASInt *i) {
+        return shared[i.intValue];
+    }];
+    return [self copyWithShared:[_shared setSearchTypesSearchTypes:types]];
+}
+
+- (OASearchSettings *)resetSearchTypes
+{
+    return [self copyWithShared:[_shared resetSearchTypes]];
+}
+
+- (BOOL)isEmptyQueryAllowed
+{
+    return [_shared isEmptyQueryAllowed];
+}
+
+- (OASearchSettings *)setEmptyQueryAllowed:(BOOL)emptyQueryAllowed
+{
+    return [self copyWithShared:[_shared setEmptyQueryAllowedEmptyQueryAllowed:emptyQueryAllowed]];
+}
+
+- (BOOL)isSortByName
+{
+    return [_shared getSortType] == OASSearchSettingsSortType.ignoreDistance;
+}
+
+- (OASearchSettings *)setSortByName:(BOOL)sortByName
+{
+    return [self copyWithShared:[_shared setSortByNameSortByName:sortByName]];
+}
+
+// nothing reads it, in the C++ search either
+- (BOOL)isInAddressSearch
+{
+    return _addressSearch;
+}
+
+- (OASearchSettings *)setAddressSearch:(BOOL)addressSearch
+{
+    OASharedSearchSettings *s = [self copyWithShared:[[OASSearchSettings alloc] initWithS:_shared]];
+    s->_addressSearch = addressSearch;
+    return s;
+}
+
+- (OAWorldRegion *)getRegions
+{
+    return _regions;
+}
+
+// the shared search finds the regions in those it reads at start, the same file the app's are of
+- (void)setRegions:(OAWorldRegion *)regions
+{
+    _regions = regions;
+    [_shared setRegionsRegions:[OASOsmandRegions.companion getDefault]];
+}
+
+- (OASearchSortType)getSortType
+{
+    OASSearchSettingsSortType *type = [_shared getSortType];
+    if (type == OASSearchSettingsSortType.byRelevance)
+        return OASearchSortTypeByRelevance;
+    if (type == OASSearchSettingsSortType.onlyByDistance)
+        return OASearchSortTypeOnlyByDistance;
+    if (type == OASSearchSettingsSortType.ignoreDistance)
+        return OASearchSortTypeIgnoreDistance;
+    return OASearchSortTypeUnknown;
+}
+
+- (OASearchSettings *)setSortType:(OASearchSortType)sortType
+{
+    OASSearchSettingsSortType *type = nil;
+    if (sortType == OASearchSortTypeByRelevance)
+        type = OASSearchSettingsSortType.byRelevance;
+    else if (sortType == OASearchSortTypeOnlyByDistance)
+        type = OASSearchSettingsSortType.onlyByDistance;
+    else if (sortType == OASearchSortTypeIgnoreDistance)
+        type = OASSearchSettingsSortType.ignoreDistance;
+    [_shared setSortTypeSortType:type];
+    return self;
+}
+
+@end
+
+@implementation OASharedSearchPhrase
+
+- (instancetype)initWithShared:(OASSearchPhrase *)shared
+{
+    self = [super init];
+    if (self)
+        _shared = shared;
+    return self;
+}
+
+- (OASearchSettings *)getSettings
+{
+    OASSearchSettings *settings = [_shared getSettings];
+    return settings ? [[OASharedSearchSettings alloc] initWithShared:settings] : nil;
+}
+
+- (NSArray<NSString *> *)getOfflineIndexes
+{
+    return [OASharedObfResources.shared resourceIdsOf:[_shared getOfflineIndexes]];
+}
+
+- (NSString *)getText:(BOOL)includeUnknownPart
+{
+    return [_shared getTextIncludeUnknownPart:includeUnknownPart];
+}
+
+- (NSString *)getTextWithoutLastWord
+{
+    return [_shared getTextWithoutLastWord];
+}
+
+- (NSString *)getFullSearchPhrase
+{
+    return [_shared getFullSearchPhrase];
+}
+
+- (NSString *)getUnknownSearchPhrase
+{
+    return [_shared getUnknownSearchPhrase];
+}
+
+- (NSString *)getFirstUnknownSearchWord
+{
+    return [_shared getFirstUnknownSearchWord];
+}
+
+- (NSString *)getUnknownWordToSearch
+{
+    return [_shared getUnknownWordToSearch];
+}
+
+- (OANameStringMatcher *)getMainUnknownNameStringMatcher
+{
+    return [[OASharedNameStringMatcher alloc] initWithShared:[_shared getMainUnknownNameStringMatcher]];
+}
+
+- (OASearchWord *)getLastSelectedWord
+{
+    OASSearchWord *word = [_shared getLastSelectedWord];
+    if (!word)
+        return nil;
+    OASSearchResult *result = [word getResult];
+    return [[OASearchWord alloc] initWithWord:[word getWord] res:result ? [OASearchResult resultOfShared:result phrase:self] : nil];
+}
+
+- (int)getRadiusLevel
+{
+    return [_shared getRadiusLevel];
+}
+
+- (BOOL)isNoSelectedType
+{
+    return [_shared isNoSelectedType];
+}
+
+- (BOOL)isEmpty
+{
+    return [_shared isEmpty];
+}
+
+- (BOOL)isLastWord:(EOAObjectType)p
+{
+    OASObjectType *type = [OASharedSearchObjects sharedObjectType:p];
+    if (!type)
+        return NO;
+    return [_shared isLastWordP:[OASKotlinArray arrayWithSize:1 init:^id(OASInt *i) {
+        return type;
+    }]];
+}
+
+- (void)syncWordsWithResults
+{
+    [_shared syncWordsWithResults];
+}
+
+- (OAPOIBaseType *)getUnselectedPoiType
+{
+    return [OASharedSearchObjects appObjectFor:[_shared getUnselectedPoiType]];
+}
+
+- (NSString *)toString
+{
+    return [_shared description];
+}
+
+@end
+
+// A result of the shared search. What the shared search may change after publishing it, uniting the
+// results of one object and making the addresses, is read from it when asked, not copied: the weight,
+// the object, the names and the address.
+@interface OASharedSearchResult : OASearchResult
+
+@end
+
+@implementation OASharedSearchResult
+{
+    // the shared object the app's one was made of
+    id _sharedObject;
+    NSObject *_appObject;
+    id _sharedRelatedObject;
+    NSObject *_appRelatedObject;
+    OASSearchResult *_sharedParent;
+    OASearchResult *_appParent;
+}
+
+// the shared result keeps the weight it computed first, so it is not read before the search sorts
+- (double)unknownPhraseMatchWeight
+{
+    return [self.sharedResult getUnknownPhraseMatchWeight];
+}
+
+- (NSObject *)object
+{
+    @synchronized (self)
+    {
+        id sharedObject = self.sharedResult.object;
+        if (sharedObject != _sharedObject)
+        {
+            _sharedObject = sharedObject;
+            _appObject = [OASharedSearchObjects appObjectFor:sharedObject];
+        }
+        return _appObject;
+    }
+}
+
+- (NSObject *)relatedObject
+{
+    @synchronized (self)
+    {
+        id shared = self.sharedResult.relatedObject;
+        if (shared != _sharedRelatedObject)
+        {
+            _sharedRelatedObject = shared;
+            _appRelatedObject = [OASharedSearchObjects appObjectFor:shared];
+        }
+        return _appRelatedObject;
+    }
+}
+
+- (void)setRelatedObject:(NSObject *)relatedObject
+{
+    @synchronized (self)
+    {
+        _sharedRelatedObject = self.sharedResult.relatedObject;
+        _appRelatedObject = relatedObject;
+    }
+}
+
+- (OASearchResult *)parentSearchResult
+{
+    @synchronized (self)
+    {
+        OASSearchResult *shared = self.sharedResult.parentSearchResult;
+        if (shared != _sharedParent)
+        {
+            _sharedParent = shared;
+            _appParent = shared ? [OASearchResult resultOfShared:shared phrase:self.requiredSearchPhrase] : nil;
+        }
+        return _appParent;
+    }
+}
+
+- (void)setParentSearchResult:(OASearchResult *)parentSearchResult
+{
+    @synchronized (self)
+    {
+        _sharedParent = self.sharedResult.parentSearchResult;
+        _appParent = parentSearchResult;
+    }
+}
+
+- (NSMutableArray<NSString *> *)otherNames
+{
+    id otherNames = self.sharedResult.otherNames;
+    if ([otherNames isKindOfClass:NSArray.class])
+        return [otherNames mutableCopy];
+    if ([otherNames isKindOfClass:NSSet.class])
+        return [[otherNames allObjects] mutableCopy];
+    return nil;
+}
+
+- (NSMutableSet<NSString *> *)otherWordsMatch
+{
+    id otherWordsMatch = [self.sharedResult getOtherWordsMatch];
+    return [otherWordsMatch isKindOfClass:NSSet.class] ? [otherWordsMatch mutableCopy] : nil;
+}
+
+- (NSString *)addressName
+{
+    return self.sharedResult.addressName;
+}
+
+@end
+
+@implementation OASearchResult (Shared)
+
++ (nullable OASearchResult *)resultOfShared:(OASSearchResult *)shared phrase:(OASearchPhrase *)phrase
+{
+    OASSearchPhrase *sharedPhrase = shared.requiredSearchPhrase;
+    if (![phrase isKindOfClass:OASharedSearchPhrase.class] || ((OASharedSearchPhrase *) phrase).shared != sharedPhrase)
+        phrase = [[OASharedSearchPhrase alloc] initWithShared:sharedPhrase];
+
+    OASearchResult *result = [[OASharedSearchResult alloc] initWithPhrase:phrase];
+    result.sharedResult = shared;
+    if (![OASharedSearchObjects canConvertSharedObject:shared.object])
+        return nil;
+
+    result.objectType = [OASharedSearchObjects appObjectType:shared.objectType];
+    result.priority = shared.priority;
+    result.priorityDistance = shared.priorityDistance;
+    result.localeName = shared.localeName;
+    result.alternateName = shared.alternateName;
+    result.cityName = shared.cityName;
+    result.localeRelatedObjectName = shared.localeRelatedObjectName;
+    result.distRelatedObjectName = shared.distRelatedObjectName;
+    result.location = [OASharedSearchObjects appObjectFor:shared.location];
+    result.preferredZoom = shared.preferredZoom;
+    result.impreciseCoordinates = [shared hasImpreciseCoordinates];
+
+    // Keep the original app objects needed to render and open platform results.
+    if (result.objectType == EOAObjectTypeFavorite && [result.object isKindOfClass:OAFavoriteItem.class])
+        result.favorite = ((OAFavoriteItem *) result.object).favorite;
+    if (result.objectType == EOAObjectTypeWpt)
+    {
+        if ([result.object isKindOfClass:OASWptPt.class])
+            result.wpt = (OASWptPt *) result.object;
+        if ([result.relatedObject isKindOfClass:OASGpxFile.class])
+            result.relatedGpx = (OASGpxFile *) result.relatedObject;
+    }
+    if (result.objectType == EOAObjectTypeIndexItem && [result.relatedObject isKindOfClass:OARepositoryResourceItem.class])
+        result.resourceId = ((OARepositoryResourceItem *) result.relatedObject).resourceId.toNSString();
+
+    if (shared.file)
+        result.resourceId = [OASharedObfResources.shared resourceIdsOf:@[shared.file]].firstObject;
+    NSString *resource = [shared getResourceType].name;
+    if ([resource isEqualToString:@"DETAILED"])
+        result.searchResultResource = EOASearchResultResourceDetailed;
+    else if ([resource isEqualToString:@"WIKIPEDIA"])
+        result.searchResultResource = EOASearchResultResourceWikipedia;
+    else if ([resource isEqualToString:@"BASEMAP"])
+        result.searchResultResource = EOASearchResultResourceBasemap;
+    else if ([resource isEqualToString:@"TRAVEL"])
+        result.searchResultResource = EOASearchResultResourceTravel;
+
+    return result;
+}
+
+- (OASSearchResult *)toSharedResult
+{
+    if (self.sharedResult)
+        return self.sharedResult;
+
+    OASSearchPhrase *phrase = [self.requiredSearchPhrase isKindOfClass:OASharedSearchPhrase.class]
+        ? ((OASharedSearchPhrase *) self.requiredSearchPhrase).shared : nil;
+    OASSearchResult *shared = phrase ? [[OASSearchResult alloc] initWithSp:phrase] : [[OASSearchResult alloc] init];
+    id object = self.object;
+    if (!object && self.objectType == EOAObjectTypeFavorite && self.favorite)
+        object = [[OAFavoriteItem alloc] initWithFavorite:std::const_pointer_cast<OsmAnd::IFavoriteLocation>(self.favorite)];
+    else if (!object && self.objectType == EOAObjectTypeWpt)
+        object = self.wpt;
+    shared.object = [OASharedSearchObjects sharedObjectFor:object];
+    shared.objectType = [OASharedSearchObjects sharedObjectType:self.objectType];
+    shared.priority = self.priority;
+    shared.priorityDistance = self.priorityDistance;
+    shared.localeName = self.localeName;
+    shared.alternateName = self.alternateName;
+    shared.addressName = self.addressName;
+    shared.cityName = self.cityName;
+    shared.localeRelatedObjectName = self.localeRelatedObjectName;
+    shared.distRelatedObjectName = self.distRelatedObjectName;
+    shared.relatedObject = [OASharedSearchObjects sharedObjectFor:self.relatedObject ?: self.relatedGpx];
+    shared.location = [OASharedSearchObjects sharedObjectFor:self.location];
+    shared.preferredZoom = self.preferredZoom;
+    if (self.otherNames)
+        shared.otherNames = [self.otherNames mutableCopy];
+    if (self.parentSearchResult)
+        shared.parentSearchResult = [self.parentSearchResult toSharedResult];
+    self.sharedResult = shared;
+    return shared;
+}
+
+@end
+
+static NSMapTable<OASSearchResult *, OASearchResult *> *appResultsTable()
+{
+    return [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality
+                                 valueOptions:NSPointerFunctionsStrongMemory];
+}
+
+@implementation OASharedSearchResultCollection
+{
+    // the app's results of the shared ones in the collection, by identity, so that the same one comes back each time
+    NSMapTable<OASSearchResult *, OASearchResult *> *_appResults;
+    // made again once the shared results change, which they do only through this collection
+    NSArray<OASearchResult *> *_currentResults;
+}
+
+- (instancetype)initWithShared:(OASSearchUICoreSearchResultCollection *)shared
+{
+    self = [super initWithPhrase:[[OASharedSearchPhrase alloc] initWithShared:[shared getPhrase]]];
+    if (self)
+    {
+        _shared = shared;
+        _appResults = appResultsTable();
+    }
+    return self;
+}
+
+- (instancetype)initWithPhrase:(OASearchPhrase *)phrase
+{
+    return [self initWithShared:[[OASSearchUICoreSearchResultCollection alloc] initWithPhrase:((OASharedSearchPhrase *) phrase).shared]];
+}
+
+- (NSArray<OASearchResult *> *)getCurrentSearchResults
+{
+    @synchronized (self)
+    {
+        if (_currentResults)
+            return _currentResults;
+        NSMutableArray<OASearchResult *> *results = [NSMutableArray array];
+        // those the shared collection has dropped, as duplicates, are left out
+        NSMapTable<OASSearchResult *, OASearchResult *> *appResults = appResultsTable();
+        for (OASSearchResult *shared in [_shared getCurrentSearchResults])
+        {
+            OASearchResult *result = [_appResults objectForKey:shared] ?: [OASearchResult resultOfShared:shared phrase:self.phrase];
+            if (!result)
+                continue;
+            [appResults setObject:result forKey:shared];
+            [results addObject:result];
+        }
+        _appResults = appResults;
+        _currentResults = [results copy];
+        return _currentResults;
+    }
+}
+
+- (NSMutableArray<OASearchResult *> *)getSearchResults
+{
+    return [[self getCurrentSearchResults] mutableCopy];
+}
+
+- (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults
+{
+    @synchronized (self)
+    {
+        if (![_shared isSkipSorting])
+            return [self getCurrentSearchResults];
+        NSMutableArray<OASearchResult *> *results = [NSMutableArray array];
+        for (OASSearchResult *shared in [_shared getVisibleSpatialSearchResults])
+        {
+            OASearchResult *result = [_appResults objectForKey:shared] ?: [OASearchResult resultOfShared:shared phrase:self.phrase];
+            if (result)
+            {
+                [_appResults setObject:result forKey:shared];
+                [results addObject:result];
+            }
+        }
+        return results;
+    }
+}
+
+- (NSArray<OASearchResult *> *)prepareVisibleResultsWithCancellation:(BOOL (^)(void))cancelled
+{
+    if (cancelled())
+        return nil;
+    NSArray<OASearchResult *> *results = [self getVisibleSpatialSearchResults];
+    for (OASearchResult *result in results)
+    {
+        if (cancelled())
+            return nil;
+        (void)result.object;
+        (void)result.relatedObject;
+    }
+    return cancelled() ? nil : results;
+}
+
+// Only existing adapters are transferred; shared still owns ordering and duplicate removal.
+- (NSMapTable<OASSearchResult *, OASearchResult *> *)cachedAppResults
+{
+    @synchronized (self)
+    {
+        return [_appResults copy];
+    }
+}
+
+- (void)pruneAppResults
+{
+    NSHashTable *retained = [NSHashTable hashTableWithOptions:NSPointerFunctionsObjectPointerPersonality];
+    for (OASSearchResult *result in [_shared getCurrentSearchResults])
+        [retained addObject:result];
+    for (OASSearchResult *result in _appResults.keyEnumerator.allObjects)
+        if (![retained containsObject:result])
+            [_appResults removeObjectForKey:result];
+}
+
+- (BOOL)isSkipSorting
+{
+    @synchronized (self)
+    {
+        return [_shared isSkipSorting];
+    }
+}
+
+- (BOOL)hasMoreSpatialSearchResults
+{
+    @synchronized (self)
+    {
+        return [_shared hasMoreSpatialSearchResults];
+    }
+}
+
+- (BOOL)showMoreSpatialSearchResults
+{
+    @synchronized (self)
+    {
+        return [_shared showMoreSpatialSearchResults];
+    }
+}
+
+- (OASearchResultCollection *)addSearchResults:(NSArray<OASearchResult *> *)sr resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
+{
+    NSMutableArray<OASSearchResult *> *shared = [NSMutableArray arrayWithCapacity:sr.count];
+    @synchronized (self)
+    {
+        for (OASearchResult *result in sr)
+        {
+            OASSearchResult *sharedResult = [result toSharedResult];
+            // the one handed out already stays the result of the collection
+            if (![_appResults objectForKey:sharedResult])
+                [_appResults setObject:result forKey:sharedResult];
+            [shared addObject:sharedResult];
+        }
+        [_shared addSearchResultsSr:shared resortAll:resortAll removeDuplicates:removeDuplicates];
+        [self pruneAppResults];
+        _currentResults = nil;
+    }
+    return self;
+}
+
+- (OASearchResultCollection *)combineWithCollection:(OASearchResultCollection *)collection resort:(BOOL)resort removeDuplicates:(BOOL)removeDuplicates
+{
+    OASharedSearchResultCollection *other;
+    if ([collection isKindOfClass:OASharedSearchResultCollection.class])
+    {
+        other = (OASharedSearchResultCollection *)collection;
+    }
+    else
+    {
+        other = [[OASharedSearchResultCollection alloc] initWithPhrase:self.phrase];
+        [other addSearchResults:[collection getCurrentSearchResults] resortAll:NO removeDuplicates:NO];
+    }
+    OASharedSearchResultCollection *combined = [[OASharedSearchResultCollection alloc] initWithShared:
+        [_shared combineWithCollectionCollection:other.shared resort:resort removeDuplicates:removeDuplicates]];
+    for (NSMapTable<OASSearchResult *, OASearchResult *> *cache in @[[self cachedAppResults], [other cachedAppResults]])
+        for (OASSearchResult *shared in cache)
+            if (![combined->_appResults objectForKey:shared])
+                [combined->_appResults setObject:[cache objectForKey:shared] forKey:shared];
+    [combined pruneAppResults];
+    return combined;
+}
+
+- (void)sortSearchResults
+{
+    @synchronized (self)
+    {
+        [_shared sortSearchResults];
+        _currentResults = nil;
+    }
+}
+
+- (void)calculateAddressString
+{
+    @synchronized (self)
+    {
+        [_shared calculateAddressString];
+    }
+}
+
+- (void)filterSearchDuplicateResults
+{
+    @synchronized (self)
+    {
+        [_shared filterSearchDuplicateResults];
+        [self pruneAppResults];
+        _currentResults = nil;
+    }
+}
+
+- (BOOL)sameSearchResult:(OASearchResult *)r1 r2:(OASearchResult *)r2
+{
+    return [_shared sameSearchResultR1:[r1 toSharedResult] r2:[r2 toSharedResult]];
+}
+
+@end
+
+@implementation OASharedSearchUICore
+{
+    OASharedSearchSettings *_settings;
+    OASharedSearchPhrase *_phrase;
+    OASharedSearchResultCollection *_currentSearchResult;
+    // a search that started before the last cancel is cancelled: the shared one ends without a word
+    OAAtomicInteger *_cancels;
+    dispatch_queue_t _resourcePreparationQueue;
+    NSUInteger _resourceUpdate;
+    BOOL _preparingResources;
+    void (^_pendingSearch)(void);
+    NSMutableArray *_pendingShallowSearches;
+}
+
+- (instancetype)initWithLang:(NSString *)lang transliterate:(BOOL)transliterate
+{
+    self = [super init];
+    if (self)
+    {
+        _shared = [[OASSearchUICore alloc] initWithPoiTypes:OAPOIHelper.sharedInstance.kPoiTypes locale:lang transliterate:transliterate];
+        _settings = [[OASharedSearchSettings alloc] initWithShared:[_shared getSearchSettings]];
+        _cancels = [OAAtomicInteger atomicInteger:0];
+        _resourcePreparationQueue = dispatch_queue_create("net.osmand.searchResources", DISPATCH_QUEUE_SERIAL);
+        _pendingShallowSearches = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (void)initApi
+{
+    [_shared doInit];
+}
+
+// Called only on the resource queue. File stamps, headers and typed readers can all require I/O.
+- (void)prepareSearchResourcesIncludingTravel:(BOOL)includeTravel
+                                  completion:(void (^)(NSArray<NSString *> *, NSArray<OASBinaryMapIndexReader *> *, uint64_t))completion
+{
+    OASharedObfResources *resources = OASharedObfResources.shared;
+    [resources refreshFiles];
+    uint64_t generation = [resources currentGeneration];
+    NSArray<NSString *> *resourceIds = [OAObfFileList searchResourceIdsIncludingTravel:includeTravel];
+    NSArray<OASBinaryMapIndexReader *> *readers = [resources searchReadersForResourceIds:resourceIds];
+    completion(resourceIds, readers, generation);
+}
+
+- (void)updateSearchResourcesIncludingTravel:(BOOL)includeTravel regions:(OAWorldRegion *)regions
+{
+    NSUInteger request;
+    @synchronized (self)
+    {
+        request = ++_resourceUpdate;
+        _preparingResources = YES;
+    }
+    dispatch_async(_resourcePreparationQueue, ^{
+        @synchronized (self)
+        {
+            if (request != self->_resourceUpdate)
+                return;
+        }
+        [self prepareSearchResourcesIncludingTravel:includeTravel completion:^(NSArray<NSString *> *resourceIds, NSArray<OASBinaryMapIndexReader *> *readers, uint64_t generation) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                @synchronized (self)
+                {
+                    if (request != self->_resourceUpdate)
+                        return;
+                    // The registry also observes map changes. Its notification can precede ours.
+                    if (generation != [OASharedObfResources.shared currentGeneration])
+                    {
+                        [self updateSearchResourcesIncludingTravel:includeTravel regions:regions];
+                        return;
+                    }
+                    OASharedSearchSettings *settings = (OASharedSearchSettings *) [self getSearchSettings];
+                    [settings setOfflineIndexes:resourceIds preparedReaders:readers];
+                    [settings setRegions:regions];
+                    self->_preparingResources = NO;
+                    NSArray *shallowSearches = [self->_pendingShallowSearches copy];
+                    [self->_pendingShallowSearches removeAllObjects];
+                    void (^search)(void) = self->_pendingSearch;
+                    self->_pendingSearch = nil;
+                    for (void (^shallowSearch)(OASharedSearchSettings *) in shallowSearches)
+                        shallowSearch(settings);
+                    if (search)
+                        search();
+                }
+            });
+        }];
+    });
+}
+
+- (void)initApiUseSpatialSearch:(BOOL)useSpatialSearch searchRulesDir:(NSString *)searchRulesDir
+{
+    [_shared doInitUseSpatialSearch:useSpatialSearch searchRulesDir:searchRulesDir];
+}
+
+// Registration keeps the app's class identifiers; searches run the corresponding shared API.
+- (void)registerAPI:(OASearchCoreAPI *)api
+{
+    Class sharedClass = [OASharedSearchAppAPIs sharedClassForAppClass:api.class];
+    NSAssert(sharedClass, @"No shared search API for %@", NSStringFromClass(api.class));
+    if (sharedClass)
+        [_shared registerAPIApi:[[sharedClass alloc] init]];
+}
+
+- (OASearchCoreAPI *)getApiByClass:(Class)cl
+{
+    return nil;
+}
+
+// the shared api of the same kind as the C++ api of this class
+- (nullable id<OASSearchCoreAPI>)sharedApiFor:(Class)cl
+{
+    NSDictionary<NSString *, Class> *sharedClasses = @{
+        NSStringFromClass(OASearchAmenityTypesAPI.class) : OASSearchCoreFactorySearchAmenityTypesAPI.class,
+        NSStringFromClass(OASearchAmenityByTypeAPI.class) : OASSearchCoreFactorySearchAmenityByTypeAPI.class,
+        NSStringFromClass(OASearchAmenityByNameAPI.class) : OASSearchCoreFactorySearchAmenityByNameAPI.class,
+        NSStringFromClass(OASearchLocationAndUrlAPI.class) : OASSearchCoreFactorySearchLocationAndUrlAPI.class,
+        NSStringFromClass(OASearchAddressByNameAPI.class) : OASSearchCoreFactorySearchAddressByNameAPI.class,
+        NSStringFromClass(OASearchStreetByCityAPI.class) : OASSearchCoreFactorySearchStreetByCityAPI.class,
+        NSStringFromClass(OASearchBuildingAndIntersectionsByStreetAPI.class) : OASSearchCoreFactorySearchBuildingAndIntersectionsByStreetAPI.class,
+    };
+    Class sharedClass = sharedClasses[NSStringFromClass(cl)] ?: [OASharedSearchAppAPIs sharedClassForAppClass:cl];
+    if (!sharedClass)
+        return nil;
+    for (id<OASSearchCoreAPI> api in [_shared getApis])
+    {
+        if ([(NSObject *) api isKindOfClass:sharedClass])
+            return api;
+    }
+    return nil;
+}
+
+// what the shared search publishes, as the app's results; cancelled with the matcher, and by cancelSearch for a search
+- (id<OASResultMatcher>)sharedMatcherFor:(nullable OAResultMatcher<OASearchResult *> *)matcher cancelledBySearch:(BOOL)cancelledBySearch
+{
+    int cancels = [_cancels get];
+    OAAtomicInteger *currentCancels = _cancels;
+    __block OASSearchPhrase *lastShared = nil;
+    __block OASharedSearchPhrase *lastPhrase = nil;
+    return [OASharedBlockResultMatcher matcherWithPublish:^BOOL(id object) {
+        OASSearchResult *shared = object;
+        if (shared.requiredSearchPhrase != lastShared)
+        {
+            lastShared = shared.requiredSearchPhrase;
+            lastPhrase = [[OASharedSearchPhrase alloc] initWithShared:lastShared];
+        }
+        OASearchResult *result = [OASearchResult resultOfShared:shared phrase:lastPhrase];
+        if (!result)
+            return NO;
+        return !matcher || [matcher publish:result];
+    } cancelled:^BOOL{
+        return (cancelledBySearch && [currentCancels get] != cancels) || (matcher && [matcher isCancelled]);
+    }];
+}
+
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings completion:(void (^)(OASearchResultCollection *))completion
+{
+    id<OASSearchCoreAPI> api = [self sharedApiFor:cl];
+    if (!api)
+    {
+        [_shared runAfterSearchTask:^{
+            if (completion)
+                completion(nil);
+        }];
+        return;
+    }
+
+    OASharedSearchSettings *settings = [searchSettings isKindOfClass:OASharedSearchSettings.class]
+        ? (OASharedSearchSettings *) searchSettings : (OASharedSearchSettings *) [self getSearchSettings];
+    @synchronized (self)
+    {
+        if (_preparingResources)
+        {
+            BOOL usesCoreResources = settings == [self getSearchSettings];
+            OASharedSearchSettings *snapshot = [[OASharedSearchSettings alloc] initWithSettings:settings];
+            __weak OASharedSearchUICore *weakSelf = self;
+            [_pendingShallowSearches addObject:[^(OASharedSearchSettings *prepared) {
+                NSArray<NSString *> *ids = usesCoreResources ? [prepared getOfflineIndexes] : [snapshot getOfflineIndexes];
+                NSSet<NSString *> *selectedIds = [NSSet setWithArray:ids];
+                NSArray<OASBinaryMapIndexReader *> *readers = [[prepared.shared getOfflineIndexes] filteredArrayUsingPredicate:
+                    [NSPredicate predicateWithBlock:^BOOL(OASBinaryMapIndexReader *reader, NSDictionary *bindings) {
+                        NSString *resourceId = [OASharedObfResources.shared resourceIdsOf:@[reader]].firstObject;
+                        return resourceId && [selectedIds containsObject:resourceId];
+                    }]];
+                [snapshot setOfflineIndexes:ids preparedReaders:readers];
+                [weakSelf shallowSearchAsync:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:snapshot completion:completion];
+            } copy]];
+            return;
+        }
+    }
+    OASSearchSettings *shared = [[OASSearchSettings alloc] initWithS:[settings sharedWithCurrentReaders]];
+    [_shared shallowSearchAsyncApi:api text:text matcher:[self sharedMatcherFor:matcher cancelledBySearch:NO]
+                        resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:shared
+                         callback:^OASBoolean *(OASSearchUICoreSearchResultCollection *collection) {
+        if (completion)
+            completion(collection ? [[OASharedSearchResultCollection alloc] initWithShared:collection] : nil);
+        return [OASBoolean numberWithBool:YES];
+    }];
+}
+
+- (void)clearCustomSearchPoiFilters
+{
+    [_shared clearCustomSearchPoiFilters];
+}
+
+- (void)addCustomSearchPoiFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority
+{
+    [_shared addCustomSearchPoiFilterPoiFilter:[OASharedSearchObjects sharedPoiFilterFor:poiFilter] priority:priority];
+}
+
+- (void)setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrders
+{
+    [_shared setActivePoiFiltersByOrderFilterOrders:filterOrders];
+}
+
+- (OASearchResultCollection *)createResultCollectionForPhrase:(OASearchPhrase *)phrase api:(id)api
+{
+    return [[OASharedSearchResultCollection alloc] initWithShared:
+        [[OASSearchUICoreSearchResultCollection alloc] initWithPhrase:((OASharedSearchPhrase *)phrase).shared
+                                                       skipSorting:[api isKindOfClass:OASSpatialTextSearchAPI.class]]];
+}
+
+- (OASearchResultCollection *)getCurrentSearchResult
+{
+    OASSearchUICoreSearchResultCollection *shared = [_shared getCurrentSearchResult];
+    @synchronized (self)
+    {
+        if (_currentSearchResult.shared != shared)
+            _currentSearchResult = [[OASharedSearchResultCollection alloc] initWithShared:shared];
+        return _currentSearchResult;
+    }
+}
+
+- (OASearchPhrase *)getPhrase
+{
+    return [self wrapPhrase:[_shared getPhrase]];
+}
+
+- (OASearchPhrase *)wrapPhrase:(OASSearchPhrase *)shared
+{
+    @synchronized (self)
+    {
+        if (_phrase.shared != shared)
+            _phrase = [[OASharedSearchPhrase alloc] initWithShared:shared];
+        return _phrase;
+    }
+}
+
+- (OASearchSettings *)getSearchSettings
+{
+    OASSearchSettings *shared = [_shared getSearchSettings];
+    @synchronized (self)
+    {
+        if (_settings.shared != shared)
+            _settings = [[OASharedSearchSettings alloc] initWithShared:shared];
+        return _settings;
+    }
+}
+
+- (void)updateSettings:(OASearchSettings *)settings
+{
+    if (![settings isKindOfClass:OASharedSearchSettings.class])
+        return;
+    OASharedSearchSettings *sharedSettings = (OASharedSearchSettings *) settings;
+    @synchronized (self)
+    {
+        _settings = sharedSettings;
+        [_shared updateSettingsSettings:_preparingResources ? sharedSettings.shared : [sharedSettings sharedWithCurrentReaders]];
+    }
+}
+
+- (BOOL)selectSearchResult:(OASearchResult *)r
+{
+    return [_shared selectSearchResultR:[r toSharedResult]];
+}
+
+- (OASearchPhrase *)resetPhrase
+{
+    return [self wrapPhrase:[_shared resetPhrase]];
+}
+
+- (OASearchPhrase *)resetPhrase:(NSString *)text
+{
+    return [self wrapPhrase:[_shared resetPhraseText:text]];
+}
+
+- (void)search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher
+{
+    @synchronized (self)
+    {
+        if (_preparingResources)
+        {
+            [_cancels incrementAndGet];
+            BOOL acceptPrivate = [[_shared getPhrase] isAcceptPrivate];
+            [[_shared resetPhraseText:text] setAcceptPrivateAcceptPrivate:acceptPrivate];
+            __weak OASharedSearchUICore *weakSelf = self;
+            _pendingSearch = [^{ [weakSelf search:text delayedExecution:delayedExecution matcher:matcher]; } copy];
+            return;
+        }
+    }
+    // the settings the core holds get the readers of the maps installed now, in place
+    [(OASharedSearchSettings *) [self getSearchSettings] sharedWithCurrentReaders];
+    [_shared searchText:text delayedExecution:delayedExecution matcher:[self sharedMatcherFor:matcher cancelledBySearch:YES]];
+}
+
+- (void)cancelSearch:(BOOL)sync
+{
+    @synchronized (self)
+    {
+        [_cancels incrementAndGet];
+        _pendingSearch = nil;
+    }
+    if (!sync)
+        return;
+
+    dispatch_semaphore_t ended = dispatch_semaphore_create(0);
+    [_shared runAfterSearchTask:^{
+        dispatch_semaphore_signal(ended);
+    }];
+    // a search waiting for the main thread cannot end while the main thread waits for it: not for ever
+    dispatch_semaphore_wait(ended, dispatch_time(DISPATCH_TIME_NOW, (int64_t) (3 * NSEC_PER_SEC)));
+}
+
+- (BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    OASSearchPhrase *shared = [phrase isKindOfClass:OASharedSearchPhrase.class] ? ((OASharedSearchPhrase *) phrase).shared : nil;
+    return shared && [_shared isSearchMoreAvailablePhrase:shared];
+}
+
+- (int)getMinimalSearchRadius:(OASearchPhrase *)phrase
+{
+    OASSearchPhrase *shared = [phrase isKindOfClass:OASharedSearchPhrase.class] ? ((OASharedSearchPhrase *) phrase).shared : nil;
+    return shared ? [_shared getMinimalSearchRadiusPhrase:shared] : INT_MAX;
+}
+
+- (int)getNextSearchRadius:(OASearchPhrase *)phrase
+{
+    OASSearchPhrase *shared = [phrase isKindOfClass:OASharedSearchPhrase.class] ? ((OASharedSearchPhrase *) phrase).shared : nil;
+    return shared ? [_shared getNextSearchRadiusPhrase:shared] : INT_MAX;
+}
+
+- (OAPOIBaseType *)getUnselectedPoiType
+{
+    return [OASharedSearchObjects appObjectFor:[_shared getUnselectedPoiType]];
+}
+
+- (NSString *)getCustomNameFilter
+{
+    return [_shared getCustomNameFilter];
+}
+
+- (void)setOnSearchStart:(OASearchUICoreRunnable)onSearchStart
+{
+    [super setOnSearchStart:onSearchStart];
+    [_shared setOnSearchStartOnSearchStart:onSearchStart];
+}
+
+- (void)setOnResultsComplete:(OASearchUICoreRunnable)onResultsComplete
+{
+    [super setOnResultsComplete:onResultsComplete];
+    [_shared setOnResultsCompleteOnResultsComplete:onResultsComplete];
+}
+
+// the C++ search's phrase and matcher: there is no such search here
+- (void)searchInBackground:(OASearchPhrase *)phrase matcher:(OASearchResultMatcher *)matcher
+{
+}
+
+@end

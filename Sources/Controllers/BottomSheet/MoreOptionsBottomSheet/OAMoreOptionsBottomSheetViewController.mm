@@ -271,9 +271,7 @@
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.dividerColor = [SeparatorAppearance color];
-            CGFloat leftInset = [cell isDirectionRTL] ? 0 : 70.0;
-            CGFloat rightInset = [cell isDirectionRTL] ? 70.0 : 0;
-            cell.dividerInsets = UIEdgeInsetsMake(6.0, leftInset, 4.0, rightInset);
+            cell.dividerInsets = UIEdgeInsetsMake(6.0, 70.0, 4.0, 0.0);
             cell.dividerHight = SeparatorAppearance.thickness;
         }
         return cell;
@@ -456,11 +454,67 @@
     return [super initWithParam:targetPoint];
 }
 
+- (BOOL)usesWidePhoneLayout
+{
+    CGSize size = self.view.window ? self.view.window.bounds.size : self.view.bounds.size;
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone
+        && self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular
+        && self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular
+        && size.width > size.height;
+}
+
+- (CGRect)contentViewFrame
+{
+    CGRect frame = [super contentViewFrame];
+    if ([self usesWidePhoneLayout])
+    {
+        CGFloat width = self.view.window ? self.view.window.bounds.size.width : self.view.bounds.size.width;
+        frame.size.width = width / 2.;
+        frame.origin.x = (width - frame.size.width) / 2.;
+    }
+    return frame;
+}
+
+- (void)updateTableHeaderView
+{
+    if (![self usesWidePhoneLayout])
+    {
+        self.tableView.tableHeaderView = nil;
+        [super updateTableHeaderView];
+        return;
+    }
+    [self.tableView layoutIfNeeded];
+    CGRect contentFrame = [self contentViewFrame];
+    CGFloat previousHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+    CGFloat rowsHeight = MAX(0., self.tableView.contentSize.height - previousHeaderHeight);
+    CGFloat headerHeight = self.keyboardHeight > 0 ? 0. : MAX(0., contentFrame.size.height - self.buttonsView.frame.size.height - rowsHeight);
+    if (headerHeight > 0.)
+    {
+        UIView *headerView = self.tableView.tableHeaderView ?: [[UIView alloc] init];
+        headerView.backgroundColor = UIColor.clearColor;
+        headerView.opaque = NO;
+        headerView.frame = CGRectMake(0., 0., contentFrame.size.width, headerHeight);
+        self.tableView.tableHeaderView = headerView;
+    }
+    else
+    {
+        self.tableView.tableHeaderView = nil;
+    }
+    self.tableBackgroundView.frame = CGRectMake(0., MAX(0., headerHeight - self.tableView.contentOffset.y), contentFrame.size.width, contentFrame.size.height);
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
+}
+
+- (void)additionalSetup
+{
+    [super additionalSetup];
+    if (@available(iOS 26.0, *))
+        self.tableView.topEdgeEffect.hidden = YES;
 }
 
 - (OATargetPoint *)targetPoint

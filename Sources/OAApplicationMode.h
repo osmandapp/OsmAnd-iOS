@@ -88,7 +88,10 @@
 
 - (NSInteger) getOffRouteDistance;
 - (NSInteger) getMinDistanceForTurn;
-- (double) getDefaultSpeed;
+- (double)defaultSpeed;
+- (float)minSpeedToleranceLimit;
+- (float)maxSpeedToleranceLimit;
+- (BOOL)isSpeedToleranceBigRange;
 
 - (NSString *) toHumanString;
 
@@ -111,8 +114,10 @@
 - (void) setRouterService:(NSInteger) routerService;
 - (OALocationIcon *) getNavigationIcon;
 - (void) setNavigationIconName:(NSString *) navIcon;
+- (NSString *)navigationIconName;
 - (OALocationIcon *) getLocationIcon;
 - (void) setLocationIconName:(NSString *) locIcon;
+- (NSString *)locationIconName;
 - (NSInteger) getViewAngleVisibility;
 - (void) setViewAngleVisibility:(NSInteger) viewAngle;
 - (NSInteger) getLocationRadiusVisibility;

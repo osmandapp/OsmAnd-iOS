@@ -313,6 +313,7 @@ static inline double normalizeDouble(double v)
 
 + (BOOL) getAccessToFile:(NSString *)filePath;
 + (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
++ (NSString *)importTempPath;
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL) iosVersionIsExactly:(NSString*)testVersion;
@@ -420,6 +421,7 @@ static inline double normalizeDouble(double v)
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)attributedText isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(nullable NSString *)iconName tintColor:(nullable UIColor *)tintColor parentViewWidth:(CGFloat)parentViewWidth;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(nullable UIColor *)tintColor icon:(nullable UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(nullable UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset;
++ (UIView *)setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset parentViewWidth:(CGFloat)parentViewWidth contentInsets:(UIEdgeInsets)contentInsets;
 
 + (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize parentViewWidth:(CGFloat)parentViewWidth;
 
@@ -454,8 +456,8 @@ static inline double normalizeDouble(double v)
 
 + (void) showMenuInView:(UIView *)parentView fromView:(UIView *)targetView;
 
-+ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit;
-+ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
++ (NSString *)formattedValue:(NSString *)value unit:(NSString *)unit;
++ (NSString *)formattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace;
 
 + (NSString *)buildGeoUrl:(double)latitude longitude:(double)longitude zoom:(int)zoom label:(NSString *)label;
 

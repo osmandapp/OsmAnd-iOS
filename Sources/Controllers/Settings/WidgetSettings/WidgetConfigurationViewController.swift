@@ -36,7 +36,6 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
         if createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
             if let selectedAppMode {
                 widgetConfigurationParams = ["selectedAppMode": selectedAppMode]

@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 
-@class OAMapObject, BaseDetailsObject;
+@class OAMapObject, BaseDetailsObject, OASAmenity;
 @class OAResultMatcher<ObjectType>;
 
 @interface OAAmenitySearcherRequest : NSObject
@@ -68,6 +68,15 @@ NS_ASSUME_NONNULL_BEGIN
                               publish:(BOOL(^)(OAPOI *poi))publish;
 
 + (NSArray<OAPOI *> *)filterUniqueAmenitiesByOsmIdOrWikidata:(NSArray<OAPOI *> *)amenities;
+
+/** Resolves the searchable type without copying the amenity's names, tags or geometry. */
++ (nullable OAPOIType *)searchableTypeForSharedAmenity:(OASAmenity *)amenity;
+
+/** The shared search's amenity as the app's model, field for field as parsePOIByAmenity makes it from the C++ one. */
++ (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity;
+
+/** Details can also represent objects without a searchable POI type. */
++ (nullable OAPOI *)parsePOIBySharedAmenity:(OASAmenity *)amenity filterTypes:(BOOL)filterTypes;
 
 - (NSArray<OAPOI *> *)searchRoutePartOf:(NSString *)routeId;
 - (NSDictionary<NSString *, NSArray<OAPOI *> *> *)searchRouteMembers:(NSString *)multipleSearch;

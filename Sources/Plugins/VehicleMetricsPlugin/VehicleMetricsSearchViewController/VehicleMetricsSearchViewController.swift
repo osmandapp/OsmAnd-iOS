@@ -69,6 +69,8 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
         }
     }
     
+    var appMode: OAApplicationMode?
+
     private var hasFirstResult = false
     private var needRescan = false
     private var centralStateObserver: NSObjectProtocol?
@@ -171,6 +173,7 @@ final class VehicleMetricsSearchViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let controller = VehicleMetricsDescriptionViewController()
         controller.device = discoveredDevices[indexPath.row]
+        controller.appMode = appMode
         navigationController?.pushViewController(controller, animated: true)
     }
     

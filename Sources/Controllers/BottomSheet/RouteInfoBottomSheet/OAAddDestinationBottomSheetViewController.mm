@@ -36,6 +36,12 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
+@interface OAAddDestinationBottomSheetViewController ()
+
+@property (nonatomic) BOOL selectingOnMap;
+
+@end
+
 @interface OAAddDestinationBottomSheetScreen () <OACollectionViewCellDelegate, OADestinationPointListDelegate>
 
 @end
@@ -114,7 +120,7 @@
     for (OAFavoriteItem *item in favorites)
     {
         [arr addObject:@{
-            @"title" : [item getName],
+            @"title" : [item getDisplayName],
             @"descr" : [OAFavoriteGroup getDisplayName:[item getCategory]],
             @"color" : [item getColor],
             @"img" : ACImageNameIcCustomFavorites,
@@ -155,7 +161,7 @@
 - (NSArray<OAFavoriteItem *> *) getSortedFavorites
 {
     NSArray *sortedArray = [[OAFavoritesHelper getFavoriteItems] sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return [[obj1 getName].lowercaseString compare:[obj2 getName].lowercaseString];
+        return [[obj1 getDisplayName].lowercaseString compare:[obj2 getDisplayName].lowercaseString];
     }];
     return sortedArray;
 }
@@ -458,6 +464,8 @@
     }
     else if ([item[@"key"] isEqualToString:@"select_on_map"])
     {
+        vwController.selectingOnMap = YES;
+        [vwController setNeedsStatusBarAppearanceUpdate];
         OATargetPointType type = OATargetRouteFinishSelection;
         if (_type == EOADestinationTypeFinish)
             type = OATargetRouteFinishSelection;
@@ -530,7 +538,7 @@
 {
     double latitude = item.favorite->getLatLon().latitude;
     double longitude = item.favorite->getLatLon().longitude;
-    NSString *title = item.favorite->getTitle().toNSString();
+    NSString *title = [item getDisplayName];
     
     if (_type == EOADestinationTypeStart)
         [_pointsHelper setStartPoint:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude] updateRoute:NO name:[[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:title]];
@@ -602,10 +610,6 @@
 
 @end
 
-@interface OAAddDestinationBottomSheetViewController ()
-
-@end
-
 @implementation OAAddDestinationBottomSheetViewController
 
 - (instancetype) initWithType:(EOADestinationType)type
@@ -621,6 +625,11 @@
     [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return self.selectingOnMap || ![[ThemeManager shared] isLightTheme] ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
+}
+
 - (void) setupView
 {
     if (!self.screenObj)
@@ -632,6 +641,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
+    if (@available(iOS 26.0, *))
+        self.tableView.topEdgeEffect.hidden = YES;
     self.tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     self.buttonsView.subviews.firstObject.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     [self hideDoneButton];

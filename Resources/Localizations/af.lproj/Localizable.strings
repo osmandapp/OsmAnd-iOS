@@ -186,7 +186,7 @@
 "daynight_mode_night" = "Nag";
 "map_widget_renderer" = "Kaartvoorstelling-styl";
 "shared_string_online_maps" = "Internet kaarte";
-"map_transparency" = "Basis kaart deursigtigheid";
+"map_transparency" = "Basis kaart sigbaarheid";
 "settings_app_theme" = "Toepassing tema";
 
 // Intro

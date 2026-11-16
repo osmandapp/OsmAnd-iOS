@@ -1546,7 +1546,7 @@
 "map_settings_contour_zoom_level_descr" = "Eş yükselti eğrilerinin görüntüleneceği yakınlaştırma seviyesini seçin";
 "map_settings_line_density" = "Çizgi yoğunluğu";
 "srtm_color_scheme" = "Renk düzeni";
-"map_transparency" = "Temel harita saydamlığı";
+"map_transparency" = "Temel harita görünürlüğü";
 "map_coords" = "Harita: Enlem %.5f Boylam %.5f";
 "transport_stops" = "durak";
 "by_transport_type" = "%@ ile";

@@ -10,6 +10,8 @@
 
 #include <OsmAndCore/Data/StreetGroup.h>
 
+@class OASCity;
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, EOACityType) // CityType
@@ -36,10 +38,12 @@ typedef NS_ENUM(NSInteger, EOACityType) // CityType
 @interface OACity : OAAddress
 
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::StreetGroup> city;
+@property (nonatomic, readonly, nullable) OASCity *sharedCity;
 
 @property (nonatomic, readonly) EOACityType type;
 
 - (instancetype)initWithCity:(const std::shared_ptr<const OsmAnd::StreetGroup>&)city;
+- (instancetype)initWithSharedCity:(OASCity *)city;
 
 + (NSString *)getLocalizedTypeStr:(EOACityType)type;
 + (NSString *)getTypeStr:(EOACityType)type;

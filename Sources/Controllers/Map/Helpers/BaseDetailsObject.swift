@@ -74,6 +74,23 @@ final class BaseDetailsObject: NSObject {
         }
     }
 
+    /// Imports an already combined search result without combining its fields a second time.
+    convenience init(objects: [Any], amenity: OAPOI, lang: String, full: Bool, combined: Bool) {
+        self.init(lang: lang)
+        self.objects = objects
+        syntheticAmenity = amenity
+        objectCompleteness = full ? .full : (combined ? .combined : .empty)
+        for object in objects {
+            let osmId = getOsmId(object)
+            if osmId > 0 && osmId != OAMapObject.getInvalidObfId() {
+                osmIds.insert(osmId)
+            }
+            if let wikidata = getWikidata(object), !wikidata.isEmpty {
+                wikidataIds.insert(wikidata)
+            }
+        }
+    }
+
     func setObfResourceName(_ obfName: String) {
         obfResourceName = obfName
     }
@@ -88,6 +105,10 @@ final class BaseDetailsObject: NSObject {
 
     func isObjectEmpty() -> Bool {
         objectCompleteness == .empty
+    }
+
+    func isObjectCombined() -> Bool {
+        objectCompleteness == .combined
     }
 
     @discardableResult
@@ -541,11 +562,11 @@ final class BaseDetailsObject: NSObject {
     }
 
     func setX(_ x: [Int]) {
-        syntheticAmenity.x = x as? NSMutableArray ?? []
+        syntheticAmenity.x = NSMutableArray(array: x)
     }
 
     func setY(_ y: [Int]) {
-        syntheticAmenity.y = y as? NSMutableArray ?? []
+        syntheticAmenity.y = NSMutableArray(array: y)
     }
 
     func addX(_ x: NSNumber) {

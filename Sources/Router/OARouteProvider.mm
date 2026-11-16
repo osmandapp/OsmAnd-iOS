@@ -26,6 +26,7 @@
 #import "OAIndexConstants.h"
 #import "MissingMapsCalculator.h"
 #import "OAMissingMapsResult.h"
+#import "OANativeRoutingMemoryGuard.h"
 #import "OARTargetPoint.h"
 #import "CLLocation+Extension.h"
 #import "OsmAndSharedWrapper.h"
@@ -494,15 +495,6 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     // when the C++ router does.
     OARouteCalculationResult *_previousCppResult;
     std::vector<std::shared_ptr<RouteSegmentResult>> _previousCppRoute;
-
-    // The OsmAndShared readers of the files in _nativeFiles, and the ones a running search may still
-    // be holding when the installed maps change.
-    NSMutableDictionary<NSString *, OASBinaryMapIndexReader *> *_sharedReaders;
-    NSMutableArray<OASBinaryMapIndexReader *> *_staleSharedReaders;
-
-    // The OsmAndShared routing environments still in use: a track approximation keeps one for as
-    // long as its screen is open, and its readers have to outlive a change of the installed maps.
-    NSHashTable<OARoutingEnvironment *> *_liveSharedEnvironments;
 }
 
 - (instancetype)init
@@ -512,9 +504,6 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     {
         _nativeFiles = [NSMutableSet set];
         _nativeRoutingLock = [[NSObject alloc] init];
-        _sharedReaders = [NSMutableDictionary dictionary];
-        _staleSharedReaders = [NSMutableArray array];
-        _liveSharedEnvironments = [NSHashTable weakObjectsHashTable];
         
         [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(
                                                                                      reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
@@ -534,8 +523,6 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     @synchronized(self)
     {
         _nativeFiles = [NSMutableSet set];
-        [_staleSharedReaders addObjectsFromArray:_sharedReaders.allValues];
-        [_sharedReaders removeAllObjects];
     }
 }
 
@@ -860,7 +847,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
         if (vl.length() > 0)
             paramsR[key] = vl;
     }
-    double defaultSpeed = params.mode.getDefaultSpeed;
+    double defaultSpeed = [params.mode defaultSpeed];
     if (defaultSpeed > 0)
         paramsR[GeneralRouterConstants::DEFAULT_SPEED] = [NSString stringWithFormat:@"%f", defaultSpeed].UTF8String;
     double minSpeed = params.mode.getMinSpeed;
@@ -1005,7 +992,7 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
     }
 }
 
-- (OARouteCalculationResult *) calcOfflineRouteImpl:(OARouteCalculationParams *)params router:(std::shared_ptr<RoutePlannerFrontEnd>)router ctx:(std::shared_ptr<RoutingContext>)ctx complexCtx:(std::shared_ptr<RoutingContext>)complexCtx st:(CLLocation *)st en:(CLLocation *)en inters:(NSArray<CLLocation *> *)inters precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated
+- (OARouteCalculationResult *) calcOfflineRouteImpl:(OARouteCalculationParams *)params router:(std::shared_ptr<RoutePlannerFrontEnd>)router ctx:(std::shared_ptr<RoutingContext>)ctx complexCtx:(std::shared_ptr<RoutingContext>)complexCtx st:(CLLocation *)st en:(CLLocation *)en inters:(NSArray<CLLocation *> *)inters precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated memoryGuard:(OANativeRoutingMemoryGuard *)memoryGuard
 {
     try
     {
@@ -1071,8 +1058,11 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
                     }
                 });
                  */
-                [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
-                result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
+                if (![memoryGuard isExceeded])
+                {
+                    [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
+                    result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
+                }
             }
         }
         else
@@ -1080,11 +1070,13 @@ static NSString *RouteCalculationErrorMessage(const std::exception &exception)
             [self calculateRegionsWithAllRoutePoints:ctx start:st targets:targets];
             result = router->searchRoute(ctx, startX, startY, endX, endY, intX, intY);
         }
-        
         // the router raises this on its own progress as the search starts, and the route screen reads
         // it off the shared one; a search that ends before anything is polled publishes it here
         if (ctx->progress != nullptr && ctx->progress->requestPrivateAccessRouting)
             params.calculationProgress.requestPrivateAccessRouting = YES;
+
+        if ([memoryGuard stop])
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:OALocalizedString(@"route_calculation_out_of_memory")];
 
         if (result.empty())
         {
@@ -1347,60 +1339,9 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
     return NO;
 }
 
-// The obf files the route covers, as OsmAndShared readers. Creating one reads the file's index, so
-// they are kept open until the installed maps change; the ones a search may still be holding are
-// closed here, on the routing thread, rather than under it.
 - (NSArray<OASBinaryMapIndexReader *> *) sharedRouteReaders
 {
-    @synchronized (self)
-    {
-        [self closeStaleSharedReaders];
-
-        NSMutableArray<OASBinaryMapIndexReader *> *readers = [NSMutableArray array];
-        for (NSString *path in [_nativeFiles.allObjects sortedArrayUsingSelector:@selector(compare:)])
-        {
-            OASBinaryMapIndexReader *reader = _sharedReaders[path];
-            if (!reader)
-            {
-                if (![NSFileManager.defaultManager fileExistsAtPath:path])
-                    continue;
-                reader = [[OASBinaryMapIndexReader alloc] initWithFilePath:path];
-                _sharedReaders[path] = reader;
-            }
-            if ([reader containsRouteData])
-                [readers addObject:reader];
-        }
-        return readers;
-    }
-}
-
-// The readers left over from a change of the installed maps. A routing environment that is still in
-// use holds its own - a track being approximated searches over them between one calculation and the
-// next - and reading through a closed reader throws inside OsmAndShared, where the exception cannot
-// be caught, so those are kept until the environment is gone. Both locks are held here: the routing
-// one by the caller, which keeps a running search away, and this object's, which guards the two
-// collections.
-- (void) closeStaleSharedReaders
-{
-    if (_staleSharedReaders.count == 0)
-        return;
-
-    NSMutableArray<OASBinaryMapIndexReader *> *inUse = [NSMutableArray array];
-    for (OARoutingEnvironment *env in _liveSharedEnvironments)
-    {
-        if (env.sharedCtx)
-            [inUse addObjectsFromArray:[env.sharedCtx getMaps]];
-    }
-
-    NSMutableArray<OASBinaryMapIndexReader *> *kept = [NSMutableArray array];
-    for (OASBinaryMapIndexReader *reader in _staleSharedReaders)
-    {
-        if ([inUse indexOfObjectIdenticalTo:reader] == NSNotFound)
-            [reader close];
-        else
-            [kept addObject:reader];
-    }
-    _staleSharedReaders = kept;
+    return [OASharedObfResources.shared routingReaders];
 }
 
 - (OASRoutingConfiguration *) buildSharedRoutingConfig:(OASRoutingConfigurationBuilder *)builder
@@ -1441,7 +1382,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         if (vl.length > 0)
             paramsR[key] = vl;
     }
-    double defaultSpeed = params.mode.getDefaultSpeed;
+    double defaultSpeed = [params.mode defaultSpeed];
     if (defaultSpeed > 0)
         paramsR[routerNames.DEFAULT_SPEED] = [NSString stringWithFormat:@"%f", defaultSpeed];
     double minSpeed = params.mode.getMinSpeed;
@@ -1498,8 +1439,6 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
 
 - (OARouteCalculationResult *) findSharedRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
 {
-    [self checkInitializedForParams:params];
-
     OARouteCalculationResult *result = [self calcSharedRouteImpl:params calcGPXRoute:calcGPXRoute readers:[self sharedRouteReaders]];
     [_missingMapsCalculator attachResult:params.missingMapsResult toRouteCalculationResult:result];
     return result;
@@ -1583,10 +1522,14 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         if (!_missingMapsCalculator)
             _missingMapsCalculator = [MissingMapsCalculator new];
 
+        NSError *readError = nil;
         params.missingMapsResult = [_missingMapsCalculator checkIfThereAreMissingSharedMaps:ctx
                                                                                       start:params.start
                                                                                     targets:targets
-                                                                            checkHHEditions:![settings.useOldRouting get]];
+                                                                            checkHHEditions:![settings.useOldRouting get]
+                                                                                      error:&readError];
+        if (readError)
+            return [[OARouteCalculationResult alloc] initWithErrorMessage:readError.localizedDescription];
         if (params.missingMapsResult)
         {
             // the route is calculated anyway, as it is on the C++ planner, where iOS never sets
@@ -1661,12 +1604,9 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
 
     OASRoutingConfiguration *cf = [self buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
 
-    // the environment outlives this call and keeps searching over these readers, so it is built
-    // where no other search is running and where the readers cannot be closed underneath it
+    // Routing and track approximation share the routing readers and run under the same lock.
     @synchronized (_nativeRoutingLock)
     {
-        [self checkInitializedForParams:params];
-
         OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];
         [router setUseFastRecalculationUse:settings.useFastRecalculation];
         OASRoutePlannerFrontEnd.companion.CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
@@ -1677,10 +1617,6 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         ctx.leftSideNavigation = params.leftSide;
 
         OARoutingEnvironment *env = [[OARoutingEnvironment alloc] initWithSharedRouter:router context:ctx];
-        @synchronized (self)
-        {
-            [_liveSharedEnvironments addObject:env];
-        }
         return env;
     }
 }
@@ -1759,7 +1695,9 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
         if (params.intermediates)
             inters = [NSArray arrayWithArray:params.intermediates];
 
-        OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+        OANativeRoutingMemoryGuard *memoryGuard = [OANativeRoutingMemoryGuard start:params];
+        OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated memoryGuard:memoryGuard];
+        [memoryGuard stop];
         [_missingMapsCalculator attachResult:params.missingMapsResult toRouteCalculationResult:result];
 
         return result;
@@ -1976,7 +1914,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
     }
     [points addObject:[[OALocation alloc] initWithProvider:@"" location:routeParams.end]];
     OALocation *lastAdded = nil;
-    float speed = [routeParams.mode getDefaultSpeed];
+    float speed = [routeParams.mode defaultSpeed];
     NSMutableArray<OARouteDirectionInfo *> *computeDirections = [NSMutableArray new];
     while(points.count > 0)
     {
@@ -2050,7 +1988,7 @@ static BOOL OAProfilesContain(OASKotlinArray<NSString *> *profiles, NSString *pr
                     CLLocation *endLoc = [[CLLocation alloc] initWithLatitude:end.coordinate.latitude longitude:end.coordinate.longitude];
                     locations = @[start, endLoc];
                 }
-                route = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:routeParams.mode.getDefaultSpeed
+                route = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[routeParams.mode defaultSpeed]
                                                                                              points:[self.class coordsToLatLons:locations]]];
             }
             [gpxRouteLocations addObjectsFromArray:locations];

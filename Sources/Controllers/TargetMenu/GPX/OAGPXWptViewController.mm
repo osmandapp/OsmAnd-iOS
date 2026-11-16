@@ -28,6 +28,7 @@
 #import "OARootViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OAAmenitySearcher.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -41,6 +42,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
     OAPOI *_originObject;
+    NSSet<NSString *> *_genericRowKeys;
     std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
@@ -73,10 +75,23 @@ static const NSInteger kOrderWptPointLinkRow = 2;
 - (void) acquireOriginObject
 {
     NSString *originName = _wpt.getAmenityOriginName;
+    OAPOI *mapAmenity = nil;
     if (originName && originName.length > 0)
-        _originObject = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
-    if (!_originObject)
-        _originObject = [_wpt getAmenity];
+        mapAmenity = [OAAmenitySearcher findPOIByOriginName:originName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
+    _genericRowKeys = [OASAdditionalInfoBundle.companion getGenericRowKeysStoredExtensions:[_wpt.point getExtensionsToRead]];
+    _originObject = [self.class cardAmenityForPoint:_wpt mapAmenity:mapAmenity];
+}
+
++ (OAPOI *) cardAmenityForPoint:(OAGpxWptItem *)wpt mapAmenity:(OAPOI *)mapAmenity
+{
+    OAPOI *storedAmenity = [wpt getAmenity];
+    if (!mapAmenity || !storedAmenity)
+        return mapAmenity ?: storedAmenity;
+    [[storedAmenity getAdditionalInfo] enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
+        if (![mapAmenity getAdditionalInfo:key])
+            [mapAmenity setAdditionalInfo:key value:value];
+    }];
+    return mapAmenity;
 }
 
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -132,6 +147,7 @@ static const NSInteger kOrderWptPointLinkRow = 2;
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI:_originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.lat, _wpt.point.lon);
+        builder.genericRowKeys = _genericRowKeys;
         NSMutableArray<OAAmenityInfoRow *> *internalRows = [NSMutableArray array];
         [builder buildMenu:internalRows];
         [rows addObjectsFromArray:internalRows];

@@ -34,7 +34,7 @@
     OASearchUICore *_searchUICore;
     OAQuickSearchHelper *_searchHelper;
     
-    dispatch_queue_t _searchQueue;
+    NSUInteger _searchRequest;
 }
 
 - (instancetype) initWithInterfaceController:(CPInterfaceController *)interfaceController searchResult:(OASearchResult *)sr
@@ -48,8 +48,6 @@
 
 - (void) commonInit
 {
-    _searchQueue = dispatch_queue_create("carPlay_categorySearchQueue", DISPATCH_QUEUE_SERIAL);
-    
     _searchHelper = OAQuickSearchHelper.instance;
     _searchUICore = _searchHelper.getCore;
     
@@ -110,12 +108,15 @@
     if ([settings getRadiusLevel] != 1)
         [_searchUICore updateSettings:[settings setRadiusLevel:1]];
     
-    dispatch_async(_searchQueue, ^{
-        OASearchResultCollection *result = [_searchUICore shallowSearch:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES];
+    NSUInteger request = ++_searchRequest;
+    __weak __typeof(self) weakSelf = self;
+    [_searchUICore shallowSearchAsync:OASearchAmenityByTypeAPI.class text:txt matcher:nil resortAll:YES removeDuplicates:YES completion:^(OASearchResultCollection *result) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateSearchResult:result];
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_searchRequest)
+                [self updateSearchResult:result];
         });
-    });
+    }];
 }
 
 - (void) updateSearchResult:(OASearchResultCollection *)res
@@ -231,7 +232,7 @@
     OASearchResult *searchResult = searchItem.getSearchResult;
     if (searchResult.objectType == EOAObjectTypePoi)
     {
-        NSString *address = searchResult.alternateName;
+        NSString *address = searchResult.addressName;
         if (address.length > 0 && ![address isEqualToString:historyName.name])
         {
             historyName.address = address;
@@ -243,6 +244,12 @@
 
     if (completionBlock)
         completionBlock();
+}
+
+- (void)onTemplateDismissed
+{
+    ++_searchRequest;
+    [super onTemplateDismissed];
 }
 
 @end

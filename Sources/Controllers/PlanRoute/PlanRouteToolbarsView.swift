@@ -49,8 +49,9 @@ final class PlanRouteTopToolbarView: TouchesPassView {
     private let titleLabel = UILabel()
     private let closeButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomCancel)
     private let optionsButton = PlanRouteButtonFactory.iconMapButton(image: .icCustomOverflowMenuStroke)
-    private let dimmingView = UIView()
     private let backgroundMaskLayer = CAGradientLayer()
+
+    private var hasHinge = false
 
     private lazy var saveButton = PlanRouteButtonFactory.primaryButton(title: localizedString("shared_string_save"))
 
@@ -120,6 +121,8 @@ final class PlanRouteTopToolbarView: TouchesPassView {
 
         closeButton.accessibilityLabel = localizedString("shared_string_close")
         optionsButton.accessibilityLabel = localizedString("shared_string_options")
+        closeButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.close
+        optionsButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.options
         closeButton.addTarget(self, action: #selector(onCloseTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(onSaveTapped), for: .touchUpInside)
     }
@@ -140,15 +143,22 @@ final class PlanRouteTopToolbarView: TouchesPassView {
         backgroundMaskLayer.startPoint = CGPoint(x: 0.5, y: 0)
         backgroundMaskLayer.endPoint = CGPoint(x: 0.5, y: 1)
         backgroundContainerView.layer.mask = backgroundMaskLayer
+
+        if #available(iOS 27.1, *) {
+            addInteraction(UIHingeInteraction { [weak self] _, update in
+                guard let self else { return }
+                hasHinge = update.hinge != nil
+                updateBackgroundLayers()
+            })
+        }
     }
 
     private func updateBackgroundLayers() {
-        let isCompactLayout = traitCollection.verticalSizeClass == .compact
-        let isBackgroundHidden = isCompactLayout || !showsGradient
-        backgroundContainerView.isHidden = isBackgroundHidden
+        let hidesBackground = hasHinge || traitCollection.verticalSizeClass == .compact || !showsGradient
+        backgroundContainerView.isHidden = hidesBackground
         titleLabel.textColor = showsGradient ? .white : .textColorPrimary
 
-        guard !isBackgroundHidden else { return }
+        guard !hidesBackground else { return }
         backgroundMaskLayer.frame = backgroundContainerView.bounds
         backgroundMaskLayer.colors = [
             UIColor.black.withAlphaComponent(Self.backgroundFirstAlpha).cgColor,
@@ -274,6 +284,9 @@ final class PlanRouteBottomToolbarView: UIView {
         addPoiButton.addTarget(self, action: #selector(onAddPoiTapped), for: .touchUpInside)
         undoButton.accessibilityLabel = localizedString("shared_string_undo")
         redoButton.accessibilityLabel = localizedString("shared_string_redo")
+        undoButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.undo
+        redoButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.redo
+        routeButton.accessibilityIdentifier = UITestAccessibilityIdentifier.PlanRoute.add
         undoButton.addTarget(self, action: #selector(onUndoTapped), for: .touchUpInside)
         redoButton.addTarget(self, action: #selector(onRedoTapped), for: .touchUpInside)
         routeButton.addTarget(self, action: #selector(onRouteTapped), for: .touchUpInside)

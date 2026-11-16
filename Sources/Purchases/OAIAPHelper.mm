@@ -37,6 +37,7 @@ NSString *const OAIAPRequestPurchaseProductNotification = @"OAIAPRequestPurchase
 #define kInconsistentReceiptStatus 200
 #define kUserNotFoundStatus 300
 
+#define CARPLAY_FREE YES
 #define CARPLAY_START_DATE_SEC (10L * 60L * 60L * 24L) // 10 days
 #define PURCHASE_VALIDATION_PERIOD_SEC 60 * 60 * 24 // daily
 
@@ -45,6 +46,8 @@ static NSString *kPlatformApple = @"apple";
 static NSString *kPlatformAmazon = @"amazon";
 static NSString *kPlatformHuawei = @"huawei";
 static NSString *kPlatformFastspring = @"fastspring";
+static NSString *const kFreeMapsAvailableKey = @"freeMapsAvailable";
+static NSString *const kFreeMapsMarkerCreatedKey = @"freeMapsMarkerCreated";
 
 typedef void (^RequestActiveProductsCompletionHandler)(NSArray<OAProduct *> *products, NSDictionary<NSString *, NSDate *> *expirationDates, BOOL success);
 
@@ -183,6 +186,48 @@ static OASubscriptionState *EXPIRED;
     BOOL _backupPurchaseRequested;
 }
 
++ (NSString *)freeMapsMarkerPath
+{
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    return [libraryPath stringByAppendingPathComponent:@"freeMapsCount.marker"];
+}
+
++ (NSUserDefaults *)freeMapsCountDefaults
+{
+    return [NSUserDefaults standardUserDefaults];
+}
+
++ (void)initializeFreeMapsCount:(BOOL)mapInstalled
+{
+    NSUserDefaults *defaults = [self freeMapsCountDefaults];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *path = [self freeMapsMarkerPath];
+    BOOL markerExists = [fileManager fileExistsAtPath:path];
+    if (!markerExists && ![fileManager createFileAtPath:path contents:nil attributes:nil])
+    {
+        NSLog(@"Failed to create free maps marker at %@", path);
+        return;
+    }
+
+    NSError *error = nil;
+    if (![[NSURL fileURLWithPath:path] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:&error])
+    {
+        if (!markerExists)
+            [fileManager removeItemAtPath:path error:nil];
+        NSLog(@"Failed to exclude free maps marker from backup: %@", error);
+        return;
+    }
+
+    // The flag survives a backup restore; the marker does not.
+    NSNumber *remaining = [defaults objectForKey:kFreeMapsAvailableKey] ?: @(kFreeMapsAvailableTotal);
+    if (!markerExists && ([defaults boolForKey:kFreeMapsMarkerCreatedKey]
+        || (!mapInstalled && remaining.intValue <= 0)))
+        [defaults setInteger:kFreeMapsAvailableTotal forKey:kFreeMapsAvailableKey];
+
+    // Restore the flag if reset_settings cleared the defaults.
+    [defaults setBool:YES forKey:kFreeMapsMarkerCreatedKey];
+}
+
 + (int) freeMapsAvailable
 {
     int freeMaps = kFreeMapsAvailableTotal;
@@ -204,7 +249,7 @@ static OASubscriptionState *EXPIRED;
     }
     [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     NSLog(@"Free maps left: %d", freeMaps);
 }
 
@@ -217,7 +262,7 @@ static OASubscriptionState *EXPIRED;
     freeMaps += count;
     [[NSUserDefaults standardUserDefaults] setInteger:freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     NSLog(@"Free maps left: %d", freeMaps);
 }
 
@@ -421,6 +466,9 @@ static OASubscriptionState *EXPIRED;
 
 - (BOOL)isCarPlayAvailable
 {
+    if (CARPLAY_FREE)
+        return YES;
+
     NSTimeInterval time = NSDate.date.timeIntervalSince1970;
     NSTimeInterval installTime = [[self class] installTime];
     if (time >= installTime + CARPLAY_START_DATE_SEC)
@@ -1600,6 +1648,7 @@ static OASubscriptionState *EXPIRED;
     [params setObject:[NSString stringWithFormat:@"%d", app.getAppInstalledDays] forKey:@"nd"];
     [params setObject:[NSString stringWithFormat:@"%d", app.getAppExecCount] forKey:@"ns"];
     [params setObject:app.getLanguageCode forKey:@"lang"];
+    [InstallAttribution addParams:params];
     NSString *aid = app.getUserIosId;
     if (aid.length > 0)
         [params setObject:aid forKey:@"aid"];

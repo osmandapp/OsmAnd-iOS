@@ -8,6 +8,7 @@
 
 #import "OAAddress.h"
 #import "Localization.h"
+#import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -29,23 +30,47 @@
     return self;
 }
 
+- (instancetype)initWithSharedAddress:(OASMapObject *)address type:(EOAAddressType)type
+{
+    self = [super init];
+    if (self)
+    {
+        _sharedAddress = address;
+        _addressType = type;
+        _addrId = (unsigned long long) address.id.longLongValue;
+        OASKLatLon *location = [address getLocation];
+        _latitude = location.latitude;
+        _longitude = location.longitude;
+    }
+    return self;
+}
+
 - (NSString *) getName:(NSString *)lang transliterate:(BOOL)transliterate
 {
+    if (_sharedAddress)
+        return [_sharedAddress getNameLang:lang transliterate:transliterate];
     return self.address->getName(QString::fromNSString(lang), transliterate).toNSString();
 }
 
 - (NSString *) getNameQ:(QString)lang transliterate:(BOOL)transliterate
 {
+    if (_sharedAddress)
+        return [_sharedAddress getNameLang:lang.toNSString() transliterate:transliterate];
     return self.address->getName(lang, transliterate).toNSString();
 }
 
 - (NSString *) name
 {
+    if (_sharedAddress)
+        return [_sharedAddress getName];
     return self.address->nativeName.toNSString();
 }
 
 - (NSDictionary<NSString *, NSString *> *) localizedNames
 {
+    if (_sharedAddress)
+        return [_sharedAddress getNamesMapIncludeEn:YES];
+
     NSMutableDictionary *localizedNames = [NSMutableDictionary dictionary];
     for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(self.address->localizedNames)))
         [localizedNames setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
@@ -60,6 +85,14 @@
     if (enName != nil && enName.length > 0)
     {
         [otherNames addObject:enName];
+    }
+    if (_sharedAddress)
+    {
+        [self.localizedNames enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *stop) {
+            if (![key isEqualToString:@"admin_level"] && ![key isEqualToString:@"place"])
+                [otherNames addObject:value];
+        }];
+        return otherNames;
     }
     for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(self.address->localizedNames)))
     {

@@ -19,7 +19,7 @@ static NSString *kTimestampRowType = @"kTimestampRowType";
 static NSString *kGroupRowType = @"kGroupRowType";
 
 
-@class AdditionalInfoBundle;
+@class OASAdditionalInfoBundle;
 
 
 @interface OATargetInfoViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
@@ -27,9 +27,8 @@ static NSString *kGroupRowType = @"kGroupRowType";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic) NSArray<OAAmenityInfoRow *> *additionalRows;
-@property (nonatomic) AdditionalInfoBundle *infoBundle;
+@property (nonatomic) OASAdditionalInfoBundle *infoBundle;
 
-@property (nonatomic) BOOL showDefaultTags;
 @property (nonatomic) BOOL showTitleIfTruncated;
 @property (nonatomic) BOOL customOnlinePhotosPosition;
 @property (nonatomic) BOOL matchWidthDivider; // show separator to full screen width

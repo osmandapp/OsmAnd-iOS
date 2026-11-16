@@ -11,8 +11,7 @@ import OsmAndShared
 /// What the shared `TravelObfHelper` asks of the app: which obf files to search, the language, and
 /// where the map is looking.
 ///
-/// Deciding which files are installed and in what order they are consulted stays here, because it
-/// depends on downloads and map settings that OsmAndShared knows nothing about.
+/// Supplies the installed travel resources and app settings to the shared helper.
 final class SharedTravelContext: NSObject, TravelObfContext {
 
     static let shared = SharedTravelContext()
@@ -22,11 +21,11 @@ final class SharedTravelContext: NSObject, TravelObfContext {
     }
 
     func getWikivoyageRepositories() -> [AmenityIndexRepository] {
-        SharedObfReaders.shared.travelRepositories()
+        SharedObfResources.shared.travelRepositories()
     }
 
     func getTravelGpxRepositories() -> [AmenityIndexRepository] {
-        SharedObfReaders.shared.travelAndMapRepositories()
+        SharedObfResources.shared.travelAndMapRepositories()
     }
 
     func getLanguage() -> String {
@@ -95,7 +94,7 @@ final class SharedTravelBookmarks: NSObject, TravelBookmarks {
 enum SharedTravelArticles {
 
     private static let appBySharedArticle =
-        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>.weakToWeakObjects()
+        NSMapTable<OsmAndShared.TravelArticle, TravelArticle>(keyOptions: [.weakMemory, .objectPointerPersonality], valueOptions: .weakMemory)
     private static let lock = NSLock()
 
     // MARK: - Articles
@@ -259,24 +258,8 @@ enum SharedTravelArticles {
 @objcMembers
 final class SharedTravel: NSObject {
 
-    /// Reads poi_types.xml into the shared registry. The obf reader needs it to name the amenities
-    /// it decodes, and the travel code needs it to read an activity back out of a route's subtype.
-    /// `OAPOIHelper` parses the same file for the app's own model; the two live side by side until
-    /// the search moves to OsmAndShared.
-    static func initPoiTypes() {
-        guard !MapPoiTypes.companion.getDefaultNoInit().isInit() else { return }
-        guard let xml = PlatformUtil.shared.getOsmAndContext().getAssetAsString(name: "poi_types.xml") else {
-            NSLog("SharedTravel: poi_types.xml is not in the bundle, travel search will not work")
-            return
-        }
-        let types = MapPoiTypes(resourceName: nil)
-        types.doInitFromString(xml: xml)
-        MapPoiTypes.companion.setDefault(types: types)
-    }
-
     static let helper: OsmAndShared.TravelObfHelper = {
-        initPoiTypes()
-        return OsmAndShared.TravelObfHelper(context: SharedTravelContext.shared,
-                                            bookmarks: SharedTravelBookmarks.shared)
+        OsmAndShared.TravelObfHelper(context: SharedTravelContext.shared,
+                                     bookmarks: SharedTravelBookmarks.shared)
     }()
 }

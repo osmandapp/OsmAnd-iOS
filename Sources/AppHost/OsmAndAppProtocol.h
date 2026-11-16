@@ -71,6 +71,7 @@ FOUNDATION_EXTERN NSString *const OARepositoryUpdateFinishedNotification;
 
 /** The OsmAndShared twin of getRoutingConfigForMode:, from the same routing.xml files. */
 - (OASRoutingConfigurationBuilder *) getSharedRoutingConfigForMode:(OAApplicationMode *)mode;
+- (OASRoutingConfigurationBuilder *) sharedDefaultRoutingConfig;
 - (OASGeneralRouter *) getSharedRouter:(OASRoutingConfigurationBuilder *)builder mode:(OAApplicationMode *)mode;
 
 - (void) saveDataToPermamentStorage;

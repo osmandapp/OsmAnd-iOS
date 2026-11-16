@@ -67,7 +67,8 @@
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
     NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
-    if (self.isViewLoaded && [preferenceKeys containsObject:[OAAppSettings sharedManager].rotateMap.key])
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (self.isViewLoaded && ([preferenceKeys containsObject:settings.rotateMap.key] || [preferenceKeys containsObject:settings.positionPlacementOnMap.key]))
         [self updateMapCenterPoint];
 }
 

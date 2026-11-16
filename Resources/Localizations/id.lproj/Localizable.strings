@@ -528,7 +528,7 @@
 "map_settings_under" = "Dasaran";
 "shared_string_online_maps" = "Peta daring";
 "shared_string_transparency" = "Transparansi";
-"map_transparency" = "Transparansi peta basis";
+"map_transparency" = "Visibilitas peta dasar";
 "street_level_imagery" = "Citra tingkat jalanan";
 "shared_string_terrain" = "Medan";
 "shared_string_legend" = "Legenda";
@@ -1300,7 +1300,7 @@
 "routing_attr_height_obstacles_description" = "Waktu perjalanan yang diproyeksikan akan mencerminkan dampak ketinggian. Preferensi perutean dapat membantu menghindari tanjakan yang curam:";
 "rendering_attr_currentTrackColor_description" = "Warna GPX";
 "routing_attr_driving_style_speed_name" = "Rute lebih pendek";
-"routing_attr_avoid_sett_description" = "Menghindari sett";
+"routing_attr_avoid_sett_description" = "Menghindari paving batu pahat";
 "rendering_attr_hikingRoutesOSMC_description" = "Render jalur sesuai dengan jejak OSMC.";
 "rendering_value_car_name" = "Mobil";
 "routing_attr_avoid_unpaved_name" = "Tidak ada jalan yang diaspal";
@@ -1353,7 +1353,7 @@
 "routing_attr_prefer_motorway_name" = "Utamakan jalan bebas hambatan";
 "rendering_attr_surface_cobblestone_name" = "Batu besar";
 "rendering_attr_highway_class_state_road_name" = "Jalan raya kota";
-"routing_attr_avoid_sett_name" = "Tidak ada sett";
+"routing_attr_avoid_sett_name" = "Tanpa paving batu pahat";
 "rendering_value_translucent_lightblue_name" = "Biru muda translucent";
 "rendering_attr_smoothness_good_name" = "Bagus";
 "routing_attr_weight_name" = "Berat";
@@ -2353,8 +2353,8 @@
 "required_maps" = "Peta yang Diperlukan";
 "shared_string_scale" = "Skala";
 "vertical_exaggeration_description" = "Dengan mengubah nilai skala, Anda dapat memperjelas relief 3D.";
-"routing_attr_avoid_cobblestone_description" = "Hindari batu bulat";
-"routing_attr_avoid_cobblestone_name" = "Hindari batu bulat";
+"routing_attr_avoid_cobblestone_description" = "Hindari jalan batu bulat";
+"routing_attr_avoid_cobblestone_name" = "Hindari jalan batu bulat";
 "track_vertical_exaggeration_description" = "Dengan mengubah nilai skala, Anda dapat mengubah ketinggian trek 3D.";
 "step_by_step" = "Belokan demi belokan";
 "downward_gradient" = "Gradien ke bawah";

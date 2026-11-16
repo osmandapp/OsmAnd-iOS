@@ -59,6 +59,7 @@ NSString *const kSimulateOBDDataKey = @"kSimulateOBDDataKey";
 NSString *const kImageCacheKey = @"kImageCacheKey";
 NSString *const kBLEScanerKey = @"kBLEScanerKey";
 NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
+NSString *const kSpatialTextSearchKey = @"kSpatialTextSearchKey";
 
 
 #pragma mark - Initialization
@@ -192,6 +193,16 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     }];
     
     [_data addSection:renderingDebugSection];
+
+    OATableSectionData *searchSection = [OATableSectionData sectionData];
+    searchSection.headerText = OALocalizedString(@"shared_string_search");
+    [searchSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kSpatialTextSearchKey,
+        kCellTitleKey : OALocalizedString(@"use_spatial_search"),
+        @"isOn" : @([[OAAppSettings sharedManager].useSharedSearch get])
+    }];
+    [_data addSection:searchSection];
     
     OATableSectionData *imageСacheSection = [OATableSectionData sectionData];
     imageСacheSection.headerText = OALocalizedString(@"image_cache");
@@ -269,6 +280,8 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
         if (cell)
         {
             cell.titleLabel.text = item.title;
+            [cell descriptionVisibility:item.descr.length > 0];
+            cell.descriptionLabel.text = item.descr;
             cell.switchView.on = [item boolForKey:@"isOn"];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -322,6 +335,10 @@ NSString *const kShowPrimitivesDebugInfoKey = @"kShowPrimitivesDebugInfoKey";
     } else if ([item.key isEqualToString:kShowPrimitivesDebugInfoKey]) {
         [[OAAppSettings sharedManager].showPrimitivesDebugInfo set:sender.isOn];
         [[_app mapSettingsChangeObservable] notifyEvent];
+    }
+    else if ([item.key isEqualToString:kSpatialTextSearchKey])
+    {
+        [[OAAppSettings sharedManager].useSharedSearch set:sender.isOn];
     }
 }
 

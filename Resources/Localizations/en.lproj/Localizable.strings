@@ -5106,3 +5106,17 @@
 "opening_hours_easter" = "Easter";
 "download_complete" = "Download complete";
 "download_complete_with_errors" = "Download complete with errors";
+
+"ios_release_5_5" = "• New coordinate formats, including EPSG systems, Maidenhead locator, and Swiss Grid\n
+• Separate widget layouts for Portrait and Landscape, plus Wide or Compact top and bottom panels\n
+• Customizable widget panel appearance: widget size, icons, and text and background colors\n
+• New CarPlay settings for map orientation and frame rate\n
+• Home is now one tap away in the CarPlay Navigation menu\n
+• Added a \"Keep screen on\" setting for each profile\n
+• Contour line labels can face uphill, as on topographic maps\n
+• Full appearance settings when editing several Favorites at once\n
+• Set the speed limit tolerance with a slider\n
+• Faster loading of large track libraries, with an indexing progress indicator\n
+• Fixed emptying the OsmAnd Cloud trash restoring deleted maps and Favorites\n
+• Fixed elevation dropping to 0 in tracks recorded in the background\n
+• Fixed OsmAnd Cloud sync conflicts after updating maps on several devices\n";

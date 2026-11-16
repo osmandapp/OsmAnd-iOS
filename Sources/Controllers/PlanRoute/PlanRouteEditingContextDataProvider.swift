@@ -397,7 +397,7 @@ final class PlanRouteEditingContextDataProvider: PlanRouteDataProvider {
         } else if case let .profileGroup(group, _) = context {
             applyMode(effectiveMode, pointIndexes: group.profilePointIndexes)
         } else if case let .wholeSegment(segment) = context {
-            let pointIndexes = segment.groups.flatMap { $0.points.map(\.index) }
+            let pointIndexes = segment.groups.flatMap(\.profilePointIndexes)
             applyMode(effectiveMode, pointIndexes: pointIndexes)
         } else {
             bridge.apply(effectiveMode, pointIndex: context.applyPointIndex, wholeRoute: context.applyWholeRoute)

@@ -191,6 +191,27 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
                                                           try XCTUnwrap(source.defaultMode?.toHumanString())))
     }
 
+    func testPartialLastGroupChangeExcludesDistinctContinuation() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let original = makeMixedSegment()
+        let lastGroup = try XCTUnwrap(original.groups.last)
+        let group = PlanRouteProfileGroup(appMode: lastGroup.appMode,
+                                          distance: lastGroup.distance,
+                                          lastPointIndex: lastGroup.lastPointIndex,
+                                          points: lastGroup.points,
+                                          profilePointIndexes: [3, 4])
+        let segment = makeSegment(groups: Array(original.groups.dropLast()) + [group])
+        source.routeSegments = [segment]
+        source.defaultMode = OAApplicationMode.car()
+        let context = SegmentRouteContext.profileGroup(group, segment: segment)
+        let controller = SegmentRouteSettingsViewController(context: context, dataSource: source, applyFromPointIndex: 4)
+        controller.loadViewIfNeeded()
+        controller.perform(NSSelectorFromString("onConfirmTapped"))
+        XCTAssertEqual(source.appliedPointIndexes, [4])
+        XCTAssertEqual(source.appliedMode?.stringKey, OAApplicationMode.pedestrian()?.stringKey)
+        XCTAssertEqual(source.defaultMode?.stringKey, OAApplicationMode.car()?.stringKey)
+    }
+
     func testChangeTypeAfterDestinationUsesFutureProfile() throws {
         let source = PlanRouteProfileTestDataSource()
         let segment = makeMixedSegment()

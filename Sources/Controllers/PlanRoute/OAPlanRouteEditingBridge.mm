@@ -1081,7 +1081,12 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
     NSInteger lastIndex = indexes.lastObject.integerValue;
     if (lastIndex == (NSInteger)allPoints.count - 1 && !allPoints[lastIndex].isGap)
-        [profilePointIndexes addObject:@(lastIndex)];
+    {
+        OAApplicationMode *nextMode = [OAApplicationMode valueOfStringKey:allPoints[lastIndex].getProfileType
+                                                                    def:OAApplicationMode.DEFAULT];
+        if ([nextMode.stringKey isEqualToString:(appMode ?: OAApplicationMode.DEFAULT).stringKey])
+            [profilePointIndexes addObject:@(lastIndex)];
+    }
     return [[PlanRouteGroupData alloc] initWithAppMode:appMode
                                             distance:groupDistance
                                      lastGlobalIndex:lastIndex

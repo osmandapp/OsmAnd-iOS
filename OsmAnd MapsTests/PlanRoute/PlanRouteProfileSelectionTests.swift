@@ -374,6 +374,71 @@ final class PlanRouteProfileSelectionTests: XCTestCase {
         }
     }
 
+    func testDoorToDoorNoOpUpdatesMenuAndAllowsManualSelection() throws {
+        for notifiesChange in [false, true] {
+            let source = PlanRouteProfileTestDataSource()
+            let points = (0..<4).map { makePoint(index: $0, count: 4) }
+            source.routeSegments = [makeSegment(groups: [
+                PlanRouteProfileGroup(appMode: nil, distance: 334, lastPointIndex: 3,
+                                      points: points, profilePointIndexes: [0, 1, 2, 3])
+            ])]
+            let controller = PlanRouteRouteViewController(dataSource: source)
+            controller.loadViewIfNeeded()
+            var sortCalls = 0
+            source.onSort = { [weak controller] indexes in
+                XCTAssertEqual(indexes, [0, 1, 2, 3])
+                sortCalls += 1
+                if notifiesChange {
+                    controller?.reloadData()
+                }
+            }
+            let doorToDoor = try sortAction(in: controller, title: localizedString("intermediate_items_sort_by_distance"))
+            XCTAssertEqual(doorToDoor.state, .off)
+            UIButton().sendAction(doorToDoor)
+            XCTAssertEqual(sortCalls, 1)
+            XCTAssertEqual(try sortAction(in: controller, title: doorToDoor.title).state, .on)
+            let manual = try sortAction(in: controller, title: localizedString("shared_string_manual"))
+            XCTAssertEqual(manual.state, .off)
+            controller.reloadData()
+            XCTAssertEqual(try sortAction(in: controller, title: doorToDoor.title).state, .on)
+            UIButton().sendAction(manual)
+            XCTAssertEqual(try sortAction(in: controller, title: manual.title).state, .on)
+            XCTAssertEqual(try sortAction(in: controller, title: doorToDoor.title).state, .off)
+            XCTAssertEqual(sortCalls, 1)
+        }
+    }
+
+    func testRouteChangeAfterDoorToDoorNoOpResetsMenuToManual() throws {
+        let source = PlanRouteProfileTestDataSource()
+        let points = (0..<4).map { makePoint(index: $0, count: 4) }
+        source.routeSegments = [makeSegment(groups: [
+            PlanRouteProfileGroup(appMode: nil, distance: 334, lastPointIndex: 3,
+                                  points: points, profilePointIndexes: [0, 1, 2, 3])
+        ])]
+        let controller = PlanRouteRouteViewController(dataSource: source)
+        controller.loadViewIfNeeded()
+        let doorToDoor = try sortAction(in: controller, title: localizedString("intermediate_items_sort_by_distance"))
+        UIButton().sendAction(doorToDoor)
+        source.routeSegments = [makeSegment(groups: [
+            PlanRouteProfileGroup(appMode: nil, distance: 445, lastPointIndex: 3,
+                                  points: points, profilePointIndexes: [0, 1, 2, 3])
+        ])]
+        controller.reloadData()
+        XCTAssertEqual(try sortAction(in: controller, title: localizedString("shared_string_manual")).state, .on)
+        XCTAssertEqual(try sortAction(in: controller, title: doorToDoor.title).state, .off)
+    }
+
+    private func sortAction(in controller: PlanRouteRouteViewController, title: String) throws -> UIAction {
+        let table = try XCTUnwrap(controller.view.subviews.first as? UITableView)
+        let header = try XCTUnwrap(controller.tableView(table, viewForHeaderInSection: 0) as? PlanRouteSegmentHeaderView)
+        let button = try XCTUnwrap(header.contentView.subviews.compactMap { $0 as? UIButton }.first)
+        let menu = try XCTUnwrap(button.menu)
+        let sortMenu = try XCTUnwrap(menu.children.compactMap { $0 as? UIMenu }
+            .flatMap(\.children).compactMap { $0 as? UIMenu }
+            .first { $0.title == localizedString("shared_string_sort") })
+        return try XCTUnwrap(sortMenu.children.compactMap { $0 as? UIAction }.first { $0.title == title })
+    }
+
     private func makeTenPointSegment() -> PlanRouteSegment {
         let points = (0..<10).map { makePoint(index: $0, count: 10) }
         return makeSegment(groups: [
@@ -458,6 +523,7 @@ private final class PlanRouteProfileTestDataSource: PlanRoutePointsDataSource {
     var appliedContext: SegmentRouteContext?
     var appliedMode: OAApplicationMode?
     var onMove: ((Int, Int) -> Void)?
+    var onSort: (([Int]) -> Void)?
     var editedPointAction: String?
     var routeInfo: PlanRouteInfo { fatalError("Route info is not used by these tests") }
     var pendingEmptySegmentIndex: Int? { nil }
@@ -487,7 +553,7 @@ private final class PlanRouteProfileTestDataSource: PlanRoutePointsDataSource {
     func startNewSegment(mode: OAApplicationMode?) {}
     func continueRoute(mode: OAApplicationMode?) {}
     func applyMode(_ mode: OAApplicationMode, pointIndex: Int, wholeRoute: Bool) {}
-    func sortDoorToDoor(pointIndexes: [Int]) {}
+    func sortDoorToDoor(pointIndexes: [Int]) { onSort?(pointIndexes) }
     func saveSegment(pointIndexes: [Int], fileName: String, showOnMap: Bool, onComplete: @escaping (Bool, String?) -> Void) {}
     func selectRoutePoint(at index: Int) {}
     func showPointOptions(at index: Int) {}

@@ -79,7 +79,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
         }
         let segments = dataSource?.routeSegments ?? []
         let signature = contentSignature(for: segments)
-        guard lastContentSignature != signature else { return }
+        guard lastContentSignature != signature || isApplyingDoorToDoorSort else { return }
         if !isApplyingDoorToDoorSort {
             doorToDoorSortedKeys.removeAll()
         }
@@ -337,6 +337,7 @@ final class PlanRouteRouteViewController: UIViewController, PlanRouteTabContent 
             doorToDoorSortedKeys.insert(key)
             isApplyingDoorToDoorSort = true
             dataSource?.sortDoorToDoor(pointIndexes: pointIndexes)
+            reloadData()
         }
         return UIMenu(title: localizedString("shared_string_sort"), image: sortImage, children: [manual, doorToDoor])
     }

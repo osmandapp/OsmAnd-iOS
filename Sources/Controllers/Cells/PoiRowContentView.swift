@@ -160,7 +160,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         openingHoursLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         openingHoursStackView.axis = .horizontal
-        openingHoursStackView.alignment = .center
+        openingHoursStackView.alignment = .fill
         openingHoursStackView.spacing = 4
         openingHoursStackView.addArrangedSubview(openingHoursIconView)
         openingHoursStackView.addArrangedSubview(openingHoursLabel)
@@ -168,7 +168,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         openingHoursStackView.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         detailsStackView.axis = .horizontal
-        detailsStackView.alignment = .center
+        detailsStackView.alignment = .fill
         detailsStackView.spacing = 8
         detailsStackView.addArrangedSubview(addressLabel)
         detailsStackView.addArrangedSubview(openingHoursStackView)
@@ -221,9 +221,12 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
             iconView.widthAnchor.constraint(equalToConstant: 0),
             iconView.heightAnchor.constraint(equalToConstant: 0)
         ]
-        let bottomConstraint = mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Self.verticalInset)
-        bottomConstraint.priority = UILayoutPriority(999)
-        NSLayoutConstraint.activate(imageSizeConstraints + iconSizeConstraints + [
+        let topContentHuggingConstraints = [textStackView, imageContainerView].map {
+            let constraint = topStackView.bottomAnchor.constraint(equalTo: $0.bottomAnchor)
+            constraint.priority = .defaultLow
+            return constraint
+        }
+        NSLayoutConstraint.activate(imageSizeConstraints + iconSizeConstraints + topContentHuggingConstraints + [
             textLayoutGuide.topAnchor.constraint(equalTo: textStackView.topAnchor),
             textLayoutGuide.leadingAnchor.constraint(equalTo: textStackView.leadingAnchor),
             textLayoutGuide.trailingAnchor.constraint(equalTo: textStackView.trailingAnchor),
@@ -231,7 +234,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
             mainStackView.topAnchor.constraint(equalTo: topAnchor, constant: Self.verticalInset),
             mainStackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
             mainStackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-            bottomConstraint,
+            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Self.verticalInset),
             iconView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
             iconView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
             photoView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
@@ -302,3 +305,5 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
             }
     }
 }
+
+final class PoiContentTableViewCell: PointContentTableViewCell {}

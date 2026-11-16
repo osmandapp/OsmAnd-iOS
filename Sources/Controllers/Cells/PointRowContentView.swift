@@ -204,7 +204,7 @@ protocol PrimaryTextLayoutGuideProviding: UIView {
     var primaryTextLayoutGuide: UILayoutGuide? { get }
 }
 
-final class PointContentTableViewCell: UITableViewCell {
+class PointContentTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         alignSeparatorWithPrimaryText()

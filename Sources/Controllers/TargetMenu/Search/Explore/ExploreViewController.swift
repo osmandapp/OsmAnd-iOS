@@ -111,6 +111,7 @@ final class ExploreViewController: UIViewController {
         tableView.estimatedRowHeight = PoiContentConfiguration.estimatedRowHeight
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 44
+        tableView.register(PoiContentTableViewCell.self, forCellReuseIdentifier: PoiContentTableViewCell.reuseIdentifier)
         tableView.register(PointContentTableViewCell.self, forCellReuseIdentifier: PointContentTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
@@ -158,9 +159,10 @@ final class ExploreViewController: UIViewController {
             }
             reload(.popularPlaces, animated: true)
         case .history:
-            settings.exploreHistoryCollapsed.set(!settings.exploreHistoryCollapsed.get())
-            reload(.history, animated: true)
-            reloadHistory()
+            let collapsed = !settings.exploreHistoryCollapsed.get()
+            settings.exploreHistoryCollapsed.set(collapsed)
+            (tableView.headerView(forSection: section.rawValue) as? CollapsibleSectionHeaderView)?.setExpanded(!collapsed)
+            reloadHistory(animated: true)
         }
     }
 
@@ -209,22 +211,26 @@ final class ExploreViewController: UIViewController {
         }
     }
 
-    private func reloadHistory() {
+    private func reloadHistory(animated: Bool = false) {
         historyGeneration += 1
         let generation = historyGeneration
         guard !isCollapsed(.history), isHistoryEnabled() else {
             historyItems = []
-            reload(.history)
+            reload(.history, animated: animated)
             return
         }
 
+        let searchHistoryEnabled = settings.searchHistory.get()
+        let navigationHistoryEnabled = settings.navigationHistory.get()
         historyQueue.async { [weak self] in
             let helper: OAHistoryHelper = OAHistoryHelper.sharedInstance()
-            let items = helper.getPointsHavingTypes(helper.searchTypes, exceptNavigation: false, limit: Self.historyItemsLimit) ?? []
+            let items = searchHistoryEnabled
+                ? helper.getPointsHavingTypes(helper.searchTypes, exceptNavigation: !navigationHistoryEnabled, limit: Self.historyItemsLimit)
+                : helper.getPointsFromNavigation(Self.historyItemsLimit)
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == historyGeneration else { return }
-                historyItems = items
-                reload(.history)
+                historyItems = items ?? []
+                reload(.history, animated: animated)
             }
         }
     }
@@ -312,6 +318,19 @@ final class ExploreViewController: UIViewController {
         OARootViewController.instance()?.navigationController?.pushViewController(controller, animated: true)
     }
 
+    private func openAllHistory() {
+        let searchHistoryEnabled = settings.searchHistory.get()
+        let navigationHistoryEnabled = settings.navigationHistory.get()
+        let controller: UIViewController?
+        if searchHistoryEnabled && navigationHistoryEnabled {
+            controller = OAGlobalSettingsViewController(settingsType: EOAHistory)
+        } else {
+            controller = OAHistorySettingsViewController(settingsType: searchHistoryEnabled ? EOAHistorySettingsTypeSearch : EOAHistorySettingsTypeNavigation, editing: false)
+        }
+        guard let controller else { return }
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
     @objc private func onLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began,
               let indexPath = tableView.indexPathForRow(at: gesture.location(in: tableView)),
@@ -334,7 +353,7 @@ extension ExploreViewController: UITableViewDataSource {
         guard let row = row(at: indexPath) else { return UITableViewCell() }
         switch row {
         case .popularPlace(let place):
-            let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: PoiContentTableViewCell.reuseIdentifier, for: indexPath)
             cell.contentConfiguration = popularPlaceConfiguration(for: place)
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             return cell
@@ -418,9 +437,7 @@ extension ExploreViewController: UITableViewDelegate {
         case .historyItem(let item):
             delegate?.exploreDidSelectHistoryItem(item)
         case .viewAllHistory:
-            if let controller = OAHistorySettingsViewController(settingsType: EOAHistorySettingsTypeSearch, editing: false) {
-                navigationController?.pushViewController(controller, animated: true)
-            }
+            openAllHistory()
         default:
             break
         }

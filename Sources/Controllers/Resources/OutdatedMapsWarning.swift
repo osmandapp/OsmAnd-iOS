@@ -14,7 +14,7 @@ final class OutdatedMapsWarning: NSObject {
 
     func showAfterUpgrade() {
         let settings = OAAppSettings.sharedManager()
-        guard settings.shouldShowOutdatedMapsWarning, settings.useSharedSearch.get(), settings.useSpatialTextSearch.get(), !settings.shouldShowWhatsNewScreen, !AppEnvironment.isUITesting, !UIApplication.shared.isAnyCarPlaySceneActive, !Self.isChecking else { return }
+        guard settings.shouldShowOutdatedMapsWarning, settings.useSharedSearch.get(), !settings.shouldShowWhatsNewScreen, !AppEnvironment.isUITesting, !UIApplication.shared.isAnyCarPlaySceneActive, !Self.isChecking else { return }
         Self.isChecking = true
         DispatchQueue.global(qos: .utility).async {
             let needsWarning = self.hasMapsWithoutSpatialSearch()

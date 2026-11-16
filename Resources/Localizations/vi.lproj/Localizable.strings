@@ -2638,3 +2638,17 @@
 "map_widget_intermediate_distance" = "Điểm đến trung gian";
 "routing_attr_avoid_sett_name" = "Tránh đường lát đá khối";
 "routing_attr_avoid_sett_description" = "Tránh đường lát đá khối";
+
+"ios_release_5_5" = "• Định dạng tọa độ mới, bao gồm các hệ EPSG, bộ định vị Maidenhead và lưới Thụy Sĩ (Swiss Grid)\n
+• Bố cục widget riêng cho chế độ dọc và ngang, cùng với bảng trên và dưới kiểu Rộng hoặc Gọn\n
+• Tùy chỉnh giao diện bảng widget: kích thước widget, biểu tượng, màu chữ và màu nền\n
+• Cài đặt CarPlay mới cho hướng bản đồ và tốc độ khung hình\n
+• Truy cập Nhà chỉ với một lần chạm từ menu Chỉ đường trong CarPlay\n
+• Thêm cài đặt \"Giữ màn hình luôn bật\" cho từng hồ sơ\n
+• Nhãn đường đồng mức có thể hướng lên dốc, như trên bản đồ địa hình\n
+• Đầy đủ cài đặt giao diện khi chỉnh sửa nhiều mục Yêu thích cùng lúc\n
+• Đặt ngưỡng giới hạn tốc độ bằng thanh trượt\n
+• Tải thư viện hành trình lớn nhanh hơn, kèm chỉ báo tiến trình lập chỉ mục\n
+• Sửa lỗi dọn sạch thùng rác OsmAnd Cloud khôi phục bản đồ và mục Yêu thích đã xóa\n
+• Sửa lỗi độ cao giảm về 0 trong hành trình được ghi ở chế độ nền\n
+• Sửa xung đột đồng bộ OsmAnd Cloud sau khi cập nhật bản đồ trên nhiều thiết bị\n";

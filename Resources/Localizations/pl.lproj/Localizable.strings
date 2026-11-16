@@ -3588,3 +3588,17 @@
 "performance" = "Wydajność";
 
 "ios_release_5_4" = "• Odświeżono „Moje miejsca” — dodano podfoldery ulubionych, przypięte foldery i szybsze akcje\n• Przebudowano „Zaplanuj trasę” — dodawaj punkty trasy oraz POI i łącz różne typy tras\n• Nowa wtyczka Astronomia: mapa gwiazd ze szczegółową bazą danych dla każdego obiektu, wykresami widoczności i harmonogramem obserwacji\n• Dodano typ wizualizacji „Cienie terenu”\n• Dodano obsługę map zawierających wyłącznie drogi\n• Edycja palety kolorów dla śladów i terenu\n• Automatyczne porządkowanie śladów według roku, długości, aktywności i innych\n• Rozdzielanie wielośladowych plików GPX na osobne pliki podczas importu\n• Ustawianie domyślnego wyglądu dla folderów ze śladami\n• Dodano ustawienie szerokości roweru, aby unikać wąskich dróg rowerowych\n• Dodano widżet napięcia adaptera OBD-II\n• Dodano opcję „Wstrzymaj odtwarzany dźwięk”, aby wstrzymywać podcasty lub audiobooki podczas komunikatów nawigacyjnych\n• Pełny wybór ikon jest teraz dostępny dla profili\n• Poprawiono wydajność podczas zarządzania dużą liczbą ulubionych\n• Naprawiono błąd związany z okresem próbnym CarPlay";
+
+"ios_release_5_5" = "• Nowe formaty współrzędnych, w tym układy EPSG, lokator Maidenhead i siatka szwajcarska (Swiss Grid)\n
+• Osobne układy widżetów dla orientacji pionowej i poziomej oraz szerokie lub kompaktowe panele górny i dolny\n
+• Konfigurowalny wygląd paneli widżetów: rozmiar widżetów, ikony, kolory tekstu i tła\n
+• Nowe ustawienia CarPlay dla orientacji mapy i liczby klatek na sekundę\n
+• Dom dostępny jednym dotknięciem z menu Nawigacja w CarPlay\n
+• Dodano ustawienie „Pozostaw ekran włączony” dla każdego profilu\n
+• Etykiety poziomic mogą być skierowane pod górę, jak na mapach topograficznych\n
+• Pełne ustawienia wyglądu podczas edycji kilku ulubionych jednocześnie\n
+• Ustawianie tolerancji ograniczenia prędkości za pomocą suwaka\n
+• Szybsze wczytywanie dużych bibliotek śladów ze wskaźnikiem postępu indeksowania\n
+• Naprawiono przywracanie usuniętych map i ulubionych po opróżnieniu folderu Śmieci w OsmAnd Cloud\n
+• Naprawiono spadek wysokości do 0 w śladach nagrywanych w tle\n
+• Naprawiono konflikty synchronizacji OsmAnd Cloud po aktualizacji map na kilku urządzeniach\n";

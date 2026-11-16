@@ -86,7 +86,7 @@ final class FreeVersionMapDownloads: NSObject {
     func chooseFreeRegion(_ item: OAResourceSwiftItem) {
         lock.lock()
         defer { lock.unlock() }
-        if isFreeVersion, let region = getItemRegion(item) {
+        if isFreeVersion, let region = itemRegion(item) {
             storeFreeRegion(region)
         }
     }
@@ -98,7 +98,7 @@ final class FreeVersionMapDownloads: NSObject {
         guard paths.count == items.count else { return false }
         deletingMaps(items)
         undeletedPaths = undeletedPaths.merging(paths) { $1 }.filter { access($0.value, F_OK) == 0 || errno != ENOENT }
-        guard undeletedPaths.keys.allSatisfy({ getRegionByDownloadName(getDownloadName($0))?.regionId == regionId }) else { return false }
+        guard undeletedPaths.keys.allSatisfy({ regionByDownloadName(downloadName($0))?.regionId == regionId }) else { return false }
         edit { values in
             values[Self.regionKey] = regionId
             values[Self.replacesKey] = (values[Self.replacesKey] as? Int ?? 0) + 1
@@ -113,7 +113,7 @@ final class FreeVersionMapDownloads: NSObject {
         var freeItems: [OAResourceSwiftItem] = []
         var otherRegions: [OAWorldRegion] = []
         for item in items {
-            let region = getItemRegion(item)
+            let region = itemRegion(item)
             if freeRegion == nil {
                 freeRegion = region
             }
@@ -131,7 +131,7 @@ final class FreeVersionMapDownloads: NSObject {
         lock.lock()
         defer { lock.unlock() }
         guard isFreeVersion, isRegionsLoaded else { return true }
-        guard let region = getItemRegion(item), !item.isInstalled() else { return true }
+        guard let region = itemRegion(item), !item.isInstalled() else { return true }
         guard let freeRegion else {
             storeFreeRegion(region)
             return true
@@ -178,14 +178,14 @@ final class FreeVersionMapDownloads: NSObject {
     }
 
     func canInstallMap(_ resourceId: String) -> Bool {
-        guard isFreeVersion, replacesCount > 0, let region = getRegionByDownloadName(getDownloadName(resourceId)), let freeRegion else { return true }
+        guard isFreeVersion, replacesCount > 0, let region = regionByDownloadName(downloadName(resourceId)), let freeRegion else { return true }
         return region == freeRegion
     }
     
     func cancelDownloads(otherThan newRegion: OAWorldRegion) {
         let tasks = OsmAndApp.swiftInstance().downloadsManager.downloadTasks(withKeyPrefix: "resource:") as? [OADownloadTask] ?? []
         for task in tasks {
-            if let item = OAResourcesUISwiftHelper.getResourceFrom(task), let region = getItemRegion(item), region.regionId != newRegion.regionId {
+            if let item = OAResourcesUISwiftHelper.getResourceFrom(task), let region = itemRegion(item), region.regionId != newRegion.regionId {
                 task.cancel()
             }
         }
@@ -210,8 +210,8 @@ final class FreeVersionMapDownloads: NSObject {
         return email.caseInsensitiveCompare(json["email"] as? String ?? "") == .orderedSame
     }
     
-    private func getItemRegion(_ item: OAResourceSwiftItem) -> OAWorldRegion? {
-        isCountedInDownloads(item) ? getRegionByDownloadName(getDownloadName(item.resourceId())) : nil
+    private func itemRegion(_ item: OAResourceSwiftItem) -> OAWorldRegion? {
+        isCountedInDownloads(item) ? regionByDownloadName(downloadName(item.resourceId())) : nil
     }
     
     private func isCountedInDownloads(_ item: OAResourceSwiftItem) -> Bool {
@@ -219,17 +219,17 @@ final class FreeVersionMapDownloads: NSObject {
         return (type == .mapRegion || type == .roadMapRegion) && !item.isFree()
     }
     
-    private func getDownloadName(_ resourceId: String) -> String {
+    private func downloadName(_ resourceId: String) -> String {
         String(resourceId.prefix { $0 != "." })
     }
     
-    private func getRegionByDownloadName(_ downloadName: String) -> OAWorldRegion? {
+    private func regionByDownloadName(_ downloadName: String) -> OAWorldRegion? {
         guard !downloadName.isEmpty, let region = OsmAndApp.swiftInstance().worldRegion?.getDataByDownloadName(downloadName), !region.isInPurchasedArea() else { return nil }
-        return getFreeRegionOf(region)
+        return freeRegionOf(region)
     }
     
-    private func getFreeRegionOf(_ region: OAWorldRegion) -> OAWorldRegion? {
-        let country = getCountryRegion(region)
+    private func freeRegionOf(_ region: OAWorldRegion) -> OAWorldRegion? {
+        let country = countryRegion(region)
         if let country, Self.federations.contains(country.regionId), country != region {
             var state = region
             while let superregion = state.superregion, superregion != country {
@@ -241,7 +241,7 @@ final class FreeVersionMapDownloads: NSObject {
         return country
     }
     
-    private func getCountryRegion(_ region: OAWorldRegion) -> OAWorldRegion? {
+    private func countryRegion(_ region: OAWorldRegion) -> OAWorldRegion? {
         if region.isContinent() { return nil }
         var current = region
         while let parent = current.superregion {
@@ -257,7 +257,7 @@ final class FreeVersionMapDownloads: NSObject {
     private func collectLocalMaps(_ items: [OAResourceSwiftItem]) -> [OAWorldRegion: [OAResourceSwiftItem]] {
         var result: [OAWorldRegion: [OAResourceSwiftItem]] = [:]
         for item in items.sorted(by: { $0.resourceId() < $1.resourceId() }) {
-            if let region = getRegionByDownloadName(getDownloadName(item.resourceId())) {
+            if let region = regionByDownloadName(downloadName(item.resourceId())) {
                 result[region, default: []].append(item)
             }
         }
@@ -270,15 +270,15 @@ final class FreeVersionMapDownloads: NSObject {
         edit { $0[Self.migratedKey] = true }
         guard (preference(Self.regionKey) as? String ?? "").isEmpty else { return }
         let mapSizes = collectLocalMaps(items).mapValues { items in items.reduce(0) { $0 + $1.size() } }
-        if let region = getLocationRegion(Array(mapSizes.keys)) ?? mapSizes.max(by: { $0.value < $1.value })?.key {
+        if let region = locationRegion(Array(mapSizes.keys)) ?? mapSizes.max(by: { $0.value < $1.value })?.key {
             storeFreeRegion(region)
         }
     }
     
-    private func getLocationRegion(_ candidates: [OAWorldRegion]) -> OAWorldRegion? {
+    private func locationRegion(_ candidates: [OAWorldRegion]) -> OAWorldRegion? {
         guard let location = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, !candidates.isEmpty else { return nil }
         let regions = OsmAndApp.swiftInstance().worldRegion?.getWorldRegions(at: location.coordinate.latitude, longitude: location.coordinate.longitude) ?? []
-        return regions.lazy.compactMap { self.getFreeRegionOf($0) }.first { candidates.contains($0) }
+        return regions.lazy.compactMap { self.freeRegionOf($0) }.first { candidates.contains($0) }
     }
     
     private func storeFreeRegion(_ region: OAWorldRegion) {

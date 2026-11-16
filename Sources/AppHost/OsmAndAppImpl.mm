@@ -78,18 +78,15 @@
 #include <openingHoursParser.h>
 #include <OsmAndCore/Search/CommonWords.h>
 
-#define MILS_IN_DEGREE 17.777778f
+static const double VERSION_3_10 = 3.10;
+static const double VERSION_3_14 = 3.14;
+static const double VERSION_4_2 = 4.2;
+static const double VERSION_4_4_1 = 4.41;
+static const double VERSION_4_7_5 = 4.75;
+static const double VERSION_5_5 = 5.5;
 
-#define VERSION_3_10 3.10
-#define VERSION_3_14 3.14
-#define VERSION_4_2 4.2
-#define VERSION_4_4_1 4.41
-#define VERSION_4_7_4 4.74
-#define VERSION_4_7_5 4.75
-#define VERSION_5_5 5.5
-
-#define kAppData @"app_data"
-#define kBuildVersion @"buildVersion"
+static NSString * const kAppData = @"app_data";
+static NSString * const kBuildVersion = @"buildVersion";
 
 NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFinishedNotification";
 

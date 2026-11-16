@@ -334,6 +334,12 @@
     return nil;
 }
 
++ (BOOL)isFreeRepositoryResource:(NSString *)resourceId
+{
+    const auto resource = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+    return resource && resource->free;
+}
+
 + (NSArray<OAResourceSwiftItem *> *) getInstalledMapResources
 {
     NSMutableArray<OAResourceSwiftItem *> *swiftResources = [NSMutableArray array];
@@ -349,8 +355,7 @@
         if (localResource->type != OsmAndResourceType::MapRegion && localResource->type != OsmAndResourceType::RoadMapRegion)
             continue;
 
-        const auto repositoryResource = app.resourcesManager->getResourceInRepository(localResource->id);
-        if (repositoryResource && repositoryResource->free)
+        if ([self isFreeRepositoryResource:localResource->id.toNSString()])
             continue;
         
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];

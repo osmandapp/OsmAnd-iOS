@@ -48,6 +48,8 @@ final class FreeVersionMapDownloads: NSObject {
     private static let preferencesName = "net.osmand.free_region"
     private static let regionKey = "region"
     private static let replacesKey = "replaces"
+    private static let pendingRegionsKey = "pendingRegions"
+    private static let replacementPathsKey = "replacementPaths"
     private static let migratedKey = "migrated"
     private static let federations: Set<String> = ["northamerica_us", "northamerica_canada", "russia", "southamerica_brazil", "asia_india", "asia_china", "australia-oceania-all_australia-oceania"]
     private static let replaceURL = "https://osmand.net/api/replace-download-map"
@@ -72,7 +74,6 @@ final class FreeVersionMapDownloads: NSObject {
     private let lock = NSRecursiveLock()
     private var preferences: [String: Any]?
     private var canWritePreferences = true
-    private var undeletedPaths = [String: String]()
     private var isRegionsLoaded: Bool {
         OsmAndApp.swiftInstance().worldRegion != nil
     }
@@ -95,16 +96,35 @@ final class FreeVersionMapDownloads: NSObject {
         guard let regionId = region.regionId, let maps = collectMapsToDelete(region) else { return false }
         let items = maps.flatMap(\.items)
         let paths = OAObfFileList.pathsByResourceId(for: items.map { $0.resourceId() })
-        guard paths.count == items.count else { return false }
-        deletingMaps(items)
-        undeletedPaths = undeletedPaths.merging(paths) { $1 }.filter { access($0.value, F_OK) == 0 || errno != ENOENT }
-        guard undeletedPaths.keys.allSatisfy({ regionByDownloadName(downloadName($0))?.regionId == regionId }) else { return false }
-        edit { values in
-            values[Self.regionKey] = regionId
-            values[Self.replacesKey] = (values[Self.replacesKey] as? Int ?? 0) + 1
+        let documents = OsmAndApp.swiftInstance().documentsPath + "/"
+        guard paths.count == items.count, paths.values.allSatisfy({ $0.hasPrefix(documents) }) else { return false }
+        var tracked = [String: String]()
+        let prepared = edit(requiresPersistence: true) { values in
+            tracked = values[Self.replacementPathsKey] as? [String: String] ?? [:]
+            for (id, path) in paths {
+                tracked[id] = String(path.dropFirst(documents.count))
+            }
+            values[Self.replacementPathsKey] = tracked
+            values[Self.pendingRegionsKey] = [values[Self.regionKey] as? String ?? "", regionId]
         }
 
-        return true
+        guard prepared else { return false }
+        deletingMaps(items)
+        let remaining = tracked.filter { id, path in
+            guard access(documents + path, F_OK) == 0 || errno != ENOENT else { return false }
+            let mapRegion = OsmAndApp.swiftInstance().worldRegion?.getDataByDownloadName(downloadName(id))
+            return mapRegion?.isInPurchasedArea() != true && !OAResourcesUISwiftHelper.isFreeRepositoryResource(id)
+        }
+
+        guard remaining.keys.allSatisfy({ regionByDownloadName(downloadName($0))?.regionId == regionId }) else { return false }
+        return edit(requiresPersistence: true) { values in
+            if values[Self.regionKey] as? String != regionId {
+                values[Self.regionKey] = regionId
+                values[Self.replacesKey] = (values[Self.replacesKey] as? Int ?? 0) + 1
+            }
+            values.removeValue(forKey: Self.pendingRegionsKey)
+            values[Self.replacementPathsKey] = remaining.isEmpty ? nil : remaining
+        }
     }
     
     func check(_ items: [OAResourceSwiftItem]) -> FreeRegionCheck {
@@ -141,6 +161,12 @@ final class FreeVersionMapDownloads: NSObject {
     }
     
     func requestReplace(from: OAWorldRegion, to: OAWorldRegion, onAnswer: @escaping (ReplaceAnswer?) -> Void) {
+        if let fromId = from.regionId, let toId = to.regionId,
+           preference(Self.pendingRegionsKey) as? [String] == [fromId, toId] {
+            DispatchQueue.main.async { onAnswer(.ok) }
+            return
+        }
+
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
         var params: [String: String] = ["os": "ios", "package": Bundle.main.bundleIdentifier ?? "", "version": OAAppVersion.getVersion(), "lang": app.getLanguageCode(), "nd": String(app.getAppInstalledDays()), "ns": String(app.getAppExecCount())]
         if let aid = app.getUserIosId(), !aid.isEmpty {
@@ -290,7 +316,7 @@ final class FreeVersionMapDownloads: NSObject {
         if let preferences { return preferences }
         var values: [String: Any] = [:]
         let url = preferencesURL
-        if FileManager.default.fileExists(atPath: url.path) {
+        if access(url.path, F_OK) == 0 || errno != ENOENT {
             do {
                 let data = try Data(contentsOf: url)
                 guard let loadedValues = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
@@ -313,22 +339,34 @@ final class FreeVersionMapDownloads: NSObject {
         return loadPreferences()[key]
     }
     
-    private func edit(_ change: (inout [String: Any]) -> Void) {
+    @discardableResult private func edit(requiresPersistence: Bool = false, _ change: (inout [String: Any]) -> Void) -> Bool {
         lock.lock()
         defer { lock.unlock() }
         var values = loadPreferences()
         change(&values)
-        preferences = values
-        guard canWritePreferences else { return }
+        if !requiresPersistence {
+            preferences = values
+        }
+
+        guard canWritePreferences else { return false }
         var url = preferencesURL
         do {
             let data = try PropertyListSerialization.data(fromPropertyList: values, format: .xml, options: 0)
             try data.write(to: url, options: .atomic)
-            var resourceValues = URLResourceValues()
-            resourceValues.isExcludedFromBackup = true
-            try url.setResourceValues(resourceValues)
         } catch {
             NSLog("Failed to save the free region: %@", error.localizedDescription)
+            return false
         }
+
+        preferences = values
+        var resourceValues = URLResourceValues()
+        resourceValues.isExcludedFromBackup = true
+        do {
+            try url.setResourceValues(resourceValues)
+        } catch {
+            NSLog("Failed to exclude free region preferences from backup: %@", error.localizedDescription)
+        }
+
+        return true
     }
 }

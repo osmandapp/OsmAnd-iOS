@@ -42,7 +42,8 @@
 - (BOOL)deleteWpt:(OASWptPt *)wpt;
 - (BOOL)deleteWpts:(NSArray<OASWptPt *> *)waypoints;
 - (void)deleteAllWpts;
-- (void)saveWpt:(OASWptPt *)wpt;
+- (BOOL)saveWpt:(OASWptPt *)wpt;
+- (void)saveWpts:(NSArray<OASWptPt *> *)waypoints completion:(void (^)(BOOL saved))completion;
 - (BOOL)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
 - (BOOL)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation removingPoint:(OASWptPt *)removedPoint;
 

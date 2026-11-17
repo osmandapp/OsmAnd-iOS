@@ -1287,6 +1287,7 @@
     }
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
+    NSMutableArray<OASWptPt *> *changedRecordingPoints = [NSMutableArray array];
     NSMutableArray<OAGpxWptItem *> *waypoints = _waypointGroups[groupName];
     for (OAGpxWptItem *waypoint in waypoints)
     {
@@ -1306,7 +1307,7 @@
         {
             OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
             [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[waypoint.point getColor]]];
-            [self.savingHelper saveWpt:waypoint.point];
+            [changedRecordingPoints addObject:waypoint.point];
         }
     }
 
@@ -1327,7 +1328,7 @@
                     {
                         OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
                         [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[existWaypoint.point getColor]]];
-                        [self.savingHelper saveWpt:existWaypoint.point];
+                        [changedRecordingPoints addObject:existWaypoint.point];
                     }
                     else
                     {
@@ -1366,10 +1367,15 @@
     }
     else
     {
-        __weak __typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
-        });
+        OAMapViewController *mapViewController = self.mapViewController;
+        [self.savingHelper saveWpts:changedRecordingPoints completion:^(BOOL saved) {
+            if (!saved)
+            {
+                NSLog(@"Failed to save recording waypoint group");
+                return;
+            }
+            [mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
+        }];
     }
 
     if (newGroupName)

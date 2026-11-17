@@ -3842,7 +3842,7 @@ static char kMapSourceUpdateQueueKey;
     return NO;
 }
 
-- (BOOL) saveFoundWpt
+- (BOOL)saveFoundWpt
 {
     if (!self.foundWpt)
         return NO;
@@ -3850,7 +3850,8 @@ static char kMapSourceUpdateQueueKey;
     if (!self.foundWptDocPath)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-        [helper saveWpt:self.foundWpt];
+        if (![helper saveWpt:self.foundWpt])
+            return NO;
 
         // update map
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -3902,9 +3903,11 @@ static char kMapSourceUpdateQueueKey;
     return NO;
 }
 
-- (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName
+- (BOOL)addNewWpt:(OASWptPt *)wpt gpxFileName:(NSString *)gpxFileName
 {
-    if (!gpxFileName)
+    if (!wpt)
+        return NO;
+    if (gpxFileName.length == 0)
     {
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         [helper addWpt:wpt];
@@ -3927,87 +3930,22 @@ static char kMapSourceUpdateQueueKey;
 
         return YES;
     }
-    else
+
+    OAGpxWptItem *item = [OAGpxWptItem withGpxWpt:[[OASWptPt alloc] initWithWptPt:wpt]];
+    NSString *path = [OAUtilities absoluteGpxPathForPath:gpxFileName];
+    if (![self applyWaypointChanges:@[] deletingItems:@[] addingItems:@[item] docPath:path updateMap:YES])
+        return NO;
+
+    self.foundWpt = item.point;
+    self.foundWptDocPath = path;
+    NSMutableSet<NSString *> *groups = [NSMutableSet set];
+    for (OASWptPt *point in item.gpxFile.getPointsList)
     {
-        NSDictionary<NSString *, OASGpxFile *> *activeGpx = _selectedGpxHelper.activeGpx;
-        for (NSString *key in activeGpx) {
-            OASGpxFile *value = activeGpx[key];
-
-            if (value == nil)
-            {
-                continue;
-            }
-
-            NSString *path = key;
-            if ([path isEqualToString:gpxFileName])
-            {
-                OASGpxFile *gpxFile = value;
-                
-                OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
-                [gpxFile addPointPoint:w];
-                
-                OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-                [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
-                
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-
-                self.foundWpt = w;
-                self.foundWptDocPath = gpxFileName;
-                
-                NSMutableSet *groups = [NSMutableSet set];
-                for (OASWptPt *loc in gpxFile.getPointsList)
-                {
-                    if (loc.category != nil)
-                    {
-                        [groups addObject:loc.category];
-                    }
-                }
-                
-                self.foundWptGroups = [groups allObjects];
-
-                // update map
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [_mapLayers.gpxMapLayer refreshGpxWaypoints];
-                });
-                
-                return YES;
-            }
-        }
-        
-        if ([_gpxFilePathTemp isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
-            
-            OASWptPt *w = wpt ? [[OASWptPt alloc] initWithWptPt:wpt] : [[OASWptPt alloc] init];
-            [gpxFile addPointPoint:w];
-
-            OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
-            [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
-            
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-            [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-            
-            self.foundWpt = w;
-            self.foundWptDocPath = gpxFileName;
-            NSMutableSet *groups = [NSMutableSet set];
-            for (OASWptPt *loc in gpxFile.getPointsList)
-            {
-                if (loc.category != nil)
-                {
-                    [groups addObject:loc.category];
-                }
-            }
-            
-            self.foundWptGroups = [groups allObjects];
-            
-            return YES;
-        }
+        if (point.category != nil)
+            [groups addObject:point.category];
     }
-    
-    return NO;
+    self.foundWptGroups = groups.allObjects;
+    return YES;
 }
 
 - (NSArray<OASWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
@@ -4147,12 +4085,12 @@ static char kMapSourceUpdateQueueKey;
 
 - (BOOL)updateWpts:(NSArray<OAGpxWptItem *> *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
-    return [self applyWaypointChanges:items deletingItems:@[] docPath:docPath updateMap:updateMap];
+    return [self applyWaypointChanges:items deletingItems:@[] addingItems:@[] docPath:docPath updateMap:updateMap];
 }
 
 - (BOOL)deleteWpts:(NSArray<OAGpxWptItem *> *)items docPath:(NSString *)docPath
 {
-    return [self applyWaypointChanges:@[] deletingItems:items docPath:docPath updateMap:YES];
+    return [self applyWaypointChanges:@[] deletingItems:items addingItems:@[] docPath:docPath updateMap:YES];
 }
 
 - (BOOL)replaceWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
@@ -4176,7 +4114,7 @@ static char kMapSourceUpdateQueueKey;
             [_mapLayers.gpxRecMapLayer refreshGpxWaypoints];
         });
     }
-    else if (![self applyWaypointChanges:@[replacement] deletingItems:removingPoint ? @[item] : @[]
+    else if (![self applyWaypointChanges:@[replacement] deletingItems:removingPoint ? @[item] : @[] addingItems:@[]
                                 docPath:item.docPath updateMap:YES])
     {
         return NO;
@@ -4189,14 +4127,16 @@ static char kMapSourceUpdateQueueKey;
     return YES;
 }
 
-- (BOOL)applyWaypointChanges:(NSArray<OAGpxWptItem *> *)items deletingItems:(NSArray<OAGpxWptItem *> *)deletedItems docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (BOOL)applyWaypointChanges:(NSArray<OAGpxWptItem *> *)items deletingItems:(NSArray<OAGpxWptItem *> *)deletedItems addingItems:(NSArray<OAGpxWptItem *> *)addedItems docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
-    if (items.count == 0 && deletedItems.count == 0)
+    if (items.count == 0 && deletedItems.count == 0 && addedItems.count == 0)
         return NO;
 
     OAGPXAppearanceCollection *appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     if (docPath.length == 0)
     {
+        if (addedItems.count > 0)
+            return NO;
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         if (deletedItems.count > 0)
         {
@@ -4212,7 +4152,8 @@ static char kMapSourceUpdateQueueKey;
         }
         for (OAGpxWptItem *item in items)
         {
-            [helper saveWpt:item.point];
+            if (![helper saveWpt:item.point])
+                return NO;
             [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
         }
         if (updateMap)
@@ -4273,6 +4214,13 @@ static char kMapSourceUpdateQueueKey;
             [removedCopies addObject:[copies objectForKey:point]];
         [self removeStoredWaypoints:removedCopies inGpxFile:gpxFile];
     }
+    for (OAGpxWptItem *item in addedItems)
+    {
+        OASWptPt *copy = [[OASWptPt alloc] initWithWptPt:item.point];
+        copy.extensionsWriters = item.point.extensionsWriters
+            ? [OASMutableDictionary dictionaryWithDictionary:item.point.extensionsWriters] : nil;
+        [gpxFile addPointPoint:copy];
+    }
     gpxFile.author = [OAAppVersion getFullVersionWithAppName];
     BOOL saved = [self writeWaypointGpxFile:gpxFile atPath:path];
 
@@ -4314,6 +4262,13 @@ static char kMapSourceUpdateQueueKey;
             [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
         }
     }];
+
+    for (OAGpxWptItem *item in addedItems)
+    {
+        [gpxFile addPointPoint:item.point];
+        item.gpxFile = gpxFile;
+        [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:item.point.getColor]];
+    }
 
     [self syncWaypointGpxFile:gpxFile atPath:path updateMap:updateMap];
     return YES;

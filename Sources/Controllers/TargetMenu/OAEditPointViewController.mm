@@ -1156,6 +1156,12 @@
 
     _isUnsaved = YES;
     _renamedPointAlertMessage = nil;
+    if (_editPointType == EOAEditPointTypeWaypoint)
+    {
+        // Match Android: Save closes the waypoint editor even when persistence fails.
+        _isUnsaved = NO;
+        [self dismissViewController];
+    }
     return NO;
 }
 

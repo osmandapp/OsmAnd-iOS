@@ -1145,48 +1145,6 @@ static const NSInteger kDBVersion = 1;
     return YES;
 }
 
-- (void) doUpdatePointsLat:(double)lat
-                       lon:(double)lon
-                      time:(long)time
-                      desc:(NSString *)desc
-                      name:(NSString *)name
-                     color:(NSString *)color
-                     group:(NSString *)group
-                      icon:(NSString *)icon
-                background:(NSString *)background
-{
-    dispatch_async(dbQueue, ^{
-        sqlite3_stmt    *statement;
-        
-        const char *dbpath = [databasePath UTF8String];
-        
-        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
-        {
-            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=?, %@=?, %@=?, %@=?, %@=? WHERE %@=? AND %@=? AND %@=%ld", POINT_NAME, POINT_COL_DESCRIPTION, POINT_COL_NAME, POINT_COL_COLOR, POINT_COL_CATEGORY, POINT_COL_ICON, POINT_COL_BACKGROUND, POINT_COL_LAT, POINT_COL_LON, POINT_COL_DATE, time];
-            
-            const char *update_stmt = [query UTF8String];
-            
-            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_text(statement, 1, [desc UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 2, [name UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 3, [color UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 4, [group UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 5, [icon UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 6, [background UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_double(statement, 7, lat);
-            sqlite3_bind_double(statement, 8, lon);
-            
-            int res = sqlite3_step(statement);
-            if (res != SQLITE_OK && res != SQLITE_DONE)
-                NSLog(@"doUpdatePointsLat failed: sqlite3_step=%d", res);
-            
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(tracksDB);
-        }
-    });
-}
-
 - (void)doDeleteAllPoints
 {
     dispatch_async(dbQueue, ^{
@@ -1300,17 +1258,73 @@ static const NSInteger kDBVersion = 1;
     [self doDeleteAllPoints];
 }
 
-- (void)saveWpt:(OASWptPt *)wpt
+- (BOOL)saveWpt:(OASWptPt *)wpt
 {
-    [self doUpdatePointsLat:wpt.lat
-                        lon:wpt.lon
-                       time:wpt.time
-                       desc:wpt.desc
-                       name:wpt.name
-                      color:UIColorFromARGB([wpt getColor]).toHexARGBString
-                      group:wpt.category
-                       icon:[wpt getIconName]
-                 background:[wpt getBackgroundType]];
+    if (!wpt || [_currentTrack.getPointsList indexOfObjectIdenticalTo:wpt] == NSNotFound)
+        return NO;
+
+    __block BOOL saved = NO;
+    dispatch_sync(dbQueue, ^{
+        saved = [self writeWaypoints:@[wpt] values:@[wpt]];
+    });
+    return saved;
+}
+
+- (void)saveWpts:(NSArray<OASWptPt *> *)waypoints completion:(void (^)(BOOL saved))completion
+{
+    // Keep queued edits independent of subsequent changes to the live waypoints.
+    NSArray<OASWptPt *> *points = [waypoints copy];
+    NSMutableArray<OASWptPt *> *values = [NSMutableArray arrayWithCapacity:points.count];
+    for (OASWptPt *point in points)
+        [values addObject:[[OASWptPt alloc] initWithWptPt:point]];
+
+    dispatch_async(dbQueue, ^{
+        BOOL saved = [self writeWaypoints:points values:values];
+        if (completion)
+            dispatch_async(dispatch_get_main_queue(), ^{ completion(saved); });
+    });
+}
+
+// Called on dbQueue; row identities and the entire batch share one transaction.
+- (BOOL)writeWaypoints:(NSArray<OASWptPt *> *)waypoints values:(NSArray<OASWptPt *> *)values
+{
+    if (waypoints.count == 0)
+        return YES;
+
+    BOOL saved = sqlite3_open(databasePath.UTF8String, &tracksDB) == SQLITE_OK
+        && sqlite3_exec(tracksDB, "BEGIN IMMEDIATE", NULL, NULL, NULL) == SQLITE_OK;
+    sqlite3_stmt *statement = NULL;
+    NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=?, %@=?, %@=?, %@=?, %@=? WHERE rowid=?",
+                       POINT_NAME, POINT_COL_DESCRIPTION, POINT_COL_NAME, POINT_COL_COLOR, POINT_COL_CATEGORY, POINT_COL_ICON, POINT_COL_BACKGROUND];
+    if (saved)
+        saved = sqlite3_prepare_v2(tracksDB, query.UTF8String, -1, &statement, NULL) == SQLITE_OK;
+    for (NSUInteger i = 0; saved && i < waypoints.count; i++)
+    {
+        NSNumber *rowId = [_waypointRowIds objectForKey:waypoints[i]];
+        if (!rowId)
+        {
+            saved = NO;
+            break;
+        }
+        OASWptPt *wpt = values[i];
+        sqlite3_reset(statement);
+        sqlite3_clear_bindings(statement);
+        saved = sqlite3_bind_text(statement, 1, wpt.desc.UTF8String, -1, SQLITE_TRANSIENT) == SQLITE_OK
+            && sqlite3_bind_text(statement, 2, wpt.name.UTF8String, -1, SQLITE_TRANSIENT) == SQLITE_OK
+            && sqlite3_bind_text(statement, 3, UIColorFromARGB(wpt.getColor).toHexARGBString.UTF8String, -1, SQLITE_TRANSIENT) == SQLITE_OK
+            && sqlite3_bind_text(statement, 4, wpt.category.UTF8String, -1, SQLITE_TRANSIENT) == SQLITE_OK
+            && sqlite3_bind_text(statement, 5, wpt.getIconName.UTF8String, -1, SQLITE_TRANSIENT) == SQLITE_OK
+            && sqlite3_bind_text(statement, 6, wpt.getBackgroundType.UTF8String, -1, SQLITE_TRANSIENT) == SQLITE_OK
+            && sqlite3_bind_int64(statement, 7, rowId.longLongValue) == SQLITE_OK
+            && sqlite3_step(statement) == SQLITE_DONE && sqlite3_changes(tracksDB) == 1;
+    }
+    sqlite3_finalize(statement);
+    if (saved)
+        saved = sqlite3_exec(tracksDB, "COMMIT", NULL, NULL, NULL) == SQLITE_OK;
+    if (!saved)
+        sqlite3_exec(tracksDB, "ROLLBACK", NULL, NULL, NULL);
+    sqlite3_close(tracksDB);
+    return saved;
 }
 
 - (void) loadGpxFromDatabase

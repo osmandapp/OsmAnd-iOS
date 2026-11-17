@@ -6945,8 +6945,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         _searchHistory = [[[OACommonBoolean withKey:searchHistoryKey defValue:YES] makeGlobal] makeShared];
         _navigationHistory = [[[OACommonBoolean withKey:navigationHistoryKey defValue:YES] makeGlobal] makeShared];
         _mapMarkersHistory = [[[OACommonBoolean withKey:mapMarkersHistoryKey defValue:YES] makeGlobal] makeShared];
-        _exploreNearbyItemsCollapsed = [[OACommonBoolean withKey:@"exploreNearbyItemsCollapsed" defValue:YES] makeGlobal];
-        _exploreHistoryCollapsed = [[OACommonBoolean withKey:@"exploreHistoryCollapsed" defValue:YES] makeGlobal];
+        _exploreNearbyItemsCollapsed = [[OACommonBoolean withKey:@"exploreNearbyItemsCollapsed" defValue:NO] makeGlobal];
+        _exploreHistoryCollapsed = [[OACommonBoolean withKey:@"exploreHistoryCollapsed" defValue:NO] makeGlobal];
 
         [_globalPreferences setObject:_numberOfStartsFirstXmasShown forKey:@"number_of_starts_first_xmas_shown"];
         [_globalPreferences setObject:_lastFavCategoryEntered forKey:@"last_fav_category"];

@@ -50,6 +50,7 @@
 #import "OAWeatherHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAObservable.h"
+#import "OAIAPHelper.h"
 #import "OsmAndSharedWrapper.h"
 
 #define kWidgetsTopPadding 10.0
@@ -91,6 +92,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
+    BOOL _customWidgetBackgroundAvailable;
     BOOL _updateInfoPending;
 
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
@@ -209,6 +211,16 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
         _themeId = -1;
+        _customWidgetBackgroundAvailable = [WidgetPanelAppearanceResolver isCustomBackgroundAvailable];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onProductPurchased:)
+                                                     name:OAIAPProductPurchasedNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onProductsRestored:)
+                                                     name:OAIAPProductsRestoredNotification
+                                                   object:nil];
 
         [self registerAllControls];
         [self recreateControls];
@@ -233,6 +245,29 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
     }
     return self;
+}
+
+- (void)onProductPurchased:(NSNotification *)notification
+{
+    [self refreshPurchaseAppearance];
+}
+
+- (void)onProductsRestored:(NSNotification *)notification
+{
+    [self refreshPurchaseAppearance];
+}
+
+- (void)refreshPurchaseAppearance
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL available = [WidgetPanelAppearanceResolver isCustomBackgroundAvailable];
+        if (_customWidgetBackgroundAvailable != available)
+        {
+            _customWidgetBackgroundAvailable = available;
+            _themeId = -1;
+            [self updateColorShadowsOfText];
+        }
+    });
 }
 
 - (void) updateRuler {

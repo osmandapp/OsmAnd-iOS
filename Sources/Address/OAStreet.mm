@@ -9,6 +9,7 @@
 #import "OAStreet.h"
 #import "OACity.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAndSharedWrapper.h"
 
 @interface OAStreet ()
 
@@ -43,9 +44,25 @@
     return self;
 }
 
+- (instancetype)initWithSharedStreet:(OASStreet *)street
+{
+    self = [super initWithSharedAddress:street type:ADDRESS_TYPE_STREET];
+    if (self)
+    {
+        _sharedStreet = street;
+    }
+    return self;
+}
+
 - (OACity *) city
 {
-    if (!_city && self.street->streetGroup)
+    if (!_city && _sharedStreet)
+    {
+        OASCity *city = [_sharedStreet getCity];
+        if (city)
+            _city = [[OACity alloc] initWithSharedCity:city];
+    }
+    else if (!_city && self.street->streetGroup)
     {
         _city = [[OACity alloc] initWithCity:self.street->streetGroup];
     }

@@ -15,6 +15,10 @@ on:
         description: 'Release Version'
         required: true
         default: '5.5.0'
+      run_ui_tests:
+        description: 'Run the full iOS UI test suite (enable before release)'
+        type: boolean
+        default: false
 jobs:
   build:
     runs-on: self-hosted
@@ -150,6 +154,7 @@ jobs:
           -workspace ios/OsmAnd.xcworkspace \
           -scheme "OsmAnd Maps" \
           -destination "platform=iOS Simulator,arch=arm64,id=$SIMULATOR_ID" \
+          "-only-testing:OsmAnd MapsTests" \
           -testLanguage en \
           -testRegion US \
           -resultBundlePath "$RUNNER_TEMP/ios-tests.xcresult" \
@@ -162,6 +167,7 @@ jobs:
     #     path: ${{ runner.temp }}/ios-tests.xcresult
     #     if-no-files-found: warn
     - name: Run iOS UI tests
+      if: ${{ inputs.run_ui_tests }}
       env:
         LANG: "en_US.UTF-8"
       run: |

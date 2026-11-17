@@ -112,7 +112,8 @@ static const NSInteger kOrderInternalRow = 0;
 static const NSInteger kOrderTitleRow = 0;
 static const NSInteger kOrderDateRow = 3;
 static const NSInteger kOrderCoommentRow = 4;
-static const NSInteger kOrderNearestRow = 1000;
+static const NSInteger kOrderNearestWikiRow = 1000;
+static const NSInteger kOrderNearestPoiRow = 1001;
 static const NSInteger kOrderNamesRow = 18000;
 static const NSInteger kOrderOsmRow = 19000;
 static const NSInteger kOrderCoordinatesRow = 20000;
@@ -141,6 +142,9 @@ static const NSInteger kOrderCoordinatesRow = 20000;
     BOOL _otherCardsReady;
     BOOL _wikiCardsRequestFailed;
     BOOL _cmPlaceRequestFailed;
+    NSUInteger _imagesLoadGeneration;
+    MapillaryAmenityImageCard *_mapillaryAmenityCard;
+    NSMutableArray<AbstractCard *> *_otherCards;
     BOOL _isFetchingNearestPoi;
     BOOL _isFetchingNearestWiki;
 }
@@ -634,13 +638,13 @@ static const NSInteger kOrderCoordinatesRow = 20000;
          textColor:nil
             isText:NO
          needLinks:NO
-             order:kOrderNearestRow
+             order:kOrderNearestPoiRow
           typeName:@""
      isPhoneNumber:NO
              isUrl:NO];
 
     rowInfo.collapsed = YES;
-    rowInfo.order = kOrderNearestRow;
+    rowInfo.order = kOrderNearestPoiRow;
 
     OACollapsableNearestPoiWikiView *view =
         [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -676,13 +680,13 @@ static const NSInteger kOrderCoordinatesRow = 20000;
          textColor:nil
             isText:NO
          needLinks:NO
-             order:kOrderNearestRow
+             order:kOrderNearestWikiRow
           typeName:@""
      isPhoneNumber:NO
              isUrl:NO];
 
     rowInfo.collapsed = YES;
-    rowInfo.order = kOrderNearestRow;
+    rowInfo.order = kOrderNearestWikiRow;
 
     OACollapsableNearestPoiWikiView *view =
         [[OACollapsableNearestPoiWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
@@ -808,6 +812,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         CGFloat rowHeight;
         if ([row.typeName isEqualToString:kCollapseDetailsRowType])
             continue;
+
         if (row.isHtml)
         {
             rowHeight = 230.0;
@@ -1095,9 +1100,31 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         openPlaceReviewsTagContent = @(poi.obfId >> 1).stringValue;
     }
     
-    NSDictionary<NSString *, NSString *> *extensions = [self additionalCardParams];
+    NSMutableDictionary<NSString *, NSString *> *extensions = [[self additionalCardParams] mutableCopy];
+    [extensions removeObjectForKey:MAPILLARY_TAG];
     _otherCardsReady = NO;
     [self addOtherCards:extensions cards:cards rowInfo:_onlinePhotoCardsRowInfo onFailureNoCache:onFailureNoCache];
+}
+
+- (void)loadMapillaryAmenityCard
+{
+    NSString *mapillaryKey = [self additionalCardParams][MAPILLARY_TAG];
+    if (!_onlinePhotoCardsRowInfo || mapillaryKey.length == 0)
+        return;
+
+    NSUInteger loadGeneration = _imagesLoadGeneration;
+    __weak __typeof(self) weakSelf = self;
+    [OAMapillaryOsmTagHelper downloadImageByKey:mapillaryKey
+                                        session:[self onlineAndMapillarySession]
+                               onDataDownloaded:^(NSDictionary *result) {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf || !result || loadGeneration != strongSelf->_imagesLoadGeneration)
+            return;
+
+        strongSelf->_mapillaryAmenityCard = [[MapillaryAmenityImageCard alloc] initWithData:result];
+        if (strongSelf->_otherCardsReady || strongSelf->_cmPlaceRequestFailed)
+            [strongSelf onOtherCardsReady:strongSelf->_otherCards ?: [NSMutableArray array] rowInfo:strongSelf->_onlinePhotoCardsRowInfo];
+    }];
 }
 
 - (NSDictionary<NSString *, NSString *> *)additionalCardParams
@@ -1321,6 +1348,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                 rowInfo:(OAAmenityInfoRow *)nearbyImagesRowInfo
 {
     _otherCardsReady = YES;
+    _otherCards = cards;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateDisplayingCards:cards];
     });
@@ -1358,6 +1386,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 {
     if (_otherCardsReady && (_wikiCardsReady || _wikiCardsRequestFailed))
     {
+        if (_mapillaryAmenityCard && ![cards containsObject:_mapillaryAmenityCard])
+            [cards addObject:_mapillaryAmenityCard];
+
         CardsFilter *filter = [[CardsFilter alloc] initWithCards:cards];
         
         if (cards.count > 1)
@@ -1392,9 +1423,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     NSMutableArray *wikimediaCards = [NSMutableArray new];
     NSMutableArray *mapilaryCards = [NSMutableArray new];
     MapillaryContributeCard *mapilaryContributeCard = nil;
+    MapillaryAmenityImageCard *mapillaryAmenityCard = nil;
 
     for (AbstractCard *card in cards) {
-        if ([card isKindOfClass:WikiImageCard.class])
+        if ([card isKindOfClass:MapillaryAmenityImageCard.class])
+            mapillaryAmenityCard = (MapillaryAmenityImageCard *)card;
+        else if ([card isKindOfClass:WikiImageCard.class])
             [wikimediaCards addObject:card];
         else if ([card isKindOfClass:MapillaryImageCard.class])
             [mapilaryCards addObject:card];
@@ -1405,6 +1439,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     }
 
     NSMutableArray *orderedCards = [NSMutableArray array];
+    if (mapillaryAmenityCard)
+        [orderedCards addObject:mapillaryAmenityCard];
     [orderedCards addObjectsFromArray:wikimediaCards];
     [orderedCards addObjectsFromArray:mapilaryCards];
     [orderedCards addObjectsFromArray:openPlaceCards];
@@ -1622,7 +1658,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             cell.titleLabel.text = OALocalizedString(@"shared_string_details").upperCase;
         return cell;
     }
-    else if ([info.typeName isEqualToString:kDescriptionRowType])
+    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionRowType])
     {
         OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -1633,6 +1669,10 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             [cell leftIconVisibility:NO];
             [cell clearButtonVisibility:NO];
         }
+        BOOL isShortDescription = [info.typeName isEqualToString:kShortDescriptionRowType];
+        cell.textView.textContainer.maximumNumberOfLines = isShortDescription ? 10 : 0;
+        cell.textView.textContainer.lineBreakMode = isShortDescription ? NSLineBreakByTruncatingTail : NSLineBreakByWordWrapping;
+        [cell setCustomLeftSeparatorInset:YES];
         NSString *label = info.text;
         if (label.length == 0)
         {
@@ -1645,6 +1685,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
             cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.textView.text = label;
+            if (isShortDescription)
+                return cell;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
             CGFloat h = MIN(188.0, s.height + 10.0);
@@ -1653,7 +1695,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         }
         return cell;
     }
-    else if ([info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionTravelRowType])
+    else if ([info.typeName isEqualToString:kShortDescriptionTravelRowType])
     {
         OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -1677,6 +1719,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             h = MAX(48.0, h);
             info.height = h;
         }
+        cell.textView.textContainer.maximumNumberOfLines = 0;
+        cell.textView.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
+        [cell setCustomLeftSeparatorInset:NO];
         return cell;
     } else if ([info.typeName isEqualToString:kShortDescriptionWikiRowType])
     {
@@ -1859,6 +1904,29 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAAmenityInfoRow *info = _rows[indexPath.row];
+    BOOL isShortDescription = [info.typeName isEqualToString:kShortDescriptionRowType];
+    if (!isShortDescription && ![info.typeName isEqualToString:kDescriptionRowType])
+        return;
+    
+    CGFloat textLeading = ([cell isDirectionRTL] ? CGRectGetWidth(cell.bounds) - CGRectGetMaxX(cell.contentView.frame) : CGRectGetMinX(cell.contentView.frame)) + cell.contentView.directionalLayoutMargins.leading;
+    cell.separatorInset = UIEdgeInsetsMake(0., MIN(tableView.separatorInset.left, textLeading), 0., 0.);
+    if (!isShortDescription)
+        return;
+    
+    CGFloat height = ceil(cell.bounds.size.height);
+    if (info.height == height)
+        return;
+    
+    info.height = height;
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.delegate contentHeightChanged];
+    });
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0.01;
@@ -1872,6 +1940,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAAmenityInfoRow *info = _rows[indexPath.row];
+    if ([info.typeName isEqualToString:kShortDescriptionRowType])
+        return UITableViewAutomaticDimension;
+
     [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
     return [self heightForInfoRow:info];
 }
@@ -1881,6 +1952,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     OAAmenityInfoRow *info = _rows[indexPath.row];
     if (info.collapsable)
         [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+
     return info.height;
 }
 
@@ -2006,7 +2078,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kCommentRowType])
+    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kShortDescriptionRowType] || [info.typeName isEqualToString:kCommentRowType])
     {
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
@@ -2084,6 +2156,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     _wikiCardsReady = NO;
     _wikiCardsRequestFailed = NO;
     _cmPlaceRequestFailed = NO;
+    _imagesLoadGeneration++;
+    _mapillaryAmenityCard = nil;
+    _otherCards = nil;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
     CollapsableCardsView *mapillaryCardsView;
     if (_mapillaryCardsRowInfo)
@@ -2105,6 +2180,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             return;
 
         strongSelf->_cmPlaceRequestFailed = YES;
+        if (strongSelf->_mapillaryAmenityCard)
+        {
+            [strongSelf onOtherCardsReady:[NSMutableArray array] rowInfo:strongSelf->_onlinePhotoCardsRowInfo];
+            return;
+        }
+
         NoInternetCard *noInternetCard = [strongSelf createOnlinePhotosNoInternetCard];
         [onlinePhotoCardsView setCards:@[noInternetCard]];
         onlinePhotoCardsView.isLoading = NO;
@@ -2116,6 +2197,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     };
     
     mapillaryCardsView.isLoading = YES;
+    [self loadMapillaryAmenityCard];
     [[OAWikiImageHelper sharedInstance] sendNearbyWikiImagesRequest:_onlinePhotoCardsRowInfo targetObj:self.getTargetObj session:[self onlineAndMapillarySession] addOtherImagesOnComplete:^(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)

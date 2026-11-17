@@ -348,7 +348,7 @@ static const float LOCATION_TIMEOUT = 1.5;
     OAApplicationMode *appMode = [[OARoutingHelper sharedInstance] getAppMode];
     if ([appMode isDerivedRoutingFrom:OAApplicationMode.PEDESTRIAN])
     {
-        float pedestrianSpeed = [appMode getDefaultSpeed];
+        float pedestrianSpeed = [appMode defaultSpeed];
         if (pedestrianSpeed > 0 && maxSpeed > pedestrianSpeed)
             maxSpeed = pedestrianSpeed;
     }

@@ -262,7 +262,16 @@ static const int START_ZOOM = 10;
         [self hide];
         [self refreshOsmEditsCollection];
         if ([[OAAppSettings sharedManager].mapSettingShowOfflineEdits get])
+        {
             [self show];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((kSymbolsUpdateInterval + 100) * NSEC_PER_MSEC)), dispatch_get_main_queue(), ^{
+                if (![self isVisible])
+                    return;
+                [self.mapViewController runWithRenderSync:^{
+                    [self.mapView invalidateFrame];
+                }];
+            });
+        }
     });
 }
 

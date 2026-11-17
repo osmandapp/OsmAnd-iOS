@@ -64,8 +64,8 @@
     NSNumberFormatter *_percentFormatter;
 }
 
-- (void)onStreetSelected:(OASearchResult *)street completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler {
-    [_searchUICore selectSearchResult:street];
+- (void)onSearchScopeSelected:(OASearchResult *)result completionHandler:(void (^)(NSArray<CPListItem *> *searchResults))completionHandler {
+    [_searchUICore selectSearchResult:result];
     _currentSearchPhrase =  [[_searchUICore getPhrase] getText:YES];
     _cpItems = @[];
     [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
@@ -161,9 +161,10 @@
     
     NSInteger index = indexNum.integerValue;
     OAQuickSearchListItem *searchItem = _searchItems[index];
-    if (searchItem.getSearchResult.objectType == EOAObjectTypeStreet && completionHandler)
+    if ((searchItem.getSearchResult.objectType == EOAObjectTypeStreet && completionHandler)
+        || searchItem.getSearchResult.objectType == EOAObjectTypeFavoriteGroup)
     {
-        [self onStreetSelected:searchItem.getSearchResult completionHandler:completionHandler];
+        [self onSearchScopeSelected:searchItem.getSearchResult completionHandler:completionHandler];
     }
     else if (searchItem.getSearchResult.objectType == EOAObjectTypeIndexItem)
     {

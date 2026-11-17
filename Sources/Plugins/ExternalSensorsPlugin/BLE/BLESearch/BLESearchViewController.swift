@@ -69,6 +69,8 @@ final class BLESearchViewController: OABaseNavbarViewController {
         }
     }
     
+    var appMode: OAApplicationMode?
+
     private var hasFirstResult = false
     private var needRescan = false
     
@@ -175,6 +177,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath) {
         let controller = BLEDescriptionViewController()
         controller.device = discoveredDevices[indexPath.row]
+        controller.appMode = appMode
         navigationController?.pushViewController(controller, animated: true)
     }
     

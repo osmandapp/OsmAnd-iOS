@@ -84,7 +84,7 @@
 
     UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset") style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action)
     {
-        [[OsmAndApp instance].data resetWeatherSettings];
+        [[OsmAndApp instance].data resetWeatherSettings:self.appMode];
         [self generateData];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kBandsSectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kUseOfflineDataSectionIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -124,7 +124,7 @@
     [forecastData addObject:@{
             @"key": @"offline_forecast_only",
             @"title": OALocalizedString(@"weather_offline_forecast_only"),
-            @"selected": @([OsmAndApp instance].data.weatherUseOfflineData),
+            @"selected": @([[OsmAndApp instance].data getWeatherUseOfflineData:self.appMode]),
             @"type": [OASwitchTableViewCell getCellIdentifier]
     }];
     [data addObject:@{
@@ -218,7 +218,7 @@
                 NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
                 formatter.locale = NSLocale.autoupdatingCurrentLocale;
 
-                NSUnit *unit = [band getBandUnit];
+                NSUnit *unit = [band getBandUnit:self.appMode];
                 if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
                     value = unit.name != nil ? unit.name : [formatter displayStringFromUnit:unit];
                 else
@@ -277,8 +277,7 @@
     _selectedIndexPath = indexPath;
     if ([item[@"key"] hasPrefix:@"band"])
     {
-        OAWeatherBandSettingsViewController *controller =
-                [[OAWeatherBandSettingsViewController alloc] initWithWeatherBand:item[@"band"]];
+        OAWeatherBandSettingsViewController *controller = [[OAWeatherBandSettingsViewController alloc] initWithWeatherBand:item[@"band"] appMode:self.appMode];
         controller.bandDelegate = self;
         [self showModalViewController:controller];
     }
@@ -306,7 +305,7 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
         NSDictionary *item = [self getItem:indexPath];
         if ([item[@"key"] isEqualToString:@"offline_forecast_only"])
-            [[OsmAndApp instance].data setWeatherUseOfflineData:switchView.isOn];
+            [[OsmAndApp instance].data setWeatherUseOfflineData:switchView.isOn mode:self.appMode];
     }
 }
 

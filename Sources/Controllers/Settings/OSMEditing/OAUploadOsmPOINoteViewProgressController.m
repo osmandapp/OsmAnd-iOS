@@ -274,16 +274,42 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
 {
     if (_mode == EOAOsmUploadViewConrollerModeFailed)
     {
-        _mode = EOAOsmUploadViewConrollerModeUploading;
-        [self generateData];
-        [self.tableView reloadData];
-        _uploadTask.delegate = self;
-        [_uploadTask retryFailedPoints];
+        if (_uploadTask.requiresNoteUploadConfirmation)
+        {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osmand_parking_warning")
+                                                                         message:OALocalizedString(@"osm_note_upload_uncertain_message")
+                                                                  preferredStyle:UIAlertControllerStyleAlert];
+            __weak __typeof(self) weakSelf = self;
+            UIAlertAction *checkAction = [UIAlertAction actionWithTitle:OALocalizedString(@"retry") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [weakSelf retryUploadsAllowingUnconfirmedNotes:NO];
+            }];
+            [alert addAction:checkAction];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"osm_note_send_again") style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+                [weakSelf retryUploadsAllowingUnconfirmedNotes:YES];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+            alert.preferredAction = checkAction;
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else
+        {
+            [self retryUploadsAllowingUnconfirmedNotes:NO];
+        }
     }
     else
     {
         [super onLeftNavbarButtonPressed];
     }
+}
+
+- (void)retryUploadsAllowingUnconfirmedNotes:(BOOL)allowUnconfirmedNotes
+{
+    _mode = EOAOsmUploadViewConrollerModeUploading;
+    [self generateData];
+    [self.tableView reloadData];
+    [self setupBottomButtons];
+    _uploadTask.delegate = self;
+    [_uploadTask retryFailedPointsAllowingUnconfirmedNotes:allowUnconfirmedNotes];
 }
 
 #pragma mark - OAUploadTaskDelegate

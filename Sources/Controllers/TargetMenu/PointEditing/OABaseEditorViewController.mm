@@ -149,6 +149,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)generateData
 {
+    [self.tableData clearAllData];
     if (self.isNewItem)
         [self generateDescriptionSection];
     [self generateGroupSection];
@@ -267,6 +268,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             [_colorCollectionHandler setSelectionItem:_selectedColorItem ?: [_appearanceCollection defaultPointColorItem]];
             [_colorCollectionHandler updateHostCellIfNeeded];
             cell.topLabel.text = item.title;
+            [self setupAccessibilityForPaletteCell:cell titleLabel:cell.topLabel menuButton:cell.topButton];
             [cell topButtonVisibility:!_isNewItem];
             cell.descriptionLabel.text = OALocalizedString(@"original_color_description");
             [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
@@ -314,6 +316,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
         [cell setCollectionHandler:_poiIconCollectionHandler];
         [_poiIconCollectionHandler updateHostCellIfNeeded];
         cell.topLabel.text = item.title;
+        [self setupAccessibilityForPaletteCell:cell titleLabel:cell.topLabel menuButton:cell.topButton];
         cell.descriptionLabel.text = OALocalizedString(@"original_icon_description");
         [cell topButtonVisibility:YES];
         [cell.bottomButton setTitle:item.descr forState:UIControlStateNormal];
@@ -341,6 +344,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
             cell.iconNames = [item objForKey:@"icons"];
             cell.contourIconNames = [item objForKey:@"contourIcons"];
             cell.titleLabel.text = item.title;
+            [self setupAccessibilityForPaletteCell:cell titleLabel:cell.titleLabel menuButton:cell.topButton];
             cell.descriptionLabel.text = OALocalizedString(@"original_shape_description");
             cell.valueLabel.text = [item objForKey:@"value"];
             cell.currentColor = _selectedColorItem.colorInt;
@@ -437,6 +441,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     // An empty icon means Original, including the initial selection for a new folder.
     _selectedIconName = self.editIconName ?: @"";
     self.editIconName = _selectedIconName;
+    // Mixed point icons may display Original without changing the folder's saved default.
     [_poiIconCollectionHandler setIconName:_selectedIconName];
 }
 
@@ -459,6 +464,7 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
     }
     _shapesCollectionHandler = [[ShapesCollectionHandler alloc] initWithBackgroundIconNames:_backgroundIconNames isFavoriteList:!self.isNewItem];
     _shapesCollectionHandler.handlerDelegate = self;
+    _shapesCollectionHandler.delegate = self;
     _shapesCollectionHandler.hostVC = self;
     
     OAFavoriteGroup *group = [self existingGroupFor:self.editName];
@@ -569,9 +575,44 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 {
     OAFavoriteGroup *groupExist = [self existingGroupFor:self.editName];
     return !groupExist
-            || ![self.editBackgroundIconName isEqualToString:groupExist.backgroundType]
-            || ![self.editIconName isEqualToString:groupExist.iconName ?: @""]
+            || [self isBackgroundIconNameChanged:groupExist.backgroundType]
+            || [self isIconNameChanged:groupExist.iconName]
             || ![self.editColor isEqual:groupExist.color];
+}
+
+- (BOOL)isIconNameChanged:(NSString *)iconName
+{
+    NSString *selectedIcon = self.editIconName ?: @"";
+    NSString *originalIcon = iconName ?: @"";
+    if ([selectedIcon hasPrefix:@"mx_"])
+        selectedIcon = [selectedIcon substringFromIndex:3];
+    if ([originalIcon hasPrefix:@"mx_"])
+        originalIcon = [originalIcon substringFromIndex:3];
+    
+    return ![selectedIcon isEqualToString:originalIcon];
+}
+
+- (BOOL)isBackgroundIconNameChanged:(NSString *)backgroundIconName
+{
+    NSString *originalBackgroundIconName = [_backgroundIconNames containsObject:backgroundIconName ?: @""] ? backgroundIconName : _backgroundIconNames.firstObject;
+    return ![self.editBackgroundIconName isEqualToString:originalBackgroundIconName];
+}
+
+- (UIColor *)appearanceColor
+{
+    return [_colorCollectionHandler isOriginalSelected] ? nil : self.editColor;
+}
+
+- (NSString *)appearanceIconName
+{
+    return [_poiIconCollectionHandler.selectedCatagoryKey isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY]
+        ? @"" : self.editIconName;
+}
+
+- (NSString *)appearanceBackgroundIconName
+{
+    return [_backgroundIconNames containsObject:_shapesCollectionHandler.selectedCatagoryKey]
+        ? self.editBackgroundIconName : nil;
 }
 
 - (void)changeSaveButtonAvailabilityWithGroup
@@ -583,6 +624,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 - (PoiIconCollectionHandler *) getPoiIconCollectionHandler
 {
     return _poiIconCollectionHandler;
+}
+
+- (void)setupAccessibilityForPaletteCell:(OACollectionSingleLineTableViewCell *)cell titleLabel:(UILabel *)titleLabel menuButton:(UIButton *)menuButton
+{
+    cell.isAccessibilityElement = NO;
+    titleLabel.accessibilityTraits |= UIAccessibilityTraitHeader;
+    menuButton.accessibilityLabel = [[menuButton.currentAttributedTitle.string stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%C", (unichar)NSAttachmentCharacter] withString:@""] trim];
 }
 
 #pragma mark - OAShapesTableViewCellDelegate
@@ -605,6 +653,34 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 }
 
 #pragma mark - OACollectionCellDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *label;
+    BOOL isSelected = NO;
+    if (collectionView == [_colorCollectionHandler getCollectionView] && [cell isKindOfClass:OAColorsCollectionViewCell.class])
+    {
+        label = ((OAColorsCollectionViewCell *)cell).colorView.backgroundColor.accessibilityName;
+        isSelected = [indexPath isEqual:[_colorCollectionHandler getSelectedIndexPath]];
+    }
+    else if (collectionView == [_poiIconCollectionHandler getCollectionView])
+    {
+        label = [PoiIconCollectionHandler iconAccessibilityLabel:_poiIconCollectionHandler.iconNamesData[indexPath.section][indexPath.item]];
+        isSelected = [indexPath isEqual:[_poiIconCollectionHandler getSelectedIndexPath]];
+    }
+    else if (collectionView == [_shapesCollectionHandler getCollectionView])
+    {
+        label = OALocalizedString([NSString stringWithFormat:@"shared_string_%@", _backgroundIconNames[indexPath.item]]);
+        isSelected = indexPath.item == _selectedBackgroundIndex;
+    }
+
+    if (!label)
+        return;
+    
+    cell.isAccessibilityElement = YES;
+    cell.accessibilityLabel = label;
+    cell.accessibilityTraits = isSelected ? UIAccessibilityTraitButton | UIAccessibilityTraitSelected : UIAccessibilityTraitButton;
+}
 
 - (void)onCollectionItemSelected:(NSIndexPath *)indexPath selectedItem:(id)selectedItem collectionView:(UICollectionView *)collectionView shouldDismiss:(BOOL)shouldDismiss
 {
@@ -649,16 +725,13 @@ static NSString * const kBackgroundsKey = @"kBackgroundsKey";
 
 - (void)onCategorySelected:(NSString *)category with:(OAIconsPaletteCell *)cell
 {
+    self.editIconName = [category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY] ? @"" : _selectedIconName;
+    _wasChanged = YES;
+
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     if (indexPath)
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    if ([category isEqualToString:_poiIconCollectionHandler.ORIGINAL_KEY])
-    {
-        _selectedIconName = @"";
-        self.editIconName = _selectedIconName;
-        _wasChanged = YES;
-    }
     [self changeSaveButtonAvailabilityWithGroup];
 }
 

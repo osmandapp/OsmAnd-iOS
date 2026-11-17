@@ -329,13 +329,11 @@
     long size = [self getChangesSize];
     if (size >= CHANGES_FOR_MAPPER_PROMO)
     {
-        NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-        NSDate *date = [NSDate date];
-        date = [calendar dateByAddingUnit:NSCalendarUnitMonth value:1 toDate:date options:0];
-        date = [calendar dateBySettingUnit:NSCalendarUnitDay value:16 ofDate:date options:0];
-        date = [calendar dateBySettingUnit:NSCalendarUnitHour value:0 ofDate:date options:0];
-        date = [calendar dateBySettingUnit:NSCalendarUnitMinute value:0 ofDate:date options:0];
-        date = [calendar dateBySettingUnit:NSCalendarUnitSecond value:0 ofDate:date options:0];
+        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *components = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth fromDate:[NSDate date]];
+        components.month += 1;
+        components.day = 16;
+        NSDate *date = [calendar dateFromComponents:components];
         [_settings.mapperLiveUpdatesExpireTime set:(long) date.timeIntervalSince1970];
     }
     else

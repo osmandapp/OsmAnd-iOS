@@ -102,6 +102,7 @@
 - (void) updateOverlayUnderlayView;
 
 - (void) updateTopControlsVisibility:(BOOL)animated;
+- (BOOL)isTopControlsVisible;
 - (void) updateBottomControlsVisibility:(BOOL)animated;
 - (void) updateBottomContolMarginsForHeight;
 

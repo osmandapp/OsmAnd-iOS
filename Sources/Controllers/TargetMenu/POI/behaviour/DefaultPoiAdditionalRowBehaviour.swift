@@ -43,7 +43,7 @@ class DefaultPoiAdditionalRowBehaviour: PoiAdditionalRowBehavior {
             var iconName = getIconName(key: params.poiType?.iconKeyName())
             
             if iconName == nil {
-                let category = params.poiType?.getOsmTag().replacingOccurrences(of: ":", with: "_")
+                let category = params.poiType?.getOsmTag()?.replacingOccurrences(of: ":", with: "_")
                 if let category, !category.isEmpty {
                     iconName = getIconName(key: category)
                 }

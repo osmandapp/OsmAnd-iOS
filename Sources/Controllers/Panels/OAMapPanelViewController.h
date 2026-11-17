@@ -52,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) showScrollableHudViewController:(OABaseScrollableHudViewController *)controller;
 - (void) hideScrollableHudViewController;
+- (void)forceHidePlanRouteIfNeeded;
+- (void)disablePlanRouteSearchContextMenuForMapGesture;
 
 - (void) showRouteLineAppearanceViewController:(OABaseScrollableHudViewController *)controller;
 
@@ -167,6 +169,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;
 - (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type;
+- (BOOL)isSelectingNavigationPoint;
+- (BOOL)processNavigationPointSelection:(NSArray<OATargetPoint *> *)targetPoints;
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
 - (void) openTargetViewWithRouteDetails:(nullable OASGpxFile *)gpx analysis:(nullable OASGpxTrackAnalysis *)analysis;

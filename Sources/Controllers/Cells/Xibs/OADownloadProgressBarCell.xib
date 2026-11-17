@@ -24,13 +24,13 @@
                         <color key="progressTintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="trackTintColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="calibratedRGB"/>
                     </progressView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GCB-w4-09b">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Downloading" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GCB-w4-09b">
                         <rect key="frame" x="20" y="43" width="100" height="20"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="45%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0B-u1-UVp">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="45%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d0B-u1-UVp">
                         <rect key="frame" x="358" y="43" width="36" height="20"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <nil key="textColor"/>
@@ -38,6 +38,7 @@
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="d0B-u1-UVp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="GCB-w4-09b" secondAttribute="trailing" constant="8" id="mTY-5q-LJb"/>
                     <constraint firstItem="af4-W9-ki2" firstAttribute="leading" secondItem="dtJ-z4-amE" secondAttribute="leadingMargin" id="0we-Pa-awn"/>
                     <constraint firstItem="GCB-w4-09b" firstAttribute="top" secondItem="af4-W9-ki2" secondAttribute="bottom" constant="21" id="9MR-TL-JRK"/>
                     <constraint firstItem="af4-W9-ki2" firstAttribute="top" secondItem="dtJ-z4-amE" secondAttribute="top" constant="19" id="SkU-UA-YqX"/>

@@ -155,6 +155,9 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 
 @interface OAResourcesUIHelper : NSObject
 
++ (nullable OARepositoryResourceItem *)uninstalledMapFromResourceIds:(NSArray<NSString *> *)ids
+                                                            region:(OAWorldRegion *)region;
+
 + (NSString *) titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                       inRegion:(OAWorldRegion*)region
                 withRegionName:(BOOL)includeRegionName

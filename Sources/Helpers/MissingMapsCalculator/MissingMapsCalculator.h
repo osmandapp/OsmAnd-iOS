@@ -24,11 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
                                                      targets:(NSArray<CLLocation *> *)targets
                                              checkHHEditions:(BOOL)checkHHEditions;
 
-/** The same over the files the OsmAndShared planner reads. */
+/** The same over shared readers. A read failure returns nil and sets error; it is not a missing map. */
 - (nullable OAMissingMapsResult *)checkIfThereAreMissingSharedMaps:(OASRoutingContext *)ctx
                                                              start:(CLLocation *)start
                                                            targets:(NSArray<CLLocation *> *)targets
-                                                   checkHHEditions:(BOOL)checkHHEditions;
+                                                   checkHHEditions:(BOOL)checkHHEditions
+                                                             error:(NSError * _Nullable * _Nullable)error;
 
 /** The same for a profile on its own, over every map the app has open - a check after a download, say. */
 - (nullable OAMissingMapsResult *)checkIfThereAreMissingMapsForProfile:(NSString *)profile

@@ -159,6 +159,10 @@ final class MigrationManager: NSObject {
                 migrateCoordinateGridFormatIds()
                 defaults.set(true, forKey: MigrationKey.migrateCoordinateGridFormatIds.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue) {
+                migrateTerrainTransparencyToAlpha255()
+                defaults.set(true, forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue)
+            }
         }
     }
 
@@ -246,10 +250,6 @@ final class MigrationManager: NSObject {
                 keepLegacyRouteWidgetsForCustomizedProfiles()
                 defaults.set(true, forKey: MigrationKey.migrateLegacyRouteWidgets.rawValue)
             }
-            if !defaults.bool(forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue) {
-                migrateTerrainTransparencyToAlpha255()
-                defaults.set(true, forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue)
-            }
         }
     }
 
@@ -259,7 +259,7 @@ final class MigrationManager: NSObject {
             let pref = settings.registerIntPreference(type.name + "_transparency", defValue: Int32(TerrainMode.defaultTransparency(type))).makeProfile()
             for mode in OAApplicationMode.allPossibleValues() where pref.isSet(for: mode) {
                 let percent = min(max(pref.get(mode), 0), 100)
-                pref.set(Int32((Double(percent) * 2.55).rounded()), mode: mode)
+                pref.set(Int32((Double(percent) * 2.55).rounded(.up)), mode: mode)
             }
         }
     }
@@ -892,7 +892,16 @@ final class MigrationManager: NSObject {
             "bottom_widget_panel_order": "widget_bottom_panel_order",
             "shared_string_automatic": "driving_region_automatic",
             "external_input_device": "selected_external_input_device",
-            "star_watcher_settings": "astronomy_settings"
+            "star_watcher_settings": "astronomy_settings",
+            "HILLSHADE_min_zoom": "hillshade_min_zoom",
+            "HILLSHADE_max_zoom": "hillshade_max_zoom",
+            "HILLSHADE_transparency": "hillshade_transparency",
+            "SLOPE_min_zoom": "slope_min_zoom",
+            "SLOPE_max_zoom": "slope_max_zoom",
+            "SLOPE_transparency": "slope_transparency",
+            "HEIGHT_min_zoom": "height_min_zoom",
+            "HEIGHT_max_zoom": "height_max_zoom",
+            "HEIGHT_transparency": "height_transparency"
         ]
 
         let changeWidgetIds = [
@@ -913,8 +922,9 @@ final class MigrationManager: NSObject {
         ]
         
         let json = changeRouteRecalculationValuesForJson(json)
+        let replacedKeys = Set(json.keys.compactMap { changeSettingKeys[$0] })
 
-        return Dictionary(uniqueKeysWithValues: json.map {
+        return Dictionary(uniqueKeysWithValues: json.filter { !replacedKeys.contains($0.key) }.map {
             var settingKey = $0
             var value = $1
             if let newKey = changeSettingKeys[settingKey], !newKey.isEmpty {

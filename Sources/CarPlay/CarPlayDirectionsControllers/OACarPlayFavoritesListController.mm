@@ -106,7 +106,7 @@
                                              accessoryImage:nil
                                               accessoryType:CPListItemAccessoryTypeNone];
     homeItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
-        OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[home getName]];
+        OAPointDescription *historyName = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[home getDisplayName]];
         [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:[home getLatitude] longitude:[home getLongitude]] historyName:historyName];
         [self safePopToRootTemplateAnimated:YES];
         if (completionBlock)

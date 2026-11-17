@@ -12,6 +12,7 @@ final class CarPlaySceneDelegate: UIResponder {
     private var carPlayDashboardController: OACarPlayDashboardInterfaceController?
     private var windowToAttach: CPWindow?
     private var carPlayInterfaceController: CPInterfaceController?
+    private let listControllers = NSHashTable<OABaseCarPlayListController>.weakObjects()
     private var isForegroundScene = false
     /// Starting with iOS 18.5 (CarPlay simulator), a change in behavior was observed: sceneWillEnterForeground is now called before didConnect, whereas previously it was the other way around. To handle this, a variable isWaitingForConfiguration was introduced.
     private var isWaitingForConfiguration = false
@@ -161,6 +162,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         
         windowToAttach = window
         carPlayInterfaceController = interfaceController
+        interfaceController.delegate = self
         shouldCenterOnMyLocation = true
         if isWaitingForConfiguration, isForegroundScene {
             isWaitingForConfiguration = false
@@ -170,6 +172,8 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didDisconnect interfaceController: CPInterfaceController, from window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didDisconnect")
+        dismissListControllers()
+        interfaceController.delegate = nil
         
         CarPlayService.shared.disconnectScene(.app)
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
@@ -187,6 +191,33 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
             carPlayMapController = nil
             windowToAttach = nil
             carPlayInterfaceController = nil
+        }
+    }
+}
+
+extension CarPlaySceneDelegate: CPInterfaceControllerDelegate, OACarPlayListLifecycleDelegate {
+    func register(_ controller: OABaseCarPlayListController) {
+        guard controller.interfaceController === carPlayInterfaceController else { return }
+        listControllers.add(controller)
+    }
+
+    func templateDidDisappear(_ aTemplate: CPTemplate, animated: Bool) {
+        guard let carPlayInterfaceController else { return }
+        let templates = carPlayInterfaceController.templates
+        for controller in listControllers.allObjects {
+            if let listTemplate = controller.listTemplate, templates.contains(listTemplate) {
+                continue
+            }
+            listControllers.remove(controller)
+            controller.dismissTemplate()
+        }
+    }
+
+    @objc func dismissListControllers() {
+        let controllers = listControllers.allObjects
+        listControllers.removeAllObjects()
+        for controller in controllers {
+            controller.dismissTemplate()
         }
     }
 }

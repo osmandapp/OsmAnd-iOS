@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAWeatherBand.h"
 
 static NSString * const kWeatherSettingsChanging = @"weather_settings_changing";
 static NSString * const kWeatherSettingsChanged = @"weather_settings_changed";
@@ -205,8 +206,15 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 - (OADownloadMode *)getWikipediaImagesDownloadMode:(OAApplicationMode *)mode;
 - (void)setWikipediaImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 
+- (BOOL)getWeatherUseOfflineData:(OAApplicationMode *)mode;
+- (void)setWeatherUseOfflineData:(BOOL)weatherUseOfflineData mode:(OAApplicationMode *)mode;
+- (NSUnit *)getWeatherUnit:(EOAWeatherBand)band mode:(OAApplicationMode *)mode;
+- (void)setWeatherUnit:(NSUnit *)unit band:(EOAWeatherBand)band mode:(OAApplicationMode *)mode;
+- (BOOL)getWeatherUnitAuto:(EOAWeatherBand)band mode:(OAApplicationMode *)mode;
+- (void)setWeatherUnitAuto:(BOOL)unitAuto band:(EOAWeatherBand)band mode:(OAApplicationMode *)mode;
+
 - (void)resetWikipediaSettings:(OAApplicationMode *)mode;
-- (void)resetWeatherSettings;
+- (void)resetWeatherSettings:(OAApplicationMode *)mode;
 
 - (OADownloadMode *)getTravelGuidesImagesDownloadMode:(OAApplicationMode *)mode;
 - (void)setTravelGuidesImagesDownloadMode:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;

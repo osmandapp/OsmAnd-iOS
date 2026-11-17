@@ -75,7 +75,7 @@ extern NSString * const WIKIMEDIA_COMMONS_TAG;
 static int DEFAULT_ELO = 900;
 
 
-@class OAPOIType, OARenderedObject;
+@class OAPOIType, OARenderedObject, OASAmenity;
 
 @interface OAPOIRoutePoint : NSObject
 
@@ -87,6 +87,12 @@ static int DEFAULT_ELO = 900;
 @end
 
 @interface OAPOI : OAMapObject
+
+/** Attaching the source also records the displayed names, before any subsequent native edits. */
+@property (nonatomic, nullable) OASAmenity *sharedAmenity;
+
+/** Copies source names plus native edits, excluding unchanged display fallbacks. */
+- (void)copyNamesToSharedAmenity:(OASAmenity * _Nonnull)amenity;
 
 @property (nonatomic, nullable) OAPOIType *type; // in android here is category:  private PoiCategory type;
 @property (nonatomic, nullable) NSString *subType;

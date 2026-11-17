@@ -91,7 +91,8 @@
             @(EOAObjectTypeGpxTrack),
             @(EOAObjectTypeLocation),
             @(EOAObjectTypePartialLocation),
-            @(EOAObjectTypeIndexItem)
+            @(EOAObjectTypeIndexItem),
+            @(EOAObjectTypeSuggestion)
         ]];
     });
     return [topVisibleTypes containsObject:@(objecType)];
@@ -147,6 +148,8 @@
             return @"GPX_TRACK";
         case EOAObjectTypeIndexItem:
             return @"INDEX_ITEM";
+        case EOAObjectTypeSuggestion:
+            return @"SUGGESTION";
         default:
             return [NSString stringWithFormat:@"%d", (int)objecType];
     }
@@ -184,6 +187,8 @@
 
 + (OAObjectType *)valueOf:(NSString *)type
 {
+    if ([type isEqualToString:@"SUGGESTION"])
+        return [OAObjectType withType:EOAObjectTypeSuggestion];
     if ([type isEqualToString:@"CITY"])
         return [OAObjectType withType:EOAObjectTypeCity];
     if ([type isEqualToString:@"VILLAGE"])

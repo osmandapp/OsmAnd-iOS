@@ -32,7 +32,7 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 
 @end
 
-@class OASearchPhrase, OASWptPt, OASGpxFile;
+@class OASearchPhrase, OASWptPt, OASGpxFile, OASSearchResult;
 
 @interface OASearchResult : NSObject
 
@@ -61,6 +61,8 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 @property (nonatomic) int preferredZoom;
 @property (nonatomic) NSString *localeName;
 @property (nonatomic) NSString *alternateName;
+// the address of a poi, made once the results are collected
+@property (nonatomic) NSString *addressName;
 @property (nonatomic) NSString *cityName;
 
 @property (nonatomic) NSMutableArray<NSString *> *otherNames;
@@ -71,6 +73,9 @@ typedef NS_ENUM(NSUInteger, EOASearchResultResource) {
 @property (nonatomic, assign) OASGpxFile *relatedGpx;
 @property (nonatomic) double distRelatedObjectName;
 @property (nonatomic, assign) EOASearchResultResource searchResultResource;
+
+// the result of the shared search this one stands for: the one it was made of, or one made of it for the shared search
+@property (nonatomic) OASSearchResult *sharedResult;
 
 
 - (instancetype)initWithPhrase:(OASearchPhrase *)sp;

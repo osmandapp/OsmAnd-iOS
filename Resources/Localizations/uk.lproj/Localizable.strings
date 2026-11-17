@@ -1295,7 +1295,7 @@
 "rendering_attr_noAdminboundaries_description" = "Приховати регіональні кордони (рівні 5–9).";
 "routing_attr_avoid_unpaved_name" = "Уник. доріг без покриття";
 "routeInfo_road_types_name" = "Види доріг";
-"routing_attr_avoid_sett_name" = "Уникати бруківки";
+"routing_attr_avoid_sett_name" = "Уникати бруківки (тесаний)";
 "rendering_attr_currentTrackWidth_description" = "Товщина GPX";
 "routing_attr_allow_advanced_description" = "Складні маршрути з небезпечними перешкодами та крутими ділянками.";
 "rendering_attr_piste_difficulty_novice_name" = "Для новачків";
@@ -1498,7 +1498,7 @@
 "rendering_value_pedestrian_name" = "Пішки";
 "rendering_attr_surface_cobblestone_name" = "Булижник";
 "routing_attr_allow_advanced_name" = "Дозволити маршрути підвищеної складності";
-"routing_attr_avoid_sett_description" = "Уникати бруківки";
+"routing_attr_avoid_sett_description" = "Уникати бруківки (тесаний)";
 "routeInfo_smoothness_name" = "Рівність";
 "rendering_value_white_name" = "Білий";
 "rendering_attr_showLez_name" = "Показати зони з обмеженням викидів";
@@ -1561,7 +1561,7 @@
 "app_mode_bicycle" = "Велосипед";
 "app_mode_car" = "Автівка";
 "app_mode_default" = "Огляд мапи";
-"map_transparency" = "Прозорість мапи";
+"map_transparency" = "Видимість базової карти";
 "srtm_color_scheme" = "Схема кольорів";
 "shared_string_appearance" = "Вигляд";
 "enable_contour_lines" = "Вмикає показ ізоліній на мапі";
@@ -3391,8 +3391,8 @@
 "custom_map_button_name_present" = "Така кнопка вже присутня";
 "step_by_step" = "Покроково";
 "rendering_value_dark_orange_name" = "Темно-жовтогарячий";
-"routing_attr_avoid_cobblestone_description" = "Уникати бруківки";
-"routing_attr_avoid_cobblestone_name" = "Уникати бруківки";
+"routing_attr_avoid_cobblestone_description" = "Уникати бруківки (кругляк)";
+"routing_attr_avoid_cobblestone_name" = "Уникати бруківки (кругляк)";
 "in_case_of_reverse_direction" = "У разі зворотного напрямку";
 "route_recalculation_dist_title" = "Мінімальна відстань для перебудування маршруту";
 "dangerous_goods_description" = "Деякими дорогами та тунелями перевезення небезпечних матеріалів заборонено.";

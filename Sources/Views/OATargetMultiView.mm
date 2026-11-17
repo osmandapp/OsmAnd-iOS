@@ -11,7 +11,6 @@
 #import "OATargetPointViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OATargetPointsHelper.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"
@@ -30,6 +29,10 @@
 @end
 
 @implementation OATargetMultiView
+{
+    NSObject *_hideAnimationToken;
+    void (^_hideCompletion)(BOOL hidden);
+}
 
 - (instancetype) init
 {
@@ -112,15 +115,9 @@
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATargetPoint *targetPoint = self.targetPoints[indexPath.row];
-    
-    if (_activeTargetType == OATargetRouteIntermediateSelection)
-    {
-        [[OATargetPointsHelper sharedInstance] navigateToPoint:[[CLLocation alloc] initWithLatitude:targetPoint.location.latitude longitude:targetPoint.location.longitude] updateRoute:YES intermediate:(_activeTargetType != OATargetRouteIntermediateSelection ? -1 : (int)[[OATargetPointsHelper sharedInstance] getIntermediatePoints].count) historyName:targetPoint.pointDescription];
-        [self hide:YES duration:0.2 onComplete:^{
-            [[[OARootViewController instance] mapPanel] showRouteInfo];
-        }];
-    }
-    else
+    OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
+
+    if (![mapPanel processNavigationPointSelection:@[targetPoint]])
     {
         if (_selectedMapObjects && _selectedMapObjects.count > indexPath.row)
         {
@@ -130,7 +127,7 @@
         }
         else
         {
-            [[[OARootViewController instance] mapPanel] showContextMenu:targetPoint];
+            [mapPanel showContextMenu:targetPoint];
         }
     }
 }
@@ -139,11 +136,6 @@
 {
     _targetPoints = targetPoints;
     [self.tableView reloadData];
-}
-
--(void) setActiveTargetType:(OATargetPointType)activeTargetType
-{
-    _activeTargetType = activeTargetType;
 }
 
 - (BOOL) isLandscapeSupported
@@ -187,12 +179,13 @@
 
 - (void) show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    [self cancelHide];
+    [self.layer removeAllAnimations];
     //[self applyMapInteraction:self.frame.size.height];
+    CGRect frame = [self getFrame];
     
     if (animated)
     {
-        CGRect frame = [self getFrame];
-        
         [UIView animateWithDuration:0.3 animations:^{
 
             self.frame = frame;
@@ -207,20 +200,6 @@
     }
     else
     {
-        CGRect frame = self.frame;
-        if ([self isLandscape])
-        {
-            frame.size.height = DeviceScreenHeight;
-            frame.size.width = kInfoViewLanscapeWidth;
-            frame.origin.y = 0.0;
-        }
-        else
-        {
-            frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight;
-            frame.size.width = DeviceScreenWidth;
-            frame.origin.y = DeviceScreenHeight - frame.size.height;
-        }
-        
         self.frame = frame;
         
         if (onComplete)
@@ -233,6 +212,24 @@
 
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    [self hide:animated duration:duration completion:^(BOOL hidden) {
+        if (hidden && onComplete)
+            onComplete();
+    }];
+}
+
+- (void)cancelHide
+{
+    _hideAnimationToken = nil;
+    void (^completion)(BOOL) = _hideCompletion;
+    _hideCompletion = nil;
+    if (completion)
+        completion(NO);
+}
+
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration completion:(void (^)(BOOL hidden))completion
+{
+    [self cancelHide];
     if (self.superview)
     {
         CGRect frame = self.frame;
@@ -243,16 +240,23 @@
         
         if (animated && duration > 0.0)
         {
+            NSObject *hideAnimationToken = [NSObject new];
+            _hideAnimationToken = hideAnimationToken;
+            _hideCompletion = [completion copy];
             [UIView animateWithDuration:duration animations:^{
                 
                 self.frame = frame;
                 
             } completion:^(BOOL finished) {
-                
+                // A newer show or hide supersedes this request, even if its animation completes later.
+                if (_hideAnimationToken != hideAnimationToken)
+                    return;
+
+                _hideAnimationToken = nil;
+                _hideCompletion = nil;
                 [self removeFromSuperview];
-                
-                if (onComplete)
-                    onComplete();
+                if (completion)
+                    completion(YES);
             }];
         }
         else
@@ -261,8 +265,8 @@
             
             [self removeFromSuperview];
             
-            if (onComplete)
-                onComplete();
+            if (completion)
+                completion(YES);
         }
     }
 }

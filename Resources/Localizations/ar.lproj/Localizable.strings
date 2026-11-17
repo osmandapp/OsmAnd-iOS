@@ -1298,7 +1298,7 @@
 "routing_attr_avoid_ferry_name" = "تجنب العبارات";
 "rendering_attr_hideUnderground_name" = "الأشياء تحت مستوى سطح الأرض";
 "rendering_attr_noAdminboundaries_name" = "الحدود";
-"routing_attr_avoid_sett_name" = "بدون ضبط";
+"routing_attr_avoid_sett_name" = "بدون رصف بالحجارة المنحوتة";
 "rendering_attr_piste_difficulty_expert_name" = "خبير";
 "routing_attr_allow_expert_description" = "طرق صعبة للغاية ، مع عقبات خطيرة والمناطق المحيطة بها.";
 "rendering_attr_highway_class_bridleway_name" = "طريق أحصنة";
@@ -1426,7 +1426,7 @@
 "routing_attr_allow_motorway_name" = "استخدام الطرق السريعة";
 "routing_attr_avoid_borders_description" = "تجنب عبور الحدود الوطنية";
 "rendering_value_pedestrian_name" = "مشي";
-"routing_attr_avoid_sett_description" = "تجنب الطرق المرصوفة";
+"routing_attr_avoid_sett_description" = "تجنب الرصف بالحجارة المنحوتة";
 "rendering_attr_surfaceIntegrity_name" = "سلامة سطح الطرق";
 "rendering_attr_surface_sett_name" = "ضبط";
 "routing_attr_allow_intermediate_name" = "السماح بالمسارات المتوسطة";
@@ -1566,7 +1566,7 @@
 "map_settings_contour_zoom_level_descr" = "حدد مستوى التكبير،سيتم عرض خطوط الكنتور";
 "map_settings_line_density" = "كثافة الخط";
 "srtm_color_scheme" = "لون الخطوط الكنتورية";
-"map_transparency" = "شفافية الخريطة";
+"map_transparency" = "وضوح الخريطة";
 "board_at" = "توقف عند";
 "map_coords" = "خريطة: خط العرض%.5f خط الطول %.5f";
 "transport_stops" = "مواقف";
@@ -3395,8 +3395,8 @@
 "downward_gradient" = "التدرج الهبوطي";
 "shared_string_top" = "أعلى";
 "display_position_automatic_descr" = "يعتمد على اتجاه الخريطة: الجزء السفلي لاتجاه الحركة ، المركز للبقية.";
-"routing_attr_avoid_cobblestone_description" = "تجنب الحصى";
-"routing_attr_avoid_cobblestone_name" = "تجنب الحصى";
+"routing_attr_avoid_cobblestone_description" = "تجنب الرصف بالحجارة المستديرة";
+"routing_attr_avoid_cobblestone_name" = "تجنب الرصف بالحجارة المستديرة";
 "speedometer_description" = "عرض سرعتك الحالية بواسطة GPS";
 "shared_string_class" = "فئة";
 "avoid_pt_types" = "تجنب أنواع النقل…";

@@ -773,6 +773,9 @@ private extension ImportTracksViewController {
         alert.addAction(UIAlertAction(title: localizedString("shared_string_continue"), style: .default))
         alert.addAction(UIAlertAction(title: localizedString("shared_string_close"), style: .destructive) { [weak self] _ in
             self?.collectTracksTask?.cancelled = true
+            if let path = self?.importURL?.path {
+                OAUtilities.denyAccess(toFile: path, removeFromInbox: true)
+            }
             self?.dismiss(animated: true)
         })
         present(alert, animated: true)

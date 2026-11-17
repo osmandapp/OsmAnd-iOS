@@ -11,7 +11,21 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     static var cachedCategories = [IconsAppearanceCategory]()
     static var cachedCategoriesByKeyName = [String: IconsAppearanceCategory]()
     
+    private static let iconLabelsByName: [String: String] = {
+        var labels: [String: String] = [:]
+        for poiType in OAPOIHelper.sharedInstance().poiTypes {
+            if let iconName = poiType.iconName(), labels[iconName] == nil {
+                labels[iconName] = poiType.nameLocalized
+            }
+        }
+        for activity in RouteActivityHelper.shared.getActivities() where labels["mx_" + activity.iconName] == nil {
+            labels["mx_" + activity.iconName] = activity.label
+        }
+        return labels
+    }()
+    
     var isFavoriteList = false
+    private var selectedIconKey: String?
     
     override init() {
         super.init()
@@ -22,6 +36,12 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         super.init()
         self.isFavoriteList = isFavoriteList
         setup()
+    }
+    
+    static func iconAccessibilityLabel(_ iconName: String) -> String {
+        let name = iconName.hasPrefix("mx_") ? String(iconName.dropFirst(3)) : iconName
+        let fallbackName = name.hasPrefix("special_") ? String(name.dropFirst(8)) : name
+        return iconLabelsByName["mx_" + name] ?? OAPOIHelper.sharedInstance().getPhraseByName(fallbackName) ?? fallbackName
     }
     
     override func initIconCategories() {
@@ -48,30 +68,57 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
         categories = categories.filter { isFavoriteList || $0.key != ORIGINAL_KEY }
         categoriesByKeyName = Dictionary(uniqueKeysWithValues: categories.map { ($0.key, $0) })
     }
+
+    override func updateHostCellIfNeeded() {
+        super.updateHostCellIfNeeded()
+        updateHostCellIfNoIconCategory(isFavoriteList && selectedCatagoryKey == ORIGINAL_KEY)
+    }
+
+    override func getSelectedItem() -> Any {
+        isFavoriteList ? selectedIconKey ?? "" : super.getSelectedItem()
+    }
+
+    override func selectCategory(_ categoryKey: String) {
+        if isFavoriteList, let category = categoriesByKeyName[categoryKey] {
+            let selectedIndex = selectedIconKey.flatMap { iconKey in
+                category.iconKeys.firstIndex(where: { Self.iconNamesMatch($0, iconKey) })
+            } ?? NSNotFound
+            setSelectedIndexPath(IndexPath(row: selectedIndex, section: 0))
+        }
+        super.selectCategory(categoryKey)
+    }
+
+    override func onItemSelected(_ indexPath: IndexPath, collectionView: UICollectionView) {
+        if isFavoriteList,
+           iconNamesData.indices.contains(indexPath.section),
+           iconNamesData[indexPath.section].indices.contains(indexPath.row) {
+            selectedIconKey = iconNamesData[indexPath.section][indexPath.row]
+        }
+        super.onItemSelected(indexPath, collectionView: collectionView)
+    }
     
     override func setIconName(_ iconName: String) {
+        selectedIconKey = iconName.isEmpty ? nil : iconName
         if isFavoriteList && iconName.isEmpty {
             selectCategory(ORIGINAL_KEY)
             return
         }
         guard !iconName.isEmpty else { return }
-        for category in categories {
-            if allIconsVCDelegate == nil && isFavoriteList && category.key == ORIGINAL_KEY && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
-                setSelectedIndexPath(IndexPath(row: 0, section: 0))
-                selectCategory(category.key)
-                return
-            } else {
-                for j in 0 ..< category.iconKeys.count {
-                    if iconName == category.iconKeys[j] ||
-                        "mx_" + iconName == category.iconKeys[j] {
-                        selectCategory(category.key)
-                        setSelectedIndexPath(IndexPath(row: j, section: 0))
-                        return
-                    }
-                }
-            }
+        if allIconsVCDelegate == nil && isFavoriteList && !groupIcons.allSatisfy({ $0 == groupIcons.first }) {
+            setSelectedIndexPath(IndexPath(row: 0, section: 0))
+            selectCategory(ORIGINAL_KEY)
+            return
+        }
+        if let categoryKey = iconCategoryKey(iconName),
+           let category = categoriesByKeyName[categoryKey],
+           let index = category.iconKeys.firstIndex(where: { Self.iconNamesMatch($0, iconName) }) {
+            setSelectedIndexPath(IndexPath(row: index, section: 0))
+            selectCategory(categoryKey)
+            return
         }
         addIconToLastUsed(iconName)
+        initLastUsedCategory()
+        sortCategories()
         setSelectedIndexPath(IndexPath(row: 0, section: 0))
         selectCategory(lastUsedKey)
     }
@@ -99,5 +146,28 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     
     override func lastUsed() -> [String] {
         return OAAppSettings.sharedManager().lastUsedFavIcons.get()
+    }
+
+    func setOriginalIcon(_ iconName: String) {
+        guard !iconName.isEmpty else { return }
+        // Keep the point's Original icon local to this editor, outside the shared category cache.
+        let category = IconsAppearanceCategory(key: ORIGINAL_KEY, translatedName: localizedString("shared_string_original"), iconKeys: [iconName], isTopCategory: true)
+        categories.removeAll { $0.key == ORIGINAL_KEY }
+        categories.insert(category, at: 0)
+        categoriesByKeyName[ORIGINAL_KEY] = category
+    }
+
+    private func iconCategoryKey(_ iconName: String) -> String? {
+        var originalKey: String?
+        for category in categories {
+            if category.iconKeys.contains(where: { Self.iconNamesMatch($0, iconName) }) {
+                if category.key != ORIGINAL_KEY {
+                    return category.key
+                }
+                // The POI icon that is in no other category is shown in Original.
+                originalKey = category.key
+            }
+        }
+        return originalKey
     }
 }

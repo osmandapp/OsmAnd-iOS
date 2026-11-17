@@ -25,6 +25,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void) deleteAllBugModifications:(OAOsmNotePoint *) point;
 -(long long) getMinID;
 
+- (BOOL)readUploadAttemptForPoint:(OAOsmNotePoint *)point attempt:(NSDictionary * _Nullable * _Nonnull)attempt;
+- (BOOL)saveUploadAttempt:(nullable NSDictionary *)attempt forPoint:(OAOsmNotePoint *)point;
+
 - (void) updateOsmBugLocation:(long long)identifier newPosition:(CLLocationCoordinate2D)newPosition;
 
 - (long)getLastModifiedTime;

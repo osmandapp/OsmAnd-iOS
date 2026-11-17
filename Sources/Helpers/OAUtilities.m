@@ -1319,9 +1319,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         {
             [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
-        else if (remove && [filePath containsString:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR]])
+        else if (remove && [filePath.stringByDeletingLastPathComponent isEqualToString:[self importTempPath]])
         {
-            [NSFileManager.defaultManager removeItemAtPath:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:TEMP_DIR] error:nil];
+            [NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
         }
         else
         {
@@ -1334,6 +1334,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
             }
         }
     }
+}
+
++ (NSString *)importTempPath
+{
+    return [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR];
 }
 
 + (BOOL) iosVersionIsAtLeast:(NSString*)testVersion
@@ -1438,6 +1443,8 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
     for (NSString *file in tmpDirectory) {
+        if ([file isEqualToString:TEMP_DIR])
+            continue;
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
     }
 }
@@ -2151,14 +2158,14 @@ static const double d180PI = 180.0 / M_PI_2;
     if (NSThread.isMainThread)
     {
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        CGFloat screenHeigth = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
-        return screenHeigth - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        CGFloat screenHeight = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
+        return screenHeight - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     }
     __block CGFloat result;
     dispatch_sync(dispatch_get_main_queue(), ^{
         CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-        CGFloat screenHeigth = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
-        result = screenHeigth - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
+        CGFloat screenHeight = [UIApplication sharedApplication].mainWindow ? [UIApplication sharedApplication].mainWindow.frame.size.height : UIScreen.mainScreen.bounds.size.height;
+        result = screenHeight - ((statusBarHeight == 40.0) ? (statusBarHeight - 20.0) : 0);
     });
     return result;
 }
@@ -2588,10 +2595,16 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset
 {
+    CGFloat margin = OAUtilities.getLeftMargin;
+    return [self setupTableHeaderViewWithText:text tintColor:tintColor icon:icon iconFrameSize:iconFrameSize iconBackgroundColor:iconBackgroundColor iconContentMode:contentMode iconYOffset:iconYOffset parentViewWidth:DeviceScreenWidth contentInsets:UIEdgeInsetsMake(0., margin, 0., margin)];
+}
+
++ (UIView *)setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset parentViewWidth:(CGFloat)parentViewWidth contentInsets:(UIEdgeInsets)contentInsets
+{
     BOOL hasIcon = iconFrameSize > 0;
     CGFloat iconOffset = hasIcon ? 12 + iconFrameSize + 20 : 0;
-    CGFloat textWidth = DeviceScreenWidth - (20 + OAUtilities.getLeftMargin * 2) - iconOffset;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    CGFloat textWidth = parentViewWidth - contentInsets.left - contentInsets.right - 20 - iconOffset;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + contentInsets.left, 0.0, textWidth, CGFLOAT_MAX)];
     label.adjustsFontForContentSizeCategory = YES;
     label.attributedText = text;
     label.numberOfLines = 0;
@@ -2601,13 +2614,13 @@ static const double d180PI = 180.0 / M_PI_2;
     frame.size.height = label.frame.size.height;
     frame.origin.y = 12.0;
     label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 16)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, parentViewWidth, label.frame.size.height + 16)];
     [tableHeaderView addSubview:label];
     
     if (hasIcon)
     {
         CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
-        UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
+        UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(parentViewWidth - 20 - contentInsets.right - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
         imageContainer.backgroundColor = iconBackgroundColor;
         
         UIImageView *imageView = [[UIImageView alloc] init];
@@ -2976,12 +2989,12 @@ static const double d180PI = 180.0 / M_PI_2;
     }
 }
 
-+ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit
++ (NSString *)formattedValue:(NSString *)value unit:(NSString *)unit
 {
-    return [self getFormattedValue:value unit:unit separateWithSpace:YES];
+    return [self formattedValue:value unit:unit separateWithSpace:YES];
 }
 
-+ (NSString *) getFormattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace
++ (NSString *)formattedValue:(NSString *)value unit:(NSString *)unit separateWithSpace:(BOOL)separateWithSpace
 {
     return [NSString stringWithFormat:separateWithSpace ? OALocalizedString(@"ltr_or_rtl_combine_via_space") : @"%@%@", value, unit];
 }

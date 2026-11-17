@@ -48,7 +48,7 @@
 {
     _app = [OsmAndApp instance];
     _lbOverlay.text = OALocalizedString(@"map_settings_over");
-    _lbUnderlay.text = OALocalizedString(@"map_settings_under");
+    _lbUnderlay.text = OALocalizedString(@"shared_string_map");
     self.layer.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.8].CGColor;
     self.layer.cornerRadius = 5.0;
     [self updateView];
@@ -182,7 +182,7 @@
     [self applyViewLayout];
     [self setNeedsLayout];
     _slOverlay.value = _app.data.overlayAlpha;
-    _slUnderlay.value = _app.data.underlayAlpha;
+    _slUnderlay.value = 1 - _app.data.underlayAlpha;
 }
 
 - (IBAction)btnExitPressed:(id)sender
@@ -201,7 +201,7 @@
 - (IBAction)slUnderlayChanged:(id)sender
 {
     UISlider *slider = sender;
-    _app.data.underlayAlpha = slider.value;
+    _app.data.underlayAlpha = 1 - slider.value;
 }
 
 @end

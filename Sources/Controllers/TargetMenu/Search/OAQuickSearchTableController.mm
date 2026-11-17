@@ -29,6 +29,7 @@
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
 #import "OAFavoriteItem.h"
+#import "OAFavoriteGroup.h"
 #import "OAGpxWptItem.h"
 #import "OABuilding.h"
 #import "OAStreet.h"
@@ -199,16 +200,29 @@
     }
     else if (item.hType == OAHistoryTypeFavorite)
     {
+        OAFavoriteItem *nameMatch = nil;
+        OAFavoriteItem *locationMatch = nil;
+        NSUInteger nameMatchCount = 0;
+        NSUInteger locationMatchCount = 0;
         for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
         {
             OsmAnd::LatLon latLon = point.favorite->getLatLon();
-            if ([OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude]
-                && [item.name isEqualToString:[point getName]])
+            if (![OAUtilities isCoordEqual:latLon.latitude srcLon:latLon.longitude destLat:item.latitude destLon:item.longitude])
+                continue;
+            
+            locationMatch = point;
+            locationMatchCount++;
+            if ([item.name isEqualToString:[point getName]] || [item.name isEqualToString:[point getDisplayName]])
             {
-                [[OARootViewController instance].mapPanel openTargetViewWithFavorite:point pushed:NO saveState:NO];
-                originFound = YES;
-                break;
+                nameMatch = point;
+                nameMatchCount++;
             }
+        }
+
+        if (nameMatchCount == 1 || (nameMatchCount == 0 && locationMatchCount == 1 && [locationMatch isSpecialPoint]))
+        {
+            [[OARootViewController instance].mapPanel openTargetViewWithFavorite:(nameMatch ?: locationMatch) pushed:NO saveState:NO];
+            originFound = YES;
         }
     }
     else if (item.hType == OAHistoryTypeWpt)
@@ -391,7 +405,7 @@
                 {
                     latitude = fav.favorite->getLatLon().latitude;
                     longitude = fav.favorite->getLatLon().longitude;
-                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:fav.favorite->getTitle().toNSString()];
+                    pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_FAVORITE name:[fav getDisplayName]];
                 }
                 break;
             }
@@ -656,6 +670,13 @@
     {
         switch (res.objectType)
         {
+            case EOAObjectTypeSuggestion:
+            {
+                OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:[item getName]
+                    tableView:tableView typeName:@"" icon:[UIImage templateImageNamed:[OAQuickSearchListItem getIconName:res]]];
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+                return cell;
+            }
             case EOAObjectTypeLocation:
             case EOAObjectTypeGpxTrack:
             {
@@ -800,7 +821,9 @@
                             cell.titleIcon.image = shieldIcon;
                     }
                     
-                    [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                    NSString *address = res.addressName;
+                    [cell.descView setText:address.length > 0 ? [OAQuickSearchListItem getPoiTypeNameWithoutAddress:res] : [OAQuickSearchListItem getTypeName:res]];
+                    cell.addressView.text = address;
                     if (poi.hasOpeningHours)
                     {
                         [cell.openingHoursView setText:poi.openingHours];
@@ -831,6 +854,15 @@
                     
                     [self setCellDistanceDirection:cell item:item];
                 }
+                return cell;
+            }
+            case EOAObjectTypeFavoriteGroup:
+            {
+                OAFavoriteGroup *group = (OAFavoriteGroup *)res.object;
+                OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:[item getName]
+                    tableView:self.tableView typeName:[OAQuickSearchListItem getTypeName:res]
+                    icon:[UIImage imageNamed:ACImageNameIcCustomFavorites]];
+                cell.leftIconView.tintColor = group.color;
                 return cell;
             }
             case EOAObjectTypePoiType:

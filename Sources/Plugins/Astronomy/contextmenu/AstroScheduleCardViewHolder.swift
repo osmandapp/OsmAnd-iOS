@@ -84,7 +84,10 @@ enum AstroScheduleCardViewHolder {
         let noteContainer = UIView()
         let note = UILabel()
         note.translatesAutoresizingMaskIntoConstraints = false
-        note.text = localizedString("astro_schedule_next_day_note")
+        let nextDayNote = localizedString("astro_schedule_next_day_note")
+        note.text = item.timeZoneText.isEmpty
+            ? nextDayNote
+            : "\(nextDayNote) · \(item.timeZoneText)"
         note.textColor = .textColorSecondary
         note.font = .preferredFont(forTextStyle: .footnote)
         note.numberOfLines = 0

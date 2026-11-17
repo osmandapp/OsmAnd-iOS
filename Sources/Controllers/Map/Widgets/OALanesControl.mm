@@ -383,4 +383,9 @@ static NSString * const kShowMinorTurnsRowKey = @"show_minor_turns";
         [_rh recalculateRouteDueToSettingsChange];
 }
 
+- (void)discardSettings
+{
+    _pendingShowMinorTurns = nil;
+}
+
 @end

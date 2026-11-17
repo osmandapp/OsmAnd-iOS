@@ -90,6 +90,10 @@ NSString * const kWidgetPanelKey = @"widgetPanel";
 {
 }
 
+- (void)discardSettings
+{
+}
+
 
 - (void)replaceHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority
 {

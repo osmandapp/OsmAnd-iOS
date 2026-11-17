@@ -290,6 +290,10 @@ class MapWidgetInfo: NSObject, Comparable {
         widget.applySettings(appMode)
     }
     
+    func discardSettings() {
+        widget.discardSettings()
+    }
+    
     func enableDisableForMode(_ appMode: OAApplicationMode, enabled: NSNumber?) {
         let screenLayoutMode = OAAppSettings.sharedManager().useSeparateLayouts.get(appMode)
             ? NSNumber(value: self.screenLayoutMode.rawValue)

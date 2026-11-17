@@ -49,7 +49,11 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        widgetInfo.applySettings(selectedAppMode)
+        if createNew {
+            widgetInfo.discardSettings()
+        } else {
+            widgetInfo.applySettings(selectedAppMode)
+        }
     }
     
     override func registerCells() {
@@ -549,6 +553,7 @@ extension WidgetConfigurationViewController {
     override func onBottomButtonPressed() {
         guard let navigationController else { return }
         
+        widgetInfo.applySettings(selectedAppMode)
         if let targetViewController = navigationController.viewControllers.compactMap({ $0 as? WidgetsListViewController }).first {
             targetViewController.addWidget(newWidget: widgetInfo, params: widgetConfigurationParams)
             navigationController.popToViewController(targetViewController, animated: true)

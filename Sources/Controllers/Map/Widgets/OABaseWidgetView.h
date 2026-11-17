@@ -68,6 +68,7 @@ extern NSString * const kWidgetPanelKey;
 - (BOOL)handleRowSelected:(OATableRowData *)item viewController:(WidgetConfigurationViewController *)viewController;
 - (BOOL)handleSwitchChanged:(OATableRowData *)item isOn:(BOOL)isOn;
 - (void)applySettings:(OAApplicationMode *)appMode;
+- (void)discardSettings;
 
 - (void)showBottomSeparator:(BOOL)show;
 - (void)showRightSeparator:(BOOL)show;

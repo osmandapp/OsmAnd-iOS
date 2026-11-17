@@ -1688,10 +1688,12 @@
         OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
         if (!group && [groupName isEqualToString:_newWaypointGroup.name])
             group = _newWaypointGroup;
+        if (!group && groupName.length == 0)
+            group = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"" iconName:DEFAULT_ICON_NAME_KEY backgroundType:DEFAULT_ICON_SHAPE_KEY color:_selectedColorItem.colorInt];
 
         if (_isNewItemAdding && group)
         {
-            if (!_iconSelectedByUser && [_pointHandler getIcon].length == 0 && group.iconName.length > 0 && [OAUtilities getMxIcon:group.iconName] != nil)
+            if (!_iconSelectedByUser && group.iconName.length > 0 && [OAUtilities getMxIcon:group.iconName] != nil)
             {
                 _selectedIconName = group.iconName;
                 [self selectIconInController];

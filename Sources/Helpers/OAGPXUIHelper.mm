@@ -51,6 +51,17 @@ static NSLock *OAGPXNearestCitySearchLock()
     return lock;
 }
 
+// Serial and shared by all helper instances: a copy picks its unique name only after the previous copy is written
+static dispatch_queue_t OAGPXCopyQueue()
+{
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("net.osmand.gpxCopy", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INITIATED, 0));
+    });
+    return queue;
+}
+
 static NSCache<NSString *, NSArray<OAPOI *> *> *OAGPXNearestCityCandidatesCache()
 {
     static NSCache<NSString *, NSArray<OAPOI *> *> *cache;
@@ -824,6 +835,14 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
 }
 
+- (NSString *)uniqueFileName:(NSString *)fileName inFolder:(NSString *)folderPath
+{
+    NSString *uniqueName = fileName;
+    while ([[NSFileManager defaultManager] fileExistsAtPath:[folderPath stringByAppendingPathComponent:uniqueName]])
+        uniqueName = [OAUtilities createNewFileName:uniqueName];
+    return uniqueName;
+}
+
 - (BOOL)writeRenamedGpx:(OASGpxFile *)gpxFile name:(NSString *)name toPath:(NSString *)path
 {
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -891,7 +910,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = trackItem.gpxFileName;
     
     NSString *subfolderPath = OsmAndApp.instance.gpxPath;
     for (NSString *component in [newFolder pathComponents])
@@ -903,22 +921,11 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         }
     }
 
-    if (newFileName)
-    {
-        newName = newFileName;
-        while ([[NSFileManager defaultManager]
-                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newName]])
-        {
-            newName = [OAUtilities createNewFileName:newName];
-        }
-    }
-
-    NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
-    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
-
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
+        NSString *newName = newFileName ? [self uniqueFileName:newFileName inFolder:newFolderPath] : trackItem.gpxFileName;
+        NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
         [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:trackItem.getFile];
         NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
         OASKFile *sourceFile = trackItem.getFile ?: [[OASKFile alloc] initWithFilePath:sourcePath];
@@ -940,11 +947,18 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     else
     {
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        dispatch_async(OAGPXCopyQueue(), ^{
+            NSString *newName = newFileName ? [self uniqueFileName:newFileName inFolder:newFolderPath] : trackItem.gpxFileName;
+            NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
+            NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
             BOOL copied = [self copyGpxFile:sourcePath toPath:destinationPath];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (!copied)
+                {
+                    NSLog(@"[ERROR] -> OAGPXUIHelper -> copyGPXToNewFolder is fail");
+                    [OAUtilities showToast:OALocalizedString(@"unexpected_error_occurred_warn") details:newName duration:4 inView:OARootViewController.instance.navigationController.view];
                     return;
+                }
 
                 if ([OAAppSettings.sharedManager isGpxVisible:oldPath])
                     [OAAppSettings.sharedManager showGpx:@[newStoringPath]];

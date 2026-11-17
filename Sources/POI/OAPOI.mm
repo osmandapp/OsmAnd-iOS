@@ -862,7 +862,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
                     {
                         [res appendString:SEPARATOR];
                     }
-                    [res appendString:poiType.value ?: poiType.name];
+                    [res appendString:poiType.name];
                 }
                 result[categoryName] = res;
             }

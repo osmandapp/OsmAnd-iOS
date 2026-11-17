@@ -729,7 +729,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     for (const auto& extension : OsmAnd::rangeOf(storedExtensions))
     {
         NSString *key = extension.key().toNSString();
-        if ([key hasPrefix:AMENITY_PREFIX] || [key hasPrefix:OSM_PREFIX_KEY])
+        if ([key hasPrefix:AMENITY_PREFIX] || [key hasPrefix:OSM_PREFIX_KEY] || [key hasPrefix:COLLAPSABLE_PREFIX])
             exts[key] = extension.value().toNSString();
     }
 

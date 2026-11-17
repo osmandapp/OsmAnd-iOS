@@ -114,6 +114,7 @@
     {
         XCTAssertFalse([key hasPrefix:@"amenity_"]);
         XCTAssertFalse([key hasPrefix:@"osm_tag_"]);
+        XCTAssertFalse([key hasPrefix:COLLAPSABLE_PREFIX]);
     }
     OAFavoriteViewController *controller = [[OAFavoriteViewController alloc] initWithItem:favorite headerOnly:NO];
     NSMutableArray<OAAmenityInfoRow *> *rows = [NSMutableArray array];
@@ -137,6 +138,48 @@
             XCTAssertEqualObjects([point getExtensionsToRead][key], stored[key]);
         favorite = [OAFavoriteItem fromWpt:point category:@""];
     }
+}
+
+- (void)testFavoriteWaypointGpxRoundTripKeepsGroupedPaymentMethods
+{
+    NSString *paymentKey = [COLLAPSABLE_PREFIX stringByAppendingString:@"payment_type"];
+    NSSet<NSString *> *expected = [NSSet setWithArray:@[@"payment_cash_yes", @"payment_visa_yes"]];
+    OAPOI *poi = [[OAPOI alloc] init];
+    [poi setAdditionalInfo:@{@"payment_cash_yes": @"yes", @"payment_visa_yes": @"yes"}];
+    OAFavoriteItem *favorite = [[OAFavoriteItem alloc] initWithLat:50.4 lon:30.5 name:@"Payment methods" category:@""];
+    [favorite setAmenity:poi];
+
+    OASWptPt *point = [favorite toWpt];
+    NSString *groupedPaymentMethods = [point getExtensionsToRead][paymentKey];
+    XCTAssertNotNil(groupedPaymentMethods);
+    NSArray<NSString *> *methods = [groupedPaymentMethods componentsSeparatedByString:@";"] ?: @[];
+    XCTAssertEqual(methods.count, expected.count);
+    XCTAssertEqualObjects([NSSet setWithArray:methods], expected);
+
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"gpx"]];
+    [self addTeardownBlock:^{
+        [NSFileManager.defaultManager removeItemAtPath:path error:nil];
+    }];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+    OASGpxFile *gpx = [[OASGpxFile alloc] initWithAuthor:@"test"];
+    [gpx addPointPoint:point];
+    XCTAssertNil([OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpx]);
+
+    OASGpxFile *reloadedGpx = [OASGpxUtilities.shared loadGpxFileFile:file];
+    XCTAssertNil(reloadedGpx.error);
+    OASWptPt *reloadedPoint = [reloadedGpx getPointsList].firstObject;
+    XCTAssertNotNil(reloadedPoint);
+    XCTAssertEqualObjects([reloadedPoint getExtensionsToRead][paymentKey], groupedPaymentMethods);
+    if (!reloadedPoint)
+        return;
+
+    OAFavoriteItem *restored = [OAFavoriteItem fromWpt:reloadedPoint category:@""];
+    XCTAssertEqualObjects([[restored getAmenity] getAdditionalInfo:paymentKey], groupedPaymentMethods);
+    OAFavoriteViewController *controller = [[OAFavoriteViewController alloc] initWithItem:restored headerOnly:NO];
+    NSMutableArray<OAAmenityInfoRow *> *rows = [NSMutableArray array];
+    [controller buildInternal:rows];
+    NSArray *paymentRows = [rows filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"key == %@", @"payment_type"]];
+    XCTAssertEqual(paymentRows.count, 1);
 }
 
 - (void)testPlainCollapsableLabelsKeepTheirMeasuredHeight

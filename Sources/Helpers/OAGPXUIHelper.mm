@@ -51,6 +51,17 @@ static NSLock *OAGPXNearestCitySearchLock()
     return lock;
 }
 
+// Serial and shared by all helper instances: a copy picks its unique name only after the previous copy is written
+static dispatch_queue_t OAGPXCopyQueue()
+{
+    static dispatch_queue_t queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("net.osmand.gpxCopy", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_USER_INITIATED, 0));
+    });
+    return queue;
+}
+
 static NSCache<NSString *, NSArray<OAPOI *> *> *OAGPXNearestCityCandidatesCache()
 {
     static NSCache<NSString *, NSArray<OAPOI *> *> *cache;
@@ -824,24 +835,66 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
 }
 
+- (NSString *)uniqueFileName:(NSString *)fileName inFolder:(NSString *)folderPath
+{
+    NSString *uniqueName = fileName;
+    while ([[NSFileManager defaultManager] fileExistsAtPath:[folderPath stringByAppendingPathComponent:uniqueName]])
+        uniqueName = [OAUtilities createNewFileName:uniqueName];
+    return uniqueName;
+}
+
+- (BOOL)writeRenamedGpx:(OASGpxFile *)gpxFile name:(NSString *)name toPath:(NSString *)path
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:path])
+        return NO;
+
+    [gpxFile updateTrackNameNewName:name];
+    if ([OASGpxUtilities.shared writeGpxFileFile:[[OASKFile alloc] initWithFilePath:path] gpxFile:gpxFile])
+    {
+        [fileManager removeItemAtPath:path error:nil];
+        return NO;
+    }
+    return YES;
+}
+
+// Called off the main thread: reading and writing a big track is slow
+- (BOOL)copyGpxFile:(NSString *)sourcePath toPath:(NSString *)destinationPath
+{
+    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:[[OASKFile alloc] initWithFilePath:sourcePath]];
+    NSString *copiedName = destinationPath.lastPathComponent.stringByDeletingPathExtension;
+    BOOL renameInside = !gpxFile.error && gpxFile.isOsmAndOrigin && ![copiedName isEqualToString:gpxFile.metadata.name];
+    BOOL copied = renameInside
+        ? [self writeRenamedGpx:gpxFile name:copiedName toPath:destinationPath]
+        : [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+    if (!copied)
+    {
+        NSLog(@"copyGPXToNewFolder failed: %@ toPath: %@ ", sourcePath, destinationPath);
+        return NO;
+    }
+
+    // getGPXItem: starts GpxReader for the new file (analysis and nearest city);
+    // addGPXFileToDBIfNeeded: makes the copy appear in the track lists at once
+    OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
+    if (![gpxDatabase getGPXItem:destinationPath])
+        [gpxDatabase addGPXFileToDBIfNeeded:destinationPath];
+    return YES;
+}
+
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
                  trackItem:(OASTrackItem *)trackItem
+                completion:(void (^_Nullable)(OASTrackItem *updatedTrackItem))completion
 {
-    NSString *gpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:trackItem.gpxFilePath];
-
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFilepath];
-    OASGpxFile *gpxFile = [OASGpxUtilities.shared loadGpxFileFile:file];
-    if (gpxFile)
-        [self copyGPXToNewFolder:newFolderName
-                 renameToNewName:newFileName
-              deleteOriginalFile:deleteOriginalFile
-                       openTrack:openTrack
-                       trackItem:trackItem
-                         gpxFile:gpxFile
-         updatedTrackItemСallback:nil];
+    [self copyGPXToNewFolder:newFolderName
+             renameToNewName:newFileName
+          deleteOriginalFile:deleteOriginalFile
+                   openTrack:openTrack
+                   trackItem:trackItem
+                     gpxFile:nil
+     updatedTrackItemСallback:completion];
 }
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
@@ -857,7 +910,6 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
 
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = trackItem.gpxFileName;
     
     NSString *subfolderPath = OsmAndApp.instance.gpxPath;
     for (NSString *component in [newFolder pathComponents])
@@ -869,22 +921,11 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         }
     }
 
-    if (newFileName)
-    {
-        newName = newFileName;
-        while ([[NSFileManager defaultManager]
-                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newName]])
-        {
-            newName = [OAUtilities createNewFileName:newName];
-        }
-    }
-
-    NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
-    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
-
     OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
     if (deleteOriginalFile)
     {
+        NSString *newName = newFileName ? [self uniqueFileName:newFileName inFolder:newFolderPath] : trackItem.gpxFileName;
+        NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
         [SharedLibSmartFolderHelper.shared onGpxFileDeletedGpxFile:trackItem.getFile];
         NSString *newStoringFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:newStoringPath];
         OASKFile *sourceFile = trackItem.getFile ?: [[OASKFile alloc] initWithFilePath:sourcePath];
@@ -906,48 +947,43 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
     }
     else
     {
-        NSError *err = nil;
-        [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:&err];
-        if (err)
-        {
-            NSLog(@"copyItemAtPath: %@ toPath: %@ ", sourcePath, destinationPath);
-            return;
-        }
-        
-        OASGpxDataItem *gpx = [gpxDatabase getGPXItem:sourcePath];
-        if (!gpx)
-        {
-            gpx = [gpxDatabase addGPXFileToDBIfNeeded:sourcePath];
-        }
-        if (gpx)
-        {
-            OASGpxTrackAnalysis *analysis = [gpx getAnalysis];
-            
-            if (analysis.locationStart)
-            {
-                OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
-                NSString *nearestCityString = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
-                [[OASGpxDbHelper shared] updateDataItemParameterItem:gpx
-                                                           parameter:OASGpxParameter.nearestCityName
-                                                               value:nearestCityString];
-            }
-        }
+        dispatch_async(OAGPXCopyQueue(), ^{
+            NSString *newName = newFileName ? [self uniqueFileName:newFileName inFolder:newFolderPath] : trackItem.gpxFileName;
+            NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
+            NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
+            BOOL copied = [self copyGpxFile:sourcePath toPath:destinationPath];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!copied)
+                {
+                    NSLog(@"[ERROR] -> OAGPXUIHelper -> copyGPXToNewFolder is fail");
+                    [OAUtilities showToast:OALocalizedString(@"unexpected_error_occurred_warn") details:newName duration:4 inView:OARootViewController.instance.navigationController.view];
+                    return;
+                }
 
-        if ([OAAppSettings.sharedManager isGpxVisible:oldPath])
-            [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
+                if ([OAAppSettings.sharedManager isGpxVisible:oldPath])
+                    [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
+
+                if (openTrack)
+                    [self openCopiedTrack:[newFolderName stringByAppendingPathComponent:newFileName]];
+
+                if (updatedTrackItemСallback)
+                    updatedTrackItemСallback([[OASTrackItem alloc] initWithFile:[[OASKFile alloc] initWithFilePath:destinationPath]]);
+            });
+        });
     }
-    if (openTrack)
+}
+
+- (void)openCopiedTrack:(NSString *)filePath
+{
+    OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:filePath];
+    if (gpx && _exportingHostVC)
     {
-        OASGpxDataItem *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
-        if (gpx && _exportingHostVC)
-        {
-            [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
-                [OARootViewController.instance.mapPanel targetHideContextPinMarker];
-                auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
-                trackItem.dataItem = gpx;
-                [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem];
-            }];
-        }
+        [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
+            [OARootViewController.instance.mapPanel targetHideContextPinMarker];
+            auto trackItem = [[OASTrackItem alloc] initWithFile:gpx.file];
+            trackItem.dataItem = gpx;
+            [OARootViewController.instance.mapPanel openTargetViewWithGPX:trackItem];
+        }];
     }
 }
 

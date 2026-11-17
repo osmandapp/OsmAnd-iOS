@@ -12,11 +12,11 @@
 		71F505F37FC24CB6A9E23D81 /* CheckDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3AAA61984F4B7C9FA437CD /* CheckDateFormatter.swift */; };
 		96982DAE4DE440408D3F6F61 /* CheckDateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAA9FC8E5C74960A711E46D /* CheckDateFormatterTests.swift */; };
 		ABE5E9FF0B1C4626A4B780BE /* OAOpeningHoursCheckDateTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */; };
+		D1928A110000000000000001 /* SteppedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1928A110000000000000002 /* SteppedSlider.swift */; };
 		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
 		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
 		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
 		D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000002 /* PlanRouteHistoryUITests.swift */; };
-		D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C608080000000000000002 /* OAFreeMapsCountTests.m */; };
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
 		D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5848A0000000000000002 /* Model3dHelperTests.swift */; };
 		D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */; };
@@ -499,6 +499,9 @@
 		46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */; };
 		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
 		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
+		5D12FB25826F371FFC5987CC /* FreeVersionMapDownloads.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3C579FC01FAAD84F96063E /* FreeVersionMapDownloads.swift */; };
+		A7C41E52B9D04F6E83A12C70 /* FreeRegionBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3E95D17C6A24B08917F4D21 /* FreeRegionBottomSheet.swift */; };
+		93F90FEF849146F101B616F4 /* OutdatedMapsWarning.swift in Sources */ = {isa = PBXBuildFile; fileRef = F059186ED908535FF95D0E5A /* OutdatedMapsWarning.swift */; };
 		6A73E2254E6E44F69F6CCAEF /* SharedObfResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfResources.swift */; };
 		9B118248E51854AF8B1C6E10 /* SharedPoiTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */; };
 		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
@@ -1793,7 +1796,6 @@
 		DA5A850926C563A900F274C7 /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */; };
 		DA5A850A26C563A900F274C7 /* OARoutingProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806526C563A500F274C7 /* OARoutingProgressView.m */; };
 		DA5A850B26C563A900F274C7 /* OAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806626C563A500F274C7 /* OAButton.m */; };
-		DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */; };
 		DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806A26C563A500F274C7 /* OAScrollView.m */; };
 		DA5A850E26C563A900F274C7 /* OAUserInteractionPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806E26C563A500F274C7 /* OAUserInteractionPassThroughView.m */; };
 		DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A806F26C563A500F274C7 /* OAUserInteractionInterceptorView.m */; };
@@ -2290,11 +2292,11 @@
 		64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpeningHoursCheckDateTest.mm; sourceTree = "<group>"; };
 		9CAA9FC8E5C74960A711E46D /* CheckDateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDateFormatterTests.swift; sourceTree = "<group>"; };
 		AB3AAA61984F4B7C9FA437CD /* CheckDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDateFormatter.swift; sourceTree = "<group>"; };
+		D1928A110000000000000002 /* SteppedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteppedSlider.swift; sourceTree = "<group>"; };
 		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
 		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
 		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
 		D57820010000000000000002 /* PlanRouteHistoryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryUITests.swift; sourceTree = "<group>"; };
-		D1C608080000000000000002 /* OAFreeMapsCountTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Helpers/OAFreeMapsCountTests.m; sourceTree = "<group>"; };
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
 		D1C5848A0000000000000002 /* Model3dHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles/Model3dHelperTests.swift; sourceTree = "<group>"; };
 		D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/UtilitiesUrlQueryTests.swift; sourceTree = "<group>"; };
@@ -3738,6 +3740,9 @@
 		D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiState.swift; sourceTree = "<group>"; };
 		D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteScrollableViewController.swift; sourceTree = "<group>"; };
 		D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteToolbarsView.swift; sourceTree = "<group>"; };
+		EA3C579FC01FAAD84F96063E /* FreeVersionMapDownloads.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeVersionMapDownloads.swift; sourceTree = "<group>"; };
+		B3E95D17C6A24B08917F4D21 /* FreeRegionBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeRegionBottomSheet.swift; sourceTree = "<group>"; };
+		F059186ED908535FF95D0E5A /* OutdatedMapsWarning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutdatedMapsWarning.swift; sourceTree = "<group>"; };
 		ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlanRouteScrollableViewController+UITesting.swift"; sourceTree = "<group>"; };
 		ED6086000000000000000002 /* PlanRouteUITestStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteUITestStateView.swift; sourceTree = "<group>"; };
 		D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTopPartView.swift; sourceTree = "<group>"; };
@@ -5202,7 +5207,6 @@
 		DA5A804226C563A500F274C7 /* OADistanceDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADistanceDirection.h; sourceTree = "<group>"; };
 		DA5A804426C563A500F274C7 /* OARouteInfoLegendItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteInfoLegendItemView.xib; sourceTree = "<group>"; };
 		DA5A804526C563A500F274C7 /* OAButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAButton.h; sourceTree = "<group>"; };
-		DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASubscribeEmailView.h; sourceTree = "<group>"; };
 		DA5A804726C563A500F274C7 /* OADownloadProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadProgressView.m; sourceTree = "<group>"; };
 		DA5A804826C563A500F274C7 /* UITableViewCell+getTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableViewCell+getTableView.h"; sourceTree = "<group>"; };
 		DA5A804926C563A500F274C7 /* OARoutingProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARoutingProgressView.h; sourceTree = "<group>"; };
@@ -5232,7 +5236,6 @@
 		DA5A806426C563A500F274C7 /* UITableViewCell+getTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableViewCell+getTableView.m"; sourceTree = "<group>"; };
 		DA5A806526C563A500F274C7 /* OARoutingProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARoutingProgressView.m; sourceTree = "<group>"; };
 		DA5A806626C563A500F274C7 /* OAButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAButton.m; sourceTree = "<group>"; };
-		DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASubscribeEmailView.m; sourceTree = "<group>"; };
 		DA5A806826C563A500F274C7 /* OATableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATableView.h; sourceTree = "<group>"; };
 		DA5A806926C563A500F274C7 /* OAUserInteractionInterceptorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUserInteractionInterceptorProtocol.h; sourceTree = "<group>"; };
 		DA5A806A26C563A500F274C7 /* OAScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScrollView.m; sourceTree = "<group>"; };
@@ -8875,6 +8878,8 @@
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
 				32FF4C2F2C18A69B00246B36 /* OADownloadMultipleResourceViewController+cpp.h */,
 				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
+				B3E95D17C6A24B08917F4D21 /* FreeRegionBottomSheet.swift */,
+				F059186ED908535FF95D0E5A /* OutdatedMapsWarning.swift */,
 				DA5A7D8326C563A300F274C7 /* OALocalResourceInfoCell.h */,
 				DA5A7D9826C563A300F274C7 /* OALocalResourceInfoCell.m */,
 				DA5A7D9926C563A300F274C7 /* OALocalResourceInformationViewController.h */,
@@ -10047,10 +10052,9 @@
 				CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */,
 				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
 				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
+				D1928A110000000000000002 /* SteppedSlider.swift */,
 				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
 				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
-				DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */,
-				DA5A806726C563A500F274C7 /* OASubscribeEmailView.m */,
 				CA4ED7ECFD074988CD7DE369 /* OASubscriptionBannerCardView.h */,
 				CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */,
 				B0D61B47A8DC2B61A93099E6 /* OATabBar.h */,
@@ -10129,6 +10133,7 @@
 				FA39D2962E819B030095DF8E /* ErrorHelper.swift */,
 				0E4DA44079A941CF8E86B30B /* HashHelper.swift */,
 				C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */,
+				EA3C579FC01FAAD84F96063E /* FreeVersionMapDownloads.swift */,
 				FA82B9172E74197A00A250F1 /* ImageLoading */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
@@ -10411,7 +10416,6 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
-				D1C608080000000000000002 /* OAFreeMapsCountTests.m */,
 				D1C584800000000000000002 /* OALocationIconTests.m */,
 				D1C5848A0000000000000002 /* Model3dHelperTests.swift */,
 				D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */,
@@ -12774,7 +12778,6 @@
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
-				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA8DC3922A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift in Sources */,
 				FA9217072D50C9640074E958 /* GalleryGridViewController.swift in Sources */,
 				C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */,
@@ -13333,6 +13336,7 @@
 				CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
+				D1928A110000000000000001 /* SteppedSlider.swift in Sources */,
 				2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
 				32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */,
@@ -13892,6 +13896,9 @@
 				CA4ED17832F287267D3F813A /* OAStorageStateValuesCell.m in Sources */,
 				CA4ED87EDFA076F9F7F63A4C /* OABenefitsOsmContributorsViewController.m in Sources */,
 				CA4EDCD265973B276DCF2FE8 /* OAMappersViewController.m in Sources */,
+				5D12FB25826F371FFC5987CC /* FreeVersionMapDownloads.swift in Sources */,
+				A7C41E52B9D04F6E83A12C70 /* FreeRegionBottomSheet.swift in Sources */,
+				93F90FEF849146F101B616F4 /* OutdatedMapsWarning.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13929,7 +13936,6 @@
 				D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */,
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
 				E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */,
-				D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,

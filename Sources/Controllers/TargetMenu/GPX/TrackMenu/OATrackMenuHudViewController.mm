@@ -2279,8 +2279,7 @@
                   deleteOriginalFile:NO
                            openTrack:YES
                            trackItem:self.gpx
-                             gpxFile:self.doc
-            updatedTrackItemСallback:nil];
+                          completion:nil];
 }
 
 #pragma mark - OASegmentSelectionDelegate

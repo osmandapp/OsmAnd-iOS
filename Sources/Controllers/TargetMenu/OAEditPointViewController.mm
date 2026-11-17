@@ -123,7 +123,7 @@
     BOOL _isNewColorSelected;
     BOOL _needToScrollToSelectedColor;
     OAColorsPaletteCell *_colorsPaletteCell;
-    
+    OASGpxUtilitiesPointsGroup *_newWaypointGroup;
     PoiIconCollectionHandler *_poiIconCollectionHandler;
 
     UILabel *_subtitle;
@@ -1347,6 +1347,7 @@
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
+        _newWaypointGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:editedGroupName iconName:iconName backgroundType:backgroundIconName color:[color toARGBNumber]];
         if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
         [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
@@ -1682,6 +1683,22 @@
                 _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
                 [_colorCollectionHandler generateData:@[_sortedColorItems]];
             }
+        }
+
+        OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
+        if (!group && [groupName isEqualToString:_newWaypointGroup.name])
+            group = _newWaypointGroup;
+
+        if (_isNewItemAdding && group)
+        {
+            if (!_iconSelectedByUser && [_pointHandler getIcon].length == 0 && group.iconName.length > 0 && [OAUtilities getMxIcon:group.iconName] != nil)
+            {
+                _selectedIconName = group.iconName;
+                [self selectIconInController];
+            }
+            NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
+            if (backgroundIndex != NSNotFound)
+                _selectedBackgroundIndex = backgroundIndex;
         }
     }
 

@@ -125,6 +125,7 @@ struct AstroVisibilityCardItem: AstroContextMenuItem {
     let culminationTime: String?
     let setTime: String?
     let locationText: String
+    let timeZoneText: String
     let culminationColor: UIColor
     let titleText: String
     let showResetButton: Bool
@@ -140,6 +141,7 @@ struct AstroScheduleDayItem {
     let date: Date
     let riseTime: String?
     let setTime: String?
+    let setDate: Date?
     let setDayOffset: Int
     let graph: AstroScheduleDayGraphSnapshot
 }
@@ -147,6 +149,7 @@ struct AstroScheduleDayItem {
 struct AstroScheduleCardItem: AstroContextMenuItem {
     let periodStart: Date
     let rangeLabel: String
+    let timeZoneText: String
     let days: [AstroScheduleDayItem]
     let showResetPeriodButton: Bool
     let key: AstroContextCardKey = .schedule

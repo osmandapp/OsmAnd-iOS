@@ -74,6 +74,26 @@ extension UIViewController {
                             barButtonItem: UIBarButtonItem?,
                             permittedArrowDirections: UIPopoverArrowDirection = .any,
                             completionWithItemsHandler: (() -> Void)? = nil) {
+        showActivity(items,
+                     applicationActivities: applicationActivities,
+                     excludedActivityTypes: excludedActivityTypes,
+                     sourceView: sourceView,
+                     sourceRect: sourceRect,
+                     barButtonItem: barButtonItem,
+                     permittedArrowDirections: permittedArrowDirections,
+                     completionHandler: { _ in
+            completionWithItemsHandler?()
+        })
+    }
+
+    @objc func showActivity(_ items: [Any],
+                            applicationActivities: [UIActivity]? = nil,
+                            excludedActivityTypes: [UIActivity.ActivityType]? = nil,
+                            sourceView: UIView?,
+                            sourceRect: CGRect = CGRect(),
+                            barButtonItem: UIBarButtonItem?,
+                            permittedArrowDirections: UIPopoverArrowDirection = .any,
+                            completionHandler: @escaping (Bool) -> Void) {
         
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: applicationActivities)
         activityViewController.excludedActivityTypes = excludedActivityTypes
@@ -88,8 +108,8 @@ extension UIViewController {
             }
         }
         
-        activityViewController.completionWithItemsHandler = { _, _, _, _ in
-            completionWithItemsHandler?()
+        activityViewController.completionWithItemsHandler = { _, completed, _, _ in
+            completionHandler(completed)
         }
         
         present(activityViewController, animated: true, completion: nil)

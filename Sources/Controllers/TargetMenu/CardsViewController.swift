@@ -32,10 +32,22 @@ final class CardsViewController: UIView {
     private var collectionView: UICollectionView!
     // swiftlint:enable all
     private var imageDataSource: SimpleImageDatasource?
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .textColorSecondary
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
+        addSubview(loadingIndicator)
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
         registerCels()
         dataSource = makeDataSource()
     }
@@ -57,8 +69,10 @@ final class CardsViewController: UIView {
             guard let self else { return }
             if show {
                 clearDataSource()
+                loadingIndicator.startAnimating()
+            } else {
+                loadingIndicator.stopAnimating()
             }
-            collectionView.showActivityIndicator(show: show)
         }
     }
     
@@ -233,7 +247,7 @@ extension CardsViewController: UICollectionViewDelegate {
         
         if card is WikiImageCard || card is UrlImageCard {
             let cards = dataSource.snapshot().itemIdentifiers
-                .filter { $0 is WikiImageCard || $0 is UrlImageCard }
+                .filter { $0 is WikiImageCard || $0 is UrlImageCard || $0 is MapillaryAmenityImageCard }
                 .compactMap { $0 as? ImageCard }
             guard let initialIndex = cards.firstIndex(where: { $0 === card }) else { return }
             let imageDataSource = SimpleImageDatasource(imageItems: cards.compactMap { ImageItem.card($0) }, placeholderImage: placeholderImage)
@@ -328,23 +342,5 @@ fileprivate extension CardsViewController {
             return 156.0
         }
         return cell.height()
-    }
-}
-
-// MARK: - UICollectionView
-
-fileprivate extension UICollectionView {
-    func showActivityIndicator(show: Bool) {
-        if show {
-            let indicator = UIActivityIndicatorView(style: .large)
-            indicator.hidesWhenStopped = true
-            backgroundView = indicator
-            indicator.startAnimating()
-        } else {
-            if let indicator = backgroundView as? UIActivityIndicatorView {
-                indicator.stopAnimating()
-                indicator.removeFromSuperview()
-            }
-        }
     }
 }

@@ -6,7 +6,7 @@
 //  Copyright © 2025 OsmAnd. All rights reserved.
 //
 
-import CarPlay.CPSessionConfiguration
+import CarPlay
 
 @objcMembers
 final class CarPlayService: NSObject {
@@ -27,8 +27,9 @@ final class CarPlayService: NSObject {
     
     private override init() {
         super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(onSceneDidActivate(_:)), name: UIScene.didActivateNotification, object: nil)
     }
-        
+
     func configure() {
         reconnectOBDIfNeeded()
         navigationModeProvider.configureForCarPlay()
@@ -88,6 +89,12 @@ final class CarPlayService: NSObject {
 
     private func reloadMapForRenderingContextChange() {
         OsmAndApp.swiftInstance().carPlayDayNightModeObservable.notifyEvent()
+    }
+
+    @objc private func onSceneDidActivate(_ notification: Notification) {
+        guard isMapAppearanceConfigured,
+              notification.object is CPTemplateApplicationScene || notification.object is CPTemplateApplicationDashboardScene else { return }
+        OARootViewController.instance()?.mapPanel.mapViewController.reloadMapSourceIfNightModeChanged()
     }
     
     private func applyVehicleAppearance(with contentStyle: CPContentStyle) {

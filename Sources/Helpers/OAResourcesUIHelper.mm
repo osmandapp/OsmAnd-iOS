@@ -729,6 +729,61 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 @implementation OAResourcesUIHelper
 
++ (nullable OARepositoryResourceItem *)uninstalledMapFromResourceIds:(NSArray<NSString *> *)ids
+                                                              region:(OAWorldRegion *)region
+{
+    for (NSString *resourceId in ids)
+    {
+        const auto& resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+        if (resource && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            BOOL isInstalled = [OsmAndApp instance].resourcesManager->isResourceInstalled(QString::fromNSString(resourceId));
+            if (!isInstalled)
+            {
+                NSString *regionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                    inRegion:region
+                                                              withRegionName:YES
+                                                            withResourceType:NO];
+                NSString *superregionTitle = [OAResourcesUIHelper titleOfResource:resource
+                                                                         inRegion:region.superregion
+                                                                   withRegionName:YES
+                                                                 withResourceType:NO];
+                NSString *composeTitle = [self composeSearchMapTitleWithPart:regionTitle andPart:superregionTitle];
+                return [self createSearchMapItemWithResource:resource region:region title:composeTitle];
+            }
+        }
+    }
+    return nil;
+}
+
++ (NSString *)composeSearchMapTitleWithPart:(nullable NSString *)part1 andPart:(nullable NSString *)part2
+{
+    if (part1.length > 0 && part2.length > 0)
+    {
+        return [NSString stringWithFormat:@"%@, %@", part1, part2];
+    }
+    return part1.length > 0 ? part1 : part2;
+}
+
++ (OARepositoryResourceItem *)createSearchMapItemWithResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource
+                                                                region:(OAWorldRegion *)region
+                                                                 title:(NSString *)title
+{
+    OARepositoryResourceItem *item = [OARepositoryResourceItem new];
+    item.resourceId = resource->id;
+    item.resourceType = resource->type;
+    item.title = title;
+    item.resource = resource;
+    NSString *downloadKey = [@"resource:" stringByAppendingString:resource->id.toNSString()];
+    item.downloadTask = [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:downloadKey] firstObject];
+    item.size = resource->size;
+    item.sizePkg = resource->packageSize;
+    item.worldRegion = region;
+    item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+    return item;
+}
+
+
 + (NSString *)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource> &)resource
                      inRegion:(OAWorldRegion *)region
                withRegionName:(BOOL)includeRegionName
@@ -888,51 +943,16 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSMutableString* text;
-    if (isUpdate)
-    {
-        text = [OALocalizedString(@"res_update_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
-    else
-    {
-        text = [OALocalizedString(@"res_install_no_space") mutableCopy];
-        [text appendString:@" "];
-        [text appendString:resourceName];
-        [text appendString:@"."];
-        [text appendString:@" "];
-        [text appendString:stringifiedSize];
-        [text appendString:@" "];
-        [text appendString:OALocalizedString(@"res_no_space_free")];
-    }
+    NSString *prefix = OALocalizedString(isUpdate ? @"res_update_no_space" : @"res_install_no_space");
+    NSString *text = [NSString stringWithFormat:@"%@ %@. %@ %@",
+                      prefix,
+                      resourceName ?: @"",
+                      stringifiedSize,
+                      OALocalizedString(@"res_no_space_free")];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:text preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
     [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-}
-
-+ (BOOL) checkIfDownloadAvailable
-{
-    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
-    return ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]);
-}
-
-+ (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
-{
-    NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
-    const auto res = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(region.regionId));
-    bool free = res && res->free;
-
-    if (region.regionId == nil || [region isInPurchasedArea] || free || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
-        return YES;
-
-    return NO;
 }
 
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
@@ -1343,19 +1363,36 @@ includeHidden:(BOOL)includeHidden
     return countryName;
 }
 
-+ (BOOL) checkIfDownloadEnabled:(OAWorldRegion *)region
++ (NSArray<OAResourceItem *> *)getDownloadEnabledItems:(NSArray<OAResourceItem *> *)items onReplaced:(dispatch_block_t)onReplaced
 {
-    BOOL isAvailable = [self.class checkIfDownloadAvailable:region];
-    if (!isAvailable)
+    NSMutableArray<OAResourceSwiftItem *> *swiftItems = [NSMutableArray array];
+    for (OAResourceItem *item in items)
     {
-        OAWorldRegion * globalRegion = [region getPrimarySuperregion];
-        OAProduct* product = [globalRegion getProduct];
-        if (!product)
-            product = OAIAPHelper.sharedInstance.allWorld;
-        [OAChoosePlanHelper showChoosePlanScreenWithProduct:product navController:[OARootViewController instance].navigationController];
-        return NO;
+        [swiftItems addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }
-    return isAvailable;
+    
+    FreeRegionCheck *check = [FreeVersionMapDownloads.shared check:swiftItems];
+    if (check.isAllFree)
+        return items;
+    
+    if (check.freeItems.count == 0)
+    {
+        UINavigationController *navigationController = [OARootViewController instance].navigationController;
+        for (UIViewController *presented = navigationController.presentedViewController; presented; presented = presented.presentedViewController)
+        {
+            if ([presented isKindOfClass:UINavigationController.class]
+                && [((UINavigationController *)presented).viewControllers.firstObject isKindOfClass:FreeRegionBottomSheet.class])
+                return @[];
+        }
+
+        FreeRegionBottomSheet *bottomSheet = [[FreeRegionBottomSheet alloc] initWithFreeRegion:check.freeRegion region:check.otherRegions.firstObject onReplaced:onReplaced];
+        [navigationController.visibleViewController showMediumToLargeSheetViewController:bottomSheet];
+        return @[];
+    }
+    
+    NSString *regionNames = [[check.otherRegions valueForKey:@"name"] componentsJoinedByString:@", "];
+    [OAUtilities showToast:@"" details:[NSString stringWithFormat:OALocalizedString(@"free_region_other_regions_need_maps_plus"), regionNames] duration:4 inView:[UIApplication sharedApplication].mainWindow];
+    return [check.freeItems valueForKey:@"objcResourceItem"];
 }
 
 + (BOOL) checkIfUpdateEnabled:(OAWorldRegion *)region
@@ -1507,7 +1544,11 @@ includeHidden:(BOOL)includeHidden
 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item sourceView:(UIView *)sourceView onTaskCreated:(OADownloadTaskCallback)onTaskCreated onTaskResumed:(OADownloadTaskCallback)onTaskResumed completionHandler:(void(^)(UIAlertController *))completionHandler silent:(BOOL)silent
 {
-    if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion]))
+    dispatch_block_t onReplaced = ^{
+        [self.class offerDownloadAndInstallOf:item sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:silent];
+    };
+
+    if (item.disabled || [self.class getDownloadEnabledItems:@[item] onReplaced:onReplaced].count == 0)
         return;
     if ([OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
         return;
@@ -1597,10 +1638,14 @@ includeHidden:(BOOL)includeHidden
     NSMutableArray<OAResourceItem *> *items = [selectedItems mutableCopy];
     for (OAResourceItem *item in selectedItems)
     {
-        if (![multipleItem.items containsObject:item] || item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self.class checkIfDownloadEnabled:item.worldRegion])
-            || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
+        if (![multipleItem.items containsObject:item] || item.disabled || [OAResourcesInstaller isInstalling:item.resourceId.toNSString()])
             [items removeObject:item];
     }
+
+    items = [[self.class getDownloadEnabledItems:items onReplaced:^{
+        [self.class offerMultipleDownloadAndInstallOf:multipleItem selectedItems:selectedItems sourceView:nil onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+    }] mutableCopy];
+
     if (items.count == 0)
         return;
 
@@ -1789,7 +1834,7 @@ includeHidden:(BOOL)includeHidden
     }
     else
     {
-        if ([OAResourcesInstaller isInstalling:item.resource->id.toNSString()])
+        if ([OAResourcesInstaller isInstalling:item.resource->id.toNSString()] || ![FreeVersionMapDownloads.shared canDownload:[[OAResourceSwiftItem alloc] initWithItem:item]])
             return;
 
         // Create download tasks
@@ -1837,6 +1882,13 @@ includeHidden:(BOOL)includeHidden
         OAResourceItem *item = mutableItems.firstObject;
 
         const auto resource = [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId);
+        if (!resource)
+        {
+            // an item list built before a repository update can hold an id the repository no longer has
+            NSLog(@"[WARNING] startDownloadOfItems: %@ is not in the repository", item.resourceId.toNSString());
+            [mutableItems removeObject:item];
+            continue;
+        }
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
         repositoryItem.resourceId = resource->id;
         repositoryItem.resourceType = resource->type;
@@ -2052,9 +2104,10 @@ includeHidden:(BOOL)includeHidden
     [self offerDeleteResourceOf:item viewController:viewController progressHUD:progressHUD executeAfterSuccess:nil];
 }
 
-+ (void)deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
++ (void)deleteResourcesSynchronously:(NSArray<OALocalResourceItem *> *)items
 {
-    dispatch_block_t proc = ^{
+    @autoreleasepool
+    {
         OsmAndAppInstance app = [OsmAndApp instance];
         BOOL shouldClearAstronomyCache = NO;
         for (OALocalResourceItem *item in items)
@@ -2091,6 +2144,9 @@ includeHidden:(BOOL)includeHidden
                     OALog(@"Failed to uninstall resource %@ from %@",
                             item.resourceId.toNSString(),
                             item.resource != nullptr ? item.resource->localPath.toNSString() : @"?");
+
+                    if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
+                        app.resourcesManager->rescanUnmanagedStoragePaths(true);
                 }
                 else
                 {
@@ -2102,8 +2158,13 @@ includeHidden:(BOOL)includeHidden
 
                 if (item.resourceType == OsmAndResourceType::MapRegion || item.resourceType == OsmAndResourceType::RoadMapRegion)
                     [app.data.mapLayerChangeObservable notifyEvent];
-                
-                [item.worldRegion.superregion updateGroupItems:item.worldRegion type:[OAResourceType toValue:item.resourceType]];
+
+                // group items are rebuilt on the main thread
+                OAWorldRegion *region = item.worldRegion;
+                NSNumber *type = [OAResourceType toValue:item.resourceType];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [region.superregion updateGroupItems:region type:type];
+                });
             }
         }
 
@@ -2112,7 +2173,13 @@ includeHidden:(BOOL)includeHidden
             AstronomyPlugin *plugin = (AstronomyPlugin *)[OAPluginsHelper getPlugin:AstronomyPlugin.class];
             [plugin clearCachedData];
         }
+    }
+}
 
++ (void)deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
+{
+    dispatch_block_t proc = ^{
+        [self deleteResourcesSynchronously:items];
         if (block)
             dispatch_async(dispatch_get_main_queue(), block);
     };

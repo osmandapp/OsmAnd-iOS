@@ -322,6 +322,7 @@ final class DeepLinkAppRouter: NSObject {
     
     @discardableResult private func dismissAndPopToRoot(completion: ((UINavigationController) -> Void)? = nil) -> UINavigationController? {
         guard let nav = prepareRootNavigationTransition() else { return nil }
+        SceneWindowStateRestorer.cancelModalRestoration(for: root)
         if let completion {
             nav.dismiss(animated: false) {
                 nav.popToRootViewController(animated: false)

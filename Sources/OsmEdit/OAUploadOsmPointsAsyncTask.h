@@ -23,12 +23,14 @@
 @interface OAUploadOsmPointsAsyncTask : NSObject
 
 @property (nonatomic, weak) id<OAUploadTaskDelegate> delegate;
+@property (nonatomic, readonly) BOOL requiresNoteUploadConfirmation;
 
 - (id) initWithPlugin:(OAOsmEditingPlugin *)plugin points:(NSArray<OAOsmPoint *> *)points closeChangeset:(BOOL)closeChangeset anonymous:(BOOL)anonymous comment:(NSString *)comment;
 
 - (void)uploadPoints;
 
 - (void)retryFailedPoints;
+- (void)retryFailedPointsAllowingUnconfirmedNotes:(BOOL)allowUnconfirmedNotes;
 
 - (void) setInterrupted:(BOOL)interrupted;
 

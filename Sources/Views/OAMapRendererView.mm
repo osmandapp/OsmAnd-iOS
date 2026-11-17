@@ -7,6 +7,7 @@
 //
 
 #import "OAMapRendererView.h"
+#import "OAAppSettings.h"
 #import "OAMapUtils.h"
 #import "OANativeUtilities.h"
 #import "OAObservable.h"
@@ -212,6 +213,7 @@ static const float kFrameRateTolerance = 0.01f;
     _mapAnimator.reset(new OsmAnd::MapAnimator());
     _mapAnimator->setMapRenderer(_renderer);
     _renderer->setSymbolsUpdateInterval(kSymbolsUpdateInterval);
+    _renderer->setSymbolsFade([[OAAppSettings sharedManager].batterySavingMode get] ? 0 : 300, -1);
 
     // Create animator for map markers
     _mapMarkersAnimator.reset(new OsmAnd::MapMarkersAnimator());

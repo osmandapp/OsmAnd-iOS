@@ -25,6 +25,8 @@
 
 @implementation OACategoriesTableViewController
 {
+    NSUInteger _dataRequest;
+    BOOL _dataRequestInvalidated;
     OAQuickSearchTableController *_tableController;
 }
 
@@ -48,8 +50,16 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    _dataRequestInvalidated = NO;
     [super viewWillAppear:animated];
     [self reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    _dataRequestInvalidated = YES;
+    ++_dataRequest;
+    [super viewDidDisappear:animated];
 }
 
 -(void)setTableDelegate:(id<OAQuickSearchTableDelegate>)tableDelegate
@@ -58,9 +68,23 @@
     _tableController.delegate = tableDelegate;
 }
 
-- (void) generateData
+- (void)generateData
 {
-    OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+    if (_dataRequestInvalidated)
+        return;
+    NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
+    [[[OAQuickSearchHelper instance] getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
+                [self updateDataWithResults:res];
+        });
+    }];
+}
+
+- (void)updateDataWithResults:(OASearchResultCollection *)res
+{
     NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
     if (res)
     {

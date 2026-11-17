@@ -7,6 +7,7 @@
 //
 
 #import "OAWikiImageHelper.h"
+#import "OAAppSettings.h"
 #import "OATargetInfoViewController.h"
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -20,9 +21,146 @@ static NSArray<NSNumber *> *cardTypes = @[@(EOAWikiImageTypeWikimedia), @(EOAWik
 
 static NSString * const kWikipediaShortLink = @".wikipedia.org/wiki/";
 
+static NSString *OAEncodedWikiQueryValue(NSString *value)
+{
+    NSMutableCharacterSet *allowedCharacters = [NSCharacterSet.URLQueryAllowedCharacterSet mutableCopy];
+    [allowedCharacters removeCharactersInString:@"&=+?#"];
+    return [value stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacters];
+}
+
+static NSString *OANormalizedWikiMediaTag(NSString *tag)
+{
+    NSString *decodedTag = tag.stringByRemovingPercentEncoding ?: tag;
+    return [[decodedTag stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString];
+}
+
+static BOOL OAIsWikiFileMetadataMissing(NSData *data, NSString *fileName)
+{
+    if (!data || fileName.length == 0)
+        return NO;
+
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSArray *images = [json isKindOfClass:NSDictionary.class] ? json[@"features-v2"] : nil;
+    if (![images isKindOfClass:NSArray.class])
+        return NO;
+
+    // NSURLComponents has already decoded the file query value once.
+    NSString *normalizedFileName = [[fileName stringByReplacingOccurrencesOfString:@"_" withString:@" "] lowercaseString];
+    for (NSDictionary *image in images)
+    {
+        if (![image isKindOfClass:NSDictionary.class])
+            continue;
+        NSString *imageURL = image[@"image"];
+        if (![imageURL isKindOfClass:NSString.class]
+            || ![OANormalizedWikiMediaTag(imageURL.lastPathComponent) isEqualToString:normalizedFileName])
+            continue;
+
+        for (NSString *key in @[@"date", @"author", @"license", @"description"])
+        {
+            NSString *value = image[key];
+            if ([value isKindOfClass:NSString.class] && value.length > 0)
+                return NO;
+        }
+        return YES;
+    }
+    return YES;
+}
+
+static NSString *OANormalizedWikipediaTitle(NSString *language, NSString *title)
+{
+    if (language.length == 0 || title.length == 0)
+        return nil;
+
+    NSString *languagePrefix = [language stringByAppendingString:@":"];
+    if ([title rangeOfString:languagePrefix options:NSCaseInsensitiveSearch].location == 0
+        || [title indexOf:kWikipediaShortLink] > 0)
+    {
+        return title;
+    }
+    return [NSString stringWithFormat:@"%@:%@", language, title];
+}
+
+static void OAAddWikipediaLanguageCandidates(NSMutableOrderedSet<NSString *> *languages, NSString *language)
+{
+    NSString *normalizedLanguage = [[language stringByReplacingOccurrencesOfString:@"_" withString:@"-"] lowercaseString];
+    if (normalizedLanguage.length == 0)
+        return;
+
+    [languages addObject:normalizedLanguage];
+    NSRange separatorRange = [normalizedLanguage rangeOfString:@"-"];
+    if (separatorRange.location != NSNotFound)
+        [languages addObject:[normalizedLanguage substringToIndex:separatorRange.location]];
+}
+
+static NSString *OAExtractWikipediaTitle(MutableOrderedDictionary<NSString *, NSString *> *values)
+{
+    NSString *directTitle = values[WIKIPEDIA_TAG];
+    if (directTitle.length > 0)
+        return directTitle;
+
+    NSString *localizedPrefix = [WIKIPEDIA_TAG stringByAppendingString:@":"];
+    NSMutableOrderedSet<NSString *> *preferredLanguages = [NSMutableOrderedSet orderedSet];
+    OAAddWikipediaLanguageCandidates(preferredLanguages, [OAAppSettings sharedManager].settingPrefMapLanguage.get);
+    for (NSString *language in NSLocale.preferredLanguages)
+        OAAddWikipediaLanguageCandidates(preferredLanguages, language);
+    [preferredLanguages addObject:@"en"];
+
+    for (NSString *language in preferredLanguages)
+    {
+        NSString *title = values[[localizedPrefix stringByAppendingString:language]];
+        NSString *normalizedTitle = OANormalizedWikipediaTitle(language, title);
+        if (normalizedTitle.length > 0)
+            return normalizedTitle;
+    }
+
+    for (NSString *key in values.allKeys)
+    {
+        if (![key hasPrefix:localizedPrefix] || key.length == localizedPrefix.length)
+            continue;
+
+        NSString *title = values[key];
+        NSString *language = [key substringFromIndex:localizedPrefix.length];
+        NSString *normalizedTitle = OANormalizedWikipediaTitle(language, title);
+        if (normalizedTitle.length > 0)
+            return normalizedTitle;
+    }
+    return nil;
+}
+
+static NSURLRequest *OARequestForLegacyWikiCacheKey(NSURLRequest *request, BOOL removeLocalizedWikipedia)
+{
+    NSURLComponents *components = [NSURLComponents componentsWithURL:request.URL resolvingAgainstBaseURL:NO];
+    NSMutableArray<NSURLQueryItem *> *legacyItems = [NSMutableArray array];
+    BOOL hasLegacySource = NO;
+    BOOL didRemoveNewParameter = NO;
+    for (NSURLQueryItem *item in components.queryItems)
+    {
+        BOOL shouldRemoveItem = [item.name isEqualToString:@"file"]
+            || (removeLocalizedWikipedia && [item.name isEqualToString:@"wiki"]);
+        if (shouldRemoveItem)
+        {
+            didRemoveNewParameter = YES;
+            continue;
+        }
+        if ([item.name isEqualToString:@"article"]
+            || [item.name isEqualToString:@"category"]
+            || [item.name isEqualToString:@"wiki"])
+        {
+            hasLegacySource = YES;
+        }
+        [legacyItems addObject:item];
+    }
+    if (!didRemoveNewParameter || !hasLegacySource)
+        return nil;
+    components.queryItems = legacyItems;
+    return [NSURLRequest requestWithURL:components.URL
+                            cachePolicy:request.cachePolicy
+                        timeoutInterval:request.timeoutInterval];
+}
+
 @interface OAWikiImageHelper ()
 
-typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *cards);
+typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *cards, BOOL requestFailed);
 @property OAWikiImageHelperOtherImages addOtherImagesFunction;
 
 @end
@@ -46,8 +184,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 - (void)sendNearbyWikiImagesRequest:(OAAmenityInfoRow *)nearbyImagesRowInfo
                           targetObj:(id)targetObj
                             session:(nullable NSURLSession *)session
-           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards))addOtherImagesOnComplete
-                   onFailureNoCache:(void (^)(void))onFailureNoCache
+           addOtherImagesOnComplete:(void (^)(NSMutableArray <AbstractCard *> *cards, BOOL requestFailed))addOtherImagesOnComplete
 {
     if (!nearbyImagesRowInfo)
         return;
@@ -61,6 +198,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
         NSString *wikiCategory = @"";
         NSString *wikidataId = @"";
+        NSString *wikiFileName = @"";
         NSString *url = @"";
         NSArray<NSString *> *keys = poi.values.allKeys;
         
@@ -69,8 +207,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             NSString *wikimediaCommons = poi.values[WIKIMEDIA_COMMONS_TAG];
             if ([wikimediaCommons hasPrefix:WIKIMEDIA_FILE])
             {
-                NSString *imageFileName = [wikimediaCommons stringByReplacingOccurrencesOfString:WIKIMEDIA_FILE withString:@""];
-                WikiImage *wikiImage = [self getWikiImage:imageFileName];
+                wikiFileName = [wikimediaCommons substringFromIndex:WIKIMEDIA_FILE.length];
+                WikiImage *wikiImage = [self getWikiImage:wikiFileName];
                 WikiImageCard *card = [[WikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
                 if (card)
                     [cards addObject:card];
@@ -78,41 +216,55 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             else if ([wikimediaCommons hasPrefix:WIKIMEDIA_CATEGORY])
             {
                 wikiCategory = [wikimediaCommons stringByReplacingOccurrencesOfString:WIKIMEDIA_CATEGORY withString:@""];
-                url = [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"category=", wikiCategory];
+                url = [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"category=", OAEncodedWikiQueryValue(wikiCategory)];
             }
         }
         if ([keys containsObject:WIKIDATA_TAG])
         {
             wikidataId = poi.values[WIKIDATA_TAG];
+            NSString *encodedWikidataId = OAEncodedWikiQueryValue(wikidataId);
             url = url.length == 0
-                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"article=", wikidataId]
-                : [url stringByAppendingFormat:@"&%@%@", @"article=", wikidataId];
+                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"article=", encodedWikidataId]
+                : [url stringByAppendingFormat:@"&%@%@", @"article=", encodedWikidataId];
         }
-        if ([keys containsObject:WIKIPEDIA_TAG])
+        NSString *directWikiTitle = poi.values[WIKIPEDIA_TAG];
+        NSString *wikiTitle = OAExtractWikipediaTitle(poi.values);
+        BOOL usesLocalizedWikipediaTag = directWikiTitle.length == 0 && wikiTitle.length > 0;
+        if (wikiTitle.length > 0)
         {
-            NSString *wikiTitle = poi.values[WIKIPEDIA_TAG];
-
             NSInteger urlInd = [wikiTitle indexOf:kWikipediaShortLink];
             if (urlInd > 0)
             {
                 NSString *prefix = [wikiTitle substringToIndex:urlInd];
                 NSString *lang = [[prefix substringFromIndex:[prefix lastIndexOf:@"/"] + 1] stringByReplacingOccurrencesOfString:@"/" withString:@""];
                 NSString *title = [wikiTitle substringFromIndex:urlInd + kWikipediaShortLink.length];
-                wikiTitle = [NSString stringWithFormat:@"%@:%@", lang, title];
+                wikiTitle = [NSString stringWithFormat:@"%@:%@", lang, title.stringByRemovingPercentEncoding ?: title];
             }
 
+            NSString *encodedWikiTitle = OAEncodedWikiQueryValue(wikiTitle);
             url = url.length == 0
-                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"wiki=", wikiTitle]
-                : [url stringByAppendingFormat:@"&%@%@", @"wiki=", wikiTitle];
+                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"wiki=", encodedWikiTitle]
+                : [url stringByAppendingFormat:@"&%@%@", @"wiki=", encodedWikiTitle];
+        }
+
+        if (wikiFileName.length > 0)
+        {
+            NSString *decodedWikiFileName = wikiFileName.stringByRemovingPercentEncoding ?: wikiFileName;
+            NSString *encodedWikiFileName = OAEncodedWikiQueryValue(decodedWikiFileName);
+            url = url.length == 0
+                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"file=", encodedWikiFileName]
+                : [url stringByAppendingFormat:@"&%@%@", @"file=", encodedWikiFileName];
         }
 
         if (USE_OSMAND_WIKI_API)
         {
             if (url.length > 0)
             {
-                url = [url stringByAppendingFormat:@"&addMetaData=true"];
-                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-                [self addOsmandAPIImageList:url cards:cards session:session onFailureNoCache:onFailureNoCache];
+                url = [url stringByAppendingString:@"&addMetaData=true"];
+                [self addOsmandAPIImageList:url
+          removeLocalizedWikipediaFromLegacyKey:usesLocalizedWikipediaTag
+                                      cards:cards
+                                    session:session];
             }
             else
             {
@@ -149,9 +301,9 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 }
 
 - (void)addOsmandAPIImageList:(NSString *)url
+removeLocalizedWikipediaFromLegacyKey:(BOOL)removeLocalizedWikipediaFromLegacyKey
                         cards:(NSMutableArray<AbstractCard *> *)cards
                       session:(nullable NSURLSession *)session
-             onFailureNoCache:(void (^)(void))onFailureNoCache
 {
     NSURL *urlObj = [NSURL URLWithString:url];
     NSString *key = [URLSessionConfigProvider onlineAndMapillaryPhotosAPIKey];
@@ -160,8 +312,28 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
     NSURLRequest *request = [NSURLRequest requestWithURL:urlObj
                                              cachePolicy:NSURLRequestReturnCacheDataElseLoad
                                          timeoutInterval:30];
+    NSString *fileName = nil;
+    for (NSURLQueryItem *item in [NSURLComponents componentsWithURL:urlObj resolvingAgainstBaseURL:NO].queryItems)
+    {
+        if ([item.name isEqualToString:@"file"])
+        {
+            fileName = item.value;
+            break;
+        }
+    }
+    NSCachedURLResponse *existingCached = [URLSessionManager cachedResponseFor:request sessionKey:key];
+    // The server may legitimately have no metadata for this file, so refresh an old cache entry only once.
+    BOOL metadataAlreadyChecked = [existingCached.userInfo[[URLSessionManager wikiFileMetadataCheckedKey]] boolValue];
+    BOOL refreshIncompleteMetadata = !metadataAlreadyChecked
+        && OAIsWikiFileMetadataMissing(existingCached.data, fileName);
+    BOOL refreshExpiredCache = existingCached && [URLSessionManager isExpiredCachedResponse:existingCached];
+    // Only a cache miss or a forced reload should extend the cache lifetime.
+    BOOL fetchFreshResponse = !existingCached || refreshIncompleteMetadata || refreshExpiredCache;
+    NSURLRequest *requestForTask = (refreshIncompleteMetadata || refreshExpiredCache)
+        ? [NSURLRequest requestWithURL:urlObj cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30]
+        : request;
     __weak __typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [urlSession dataTaskWithRequest:request
+    NSURLSessionDataTask *task = [urlSession dataTaskWithRequest:requestForTask
                                             completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf)
@@ -169,39 +341,42 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         
         if (error && error.code == NSURLErrorCancelled)
             return;
+
+        void (^completeWithoutWikiData)(void) = ^{
+            [strongSelf runCallback:cards requestFailed:YES];
+        };
         
         NSData *effectiveData = data;
-        NSURLResponse *effectiveResponse = response;
 
         if ((!data || !response) && [ErrorHelper isInternetConnectionError:error])
         {
-            NSCachedURLResponse *cached = [URLSessionManager cachedResponseFor:request sessionKey:key];
+            NSCachedURLResponse *cached = existingCached ?: [URLSessionManager cachedResponseFor:request sessionKey:key];
             if (cached)
             {
                 effectiveData = cached.data;
-                effectiveResponse = cached.response;
             }
             else
             {
-                if (onFailureNoCache)
+                NSURLRequest *legacyRequest = OARequestForLegacyWikiCacheKey(request, removeLocalizedWikipediaFromLegacyKey);
+                NSCachedURLResponse *legacyCached = legacyRequest
+                    ? [URLSessionManager cachedResponseFor:legacyRequest sessionKey:key]
+                    : nil;
+                if (legacyCached)
                 {
-                    dispatch_async(dispatch_get_main_queue(), onFailureNoCache);
+                    effectiveData = legacyCached.data;
                 }
-                return;
+                else
+                {
+                    completeWithoutWikiData();
+                    return;
+                }
             }
         }
-        else
-        {
-            if ([response isKindOfClass:[NSHTTPURLResponse class]] &&
-                ((NSHTTPURLResponse *)response).statusCode == 200 && data)
-            {
-                [URLSessionManager storeResponse:response data:data for:request sessionKey:key];
-            }
-        }
-        
+
         if (!effectiveData)
         {
             NSLog(@"[ERROR] addOsmandAPIImageList effectiveData is nil, cannot parse JSON.");
+            completeWithoutWikiData();
             return;
         }
 
@@ -209,9 +384,10 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
         NSError *jsonError = nil;
         NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:effectiveData options:NSJSONReadingAllowFragments error:&jsonError];
+        NSArray *images = nil;
         if (!jsonError && [jsonDict isKindOfClass:[NSDictionary class]])
         {
-            NSArray *images = jsonDict[@"features-v2"];
+            images = jsonDict[@"features-v2"];
             if ([images isKindOfClass:[NSArray class]])
             {
                 for (NSDictionary *dic in images)
@@ -237,10 +413,32 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
             NSLog(@"JSON parsing error: %@", jsonError ?: @"unknown error");
         }
 
+        BOOL isSuccessfulNetworkResponse = fetchFreshResponse && data != nil
+            && [response isKindOfClass:NSHTTPURLResponse.class]
+            && ((NSHTTPURLResponse *)response).statusCode == 200;
+        if (isSuccessfulNetworkResponse && [images isKindOfClass:NSArray.class])
+        {
+            [URLSessionManager storeResponse:response
+                                       data:data
+                                        for:request
+                                 sessionKey:key
+                     wikiFileMetadataChecked:fileName.length > 0];
+        }
+
         @synchronized(cards) {
-            if (localCards.count > 0)
+            for (WikiImageCard *newCard in localCards)
             {
-                [cards addObjectsFromArray:localCards];
+                NSUInteger existingIndex = [cards indexOfObjectPassingTest:^BOOL(AbstractCard *existingCard, NSUInteger idx, BOOL *stop) {
+                    if (![existingCard isKindOfClass:WikiImageCard.class])
+                        return NO;
+                    WikiImage *existingImage = ((WikiImageCard *)existingCard).wikiImage;
+                    return [OANormalizedWikiMediaTag(existingImage.wikiMediaTag)
+                            isEqualToString:OANormalizedWikiMediaTag(newCard.wikiImage.wikiMediaTag)];
+                }];
+                if (existingIndex == NSNotFound)
+                    [cards addObject:newCard];
+                else
+                    [cards replaceObjectAtIndex:existingIndex withObject:newCard];
             }
         }
 
@@ -254,10 +452,10 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
 - (WikiImage *)getOsmandApiWikiImage:(NSString *)imageUrl
 {
-    NSString *url = [imageUrl stringByRemovingPercentEncoding];
-    NSString *imageHiResUrl = [url stringByReplacingOccurrencesOfString:@" " withString:@"_"];
-    NSString *imageFileName = url.lastPathComponent;
-    NSString *imageName = imageFileName.stringByDeletingPathExtension;
+    NSString *imageHiResUrl = [imageUrl stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    NSString *imageFileName = imageHiResUrl.lastPathComponent;
+    NSString *decodedImageFileName = imageFileName.stringByRemovingPercentEncoding ?: imageFileName;
+    NSString *imageName = decodedImageFileName.stringByDeletingPathExtension;
     NSString *imageStubUrl = [NSString stringWithFormat:@"%@%@%i", imageHiResUrl, @"?width=", THUMB_SIZE];
     return [[WikiImage alloc] initWithWikiMediaTag:imageFileName
                                            imageName:imageName
@@ -285,9 +483,14 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
 
 - (void)runCallback:(NSMutableArray<AbstractCard *> *)cards
 {
+    [self runCallback:cards requestFailed:NO];
+}
+
+- (void)runCallback:(NSMutableArray<AbstractCard *> *)cards requestFailed:(BOOL)requestFailed
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_addOtherImagesFunction)
-            _addOtherImagesFunction(cards);
+            _addOtherImagesFunction(cards, requestFailed);
     });
 }
 
@@ -314,7 +517,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<AbstractCard *> *card
         }
         _foundImages = nil;
         _cardTypesReady = nil;
-        _addOtherImagesFunction(cards);
+        _addOtherImagesFunction(cards, NO);
     }
 }
 

@@ -153,6 +153,7 @@ static char kMapSourceUpdateQueueKey;
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
+@property (atomic) BOOL renderedNightMode;
 
 - (void)runAsyncWithRenderSync:(void (^)(void))runnable;
 - (void)updateMapLocaleLanguageForEnvironment:(const std::shared_ptr<OsmAnd::MapPresentationEnvironment>&)mapPresentationEnvironment
@@ -648,6 +649,7 @@ static char kMapSourceUpdateQueueKey;
     if ([OASubscriptionCancelViewController shouldShowDialog])
         [OASubscriptionCancelViewController showInstance:self.navigationController];
     
+    [[OutdatedMapsWarning new] showAfterUpgrade];
     if (_app.initialURLMapState)
     {
         OsmAnd::PointI centerPoint(_app.initialURLMapState.target31.x,
@@ -1797,6 +1799,7 @@ static char kMapSourceUpdateQueueKey;
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
         [quickAction hideActionsSheetAnimated:nil];
+        [mapPanel disablePlanRouteSearchContextMenuForMapGesture];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events
@@ -2289,10 +2292,18 @@ static char kMapSourceUpdateQueueKey;
             _mapSourceInvalidated = YES;
             return;
         }
-        
+
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self updateCurrentMapSource];
         });
+    });
+}
+
+- (void)reloadMapSourceIfNightModeChanged
+{
+    dispatch_async(_mapSourceUpdateQueue, ^{
+        if (self.renderedNightMode != [OAAppSettings sharedManager].isCurrentMapNightMode)
+            [self reloadMapSourceForDayNightModeChange];
     });
 }
 
@@ -2594,6 +2605,7 @@ static char kMapSourceUpdateQueueKey;
         return;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL nightMode = settings.isCurrentMapNightMode;
     const auto screenTileSize = 256 * displayDensityFactor;
     double mapDensity = [settings.mapDensity get];
     double mapDensityAligned;
@@ -2672,7 +2684,7 @@ static char kMapSourceUpdateQueueKey;
             NSString *baseMode = am.parent && am.parent.stringKey.length > 0 ? am.parent.stringKey : am.stringKey;
             newSettings[@"baseAppMode"] = baseMode;
 
-            if (settings.isCurrentMapNightMode)
+            if (nightMode)
                 newSettings[@"nightMode"] = @"true";
             shouldSetSkyFog = YES;
 
@@ -2811,7 +2823,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (enabledSrtmPlugin && [enabledSrtmPlugin isTerrainLayerEnabled] && [enabledSrtmPlugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([enabledSrtmPlugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -2867,8 +2879,7 @@ static char kMapSourceUpdateQueueKey;
             [_mapView setVisualZoomShift:mapDensity];
         if (shouldSetSkyFog)
         {
-            BOOL mapNightMode = settings.isCurrentMapNightMode;
-            if (mapNightMode)
+            if (nightMode)
             {
                 [_mapView setSkyColor:OsmAnd::ColorRGB(48, 64, 128)];
                 [_mapView setFogColor:OsmAnd::ColorRGB(36, 48, 96)];
@@ -2917,6 +2928,7 @@ static char kMapSourceUpdateQueueKey;
         [_mapLayers updateLayers];
         [_mapView setFlatEarth:![settings.sphericalMap get]];
     }];
+    self.renderedNightMode = nightMode;
 
     [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:[[OAMapPresentationEnvironment alloc] initWithEnvironment:mapPresentationEnvironment]];
     if (shouldApplyWeatherBandSettings)
@@ -3020,7 +3032,7 @@ static char kMapSourceUpdateQueueKey;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (plugin && [plugin isTerrainLayerEnabled] && [plugin isTerrainShadowsMode])
     {
-        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] * 0.01);
+        elevationConfiguration.setVisualizationAlpha([plugin terrainShadowsOpacity] / 255.0);
     }
     else
     {
@@ -3114,7 +3126,10 @@ static char kMapSourceUpdateQueueKey;
     if (!self.mapViewLoaded)
         return;
 
-    if ([[OAAppSettings sharedManager].batterySavingMode get] || _attachedToCarPlayWindow)
+    BOOL batterySavingMode = [[OAAppSettings sharedManager].batterySavingMode get];
+    _mapView.renderer->setSymbolsFade(batterySavingMode ? 0 : 300, -1);
+
+    if (batterySavingMode || _attachedToCarPlayWindow)
         [_mapView limitFrameRefreshRate];
     else
         [_mapView restoreFrameRefreshRate];
@@ -3510,29 +3525,27 @@ static char kMapSourceUpdateQueueKey;
     }
 }
 
-- (void)setWptData:(OASearchWptAPI *)wptApi {
-    NSMutableArray *paths = [NSMutableArray array];
-    NSMutableArray *gpxDocs = [NSMutableArray array];
+- (void)setWptData:(OASearchWptAPI *)wptApi
+{
+    [self readSearchableGpxFiles:^(NSArray<OASGpxFile *> *files, NSArray<NSString *> *paths) {
+        [wptApi setWptData:files paths:paths];
+    }];
+}
 
-    for (NSString *key in _selectedGpxHelper.activeGpx.allKeys)
+- (void)readSearchableGpxFiles:(void (^)(NSArray<OASGpxFile *> *, NSArray<NSString *> *))reader
+{
+    NSAssert(NSThread.isMainThread, @"Read the visible GPX selection on the main thread");
+    NSMutableArray<NSString *> *paths = [NSMutableArray array];
+    NSMutableArray<OASGpxFile *> *files = [NSMutableArray array];
+    NSDictionary<NSString *, OASGpxFile *> *selected = _selectedGpxHelper.activeGpx;
+    for (NSString *path in selected)
     {
-        id value = _selectedGpxHelper.activeGpx[key];
-        if (value == nil)
-        {
-            continue;
-        }
-        
-        [paths addObject:key];
-        
-        [gpxDocs addObject:value];
+        [paths addObject:path];
+        [files addObject:selected[path]];
     }
-    
-    if (_gpxFilesRec && _gpxFilesRec.count > 0)
-    {
-        [gpxDocs addObjectsFromArray:_gpxFilesRec];
-    }
-    
-    [wptApi setWptData:[gpxDocs copy] paths:paths];
+    if (_gpxFilesRec.count > 0)
+        [files addObjectsFromArray:_gpxFilesRec];
+    reader([files copy], [paths copy]);
 }
 
 - (BOOL)hasWptAt:(CLLocationCoordinate2D)location
@@ -4124,6 +4137,8 @@ static char kMapSourceUpdateQueueKey;
         if ([path isEqualToString:oldPath])
         {
             gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
+            if (gpxFile.isOsmAndOrigin && metadata.name)
+                [gpxFile updateTrackNameNewName:metadata.name];
 
             [_selectedGpxHelper removeGpxFileWith:oldPath];
             [_selectedGpxHelper addGpxFile:gpxFile for:docPath];
@@ -4145,6 +4160,8 @@ static char kMapSourceUpdateQueueKey;
     {
         OASGpxFile *gpxFile = _gpxFilesTemp.firstObject;
         gpxFile.metadata = [[OASMetadata alloc] initWithSource:metadata];
+        if (gpxFile.isOsmAndOrigin && metadata.name)
+            [gpxFile updateTrackNameNewName:metadata.name];
 
         OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
         gpxFile.author = [OAAppVersion getFullVersionWithAppName];

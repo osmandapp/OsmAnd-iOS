@@ -71,7 +71,6 @@
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getFlattenedSubregion:(NSString *)regionId;
 - (NSArray<OAWorldRegion *> *) getFlattenedSubregions:(NSArray<NSString *> *)regionIds;
-- (OAWorldRegion *) getPrimarySuperregion;
 - (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName;
 - (OAProduct *) getProduct;
 
@@ -80,6 +79,7 @@
 + (OAWorldRegion *) loadFrom:(NSString *)ocbfFilename;
 
 - (void)buildResourceGroupItem;
+- (void)rebuildResourceGroupItem;
 - (void)updateGroupItems:(OAWorldRegion *)subregion type:(NSNumber *)type;
 - (BOOL)hasGroupItems;
 + (NSArray<OAWorldRegion *> *)removeDuplicates:(NSArray<OAWorldRegion *> *)regions;

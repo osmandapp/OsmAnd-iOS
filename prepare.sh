@@ -49,9 +49,6 @@ if [ ! -z "$BUILT_QT_FILES_ZIPFILE" ] && [ ! "$DOWNLOAD_PREBUILT_QT_FILES" == "t
 	mv $SRCLOC/../core/externals/qtbase-ios/$BNAME $BUILT_QT_FILES_ZIPFILE
 fi
 
-# Download BRCybertron libxslt sources used by the local Swift package.
-"$SRCLOC/Scripts/download_libxslt_for_BRCybertron_spm.sh"
-
 # Download all shipped resources
 "$SRCLOC/Scripts/download-shipped-resources.sh"
 

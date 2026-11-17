@@ -14,16 +14,10 @@ final class OBDVehicleMetricsSensor: Sensor {
     private(set) var isReadyBufferResponse = false
 
     override func update(with characteristic: CBCharacteristic, result: @escaping (Result<Void, Error>) -> Void) {
-        guard let data = characteristic.value else { return }
-
-        switch characteristic.uuid {
-        case "2AF0".CBUUIDRepresentation, "2AF1".CBUUIDRepresentation, "FFE1".CBUUIDRepresentation:
-            processReceivedData(data, result: result)
-        case "FFF1".CBUUIDRepresentation:
-            debugPrint("[OBDVehicleMetricsSensor] -> for reading")
-        default:
-            debugPrint("[OBDVehicleMetricsSensor] -> Unhandled Characteristic UUID: \(characteristic.uuid)")
-        }
+        guard let obdDevice = device as? OBDVehicleMetricsDevice,
+              obdDevice.isECUReadCharacteristic(characteristic),
+              let data = characteristic.value else { return }
+        processReceivedData(data, result: result)
     }
 
     func clearBuffer() {

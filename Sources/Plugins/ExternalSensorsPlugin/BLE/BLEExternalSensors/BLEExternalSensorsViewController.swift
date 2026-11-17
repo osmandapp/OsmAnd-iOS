@@ -24,6 +24,8 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         }
     }
     
+    @objc var appMode: OAApplicationMode?
+
     private let headerEmptyView: UIView = UIView(frame: .zero)
     
     private var sectionsDevicesData = [ExternalSensorsConnectState: [Device]]()
@@ -205,6 +207,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 if let items = sectionsDevicesData[item], items.count > indexPath.row {
                     let controller = BLEDescriptionViewController()
                     controller.device = items[indexPath.row]
+                    controller.appMode = appMode
                     navigationController?.pushViewController(controller, animated: true)
                 }
             }
@@ -340,6 +343,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         detectBluetoothState()
         let storyboard = UIStoryboard(name: "BLESearchViewController", bundle: nil)
         if let vc = storyboard.instantiateViewController(withIdentifier: "BLESearchViewController") as? BLESearchViewController {
+            vc.appMode = appMode
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -411,6 +415,7 @@ extension BLEExternalSensorsViewController {
     private func showDescriptionViewController(device: Device) {
         let controller = BLEDescriptionViewController()
         controller.device = device
+        controller.appMode = appMode
         navigationController?.pushViewController(controller, animated: true)
     }
 }

@@ -57,11 +57,23 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
+    private var panelAppearance: ResolvedWidgetPanelAppearance?
     @nonobjc private var appearanceModeContext: (panel: WidgetsPanel,
                                                    appMode: OAApplicationMode,
                                                    layoutMode: ScreenLayoutMode?)?
     
     // swiftlint:enable all
+
+    var hasLeadingMarkerBar: Bool {
+        let visibleWidgets: [OABaseWidgetView]
+        if isHorizontal {
+            visibleWidgets = widgetPages.flatMap { $0 }
+        } else {
+            guard widgetPages.indices.contains(currentIndex) else { return false }
+            visibleWidgets = widgetPages[currentIndex]
+        }
+        return visibleWidgets.first { !$0.isHidden } is OADestinationBarWidget
+    }
     
     // MARK: - Init
     
@@ -185,6 +197,12 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pages.append(UIViewController())
         }
 
+        if let panelAppearance {
+            for case let page as WidgetPageViewController in pages {
+                page.applyAppearance(panelAppearance)
+            }
+        }
+
         // Set up the page control before calculating the selected page size.
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = currentIndex
@@ -230,6 +248,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     }
 
     func applyAppearance(_ appearance: ResolvedWidgetPanelAppearance) {
+        panelAppearance = appearance
         specialPanelController?.applyAppearance(appearance)
         setupPageControl()
         pageContainerView.backgroundColor = appearance.backgroundColor
@@ -420,6 +439,7 @@ extension WidgetPanelViewController {
     
     func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) {
         updateWidgetSizes()
+        delegate?.onPanelSizeChanged()
     }
     
     func widgetClicked(_ widget: OABaseWidgetView) {

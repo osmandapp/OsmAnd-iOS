@@ -29,6 +29,7 @@
 #import "OAAppDelegate.h"
 #import "OAFirstUsageWizardController.h"
 #import "StartupLogging.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
@@ -78,6 +79,18 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
     
     _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
     LogStartup(@"UIWindow created");
+
+    if (@available(iOS 17.0, *))
+    {
+        // Focus can change between visible phone scenes without another activation callback.
+        __weak __typeof(self) weakSelf = self;
+        [_windowScene registerForTraitChanges:@[UITraitActiveAppearance.class]
+                                  withHandler:^(__kindof id<UITraitEnvironment> traitEnvironment, UITraitCollection *previousCollection) {
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf && strongSelf->_windowScene.traitCollection.activeAppearance == UIUserInterfaceActiveAppearanceActive)
+                [strongSelf moveRootViewControllerToWindowIfNeeded];
+        }];
+    }
     
     OAAppDelegate *appDelegate = [self appDelegate];
     [appDelegate initialize];
@@ -143,6 +156,8 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
 
 - (void)sceneDidBecomeActive:(UIScene *)scene
 {
+    // Transfer only after activation, when the scene has its final orientation and size.
+    [self moveRootViewControllerToWindowIfNeeded];
     [[self appDelegate] applicationDidBecomeActive];
 }
 
@@ -214,9 +229,28 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
         [self appDelegate].rootViewController = [OARootViewController new];
 
     _rootViewController = [self appDelegate].rootViewController;
+    if ([SceneWindowStateRestorer attach:_rootViewController to:_window])
+        return;
+    if (!_window.rootViewController && _windowScene.activationState != UISceneActivationStateBackground)
+    {
+        // Keep the waiting scene visible until it can own the shared controller.
+        _window.rootViewController = [OALaunchScreenViewController new];
+        [_window makeKeyAndVisible];
+    }
+}
 
-    _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
-    [_window makeKeyAndVisible];
+// All window scenes share one root controller: it lives in the window that came to the foreground last
+- (void)moveRootViewControllerToWindowIfNeeded
+{
+    OAAppDelegate *appDelegate = [self appDelegate];
+    OARootViewController *rootViewController = appDelegate.rootViewController;
+    if ((appDelegate.appLaunchEvent != AppLaunchEventSetupRoot
+         && appDelegate.appLaunchEvent != AppLaunchEventFirstLaunch)
+        || !rootViewController.isViewLoaded
+        || rootViewController.navigationController.view.window == _window)
+        return;
+
+    [self configureLaunchEventSetupRootState];
 }
 
 - (void)configureServices

@@ -14,6 +14,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static inline QString OANormalizeLocalizedNameKey(const QString &nameKey)
+{
+    QString key = nameKey.trimmed().toLower();
+    if (key.startsWith(QStringLiteral("name:")))
+        key = key.mid(5);
+    return key;
+}
+
 @class OASearchPoiTypeFilter, OATopIndexFilter;
 
 @interface OAPOIHelper(cpp)

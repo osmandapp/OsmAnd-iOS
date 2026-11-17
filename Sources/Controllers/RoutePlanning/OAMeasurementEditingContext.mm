@@ -16,6 +16,7 @@
 #import "OARouteImporter.h"
 #import "OARoutingHelper.h"
 #import "OARouteCalculationParams.h"
+#import "OANativeRoutingMemoryGuard.h"
 #import "OARouteExporter.h"
 #import "OAGpxRouteApproximation.h"
 #import "OANativeUtilities.h"
@@ -533,7 +534,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             NSArray<OASWptPt *> *points = self.getBeforePoints;
             if (position > 0 && position <= points.count)
             {
-                OASWptPt *prevPt = points.lastObject;
+                OASWptPt *prevPt = points[position - 1];
                 if (prevPt.isGap)
                 {
                     if (position == points.count && self.getAfterPoints.count == 0)
@@ -546,9 +547,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                     else
                     {
                         [point setGap];
-                        if (position > 1)
+                        OASWptPt *pt = position > 1 ? points[position - 2] : nil;
+                        if (pt && !pt.isGap)
                         {
-                            OASWptPt *pt = points[position - 2];
                             if ([pt hasProfile])
                             {
                                 [prevPt setProfileTypeProfileType:pt.getProfileType];
@@ -557,6 +558,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                             {
                                 [prevPt removeProfileType];
                             }
+                        }
+                        else
+                        {
+                            [prevPt removeProfileType];
                         }
                     }
                 }
@@ -572,19 +577,17 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             break;
         }
         case EOAAddPointModeBefore: {
-            NSArray<OASWptPt *> *points = self.getAfterPoints;
-            if (position >= -1 && position + 1 < points.count)
-            {
-                OASWptPt *nextPt = points[position + 1];
-                if ([nextPt hasProfile])
-                {
-                    [point setProfileTypeProfileType:nextPt.getProfileType];
-                }
-            }
-            else if (_appMode != DEFAULT_APP_MODE)
-            {
-                [point setProfileTypeProfileType:_appMode.stringKey];
-            }
+            NSArray<OASWptPt *> *points = self.getAllPoints;
+            OASWptPt *profilePoint = nil;
+            if (position > 0 && position <= points.count && !points[position - 1].isGap)
+                profilePoint = points[position - 1];
+            else if (position >= 0 && position < points.count && !points[position].isGap)
+                profilePoint = points[position];
+            NSString *profile = profilePoint ? profilePoint.getProfileType : _appMode.stringKey;
+            if (profile.length > 0 && ![profile isEqualToString:DEFAULT_APP_MODE.stringKey])
+                [point setProfileTypeProfileType:profile];
+            else
+                [point removeProfileType];
             break;
         }
     }
@@ -598,7 +601,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 - (void) addPoint:(OASWptPt *)pt mode:(EOAAddPointMode)mode
 {
     if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
-        [self preAddPoint:(mode == EOAAddPointModeBefore ? -1 : self.getBeforePoints.count) mode:mode point:pt];
+        [self preAddPoint:self.getBeforePoints.count mode:mode point:pt];
     _before.points = [[_before.points arrayByAddingObject:pt] mutableCopy];
     [self updateSegmentsForSnap:NO];
 }
@@ -827,14 +830,25 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     NSMutableArray<OAWptPtPair *> *res = [NSMutableArray new];
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
     {
-        for (NSInteger i = 0; i < (NSInteger) points.count - 1; i++)
+        NSInteger segmentStart = 0;
+        BOOL hasRoute = NO;
+        for (NSInteger i = 0; i < points.count; i++)
         {
-            OASWptPt *startPoint = points[i];
-            OASWptPt *endPoint = points[i + 1];
-            OAWptPtPair *pair = [OAWptPtPair pairWithFirst:startPoint second:endPoint];
-            
-            if (_roadSegmentData[pair] == nil && startPoint.hasProfile)
-                [res addObject:pair];
+            if (points[i].isGap || i == points.count - 1)
+            {
+                for (NSInteger j = segmentStart; j < i; j++)
+                {
+                    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[j] second:points[j + 1]];
+                    if (_roadSegmentData[pair] == nil && (points[j].hasProfile || hasRoute))
+                        [res addObject:pair];
+                }
+                segmentStart = i + 1;
+                hasRoute = NO;
+            }
+            else if (_roadSegmentData[[OAWptPtPair pairWithFirst:points[i] second:points[i + 1]]] != nil)
+            {
+                hasRoute = YES;
+            }
         }
     }
     return res;
@@ -1349,7 +1363,11 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         if (weakSelf.progressDelegate)
             [weakSelf.progressDelegate hideProgressBar];
     });
-    _calculationProgress.isCancelled = YES;
+    if (_calculationProgress != nil)
+    {
+        _calculationProgress.isCancelled = YES;
+        [OANativeRoutingMemoryGuard clearMemoryLimitExceededForProgress:_calculationProgress];
+    }
 }
 
 - (OARouteCalculationParams *) getParams:(BOOL)resetCounter
@@ -1657,7 +1675,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     }
     NSArray<OASRouteSegmentResult *> *originalRoute = route.getOriginalRoute;
     if (originalRoute.count == 0)
-        originalRoute = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:DEFAULT_APP_MODE.getDefaultSpeed
+        originalRoute = @[[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[DEFAULT_APP_MODE defaultSpeed]
                                                                                               points:[self waypointsToLatLons:pts]]];
 
     __weak __typeof(self) weakSelf = self;

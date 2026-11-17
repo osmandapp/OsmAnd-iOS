@@ -24,6 +24,8 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         }
     }
     
+    @objc var appMode: OAApplicationMode?
+
     private let headerEmptyView: UIView = UIView(frame: .zero)
     
     private var sectionsDevicesData = [ConnectState: [Device]]()
@@ -217,6 +219,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
             if let items = sectionsDevicesData[item], items.count > indexPath.row {
                 let controller = VehicleMetricsDescriptionViewController()
                 controller.device = items[indexPath.row]
+                controller.appMode = appMode
                 navigationController?.pushViewController(controller, animated: true)
             }
         }
@@ -390,6 +393,7 @@ final class VehicleMetricsSensorsController: OABaseNavbarViewController {
         detectBluetoothState()
         let storyboard = UIStoryboard(name: "VehicleMetricsSearchViewController", bundle: nil)
         if let vc = storyboard.instantiateViewController(withIdentifier: "VehicleMetricsSearchViewController") as? VehicleMetricsSearchViewController {
+            vc.appMode = appMode
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -511,6 +515,7 @@ extension VehicleMetricsSensorsController {
     private func showDescriptionViewController(device: Device, startBehavior: VehicleMetricsDescriptionViewController.TableViewStartBehavior) {
         let controller = VehicleMetricsDescriptionViewController()
         controller.device = device
+        controller.appMode = appMode
         controller.startBehavior = startBehavior
         navigationController?.pushViewController(controller, animated: true)
     }

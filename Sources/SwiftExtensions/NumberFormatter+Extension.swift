@@ -25,6 +25,16 @@ extension NumberFormatter {
         return formatter
     }()
 
+    static func speedToleranceFormatter(decimalPlaces: Int) -> NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale(identifier: OAUtilities.currentLang() ?? Locale.current.identifier)
+        formatter.numberStyle = .decimal
+        formatter.usesGroupingSeparator = false
+        formatter.minimumFractionDigits = decimalPlaces
+        formatter.maximumFractionDigits = decimalPlaces
+        return formatter
+    }
+
     private static let countFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

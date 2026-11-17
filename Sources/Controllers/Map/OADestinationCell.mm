@@ -90,7 +90,8 @@
 
 - (void)updateLayout:(CGRect)frame
 {
-    CGFloat rightMargin = (_firstRow || self.buttonOkVisible ? 40.0 : 0.0) + (self.buttonOkVisible ? 40.0 : 0.0);
+    CGFloat listWidth = 48.;
+    CGFloat rightMargin = (_firstRow || self.buttonOkVisible ? listWidth : 0.) + (self.buttonOkVisible ? 40. : 0.);
     CGFloat h = frame.size.height;
     CGFloat dirViewWidth = frame.size.width - rightMargin;
 
@@ -103,7 +104,7 @@
         _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h);
         
         if (_firstRow)
-            _btnClose.frame = CGRectMake(frame.size.width - 40.0, 0.0, 40.0, h);
+            _btnClose.frame = CGRectMake(frame.size.width - listWidth, 0.0, listWidth, h);
 
         if (self.buttonOkVisible)
         {
@@ -128,14 +129,14 @@
     }
     else
     {
-        _directionsView.frame = CGRectMake(40, 0.0, dirViewWidth, h);
+        _directionsView.frame = CGRectMake(rightMargin, 0.0, dirViewWidth, h);
         
         if (_firstRow)
-            _btnClose.frame = CGRectMake(0, 0.0, 40.0, h);
+            _btnClose.frame = CGRectMake(0, 0.0, listWidth, h);
 
         if (self.buttonOkVisible)
         {
-            _btnOK.frame = CGRectMake(0, 0.0, 40.0, h);
+            _btnOK.frame = CGRectMake(listWidth, 0.0, 40.0, h);
             _btnOK.hidden = NO;
         }
         else

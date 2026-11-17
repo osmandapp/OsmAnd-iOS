@@ -512,7 +512,7 @@ final class ResolvedWidgetPanelAppearance: NSObject {
 }
 
 final class WidgetPanelAppearanceResolver: NSObject {
-    static var isCustomBackgroundAvailable: Bool {
+    @objc static var isCustomBackgroundAvailable: Bool {
         OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
     }
 

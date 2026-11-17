@@ -227,10 +227,19 @@
 
 - (void)onMenuShown
 {
-    if (![OAUtilities isLandscapeIpadAware])
+    [self updatePanelCorners];
+}
+
+- (void)updatePanelCorners
+{
+    BOOL rounded = ![OAUtilities isLandscapeIpadAware];
+    CACornerMask topCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
+    for (UIView *view in @[_mainTitleContainerView, self.contentView])
     {
-        [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-        [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
+        view.layer.mask = nil;
+        view.layer.cornerRadius = rounded ? 10. : 0.;
+        view.layer.maskedCorners = topCorners;
+        view.layer.masksToBounds = rounded;
     }
 }
 
@@ -263,16 +272,7 @@
         if (self.delegate)
             [self.delegate contentChanged];
         
-        if (![OAUtilities isLandscapeIpadAware])
-        {
-            [OAUtilities setMaskTo:_mainTitleContainerView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-            [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];
-        }
-        else
-        {
-            _mainTitleContainerView.layer.mask = nil;
-            self.contentView.layer.mask = nil;
-        }
+        [self updatePanelCorners];
         [self adjustViewport];
     } completion:nil];
 }

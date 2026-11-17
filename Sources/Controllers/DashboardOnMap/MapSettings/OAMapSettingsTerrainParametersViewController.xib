@@ -13,11 +13,13 @@
             <connections>
                 <outlet property="backButton" destination="cvP-w2-Xhz" id="nsF-hK-RhF"/>
                 <outlet property="backButtonContainerView" destination="Bx5-83-vHZ" id="vCd-FL-mJz"/>
+                <outlet property="backButtonTopConstraint" destination="3N7-r0-Xl0" id="6vP-6O-U7x"/>
                 <outlet property="backButtonLeadingConstraint" destination="W8C-gQ-Qqg" id="FoO-yo-AiK"/>
                 <outlet property="contentContainer" destination="zNY-GS-def" id="Ms7-aR-wff"/>
                 <outlet property="doneButtonContainerView" destination="m3g-Rr-VVl" id="C0q-US-O8i"/>
                 <outlet property="resetButton" destination="saE-hb-AlN" id="AFc-ld-JEu"/>
                 <outlet property="resetButtonTrailingConstraint" destination="mO8-uv-SjE" id="A3f-cN-5Z6"/>
+                <outlet property="resetButtonTopConstraint" destination="fwj-XT-Edy" id="Y4e-Jd-LmX"/>
                 <outlet property="scrollableView" destination="i07-sF-Si1" id="XT6-Fa-xRF"/>
                 <outlet property="statusBarBackgroundView" destination="ylX-HG-9YA" id="IJP-4R-4QL"/>
                 <outlet property="tableView" destination="cz0-vR-itK" id="90m-BO-Imn"/>

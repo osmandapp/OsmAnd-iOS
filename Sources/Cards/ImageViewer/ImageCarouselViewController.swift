@@ -270,10 +270,8 @@ final class ImageCarouselViewController: UIPageViewController {
 
         switch card {
         case let wikiCard as WikiImageCard:
-            guard let encoded = wikiCard.urlWithCommonAttributions
-                .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-                  let encodedURL = URL(string: encoded) else {
-                NSLog("Error: Invalid encoded URL: \(wikiCard.urlWithCommonAttributions)")
+            guard let encodedURL = URL(string: wikiCard.urlWithCommonAttributions) else {
+                NSLog("Error: Invalid URL: \(wikiCard.urlWithCommonAttributions)")
                 return
             }
             url = encodedURL
@@ -283,6 +281,12 @@ final class ImageCarouselViewController: UIPageViewController {
                 return
             }
             url = imageURL
+        case let mapillaryCard as MapillaryAmenityImageCard:
+            guard let viewerURL = URL(string: mapillaryCard.url) else {
+                NSLog("Error: Invalid URL: \(mapillaryCard.url)")
+                return
+            }
+            url = viewerURL
         default:
             return
         }

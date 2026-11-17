@@ -746,7 +746,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "shared_string_online_maps" = "Online maps";
 "shared_string_transparency" = "Transparency";
-"map_transparency" = "Base map transparency";
+"map_transparency" = "Base map visibility";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
@@ -2195,7 +2195,7 @@
 "routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
 "rendering_attr_currentTrackColor_description" = "GPX color";
 "routing_attr_driving_style_speed_name" = "Shorter routes";
-"routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
+"routing_attr_avoid_sett_description" = "Avoids sett";
 "rendering_attr_hikingRoutesOSMC_description" = "Render paths according to OSMC traces.";
 "rendering_value_car_name" = "Driving";
 "routing_attr_avoid_unpaved_name" = "No unpaved roads";
@@ -2249,7 +2249,7 @@
 "routing_attr_prefer_motorway_name" = "Prefer motorways";
 "rendering_attr_surface_cobblestone_name" = "Cobblestone";
 "rendering_attr_highway_class_state_road_name" = "State road";
-"routing_attr_avoid_sett_name" = "No cobblestone or sett";
+"routing_attr_avoid_sett_name" = "No sett";
 "rendering_value_translucent_lightblue_name" = "Translucent light blue";
 "rendering_attr_smoothness_good_name" = "Good";
 "routing_attr_weight_name" = "Weight limit";
@@ -2686,3 +2686,5 @@
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";
 "shared_string_large" = "وڈا";
+"routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
+"routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";

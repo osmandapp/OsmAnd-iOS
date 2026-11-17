@@ -78,17 +78,15 @@
 #include <openingHoursParser.h>
 #include <OsmAndCore/Search/CommonWords.h>
 
-#define MILS_IN_DEGREE 17.777778f
+static const double VERSION_3_10 = 3.10;
+static const double VERSION_3_14 = 3.14;
+static const double VERSION_4_2 = 4.2;
+static const double VERSION_4_4_1 = 4.41;
+static const double VERSION_4_7_5 = 4.75;
+static const double VERSION_5_5 = 5.5;
 
-#define VERSION_3_10 3.10
-#define VERSION_3_14 3.14
-#define VERSION_4_2 4.2
-#define VERSION_4_4_1 4.41
-#define VERSION_4_7_4 4.74
-#define VERSION_4_7_5 4.75
-
-#define kAppData @"app_data"
-#define kBuildVersion @"buildVersion"
+static NSString * const kAppData = @"app_data";
+static NSString * const kBuildVersion = @"buildVersion";
 
 NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFinishedNotification";
 
@@ -449,18 +447,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     if (resetSettings)
     {
         LogStartup(@"resetSettings start");
-        int freeMaps = -1;
-        if ([defaults objectForKey:@"freeMapsAvailable"]) {
-            freeMaps = (int)[defaults integerForKey:@"freeMapsAvailable"];
-        }
-
         NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
         [defaults removePersistentDomainForName:appDomain];
         [defaults synchronize];
-
-        if (freeMaps != -1) {
-            [defaults setInteger:freeMaps forKey:@"freeMapsAvailable"];
-        }
 
         [defaults registerDefaults:[self inflateInitialUserDefaults]];
         NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@(NO) forKey:@"hide_all_gpx"];
@@ -674,6 +663,11 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
             [OAAppSettings sharedManager].requireUploadPurchases = YES;
             LogStartup(@"version < 4.7.5 migration done");
         }
+        if (prevVersion < VERSION_5_5)
+        {
+            [OAAppSettings sharedManager].shouldShowOutdatedMapsWarning = YES;
+            LogStartup(@"version < 5.5 migration done");
+        }
 
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
@@ -771,6 +765,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     [self loadWorldRegions];
     [self addRegionNamesToCommonWords];
     LogStartup(@"world regions loaded");
+
+    [self loadSharedRegions];
+    LogStartup(@"shared world regions loaded");
 
     [OAManageResourcesViewController prepareData];
     LogStartup(@"manage resources view controller data prepared");
@@ -1239,6 +1236,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 {
     NSString *voiceProvider = [[OAAppSettings sharedManager].voiceProvider get:applicationMode];
     OAVoiceRouter *vrt = [OARoutingHelper sharedInstance].getVoiceRouter;
+    [[vrt getPlayer] clear];
     [vrt setPlayer:[[OATTSCommandPlayerImpl alloc] initWithVoiceRouter:vrt voiceProvider:voiceProvider]];
 }
 
@@ -1278,7 +1276,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
     
     if (async)
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UTILITY, 0), ^{
             
             self.resourcesManager->updateRepository();
             
@@ -1374,6 +1372,23 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 - (void) loadWorldRegions
 {
     [self applyWorldRegions:[self readWorldRegions]];
+}
+
+// The regions of the shared search, and the names its common words take from them, so they are
+// read before any search. A file that cannot be read leaves them out; the C++ search has its own.
+- (void) loadSharedRegions
+{
+    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
+    OASOsmandRegions *regions = [[OASOsmandRegions alloc] initWithIsInitialized:NO];
+    [regions setLocaleLocale:[OAUtilities currentLang] ?: @"en" country:[NSLocale.currentLocale objectForKey:NSLocaleCountryCode]];
+    NSError *error = nil;
+    if (![regions prepareFileFileName:ocbfPathLib error:&error])
+    {
+        NSLog(@"Shared regions not read from %@: %@", ocbfPathLib, error);
+        [regions close];
+        return;
+    }
+    [OASOsmandRegions.companion setDefaultRegions:regions];
 }
 
 - (void) addRegionNamesToCommonWords
@@ -1572,6 +1587,7 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
 
 - (void) onApplicationWillEnterForeground
 {
+    [InstallAttribution checkAndReport];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 

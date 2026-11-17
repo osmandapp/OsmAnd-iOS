@@ -111,7 +111,9 @@ enum AstroVisibilityCardViewHolder {
 
         if !item.locationText.isEmpty {
             let location = UILabel()
-            location.text = item.locationText
+            location.text = item.timeZoneText.isEmpty
+                ? item.locationText
+                : "\(item.locationText) · \(item.timeZoneText)"
             location.textColor = .textColorSecondary
             location.font = .preferredFont(forTextStyle: .footnote)
             location.numberOfLines = 0

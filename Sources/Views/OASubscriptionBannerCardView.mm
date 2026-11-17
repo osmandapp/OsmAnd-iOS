@@ -7,11 +7,11 @@
 //
 
 #import "OASubscriptionBannerCardView.h"
-#import "OAIAPHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kButtonIconSideSize 30.
 #define kIconSideSize 48.
@@ -66,8 +66,7 @@
 
 - (void)updateView
 {
-    self.freeMapsCount = [OAIAPHelper freeMapsAvailable];
-    self.titleLabel.attributedText = [self getAttributedTitleText:_type freeMapsCount:self.freeMapsCount];
+    self.titleLabel.attributedText = [self getAttributedTitleText:_type];
     [self.buttonView setAttributedTitle:[self getAttributedButtonText:_type] forState:UIControlStateNormal];
 
     switch(_type)
@@ -85,22 +84,6 @@
             self.buttonView.tintColor = UIColorFromRGB(color_banner_button);
             [self.buttonView setTitleColor:UIColorFromRGB(color_banner_button) forState:UIControlStateNormal];
             [self.buttonView setImage:nil forState:UIControlStateNormal];
-            break;
-        }
-        case EOASubscriptionBannerNoFree:
-        {
-            self.separatorView.hidden = YES;
-            self.descriptionLabel.hidden = NO;
-            self.descriptionLabel.attributedText = [self getAttributedDescriptionText];
-
-            self.iconView.image = [UIImage imageNamed:ACImageNameIcCustomZeroDownloadsBig];
-            self.iconView.tintColor = UIColor.whiteColor;
-
-            self.buttonView.backgroundColor = UIColorFromRGB(color_banner_button);
-            self.buttonView.tintColor = UIColorFromRGB(color_primary_purple);
-            [self.buttonView setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            [self.buttonView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowForward].imageFlippedForRightToLeftLayoutDirection
-                             forState:UIControlStateNormal];
             break;
         }
         case EOASubscriptionBannerUpdates:
@@ -123,16 +106,26 @@
     [self updateFrame];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self updateFrame];
+    self.contentView.frame = self.bounds;
+}
+
 - (void)updateFrame
 {
+    CGFloat viewWidth = self.bounds.size.width > 0. ? self.bounds.size.width : DeviceScreenWidth;
+    CGFloat leftInset = self.safeAreaInsets.left;
+    CGFloat availableWidth = viewWidth - leftInset - self.safeAreaInsets.right;
     BOOL isFree = _type == EOASubscriptionBannerFree;
 
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleLabel.attributedText
-                                                  width:DeviceScreenWidth - [OAUtilities getLeftMargin] * 2 - kPaddingOnSideOfContent - 16. - kIconSideSize];
-    self.titleLabel.frame = CGRectMake([OAUtilities getLeftMargin] + 20., 16., titleSize.width, titleSize.height);
+                                                  width:availableWidth - kPaddingOnSideOfContent - 16. - kIconSideSize];
+    self.titleLabel.frame = CGRectMake(leftInset + 20., 16., titleSize.width, titleSize.height);
 
     CGSize buttonSize = [OAUtilities calculateTextBounds:[self.buttonView attributedTitleForState:UIControlStateNormal]
-                                                   width:DeviceScreenWidth - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent + 12.) * 2 - kButtonIconSideSize - 16.];
+                                                   width:availableWidth - (kPaddingOnSideOfContent + 12.) * 2 - kButtonIconSideSize - 16.];
 
     if (isFree && buttonSize.height < kButtonPrimaryHeight)
         buttonSize.height = kButtonPrimaryHeight;
@@ -145,50 +138,44 @@
 
     CGFloat height = 0;
 
-    if (isFree || _type == EOASubscriptionBannerNoFree)
+    if (isFree)
     {
-        self.iconView.frame = CGRectMake(DeviceScreenWidth - [OAUtilities getLeftMargin] - 10. - kIconSideSize, 16., kIconSideSize, kIconSideSize);
+        self.iconView.frame = CGRectMake(leftInset + availableWidth - 10. - kIconSideSize, 16., kIconSideSize, kIconSideSize);
         CGFloat imageBlockHeight = self.iconView.frame.origin.y + kIconSideSize + 12.;
         CGFloat textBlockHeight = self.titleLabel.frame.origin.y + titleSize.height + 3.;
         CGSize descriptionSize = [OAUtilities calculateTextBounds:self.descriptionLabel.attributedText
-                                                            width:DeviceScreenWidth - [OAUtilities getLeftMargin] * 2 - kPaddingOnSideOfContent - 16. - kIconSideSize];
-        self.descriptionLabel.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent, textBlockHeight, descriptionSize.width, descriptionSize.height);
+                                                            width:availableWidth - kPaddingOnSideOfContent - 16. - kIconSideSize];
+        self.descriptionLabel.frame = CGRectMake(leftInset + kPaddingOnSideOfContent, textBlockHeight, descriptionSize.width, descriptionSize.height);
         textBlockHeight += descriptionSize.height;
         textBlockHeight += 12.;
 
         height = textBlockHeight > imageBlockHeight ? textBlockHeight : imageBlockHeight;
 
-        if (isFree)
-        {
-            self.separatorView.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent,
-                                                  height,
-                                                  DeviceScreenWidth - [OAUtilities getLeftMargin] - kPaddingOnSideOfContent,
-                                                  kSeparatorHeight);
-            height += kSeparatorHeight;
-        }
+        self.separatorView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
+                                              height,
+                                              availableWidth - kPaddingOnSideOfContent,
+                                              kSeparatorHeight);
+        height += kSeparatorHeight;
 
-        self.buttonView.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent,
+        self.buttonView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
                                            height,
-                                           DeviceScreenWidth - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent) * 2,
+                                           availableWidth - (kPaddingOnSideOfContent) * 2,
                                            buttonSize.height);
         height += buttonSize.height;
 
-        if (isFree)
-            height += 3.;
-        else if (_type == EOASubscriptionBannerNoFree)
-            height += 16.;
+        height += 3.;
     }
     else if (_type == EOASubscriptionBannerUpdates)
     {
-        self.iconView.frame = CGRectMake(DeviceScreenWidth - [OAUtilities getLeftMargin] - 10. - kIconSideSize, 10., kIconSideSize, kIconSideSize);
+        self.iconView.frame = CGRectMake(leftInset + availableWidth - 10. - kIconSideSize, 10., kIconSideSize, kIconSideSize);
         CGFloat imageBlockHeight = self.iconView.frame.origin.y + kIconSideSize + 10.;
         CGFloat textBlockHeight = self.titleLabel.frame.origin.y + titleSize.height + 10.;
 
         height = textBlockHeight > imageBlockHeight ? textBlockHeight : imageBlockHeight;
 
-        self.buttonView.frame = CGRectMake([OAUtilities getLeftMargin] + kPaddingOnSideOfContent,
+        self.buttonView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
                                            height,
-                                           DeviceScreenWidth - ([OAUtilities getLeftMargin] + kPaddingOnSideOfContent) * 2,
+                                           availableWidth - (kPaddingOnSideOfContent) * 2,
                                            buttonSize.height);
         height += buttonSize.height;
         height += 16.;
@@ -202,8 +189,8 @@
     CGFloat iconWidth = isFree ? 0. : kButtonIconSideSize;
     
     CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
-                                                          width:DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 - iconWidth].width;
-    CGFloat imagePadding = DeviceScreenWidth - ((kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 + buttonTitleWidth + iconWidth);
+                                                          width:availableWidth - (kPaddingOnSideOfContent + contentHorizontalInset) * 2 - iconWidth].width;
+    CGFloat imagePadding = availableWidth - ((kPaddingOnSideOfContent + contentHorizontalInset) * 2 + buttonTitleWidth + iconWidth);
     
     UIButtonConfiguration *configuration = UIButtonConfiguration.plainButtonConfiguration;
     configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;
@@ -215,12 +202,10 @@
     [self.buttonView setNeedsUpdateConfiguration];
 }
 
-- (NSAttributedString *)getAttributedTitleText:(EOASubscriptionBannerType)type freeMapsCount:(NSInteger)freeMapsCount
+- (NSAttributedString *)getAttributedTitleText:(EOASubscriptionBannerType)type
 {
     BOOL isUpdates = type == EOASubscriptionBannerUpdates;
-    NSString *text = isUpdates ? OALocalizedString(@"subscription_banner_osmand_pro_title")
-        : type == EOASubscriptionBannerFree ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMapsCount]
-        : OALocalizedString(@"subscription_banner_no_free_maps_title");
+    NSString *text = OALocalizedString(isUpdates ? @"subscription_banner_osmand_pro_title" : @"free_version_title");
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isUpdates ? 23.8 : 20.4;
     return [[NSAttributedString alloc] initWithString:text
@@ -232,7 +217,11 @@
 
 - (NSAttributedString *)getAttributedDescriptionText
 {
-    NSString *text = OALocalizedString(@"subscription_banner_free_maps_description");
+    OAWorldRegion *freeRegion = FreeVersionMapDownloads.shared.freeRegion;
+    NSString *text = OALocalizedString(freeRegion ? @"free_region_banner_descr" : @"free_region_not_chosen_descr");
+    if (freeRegion)
+        text = [NSString stringWithFormat:text, freeRegion.name];
+
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = 18.;
     return [[NSAttributedString alloc] initWithString:text
@@ -244,7 +233,7 @@
 
 - (NSAttributedString *)getAttributedButtonText:(EOASubscriptionBannerType)type
 {
-    NSString *text = type == EOASubscriptionBannerUpdates ? OALocalizedString(@"shared_string_get") : OALocalizedString(@"get_unlimited_access");
+    NSString *text = OALocalizedString(type == EOASubscriptionBannerUpdates ? @"shared_string_get" : @"get_unlimited_downloads");
     BOOL isFree = type == EOASubscriptionBannerFree;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isFree ? 22. : 18.;

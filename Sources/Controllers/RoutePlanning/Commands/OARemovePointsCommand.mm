@@ -10,16 +10,26 @@
 #import <OsmAndShared/OsmAndShared.h>
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
+#import "OAApplicationMode.h"
 
 @implementation OARemovePointsCommand
 {
     NSArray<NSNumber *> *_positions; // descending
     NSMutableArray<OASWptPt *> *_points; // removed, in _positions order
     NSMutableArray *_previousPointProfiles; // NSString or NSNull, in _positions order
+    OAApplicationMode *_previousGroupMode;
+    OAApplicationMode *_appMode;
 }
 
 - (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
                     positions:(NSArray<NSNumber *> *)positions
+{
+    return [self initWithLayer:measurementLayer positions:positions previousGroupMode:nil];
+}
+
+- (instancetype)initWithLayer:(OAMeasurementToolLayer *)measurementLayer
+                    positions:(NSArray<NSNumber *> *)positions
+            previousGroupMode:(OAApplicationMode *)previousGroupMode
 {
     self = [super initWithLayer:measurementLayer];
     if (self)
@@ -27,6 +37,7 @@
         _positions = [[NSSet setWithArray:positions].allObjects sortedArrayUsingComparator:^NSComparisonResult(NSNumber *a, NSNumber *b) {
             return [b compare:a];
         }];
+        _previousGroupMode = previousGroupMode;
     }
     return self;
 }
@@ -36,6 +47,7 @@
     NSInteger count = self.getEditingCtx.getPoints.count;
     if (_positions.count == 0 || _positions.lastObject.integerValue < 0 || _positions.firstObject.integerValue >= count)
         return NO;
+    _appMode = self.getEditingCtx.appMode;
     [self removePoints];
     return YES;
 }
@@ -58,6 +70,7 @@
         [points insertObject:_points[i] atIndex:MIN(position, (NSInteger)points.count)];
     }
     [ctx setPoints:points];
+    ctx.appMode = _appMode;
     [ctx updateSegmentsForSnap:NO];
     [self.measurementLayer updateLayer];
 }
@@ -85,7 +98,18 @@
         [points removeObjectAtIndex:position];
         [_points addObject:point];
     }
+    NSInteger previousIndex = _positions.lastObject.integerValue - 1;
+    if (_previousGroupMode && previousIndex >= 0 && !points[previousIndex].isGap)
+    {
+        if (_previousGroupMode == OAApplicationMode.DEFAULT)
+            [points[previousIndex] removeProfileType];
+        else
+            [points[previousIndex] setProfileTypeProfileType:_previousGroupMode.stringKey];
+    }
     [ctx setPoints:points];
+    OASWptPt *lastPoint = ctx.getAllPoints.lastObject;
+    if (lastPoint && !lastPoint.isGap)
+        ctx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     [ctx updateSegmentsForSnap:NO];
     [self.measurementLayer updateLayer];
 }

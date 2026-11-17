@@ -18,7 +18,7 @@
         if (source && resources[source])
             [layers addObject:value];
     }
-    return layers;
+    return [layers copy];
 }
 
 + (OAMapSource *)mapSourceForLayer:(EOADownloadMapLayer)layer

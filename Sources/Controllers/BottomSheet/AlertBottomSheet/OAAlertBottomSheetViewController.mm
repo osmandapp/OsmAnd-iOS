@@ -318,6 +318,11 @@
         cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         cell.backgroundColor = UIColor.clearColor;
+        cell.isAccessibilityElement = YES;
+        cell.accessibilityLabel = cell.descriptionLabel.text.length > 0
+            ? [NSString stringWithFormat:@"%@, %@", cell.titleLabel.text, cell.descriptionLabel.text]
+            : cell.titleLabel.text;
+        cell.accessibilityTraits = UIAccessibilityTraitButton;
         return cell;
     }
     else if ([type isEqualToString:[OATitleIconRoundCell getCellIdentifier]])

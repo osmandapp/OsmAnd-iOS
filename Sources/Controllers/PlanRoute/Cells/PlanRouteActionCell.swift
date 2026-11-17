@@ -13,6 +13,7 @@ final class PlanRouteActionCell: UITableViewCell {
     private static let minimumHeight: CGFloat = 52
 
     private let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -23,8 +24,10 @@ final class PlanRouteActionCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(title: String, isDestructive: Bool, showsDisclosure: Bool = false) {
+    func configure(title: String, subtitle: String? = nil, isDestructive: Bool, showsDisclosure: Bool = false) {
         titleLabel.text = title
+        subtitleLabel.text = subtitle
+        subtitleLabel.isHidden = subtitle == nil
         if isDestructive {
             titleLabel.textColor = .textColorDisruptive
         } else {
@@ -36,7 +39,17 @@ final class PlanRouteActionCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: contentInsets.leading, bottom: 0, right: contentInsets.trailing)
         isAccessibilityElement = true
         accessibilityLabel = title
+        accessibilityValue = subtitle
         accessibilityTraits = .button
+    }
+
+    func configureForContinuation(title: String = localizedString("plan_route_continue_with_different_type"), mode: OAApplicationMode?) {
+        let modeTitle = mode?.toHumanString() ?? localizedString("plan_route_straight_line")
+        let subtitle = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_next"), modeTitle)
+        configure(title: title,
+                  subtitle: subtitle,
+                  isDestructive: false,
+                  showsDisclosure: true)
     }
 
     private func setupCell() {
@@ -48,15 +61,23 @@ final class PlanRouteActionCell: UITableViewCell {
         titleLabel.font = .scaledSystemFont(ofSize: 17)
         titleLabel.numberOfLines = 0
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(titleLabel)
+        subtitleLabel.font = .scaledSystemFont(ofSize: 15)
+        subtitleLabel.textColor = .textColorSecondary
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.adjustsFontForContentSizeCategory = true
+
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: contentInsets.leading),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -contentInsets.trailing),
-            titleLabel.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: contentInsets.top),
-            titleLabel.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -contentInsets.bottom),
-            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: contentInsets.leading),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -contentInsets.trailing),
+            stackView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: contentInsets.top),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -contentInsets.bottom),
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: minimumHeight)
         ])
     }

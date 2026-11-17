@@ -490,7 +490,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             NSArray<OASWptPt *> *points = self.getBeforePoints;
             if (position > 0 && position <= points.count)
             {
-                OASWptPt *prevPt = points.lastObject;
+                OASWptPt *prevPt = points[position - 1];
                 if (prevPt.isGap)
                 {
                     if (position == points.count && self.getAfterPoints.count == 0)
@@ -503,9 +503,9 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                     else
                     {
                         [point setGap];
-                        if (position > 1)
+                        OASWptPt *pt = position > 1 ? points[position - 2] : nil;
+                        if (pt && !pt.isGap)
                         {
-                            OASWptPt *pt = points[position - 2];
                             if ([pt hasProfile])
                             {
                                 [prevPt setProfileTypeProfileType:pt.getProfileType];
@@ -514,6 +514,10 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                             {
                                 [prevPt removeProfileType];
                             }
+                        }
+                        else
+                        {
+                            [prevPt removeProfileType];
                         }
                     }
                 }
@@ -529,19 +533,17 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
             break;
         }
         case EOAAddPointModeBefore: {
-            NSArray<OASWptPt *> *points = self.getAfterPoints;
-            if (position >= -1 && position + 1 < points.count)
-            {
-                OASWptPt *nextPt = points[position + 1];
-                if ([nextPt hasProfile])
-                {
-                    [point setProfileTypeProfileType:nextPt.getProfileType];
-                }
-            }
-            else if (_appMode != DEFAULT_APP_MODE)
-            {
-                [point setProfileTypeProfileType:_appMode.stringKey];
-            }
+            NSArray<OASWptPt *> *points = self.getAllPoints;
+            OASWptPt *profilePoint = nil;
+            if (position > 0 && position <= points.count && !points[position - 1].isGap)
+                profilePoint = points[position - 1];
+            else if (position >= 0 && position < points.count && !points[position].isGap)
+                profilePoint = points[position];
+            NSString *profile = profilePoint ? profilePoint.getProfileType : _appMode.stringKey;
+            if (profile.length > 0 && ![profile isEqualToString:DEFAULT_APP_MODE.stringKey])
+                [point setProfileTypeProfileType:profile];
+            else
+                [point removeProfileType];
             break;
         }
     }
@@ -555,7 +557,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 - (void) addPoint:(OASWptPt *)pt mode:(EOAAddPointMode)mode
 {
     if (mode == EOAAddPointModeAfter || mode == EOAAddPointModeBefore)
-        [self preAddPoint:(mode == EOAAddPointModeBefore ? -1 : self.getBeforePoints.count) mode:mode point:pt];
+        [self preAddPoint:self.getBeforePoints.count mode:mode point:pt];
     _before.points = [[_before.points arrayByAddingObject:pt] mutableCopy];
     [self updateSegmentsForSnap:NO];
 }

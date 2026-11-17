@@ -11,6 +11,7 @@
 #import "OAMeasurementEditingContext.h"
 #import "OAMeasurementToolLayer.h"
 #import "OARoadSegmentData.h"
+#import "OAApplicationMode.h"
 
 @implementation OAClearPointsCommand
 {
@@ -18,6 +19,7 @@
     NSDictionary<NSArray<OASWptPt *> *, OARoadSegmentData *> *_roadSegmentData;
     EOAClearPointsMode _clearMode;
     NSInteger _pointPosition;
+    OAApplicationMode *_appMode;
 }
 
 - (instancetype) initWithMeasurementLayer:(OAMeasurementToolLayer *)layer mode:(EOAClearPointsMode)mode
@@ -40,6 +42,7 @@
         return NO;
     _points = [ctx.getAllPoints copy];
     _roadSegmentData = [ctx.roadSegmentData copy];
+    _appMode = ctx.appMode;
     [self executeCommand];
     return YES;
 }
@@ -66,6 +69,9 @@
         {
             [ctx trimAfter:_pointPosition];
             [ctx splitSegments:ctx.getAllPoints.count];
+            OASWptPt *lastPoint = ctx.getAllPoints.lastObject;
+            if (lastPoint && !lastPoint.isGap)
+                ctx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
             [self.measurementLayer updateLayer];
             break;
         }
@@ -77,6 +83,7 @@
     OAMeasurementEditingContext *ctx = [self getEditingCtx];
     [ctx clearSegments];
     ctx.roadSegmentData = [_roadSegmentData mutableCopy];
+    ctx.appMode = _appMode;
     [ctx addPoints:_points];
     [self.measurementLayer updateLayer];
 }

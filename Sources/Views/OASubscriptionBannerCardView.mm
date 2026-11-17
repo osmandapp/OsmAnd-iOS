@@ -7,11 +7,11 @@
 //
 
 #import "OASubscriptionBannerCardView.h"
-#import "OAIAPHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kButtonIconSideSize 30.
 #define kIconSideSize 48.
@@ -66,8 +66,7 @@
 
 - (void)updateView
 {
-    self.freeMapsCount = [OAIAPHelper freeMapsAvailable];
-    self.titleLabel.attributedText = [self getAttributedTitleText:_type freeMapsCount:self.freeMapsCount];
+    self.titleLabel.attributedText = [self getAttributedTitleText:_type];
     [self.buttonView setAttributedTitle:[self getAttributedButtonText:_type] forState:UIControlStateNormal];
 
     switch(_type)
@@ -85,22 +84,6 @@
             self.buttonView.tintColor = UIColorFromRGB(color_banner_button);
             [self.buttonView setTitleColor:UIColorFromRGB(color_banner_button) forState:UIControlStateNormal];
             [self.buttonView setImage:nil forState:UIControlStateNormal];
-            break;
-        }
-        case EOASubscriptionBannerNoFree:
-        {
-            self.separatorView.hidden = YES;
-            self.descriptionLabel.hidden = NO;
-            self.descriptionLabel.attributedText = [self getAttributedDescriptionText];
-
-            self.iconView.image = [UIImage imageNamed:ACImageNameIcCustomZeroDownloadsBig];
-            self.iconView.tintColor = UIColor.whiteColor;
-
-            self.buttonView.backgroundColor = UIColorFromRGB(color_banner_button);
-            self.buttonView.tintColor = UIColorFromRGB(color_primary_purple);
-            [self.buttonView setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-            [self.buttonView setImage:[UIImage templateImageNamed:ACImageNameIcCustomArrowForward].imageFlippedForRightToLeftLayoutDirection
-                             forState:UIControlStateNormal];
             break;
         }
         case EOASubscriptionBannerUpdates:
@@ -155,7 +138,7 @@
 
     CGFloat height = 0;
 
-    if (isFree || _type == EOASubscriptionBannerNoFree)
+    if (isFree)
     {
         self.iconView.frame = CGRectMake(leftInset + availableWidth - 10. - kIconSideSize, 16., kIconSideSize, kIconSideSize);
         CGFloat imageBlockHeight = self.iconView.frame.origin.y + kIconSideSize + 12.;
@@ -168,14 +151,11 @@
 
         height = textBlockHeight > imageBlockHeight ? textBlockHeight : imageBlockHeight;
 
-        if (isFree)
-        {
-            self.separatorView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
-                                                  height,
-                                                  availableWidth - kPaddingOnSideOfContent,
-                                                  kSeparatorHeight);
-            height += kSeparatorHeight;
-        }
+        self.separatorView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
+                                              height,
+                                              availableWidth - kPaddingOnSideOfContent,
+                                              kSeparatorHeight);
+        height += kSeparatorHeight;
 
         self.buttonView.frame = CGRectMake(leftInset + kPaddingOnSideOfContent,
                                            height,
@@ -183,10 +163,7 @@
                                            buttonSize.height);
         height += buttonSize.height;
 
-        if (isFree)
-            height += 3.;
-        else if (_type == EOASubscriptionBannerNoFree)
-            height += 16.;
+        height += 3.;
     }
     else if (_type == EOASubscriptionBannerUpdates)
     {
@@ -225,12 +202,10 @@
     [self.buttonView setNeedsUpdateConfiguration];
 }
 
-- (NSAttributedString *)getAttributedTitleText:(EOASubscriptionBannerType)type freeMapsCount:(NSInteger)freeMapsCount
+- (NSAttributedString *)getAttributedTitleText:(EOASubscriptionBannerType)type
 {
     BOOL isUpdates = type == EOASubscriptionBannerUpdates;
-    NSString *text = isUpdates ? OALocalizedString(@"subscription_banner_osmand_pro_title")
-        : type == EOASubscriptionBannerFree ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMapsCount]
-        : OALocalizedString(@"subscription_banner_no_free_maps_title");
+    NSString *text = OALocalizedString(isUpdates ? @"subscription_banner_osmand_pro_title" : @"free_version_title");
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isUpdates ? 23.8 : 20.4;
     return [[NSAttributedString alloc] initWithString:text
@@ -242,7 +217,11 @@
 
 - (NSAttributedString *)getAttributedDescriptionText
 {
-    NSString *text = OALocalizedString(@"subscription_banner_free_maps_description");
+    OAWorldRegion *freeRegion = FreeVersionMapDownloads.shared.freeRegion;
+    NSString *text = OALocalizedString(freeRegion ? @"free_region_banner_descr" : @"free_region_not_chosen_descr");
+    if (freeRegion)
+        text = [NSString stringWithFormat:text, freeRegion.name];
+
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = 18.;
     return [[NSAttributedString alloc] initWithString:text
@@ -254,7 +233,7 @@
 
 - (NSAttributedString *)getAttributedButtonText:(EOASubscriptionBannerType)type
 {
-    NSString *text = type == EOASubscriptionBannerUpdates ? OALocalizedString(@"shared_string_get") : OALocalizedString(@"get_unlimited_access");
+    NSString *text = OALocalizedString(type == EOASubscriptionBannerUpdates ? @"shared_string_get" : @"get_unlimited_downloads");
     BOOL isFree = type == EOASubscriptionBannerFree;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isFree ? 22. : 18.;

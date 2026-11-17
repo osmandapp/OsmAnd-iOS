@@ -725,7 +725,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     if (self.getCalendarEvent)
         exts[CALENDAR_EXTENSION] = @"true";
 
-    [pt setAmenity:[self getAmenity]];
+    const QHash<QString, QString> storedExtensions = self.favorite->getExtensions();
+    for (const auto& extension : OsmAnd::rangeOf(storedExtensions))
+    {
+        NSString *key = extension.key().toNSString();
+        if ([key hasPrefix:AMENITY_PREFIX] || [key hasPrefix:OSM_PREFIX_KEY])
+            exts[key] = extension.value().toNSString();
+    }
 
     NSString *osmUrlKey = OASGpxUtilities.shared.OSM_URL_EXTENSION;
     NSString *osmUrl = self.favorite->getExtensions().value(QString::fromNSString(osmUrlKey)).toNSString();

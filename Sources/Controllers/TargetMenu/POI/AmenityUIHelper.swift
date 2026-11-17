@@ -229,7 +229,7 @@ final class AmenityUIHelper: NSObject {
     private func createPoiAdditionalInfoRow(key: String, value: String, resolvedType: AdditionalInfoBundle.ResolvedPoiType?,
                                             collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
         let cleanValue = value.replacingNbsp()
-        let openingHoursCheckDate = key == OPENING_HOURS_TAG ? additionalInfo.get(key: CHECK_DATE_OPENING_HOURS_TAG) : nil
+        let openingHoursCheckDate = key == OPENING_HOURS_TAG ? additionalInfo.getFilteredInfo()[CHECK_DATE_OPENING_HOURS_TAG] : nil
         let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
         rowParamsBuilder.collapsableView = collapsableView
         let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)

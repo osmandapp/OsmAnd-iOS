@@ -1,6 +1,6 @@
 import Foundation
 
-enum OpeningHoursCheckDateFormatter {
+enum CheckDateFormatter {
     private static let inputFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -12,10 +12,16 @@ enum OpeningHoursCheckDateFormatter {
     }()
 
     static func format(_ rawValue: String?, locale: Locale = .current) -> String? {
-        guard let value = rawValue?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else { return nil }
-        guard value.range(of: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$", options: .regularExpression) != nil,
-              let date = inputFormatter.date(from: value),
-              inputFormatter.string(from: date) == value else { return value }
+        guard let value = rawValue, !value.isEmpty else { return nil }
+        guard value.range(of: "\\A[ \\t]*\\p{Nd}+-[ \\t]*\\p{Nd}+-[ \\t]*\\p{Nd}+\\z", options: .regularExpression) != nil else { return value }
+        var parsedValue: AnyObject?
+        var range = NSRange(location: 0, length: (value as NSString).length)
+        do {
+            try inputFormatter.getObjectValue(&parsedValue, for: value, range: &range)
+        } catch {
+            return value
+        }
+        guard range.length == (value as NSString).length, let date = parsedValue as? Date else { return value }
         let outputFormatter = DateFormatter()
         outputFormatter.locale = locale
         outputFormatter.timeZone = TimeZone(secondsFromGMT: 0)

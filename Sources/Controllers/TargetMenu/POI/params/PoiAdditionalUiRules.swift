@@ -37,6 +37,12 @@ final class PoiAdditionalUiRules: NSObject {
         rules.append(openingHours)
         rulesByKey[OPENING_HOURS_TAG] = openingHours
 
+        let checkDate = PoiAdditionalUiRule(key: CHECK_DATE_TAG)
+        checkDate.isNeedLinks = false
+        checkDate.behavior = CheckDateRowBehaviour()
+        rules.append(checkDate)
+        rulesByKey[CHECK_DATE_TAG] = checkDate
+
         let phone = PoiAdditionalUiRule(key: PHONE_TAG)
         phone.customIconName = "ic_phone_number"
         phone.customTextPrefix = localizedString("phone")

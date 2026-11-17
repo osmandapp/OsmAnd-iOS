@@ -2200,19 +2200,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_tableController showOnMap:searchResult searchType:self.searchType delegate:self];
 }
 
-- (void)exploreDidRequestAllPopularPlaces
+- (void)exploreDidRequestShowPopularPlacesOnMap
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter];
     if (!filter)
         return;
 
-    OASearchResult *searchResult = [[OASearchResult alloc] initWithPhrase:[self.searchUICore getPhrase]];
-    searchResult.localeName = filter.name;
-    searchResult.object = filter;
-    searchResult.priority = SEARCH_AMENITY_TYPE_PRIORITY;
-    searchResult.priorityDistance = 0;
-    searchResult.objectType = EOAObjectTypePoiType;
-    [self completeQueryWithObject:searchResult];
+    [[OAPOIFiltersHelper sharedInstance] replaceSelectedPoiFilters:filter];
+    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+    [self showToolbar:filter];
+    _searchToolbarViewController.toolbarTitle = OALocalizedString(@"popular_places");
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

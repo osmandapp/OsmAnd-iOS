@@ -10,7 +10,7 @@ import UIKit
 @objc protocol ExploreViewControllerDelegate: AnyObject {
     func exploreDidSelectHistoryItem(_ item: OAHistoryItem)
     func exploreDidSelectPopularPlace(_ poi: OAPOI)
-    func exploreDidRequestAllPopularPlaces()
+    func exploreDidRequestShowPopularPlacesOnMap()
 }
 
 final class ExploreViewController: UIViewController {
@@ -181,7 +181,7 @@ final class ExploreViewController: UIViewController {
         switch section {
         case .popularPlaces:
             if !popularPlaces.isEmpty {
-                return popularPlaces.map { .popularPlace($0) } + [.showAllPopularPlaces]
+                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
             }
             if !popularPlacesSearcher.isDataSourceAvailable {
                 return [.noInternet]
@@ -203,7 +203,7 @@ final class ExploreViewController: UIViewController {
 
     private func startLoadingPopularPlaces() {
         guard !isCollapsed(.popularPlaces), popularPlacesSearcher.isDataSourceAvailable, !popularPlacesSearcher.isLoading else { return }
-        popularPlacesSearcher.load(limit: Self.popularPlacesCount) { [weak self] places in
+        popularPlacesSearcher.load(detailedPlacesCount: Self.popularPlacesCount) { [weak self] places in
             guard let self else { return }
             popularPlaces = places
             wikiMapItems = popularPlaces.isEmpty ? OAResourcesUISwiftHelper.findWikiMapRegionsAtCurrentMapLocation() ?? [] : []
@@ -235,61 +235,19 @@ final class ExploreViewController: UIViewController {
         }
     }
 
-    private func distanceAndDirection(latitude: Double, longitude: Double) -> (distance: String?, direction: CGFloat, color: UIColor) {
-        if searchNearMapCenter && CLLocationCoordinate2DIsValid(searchLocation) {
-            let center = CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude)
-            let meters = OADistanceAndDirectionsUpdater.distance(from: center, toDestinationLatitude: latitude, destinationLongitude: longitude)
-            let azimuth = OARootViewController.instance()?.mapPanel?.mapViewController.azimuth() ?? 0
-            let direction = OADistanceAndDirectionsUpdater.directionAngle(from: center,
-                                                                          sourceDirection: CLLocationDirection(azimuth),
-                                                                          toDestinationLatitude: latitude,
-                                                                          destinationLongitude: longitude)
-            return (OAOsmAndFormatter.getFormattedDistance(Float(meters)), direction, .iconColorDirectionMapCenter)
-        }
-
-        guard let location = OsmAndApp.swiftInstance()?.locationServices?.lastKnownLocation else { return (nil, 0, .iconColorDirectionActive) }
-        let meters = OADistanceAndDirectionsUpdater.distance(from: location, toDestinationLatitude: latitude, destinationLongitude: longitude)
-        let direction = OADistanceAndDirectionsUpdater.directionAngle(from: location, toDestinationLatitude: latitude, destinationLongitude: longitude)
-        return (OAOsmAndFormatter.getFormattedDistance(Float(meters)), direction, .iconColorDirectionActive)
+    private var locationReference: SearchLocationReference {
+        SearchLocationReference(searchNearMapCenter: searchNearMapCenter, searchLocation: searchLocation)
     }
 
     private func popularPlaceSecondaryContent(for poi: OAPOI) -> PointSecondaryContent {
-        let metrics = distanceAndDirection(latitude: poi.latitude, longitude: poi.longitude)
-        return PointSecondaryContent(formattedDistance: metrics.distance,
-                                     direction: metrics.direction,
-                                     directionColor: metrics.color,
-                                     address: nil,
-                                     date: nil,
-                                     trailingText: poi.type?.nameLocalized)
+        locationReference.secondaryContent(latitude: poi.latitude, longitude: poi.longitude, trailingText: poi.type?.nameLocalized)
     }
 
     private func historySecondaryContent(for item: OAHistoryItem) -> PointSecondaryContent {
-        let metrics = distanceAndDirection(latitude: item.latitude, longitude: item.longitude)
         let typeName = item.typeName ?? ""
-        return PointSecondaryContent(formattedDistance: metrics.distance,
-                                     direction: metrics.direction,
-                                     directionColor: metrics.color,
-                                     address: typeName.isEmpty ? localizedString("shared_string_history") : typeName,
-                                     date: nil)
-    }
-
-    private func popularPlaceConfiguration(for place: PopularPlace) -> PoiContentConfiguration {
-        let poi = place.poi
-        let name = poi.getName(settings.settingPrefMapLanguage.get(), transliterate: settings.settingMapLanguageTranslit.get()) ?? poi.nameLocalized ?? poi.name ?? ""
-        let openingHours = OAPOIHelper.sharedInstance().getShortFormattedOpeningHours(place.detailedPoi)
-        var openingHoursColor: UIColor?
-        if !openingHours.isEmpty, let parser = OAOpeningHoursParser(string: place.detailedPoi.openingHours) {
-            openingHoursColor = parser.isOpenedForTime() ? .accentsGreen : .textColorDisruptive
-        }
-        let imageURL = settings.wikiShowImagePreviews.get() ? poi.wikiIconUrl.flatMap { URL(string: $0) } : nil
-        return PoiContentConfiguration(style: .compact,
-                                       title: name,
-                                       icon: poi.icon(),
-                                       imageURL: imageURL,
-                                       secondaryContent: popularPlaceSecondaryContent(for: poi),
-                                       address: place.address,
-                                       openingHours: openingHours,
-                                       openingHoursColor: openingHoursColor)
+        return locationReference.secondaryContent(latitude: item.latitude,
+                                                  longitude: item.longitude,
+                                                  address: typeName.isEmpty ? localizedString("shared_string_history") : typeName)
     }
 
     private func actionCell(at indexPath: IndexPath, title: String) -> UITableViewCell {
@@ -316,6 +274,17 @@ final class ExploreViewController: UIViewController {
         guard let controller = OAHistorySettingsViewController(settingsType: EOAHistorySettingsTypeSearch, editing: false) else { return }
         dismiss(animated: true)
         OARootViewController.instance()?.navigationController?.pushViewController(controller, animated: true)
+    }
+
+    private func openAllPopularPlaces() {
+        let controller = PopularPlacesViewController(places: popularPlaces, locationReference: locationReference)
+        controller.onSelectPlace = { [weak self] poi in
+            self?.delegate?.exploreDidSelectPopularPlace(poi)
+        }
+        controller.onShowOnMap = { [weak self] in
+            self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+        }
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func openAllHistory() {
@@ -354,7 +323,7 @@ extension ExploreViewController: UITableViewDataSource {
         switch row {
         case .popularPlace(let place):
             let cell = tableView.dequeueReusableCell(withIdentifier: PoiContentTableViewCell.reuseIdentifier, for: indexPath)
-            cell.contentConfiguration = popularPlaceConfiguration(for: place)
+            cell.contentConfiguration = place.contentConfiguration(style: .compact, secondaryContent: popularPlaceSecondaryContent(for: place.poi))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             return cell
         case .historyItem(let item):
@@ -431,7 +400,7 @@ extension ExploreViewController: UITableViewDelegate {
         case .popularPlace(let place):
             delegate?.exploreDidSelectPopularPlace(place.poi)
         case .showAllPopularPlaces:
-            delegate?.exploreDidRequestAllPopularPlaces()
+            openAllPopularPlaces()
         case .wikiMap(let item):
             downloadingHelper.onCellClicked(item.resourceId())
         case .historyItem(let item):

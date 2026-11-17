@@ -99,6 +99,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
     private let openingHoursLabel = UILabel()
     private let openingHoursStackView = UIStackView()
     private let detailsStackView = UIStackView()
+    private let textStackView = UIStackView()
     private let topStackView = UIStackView()
     private let mainStackView = UIStackView()
     private let descriptionLabel = UILabel()
@@ -173,7 +174,8 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         detailsStackView.addArrangedSubview(addressLabel)
         detailsStackView.addArrangedSubview(openingHoursStackView)
 
-        let textStackView = UIStackView(arrangedSubviews: [titleLabel, secondaryLabel])
+        textStackView.addArrangedSubview(titleLabel)
+        textStackView.addArrangedSubview(secondaryLabel)
         textStackView.axis = .vertical
         textStackView.alignment = .fill
         textStackView.spacing = Self.detailsSpacing
@@ -258,7 +260,9 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         openingHoursIconView.tintColor = configuration.openingHoursColor ?? .textColorSecondary
         openingHoursStackView.isHidden = openingHours.isEmpty
         detailsStackView.isHidden = address.isEmpty && openingHours.isEmpty
-        mainStackView.setCustomSpacing(detailsStackView.isHidden ? Self.descriptionSpacing : Self.detailsSpacing, after: topStackView)
+        placeDetails(for: configuration.style)
+        let detailsBelowTopContent = configuration.style == .compact && !detailsStackView.isHidden
+        mainStackView.setCustomSpacing(detailsBelowTopContent ? Self.detailsSpacing : Self.descriptionSpacing, after: topStackView)
 
         let descriptionText = configuration.style == .detailed ? configuration.descriptionText ?? "" : ""
         descriptionLabel.text = descriptionText
@@ -278,6 +282,18 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
             .compactMap { $0 }
             .filter { !$0.isEmpty }
             .joined(separator: ", ")
+    }
+
+    private func placeDetails(for style: PoiContentConfiguration.Style) {
+        let container = style == .detailed ? textStackView : mainStackView
+        guard detailsStackView.superview !== container else { return }
+        detailsStackView.removeFromSuperview()
+        switch style {
+        case .compact:
+            mainStackView.insertArrangedSubview(detailsStackView, at: 1)
+        case .detailed:
+            textStackView.addArrangedSubview(detailsStackView)
+        }
     }
 
     private func applyImage(_ url: URL?, style: PoiContentConfiguration.Style) {

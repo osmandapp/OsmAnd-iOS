@@ -600,7 +600,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
         }
         cell.dataArray = _possibleZoomValues;
-        [cell.picker selectRow:indexPath.row == kMinZoomPickerRow ? _minZoom - 1 : _maxZoom - 1 inComponent:0 animated:NO];
+        NSInteger zoom = indexPath.row == kMinZoomPickerRow ? _minZoom : _maxZoom;
+        [cell.picker selectRow:zoom - [self getItemMinZoom] inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         cell.hidden = ![item[@"isVisible"] boolValue];
@@ -745,7 +746,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             _minZoom = _maxZoom;
-            [self updatePickerCell:_minZoom - 1 zoomRow:kMinZoomPickerRow];
+            [self updatePickerCell:_minZoom - [self getItemMinZoom] zoomRow:kMinZoomPickerRow];
         }
         zoomRow = kMinZoomRow;
         [self downloadZoomedTiles];
@@ -759,7 +760,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             _maxZoom = _minZoom;
-            [self updatePickerCell:_maxZoom - 1 zoomRow:kMaxZoomPickerRow];
+            [self updatePickerCell:_maxZoom - [self getItemMinZoom] zoomRow:kMaxZoomPickerRow];
         }
         zoomRow = kMaxZoomRow;
         [self downloadZoomedTiles];

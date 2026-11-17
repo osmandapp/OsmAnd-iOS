@@ -44,16 +44,16 @@ static const double DISTANCE_SKIP = 10000;
 @property (nonatomic, assign) long edition;
 @property (nonatomic, copy) NSString *downloadName;
 
-- (BOOL)hasRouteDataAtX31:(int)x31 y31:(int)y31;
+- (BOOL)hasRouteDataAtX31:(int)x31 y31:(int)y31 error:(NSError **)error;
 
 @end
 
 @implementation RegisteredMap
 
-- (BOOL)hasRouteDataAtX31:(int)x31 y31:(int)y31
+- (BOOL)hasRouteDataAtX31:(int)x31 y31:(int)y31 error:(NSError **)error
 {
     if (_sharedReader)
-        return [_sharedReader containsRouteData] && [_sharedReader containsActualRouteDataX31:x31 y31:y31 checkedRegions:nil];
+        return [_sharedReader containsRouteData] && [_sharedReader containsActualRouteDataX31:x31 y31:y31 checkedRegions:nil error:error];
 
     int zoomToLoad = 14;
     int x = x31 >> zoomToLoad;
@@ -126,7 +126,7 @@ static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState stat
                                                   knownMaps:[self registeredMapsForProfile:profile]
                                                       start:start
                                                     targets:targets
-                                            checkHHEditions:checkHHEditions];
+                                            checkHHEditions:checkHHEditions error:nil];
     if (ctx->progress != nullptr)
     {
         if (result)
@@ -141,13 +141,21 @@ static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState stat
                                                     start:(CLLocation *)start
                                                   targets:(NSArray<CLLocation *> *)targets
                                           checkHHEditions:(BOOL)checkHHEditions
+                                                    error:(NSError **)error
 {
     NSString *profile = [[ctx.config.router getProfile] getBaseProfile];
+    NSError *readError = nil;
     OAMissingMapsResult *result = [self checkMapsForProfile:profile
                                                   knownMaps:[self registeredSharedMaps:[ctx getMaps] profile:profile]
                                                       start:start
                                                     targets:targets
-                                            checkHHEditions:checkHHEditions];
+                                            checkHHEditions:checkHHEditions error:&readError];
+    if (readError)
+    {
+        if (error)
+            *error = readError;
+        return nil;
+    }
     OASRouteCalculationProgress *progress = ctx.calculationProgress;
     if (progress)
     {
@@ -168,7 +176,7 @@ static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState stat
                            knownMaps:[self registeredMapsForProfile:profile]
                                start:start
                              targets:targets
-                     checkHHEditions:checkHHEditions];
+                     checkHHEditions:checkHHEditions error:nil];
 }
 
 // The maps the C++ planner reads: every obf file the app has open. Both planners are handed the
@@ -240,6 +248,7 @@ static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState stat
                                        start:(CLLocation *)start
                                      targets:(NSArray<CLLocation *> *)targets
                              checkHHEditions:(BOOL)checkHHEditions
+                                       error:(NSError **)error
 {
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
     NSMutableArray<CLLocation *> *missingMapsPoints = [NSMutableArray arrayWithObject:start];
@@ -259,13 +268,15 @@ static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState stat
             continue;
         }
         
-        [self split:knownMaps pointsToCheck:pointsToCheck pnt:prev isStartEnd:i == 0 next:end];
+        if (![self split:knownMaps pointsToCheck:pointsToCheck pnt:prev isStartEnd:i == 0 next:end error:error])
+            return nil;
         prev = end;
     }
     
     if (end != nil)
     {
-        [self addPoint:knownMaps pointsToCheck:pointsToCheck point:end isStartEnd:YES];
+        if (![self addPoint:knownMaps pointsToCheck:pointsToCheck point:end isStartEnd:YES error:error])
+            return nil;
     }
     
     NSMutableSet<NSNumber *> *presentTimestamps = nil;
@@ -407,29 +418,31 @@ static OASFastRoutingStateStatus *OASharedRoutingStatus(EOAMissingMapsState stat
     return calculationResult;
 }
 
-- (void)split:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
+- (BOOL)split:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
           pnt:(CLLocation *)pnt
    isStartEnd:(BOOL)isStartEnd
          next:(CLLocation *)next
+        error:(NSError **)error
 {
     double distance = [OAMapUtils getDistance:pnt.coordinate second:next.coordinate];
     if (distance < kDISTANCE_SPLIT)
     {
-        [self addPoint:knownMaps pointsToCheck:pointsToCheck point:pnt isStartEnd:isStartEnd];
+        return [self addPoint:knownMaps pointsToCheck:pointsToCheck point:pnt isStartEnd:isStartEnd error:error];
     }
     else
     {
         CLLocation *mid = [OAMapUtils calculateMidPoint:pnt s2:next];
-        [self split:knownMaps pointsToCheck:pointsToCheck pnt:pnt isStartEnd:isStartEnd next:mid];
-        [self split:knownMaps pointsToCheck:pointsToCheck pnt:mid isStartEnd:NO next:next];
+        return [self split:knownMaps pointsToCheck:pointsToCheck pnt:pnt isStartEnd:isStartEnd next:mid error:error]
+            && [self split:knownMaps pointsToCheck:pointsToCheck pnt:mid isStartEnd:NO next:next error:error];
     }
 }
 
-- (void)addPoint:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
+- (BOOL)addPoint:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
    pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
            point:(CLLocation *)loc
       isStartEnd:(BOOL)isStartEnd
+           error:(NSError **)error
 {
     NSMutableArray<NSString *> *regions = [NSMutableArray array];
     
@@ -478,7 +491,17 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             
             for (RegisteredMap *r in knownMaps.allValues)
             {
-                if (!r.standard && [r hasRouteDataAtX31:x31 y31:y31])
+                if (r.standard)
+                    continue;
+                NSError *readError = nil;
+                BOOL hasData = [r hasRouteDataAtX31:x31 y31:y31 error:&readError];
+                if (readError)
+                {
+                    if (error)
+                        *error = readError;
+                    return NO;
+                }
+                if (hasData)
                 {
                     [pnt.regions insertObject:r.downloadName atIndex:0];
                 }
@@ -489,6 +512,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         
         [pointsToCheck addObject:pnt];
     }
+    return YES;
 }
 
 - (NSArray<OAWorldRegion *> *)convert:(NSArray<NSString *> *)maps

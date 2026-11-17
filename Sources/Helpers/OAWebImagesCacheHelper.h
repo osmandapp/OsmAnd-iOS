@@ -12,6 +12,8 @@
 
 @interface OAWebImagesCacheHelper : NSObject
 
++ (NSString *)normalizeLegacyWikimediaThumbnailUrls:(NSString *)html;
+
 - (NSString *)getDbFilename;
 - (NSString *)getDbFoldername;
 

@@ -103,7 +103,7 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     OAMissingMapsResult *result = [_calculator checkIfThereAreMissingSharedMaps:[self contextOver:kRegionMap progress:progress]
                                                                           start:[self locationAt:kRouteStart]
                                                                         targets:@[[self locationAt:kRouteEnd]]
-                                                                checkHHEditions:YES];
+                                                                checkHHEditions:YES error:nil];
 
     XCTAssertNil(result, @"the map of the region the route runs in is there, so there is nothing to download");
     XCTAssertFalse([progress hasMixedOrMissingMaps], @"the routing status was raised over a map that is there");
@@ -115,7 +115,7 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     OAMissingMapsResult *result = [_calculator checkIfThereAreMissingSharedMaps:[self contextOver:kOtherRegionMap progress:progress]
                                                                           start:[self locationAt:kRouteStart]
                                                                         targets:@[[self locationAt:kRouteEnd]]
-                                                                checkHHEditions:YES];
+                                                                checkHHEditions:YES error:nil];
 
     XCTAssertNotNil(result, @"only the map of another region is there, so the route is not covered");
     XCTAssertEqualObjects(result.missingMaps, @[kRegionUnderTheRoute], @"the region to download");
@@ -128,8 +128,37 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     XCTAssertTrue([progress hasMixedOrMissingMaps], @"the routing status the HH search reads was not raised");
 }
 
+- (void)testClosedCustomMapReturnsAReadErrorInsteadOfMissingMaps
+{
+    OASRouteCalculationProgress *progress = [[OASRouteCalculationProgress alloc] init];
+    NSString *fixturePath = [[NSBundle bundleForClass:self.class] pathForResource:@"city01" ofType:@"obf" inDirectory:@"test-resources/approximation"];
+    NSString *path = [_mapsDirectory stringByAppendingPathComponent:@"Custom_test_map.obf"];
+    XCTAssertTrue([NSFileManager.defaultManager copyItemAtPath:fixturePath toPath:path error:nil]);
+    OASBinaryMapReaderResource *resource = [[OASBinaryMapReaderResource alloc] initWithPath:path];
+    OASBinaryMapIndexReader *reader = [resource getReaderType:OASBinaryMapReaderResourceType.routing];
+    XCTAssertNotNil(reader);
+    XCTAssertTrue([reader containsRouteData]);
+    OASRoutingContext *ctx = [self contextOverReader:reader progress:progress];
+    [resource close];
+    // Two points of the city01 track, inside the fixture and a downloadable region.
+    CLLocation *start = [[CLLocation alloc] initWithLatitude:51.721727768 longitude:5.358000290];
+    CLLocation *end = [[CLLocation alloc] initWithLatitude:51.722179715 longitude:5.360096436];
+    XCTAssertGreaterThan([OsmAndApp.instance.worldRegion getWorldRegionsAtWithoutSort:start.coordinate.latitude longitude:start.coordinate.longitude].count, 0);
+    NSError *error = nil;
+    OAMissingMapsResult *result = [_calculator checkIfThereAreMissingSharedMaps:ctx
+        start:start targets:@[end] checkHHEditions:YES error:&error];
+    XCTAssertNotNil(error, @"a failed read must cross the native boundary as an error");
+    XCTAssertNil(result, @"a read failure must not report maps to download");
+    XCTAssertFalse([progress hasMixedOrMissingMaps]);
+}
+
 // A routing context over one map file, set up the way the provider sets one up for a route.
 - (OASRoutingContext *) contextOver:(NSString *)mapName progress:(OASRouteCalculationProgress *)progress
+{
+    return [self contextOverReader:[self readerNamed:mapName] progress:progress];
+}
+
+- (OASRoutingContext *)contextOverReader:(OASBinaryMapIndexReader *)reader progress:(OASRouteCalculationProgress *)progress
 {
     OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
     params.mode = [OAApplicationMode CAR];
@@ -143,7 +172,7 @@ static NSString * const kOtherRegionMap = @"Ukraine_lviv_europe.obf";
     OASRoutingConfiguration *cf = [_provider buildSharedRoutingConfig:builder params:params generalRouter:generalRouter];
 
     OASRoutePlannerFrontEnd *router = [[OASRoutePlannerFrontEnd alloc] init];
-    OASRoutingContext *ctx = [router buildRoutingContextConfig:cf map:@[[self readerNamed:mapName]] rm:OASRouteCalculationMode.normal];
+    OASRoutingContext *ctx = [router buildRoutingContextConfig:cf map:@[reader] rm:OASRouteCalculationMode.normal];
     ctx.calculationProgress = progress;
     return ctx;
 }

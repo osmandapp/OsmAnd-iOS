@@ -28,6 +28,7 @@
 {
     NSArray<NSDictionary *> *_data;
     OAWeatherBand *_band;
+    OAApplicationMode *_appMode;
     NSInteger _indexSelected;
 }
 
@@ -35,11 +36,17 @@
 
 - (instancetype)initWithWeatherBand:(OAWeatherBand *)band
 {
+    return [self initWithWeatherBand:band appMode:[OAAppSettings sharedManager].applicationMode.get];
+}
+
+- (instancetype)initWithWeatherBand:(OAWeatherBand *)band appMode:(OAApplicationMode *)appMode
+{
     self = [super init];
     if (self)
     {
         _band = band;
-        _indexSelected = [_band isBandUnitAuto] ? 0 : [[_band getAvailableBandUnits] indexOfObject:[_band getBandUnit]] + 1;
+        _appMode = appMode;
+        _indexSelected = [_band isBandUnitAuto:_appMode] ? 0 : [[_band getAvailableBandUnits] indexOfObject:[_band getBandUnit:_appMode]] + 1;
     }
     return self;
 }
@@ -145,20 +152,24 @@
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     _indexSelected = indexPath.row;
-    NSUnit *prevUnit = [_band getBandUnit];
-    [_band setBandUnitAuto:_indexSelected == 0];
+    NSUnit *prevUnit = [_band getBandUnit:_appMode];
+    [_band setBandUnitAuto:_indexSelected == 0 mode:_appMode];
     if (_indexSelected != 0)
-        [_band setBandUnit:_data[indexPath.row][@"unit"]];
-    NSUnit *currentUnit = [_band getBandUnit];
+        [_band setBandUnit:_data[indexPath.row][@"unit"] mode:_appMode];
 
-    [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->setBandSettings([[OAWeatherHelper sharedInstance] getBandSettings]);
-    if (![prevUnit.symbol isEqualToString:currentUnit.symbol])
-        [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    NSUnit *currentUnit = [_band getBandUnit:_appMode];
+    if (_appMode == [OAAppSettings sharedManager].applicationMode.get)
+    {
+        [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->setBandSettings([[OAWeatherHelper sharedInstance] getBandSettings]);
+        if (![prevUnit.symbol isEqualToString:currentUnit.symbol])
+            [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    }
+
     if (self.bandDelegate)
         [self.bandDelegate onBandUnitChanged];
 
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
-             withRowAnimation:UITableViewRowAnimationNone];
+                  withRowAnimation:UITableViewRowAnimationNone];
 }
 
 #pragma mark - Additions

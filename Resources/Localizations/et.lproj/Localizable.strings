@@ -1477,7 +1477,7 @@
 "app_mode_taxi" = "Takso";
 "srtm_color_scheme" = "Värviskeem";
 "app_mode_horse" = "Hobune";
-"map_transparency" = "Aluskaardi läbipaistvus";
+"map_transparency" = "Aluskaardi nähtavus";
 "online_webpage_warning" = "Lehekülg saadaval ainult veebis. Avada veebilehitsejas\?";
 "app_mode_subway" = "Metroo";
 "osmand_parking_warning" = "Hoiatus";

@@ -48,7 +48,7 @@ final class ShowHideCoordinatesGridAction: OAQuickAction {
     }
     
     override func getIconResName() -> String {
-        isActionWithSlash() ? "ic_action_world_globe" : "ic_action_coordinates_grid_disabled"
+        "ic_action_world_globe"
     }
     
     override func isActionWithSlash() -> Bool {

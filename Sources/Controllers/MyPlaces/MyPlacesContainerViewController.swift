@@ -88,6 +88,7 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     private var isSelectionMode = false
     private var isSearchActive = false
     private var isSearchBarAnimating = false
+    private var searchPresentationGeneration = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,6 +106,12 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        // Keep the existing search controller while the navigation stack changes windows.
+        if OARootViewController.instance().movingBetweenWindowScenes {
+            navigationController?.setNavigationBarHidden(false, animated: false)
+            return
+        }
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.searchController = nil
@@ -122,6 +129,9 @@ final class MyPlacesContainerViewController: OACompoundViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+
+        // Moving the controller to another scene should not detach its active search UI.
+        if OARootViewController.instance().movingBetweenWindowScenes { return }
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationItem.searchController = nil
@@ -484,8 +494,13 @@ extension MyPlacesContainerViewController: UISearchBarDelegate {
 // MARK: - UISearchControllerDelegate
 extension MyPlacesContainerViewController: UISearchControllerDelegate {
     func didPresentSearchController(_ searchController: UISearchController) {
+        searchPresentationGeneration += 1
         isSearchActive = true
         isSearchBarAnimating = false
+        // UIKit may clear this binding while the modal search controller is re-presented.
+        if navigationItem.searchController !== searchController {
+            navigationItem.searchController = searchController
+        }
         updateSearchResults(for: searchController)
         UIView.animate(withDuration: 0.1, delay: 0, options: [.beginFromCurrentState]) {
             searchController.searchBar.alpha = 1
@@ -493,6 +508,8 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
+        // The transfer dismisses and re-presents this controller without ending the search.
+        if OARootViewController.instance().movingBetweenWindowScenes { return }
         isSearchBarAnimating = true
         navigationItem.searchController = nil
         pageViewController?.delegate = self
@@ -513,6 +530,7 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
     }
     
     func didDismissSearchController(_ searchController: UISearchController) {
+        if OARootViewController.instance().movingBetweenWindowScenes { return }
         isSearchBarAnimating = false
         segmentContainerTopConstraint.constant = view.safeAreaInsets.top
         view.layoutIfNeeded()
@@ -520,8 +538,10 @@ extension MyPlacesContainerViewController: UISearchControllerDelegate {
             navigationItem.searchController = nil
         }
         
+        let generation = searchPresentationGeneration
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.isSearchActive = false
+            guard let self, self.searchPresentationGeneration == generation else { return }
+            self.isSearchActive = false
         }
     }
     

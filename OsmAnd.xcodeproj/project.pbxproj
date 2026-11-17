@@ -7,11 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
+		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
+		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
+		D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000002 /* PlanRouteHistoryUITests.swift */; };
+		D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C608080000000000000002 /* OAFreeMapsCountTests.m */; };
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
+		D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5848A0000000000000002 /* Model3dHelperTests.swift */; };
 		D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */; };
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
+		0A5E1C0D2F7A10000000A001 /* OANativeRoutingMemoryGuard.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */; };
 		0513AA382A9B530A00CFA2A0 /* OADestinationBarWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */; };
 		05541D95299267900014AEF8 /* contourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 05541D94299267900014AEF8 /* contourlines.addon.render.xml */; };
 		0575058E292D254500FEECD4 /* weather.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 0575058D292D254500FEECD4 /* weather.addon.render.xml */; };
@@ -21,6 +28,7 @@
 		0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */; };
 		059D31412C66857F00F8B6EF /* GPXInterpolator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059D31402C66857F00F8B6EF /* GPXInterpolator.swift */; };
 		05A0FCFC2C42D4A200F7ED66 /* models in Resources */ = {isa = PBXBuildFile; fileRef = 05A0FCFB2C42D4A200F7ED66 /* models */; };
+		DF55E34E93AE219971B7CCC2 /* abbr in Resources */ = {isa = PBXBuildFile; fileRef = EF1CC644314826DE82BC05B1 /* abbr */; };
 		05AB44602C9062F500BF4F05 /* OAOsmAndContextImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */; };
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
 		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
@@ -179,6 +187,7 @@
 		32119B502847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32119B4F2847D807005E1E0C /* OAOsmandDevelopmentSimulateLocationViewController.mm */; };
 		32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */; };
 		3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
+		4452B88BEBDEF179C92E49EF /* PoiAdditionalLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */; };
 		32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32190FD72D4909850006E91C /* RenderedObjectHelper.swift */; };
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
@@ -232,7 +241,6 @@
 		324F6C652ED5E90F00C76A85 /* PlaceDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324F6C642ED5E90F00C76A85 /* PlaceDetailsViewController.swift */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
 		325FDBAC2E8E9854006E7C07 /* AmenityUIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */; };
-		325FDBAE2E8E9AED006E7C07 /* AdditionalInfoBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */; };
 		326087072F323A040038A34B /* AmenityInfoRowParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */; };
 		326087092F324B290038A34B /* PoiAdditionalUiRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326087082F324B270038A34B /* PoiAdditionalUiRule.swift */; };
 		3260870C2F324DB20038A34B /* PoiAdditionalRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3260870B2F324DB00038A34B /* PoiAdditionalRowBehavior.swift */; };
@@ -270,7 +278,6 @@
 		329B392A2E3BB663006A774B /* OALocalItemType.m in Sources */ = {isa = PBXBuildFile; fileRef = 329B39292E3BB65F006A774B /* OALocalItemType.m */; };
 		329E56B62C7BB45F00DC7B7C /* OAIconsPaletteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 322B53962C78DD5A006B48B0 /* OAIconsPaletteCell.xib */; };
 		329E56BA2C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */; };
-		329E790D2E8FF69A00B4BC6D /* MergeLocalizedTagsAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 329E790C2E8FF69900B4BC6D /* MergeLocalizedTagsAlgorithm.swift */; };
 		32A0CDF12C29AE6E00FDD8E0 /* Model3dHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */; };
 		32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */; };
 		32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */; };
@@ -399,7 +406,6 @@
 		4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */; };
 		466A01802BFBA9B7008CC50E /* QuickActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466A017F2BFBA9B7008CC50E /* QuickActionType.swift */; };
 		4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */; };
-		467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */; };
 		467DFD7D297EFDBB008A9830 /* OACardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */; };
 		467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 467DFD7F297F172C008A9830 /* OACardTableViewCell.m */; };
 		468443402B83C57A006B8E62 /* CheckCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4684433F2B83C57A006B8E62 /* CheckCodeCommand.swift */; };
@@ -488,7 +494,8 @@
 		46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */; };
 		4F7C1A022F2F000100B00001 /* SelectFavoriteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7C1A012F2F000100B00001 /* SelectFavoriteGroupViewController.swift */; };
 		50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E0FB65E07BC4500AE599F9B /* SharedTravelContext.swift */; };
-		6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */; };
+		6A73E2254E6E44F69F6CCAEF /* SharedObfResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B920021BF64FC6825F4B37 /* SharedObfResources.swift */; };
+		9B118248E51854AF8B1C6E10 /* SharedPoiTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */; };
 		54A955022F4E950100549501 /* WidgetsAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955012F4E950100549501 /* WidgetsAppearanceViewController.swift */; };
 		54A955042F4E950100549501 /* WidgetPanelAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955032F4E950100549501 /* WidgetPanelAppearance.swift */; };
 		54A955062F4E950100549501 /* WidgetPanelColorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A955052F4E950100549501 /* WidgetPanelColorViewController.swift */; };
@@ -672,6 +679,7 @@
 		C1A55E0B77300000000000E1 /* OACppRouteCalculationProgress.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000E3 /* OACppRouteCalculationProgress.mm */; };
 		C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */; };
 		C2E8E311482906B2954F30E1 /* OACppRouteConverterTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E02435B064BCFE1673E2AB83 /* OACppRouteConverterTest.mm */; };
+		C50364FB3078C303001B6EDE /* FavoriteGroupEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C50364FA3078C303001B6EDE /* FavoriteGroupEditorViewController.swift */; };
 		C503AC6B2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */; };
 		C503BC4E3045798E00EB704D /* FavoriteFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC4D3045798E00EB704D /* FavoriteFolder.swift */; };
 		C503BC553045882C00EB704D /* FavoriteFolderProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */; };
@@ -728,6 +736,7 @@
 		C575798C2D64A0A30016957D /* TracksChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */; };
 		C57693172D66159200E4F772 /* AppearanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693162D66159200E4F772 /* AppearanceData.swift */; };
 		C57693192D67148400E4F772 /* ChangeTracksAppearanceTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */; };
+		C57E1E47308635D200112730 /* DownloadMapProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */; };
 		C57E26F32D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */; };
 		C57E26F42D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */; };
 		C58106742EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */; };
@@ -914,6 +923,7 @@
 		D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		D1C571200000000000000001 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */; };
+		D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000010 /* AmenityCardRowsTests.swift */; };
 		D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */; };
 		D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */; };
 		D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */; };
@@ -956,6 +966,8 @@
 		D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */; };
 		D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */; };
 		D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */; };
+		ED6086000000000000000003 /* PlanRouteScrollableViewController+UITesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */; };
+		ED6086000000000000000001 /* PlanRouteUITestStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000002 /* PlanRouteUITestStateView.swift */; };
 		D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */; };
 		D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */; };
 		D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */; };
@@ -967,6 +979,7 @@
 		D7210AA0301B768C003CECB8 /* PlanRouteSegmentGapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */; };
 		D7B76D0D2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */; };
 		D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */; };
+		D7BF047A2FD2DB4400BABB31 /* TracksIndexingTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */; };
 		D7EE671A3017818E0047F171 /* CancelableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7EE67193017818E0047F171 /* CancelableTableView.swift */; };
 		D7EE6720301782CA0047F171 /* OAReorderSegmentCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */; };
 		DA0132D42A1E0AB500920C14 /* WidgetsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0132D32A1E0AB500920C14 /* WidgetsListViewController.swift */; };
@@ -1143,8 +1156,6 @@
 		DA5A819C26C563A700F274C7 /* OAAddPOIAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A1B26C563A000F274C7 /* OAAddPOIAction.mm */; };
 		DA5A819D26C563A700F274C7 /* OASwitchProfileAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A1C26C563A000F274C7 /* OASwitchProfileAction.m */; };
 		DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */; };
-		DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */; };
-		DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */; };
 		295600000000000000000003 /* OADownloadMapLayerHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 295600000000000000000002 /* OADownloadMapLayerHelper.mm */; };
 		DA5A81A126C563A700F274C7 /* OADownloadMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */; };
 		DA5A81A226C563A700F274C7 /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */; };
@@ -1157,6 +1168,8 @@
 		DA5A81A926C563A700F274C7 /* OAAbbreviations.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3426C563A000F274C7 /* OAAbbreviations.mm */; };
 		DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3526C563A000F274C7 /* OASearchSettings.mm */; };
 		DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3B26C563A000F274C7 /* OAQuickSearchHelper.mm */; };
+		9E5CEDCDF8EB26CAB2F729E4 /* OASharedSearchObjects.mm in Sources */ = {isa = PBXBuildFile; fileRef = 131B21973693155434C4DE9A /* OASharedSearchObjects.mm */; };
+		33884E8AFB7A506793AB8824 /* OASharedSearchUICore.mm in Sources */ = {isa = PBXBuildFile; fileRef = EF3256B89A6764BD72367316 /* OASharedSearchUICore.mm */; };
 		DA5A81AC26C563A700F274C7 /* OASearchUICore.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A3D26C563A000F274C7 /* OASearchUICore.mm */; };
 		DA5A81AD26C563A700F274C7 /* OASearchPhrase.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A4026C563A000F274C7 /* OASearchPhrase.mm */; };
 		DA5A81AE26C563A700F274C7 /* OASearchResultMatcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A4326C563A000F274C7 /* OASearchResultMatcher.mm */; };
@@ -1261,7 +1274,7 @@
 		DA5A825426C563A700F274C7 /* OAAutoZoomMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9526C563A100F274C7 /* OAAutoZoomMapViewController.m */; };
 		DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9626C563A100F274C7 /* OAArrivalAnnouncementViewController.m */; };
 		DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */; };
-		DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */; };
+		DA5A825826C563A700F274C7 /* SpeedLimitToleranceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */; };
 		DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */; };
 		DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7BA226C563A100F274C7 /* OABaseSettingsViewController.m */; };
 		DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7BA326C563A100F274C7 /* OAOsmEditingSettingsViewController.mm */; };
@@ -1532,7 +1545,7 @@
 		DA5A83D926C563A800F274C7 /* OAFavoriteImportViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */; };
 		DA5A83DF26C563A800F274C7 /* OAEditGroupViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */; };
 		DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */; };
-		DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */; };
+		C5C58153306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */; };
 		DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */; };
 		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */; };
 		DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */; };
@@ -1628,6 +1641,7 @@
 		DA5A845626C563A900F274C7 /* OARulerByTapControlLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EDB26C563A400F274C7 /* OARulerByTapControlLayer.mm */; };
 		DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */; };
 		DA5A845826C563A900F274C7 /* OAOverlayMapLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */; };
+		ED6086000000000000000005 /* OAMeasurementToolLayer+UITesting.mm in Sources */ = {isa = PBXBuildFile; fileRef = ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */; };
 		DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */; };
 		DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE426C563A400F274C7 /* OAGPXRecLayer.mm */; };
 		DA5A845B26C563A900F274C7 /* OADestinationsLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7EE626C563A400F274C7 /* OADestinationsLayer.mm */; };
@@ -1690,6 +1704,7 @@
 		DA5A849B26C563A900F274C7 /* OAClearPointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7026C563A500F274C7 /* OAClearPointsCommand.mm */; };
 		DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7326C563A500F274C7 /* OAMeasurementModeCommand.mm */; };
 		DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7426C563A500F274C7 /* OARemovePointCommand.mm */; };
+		0A5E1C0D2F7A10000000B001 /* OARemovePointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */; };
 		DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7526C563A500F274C7 /* OAReversePointsCommand.mm */; };
 		DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7826C563A500F274C7 /* OAChangeRouteModeCommand.mm */; };
 		DA5A84A026C563A900F274C7 /* OAReorderPointCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F7926C563A500F274C7 /* OAReorderPointCommand.mm */; };
@@ -1806,8 +1821,8 @@
 		DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */; };
 		DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */; };
 		DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */; };
+		0EACBEE6C24FB1216C606B48 /* InstallAttribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */; };
 		DA5A853426C563A900F274C7 /* OASettingsExporter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */; };
-		DA5A853526C563A900F274C7 /* kml2gpx.xslt in Resources */ = {isa = PBXBuildFile; fileRef = DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */; };
 		DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */; };
 		DA5A853726C563A900F274C7 /* OADefaultFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80AF26C563A600F274C7 /* OADefaultFavorite.m */; };
 		DA5A853826C563A900F274C7 /* OAFavoritesHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */; };
@@ -1836,7 +1851,6 @@
 		DA5A855026C563A900F274C7 /* OAResourcesInstaller.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80DB26C563A600F274C7 /* OAResourcesInstaller.mm */; };
 		DA5A855126C563A900F274C7 /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */; };
 		DA5A855226C563A900F274C7 /* OAMapUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80E126C563A600F274C7 /* OAMapUtils.mm */; };
-		DA5A855326C563A900F274C7 /* OAKml2Gpx.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80E326C563A600F274C7 /* OAKml2Gpx.m */; };
 		DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80E426C563A600F274C7 /* OAGPXAppearanceCollection.mm */; };
 		DA5A855526C563A900F274C7 /* OASimulationProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80E626C563A600F274C7 /* OASimulationProvider.mm */; };
 		DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A80E826C563A600F274C7 /* OALocationServices.mm */; };
@@ -1880,6 +1894,12 @@
 		DA69ED5D2A385B1B001022C7 /* OAWidgetPanelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA69ED5B2A385B1B001022C7 /* OAWidgetPanelViewController.xib */; };
 		DA69ED5F2A385DA6001022C7 /* WidgetPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA69ED5E2A385DA6001022C7 /* WidgetPageViewController.swift */; };
 		DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA72AB942508F44900851313 /* SearchUICoreTest.mm */; };
+		BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */; };
+		EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */; };
+		EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */; };
+		A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */; };
+		5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */; };
+		0D8544693BE51C1DE2A67275 /* OASharedSearchUICoreTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */; };
 		DA73EF7429A3B5410071935D /* publictransportroutes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */; };
 		DA775B8727E5F30E0081B9C1 /* OARemoteFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */; };
 		DA775B8A27E6109F0081B9C1 /* OALocalFile.m in Sources */ = {isa = PBXBuildFile; fileRef = DA775B8927E6109F0081B9C1 /* OALocalFile.m */; };
@@ -1963,6 +1983,7 @@
 		DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC849B226CF967C00018091 /* OADownloadMapWidget.mm */; };
 		DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */; };
 		DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACBB96325D2BEA200378C47 /* CarPlay.framework */; };
+		6091CA11000000000000A001 /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6091CA11000000000000A002 /* CallKit.framework */; };
 		DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACF784327E3441600A8A218 /* OABackupHelper.mm */; };
 		DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2203D2913AF010052B967 /* OATableCollapsableRowData.m */; };
 		DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */; };
@@ -2029,6 +2050,7 @@
 		FA44BF5B2A72A91C000D2F5F /* CarPlaySceneDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */; };
 		FA44BF5C2A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */; };
 		FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA44BF672A72F810000D2F5F /* SceneDelegate.mm */; };
+		C0D6A8012C00A00100000001 /* SceneWindowStateRestorer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6A8022C00A00100000001 /* SceneWindowStateRestorer.swift */; };
 		FA44F8E22D0B215900334FDB /* GpxLoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */; };
 		FA45851E2C9474A3003A5AD7 /* GpxDataItemExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */; };
 		FA4713D22E0E937500DC518F /* URLSessionConfigProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */; };
@@ -2064,7 +2086,7 @@
 		FA6408792D3E845A005FD12D /* ImageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408782D3E845A005FD12D /* ImageCardCell.swift */; };
 		FA64087B2D3E88C0005FD12D /* MapillaryContributeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */; };
 		FA64087D2D3E8B96005FD12D /* MapillaryContributeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */; };
-		FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */; };
+		FA64087F2D3E8EDA005FD12D /* MapillaryImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */; };
 		FA6408872D3E908F005FD12D /* OAMapillaryImageCardWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6408862D3E908F005FD12D /* OAMapillaryImageCardWrapper.m */; };
 		FA64173B2CA5A57500982297 /* SharedLibExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64173A2CA5A57500982297 /* SharedLibExtension.swift */; };
 		FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */; };
@@ -2085,7 +2107,6 @@
 		FA7000012F90000000000007 /* MCBinaryHeap.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000024 /* MCBinaryHeap.m */; };
 		FA7000012F90000000000008 /* MaterialTextFields.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000027 /* MaterialTextFields.m */; };
 		FA7000012F90000000000009 /* AFNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = FA7000012F9000000000002B /* AFNetworking */; };
-		FA7000012F9000000000000A /* BRCybertron in Frameworks */ = {isa = PBXBuildFile; productRef = FA7000012F9000000000002D /* BRCybertron */; };
 		FA73410A2BBAE44A00CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7341092BBAE44A00CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.xib */; };
 		FA73410D2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA73410C2BBAED8600CBF7EC /* LeftIconRightStackTitleDescriptionButtonView.swift */; };
 		FA7341142BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA7341122BBC1C2000CBF7EC /* OARequiredMapsResourceViewController.mm */; };
@@ -2203,6 +2224,14 @@
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
 		D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */; };
 		D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */; };
+		D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000002 /* OAFavoriteIconTests.mm */; };
+		D1C609900000000000000003 /* FavoriteOriginalIconUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */; };
+		D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */; };
+		D609152ABC68498BBF4CC2FE /* OASharedSearchAppAPIs.mm in Sources */ = {isa = PBXBuildFile; fileRef = B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */; };
+		D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */; };
+		31BD3D43BB3E4BE0B51EF0EE /* OASharedAmenitySearcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */; };
+		DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */; };
+		D9F147600000000000000002 /* OASearchScreenLifetimeTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = D9F147600000000000000001 /* OASearchScreenLifetimeTest.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2253,7 +2282,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
+		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
+		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
+		D57820010000000000000002 /* PlanRouteHistoryUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryUITests.swift; sourceTree = "<group>"; };
+		D1C608080000000000000002 /* OAFreeMapsCountTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Helpers/OAFreeMapsCountTests.m; sourceTree = "<group>"; };
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
+		D1C5848A0000000000000002 /* Model3dHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles/Model3dHelperTests.swift; sourceTree = "<group>"; };
 		D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/UtilitiesUrlQueryTests.swift; sourceTree = "<group>"; };
 		D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
@@ -2262,6 +2297,8 @@
 		040A97D4493C89D048F33E9F /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteRecalculationHelper.h; sourceTree = "<group>"; };
 		051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteRecalculationHelper.mm; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000A002 /* OANativeRoutingMemoryGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANativeRoutingMemoryGuard.h; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANativeRoutingMemoryGuard.mm; sourceTree = "<group>"; };
 		0513AA362A9B530A00CFA2A0 /* OADestinationBarWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADestinationBarWidget.h; sourceTree = "<group>"; };
 		0513AA372A9B530A00CFA2A0 /* OADestinationBarWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADestinationBarWidget.mm; sourceTree = "<group>"; };
 		05541D94299267900014AEF8 /* contourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = contourlines.addon.render.xml; path = ../resources/rendering_styles/contourlines.addon.render.xml; sourceTree = "<group>"; };
@@ -2273,6 +2310,7 @@
 		0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentDictionary.swift; sourceTree = "<group>"; };
 		059D31402C66857F00F8B6EF /* GPXInterpolator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPXInterpolator.swift; sourceTree = "<group>"; };
 		05A0FCFB2C42D4A200F7ED66 /* models */ = {isa = PBXFileReference; lastKnownFileType = folder; name = models; path = ../resources/models; sourceTree = "<group>"; };
+		EF1CC644314826DE82BC05B1 /* abbr */ = {isa = PBXFileReference; lastKnownFileType = folder; name = abbr; path = ../resources/abbr; sourceTree = "<group>"; };
 		05AB445E2C9062F500BF4F05 /* OAOsmAndContextImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmAndContextImpl.h; sourceTree = "<group>"; };
 		05AB445F2C9062F500BF4F05 /* OAOsmAndContextImpl.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmAndContextImpl.mm; sourceTree = "<group>"; };
 		05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlinePlugin.h; sourceTree = "<group>"; };
@@ -2312,7 +2350,8 @@
 		0E4DA44079A941CF8E86B30B /* HashHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashHelper.swift; sourceTree = "<group>"; };
 		148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACppRouteConverter.mm; sourceTree = "<group>"; };
 		153B5979A977684A360DBEE5 /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nb; path = nb.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfReaders.swift; sourceTree = "<group>"; };
+		17B920021BF64FC6825F4B37 /* SharedObfResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedObfResources.swift; sourceTree = "<group>"; };
+		0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPoiTranslator.swift; sourceTree = "<group>"; };
 		180F303DB967BA6C58C6A762 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = is; path = is.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		18D8B041AE3F505150D22288 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		21D6D5267C249A7783FE069E /* tt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tt; path = tt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -2492,6 +2531,7 @@
 		32119B532848D910005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.h; sourceTree = "<group>"; };
 		32119B542848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmandDevelopmentSimulateSpeedSelectorViewController.m; sourceTree = "<group>"; };
 		3216E9522BA097BD0087D0EF /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalLabels.swift; sourceTree = "<group>"; };
 		32190FD72D4909850006E91C /* RenderedObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenderedObjectHelper.swift; sourceTree = "<group>"; };
 		32190FD92D490B460006E91C /* OAMapUtils+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMapUtils+cpp.h"; sourceTree = "<group>"; };
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
@@ -2567,7 +2607,6 @@
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityUIHelper.swift; sourceTree = "<group>"; };
-		325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalInfoBundle.swift; sourceTree = "<group>"; };
 		326087062F3239FD0038A34B /* AmenityInfoRowParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityInfoRowParams.swift; sourceTree = "<group>"; };
 		326087082F324B270038A34B /* PoiAdditionalUiRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalUiRule.swift; sourceTree = "<group>"; };
 		3260870B2F324DB00038A34B /* PoiAdditionalRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiAdditionalRowBehavior.swift; sourceTree = "<group>"; };
@@ -2638,7 +2677,6 @@
 		329B39282E3BB648006A774B /* OALocalItemType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALocalItemType.h; sourceTree = "<group>"; };
 		329B39292E3BB65F006A774B /* OALocalItemType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OALocalItemType.m; sourceTree = "<group>"; };
 		329E56B92C88321100DC7B7C /* ProfileAppearanceViewAngleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAppearanceViewAngleViewController.swift; sourceTree = "<group>"; };
-		329E790C2E8FF69900B4BC6D /* MergeLocalizedTagsAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeLocalizedTagsAlgorithm.swift; sourceTree = "<group>"; };
 		32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model3dHelper.swift; sourceTree = "<group>"; };
 		32A0CDF22C29AF8500FDD8E0 /* OAModel3dHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAModel3dHelper.h; sourceTree = "<group>"; };
 		32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAModel3dHelper.mm; sourceTree = "<group>"; };
@@ -2823,8 +2861,6 @@
 		4665DB6D2C20BBFD00F897EC /* ColorsPaletteUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorsPaletteUtils.swift; sourceTree = "<group>"; };
 		466A017F2BFBA9B7008CC50E /* QuickActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionType.swift; sourceTree = "<group>"; };
 		4671FB8F2CDE6E3A00446D18 /* GpxUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxUtils.swift; sourceTree = "<group>"; };
-		467D7DC02ADDE95B0037A593 /* OAFavoriteGroupEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteGroupEditorViewController.h; sourceTree = "<group>"; };
-		467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteGroupEditorViewController.mm; sourceTree = "<group>"; };
 		467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACardTableViewCell.xib; sourceTree = "<group>"; };
 		467DFD7E297F16AF008A9830 /* OACardTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACardTableViewCell.h; sourceTree = "<group>"; };
 		467DFD7F297F172C008A9830 /* OACardTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACardTableViewCell.m; sourceTree = "<group>"; };
@@ -3252,6 +3288,7 @@
 		C1A55E0B77300000000000F2 /* OASharedRouteProgressTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedRouteProgressTest.mm; sourceTree = "<group>"; };
 		C1AB8471989D79CC4F5F17A1 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = my; path = my.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		C390E2A13B31BA32AE26F2BF /* uz-Cyrl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "uz-Cyrl"; path = "uz-Cyrl.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		C50364FA3078C303001B6EDE /* FavoriteGroupEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGroupEditorViewController.swift; sourceTree = "<group>"; };
 		C503AC6A2DC4896B00F154F0 /* ShowHideCoordinatesGridAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideCoordinatesGridAction.swift; sourceTree = "<group>"; };
 		C503BC4D3045798E00EB704D /* FavoriteFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolder.swift; sourceTree = "<group>"; };
 		C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteFolderProvider.swift; sourceTree = "<group>"; };
@@ -3405,6 +3442,7 @@
 		C575798B2D64A0A30016957D /* TracksChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		C57693162D66159200E4F772 /* AppearanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceData.swift; sourceTree = "<group>"; };
 		C57693182D67148400E4F772 /* ChangeTracksAppearanceTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTracksAppearanceTask.swift; sourceTree = "<group>"; };
+		C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadMapProgressViewController.swift; sourceTree = "<group>"; };
 		C57E26F12D3D663F00A8A3D5 /* AttachRoadsBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachRoadsBannerCell.swift; sourceTree = "<group>"; };
 		C57E26F22D3D663F00A8A3D5 /* AttachRoadsBannerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttachRoadsBannerCell.xib; sourceTree = "<group>"; };
 		C58106732EF4146A00DC6AD4 /* ShowHideWindAnimationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowHideWindAnimationAction.swift; sourceTree = "<group>"; };
@@ -3492,6 +3530,7 @@
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
 		C5EE465A2E9D1F8B0019C9E0 /* CarPlayNavigationModeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayNavigationModeProvider.swift; sourceTree = "<group>"; };
 		C5F1323A31A0000000000001 /* OAMeasurementEditingContextTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementEditingContextTypes.h; sourceTree = "<group>"; };
+		C5F46C193079C501002AAA41 /* OAFavoriteGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteGroup.h; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
 		CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastDetailsViewController.h; sourceTree = "<group>"; };
 		CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherCacheSettingsViewController.h; sourceTree = "<group>"; };
@@ -3647,6 +3686,7 @@
 		D1A0B0102F50001100A0B001 /* URLExtractionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtractionTests.swift; sourceTree = "<group>"; };
 		D1C571200000000000000003 /* ContextMenuPresentationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinator.swift; sourceTree = "<group>"; };
 		D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationCoordinatorTest.swift; sourceTree = "<group>"; };
+		D1C571200000000000000010 /* AmenityCardRowsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmenityCardRowsTests.swift; sourceTree = "<group>"; };
 		D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuPresentationUITests.swift; sourceTree = "<group>"; };
 		D1C571210000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1C571210000000000000004 /* OsmAnd MapsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3690,6 +3730,8 @@
 		D721015D301B768C003CECB8 /* PlanRoutePoiState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePoiState.swift; sourceTree = "<group>"; };
 		D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteScrollableViewController.swift; sourceTree = "<group>"; };
 		D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteToolbarsView.swift; sourceTree = "<group>"; };
+		ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlanRouteScrollableViewController+UITesting.swift"; sourceTree = "<group>"; };
+		ED6086000000000000000002 /* PlanRouteUITestStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteUITestStateView.swift; sourceTree = "<group>"; };
 		D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTopPartView.swift; sourceTree = "<group>"; };
 		D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteBetweenPointsViewController.swift; sourceTree = "<group>"; };
 		D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSettingsViewController.swift; sourceTree = "<group>"; };
@@ -3701,6 +3743,7 @@
 		D7210AA1301B768C003CECB8 /* PlanRouteSegmentGapCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteSegmentGapCell.swift; sourceTree = "<group>"; };
 		D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByStepSizeViewController.swift; sourceTree = "<group>"; };
 		D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksViewController.swift; sourceTree = "<group>"; };
+		D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TracksIndexingTracker.swift; sourceTree = "<group>"; };
 		D7EE67193017818E0047F171 /* CancelableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableTableView.swift; sourceTree = "<group>"; };
 		D7EE671E301782CA0047F171 /* OAReorderSegmentCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAReorderSegmentCommand.h; sourceTree = "<group>"; };
 		D7EE671F301782CA0047F171 /* OAReorderSegmentCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAReorderSegmentCommand.mm; sourceTree = "<group>"; };
@@ -4058,12 +4101,9 @@
 		DA5A7A2126C563A000F274C7 /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAWorldRegion+Protected.h"; sourceTree = "<group>"; };
 		DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
-		DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapProgressViewController.mm; sourceTree = "<group>"; };
-		DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMapProgressViewController.xib; sourceTree = "<group>"; };
 		295600000000000000000001 /* OADownloadMapLayerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMapLayerHelper.h; sourceTree = "<group>"; };
 		295600000000000000000002 /* OADownloadMapLayerHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapLayerHelper.mm; sourceTree = "<group>"; };
 		DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapViewController.mm; sourceTree = "<group>"; };
-		DA5A7A2826C563A000F274C7 /* OADownloadMapProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMapProgressViewController.h; sourceTree = "<group>"; };
 		DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectMapSourceViewController.mm; sourceTree = "<group>"; };
 		DA5A7A2A26C563A000F274C7 /* OASelectMapSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASelectMapSourceViewController.xib; sourceTree = "<group>"; };
 		DA5A7A2B26C563A000F274C7 /* OASelectMapSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASelectMapSourceViewController.h; sourceTree = "<group>"; };
@@ -4082,6 +4122,10 @@
 		DA5A7A3926C563A000F274C7 /* OASearchCoreFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchCoreFactory.h; sourceTree = "<group>"; };
 		DA5A7A3A26C563A000F274C7 /* OASearchWord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchWord.h; sourceTree = "<group>"; };
 		DA5A7A3B26C563A000F274C7 /* OAQuickSearchHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchHelper.mm; sourceTree = "<group>"; };
+		0D69D31BCDA6B29D8F31126C /* OASharedSearchObjects.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchObjects.h; sourceTree = "<group>"; };
+		131B21973693155434C4DE9A /* OASharedSearchObjects.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchObjects.mm; sourceTree = "<group>"; };
+		EC1120949C22910240627B12 /* OASharedSearchUICore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchUICore.h; sourceTree = "<group>"; };
+		EF3256B89A6764BD72367316 /* OASharedSearchUICore.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchUICore.mm; sourceTree = "<group>"; };
 		DA5A7A3C26C563A000F274C7 /* OASearchUICore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchUICore.h; sourceTree = "<group>"; };
 		DA5A7A3D26C563A000F274C7 /* OASearchUICore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchUICore.mm; sourceTree = "<group>"; };
 		DA5A7A3E26C563A000F274C7 /* OASearchResultMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchResultMatcher.h; sourceTree = "<group>"; };
@@ -4274,7 +4318,6 @@
 		DA5A7B8226C563A100F274C7 /* OAAutoCenterMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAutoCenterMapViewController.m; sourceTree = "<group>"; };
 		DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVehicleParametersSettingsViewController.h; sourceTree = "<group>"; };
 		DA5A7B8426C563A100F274C7 /* OADefaultSpeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADefaultSpeedViewController.mm; sourceTree = "<group>"; };
-		DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASpeedLimitToleranceViewController.h; sourceTree = "<group>"; };
 		DA5A7B8626C563A100F274C7 /* OAVoicePromptsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoicePromptsViewController.h; sourceTree = "<group>"; };
 		DA5A7B8826C563A100F274C7 /* OANavigationLanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationLanguageViewController.m; sourceTree = "<group>"; };
 		DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScreenAlertsViewController.m; sourceTree = "<group>"; };
@@ -4293,7 +4336,7 @@
 		DA5A7B9926C563A100F274C7 /* OARecalculateRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARecalculateRouteViewController.h; sourceTree = "<group>"; };
 		DA5A7B9A26C563A100F274C7 /* OARouteParameterValuesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteParameterValuesViewController.h; sourceTree = "<group>"; };
 		DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAvoidPreferParametersViewController.mm; sourceTree = "<group>"; };
-		DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASpeedLimitToleranceViewController.m; sourceTree = "<group>"; };
+		DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedLimitToleranceViewController.swift; sourceTree = "<group>"; };
 		DA5A7B9D26C563A100F274C7 /* OADefaultSpeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADefaultSpeedViewController.h; sourceTree = "<group>"; };
 		DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACreateProfileViewController.mm; sourceTree = "<group>"; };
 		DA5A7BA026C563A100F274C7 /* OACreateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACreateProfileViewController.h; sourceTree = "<group>"; };
@@ -4726,10 +4769,9 @@
 		DA5A7E1026C563A300F274C7 /* OAEditGroupViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEditGroupViewController.mm; sourceTree = "<group>"; };
 		DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
 		DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditDescriptionViewController.h; sourceTree = "<group>"; };
-		DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditColorViewController.m; sourceTree = "<group>"; };
+		C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesChangeAppearanceViewController.swift; sourceTree = "<group>"; };
 		DA5A7E1626C563A300F274C7 /* OAEditGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditGroupViewController.h; sourceTree = "<group>"; };
 		DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAEditDescriptionViewController.m; sourceTree = "<group>"; };
-		DA5A7E1A26C563A300F274C7 /* OAEditColorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAEditColorViewController.h; sourceTree = "<group>"; };
 		DA5A7E1C26C563A300F274C7 /* OACollapsableTransportStopRoutesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableTransportStopRoutesView.h; sourceTree = "<group>"; };
 		DA5A7E1E26C563A400F274C7 /* OAWikiMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiMenuViewController.h; sourceTree = "<group>"; };
 		DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiWebViewController.mm; sourceTree = "<group>"; };
@@ -4880,6 +4922,8 @@
 		DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapLayers.h; sourceTree = "<group>"; };
 		DA5A7EDD26C563A400F274C7 /* OAGPXRecLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXRecLayer.h; sourceTree = "<group>"; };
 		DA5A7EDE26C563A400F274C7 /* OAFavoritesLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoritesLayer.h; sourceTree = "<group>"; };
+		ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "OAMeasurementToolLayer+UITesting.mm"; sourceTree = "<group>"; };
+		ED6086000000000000000007 /* OAMeasurementToolLayer+UITesting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAMeasurementToolLayer+UITesting.h"; sourceTree = "<group>"; };
 		DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMeasurementToolLayer.h; sourceTree = "<group>"; };
 		DA5A7EE026C563A400F274C7 /* OAOsmBugsLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmBugsLayer.mm; sourceTree = "<group>"; };
 		DA5A7EE126C563A400F274C7 /* OAOverlayMapLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOverlayMapLayer.mm; sourceTree = "<group>"; };
@@ -5029,6 +5073,8 @@
 		DA5A7F8226C563A500F274C7 /* OAMeasurementCommandManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMeasurementCommandManager.m; sourceTree = "<group>"; };
 		DA5A7F8326C563A500F274C7 /* OAMovePointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMovePointCommand.h; sourceTree = "<group>"; };
 		DA5A7F8426C563A500F274C7 /* OARemovePointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARemovePointCommand.h; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000B002 /* OARemovePointsCommand.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemovePointsCommand.h; sourceTree = "<group>"; };
+		0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARemovePointsCommand.mm; sourceTree = "<group>"; };
 		DA5A7F8526C563A500F274C7 /* OAApplyGpxApproximationCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAApplyGpxApproximationCommand.h; sourceTree = "<group>"; };
 		DA5A7F8626C563A500F274C7 /* OAAddPointCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddPointCommand.h; sourceTree = "<group>"; };
 		DA5A7F8726C563A500F274C7 /* OAPlanningPopupBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPlanningPopupBaseViewController.m; sourceTree = "<group>"; };
@@ -5232,16 +5278,15 @@
 		DA5A80A526C563A500F274C7 /* OASettingsImporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsImporter.mm; sourceTree = "<group>"; };
 		DA5A80A626C563A600F274C7 /* OAResourcesUIHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUIHelper.mm; sourceTree = "<group>"; };
 		DA5A80A726C563A600F274C7 /* OAWikiImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiImageHelper.h; sourceTree = "<group>"; };
+		FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallAttribution.swift; sourceTree = "<group>"; };
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
 		DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapTileDownloader.h; sourceTree = "<group>"; };
 		DA5A80AB26C563A600F274C7 /* OAMapUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapUtils.h; sourceTree = "<group>"; };
-		DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = kml2gpx.xslt; sourceTree = "<group>"; };
 		DA5A80AD26C563A600F274C7 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
 		DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACustomRegion.mm; sourceTree = "<group>"; };
 		DA5A80AF26C563A600F274C7 /* OADefaultFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADefaultFavorite.m; sourceTree = "<group>"; };
 		DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoritesHelper.mm; sourceTree = "<group>"; };
-		DA5A80B126C563A600F274C7 /* OAKml2Gpx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAKml2Gpx.h; sourceTree = "<group>"; };
 		DA5A80B226C563A600F274C7 /* OAAppSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAppSettings.m; sourceTree = "<group>"; };
 		DA5A80B326C563A600F274C7 /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		DA5A80B426C563A600F274C7 /* OAAvoidSpecificRoads.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAvoidSpecificRoads.mm; sourceTree = "<group>"; };
@@ -5290,7 +5335,6 @@
 		DA5A80E026C563A600F274C7 /* OAAppSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppSettings.h; sourceTree = "<group>"; };
 		DA5A80E126C563A600F274C7 /* OAMapUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapUtils.mm; sourceTree = "<group>"; };
 		DA5A80E226C563A600F274C7 /* OASavingTrackHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASavingTrackHelper.h; sourceTree = "<group>"; };
-		DA5A80E326C563A600F274C7 /* OAKml2Gpx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAKml2Gpx.m; sourceTree = "<group>"; };
 		DA5A80E426C563A600F274C7 /* OAGPXAppearanceCollection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXAppearanceCollection.mm; sourceTree = "<group>"; };
 		DA5A80E626C563A600F274C7 /* OASimulationProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASimulationProvider.mm; sourceTree = "<group>"; };
 		DA5A80E726C563A600F274C7 /* OALocationServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationServices.h; sourceTree = "<group>"; };
@@ -5364,6 +5408,12 @@
 		DA72AB892508F40F00851313 /* OsmAnd MapsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd MapsTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA72AB8D2508F41000851313 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA72AB942508F44900851313 /* SearchUICoreTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SearchUICoreTest.mm; sourceTree = "<group>"; };
+		74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchContextTest.mm; sourceTree = "<group>"; };
+		C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAObfFileListOrderTest.mm; sourceTree = "<group>"; };
+		B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchModelsTest.mm; sourceTree = "<group>"; };
+		EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchFacadeTest.mm; sourceTree = "<group>"; };
+		5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchCitiesTest.mm; sourceTree = "<group>"; };
+		B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchUICoreTest.mm; sourceTree = "<group>"; };
 		DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = publictransportroutes.addon.render.xml; path = ../resources/rendering_styles/publictransportroutes.addon.render.xml; sourceTree = "<group>"; };
 		DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARemoteFile.h; sourceTree = "<group>"; };
 		DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARemoteFile.m; sourceTree = "<group>"; };
@@ -5478,6 +5528,7 @@
 		DAC849B326CF967C00018091 /* OADownloadMapWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMapWidget.h; sourceTree = "<group>"; };
 		DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMapWidget.xib; sourceTree = "<group>"; };
 		DACBB96325D2BEA200378C47 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
+		6091CA11000000000000A002 /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		DACF784227E3441600A8A218 /* OABackupHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupHelper.h; sourceTree = "<group>"; };
 		DACF784327E3441600A8A218 /* OABackupHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABackupHelper.mm; sourceTree = "<group>"; };
 		DAD2203C2913AF010052B967 /* OATableCollapsableRowData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableCollapsableRowData.h; sourceTree = "<group>"; };
@@ -5561,6 +5612,7 @@
 		FA44BF592A72A91C000D2F5F /* DashboardCarPlaySceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardCarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 		FA44BF672A72F810000D2F5F /* SceneDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneDelegate.mm; sourceTree = "<group>"; };
 		FA44BF682A72F810000D2F5F /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		C0D6A8022C00A00100000001 /* SceneWindowStateRestorer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneWindowStateRestorer.swift; sourceTree = "<group>"; };
 		FA44F8E12D0B215900334FDB /* GpxLoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxLoadOperation.swift; sourceTree = "<group>"; };
 		FA45851D2C9474A3003A5AD7 /* GpxDataItemExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GpxDataItemExtension.swift; sourceTree = "<group>"; };
 		FA4713D12E0E937500DC518F /* URLSessionConfigProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionConfigProvider.swift; sourceTree = "<group>"; };
@@ -5600,7 +5652,7 @@
 		FA6408782D3E845A005FD12D /* ImageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCardCell.swift; sourceTree = "<group>"; };
 		FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryContributeCard.swift; sourceTree = "<group>"; };
 		FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryContributeCell.swift; sourceTree = "<group>"; };
-		FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAMapillaryImageCard.swift; sourceTree = "<group>"; };
+		FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryImageCard.swift; sourceTree = "<group>"; };
 		FA6408852D3E908F005FD12D /* OAMapillaryImageCardWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryImageCardWrapper.h; sourceTree = "<group>"; };
 		FA6408862D3E908F005FD12D /* OAMapillaryImageCardWrapper.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = OAMapillaryImageCardWrapper.m; sourceTree = "<group>"; };
 		FA64173A2CA5A57500982297 /* SharedLibExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLibExtension.swift; sourceTree = "<group>"; };
@@ -5754,6 +5806,16 @@
 		FE6716631789B78626884F9C /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = az; path = az.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxWptEditingHandlerTest.mm; sourceTree = "<group>"; };
 		D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWaypointGroupSelectionTest.mm; sourceTree = "<group>"; };
+		D1C609900000000000000002 /* OAFavoriteIconTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteIconTests.mm; sourceTree = "<group>"; };
+		D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteOriginalIconUITests.swift; sourceTree = "<group>"; };
+		D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPanelMenuRestorationTests.mm; sourceTree = "<group>"; };
+		77CF376424AD4290B198F52E /* OASharedSearchAppAPIs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedSearchAppAPIs.h; sourceTree = "<group>"; };
+		B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIs.mm; sourceTree = "<group>"; };
+		CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedSearchAppAPIsTest.mm; sourceTree = "<group>"; };
+		C6C07FA17F7C4FE0B4BC42E7 /* OASharedAmenitySearcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedAmenitySearcher.h; sourceTree = "<group>"; };
+		E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedAmenitySearcher.mm; sourceTree = "<group>"; };
+		AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASharedAmenitySearcherTest.mm; sourceTree = "<group>"; };
+		D9F147600000000000000001 /* OASearchScreenLifetimeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASearchScreenLifetimeTest.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -5774,6 +5836,7 @@
 				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
 				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
 				DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */,
+				6091CA11000000000000A001 /* CallKit.framework in Frameworks */,
 				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
@@ -5803,7 +5866,6 @@
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
 				894E639B06194FAE9135FAD3 /* Kingfisher in Frameworks */,
 				FA7000012F90000000000009 /* AFNetworking in Frameworks */,
-				FA7000012F9000000000000A /* BRCybertron in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6529,6 +6591,7 @@
 		84C41E531AB95F970089EABB /* search */ = {
 			isa = PBXGroup;
 			children = (
+				EF1CC644314826DE82BC05B1 /* abbr */,
 				842431791AEEBEEB00925821 /* phrases */,
 				84C41E581AB960D10089EABB /* phrases.xml */,
 				84C41E541AB960070089EABB /* poi_types.xml */,
@@ -6753,6 +6816,7 @@
 				DA578C4B266263D2007A086E /* libqtpcre2.a */,
 				81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */,
 				DACBB96325D2BEA200378C47 /* CarPlay.framework */,
+				6091CA11000000000000A002 /* CallKit.framework */,
 				DA80DACE251E3440008E6267 /* UIKit.framework */,
 				DA80DAC5251E2D57008E6267 /* Foundation.framework */,
 				DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */,
@@ -6978,7 +7042,9 @@
 		D1C571200000000000000006 /* Panels */ = {
 			isa = PBXGroup;
 			children = (
+				D1C571200000000000000010 /* AmenityCardRowsTests.swift */,
 				D1C571200000000000000005 /* ContextMenuPresentationCoordinatorTest.swift */,
+				D1C598800000000000000002 /* OAMapPanelMenuRestorationTests.mm */,
 			);
 			path = Panels;
 			sourceTree = "<group>";
@@ -6987,6 +7053,9 @@
 			isa = PBXGroup;
 			children = (
 				D1C571210000000000000002 /* ContextMenuPresentationUITests.swift */,
+				D1C609900000000000000004 /* FavoriteOriginalIconUITests.swift */,
+				D57820010000000000000004 /* PlanRouteHistoryFixture.swift */,
+				D57820010000000000000002 /* PlanRouteHistoryUITests.swift */,
 				D1C571210000000000000003 /* Info.plist */,
 			);
 			path = "OsmAnd MapsUITests";
@@ -7056,6 +7125,8 @@
 				D721015E301B768C003CECB8 /* PlanRouteScrollableViewController.swift */,
 				D721015F301B768C003CECB8 /* PlanRouteToolbarsView.swift */,
 				D7210160301B768C003CECB8 /* PlanRouteTopPartView.swift */,
+				ED6086000000000000000002 /* PlanRouteUITestStateView.swift */,
+				ED6086000000000000000004 /* PlanRouteScrollableViewController+UITesting.swift */,
 				D7210161301B768C003CECB8 /* RouteBetweenPointsViewController.swift */,
 				D7210162301B768C003CECB8 /* RouteSettingsViewController.swift */,
 				D7210163301B768C003CECB8 /* RouteTypeViewController.swift */,
@@ -7598,6 +7669,7 @@
 				DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */,
 				FA44BF682A72F810000D2F5F /* SceneDelegate.h */,
 				FA44BF672A72F810000D2F5F /* SceneDelegate.mm */,
+				C0D6A8022C00A00100000001 /* SceneWindowStateRestorer.swift */,
 				FA44BF562A72A8FC000D2F5F /* CarPlayDelegate */,
 				DA5A79B526C563A000F274C7 /* Localization.h */,
 				DA5A79BF26C563A000F274C7 /* main.m */,
@@ -7815,11 +7887,9 @@
 		DA5A7A2426C563A000F274C7 /* DownloadMapSource */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7A2826C563A000F274C7 /* OADownloadMapProgressViewController.h */,
-				DA5A7A2526C563A000F274C7 /* OADownloadMapProgressViewController.mm */,
-				DA5A7A2626C563A000F274C7 /* OADownloadMapProgressViewController.xib */,
 				295600000000000000000001 /* OADownloadMapLayerHelper.h */,
 				295600000000000000000002 /* OADownloadMapLayerHelper.mm */,
+				C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */,
 				DA5A7A2D26C563A000F274C7 /* OADownloadMapViewController.h */,
 				DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */,
 				DA5A7A2C26C563A000F274C7 /* OADownloadMapViewController.xib */,
@@ -7841,6 +7911,12 @@
 				DA5A7A3226C563A000F274C7 /* OAObjectType.m */,
 				DA5A7A2F26C563A000F274C7 /* OAQuickSearchHelper.h */,
 				DA5A7A3B26C563A000F274C7 /* OAQuickSearchHelper.mm */,
+				0D69D31BCDA6B29D8F31126C /* OASharedSearchObjects.h */,
+				131B21973693155434C4DE9A /* OASharedSearchObjects.mm */,
+				EC1120949C22910240627B12 /* OASharedSearchUICore.h */,
+				EF3256B89A6764BD72367316 /* OASharedSearchUICore.mm */,
+				B3131D14D0B24619A4A37E12 /* OASharedSearchAppAPIs.mm */,
+				77CF376424AD4290B198F52E /* OASharedSearchAppAPIs.h */,
 				DA5A7A4226C563A000F274C7 /* OASearchCoreAPI.h */,
 				DA5A7A3126C563A000F274C7 /* OASearchCoreAPI.mm */,
 				DA5A7A3926C563A000F274C7 /* OASearchCoreFactory.h */,
@@ -7895,6 +7971,7 @@
 				32FEF4802D073169005E8B55 /* OARenderedObject.h */,
 				3226C1A82D3E67D5008F9905 /* OARenderedObject+cpp.h */,
 				32FEF4812D073174005E8B55 /* OARenderedObject.mm */,
+				D0910CA225C92C33D3DF57B8 /* PoiAdditionalLabels.swift */,
 				32190FD72D4909850006E91C /* RenderedObjectHelper.swift */,
 				DA5A7A5426C563A000F274C7 /* OAPOIBaseType.h */,
 				DA5A7A5526C563A000F274C7 /* OAPOIBaseType.mm */,
@@ -8303,8 +8380,7 @@
 				DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */,
 				321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */,
 				321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */,
-				DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */,
-				DA5A7B9C26C563A100F274C7 /* OASpeedLimitToleranceViewController.m */,
+				DA5A7B9C26C563A100F274C7 /* SpeedLimitToleranceViewController.swift */,
 				DA5A7B8326C563A100F274C7 /* OAVehicleParametersSettingsViewController.h */,
 				DA5A7B7726C563A100F274C7 /* OAVehicleParametersSettingsViewController.mm */,
 				DA5A7B7326C563A100F274C7 /* OAVehicleParametersViewController.h */,
@@ -8899,6 +8975,7 @@
 				CE7AC1A72FE02A2600495411 /* Import */,
 				D7B76D0C2FD16070004EE3E9 /* OrganizeByStepSizeViewController.swift */,
 				D7BF04772FD2DB4400BABB31 /* TracksViewController.swift */,
+				D7BF04792FD2DB4400BABB31 /* TracksIndexingTracker.swift */,
 				D71B9A8B2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift */,
 				D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */,
 				275ED6502FDC5AA60088D42B /* FavoriteListViewController */,
@@ -9049,8 +9126,7 @@
 		DA5A7E0E26C563A300F274C7 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A7E1A26C563A300F274C7 /* OAEditColorViewController.h */,
-				DA5A7E1426C563A300F274C7 /* OAEditColorViewController.m */,
+				C5C58152306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift */,
 				DA5A7E1326C563A300F274C7 /* OAEditDescriptionViewController.h */,
 				DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */,
 				DA5A7E1126C563A300F274C7 /* OAEditDescriptionViewController.xib */,
@@ -9133,9 +9209,7 @@
 				FADD74082FC0433400004A51 /* RenderedObjectAmenityProvider.swift */,
 				326087112F3251890038A34B /* params */,
 				3260870A2F324DA00038A34B /* behaviour */,
-				325FDBAD2E8E9AE9006E7C07 /* AdditionalInfoBundle.swift */,
 				325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */,
-				329E790C2E8FF69900B4BC6D /* MergeLocalizedTagsAlgorithm.swift */,
 				DA5A7E5126C563A400F274C7 /* OAPOIViewController.xib */,
 				DA5A7E5226C563A400F274C7 /* OAPOIViewController.h */,
 				DA5A7E5326C563A400F274C7 /* OAPOIViewController.mm */,
@@ -9174,8 +9248,7 @@
 				46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */,
 				DA5A7E6026C563A400F274C7 /* OAFavoriteEditingHandler.h */,
 				DA5A7E6126C563A400F274C7 /* OAFavoriteEditingHandler.mm */,
-				467D7DC02ADDE95B0037A593 /* OAFavoriteGroupEditorViewController.h */,
-				467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */,
+				C50364FA3078C303001B6EDE /* FavoriteGroupEditorViewController.swift */,
 				DA5A7E6326C563A400F274C7 /* OAGpxWptEditingHandler.h */,
 				DA5A7E6426C563A400F274C7 /* OAGpxWptEditingHandler.mm */,
 				46220B772AD70A7B006C3248 /* OAGroupEditorViewController.h */,
@@ -9381,6 +9454,8 @@
 				DA5A7EDC26C563A400F274C7 /* OAMapLayers.h */,
 				DA5A7ED626C563A400F274C7 /* OAMapLayers.mm */,
 				DA5A7EDF26C563A400F274C7 /* OAMeasurementToolLayer.h */,
+				ED6086000000000000000007 /* OAMeasurementToolLayer+UITesting.h */,
+				ED6086000000000000000006 /* OAMeasurementToolLayer+UITesting.mm */,
 				DA5A7EE226C563A400F274C7 /* OAMeasurementToolLayer.mm */,
 				DA5A7EF326C563A400F274C7 /* OAMyPositionLayer.h */,
 				DA5A7ED326C563A400F274C7 /* OAMyPositionLayer.mm */,
@@ -9622,6 +9697,8 @@
 				DA5A7F7C26C563A500F274C7 /* OAMovePointCommand.mm */,
 				DA5A7F8426C563A500F274C7 /* OARemovePointCommand.h */,
 				DA5A7F7426C563A500F274C7 /* OARemovePointCommand.mm */,
+				0A5E1C0D2F7A10000000B002 /* OARemovePointsCommand.h */,
+				0A5E1C0D2F7A10000000B003 /* OARemovePointsCommand.mm */,
 				DA5A7F7D26C563A500F274C7 /* OAReorderPointCommand.h */,
 				DA5A7F7926C563A500F274C7 /* OAReorderPointCommand.mm */,
 				DA5A7F8026C563A500F274C7 /* OAReversePointsCommand.h */,
@@ -10064,7 +10141,6 @@
 				DA5A7D6326C563A300F274C7 /* GpxUIHelper.swift */,
 				C5B2AA602DB00700007FB854 /* GridFormat.swift */,
 				32ABB64F2AEC01C000491E99 /* ImageToStringConverter.swift */,
-				DA5A80AC26C563A600F274C7 /* kml2gpx.xslt */,
 				32C41F582E15370800E9941C /* LocaleHelper.swift */,
 				FA5D71E02CE24C4E0062BC4D /* LockHelper.swift */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
@@ -10076,6 +10152,8 @@
 				DA5A80DD26C563A600F274C7 /* NSData+CRC32.m */,
 				32EB34472E462D58004F7C75 /* OAAmenitySearcher.h */,
 				32EB34482E462D68004F7C75 /* OAAmenitySearcher.mm */,
+				C6C07FA17F7C4FE0B4BC42E7 /* OASharedAmenitySearcher.h */,
+				E434A3EB48564047BACA6148 /* OASharedAmenitySearcher.mm */,
 				32F6B3902E47A842007F3902 /* OAAmenitySearcher+cpp.h */,
 				32E080C12FAB2DC50095A278 /* SearchByRouteIdTask.swift */,
 				DA5A80E026C563A600F274C7 /* OAAppSettings.h */,
@@ -10105,11 +10183,13 @@
 				DA5A80AF26C563A600F274C7 /* OADefaultFavorite.m */,
 				DA5A80BD26C563A600F274C7 /* OADiscountHelper.h */,
 				DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */,
+				FD721D5DEBD58F4D5E7F7F01 /* InstallAttribution.swift */,
 				DA5A80CA26C563A600F274C7 /* OADownloadsItem.h */,
 				DA5A80C726C563A600F274C7 /* OADownloadsItem.mm */,
 				321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */,
 				321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */,
 				DA5A80D126C563A600F274C7 /* OAFavoritesHelper.h */,
+				C5F46C193079C501002AAA41 /* OAFavoriteGroup.h */,
 				DA5A80B026C563A600F274C7 /* OAFavoritesHelper.mm */,
 				C503BC4D3045798E00EB704D /* FavoriteFolder.swift */,
 				C503BC543045882C00EB704D /* FavoriteFolderProvider.swift */,
@@ -10126,8 +10206,6 @@
 				C506111B2DB9678300E8F204 /* OAGridFormatMappingBridge.mm */,
 				DA5A80A126C563A500F274C7 /* OAJsonHelper.h */,
 				DA5A80CD26C563A600F274C7 /* OAJsonHelper.m */,
-				DA5A80B126C563A600F274C7 /* OAKml2Gpx.h */,
-				DA5A80E326C563A600F274C7 /* OAKml2Gpx.m */,
 				DA5A80B726C563A600F274C7 /* OALocationParser.h */,
 				DA5A809826C563A500F274C7 /* OALocationParser.mm */,
 				3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */,
@@ -10229,7 +10307,7 @@
 		DA5A80EC26C563A600F274C7 /* Mapillary */ = {
 			isa = PBXGroup;
 			children = (
-				FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */,
+				FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */,
 				DA5A80EE26C563A600F274C7 /* OAMapillaryImage.h */,
 				DA5A80F126C563A600F274C7 /* OAMapillaryImage.mm */,
 				CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */,
@@ -10300,6 +10378,8 @@
 				461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */,
 				051177FD2B25A51A006B4774 /* OARouteRecalculationHelper.h */,
 				051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */,
+				0A5E1C0D2F7A10000000A002 /* OANativeRoutingMemoryGuard.h */,
+				0A5E1C0D2F7A10000000A003 /* OANativeRoutingMemoryGuard.mm */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -10323,9 +10403,12 @@
 		DA72AB8A2508F40F00851313 /* OsmAnd MapsTests */ = {
 			isa = PBXGroup;
 			children = (
+				D1C608080000000000000002 /* OAFreeMapsCountTests.m */,
 				D1C584800000000000000002 /* OALocationIconTests.m */,
+				D1C5848A0000000000000002 /* Model3dHelperTests.swift */,
 				D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */,
 				D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */,
+				E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
 				FAB624402E0953870048965E /* OsmAnd MapsTests-Bridging-Header.h */,
 				FAB6243D2E0953580048965E /* Managers */,
@@ -10345,6 +10428,16 @@
 			isa = PBXGroup;
 			children = (
 				DA72AB942508F44900851313 /* SearchUICoreTest.mm */,
+				74C84910C3702765A353E4AA /* OASharedSearchContextTest.mm */,
+				C214471022C80129EC9857EC /* OAObfFileListOrderTest.mm */,
+				B9ED78DFDBEF02F837A9DE20 /* OASharedSearchModelsTest.mm */,
+				AEC77F6BE00B43559DD272C2 /* OASharedAmenitySearcherTest.mm */,
+				D9F147600000000000000001 /* OASearchScreenLifetimeTest.mm */,
+				EBB19E5672A75651A41E3A4E /* OASharedSearchFacadeTest.mm */,
+				E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */,
+				5A43B347DE8BBD7E140EBAC0 /* OASearchCitiesTest.mm */,
+				CE118147C2AF4B1383978DD4 /* OASharedSearchAppAPIsTest.mm */,
+				B6459827163E7F0A2013795B /* OASharedSearchUICoreTest.mm */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -10774,7 +10867,8 @@
 				FAD8489F2CAE9FDD0018AF92 /* GpxFileExtension.swift */,
 				9C102C0285A946359E1BE6A4 /* OAObfFileList.h */,
 				731A97689A654400B3FE08E0 /* OAObfFileList.mm */,
-				17B920021BF64FC6825F4B37 /* SharedObfReaders.swift */,
+				17B920021BF64FC6825F4B37 /* SharedObfResources.swift */,
+				0626382FD4F292991CDD4C33 /* SharedPoiTranslator.swift */,
 			);
 			path = SharedLibHelpers;
 			sourceTree = "<group>";
@@ -11297,6 +11391,7 @@
 			children = (
 				D1C564400000000000000003 /* OAGpxWptEditingHandlerTest.mm */,
 				D1C564400000000000000004 /* OAWaypointGroupSelectionTest.mm */,
+				D1C609900000000000000002 /* OAFavoriteIconTests.mm */,
 			);
 			path = PointEditing;
 			sourceTree = "<group>";
@@ -11328,7 +11423,6 @@
 			packageProductDependencies = (
 				675D59365E264CE6A5F93C66 /* Kingfisher */,
 				FA7000012F9000000000002B /* AFNetworking */,
-				FA7000012F9000000000002D /* BRCybertron */,
 			);
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
@@ -11497,7 +11591,6 @@
 				11D9394822FF40EFAB7D4478 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				ADEBBA52BE4C4EA4B376A7E6 /* XCLocalSwiftPackageReference "Scripts/SwiftLint" */,
 				FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */,
-				FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */,
 			);
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
 			projectDirPath = "";
@@ -11728,7 +11821,6 @@
 				DA5A820226C563A700F274C7 /* OAFeatureCardRow.xib in Resources */,
 				DAC5886021089948008B7763 /* es_tts.js in Resources */,
 				DA5A82DF26C563A800F274C7 /* OAPublicTransportPointCell.xib in Resources */,
-				DA5A853526C563A900F274C7 /* kml2gpx.xslt in Resources */,
 				0AB314F5271F0C11007C34A3 /* OASelectionCollapsableCell.xib in Resources */,
 				DA5A82B526C563A800F274C7 /* OADividerCell.xib in Resources */,
 				DAB625B12125A8E700E6AF2E /* ko_tts.js in Resources */,
@@ -11811,7 +11903,6 @@
 				C56F0B242F76B53900FC543B /* MapSettingsBuildings3DParametersViewController.xib in Resources */,
 				DAB985AE2124235E0081F8F8 /* da_tts.js in Resources */,
 				DA5A849426C563A900F274C7 /* OASaveTrackBottomSheetViewController.xib in Resources */,
-				DA5A81A026C563A700F274C7 /* OADownloadMapProgressViewController.xib in Resources */,
 				465D7E21295494000099B206 /* OATextMultilineTableViewCell.xib in Resources */,
 				DA5A838B26C563A800F274C7 /* OAOsmAndLiveSelectionViewController.xib in Resources */,
 				DA5A82DD26C563A800F274C7 /* OAGPXRouteRoundCell.xib in Resources */,
@@ -11820,6 +11911,7 @@
 				DA5A82A626C563A700F274C7 /* OABottomSheetHeaderCell.xib in Resources */,
 				DA5A844426C563A900F274C7 /* OATargetMenuViewController.xib in Resources */,
 				05A0FCFC2C42D4A200F7ED66 /* models in Resources */,
+				DF55E34E93AE219971B7CCC2 /* abbr in Resources */,
 				DA5A82AF26C563A700F274C7 /* OAEmptySearchCell.xib in Resources */,
 				DA5A82A126C563A700F274C7 /* OAImagesTableViewCell.xib in Resources */,
 				2745FEF92F3A1216004F6AB4 /* PreviewImageView.xib in Resources */,
@@ -12141,6 +12233,7 @@
 				46DB0A632C5CEA8F001356D5 /* ConcurrentArray.swift in Sources */,
 				32C41F542E0C4CEF00E9941C /* OAHeightDataLoader.mm in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
+				C0D6A8012C00A00100000001 /* SceneWindowStateRestorer.swift in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,
 				DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */,
@@ -12173,6 +12266,7 @@
 				C5C81F922E535061009D3439 /* DriveModeButtonState.swift in Sources */,
 				3239C29C2EFC73FD00D526A8 /* ClickableWayHelper.swift in Sources */,
 				D7BF04782FD2DB4400BABB31 /* TracksViewController.swift in Sources */,
+				D7BF047A2FD2DB4400BABB31 /* TracksIndexingTracker.swift in Sources */,
 				FA64086B2D3E6EA5005FD12D /* CollapsableCardsView.swift in Sources */,
 				DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */,
 				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,
@@ -12246,6 +12340,7 @@
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
+				4452B88BEBDEF179C92E49EF /* PoiAdditionalLabels.swift in Sources */,
 				32190FD82D4909940006E91C /* RenderedObjectHelper.swift in Sources */,
 				FAAAADDE2F3DD2A4008B8744 /* OSMCircularShadowProcessor.swift in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
@@ -12255,7 +12350,7 @@
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
 				FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */,
 				CEFC9E7030372CA500D224E4 /* CoordinateGridFormat.swift in Sources */,
-				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
+				DA5A825826C563A700F274C7 /* SpeedLimitToleranceViewController.swift in Sources */,
 				323F04C02C6556D30058DD78 /* ShowHideHikingRoutesAction.swift in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				2765D1072FC0953B00D612A3 /* MyPlacesSortModeHelper.swift in Sources */,
@@ -12440,6 +12535,8 @@
 				D7210186301B768C003CECB8 /* PlanRoutePoiState.swift in Sources */,
 				D7210187301B768C003CECB8 /* PlanRouteScrollableViewController.swift in Sources */,
 				D7210188301B768C003CECB8 /* PlanRouteToolbarsView.swift in Sources */,
+				ED6086000000000000000001 /* PlanRouteUITestStateView.swift in Sources */,
+				ED6086000000000000000003 /* PlanRouteScrollableViewController+UITesting.swift in Sources */,
 				D7210189301B768C003CECB8 /* PlanRouteTopPartView.swift in Sources */,
 				D721018A301B768C003CECB8 /* RouteBetweenPointsViewController.swift in Sources */,
 				D721018B301B768C003CECB8 /* RouteSettingsViewController.swift in Sources */,
@@ -12511,6 +12608,7 @@
 				DA5A848226C563A900F274C7 /* OADistanceToPointWidget.mm in Sources */,
 				FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */,
 				051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */,
+				0A5E1C0D2F7A10000000A001 /* OANativeRoutingMemoryGuard.mm in Sources */,
 				DA5A857026C563A900F274C7 /* OARouteCalculationParams.mm in Sources */,
 				DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */,
 				323F04CA2C6579280058DD78 /* ShowHideFitnessTrailsAction.swift in Sources */,
@@ -12582,7 +12680,8 @@
 				320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */,
 				05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */,
 				F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */,
-				6A73E2254E6E44F69F6CCAEF /* SharedObfReaders.swift in Sources */,
+				6A73E2254E6E44F69F6CCAEF /* SharedObfResources.swift in Sources */,
+				9B118248E51854AF8B1C6E10 /* SharedPoiTranslator.swift in Sources */,
 				50A30E69094C46DE86FFAFA9 /* SharedTravelContext.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
@@ -12677,7 +12776,6 @@
 				468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
 				27D33B4D2E744E7200AD4F70 /* MapZoomInAction.swift in Sources */,
-				329E790D2E8FF69A00B4BC6D /* MergeLocalizedTagsAlgorithm.swift in Sources */,
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,
 				FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */,
 				DA591EA928D9EAF20068CAC7 /* OATableDataModel.m in Sources */,
@@ -12830,7 +12928,6 @@
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
 				CE7CC392302AFE620048D36F /* CoordinatesFormatEditViewController.swift in Sources */,
-				DA5A819F26C563A700F274C7 /* OADownloadMapProgressViewController.mm in Sources */,
 				DA5A833226C563A800F274C7 /* OAPoiCollectionViewCell.m in Sources */,
 				DA5A81B826C563A700F274C7 /* OAPOI.mm in Sources */,
 				DA5A814B26C563A700F274C7 /* OABaseCarPlayInterfaceController.mm in Sources */,
@@ -12895,6 +12992,7 @@
 				DA5A84BE26C563A900F274C7 /* OASegmentOptionsBottomSheetViewController.mm in Sources */,
 				46C841352C32F33D00E284B0 /* OANavAddDestinationAction.m in Sources */,
 				DA5A853326C563A900F274C7 /* OADiscountHelper.mm in Sources */,
+				0EACBEE6C24FB1216C606B48 /* InstallAttribution.swift in Sources */,
 				C51967AD2C247E9000476E4B /* POITagsDetailsViewController.swift in Sources */,
 				DA5A856826C563A900F274C7 /* OATransportRoutingHelper.mm in Sources */,
 				FA64087B2D3E88C0005FD12D /* MapillaryContributeCard.swift in Sources */,
@@ -12905,6 +13003,7 @@
 				DA5A825A26C563A700F274C7 /* OABaseSettingsViewController.m in Sources */,
 				DA5A854626C563A900F274C7 /* OASavingTrackHelper.mm in Sources */,
 				FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */,
+				C57E1E47308635D200112730 /* DownloadMapProgressViewController.swift in Sources */,
 				DAA61CBF2A02789D00AFF65D /* MapWidgetInfo.swift in Sources */,
 				DA5A817426C563A700F274C7 /* OAGpxWptItem.mm in Sources */,
 				27C6D5B92E7D578C00695D5B /* KeyEventHandler.swift in Sources */,
@@ -12926,7 +13025,7 @@
 				DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */,
 				FAAAADD82F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift in Sources */,
 				CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */,
-				FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */,
+				FA64087F2D3E8EDA005FD12D /* MapillaryImageCard.swift in Sources */,
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
 				2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */,
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,
@@ -12970,7 +13069,6 @@
 				462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */,
 				C5A466CE2D356B68008E0C87 /* OAGpxApproximationHelper.mm in Sources */,
 				46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */,
-				467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */,
 				DA5A82E326C563A800F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.m in Sources */,
 				326087092F324B290038A34B /* PoiAdditionalUiRule.swift in Sources */,
 				DA4ABF212876DA6800B996EF /* OAMarkersSettingsItem.mm in Sources */,
@@ -13000,6 +13098,7 @@
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				32EB34492E462D6A004F7C75 /* OAAmenitySearcher.mm in Sources */,
+				31BD3D43BB3E4BE0B51EF0EE /* OASharedAmenitySearcher.mm in Sources */,
 				CE7787D6302C70D300BEA7A6 /* SwissGridApproximation.swift in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				C5D3D2B22EE006A100664956 /* ShareLinkItem.swift in Sources */,
@@ -13208,6 +13307,7 @@
 				275FE9992ED5A748007E4945 /* ProfileAppearanceUpdateSize.swift in Sources */,
 				0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */,
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
+				ED6086000000000000000005 /* OAMeasurementToolLayer+UITesting.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
 				DA5A844526C563A900F274C7 /* UIViewController+OARootViewController.m in Sources */,
@@ -13298,6 +13398,7 @@
 				CE7CC396302B4EA40048D36F /* CoordinatesFormatAddViewController.swift in Sources */,
 				DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */,
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
+				0A5E1C0D2F7A10000000B001 /* OARemovePointsCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,
@@ -13380,6 +13481,9 @@
 				CE4075A52FC48C40004224AA /* ProfileIconCollectionHandler.swift in Sources */,
 				C58106762EF43A4400DC6AD4 /* ShowHideWeatherLayersAction.swift in Sources */,
 				DA5A81AB26C563A700F274C7 /* OAQuickSearchHelper.mm in Sources */,
+				9E5CEDCDF8EB26CAB2F729E4 /* OASharedSearchObjects.mm in Sources */,
+				33884E8AFB7A506793AB8824 /* OASharedSearchUICore.mm in Sources */,
+				D609152ABC68498BBF4CC2FE /* OASharedSearchAppAPIs.mm in Sources */,
 				DA5A845026C563A900F274C7 /* OAPOILayer.mm in Sources */,
 				DA2EC47B29FBB90A00ECEB37 /* WidgetType.swift in Sources */,
 				4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */,
@@ -13463,7 +13567,6 @@
 				46330AEF2C034C1100E60CA2 /* FabMarginPreference.swift in Sources */,
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
 				464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */,
-				325FDBAE2E8E9AED006E7C07 /* AdditionalInfoBundle.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
 				FA899F262DD4CC690022F736 /* OBDVehicleMetricsDevice.swift in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
@@ -13557,7 +13660,6 @@
 				328EE34A2E169049003CDB48 /* ClickableWay.swift in Sources */,
 				DA5A854126C563A900F274C7 /* OAWikiImageHelper.mm in Sources */,
 				DA5A82EE26C563A800F274C7 /* OACustomPickerTableViewCell.m in Sources */,
-				DA5A855326C563A900F274C7 /* OAKml2Gpx.m in Sources */,
 				DA5A846B26C563A900F274C7 /* OAToolbarViewController.mm in Sources */,
 				DA5A854F26C563A900F274C7 /* OpenLocationCodeObjCBridge.swift in Sources */,
 				FA282AEF2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift in Sources */,
@@ -13636,7 +13738,7 @@
 				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,
 				46BCB1602CC2AC6D004E0283 /* GradientChartCell.swift in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
-				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
+				C5C58153306BC37E00A484F5 /* FavoritesChangeAppearanceViewController.swift in Sources */,
 				4665DB6E2C20BBFD00F897EC /* ColorsPaletteUtils.swift in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,
 				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
@@ -13660,6 +13762,7 @@
 				DA5A855E26C563A900F274C7 /* OATransportRouteCalculationParams.mm in Sources */,
 				DA5A855926C563A900F274C7 /* OAMapillaryImage.mm in Sources */,
 				DA5A839D26C563A800F274C7 /* OAMapPanelViewController.mm in Sources */,
+				C50364FB3078C303001B6EDE /* FavoriteGroupEditorViewController.swift in Sources */,
 				DA5A825B26C563A700F274C7 /* OAOsmEditingSettingsViewController.mm in Sources */,
 				B0D61F02E8A3B7B2733E2C18 /* OATrackMenuHudViewController.mm in Sources */,
 				B0D61B91977188ED34EB63FD /* OATabBar.mm in Sources */,
@@ -13788,6 +13891,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1C571210000000000000001 /* ContextMenuPresentationUITests.swift in Sources */,
+				D1C609900000000000000003 /* FavoriteOriginalIconUITests.swift in Sources */,
+				D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */,
+				D57820010000000000000001 /* PlanRouteHistoryUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13807,15 +13913,29 @@
 				C1A55E0B77300000000000D1 /* OASharedMissingMapsTest.mm in Sources */,
 				C1A55E0B77300000000000F1 /* OASharedRouteProgressTest.mm in Sources */,
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
+				D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */,
 				D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */,
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
+				E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */,
+				D1C608080000000000000001 /* OAFreeMapsCountTests.m in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,
 				FAB624412E0954F90048965E /* SelectionManager.swift in Sources */,
 				D1A0B0122F50001100A0B001 /* StringExtensions.swift in Sources */,
 				DA72AB952508F44900851313 /* SearchUICoreTest.mm in Sources */,
+				BE4E98FB75F20F0892E32DBF /* OASharedSearchContextTest.mm in Sources */,
+				EA93ECDF1E8BF76180235164 /* OAObfFileListOrderTest.mm in Sources */,
+				EDB27094FA1741B466038E1E /* OASharedSearchModelsTest.mm in Sources */,
+				DD0F04C6445245E6B20F193D /* OASharedAmenitySearcherTest.mm in Sources */,
+				D9F147600000000000000002 /* OASearchScreenLifetimeTest.mm in Sources */,
+				A0E8CF98286EBCC9B93AD7FC /* OASharedSearchFacadeTest.mm in Sources */,
+				E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */,
+				5177B3784E35AA1A054E70C9 /* OASearchCitiesTest.mm in Sources */,
+				D4703706FE594173BD940B86 /* OASharedSearchAppAPIsTest.mm in Sources */,
+				0D8544693BE51C1DE2A67275 /* OASharedSearchUICoreTest.mm in Sources */,
 				D1C571200000000000000007 /* ContextMenuPresentationCoordinator.swift in Sources */,
 				D1C573500000000000000001 /* OAPlanRouteEditingBridgeTest.mm in Sources */,
 				D1C564400000000000000002 /* OAWaypointGroupSelectionTest.mm in Sources */,
+				D1C609900000000000000001 /* OAFavoriteIconTests.mm in Sources */,
 				D1C564400000000000000001 /* OAGpxWptEditingHandlerTest.mm in Sources */,
 				D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */,
 				D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */,
@@ -13823,6 +13943,8 @@
 				D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */,
 				D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */,
 				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
+				D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */,
+				D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14523,6 +14645,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "Generic OsmAnd Profile";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Dev OsmAnd Profile";
 				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/OsmAnd Maps-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -15032,10 +15155,6 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = Packages/AFNetworking;
 		};
-		FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/BRCybertron;
-		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -15059,11 +15178,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FA7000012F9000000000002A /* XCLocalSwiftPackageReference "Packages/AFNetworking" */;
 			productName = AFNetworking;
-		};
-		FA7000012F9000000000002D /* BRCybertron */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FA7000012F9000000000002C /* XCLocalSwiftPackageReference "Packages/BRCybertron" */;
-			productName = BRCybertron;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

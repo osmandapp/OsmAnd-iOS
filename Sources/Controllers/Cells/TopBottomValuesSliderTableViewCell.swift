@@ -20,6 +20,19 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
     @IBOutlet private var topRightLabelLeadingConstraint: NSLayoutConstraint!
     @IBOutlet private var topRightButtonLeadingConstraint: NSLayoutConstraint!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        updateFonts()
+    }
+
+    // scaledSystemFont caps the font at the size calculated when it is created.
+    // Recreate fonts on Dynamic Type changes so they can grow beyond that initial cap.
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
+        updateFonts()
+    }
+
     func topRightLabelVisibility(_ show: Bool) {
         topRightButton.isHidden = show
         topRightLabel.isHidden = !show
@@ -42,5 +55,15 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
     func segmentValuesVisibility(_ show: Bool) {
         sliderValuesView.isHidden = show
         segmentValuesView.isHidden = !show
+    }
+
+    private func updateFonts() {
+        let font = UIFont.scaledSystemFont(ofSize: 17)
+        for label in [topLeftLabel, topRightLabel, bottomLeftLabel, bottomRightLabel] {
+            label?.font = font
+            label?.adjustsFontForContentSizeCategory = true
+        }
+        descriptionLabel?.font = UIFont.scaledSystemFont(ofSize: 15)
+        descriptionLabel?.adjustsFontForContentSizeCategory = true
     }
 }

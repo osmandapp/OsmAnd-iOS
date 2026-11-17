@@ -49,6 +49,8 @@
 - (void) refreshCustomPoiFilters;
 - (void) cancelSearch:(BOOL)sync;
 - (void)setResourcesForSearchUICore;
+// again only for the shared search: the C++ one adds its apis to those it has
+- (void) initSearchUICore;
 
 - (void) searchCityLocations:(NSString *)text
           searchLocation:(CLLocation *)searchLocation
@@ -59,13 +61,8 @@
 
 
 - (void)cancelSearchCities;
-- (NSMutableArray<OASearchResult *> *)searchCities:(NSString *)text
-                                    searchLocation:(CLLocation *)searchLocation
-                                      allowedTypes:(NSArray<NSString *> *)allowedTypes
-                                         cityLimit:(NSInteger)cityLimit
-                                       isCancelled:(BOOL (^)(void))isCancelled;
+// Completes on the main queue for the latest active request; cancellation suppresses the callback.
 - (void)searchCitiesAsync:(NSString *)text
-           searchLocation:(CLLocation *)searchLocation
              allowedTypes:(NSArray<NSString *> *)allowedTypes
                 cityLimit:(NSInteger)cityLimit
                onComplete:(void (^)(NSMutableArray *amenities))onComplete;

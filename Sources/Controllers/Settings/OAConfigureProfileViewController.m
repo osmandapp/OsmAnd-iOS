@@ -667,15 +667,23 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         else if ([targetScreenKey isEqualToString:kOsmEditsSettings])
             settingsScreen = [[OAOsmEditingSettingsViewController alloc] init];
         else if ([targetScreenKey isEqualToString:kWeatherSettings])
-            settingsScreen = [[OAWeatherSettingsViewController alloc] init];
+            settingsScreen = [[OAWeatherSettingsViewController alloc] initWithAppMode:_appMode];
         else if ([targetScreenKey isEqualToString:kOsmandDevelopmentSettings])
             settingsScreen = [[OAOsmandDevelopmentViewController alloc] init];
         else if ([targetScreenKey isEqualToString:kWikipediaSettings])
             settingsScreen = [[OAWikipediaSettingsViewController alloc] initWithAppMode:_appMode];
         else if ([targetScreenKey isEqualToString:kExternalSensors])
-            settingsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+        {
+            BLEExternalSensorsViewController *externalSensorsScreen = [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
+            externalSensorsScreen.appMode = _appMode;
+            settingsScreen = externalSensorsScreen;
+        }
         else if ([targetScreenKey isEqualToString:kVehicleMetrics])
-            settingsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
+        {
+            VehicleMetricsSensorsController *vehicleMetricsScreen = [[UIStoryboard storyboardWithName:@"VehicleMetricsSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"VehicleMetricsSensors"];
+            vehicleMetricsScreen.appMode = _appMode;
+            settingsScreen = vehicleMetricsScreen;
+        }
         else if ([targetScreenKey isEqualToString:kAisTrackerSettings])
             settingsScreen = [[AisTrackerSettingsViewController alloc] initWithPlugin:(AisTrackerPlugin *)[OAPluginsHelper getPlugin:AisTrackerPlugin.class] appMode:_appMode];
         if (settingsScreen)

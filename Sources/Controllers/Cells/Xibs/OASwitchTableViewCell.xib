@@ -156,7 +156,8 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="AMO-6X-s1L" firstAttribute="leading" secondItem="rhj-6g-ATW" secondAttribute="leadingMargin" id="44C-ZN-Q93"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="AMO-6X-s1L" secondAttribute="trailing" id="LIc-Pj-zvm"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="AMO-6X-s1L" secondAttribute="trailing" constant="20" id="alt-switch-inset"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="AMO-6X-s1L" secondAttribute="trailing" priority="999" id="LIc-Pj-zvm"/>
                     <constraint firstAttribute="bottom" secondItem="AMO-6X-s1L" secondAttribute="bottom" id="Nom-0O-rPk"/>
                     <constraint firstItem="AMO-6X-s1L" firstAttribute="top" secondItem="rhj-6g-ATW" secondAttribute="top" id="rOO-qV-KMh"/>
                 </constraints>

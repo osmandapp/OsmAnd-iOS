@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     DownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
     NSObject *_dataLock;
+    CGRect _headerContentFrame;
 }
 
 - (instancetype) initWithPluginId:(NSString *)pluginId
@@ -326,6 +327,18 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    CGRect contentFrame = UIEdgeInsetsInsetRect(self.tableView.bounds, self.tableView.safeAreaInsets);
+    contentFrame.origin.y = 0.;
+    if (!CGRectEqualToRect(contentFrame, _headerContentFrame))
+    {
+        _headerContentFrame = contentFrame;
+        self.tableView.tableHeaderView = [self getHeaderForTableView:self.tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText];
+    }
+}
+
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
@@ -469,7 +482,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [style setLineSpacing:6];
         attrString = [[NSAttributedString alloc] initWithString:descriptionText attributes:@{NSParagraphStyleAttributeName : style}];
     }
-    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:[UIColor colorNamed:ACColorNameIconColorActive] iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
+    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:[UIColor colorNamed:ACColorNameIconColorActive] iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48. parentViewWidth:tableView.bounds.size.width contentInsets:tableView.safeAreaInsets];
 }
 
 - (NSInteger) getTypeForSection:(NSInteger)section

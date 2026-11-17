@@ -39,7 +39,11 @@ static const NSInteger kElevationMaxMeters = 2000;
 @property (weak, nonatomic) IBOutlet UIView *doneButtonContainerView;
 @property (weak, nonatomic) IBOutlet UIButton *resetButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonLeadingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *backButtonTopConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *resetButtonTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *resetButtonTopConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *landscapeBackButtonTopConstraint;
+@property (strong, nonatomic) NSLayoutConstraint *landscapeResetButtonTopConstraint;
 
 @property (nonatomic) OAMapPanelViewController *mapPanel;
 @property (nonatomic) OAConcurrentArray<OASPaletteItemGradient *> *sortedPaletteColorItems;
@@ -121,7 +125,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
     _baseMinZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings zoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].min : [_plugin getTerrainMinZoom];
     _baseMaxZoom = _terrainType == EOATerrainSettingsTypeCoordinatesGridZoomLevels ? [_coordinatesGridSettings zoomLevelsWithRestrictionsForAppMode:[_settings.applicationMode get]].max : [_plugin getTerrainMaxZoom];
-    _baseAlpha = [_terrainMode getTransparency] * 0.01;
+    _baseAlpha = _terrainMode.alpha;
 
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
@@ -435,10 +439,9 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self.toolBarView addSubview:_applyButton];
 
     [NSLayoutConstraint activateConstraints:@[
-        [_applyButton.centerXAnchor constraintEqualToAnchor:self.toolBarView.centerXAnchor],
         [_applyButton.topAnchor constraintEqualToAnchor:self.toolBarView.topAnchor],
-        [_applyButton.leadingAnchor constraintEqualToAnchor:self.toolBarView.leadingAnchor constant:20.0],
-        [_applyButton.trailingAnchor constraintEqualToAnchor:self.toolBarView.trailingAnchor constant:-20.0],
+        [_applyButton.leadingAnchor constraintEqualToAnchor:self.toolBarView.safeAreaLayoutGuide.leadingAnchor constant:20.0],
+        [_applyButton.trailingAnchor constraintEqualToAnchor:self.toolBarView.safeAreaLayoutGuide.trailingAnchor constant:-20.0],
         [_applyButton.heightAnchor constraintEqualToConstant:44.0]
     ]];
 }
@@ -482,17 +485,31 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)doAdditionalLayout
 {
     BOOL isRTL = [self.backButtonContainerView isDirectionRTL];
-    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] - [OAUtilities getLeftMargin] + 10.;
+    BOOL isLandscape = [self isLandscape];
+    CGFloat landscapeWidthAdjusted = [self getLandscapeViewWidth] + 10.;
     CGFloat commonMargin = [OAUtilities getLeftMargin] + 10.;
-    CGFloat defaultPadding = 13.;
-    self.backButtonLeadingConstraint.constant = [self isLandscape] ? (isRTL ? defaultPadding : landscapeWidthAdjusted) : commonMargin;
-    self.resetButtonTrailingConstraint.constant = [self isLandscape] ? (isRTL ? landscapeWidthAdjusted : defaultPadding) : commonMargin;
+    CGFloat cornerPadding = 40.;
+    self.backButtonLeadingConstraint.constant = isLandscape ? (isRTL ? cornerPadding : landscapeWidthAdjusted) : commonMargin;
+    self.resetButtonTrailingConstraint.constant = isLandscape ? (isRTL ? landscapeWidthAdjusted : cornerPadding) : commonMargin;
+
+    // On a landscape phone the buttons are on the map side of the camera cutout.
+    // Anchor them to the view so a deep top safe area cannot cover grid labels.
+    BOOL useMapTop = isLandscape && !OAUtilities.isIPad;
+    if (useMapTop && !self.landscapeBackButtonTopConstraint)
+    {
+        self.landscapeBackButtonTopConstraint = [self.backButtonContainerView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:16.];
+        self.landscapeResetButtonTopConstraint = [self.doneButtonContainerView.topAnchor constraintEqualToAnchor:self.view.topAnchor constant:16.];
+    }
+    self.backButtonTopConstraint.active = !useMapTop;
+    self.resetButtonTopConstraint.active = !useMapTop;
+    self.landscapeBackButtonTopConstraint.active = useMapTop;
+    self.landscapeResetButtonTopConstraint.active = useMapTop;
 }
 
 - (void)hide
 {
     if (_terrainType == EOATerrainSettingsTypeVisibility && _baseAlpha != _currentAlpha)
-        [_terrainMode setTransparency:_baseAlpha / 0.01];
+        _terrainMode.alpha = _baseAlpha;
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_baseMinZoom != _minZoom || _baseMaxZoom != _maxZoom))
         [_terrainMode setZoomValuesWithMinZoom:(int32_t) _baseMinZoom maxZoom:(int32_t) _baseMaxZoom];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration && _baseVerticalExaggerationScale != _currentVerticalExaggerationScale)
@@ -533,11 +550,11 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (BOOL)resetVisibilityValues
 {
-    CGFloat defaultAlpha = ([_terrainMode isHillshade] ? hillshadeDefaultTrasparency : defaultTrasparency) * 0.01;
+    CGFloat defaultAlpha = _terrainMode.defaultAlpha;
     if (_currentAlpha != defaultAlpha)
     {
         _currentAlpha = defaultAlpha;
-        [_terrainMode setTransparency:defaultAlpha / 0.01];
+        _terrainMode.alpha = defaultAlpha;
         _isValueChange = _baseAlpha != _currentAlpha;
         [self updateApplyButton];
         return YES;
@@ -684,7 +701,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentVisibility
 {
-    [_terrainMode setTransparency:_currentAlpha / 0.01];
+    _terrainMode.alpha = _currentAlpha;
 }
 
 - (void)applyCurrentZoomLevels
@@ -783,7 +800,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)onApplyButtonPressed
 {
-    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != [_terrainMode getTransparency] * 0.01)
+    if (_terrainType == EOATerrainSettingsTypeVisibility && _currentAlpha != _terrainMode.alpha)
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels && (_minZoom != [_terrainMode getMinZoom] || _maxZoom != [_terrainMode getMaxZoom]))
         [self applyCurrentZoomLevels];
@@ -864,7 +881,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     }
 
     _currentAlpha = slider.value;
-    [_terrainMode setTransparency:_currentAlpha / 0.01];
+    _terrainMode.alpha = _currentAlpha;
 
     _isValueChange = _baseAlpha != _currentAlpha;
     [self updateApplyButton];
@@ -969,9 +986,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         else
         {
             cell.updateValueCallback = nil;
-            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
-            cell.sliderView.value = transparency * 0.01;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
+            TerrainMode *terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode];
+            cell.sliderView.value = terrainMode.alpha;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%d%%", terrainMode.transparencyPercent];
         }
 
         [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];

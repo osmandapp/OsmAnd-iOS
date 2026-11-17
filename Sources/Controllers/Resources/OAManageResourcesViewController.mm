@@ -41,6 +41,7 @@
 #import "OADownloadMultipleResourceViewController+cpp.h"
 #import "OAResourcesUISwiftHelper.h"
 #import "OASearchResult.h"
+#import "OsmAndSharedWrapper.h"
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherForecastDetailsViewController.h"
@@ -207,6 +208,9 @@ static NSMutableArray *_searchableWorldwideRegionItems;
 static BOOL _lackOfResources = NO;
 static BOOL _repositoryUpdated = NO;
 
+// posted after updateRepository rebuilt the group items, which visible region lists hold copies of
+static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsRebuiltNotification";
+
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region
 {
     const auto citRegionResources = _resourcesByRegions.constFind(region);
@@ -329,12 +333,37 @@ static BOOL _repositoryUpdated = NO;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     _searchController.searchBar.delegate = self;
     _searchController.obscuresBackgroundDuringPresentation = NO;
+    if (@available(iOS 27.0, *))
+    {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        {
+            self.navigationItem.searchBarPlacementAllowsToolbarIntegration = NO;
+            self.navigationItem.preferredSearchBarPlacement = UINavigationItemSearchBarPlacementStacked;
+            self.navigationItem.hidesSearchBarWhenScrolling = NO;
+        }
+    }
     self.navigationItem.searchController = _searchController;
     
     if (_displayBanner)
         [self setupSubscriptionBanner];
 
     self.definesPresentationContext = YES;
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    if (@available(iOS 27.0, *))
+    {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        {
+            UINavigationItemSearchBarPlacement placement = self.view.safeAreaLayoutGuide.layoutFrame.size.width >= 600.0
+                ? UINavigationItemSearchBarPlacementIntegratedButton
+                : UINavigationItemSearchBarPlacementStacked;
+            if (self.navigationItem.preferredSearchBarPlacement != placement)
+                self.navigationItem.preferredSearchBarPlacement = placement;
+        }
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -393,6 +422,7 @@ static BOOL _repositoryUpdated = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRepositoryUpdateFinished:) name:OARepositoryUpdateFinishedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceGroupsRebuilt:) name:kResourceGroupsRebuiltNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
@@ -658,6 +688,11 @@ static BOOL _repositoryUpdated = NO;
     }
 
     [_subscriptionBannerView updateView];
+}
+
+- (void) resourceGroupsRebuilt:(NSNotification *)notification
+{
+    [self updateContent];
 }
 
 - (void) resourceInstallationFailed:(NSNotification *)notification
@@ -1682,6 +1717,7 @@ static BOOL _repositoryUpdated = NO;
 {
     @synchronized(_dataLock)
     {
+        [OAQuickSearchHelper.instance cancelSearchCities];
         // If case searchString is empty, there are no results
         if (searchString == nil || searchString.length == 0)
         {
@@ -1746,46 +1782,77 @@ static BOOL _repositoryUpdated = NO;
         }
         
         [OAQuickSearchHelper.instance searchCitiesAsync:searchString
-                                         searchLocation:_app.locationServices.lastKnownLocation
                                            allowedTypes:@[@"city", @"town"]
                                               cityLimit:kSearchCityLimit
                                              onComplete:^(NSMutableArray *searchResults) {
-            NSMutableArray *regionsByCity = [NSMutableArray array];
-            for (OASearchResult *amenity in searchResults)
-            {
-                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
-                if (region)
-                {
-                    NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
-                    if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
-                    {
-                        amenity.relatedObject = searchResult.firstObject;
-                        [regionsByCity addObject:amenity];
-                    }
-                    else
-                    {
-                        [regionsByCity addObjectsFromArray:searchResult];
-                    }
-                }
-            }
+            NSArray *regionsByCity = [self citySearchRows:searchResults excludingRows:resultByContains];
             if (regionsByCity.count > 0)
             {
-                [regionsByCity sortUsingComparator:^NSComparisonResult(id a, id b) {
-                    NSString *titleA = [self titleForObject:a];
-                    NSString *titleB = [self titleForObject:b];
-                    
-                    NSComparisonResult titleCompare = [titleA localizedCaseInsensitiveCompare:titleB];
-                    if (titleCompare == NSOrderedSame)
-                        return [[self subtitleForObject:a] localizedCaseInsensitiveCompare:[self subtitleForObject:b]];
-                    
-                    return titleCompare;
-                }];
                 _searchResults = [resultByContains arrayByAddingObjectsFromArray:regionsByCity];
                 [_tableView reloadData];
             }
             [self.view removeSpinner];
         }];
     }
+}
+
+- (NSArray *)citySearchRows:(NSArray<OASearchResult *> *)cities excludingRows:(NSArray *)matchedRows
+{
+    // a map or a region is shown once: by the first city leading to it, or not at all when it is in the list already
+    NSMutableSet<NSString *> *shownRows = [NSMutableSet set];
+    for (id row in matchedRows)
+    {
+        NSString *key = [self keyOfSearchRow:row];
+        if (key)
+            [shownRows addObject:key];
+        // a region in the list leads to its maps too
+        const auto citRegionResources = [row isKindOfClass:OAWorldRegion.class] ? _resourcesByRegions.constFind((OAWorldRegion *) row) : _resourcesByRegions.cend();
+        if (citRegionResources != _resourcesByRegions.cend())
+        {
+            for (const auto& resource : citRegionResources->allResources)
+                [shownRows addObject:resource->id.toNSString()];
+        }
+    }
+    NSMutableArray *regionsByCity = [NSMutableArray array];
+    for (OASearchResult *amenity in cities)
+    {
+        OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
+        if (region)
+        {
+            NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+            if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+            {
+                amenity.relatedObject = searchResult.firstObject;
+                searchResult = @[amenity];
+            }
+            for (id row in searchResult)
+            {
+                NSString *key = [self keyOfSearchRow:row];
+                if (!key || ![shownRows containsObject:key])
+                {
+                    if (key)
+                        [shownRows addObject:key];
+                    [regionsByCity addObject:row];
+                }
+            }
+        }
+    }
+    [regionsByCity sortUsingComparator:^NSComparisonResult(id a, id b) {
+        // cities go before towns and regions
+        BOOL isCityA = [self isCitySearchRow:a];
+        if (isCityA != [self isCitySearchRow:b])
+            return isCityA ? NSOrderedAscending : NSOrderedDescending;
+
+        NSString *titleA = [self titleForObject:a];
+        NSString *titleB = [self titleForObject:b];
+
+        NSComparisonResult titleCompare = [titleA localizedCaseInsensitiveCompare:titleB];
+        if (titleCompare == NSOrderedSame)
+            return [[self subtitleForObject:a] localizedCaseInsensitiveCompare:[self subtitleForObject:b]];
+
+        return titleCompare;
+    }];
+    return regionsByCity;
 }
 
 - (NSString *)titleForObject:(id)obj
@@ -1803,6 +1870,26 @@ static BOOL _repositoryUpdated = NO;
         return ((OASearchResult *)obj).localeName;
     }
     return @"";
+}
+
+// what a row of the search leads to: a map, by itself or by a city, or a region
+- (nullable NSString *)keyOfSearchRow:(id)row
+{
+    if ([row isKindOfClass:OASearchResult.class])
+        row = ((OASearchResult *) row).relatedObject;
+    if ([row isKindOfClass:OAResourceItem.class])
+        return ((OAResourceItem *) row).resourceId.toNSString();
+    if ([row isKindOfClass:OAWorldRegion.class])
+        return ((OAWorldRegion *) row).regionId;
+    return nil;
+}
+
+- (BOOL)isCitySearchRow:(id)row
+{
+    if (![row isKindOfClass:OASearchResult.class])
+        return NO;
+    NSObject *object = ((OASearchResult *) row).object;
+    return [object isKindOfClass:OASAmenity.class] && [[(OASAmenity *) object getSubType] isEqualToString:@"city"];
 }
 
 - (NSString *)subtitleForObject:(id)obj
@@ -1977,7 +2064,7 @@ static BOOL _repositoryUpdated = NO;
     [self updateRepositoryUpdateIndicator];
     [OAOcbfHelper downloadOcbfIfUpdated:^(BOOL ocbfUpdated) {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
-            // Reloading the region tree drops the group items built on startup, so do it only when regions.ocbf changed.
+            // The region tree is reread only when regions.ocbf changed.
             // The tree is read here but published on the main thread: self.region, the region-keyed resource cache and
             // the section layout are all compared against _app.worldRegion by identity.
             OAWorldRegion *reloadedWorldRegion = ocbfUpdated ? [_app readWorldRegions] : nil;
@@ -1989,7 +2076,8 @@ static BOOL _repositoryUpdated = NO;
                     self.region = _app.worldRegion;
                 }
                 [self updateContent];
-                [_app.worldRegion buildResourceGroupItem];
+                [_app.worldRegion rebuildResourceGroupItem];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kResourceGroupsRebuiltNotification object:self];
                 _refreshingRepository = NO;
                 [self updateRepositoryUpdateIndicator];
             });
@@ -2156,7 +2244,11 @@ static BOOL _repositoryUpdated = NO;
         return _freeMemoryView.bounds.size.height;
 
     if (section == _subscribeEmailSection)
-        return [_subscribeEmailView updateFrame:self.tableView.frame.size.width margin:[OAUtilities getLeftMargin]].size.height;
+    {
+        CGFloat margin = [OAUtilities getLeftMargin];
+        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0., MAX(margin, tableView.safeAreaInsets.left), 0., MAX(margin, tableView.safeAreaInsets.right));
+        return [_subscribeEmailView updateFrame:tableView.bounds.size.width contentInsets:contentInsets].size.height;
+    }
 
     if (section == 0)
         return 56.0;

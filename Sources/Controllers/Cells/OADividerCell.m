@@ -26,24 +26,44 @@
     _dividerInsets = UIEdgeInsetsMake(0, 44.0, 0, 0);
     
     _divider = [[CALayer alloc] init];
-    _divider.backgroundColor = _dividerColor.CGColor;
     [self.layer addSublayer:_divider];
+    [self updateDividerColor];
 }
 
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    
-    CGFloat w = self.frame.size.width - _dividerInsets.left - _dividerInsets.right;
-    _divider.frame = CGRectMake(_dividerInsets.left, _dividerInsets.top, w, _dividerHight);
+
+    CGFloat leading = _alignsWithLayoutMargins ? self.directionalLayoutMargins.leading : _dividerInsets.left;
+    CGFloat trailing = _alignsWithLayoutMargins ? self.directionalLayoutMargins.trailing : _dividerInsets.right;
+    CGFloat w = self.frame.size.width - leading - trailing;
+    _divider.frame = CGRectMake([self isDirectionRTL] ? trailing : leading, _dividerInsets.top, w, _dividerHight);
+}
+
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self updateDividerColor];
 }
 
 - (void) setDividerColor:(UIColor *)dividerColor
 {
     _dividerColor = dividerColor;
-    
+    [self updateDividerColor];
+}
+
+- (void) setAlignsWithLayoutMargins:(BOOL)alignsWithLayoutMargins
+{
+    _alignsWithLayoutMargins = alignsWithLayoutMargins;
+    [self setNeedsLayout];
+}
+
+- (void) updateDividerColor
+{
     if (_divider)
-        _divider.backgroundColor = _dividerColor.CGColor;
+        _divider.backgroundColor = [_dividerColor resolvedColorWithTraitCollection:self.traitCollection].CGColor;
 }
 
 - (CGFloat) cellHeight

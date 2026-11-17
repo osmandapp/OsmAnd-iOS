@@ -88,8 +88,9 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     }
     
     @objc private func onProfileSettingSet(notification: Notification) {
+        let settings: OAAppSettings = OAAppSettings.sharedManager()
         guard let preferenceKeys = notification.userInfo?[kPreferenceKeysUserInfoKey] as? Set<String>,
-              preferenceKeys.contains(OAAppSettings.sharedManager().rotateMap.key) else {
+              preferenceKeys.contains(settings.rotateMap.key) || preferenceKeys.contains(settings.positionPlacementOnMap.key) else {
             return
         }
         updateMapViewport()

@@ -46,9 +46,10 @@ OAWeatherWebClient::OAWeatherWebClient()
     sessionConfiguration.timeoutIntervalForRequest = 300.0;
     sessionConfiguration.timeoutIntervalForResource = 600.0;
     sessionConfiguration.HTTPMaximumConnectionsPerHost = 50;
+    // downloads are awaited on core threads, also while the main thread waits for the core
     _urlSession = [NSURLSession sessionWithConfiguration:sessionConfiguration
                                                 delegate:nil
-                                           delegateQueue:[NSOperationQueue mainQueue]];
+                                           delegateQueue:nil];
 }
 
 OAWeatherWebClient::~OAWeatherWebClient()

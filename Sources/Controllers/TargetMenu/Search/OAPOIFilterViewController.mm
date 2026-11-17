@@ -180,6 +180,35 @@ typedef enum
     [self applySafeAreaMargins];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+
+    CGRect safeFrame = [self.view convertRect:self.view.safeAreaLayoutGuide.layoutFrame toView:_topView];
+    CGFloat leftEdge = MAX(0., CGRectGetMinX(safeFrame));
+    CGFloat rightEdge = MIN(CGRectGetWidth(_topView.bounds), CGRectGetMaxX(safeFrame));
+
+    CGRect closeFrame = _btnClose.frame;
+    closeFrame.origin.x = leftEdge;
+    _btnClose.frame = closeFrame;
+
+    CGRect moreFrame = _btnMore.frame;
+    moreFrame.origin.x = rightEdge - CGRectGetWidth(moreFrame);
+    _btnMore.frame = moreFrame;
+
+    CGFloat textX = CGRectGetMaxX(closeFrame) + 6.;
+    CGFloat textWidth = MAX(0., CGRectGetMinX(moreFrame) - textX - 6.);
+    CGRect titleFrame = _textView.frame;
+    titleFrame.origin.x = textX;
+    titleFrame.size.width = textWidth;
+    _textView.frame = titleFrame;
+
+    CGRect descriptionFrame = _descView.frame;
+    descriptionFrame.origin.x = textX;
+    descriptionFrame.size.width = textWidth;
+    _descView.frame = descriptionFrame;
+}
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
@@ -627,6 +656,10 @@ typedef enum
         NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *additionalsMap = [NSMutableDictionary dictionary];
         [self extractPoiAdditionals:[poiAdditionals allValues] additionalsMap:additionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:NO];
         [self extractPoiAdditionals:otherAdditionalCategories additionalsMap:additionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:NO];
+        // labels depend on all values of a category, not only on the visible ones
+        NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *allAdditionalsMap = [NSMutableDictionary dictionary];
+        [self extractPoiAdditionals:[poiAdditionals allValues] additionalsMap:allAdditionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:YES];
+        [self extractPoiAdditionals:otherAdditionalCategories additionalsMap:allAdditionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:YES];
         
         if (additionalsMap.count > 0)
         {
@@ -659,6 +692,28 @@ typedef enum
                 groupId++;
                 NSMutableArray<OAPOIFilterListItem *> *items = [NSMutableArray array];
 
+                NSArray<OAPOIType *> *allCategoryPoiAdditionals = allAdditionalsMap[category] ?: value;
+                NSMutableArray<NSString *> *translations = [NSMutableArray array];
+                NSMutableArray<NSString *> *osmValues = [NSMutableArray array];
+                for (OAPOIType *poiType in allCategoryPoiAdditionals)
+                {
+                    [translations addObject:poiType.nameLocalized ?: @""];
+                    [osmValues addObject:[poiType getOsmValue] ?: @""];
+                }
+                if ([PoiAdditionalLabels isSingleYes:osmValues])
+                {
+                    // a group of one "yes" value is a single switch
+                    NSString *keyName = [[allCategoryPoiAdditionals.firstObject.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase];
+                    NSString *label = [PoiAdditionalLabels getSwitchLabel:translations.firstObject groupName:categoryLocalizedName];
+                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:categoryIcon text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
+                    [groups setObject:items forKey:[NSNumber numberWithInt:groupId]];
+                    continue;
+                }
+                NSArray<NSString *> *labels = [PoiAdditionalLabels getGroupLabels:translations osmValues:osmValues];
+                NSMutableDictionary<NSString *, NSString *> *poiAdditionalLabels = [NSMutableDictionary dictionary];
+                for (NSInteger i = 0; i < allCategoryPoiAdditionals.count; i++)
+                    poiAdditionalLabels[allCategoryPoiAdditionals[i].name] = labels[i];
+
                 [items addObject:[[OAPOIFilterListItem alloc] initWithType:GROUP_HEADER icon:categoryIcon text:categoryLocalizedName groupIndex:groupId expandable:YES expanded:expanded checked:NO category:category keyName:nil]];
                 
                 NSMutableArray<OAPOIType *> *categoryPoiAdditionals = value;
@@ -672,7 +727,8 @@ typedef enum
                 {
                     NSString *keyName = [[poiType.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase];
                     
-                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:poiType.nameLocalized groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
+                    NSString *label = poiAdditionalLabels[poiType.name] ?: poiType.nameLocalized;
+                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
                 }
                 if (!showAll && categoryPoiAdditionals.count > 0)
                 {

@@ -1135,3 +1135,5 @@
 "select_track_to_follow" = "Odaberi stazu za pratiti";
 "customize_route_line" = "Prilagodi liniju rute";
 "simulate_navigation" = "Simuliraj navigaciju";
+"routing_attr_avoid_sett_name" = "Bez kamenih kocki";
+"routing_attr_avoid_sett_description" = "Izbjegava kamene kocke";

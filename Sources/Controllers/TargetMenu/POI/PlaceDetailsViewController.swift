@@ -9,6 +9,7 @@
 // analog in android: PlaceDetailsMenuBuilder.java
 
 import QuartzCore
+import OsmAndShared
 
 @objcMembers
 final class PlaceDetailsViewController: OAPOIViewController {
@@ -108,7 +109,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
             hasDescription = buildDescription(amenities: getTravelAmenities(), allowOnlineWiki: false, rows: rows)
         }
         if hasDescription {
-            infoBundle.setCustomHiddenExtensions([DESCRIPTION_TAG])
+            infoBundle.setCustomHiddenExtensions(customHiddenExtensions: [DESCRIPTION_TAG])
         }
         
         if customOnlinePhotosPosition {
@@ -130,7 +131,7 @@ final class PlaceDetailsViewController: OAPOIViewController {
     
     private func buildDescription(amenity: OAPOI, allowOnlineWiki: Bool, rows: NSMutableArray) -> Bool {
         let extensions = amenity.getAmenityExtensions(false)
-        let bundle = AdditionalInfoBundle(additionalInfo: extensions)
+        let bundle = AdditionalInfoBundle(poiTypes: OAPOIHelper.sharedInstance().kPoiTypes, additionalInfo: extensions)
         let filteredInfo = bundle.getFilteredLocalizedInfo()
         
         if buildShortWikiDescription(filteredInfo, allowOnlineWiki: allowOnlineWiki, rows: rows) {

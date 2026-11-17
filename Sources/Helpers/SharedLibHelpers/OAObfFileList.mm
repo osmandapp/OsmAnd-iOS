@@ -7,12 +7,37 @@
 
 #import "OAObfFileList.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 #import "OsmAndSharedWrapper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
 @implementation OAObfFileList
+
++ (NSDictionary<NSString *, OASObfReaderRegistryObfFile *> *)filesForSharedRegistry
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @{};
+
+    NSMutableDictionary<NSString *, OASObfReaderRegistryObfFile *> *files = [NSMutableDictionary dictionary];
+    BOOL useLiveForRouting = OAAppSettings.sharedManager.useOsmLiveForRouting;
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+    {
+        NSString *path = resource->localPath.toNSString();
+        if (![path.lowercaseString hasSuffix:@".obf"])
+            continue;
+
+        BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
+        BOOL travel = resource->type == OsmAnd::ResourcesManager::ResourceType::Travel;
+        BOOL live = resource->type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion;
+        files[resource->id.toNSString()] = [[OASObfReaderRegistryObfFile alloc] initWithPath:path
+            useForRouting:installed && !travel && (!live || useLiveForRouting)
+            useForPublicTransport:installed && !travel && !live];
+    }
+    return files;
+}
 
 + (NSArray<NSString *> *)travelFilePaths
 {
@@ -22,6 +47,149 @@
 + (NSArray<NSString *> *)travelAndMapFilePaths
 {
     return [self pathsIncludingMapRegions:YES];
+}
+
++ (NSArray<NSString *> *)searchResourceIdsIncludingTravel:(BOOL)includeTravel
+{
+    return [self sortedForSearch:[self searchResourceIdsIncludingTravel:includeTravel paths:nil]];
+}
+
++ (NSArray<NSString *> *)searchFilePathsIncludingTravel:(BOOL)includeTravel
+{
+    NSMutableDictionary<NSString *, NSString *> *pathsByResourceId = [NSMutableDictionary dictionary];
+    NSArray<NSString *> *resourceIds = [self searchResourceIdsIncludingTravel:includeTravel paths:pathsByResourceId];
+    NSMutableArray<NSString *> *paths = [NSMutableArray array];
+    for (NSString *resourceId in [self sortedForSearch:resourceIds])
+    {
+        NSString *path = pathsByResourceId[resourceId];
+        if (path.length > 0 && [NSFileManager.defaultManager fileExistsAtPath:path])
+            [paths addObject:path];
+    }
+    return paths;
+}
+
++ (NSDictionary<NSString *, NSString *> *)pathsByResourceIdFor:(NSArray<NSString *> *)resourceIds
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @{};
+
+    NSMutableDictionary<NSString *, NSString *> *pathsByResourceId = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in resourceIds)
+    {
+        const auto resource = app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+        if (resource && !resource->localPath.isEmpty())
+            pathsByResourceId[resourceId] = resource->localPath.toNSString();
+    }
+    return pathsByResourceId;
+}
+
+// in the order of the installed resources, which the sort starts from
++ (NSArray<NSString *> *)searchResourceIdsIncludingTravel:(BOOL)includeTravel
+                                                    paths:(nullable NSMutableDictionary<NSString *, NSString *> *)pathsByResourceId
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @[];
+
+    NSMutableArray<NSString *> *resourceIds = [NSMutableArray array];
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+    {
+        const auto type = resource->type;
+        if (type == OsmAnd::ResourcesManager::ResourceType::MapRegion
+            || type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
+            || type == OsmAnd::ResourcesManager::ResourceType::LiveUpdateRegion
+            || (includeTravel && type == OsmAnd::ResourcesManager::ResourceType::Travel))
+        {
+            NSString *resourceId = resource->id.toNSString();
+            [resourceIds addObject:resourceId];
+            pathsByResourceId[resourceId] = resource->localPath.toNSString();
+        }
+    }
+    return resourceIds;
+}
+
+// The key a file is ordered by: its region, 0 for a live update of it and 1 for anything else, and the
+// date of the update. "germany_berlin_europe_25_10_28.live.obf" is (germany_berlin_europe, 0, 25_10_28).
+static NSArray *orderKey(NSString *resourceId)
+{
+    BOOL live = [resourceId hasSuffix:@".live.obf"];
+    NSString *suffix = live ? @".live.obf" : @".obf";
+    NSString *name = [resourceId hasSuffix:suffix] ? [resourceId substringToIndex:resourceId.length - suffix.length] : resourceId;
+    if (live)
+    {
+        NSRange date = [name rangeOfString:@"_([0-9]+_){2}[0-9]+\\z" options:NSRegularExpressionSearch];
+        if (date.location != NSNotFound && date.location > 0)
+            return @[[name substringToIndex:date.location], @0, [name substringFromIndex:date.location + 1]];
+    }
+    return @[name, @1, @""];
+}
+
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds
+{
+    // one key per id, so that the order is the same whatever order the ids come in: the region, its
+    // live updates before it, the newest of them first. The first file to give a poi claims its id,
+    // so an update that removed the poi has to be read before the region and the older updates
+    NSMutableDictionary<NSString *, NSArray *> *keys = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in resourceIds)
+        keys[resourceId] = orderKey(resourceId);
+
+    return [resourceIds sortedArrayUsingComparator:^NSComparisonResult(NSString *first, NSString *second) {
+        NSArray *a = keys[first];
+        NSArray *b = keys[second];
+        NSComparisonResult result = [a[0] compare:b[0]];
+        if (result == NSOrderedSame)
+            result = [a[1] compare:b[1]];
+        if (result == NSOrderedSame)
+            result = [b[2] compare:a[2]];
+        return result == NSOrderedSame ? [first compare:second] : result;
+    }];
+}
+
++ (NSArray<NSString *> *)sortedForSearch:(NSArray<NSString *> *)resourceIds distance:(double (^)(NSString *resourceId))distance
+{
+    NSArray<NSString *> *sorted = [self sortedForSearch:resourceIds];
+    NSMutableDictionary<NSString *, NSMutableArray<NSString *> *> *updatesByRegion = [NSMutableDictionary dictionary];
+    NSMutableArray<NSString *> *files = [NSMutableArray array];
+    NSMutableDictionary<NSString *, NSNumber *> *distances = [NSMutableDictionary dictionary];
+    for (NSString *resourceId in sorted)
+    {
+        NSArray *key = orderKey(resourceId);
+        if ([key[1] isEqual:@0])
+        {
+            NSMutableArray<NSString *> *updates = updatesByRegion[key[0]] ?: (updatesByRegion[key[0]] = [NSMutableArray array]);
+            [updates addObject:resourceId];
+        }
+        else
+        {
+            [files addObject:resourceId];
+            distances[resourceId] = @(distance(resourceId));
+        }
+    }
+    // stable: files as far away keep the order by name
+    [files sortWithOptions:NSSortStable usingComparator:^NSComparisonResult(NSString *first, NSString *second) {
+        return [distances[first] compare:distances[second]];
+    }];
+
+    NSMutableArray<NSString *> *result = [NSMutableArray arrayWithCapacity:sorted.count];
+    for (NSString *file in files)
+    {
+        NSString *region = orderKey(file)[0];
+        NSArray<NSString *> *updates = updatesByRegion[region];
+        if (updates)
+        {
+            [result addObjectsFromArray:updates];
+            [updatesByRegion removeObjectForKey:region];
+        }
+        [result addObject:file];
+    }
+    // updates of a region that is not among the files are still read, after the rest
+    for (NSString *resourceId in sorted)
+    {
+        if (updatesByRegion[orderKey(resourceId)[0]] && [orderKey(resourceId)[1] isEqual:@0])
+            [result addObject:resourceId];
+    }
+    return result;
 }
 
 + (NSString *)pathForFileName:(NSString *)fileName

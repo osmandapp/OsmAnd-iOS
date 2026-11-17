@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OAAppSettings.h"
 
-@class OsmAndFormatterParams;
+@class OsmAndFormatterParams, FormattedValue;
 
 static const NSInteger METERS_IN_KILOMETER = 1000;
 static const CGFloat METERS_IN_ONE_MILE = 1609.344f;
@@ -52,6 +52,7 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
 + (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params;
 + (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode;
 + (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode withParams:(OsmAndFormatterParams *)params;
++ (NSString *)getFormattedDistance:(float)meters mode:(OAApplicationMode *)mode withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *)getFormattedAzimuth:(float)bearing;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;
@@ -63,6 +64,12 @@ static const CGFloat US_GALLONS_IN_LITER = 3.78541f;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
 + (NSString *)getFormattedSpeed:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem;
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedSpeed:(float)metersperseconds mode:(OAApplicationMode *)mode;
++ (NSString *)getFormattedSpeed:(float)metersperseconds mode:(OAApplicationMode *)mode valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)speedToleranceString:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem hasFastSpeed:(BOOL)hasFastSpeed valueUnitArray:(NSMutableArray<NSString *> *)valueUnitArray;
++ (FormattedValue *)formattedSpeedToleranceValue:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem hasFastSpeed:(BOOL)hasFastSpeed;
++ (EOASpeedConstant)speedModeForPaceMode:(EOASpeedConstant)speedSystem;
++ (float)mpSFromFormattedValue:(float)value speedSystem:(EOASpeedConstant)speedSystem;
 + (NSString *)getFormattedAlt:(double)alt;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAltitudeMetricsConstant)mc;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAltitudeMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;

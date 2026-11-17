@@ -1581,7 +1581,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
                 NSLog(@"showMenuAction() searchTravelGpx() travelGpx is null");
                 return NO;
             }
-            [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx gpxFileName:[amenity getGpxFileName:nil] latLon:[amenity getLocation] adjustMapPosition:NO];
+            [OATravelObfHelper.shared openTrackMenuWithArticle:travelGpx gpxFileName:[travelGpx getGpxFileName] latLon:[amenity getLocation] adjustMapPosition:NO];
             return YES;
         }
     }

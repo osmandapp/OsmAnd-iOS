@@ -162,11 +162,12 @@ final class CoordinatesFormatAddViewController: OABaseSettingsViewController {
         cell.descriptionLabel.text = item.descr
         cell.descriptionLabel.font = .preferredFont(forTextStyle: .subheadline)
 
-        cell.isAccessibilityElement = true
+        cell.isAccessibilityElement = false
         cell.accessibilityLabel = item.title
-        cell.accessibilityValue = item.descr
-        cell.accessibilityTraits = .button
-        cell.accessibilityHint = localizedString("shared_string_add")
+        cell.contentView.isAccessibilityElement = true
+        cell.contentView.accessibilityLabel = item.title
+        cell.contentView.accessibilityValue = item.descr
+        cell.contentView.accessibilityTraits = .staticText
         return cell
     }
     

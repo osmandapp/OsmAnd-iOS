@@ -26,10 +26,10 @@ class SensorWidgetDataField: SensorDataField {
 
 final class SensorSpeedWidgetDataField: SensorWidgetDataField {
     // SensorWidgetDataFieldType.BIKE_SPEED
-    override func getFormattedValue() -> FormattedValue? {
+    override func getFormattedValue(appMode: OAApplicationMode? = nil) -> FormattedValue? {
         if let value = numberValue?.floatValue {
             let valueUnitArray: NSMutableArray = []
-            OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)
+            OAOsmAndFormatter.getFormattedSpeed(value, mode: appMode, valueUnitArray: valueUnitArray)
             if let result = getValueAndUnit(with: valueUnitArray) {
                 return FormattedValue(valueSrc: 0, value: result.value, unit: result.unit)
             }
@@ -40,10 +40,10 @@ final class SensorSpeedWidgetDataField: SensorWidgetDataField {
 
 final class SensorDistanceWidgetDataField: SensorWidgetDataField {
     // SensorWidgetDataFieldType.BIKE_DISTANCE
-    override func getFormattedValue() -> FormattedValue? {
+    override func getFormattedValue(appMode: OAApplicationMode? = nil) -> FormattedValue? {
         if let value = numberValue?.floatValue {
             let valueUnitArray: NSMutableArray = []
-            OAOsmAndFormatter.getFormattedDistance(value, with: OsmAndFormatterParams.noTrailingZeros, valueUnitArray: valueUnitArray)
+            OAOsmAndFormatter.getFormattedDistance(value, mode: appMode, with: OsmAndFormatterParams.noTrailingZeros, valueUnitArray: valueUnitArray)
             if let result = getValueAndUnit(with: valueUnitArray) {
                 return FormattedValue(valueSrc: 0, value: result.value, unit: result.unit)
             }

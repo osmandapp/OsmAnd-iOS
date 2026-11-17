@@ -11,6 +11,7 @@
 #import "OAPOICategory.h"
 #import "OAAppSettings.h"
 #import "OAPOIHelper.h"
+#import "OAPOIHelper+cpp.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARenderedObject.h"
 #import "OARenderedObject+cpp.h"
@@ -101,6 +102,57 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
 {
     NSMutableSet<NSString *> *_contentLocales;
     int _travelElo;
+    NSString *_sharedDisplayName;
+    NSDictionary<NSString *, NSString *> *_sharedDisplayNames;
+}
+
+- (void)setSharedAmenity:(OASAmenity *)sharedAmenity
+{
+    _sharedAmenity = sharedAmenity;
+    _sharedDisplayName = [self.name copy];
+    _sharedDisplayNames = [self.localizedNames copy];
+}
+
+- (void)copyNamesToSharedAmenity:(OASAmenity *)amenity
+{
+    NSString *name = self.name;
+    NSMutableDictionary<NSString *, NSString *> *names = [self.localizedNames mutableCopy];
+    if (_sharedAmenity)
+    {
+        if (name == _sharedDisplayName || [name isEqualToString:_sharedDisplayName])
+            name = [_sharedAmenity getName];
+        names = [[_sharedAmenity getNamesMapIncludeEn:YES] mutableCopy];
+        NSMutableSet<NSString *> *sourceLanguages = [NSMutableSet set];
+        for (NSString *sourceKey in names.allKeys)
+        {
+            NSString *lang = OANormalizeLocalizedNameKey(QString::fromNSString(sourceKey)).toNSString();
+            [sourceLanguages addObject:lang];
+            NSString *value = self.localizedNames[lang];
+            if (!value)
+                [names removeObjectForKey:sourceKey];
+            else if (![value isEqualToString:_sharedDisplayNames[lang]])
+                names[sourceKey] = value;
+        }
+        for (NSString *lang in self.localizedNames)
+        {
+            NSString *value = self.localizedNames[lang];
+            if (![sourceLanguages containsObject:lang] && ![value isEqualToString:_sharedDisplayNames[lang]])
+                names[lang] = value;
+        }
+    }
+    NSString *englishName = names[@"en"];
+    for (NSString *key in names.allKeys)
+    {
+        if (OANormalizeLocalizedNameKey(QString::fromNSString(key)) == QStringLiteral("en"))
+        {
+            if (!englishName)
+                englishName = names[key];
+            [names removeObjectForKey:key];
+        }
+    }
+    [amenity setNameName:name];
+    [amenity setEnNameEnName:englishName];
+    [amenity setNamesName:names];
 }
 
 -(void)setType:(OAPOIType *)type
@@ -862,9 +914,12 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
             else
             {
                 NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
-                NSString *trimmedKey = [key stringByReplacingOccurrencesOfString:COLLAPSABLE_PREFIX withString:@""];
-                if (![HIDDEN_EXTENSIONS containsObject:shortKey] && ![HIDDEN_EXTENSIONS containsObject:key] && map[key].length > 0)
-                    additionalInfo[trimmedKey] = map[key];
+                BOOL externalNamespace = [key containsString:@":"]
+                        && ![key hasPrefix:OASGpxUtilities.shared.OSMAND_EXTENSIONS_PREFIX]
+                        && ![key hasPrefix:OASGpxUtilities.shared.GPXTPX_PREFIX];
+                BOOL hidden = [HIDDEN_EXTENSIONS containsObject:key] || (!externalNamespace && [HIDDEN_EXTENSIONS containsObject:shortKey]);
+                if (!hidden && map[key].length > 0)
+                    additionalInfo[key] = map[key];
             }
         }
         if (!type)

@@ -22,6 +22,12 @@
 - (OASearchResultCollection *) combineWithCollection:(OASearchResultCollection *)collection resort:(BOOL)resort removeDuplicates:(BOOL)removeDuplicates;
 - (OASearchResultCollection *) addSearchResults:(NSArray<OASearchResult *> *)sr resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
 - (NSArray<OASearchResult *> *) getCurrentSearchResults;
+/** Results currently visible in the search list. Classic search exposes its complete collection. */
+- (NSArray<OASearchResult *> *)getVisibleSpatialSearchResults;
+/** Whether the collection preserves spatial ordering and visibility levels. */
+- (BOOL)isSkipSorting;
+- (BOOL)hasMoreSpatialSearchResults;
+- (BOOL)showMoreSpatialSearchResults;
 - (void) sortSearchResults;
 - (void) calculateAddressString;
 - (void) filterSearchDuplicateResults;
@@ -48,9 +54,10 @@ typedef void (^OASearchUICoreRunnable)();
 
 - (OASearchCoreAPI *) getApiByClass:(Class)cl;
 
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher;
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates;
-- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings;
+/** Runs on the engine's serial search queue. Completion is called on that queue, including when no API matches. */
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher completion:(void (^)(OASearchResultCollection *))completion;
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates completion:(void (^)(OASearchResultCollection *))completion;
+- (void)shallowSearchAsync:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings completion:(void (^)(OASearchResultCollection *))completion;
 
 - (void) initApi;
 
@@ -60,6 +67,8 @@ typedef void (^OASearchUICoreRunnable)();
 - (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrders;
 
 - (OASearchResultCollection *) getCurrentSearchResult;
+/** Creates a collection with the ordering policy of the API that published these results. */
+- (OASearchResultCollection *)createResultCollectionForPhrase:(OASearchPhrase *)phrase api:(id)api;
 - (OASearchPhrase *) getPhrase;
 - (OASearchSettings *) getSearchSettings;
 

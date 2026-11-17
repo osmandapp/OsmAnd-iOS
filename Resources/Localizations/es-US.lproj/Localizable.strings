@@ -652,7 +652,7 @@
 "map_settings_offline" = "Estilos de mapas sin conexión";
 "shared_string_online_maps" = "Mapas en línea";
 "shared_string_transparency" = "Transparencia";
-"map_transparency" = "Transparencia del mapa base";
+"map_transparency" = "Visibilidad del mapa base";
 "map_settings_avail_lay" = "Capas disponibles";
 "street_level_imagery" = "Imágenes a nivel de calle";
 "shared_string_terrain" = "Terreno";

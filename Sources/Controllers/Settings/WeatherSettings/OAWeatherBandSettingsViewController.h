@@ -8,7 +8,7 @@
 
 #import "OABaseNavbarViewController.h"
 
-@class OAWeatherBand;
+@class OAWeatherBand, OAApplicationMode;
 
 @protocol OAWeatherBandSettingsDelegate <NSObject>
 
@@ -21,6 +21,7 @@
 @interface OAWeatherBandSettingsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithWeatherBand:(OAWeatherBand *)band;
+- (instancetype)initWithWeatherBand:(OAWeatherBand *)band appMode:(OAApplicationMode *)appMode;
 
 @property (nonatomic, weak) id<OAWeatherBandSettingsDelegate> bandDelegate;
 

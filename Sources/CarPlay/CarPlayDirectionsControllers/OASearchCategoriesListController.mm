@@ -22,6 +22,7 @@
 
 @implementation OASearchCategoriesListController
 {
+    NSUInteger _dataRequest;
     OAQuickSearchHelper *_quickSearchHelper;
     
     OACarPlayCategoryResultListController *_categoryResultController;
@@ -37,9 +38,22 @@
     return OALocalizedString(@"poi_categories");
 }
 
-- (NSArray<CPListSection *> *) generateSections
+- (NSArray<CPListSection *> *)generateSections
 {
-    OASearchResultCollection *res = [[_quickSearchHelper getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+    NSUInteger request = ++_dataRequest;
+    __weak __typeof(self) weakSelf = self;
+    [[_quickSearchHelper getCore] shallowSearchAsync:OASearchAmenityTypesAPI.class text:@"" matcher:nil completion:^(OASearchResultCollection *res) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            __strong __typeof(weakSelf) self = weakSelf;
+            if (self && request == self->_dataRequest)
+                [self updateSections:[self sectionsForResults:res]];
+        });
+    }];
+    return @[];
+}
+
+- (NSArray<CPListSection *> *)sectionsForResults:(OASearchResultCollection *)res
+{
     NSMutableArray<CPListItem *> *items = [NSMutableArray new];
     if (res)
     {
@@ -112,6 +126,12 @@
 
     if (completionBlock)
         completionBlock();
+}
+
+- (void)onTemplateDismissed
+{
+    ++_dataRequest;
+    [super onTemplateDismissed];
 }
 
 @end

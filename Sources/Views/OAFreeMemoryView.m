@@ -11,6 +11,11 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
+static const CGFloat kContentHorizontalInset = 15.0;
+static const CGFloat kLabelTopInset = 10.0;
+static const CGFloat kLabelInitialWidth = 240.0;
+static const CGFloat kLabelInitialHeight = 20.0;
+
 @implementation OAFreeMemoryView
 {
     UILabel *_titleLabel;
@@ -43,7 +48,12 @@
 - (UIEdgeInsets) contentInsets
 {
     UIEdgeInsets safeArea = self.safeAreaInsets;
-    return UIEdgeInsetsMake(0.0, 15.0 + safeArea.left, 0.0, 15.0 + safeArea.right);
+    return UIEdgeInsetsMake(0.0, kContentHorizontalInset + safeArea.left, 0.0, kContentHorizontalInset + safeArea.right);
+}
+
+- (BOOL)isRTL
+{
+    return self.effectiveUserInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionRightToLeft;
 }
 
 - (void) layoutSubviews
@@ -54,8 +64,10 @@
     [_titleLabel sizeToFit];
     [_freeMemLabel sizeToFit];
 
-    _titleLabel.frame = CGRectMake(insets.left, 10.0, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
-    _freeMemLabel.frame = CGRectMake(self.bounds.size.width - _freeMemLabel.bounds.size.width - insets.right, 10.0, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
+    BOOL isRTL = [self isRTL];
+    CGFloat rightEdge = self.bounds.size.width - insets.right;
+    _titleLabel.frame = CGRectMake(isRTL ? rightEdge - _titleLabel.bounds.size.width : insets.left, kLabelTopInset, _titleLabel.bounds.size.width, _titleLabel.bounds.size.height);
+    _freeMemLabel.frame = CGRectMake(isRTL ? insets.left : rightEdge - _freeMemLabel.bounds.size.width, kLabelTopInset, _freeMemLabel.bounds.size.width, _freeMemLabel.bounds.size.height);
     [self setNeedsDisplay];
 }
 
@@ -64,6 +76,15 @@
     [super safeAreaInsetsDidChange];
     [self setNeedsLayout];
     [self setNeedsDisplay];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+
+    if (![self.traitCollection.preferredContentSizeCategory isEqualToString:previousTraitCollection.preferredContentSizeCategory]
+        || self.traitCollection.layoutDirection != previousTraitCollection.layoutDirection)
+        [self setNeedsLayout];
 }
 
 - (void) commonInit
@@ -80,7 +101,7 @@
     _deviceMemoryAvailable = 0;
     _documentsSize = 0;
     
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContentHorizontalInset, kLabelTopInset, kLabelInitialWidth, kLabelInitialHeight)];
     _titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
     _titleLabel.adjustsFontForContentSizeCategory = YES;
@@ -88,7 +109,7 @@
     _titleLabel.text = OALocalizedString(@"device_memory");
     [self addSubview:_titleLabel];
     
-    _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
+    _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(kContentHorizontalInset, kLabelTopInset, kLabelInitialWidth, kLabelInitialHeight)];
     _freeMemLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _freeMemLabel.font = [UIFont scaledSystemFontOfSize:14.0];
     _freeMemLabel.adjustsFontForContentSizeCategory = YES;
@@ -213,6 +234,13 @@
     }
 
     CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    if ([self isRTL])
+    {
+        // Mirror inside the bar's bounds to preserve asymmetric safe-area insets.
+        CGContextTranslateCTM(context, CGRectGetMinX(frame) + CGRectGetMaxX(frame), 0.0);
+        CGContextScaleCTM(context, -1.0, 1.0);
+    }
     CGColorSpaceRef rgbColorspace = CGColorSpaceCreateDeviceRGB();
 
     /*
@@ -334,6 +362,7 @@
     CGGradientRelease(glossGradientApp);
     CGGradientRelease(glossGradientFree);
     CGColorSpaceRelease(rgbColorspace);
+    CGContextRestoreGState(context);
 }
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key

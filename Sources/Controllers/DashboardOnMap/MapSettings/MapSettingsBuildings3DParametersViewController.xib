@@ -14,10 +14,12 @@
                 <outlet property="backButton" destination="wnB-6e-Mvf" id="t9m-IA-uqS"/>
                 <outlet property="backButtonContainerView" destination="eKw-4z-Ryw" id="8F2-Z1-7wl"/>
                 <outlet property="backButtonLeadingConstraint" destination="woM-4F-NYT" id="5Dq-zH-80t"/>
+                <outlet property="backButtonTopConstraint" destination="6VW-T8-I2v" id="uB1-Lm-1n3"/>
                 <outlet property="contentContainer" destination="EWQ-rI-8ij" id="b4E-z1-r7N"/>
                 <outlet property="doneButtonContainerView" destination="hgA-LB-dsO" id="0Yo-g7-2mf"/>
                 <outlet property="resetButton" destination="jW9-cm-r7D" id="jQ0-rK-1kY"/>
                 <outlet property="resetButtonTrailingConstraint" destination="vIz-YM-udy" id="RhM-cW-RW6"/>
+                <outlet property="resetButtonTopConstraint" destination="lWg-7E-M4z" id="uA5-7M-1Yf"/>
                 <outlet property="scrollableView" destination="ti9-c1-tfn" id="p2r-PO-IhD"/>
                 <outlet property="statusBarBackgroundView" destination="b6c-LM-fjU" id="Zf7-cA-tY2"/>
                 <outlet property="tableView" destination="ism-tw-8Ez" id="wSc-7x-BZb"/>

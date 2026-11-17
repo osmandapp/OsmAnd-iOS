@@ -26,7 +26,16 @@
 
 static NSDictionary *platformCompatibilityKeysDictionary = @{
     @"widget_top_panel_order": @"top_widget_panel_order",
-    @"widget_bottom_panel_order": @"bottom_widget_panel_order"
+    @"widget_bottom_panel_order": @"bottom_widget_panel_order",
+    @"hillshade_min_zoom": @"HILLSHADE_min_zoom",
+    @"hillshade_max_zoom": @"HILLSHADE_max_zoom",
+    @"hillshade_transparency": @"HILLSHADE_transparency",
+    @"slope_min_zoom": @"SLOPE_min_zoom",
+    @"slope_max_zoom": @"SLOPE_max_zoom",
+    @"slope_transparency": @"SLOPE_transparency",
+    @"height_min_zoom": @"HEIGHT_min_zoom",
+    @"height_max_zoom": @"HEIGHT_max_zoom",
+    @"height_transparency": @"HEIGHT_transparency"
 };
 
 @implementation OAProfileSettingsItem

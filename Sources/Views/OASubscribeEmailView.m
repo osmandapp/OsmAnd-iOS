@@ -118,33 +118,34 @@
         [self.delegate subscribeEmailButtonPressed];
 }
 
-- (CGFloat) updateLayout:(CGFloat)width margin:(CGFloat)margin
+- (CGFloat)updateLayout:(CGFloat)width contentInsets:(UIEdgeInsets)contentInsets
 {
-    CGFloat w = width - kMarginHor * 2 - margin * 2;
+    CGFloat w = width - kMarginHor * 2;
+    CGFloat contentWidth = w - contentInsets.left - contentInsets.right;
     
     CGRect mf = self.imageView.frame;
-    mf.origin.x = kContentMargin;
+    mf.origin.x = contentInsets.left + kContentMargin;
     mf.origin.y = kContentMargin + 4.0;
     self.imageView.frame = mf;
     
-    CGFloat lbw = w - 64.0 - kContentMargin;
+    CGFloat lbw = contentWidth - 64.0 - kContentMargin;
     CGFloat lbh = [OAUtilities calculateTextBounds:self.lbTitle.attributedText width:lbw].height;
-    CGRect lbf = CGRectMake(64.0, kContentMargin, lbw, lbh);
+    CGRect lbf = CGRectMake(contentInsets.left + 64.0, kContentMargin, lbw, lbh);
     self.lbTitle.frame = lbf;
 
-    _div.frame = CGRectMake(64.0, CGRectGetMaxY(lbf) + kContentMargin, w - 64.0, kDivH);
+    _div.frame = CGRectMake(CGRectGetMinX(lbf), CGRectGetMaxY(lbf) + kContentMargin, w - CGRectGetMinX(lbf), kDivH);
     
-    CGRect bf = CGRectMake(64.0 - kContentMargin, CGRectGetMaxY(lbf) + kContentMargin + 1.0, w - 64.0, 50.0);
+    CGRect bf = CGRectMake(CGRectGetMinX(lbf) - kContentMargin, CGRectGetMaxY(lbf) + kContentMargin + 1.0, contentWidth - 64.0, 50.0);
     self.btnSubscribe.frame = bf;
     
-    self.containerView.frame = CGRectMake(margin + kMarginHor, kMarginVert, w, CGRectGetMaxY(bf));
+    self.containerView.frame = CGRectMake(kMarginHor, kMarginVert, w, CGRectGetMaxY(bf));
     
     return self.containerView.frame.size.height + kMarginVert * 2;
 }
 
-- (CGRect) updateFrame:(CGFloat)width margin:(CGFloat)margin
+- (CGRect)updateFrame:(CGFloat)width contentInsets:(UIEdgeInsets)contentInsets
 {
-    CGFloat h = [self updateLayout:width margin:margin];
+    CGFloat h = [self updateLayout:width contentInsets:contentInsets];
     CGRect f = self.frame;
     f.size.width = width;
     f.size.height = h;

@@ -54,7 +54,7 @@ static NSArray *colors;
     return colors;
 }
 
-+ (UIColor *) getDefaultColor
++ (UIColor *)getDefaultColor
 {
     return ((OAFavoriteColor *) [self.class builtinColors][0]).color;
 }
@@ -103,11 +103,19 @@ static NSArray *colors;
     return distance;
 }
 
-+ (NSInteger) getValidBuiltInColorNumber:(NSInteger)number
++ (NSInteger)getValidBuiltInColorNumber:(NSInteger)number
 {
     if (number < 0 || number >= [OADefaultFavorite builtinColors].count)
         return 0;
     return number;
+}
+
++ (UIColor *)getColorFromBuiltInNumberOrARGB:(NSInteger)value
+{
+    if (value >= 0 && value < [OADefaultFavorite builtinColors].count)
+        return ((OAFavoriteColor *)[OADefaultFavorite builtinColors][value]).color;
+    
+    return UIColorFromARGB((int)value);
 }
 
 @end

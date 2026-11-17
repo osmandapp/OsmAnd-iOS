@@ -102,11 +102,12 @@
 - (void) updateOverlayUnderlayView;
 
 - (void) updateTopControlsVisibility:(BOOL)animated;
+- (BOOL)isTopControlsVisible;
 - (void) updateBottomControlsVisibility:(BOOL)animated;
 - (void) updateBottomContolMarginsForHeight;
 
 - (CGFloat) getHudMinTopOffset;
-- (CGFloat) getHudTopOffset;
+- (CGFloat)hudTopOffset;
 - (CGFloat) getHudMinBottomOffset;
 - (CGFloat) getHudBottomOffset;
 

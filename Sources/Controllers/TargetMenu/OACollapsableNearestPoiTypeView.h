@@ -20,6 +20,7 @@ amenityPoiCategory:(OAPOICategory *)amenityPoiCategory
              lat:(double)lat
              lon:(double)lon
  isPoiAdditional:(BOOL)isPoiAdditional
+          values:(NSArray<NSString *> *)values
          textRow:(OAAmenityInfoRow *)textRow;
 
 @end

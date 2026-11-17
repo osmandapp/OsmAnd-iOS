@@ -14,6 +14,7 @@
 #import "OAAppSettings.h"
 #import "OAOperationLog.h"
 #import "OAUtilities.h"
+#import "OAIAPHelper.h"
 
 #define kUserOperation @"Register device"
 
@@ -86,6 +87,7 @@
                 [settings.backupNativeDeviceId set:resultJson[@"deviceid"]];
                 [settings.backupAccessToken set:resultJson[@"accesstoken"]];
                 [settings.backupAccessTokenUpdateTime set:resultJson[@"udpatetime"]];
+                [OAIAPHelper.sharedInstance onCloudAccountChanged];
 
                 message = @"Device have been registered successfully";
                 status = STATUS_SUCCESS;

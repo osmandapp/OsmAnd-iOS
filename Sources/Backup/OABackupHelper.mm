@@ -226,6 +226,7 @@ static const NSUInteger EMPTY_TRASH_CHUNK_SIZE = 50;
     [_settings.backupPromocode resetToDefault];
     [_settings.backupDeviceId resetToDefault];
     [_settings.backupAccessToken resetToDefault];
+    [OAIAPHelper.sharedInstance onCloudAccountChanged];
 }
 
 - (NSArray<NSString *> *) collectItemFilesForUpload:(OAFileSettingsItem *)item

@@ -108,10 +108,13 @@ final class CarPlaySceneDelegate: UIResponder {
     /// A drive starts from the car position, not from the last place viewed on the map.
     /// A calculated route still opens as a route overview: it moves the map and unlinks it again.
     private func centerOnMyLocation() {
-        guard let app = OsmAndApp.swiftInstance(), app.locationServices?.denied != true else { return }
+        guard let app = OsmAndApp.swiftInstance(), let locationServices = app.locationServices, !locationServices.denied else { return }
         app.mapMode = .positionTrack
+        if locationServices.status == .suspended {
+            locationServices.resume()
+        }
     }
-    
+
     private func addListeners() {
         guard let carPlayDashboardController else { return }
         let routingHelper = OARoutingHelper.sharedInstance()

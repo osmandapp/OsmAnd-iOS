@@ -324,7 +324,7 @@
         }
     }
 
-    return swiftResources;
+    return [swiftResources copy];
 }
 
 + (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask
@@ -367,7 +367,7 @@
         [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }
     
-    return swiftResources;
+    return [swiftResources copy];
 }
 
 + (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
@@ -599,7 +599,7 @@
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
         [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }
-    return swiftResources;
+    return [swiftResources copy];
 }
 
 + (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation

@@ -205,7 +205,7 @@
 - (NSAttributedString *)getAttributedTitleText:(EOASubscriptionBannerType)type
 {
     BOOL isUpdates = type == EOASubscriptionBannerUpdates;
-    NSString *text = isUpdates ? OALocalizedString(@"subscription_banner_osmand_pro_title") : OALocalizedString(@"free_version_title");
+    NSString *text = OALocalizedString(isUpdates ? @"subscription_banner_osmand_pro_title" : @"free_version_title");
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isUpdates ? 23.8 : 20.4;
     return [[NSAttributedString alloc] initWithString:text
@@ -218,7 +218,10 @@
 - (NSAttributedString *)getAttributedDescriptionText
 {
     OAWorldRegion *freeRegion = FreeVersionMapDownloads.shared.freeRegion;
-    NSString *text = freeRegion ? [NSString stringWithFormat:OALocalizedString(@"free_region_banner_descr"), freeRegion.name] : OALocalizedString(@"free_region_not_chosen_descr");
+    NSString *text = OALocalizedString(freeRegion ? @"free_region_banner_descr" : @"free_region_not_chosen_descr");
+    if (freeRegion)
+        text = [NSString stringWithFormat:text, freeRegion.name];
+
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = 18.;
     return [[NSAttributedString alloc] initWithString:text
@@ -230,7 +233,7 @@
 
 - (NSAttributedString *)getAttributedButtonText:(EOASubscriptionBannerType)type
 {
-    NSString *text = type == EOASubscriptionBannerUpdates ? OALocalizedString(@"shared_string_get") : OALocalizedString(@"get_unlimited_downloads");
+    NSString *text = OALocalizedString(type == EOASubscriptionBannerUpdates ? @"shared_string_get" : @"get_unlimited_downloads");
     BOOL isFree = type == EOASubscriptionBannerFree;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isFree ? 22. : 18.;

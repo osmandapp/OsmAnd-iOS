@@ -31,6 +31,7 @@
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
 #import "OAFavoriteViewController.h"
+#import "OARouteTargetSelectionViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
@@ -373,6 +374,19 @@ static const NSInteger _buttonsCount = 4;
     [self.customController applyGradient:useGradient alpha:alpha];
 }
 
+- (CGFloat)effectiveStatusBarHeight
+{
+    UIWindow *window = self.window ?: self.parentView.window ?: [OARootViewController instance].view.window;
+    CGFloat safeAreaTop = MAX(self.safeAreaInsets.top, window.safeAreaInsets.top);
+    return MAX(safeAreaTop, window.windowScene.statusBarManager.statusBarFrame.size.height);
+}
+
+- (CGFloat)effectiveRightSafeAreaInset
+{
+    UIWindow *window = self.window ?: self.parentView.window ?: [OARootViewController instance].view.window;
+    return MAX(MAX(self.safeAreaInsets.right, self.parentView.safeAreaInsets.right), window.safeAreaInsets.right);
+}
+
 - (void) updateToolbarFrame:(BOOL)landscape
 {
     if (_toolbarAnimating)
@@ -434,7 +448,7 @@ static const NSInteger _buttonsCount = 4;
     [self.parentView addSubview:self.customController.navBar];
     
     BOOL showTopControls = [self.customController showTopControls];
-    _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
+    _toolbarHeight = showTopControls ? _customController.getNavBarHeight : [self effectiveStatusBarHeight];
     
     [self.menuViewDelegate targetUpdateControlsLayout:showTopControls customStatusBarStyle:[OAAppSettings sharedManager].isAppMapNightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent];
     
@@ -483,7 +497,7 @@ static const NSInteger _buttonsCount = 4;
         else
             newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
      
-        _toolbarHeight = OAUtilities.getStatusBarHeight;
+        _toolbarHeight = [self effectiveStatusBarHeight];
 
         [self.menuViewDelegate targetUpdateControlsLayout:NO customStatusBarStyle:UIStatusBarStyleDefault];
 
@@ -590,8 +604,14 @@ static const NSInteger _buttonsCount = 4;
     return self.superview && [self getTopToolbarAlpha] == 1.;
 }
 
-- (CGFloat) toolbarHeight
+- (CGFloat)toolbarHeight
 {
+    if ([self.customController isKindOfClass:OARouteTargetSelectionViewController.class])
+    {
+        BOOL toolbarVisible = self.superview && !_hiding && !self.customController.navBar.hidden;
+        return toolbarVisible ? CGRectGetHeight(self.customController.navBar.bounds) : [self effectiveStatusBarHeight];
+    }
+
     return _toolbarHeight;
 }
 
@@ -705,7 +725,7 @@ static const NSInteger _buttonsCount = 4;
 - (void) clearCustomControllerIfNeeded
 {
     _rotationInProgress = NO;
-    _toolbarHeight = OAUtilities.getStatusBarHeight;
+    _toolbarHeight = [self effectiveStatusBarHeight];
     
     _bottomBarVisible = NO;
     _bottomBarHeight = 0.;
@@ -951,7 +971,7 @@ static const NSInteger _buttonsCount = 4;
         if ([self isLandscape])
         {
             frame.origin.x = -DeviceScreenWidth;
-            frame.origin.y = OAUtilities.getStatusBarHeight;
+            frame.origin.y = 0.;
             self.frame = frame;
 
             frame.origin.x = 0.0;
@@ -984,10 +1004,7 @@ static const NSInteger _buttonsCount = 4;
     else
     {
         CGRect frame = self.frame;
-        if ([self isLandscape])
-            frame.origin.y = OAUtilities.getStatusBarHeight;
-        else
-            frame.origin.y = 0;
+        frame.origin.y = 0.;
         
         self.frame = frame;
         CFTimeInterval animationDuration = (CACurrentMediaTime() - animationStartTime) * 1000.0;
@@ -1206,6 +1223,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat itemsX = 16.0 + [OAUtilities getLeftMargin];
     CGFloat topLabelY = _targetPoint.type == OATargetRouteDetails ? 16.0 : 20.0;
     CGFloat controlButtonsHeight = [self calculateControlButtonsHeight];
+    CGFloat rightSafe = landscape ? 0. : [self effectiveRightSafeAreaInset];
     
     CGRect sliderFrame = _sliderView.frame;
     sliderFrame.origin.x = _containerView.frame.size.width / 2 - _sliderView.frame.size.width / 2;
@@ -1223,7 +1241,7 @@ static const NSInteger _buttonsCount = 4;
         textX += 10.0;
     CGFloat width = (landscape ? (OAUtilities.isIPad ? [self getViewWidthForPad] : kInfoViewLandscapeWidth) + [OAUtilities getLeftMargin] : DeviceScreenWidth);
     
-    CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin];
+    CGFloat labelPreferredWidth = width - textX - 40.0 - [OAUtilities getLeftMargin] - rightSafe;
     
     BOOL singleLineAddress = [self shouldUseSingleLineAddress];
     // For a selected map location, the resolved address replaces the title placeholder.
@@ -1340,6 +1358,9 @@ static const NSInteger _buttonsCount = 4;
     CGFloat infoViewHeight = (!self.customController || [self.customController hasInfoView]) && !_hideButtons ? _backViewRoute.bounds.size.height : 0;
     
     _topView.frame = CGRectMake(0.0, 0.0, width, topViewHeight);
+    CGRect imageFrame = _imageView.frame;
+    imageFrame.origin.x = width - rightSafe - kMargin - imageFrame.size.width;
+    _imageView.frame = imageFrame;
     _controlButtonsView.hidden = controlButtonsHeight == 0;
     if (!_controlButtonsView.hidden)
     {
@@ -1351,7 +1372,7 @@ static const NSInteger _buttonsCount = 4;
         _controlButtonRight.enabled = self.customController.rightControlButton && !self.customController.rightControlButton.disabled;
         _controlButtonDownload.enabled = self.customController.downloadControlButton && !self.customController.downloadControlButton.disabled;
         CGFloat x = itemsX;
-        CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin]) / 2.0;
+        CGFloat w = (width - 32.0 - 8.0 - [OAUtilities getLeftMargin] - rightSafe) / 2.0;
         CGFloat downloadY = 4.0;
         CGRect leftControlButtonFrame = CGRectMake(x, 4.0, w, 32.0);
         x += w + 8.0;
@@ -1370,18 +1391,18 @@ static const NSInteger _buttonsCount = 4;
             if (![_controlButtonDownload isDirectionRTL])
                 _controlButtonDownload.frame = CGRectMake(itemsX, downloadY, w, 32.0);
             else
-                _controlButtonDownload.frame = CGRectMake(width - itemsX - w, downloadY, w, 32.0);
+                _controlButtonDownload.frame = CGRectMake(width - rightSafe - kMargin - w, downloadY, w, 32.0);
         }
         if (!_downloadProgressBar.hidden && !_downloadProgressLabel.hidden && !_downloadCancelButton.hidden)
         {
-            CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin;
+            CGFloat viewWidth = width - 32.0 - OAUtilities.getLeftMargin - rightSafe;
             _downloadProgressLabel.frame = CGRectMake(itemsX, downloadY, viewWidth, 17.0);
             _downloadCancelButton.frame = CGRectMake(viewWidth - 15.0, CGRectGetMaxY(_downloadProgressLabel.frame) - 10.0, 30.0, 30.0);
             _downloadProgressBar.frame = CGRectMake(itemsX, CGRectGetMaxY(_downloadProgressLabel.frame) + 5.0, viewWidth - _downloadCancelButton.frame.size.width - 16.0, 5.0);
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
-    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight - self.customController.detailsButtonHeight, width, containerViewHeight);
+    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [self effectiveStatusBarHeight]) : DeviceScreenHeight - containerViewHeight - self.customController.detailsButtonHeight, width, containerViewHeight);
     CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.0;
     
     if (self.customController && [self.customController hasContent])
@@ -1427,6 +1448,10 @@ static const NSInteger _buttonsCount = 4;
         _topOverscrollView.hidden = YES;
     }
     _bottomOverscrollView.frame = CGRectMake(0, contentHeight, width, 1000.0);
+    if (self.customController && ![self.customController hasContent])
+        _bottomOverscrollView.backgroundColor = self.customController.contentView.backgroundColor;
+    else
+        _bottomOverscrollView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
 
     self.frame = CGRectMake(0, 0, width, DeviceScreenHeight);
     self.contentInset = UIEdgeInsetsMake(0, 0, self.customController ? self.customController.keyboardSize.height : 0, 0);
@@ -1468,7 +1493,7 @@ static const NSInteger _buttonsCount = 4;
     _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + topViewHeight + controlButtonsHeight, width, infoViewHeight + heightWithMargin);
     _buttonsColoredView.frame = CGRectMake(0.0, kOATargetPointButtonsViewHeight, width, _buttonsView.frame.size.height - kOATargetPointButtonsViewHeight);
 
-    CGFloat backViewWidth = (_buttonsView.frame.size.width - leftSafe - kMargin * 2 - kButtonsSideMargin * (_buttonsCount - 1)) / _buttonsCount;
+    CGFloat backViewWidth = (_buttonsView.frame.size.width - leftSafe - rightSafe - kMargin * 2 - kButtonsSideMargin * (_buttonsCount - 1)) / _buttonsCount;
     CGFloat x = leftSafe + kMargin;
     if ([_backViewRoute isDirectionRTL])
     {
@@ -1478,7 +1503,7 @@ static const NSInteger _buttonsCount = 4;
         x += backViewWidth + kButtonsSideMargin;
         _backView2.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
         x += backViewWidth + kButtonsSideMargin;
-        _backView1.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        _backView1.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin - rightSafe, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
     }
     else
     {
@@ -1488,7 +1513,7 @@ static const NSInteger _buttonsCount = 4;
         x += backViewWidth + kButtonsSideMargin;
         _backView3.frame = CGRectMake(x, kButtonsTopMargin, backViewWidth, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
         x += backViewWidth + kButtonsSideMargin;
-        _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
+        _backView4.frame = CGRectMake(x, kButtonsTopMargin, _buttonsView.frame.size.width - x - kMargin - rightSafe, kOATargetPointButtonsViewHeight - kButtonsBottomMargin);
     }
     if (_backView4.hidden)
         _backView4.hidden = NO;
@@ -1540,7 +1565,7 @@ static const NSInteger _buttonsCount = 4;
         [_buttonRoute setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation].imageWithHorizontallyFlippedOrientation forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
         _buttonRoute.titleEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
+        _buttonShowInfo.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonShowInfo.frame.size.width - kMargin - rightSafe, 5, _buttonShowInfo.frame.size.width, _buttonShowInfo.frame.size.height);
     }
     else
     {
@@ -1548,7 +1573,7 @@ static const NSInteger _buttonsCount = 4;
         [_buttonRoute setImage:[UIImage imageNamed:ACImageNameLeftMenuIconNavigation] forState:UIControlStateNormal];
         _buttonRoute.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
         _buttonRoute.imageEdgeInsets = UIEdgeInsetsMake(0, 4, 0, 0);
-        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
+        _buttonRoute.frame = CGRectMake(_backViewRoute.frame.size.width - _buttonRoute.frame.size.width - kMargin - rightSafe, 5, _buttonRoute.frame.size.width + 4, _buttonRoute.frame.size.height);
     }
     [_buttonFavorite setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
     [_buttonShare setSemanticContentAttribute:UISemanticContentAttributeForceLeftToRight];
@@ -2402,7 +2427,7 @@ static const NSInteger _buttonsCount = 4;
     if (alpha > 0)
     {
         CGFloat a = _fullOffset;
-        CGFloat c = self.contentOffset.y - [OAUtilities getStatusBarHeight];
+        CGFloat c = self.contentOffset.y - [self effectiveStatusBarHeight];
         alpha = c / a;
         if (alpha < 0)
             alpha = 0.0;
@@ -2421,7 +2446,7 @@ static const NSInteger _buttonsCount = 4;
     CGFloat alpha = self.alpha;
     if (alpha > 0 && ![self isLandscape])
     {
-        CGFloat a = _headerY - [OAUtilities getStatusBarHeight];
+        CGFloat a = _headerY - [self effectiveStatusBarHeight];
         CGFloat b = _headerY - self.customController.navBar.frame.size.height;
         CGFloat c = self.contentOffset.y + self.customController.navBar.frame.size.height;
         alpha = (c - b) / (a - b);

@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gO-t7-roK">
-                    <rect key="frame" x="0.0" y="47" width="428" height="845"/>
+                    <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_openstreetmap" translatesAutoresizingMaskIntoConstraints="NO" id="Nii-cE-fcN">
                             <rect key="frame" x="94" y="807" width="240" height="30"/>
@@ -76,10 +76,10 @@
             <viewLayoutGuide key="safeArea" id="350-KX-KPn"/>
             <color key="backgroundColor" name="launchScreenBgColor"/>
             <constraints>
-                <constraint firstItem="3gO-t7-roK" firstAttribute="trailing" secondItem="350-KX-KPn" secondAttribute="trailing" id="2g3-Qq-GGb"/>
-                <constraint firstItem="3gO-t7-roK" firstAttribute="top" secondItem="350-KX-KPn" secondAttribute="top" id="YoG-iw-igs"/>
-                <constraint firstItem="3gO-t7-roK" firstAttribute="leading" secondItem="350-KX-KPn" secondAttribute="leading" id="gQt-bI-Xsr"/>
-                <constraint firstItem="3gO-t7-roK" firstAttribute="bottom" secondItem="350-KX-KPn" secondAttribute="bottom" id="k3T-o7-fx9"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="2g3-Qq-GGb"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="YoG-iw-igs"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="gQt-bI-Xsr"/>
+                <constraint firstItem="3gO-t7-roK" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="k3T-o7-fx9"/>
             </constraints>
             <point key="canvasLocation" x="46.875" y="45.422535211267608"/>
         </view>

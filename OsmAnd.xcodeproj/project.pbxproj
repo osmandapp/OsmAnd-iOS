@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1928A110000000000000001 /* SteppedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1928A110000000000000002 /* SteppedSlider.swift */; };
 		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
 		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
 		D57820010000000000000003 /* PlanRouteHistoryFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = D57820010000000000000004 /* PlanRouteHistoryFixture.swift */; };
@@ -1982,6 +1983,7 @@
 		DAC849B426CF967C00018091 /* OADownloadMapWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DAC849B226CF967C00018091 /* OADownloadMapWidget.mm */; };
 		DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */; };
 		DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACBB96325D2BEA200378C47 /* CarPlay.framework */; };
+		6091CA11000000000000A001 /* CallKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6091CA11000000000000A002 /* CallKit.framework */; };
 		DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACF784327E3441600A8A218 /* OABackupHelper.mm */; };
 		DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2203D2913AF010052B967 /* OATableCollapsableRowData.m */; };
 		DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */; };
@@ -2084,7 +2086,7 @@
 		FA6408792D3E845A005FD12D /* ImageCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6408782D3E845A005FD12D /* ImageCardCell.swift */; };
 		FA64087B2D3E88C0005FD12D /* MapillaryContributeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */; };
 		FA64087D2D3E8B96005FD12D /* MapillaryContributeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */; };
-		FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */; };
+		FA64087F2D3E8EDA005FD12D /* MapillaryImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */; };
 		FA6408872D3E908F005FD12D /* OAMapillaryImageCardWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = FA6408862D3E908F005FD12D /* OAMapillaryImageCardWrapper.m */; };
 		FA64173B2CA5A57500982297 /* SharedLibExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA64173A2CA5A57500982297 /* SharedLibExtension.swift */; };
 		FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */; };
@@ -2280,6 +2282,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1928A110000000000000002 /* SteppedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteppedSlider.swift; sourceTree = "<group>"; };
 		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
 		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
 		D57820010000000000000004 /* PlanRouteHistoryFixture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteHistoryFixture.swift; sourceTree = "<group>"; };
@@ -5524,6 +5527,7 @@
 		DAC849B326CF967C00018091 /* OADownloadMapWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadMapWidget.h; sourceTree = "<group>"; };
 		DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADownloadMapWidget.xib; sourceTree = "<group>"; };
 		DACBB96325D2BEA200378C47 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
+		6091CA11000000000000A002 /* CallKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CallKit.framework; path = System/Library/Frameworks/CallKit.framework; sourceTree = SDKROOT; };
 		DACF784227E3441600A8A218 /* OABackupHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupHelper.h; sourceTree = "<group>"; };
 		DACF784327E3441600A8A218 /* OABackupHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABackupHelper.mm; sourceTree = "<group>"; };
 		DAD2203C2913AF010052B967 /* OATableCollapsableRowData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableCollapsableRowData.h; sourceTree = "<group>"; };
@@ -5647,7 +5651,7 @@
 		FA6408782D3E845A005FD12D /* ImageCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCardCell.swift; sourceTree = "<group>"; };
 		FA64087A2D3E88C0005FD12D /* MapillaryContributeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryContributeCard.swift; sourceTree = "<group>"; };
 		FA64087C2D3E8B96005FD12D /* MapillaryContributeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryContributeCell.swift; sourceTree = "<group>"; };
-		FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAMapillaryImageCard.swift; sourceTree = "<group>"; };
+		FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapillaryImageCard.swift; sourceTree = "<group>"; };
 		FA6408852D3E908F005FD12D /* OAMapillaryImageCardWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapillaryImageCardWrapper.h; sourceTree = "<group>"; };
 		FA6408862D3E908F005FD12D /* OAMapillaryImageCardWrapper.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = OAMapillaryImageCardWrapper.m; sourceTree = "<group>"; };
 		FA64173A2CA5A57500982297 /* SharedLibExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedLibExtension.swift; sourceTree = "<group>"; };
@@ -5831,6 +5835,7 @@
 				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
 				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
 				DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */,
+				6091CA11000000000000A001 /* CallKit.framework in Frameworks */,
 				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
 				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
 				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
@@ -6810,6 +6815,7 @@
 				DA578C4B266263D2007A086E /* libqtpcre2.a */,
 				81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */,
 				DACBB96325D2BEA200378C47 /* CarPlay.framework */,
+				6091CA11000000000000A002 /* CallKit.framework */,
 				DA80DACE251E3440008E6267 /* UIKit.framework */,
 				DA80DAC5251E2D57008E6267 /* Foundation.framework */,
 				DA80DAC0251E2CB8008E6267 /* libQt5Concurrent.a */,
@@ -10030,6 +10036,7 @@
 				CA4EDBF84C09652F36648561 /* OASegmentedSlider.mm */,
 				DA9F841A29CC96EF00127DAE /* OAShapeLayer.h */,
 				DA9F841B29CC96EF00127DAE /* OAShapeLayer.m */,
+				D1928A110000000000000002 /* SteppedSlider.swift */,
 				CA4ED5B77046F2C3F6FB7181 /* OASlider.h */,
 				CA4ED20CACFB86C3CEE9C486 /* OASlider.mm */,
 				DA5A804626C563A500F274C7 /* OASubscribeEmailView.h */,
@@ -10298,7 +10305,7 @@
 		DA5A80EC26C563A600F274C7 /* Mapillary */ = {
 			isa = PBXGroup;
 			children = (
-				FA64087E2D3E8EDA005FD12D /* OAMapillaryImageCard.swift */,
+				FA64087E2D3E8EDA005FD12D /* MapillaryImageCard.swift */,
 				DA5A80EE26C563A600F274C7 /* OAMapillaryImage.h */,
 				DA5A80F126C563A600F274C7 /* OAMapillaryImage.mm */,
 				CA4ED676EDCD24E9BE24075D /* OAMapillaryOsmTagHelper.mm */,
@@ -13016,7 +13023,7 @@
 				DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */,
 				FAAAADD82F3DD1F2008B8744 /* TooManyRequestsRetryStrategy.swift in Sources */,
 				CE7AC7A03008E3EE00A864B9 /* AstroWikiBridge.swift in Sources */,
-				FA64087F2D3E8EDA005FD12D /* OAMapillaryImageCard.swift in Sources */,
+				FA64087F2D3E8EDA005FD12D /* MapillaryImageCard.swift in Sources */,
 				DA4ABF232876DA6800B996EF /* OACollectionSettingsItem.mm in Sources */,
 				2783B4362E66E6F700682723 /* InputDeviceProfile.swift in Sources */,
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,
@@ -13316,6 +13323,7 @@
 				CE71B88C2FEFAB0C008B0759 /* StarMapSearchEmptyView.swift in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
+				D1928A110000000000000001 /* SteppedSlider.swift in Sources */,
 				2702BC622EF98AD900A545A2 /* TopBottomValuesSliderTableViewCell.swift in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
 				32AB486B2C9C84B3005EF1D4 /* DownloadingListViewController.swift in Sources */,

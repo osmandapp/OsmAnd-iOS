@@ -109,6 +109,7 @@ final class SpeedLimitToleranceViewController: OABaseSettingsViewController {
         cell.slider.minimumValue = convertedLimitFrom
         cell.slider.maximumValue = convertedLimitTo
         cell.slider.value = convertedSelectedValue
+        cell.slider.accessibilityStep = step
         cell.slider.tintColor = .menuButton
         cell.slider.maximumTrackTintColor = .sliderLineBg
         cell.slider.accessibilityLabel = getTitle()

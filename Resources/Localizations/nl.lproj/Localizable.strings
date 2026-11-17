@@ -1041,7 +1041,7 @@
 "app_mode_bicycle" = "Fiets";
 "app_mode_subway" = "Metro";
 "app_mode_camper" = "Caravan";
-"map_transparency" = "Basiskaart-transparantie";
+"map_transparency" = "Basiskaart-zichtbaarheid";
 "osmand_parking_warning" = "Waarschuwing";
 "open_in_browser_wiki" = "Artikel online openen";
 "app_mode_monowheel" = "Monowheel, Hoverboard";

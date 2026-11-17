@@ -1566,7 +1566,7 @@
 "map_settings_contour_zoom_level_descr" = "حدد مستوى التكبير،سيتم عرض خطوط الكنتور";
 "map_settings_line_density" = "كثافة الخط";
 "srtm_color_scheme" = "لون الخطوط الكنتورية";
-"map_transparency" = "شفافية الخريطة";
+"map_transparency" = "وضوح الخريطة";
 "board_at" = "توقف عند";
 "map_coords" = "خريطة: خط العرض%.5f خط الطول %.5f";
 "transport_stops" = "مواقف";

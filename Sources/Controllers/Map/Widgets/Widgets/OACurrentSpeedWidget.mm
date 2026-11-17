@@ -24,6 +24,7 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
     OACurrentPositionHelper *_currentPositionHelper;
 
     float _cachedSpeed;
+    BOOL _hasCachedSpeed;
 }
 
 - (instancetype)initWithCustomId:(NSString *)customId
@@ -54,8 +55,9 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
             ? LOW_SPEED_UPDATE_THRESHOLD_MPS
             : UPDATE_THRESHOLD_MPS;
 
-        if ([self isUpdateNeeded] || ABS(currentSpeed - _cachedSpeed) > updateThreshold)
+        if (!_hasCachedSpeed || [self isUpdateNeeded] || ABS(currentSpeed - _cachedSpeed) > updateThreshold)
         {
+            _hasCachedSpeed = YES;
             _cachedSpeed = currentSpeed;
             NSString *ds = [OAOsmAndFormatter getFormattedSpeed:currentSpeed];
             int ls = [ds indexOf:@" "];
@@ -67,9 +69,10 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
             return true;
         }
     }
-    else if (_cachedSpeed != 0)
+    else if (!_hasCachedSpeed || _cachedSpeed != -1)
     {
-        _cachedSpeed = 0;
+        _hasCachedSpeed = YES;
+        _cachedSpeed = -1;
         [self setText:[[self getWidgetPanel] isPanelVertical] ? @"-" : nil subtext:nil];
     }
     return false;

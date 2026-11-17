@@ -117,6 +117,10 @@
 
 - (void) updateCurrentLocationAddress;
 
+@property (nonatomic, readonly) BOOL usesExpandedPhoneWidgetLayout;
+
+- (void)updateTopWidgetLayout;
+
 - (BOOL)hasTopWidget;
 - (BOOL)hasBottomWidget;
 - (BOOL)hasLeftWidget;

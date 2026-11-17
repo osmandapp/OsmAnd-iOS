@@ -482,7 +482,7 @@
     UIEdgeInsets safeInsets = _mapHudViewController.view.safeAreaInsets;
     CGFloat availableWidth = MAX(0., _mapHudViewController.view.bounds.size.width - safeInsets.left - safeInsets.right);
     CGFloat panelWidth = [OAUtilities isLandscapeIpadAware] ? MIN(kInfoViewLandscapeWidthPad, availableWidth) : availableWidth;
-    _mapHudViewController.topWidgetsViewWidthConstraint.constant = panelWidth;
+    _mapHudViewController.topWidgetsViewWidthConstraint.constant = _mapHudViewController.usesExpandedPhoneWidgetLayout ? MIN(kInfoViewLandscapeWidthPad, availableWidth) : panelWidth;
 
     if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
         [[OARootViewController instance].mapPanel updateToolbar];
@@ -582,6 +582,7 @@
     
     _mapHudViewController.leftWidgetsViewTopConstraint.constant =
     _mapHudViewController.rightWidgetsViewTopConstraint.constant = leftRightWidgetsViewTopConstraintConstant;
+    [_mapHudViewController updateTopWidgetLayout];
 
     if (_weatherToolbar && _weatherToolbar.superview)
         [self updateWeatherToolbarVisible];

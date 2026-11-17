@@ -43,6 +43,7 @@
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"
 #import "StartupLogging.h"
+#import "OASizes.h"
 
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
@@ -83,6 +84,12 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _locationServicesStatusObserver;
+
+    NSLayoutConstraint *_topWidgetsContainerTopConstraint;
+    NSLayoutConstraint *_topWidgetsCenterXConstraint;
+    UILayoutGuide *_topWidgetsLayoutGuide;
+    CGFloat _topWidgetsLayoutExtent;
+    BOOL _topWidgetsRaised;
 
     BOOL _driveModeActive;
     BOOL _hudButtonsVisible;
@@ -291,6 +298,126 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     [self.leftWidgetsView addShadow];
     [self.rightWidgetsView addShadow];
     [self.middleWidgetsView addShadow];
+    [self setupTopWidgetLayout];
+}
+
+- (void)setupTopWidgetLayout
+{
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+    {
+        _topWidgetsLayoutExtent = 44.;
+        _topWidgetsLayoutGuide = [self.view layoutGuideForLayoutRegion:[UIViewLayoutRegion layoutRegionForBarOnEdge:UIRectEdgeTop extent:_topWidgetsLayoutExtent]];
+    }
+#endif
+    for (NSLayoutConstraint *constraint in self.view.constraints)
+    {
+        if (constraint.firstItem == self.topWidgetsView.superview && constraint.firstAttribute == NSLayoutAttributeTop
+            && constraint.secondItem == self.statusBarView && constraint.secondAttribute == NSLayoutAttributeBottom)
+            _topWidgetsContainerTopConstraint = constraint;
+    }
+    for (NSLayoutConstraint *constraint in self.topWidgetsView.superview.constraints)
+    {
+        if (constraint.firstItem == self.topWidgetsView && constraint.firstAttribute == NSLayoutAttributeCenterX)
+            _topWidgetsCenterXConstraint = constraint;
+    }
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self updateTopWidgetLayout];
+}
+
+- (BOOL)usesPhoneOcclusionLayout
+{
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+    {
+        if (self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        {
+            for (UIViewReservedRegion *reserved in [self.view reservedRegionsOfKind:UIViewReservedRegionKind.occlusionRegionKind])
+            {
+                if (reserved.isActive)
+                    return YES;
+            }
+        }
+    }
+#endif
+    return NO;
+}
+
+- (BOOL)usesExpandedPhoneWidgetLayout
+{
+    return self.traitCollection.userInterfaceIdiom == UIUserInterfaceIdiomPhone
+        && self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular
+        && self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular;
+}
+
+- (void)updateTopWidgetLayout
+{
+    if (!self.usesExpandedPhoneWidgetLayout && !self.usesPhoneOcclusionLayout && !_topWidgetsRaised)
+        return;
+    _topWidgetsRaised = NO;
+    UIEdgeInsets safeInsets = self.view.safeAreaInsets;
+    CGFloat availableWidth = MAX(0., self.view.bounds.size.width - safeInsets.left - safeInsets.right);
+    BOOL expandedPhone = self.usesExpandedPhoneWidgetLayout;
+    BOOL landscapePhone = self.usesPhoneOcclusionLayout && CGRectGetWidth(self.view.bounds) > CGRectGetHeight(self.view.bounds);
+    CGFloat width = ([OAUtilities isLandscapeIpadAware] || expandedPhone) ? MIN(kInfoViewLandscapeWidthPad, availableWidth) : availableWidth;
+    CGFloat centerOffset = 0.;
+    CGFloat containerOffset = 0.;
+    CGFloat topOffset = _toolbarViewController.view.superview ? self.topWidgetsViewYConstraint.constant : 0.;
+    BOOL eligible = !self.contextMenuMode && !_toolbarViewController.view.superview
+        && !_mapPanelViewController.scrollableHudViewController && [_mapInfoController.topPanelController hasWidgets];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+    {
+        if (eligible && (expandedPhone || landscapePhone) && _topWidgetsContainerTopConstraint)
+        {
+            CGFloat height = self.topWidgetsViewHeightConstraint.constant;
+            CGFloat extent = MAX(44., height);
+            if (_topWidgetsLayoutExtent != extent)
+            {
+                _topWidgetsLayoutExtent = extent;
+                _topWidgetsLayoutGuide = [self.view layoutGuideForLayoutRegion:[UIViewLayoutRegion layoutRegionForBarOnEdge:UIRectEdgeTop extent:extent]];
+                [self.view setNeedsLayout];
+            }
+            CGRect frame = _topWidgetsLayoutGuide.layoutFrame;
+            CGFloat minimumWidth = 280. * MAX(1., [UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize / 17.);
+            CGFloat proposedWidth = MIN(kInfoViewLandscapeWidthPad, frame.size.width);
+            CGFloat centerX = MIN(MAX(CGRectGetMidX(self.view.bounds), CGRectGetMinX(frame) + proposedWidth / 2.), CGRectGetMaxX(frame) - proposedWidth / 2.);
+            CGRect proposedFrame = CGRectMake(centerX - proposedWidth / 2., CGRectGetMinY(self.view.bounds), proposedWidth, height);
+            BOOL fits = proposedWidth >= minimumWidth && height > 0.;
+            for (UIViewReservedRegion *reserved in [self.view reservedRegionsOfKind:UIViewReservedRegionKind.occlusionRegionKind])
+            {
+                if (reserved.isActive && CGRectIntersectsRect(proposedFrame, reserved.frame))
+                    fits = NO;
+            }
+            if (fits)
+            {
+                CGRect containerSafeFrame = [self.topWidgetsView.superview convertRect:self.topWidgetsView.superview.safeAreaLayoutGuide.layoutFrame toView:self.view];
+                width = proposedWidth;
+                centerOffset = centerX - CGRectGetMidX(containerSafeFrame);
+                containerOffset = proposedFrame.origin.y - self.statusBarViewHeightConstraint.constant;
+                _topWidgetsRaised = YES;
+            }
+        }
+    }
+#endif
+    if (_topWidgetsContainerTopConstraint.constant != containerOffset)
+        _topWidgetsContainerTopConstraint.constant = containerOffset;
+    if (self.topWidgetsViewWidthConstraint.constant != width)
+        self.topWidgetsViewWidthConstraint.constant = width;
+    if (_topWidgetsCenterXConstraint.constant != centerOffset)
+        _topWidgetsCenterXConstraint.constant = centerOffset;
+    if (self.topWidgetsViewYConstraint.constant != topOffset)
+        self.topWidgetsViewYConstraint.constant = topOffset;
+    if (eligible && (expandedPhone || _topWidgetsRaised))
+    {
+        self.leftWidgetsViewTopConstraint.constant = -self.topWidgetsViewHeightConstraint.constant - containerOffset;
+        self.rightWidgetsViewTopConstraint.constant = self.leftWidgetsViewTopConstraint.constant;
+    }
+    _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
 }
 
 - (void)setupCompassButton
@@ -377,9 +504,10 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         _app.initialURLMapState = nil;
 }
 
-- (void) viewDidAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+
     
     if (self.toolbarViewController)
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
@@ -1439,6 +1567,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
         self.topWidgetsViewYConstraint.constant = 0.;
     }
 
+    [self updateTopWidgetLayout];
     [self updateTopControlsVisibility:animated];
     [self updateBottomControlsVisibility:animated];
     [_floatingButtonsController updateViewVisibility];
@@ -1626,7 +1755,7 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
     }
     else if (!self.contextMenuMode && !_mapPanelViewController.suspendedPlanRouteController)
     {
-        if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware])
+        if (isTopWidgetsVisible && contextMenuToolbarHeight == 0. && ![OAUtilities isLandscapeIpadAware] && !self.usesExpandedPhoneWidgetLayout)
             offset += self.topWidgetsViewHeightConstraint.constant;
         if (isToolbarVisible)
             offset += _toolbarViewController.view.frame.size.height;
@@ -1655,6 +1784,9 @@ static const NSTimeInterval kWidgetsUpdateFrameInterval = 1.0 / 30.0;
 
 - (UIColor *) getStatusBarBackgroundColor
 {
+    if ((self.usesPhoneOcclusionLayout || _topWidgetsRaised) && !self.contextMenuMode && !_toolbarViewController.view.superview
+        && !_mapPanelViewController.scrollableHudViewController && [_mapInfoController.topPanelController hasWidgets])
+        return UIColor.clearColor;
     BOOL isNight = _settings.isAppMapNightMode;
     BOOL transparent = [_settings.transparentMapTheme get];
     UIColor *statusBarColor;

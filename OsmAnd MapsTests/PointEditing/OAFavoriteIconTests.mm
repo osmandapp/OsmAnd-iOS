@@ -10,6 +10,7 @@
 #import "OAFavoritesHelperBridge.h"
 #import "OAFavoriteFolderBridgeItem.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGlobalSettingsItem.h"
 #import "OAAppSettings.h"
 #import "OAAppDelegate.h"
 #import "OARootViewController.h"
@@ -403,7 +404,7 @@
     [self waitForExpectations:@[completion] timeout:5];
 }
 
-- (void)testGroupCreatedInFavoriteEditorAppearsInMyPlacesWithoutSavingPoint
+- (void)testGroupCreatedInFavoriteEditorAppearsInMyPlacesAndSurvivesStorageReloadWithoutSavingPoint
 {
     OAFavoriteGroup *source = [self groupWithIcon:@"" pointIcons:@[]];
     OAEditPointViewController *editor = [self newPointEditorInGroup:source fromPOI:YES];
@@ -435,6 +436,25 @@
     XCTAssertEqual(folders.count, 1u);
     XCTAssertEqual(folders.firstObject.pointsCount, 0u);
     XCTAssertEqualObjects(folders.firstObject.color, UIColor.blueColor);
+
+    // Use the same cleanup as Cancel > Exit, without presenting the confirmation alert.
+    OAFavoriteEditingHandler *handler = [editor valueForKey:@"pointHandler"];
+    [handler deleteItem];
+    XCTAssertEqual([OAFavoritesHelper groupByName:name], group);
+
+    // Reload from disk without saving the favorite or issuing a save from the test.
+    NSString *path = [[OsmAndApp instance] favoritesStorageFilename:name];
+    NSPredicate *groupIsStored = [NSPredicate predicateWithBlock:^BOOL(id object, NSDictionary *bindings) {
+        NSMutableDictionary<NSString *, OAFavoriteGroup *> *groups = [NSMutableDictionary new];
+        [OAFavoritesHelper loadFileGroups:path groups:groups];
+        return groups[name] != nil;
+    }];
+    [self waitForExpectations:@[[[XCTNSPredicateExpectation alloc] initWithPredicate:groupIsStored object:nil]] timeout:10];
+    OAFavoriteGroup *loaded = [self loadStoredGroup:group];
+    XCTAssertEqual(loaded.points.count, 0u);
+    XCTAssertEqualObjects(loaded.iconName ?: @"", @"");
+    XCTAssertEqualObjects(loaded.color, UIColor.blueColor);
+    XCTAssertEqualObjects(loaded.backgroundType, @"square");
 }
 
 - (void)testLastUsedIconsDoNotDuplicatePOIIconAfterManualSelection
@@ -482,18 +502,40 @@
     XCTAssertEqualObjects([reloaded getSelectedItem], @"defibrillator");
 }
 
-- (void)testLastUsedIconsMigrateExistingAliasesInMostRecentOrder
+- (void)setLastUsedIconsMigrationCompleted:(BOOL)completed
 {
+    NSString *key = @"migrateLastUsedFavoriteIcons";
+    NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+    id originalValue = [defaults objectForKey:key];
+    [self addTeardownBlock:^{
+        if (originalValue)
+            [defaults setObject:originalValue forKey:key];
+        else
+            [defaults removeObjectForKey:key];
+    }];
+    [defaults setBool:completed forKey:key];
+}
+
+- (void)testLastUsedIconsMigrateBeforeEitherConsumerIsOpened
+{
+    [self setLastUsedIconsMigrationCompleted:NO];
     [OAAppSettings.sharedManager.lastUsedFavIcons set:@[
-        @"mx_defibrillator", @"defibrillator", @"mx_assembly_point", @"amenity_school",
+        @"", @"mx_", @"mx_defibrillator", @"defibrillator", @"mx_assembly_point", @"amenity_school",
         @"mx_xmas_pyramid", @"barrier_gate", @"special_star", @"tourism_hostel", @"shop_car",
-        @"mx_blood_donation", @"mx_amenity_biergarten", @"activities_electric_bike"
+        @"mx_blood_donation", @"mx_amenity_biergarten", @"activities_electric_bike",
+        @"ic_action_car_dark", @"special_bicycle"
     ]];
     NSArray<NSString *> *expected = @[
         @"defibrillator", @"assembly_point", @"amenity_school", @"xmas_pyramid", @"barrier_gate",
         @"special_star", @"tourism_hostel", @"shop_car", @"blood_donation", @"amenity_biergarten",
-        @"activities_electric_bike"
+        @"activities_electric_bike", @"ic_action_car_dark"
     ];
+    [OAMigrationManager.shared migrateIfNeeded:NO];
+    XCTAssertTrue([NSUserDefaults.standardUserDefaults boolForKey:@"migrateLastUsedFavoriteIcons"]);
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, expected);
+    // This handler reads the preference directly, before the favorite handler is opened.
+    ButtonAppearanceIconCollectionHandler *buttons = [[ButtonAppearanceIconCollectionHandler alloc] initWithCustomIconKeys:@[]];
+    XCTAssertEqualObjects(buttons.categoriesByKeyName[buttons.lastUsedKey].iconKeys, expected);
     PoiIconCollectionHandler *icons = [PoiIconCollectionHandler new];
     XCTAssertEqualObjects(icons.lastUsedIcons, expected);
     XCTAssertEqualObjects(icons.categoriesByKeyName[icons.lastUsedKey].iconKeys, expected);
@@ -504,6 +546,77 @@
     PoiIconCollectionHandler *reopened = [PoiIconCollectionHandler new];
     XCTAssertEqualObjects(reopened.lastUsedIcons, expected);
     XCTAssertEqualObjects(reopened.categoriesByKeyName[reopened.lastUsedKey].iconKeys, expected);
+}
+
+- (void)testLastUsedIconsStartupMigrationRunsOnlyOnce
+{
+    [self setLastUsedIconsMigrationCompleted:NO];
+    NSArray<NSString *> *legacy = @[@"mx_defibrillator", @"defibrillator"];
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:legacy];
+    [OAMigrationManager.shared migrateIfNeeded:NO];
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, (@[@"defibrillator"]));
+    XCTAssertTrue([NSUserDefaults.standardUserDefaults boolForKey:@"migrateLastUsedFavoriteIcons"]);
+
+    // Later imports must be handled at the import boundary, not by rerunning startup migration.
+    [OAAppSettings.sharedManager.lastUsedFavIcons set:legacy];
+    [OAMigrationManager.shared migrateIfNeeded:NO];
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, legacy);
+}
+
+- (void)importLastUsedIcons:(NSString *)icons
+{
+    NSString *root = [OsmAndApp.instance.favoritesPath stringByDeletingLastPathComponent];
+    NSString *path = [root stringByAppendingPathComponent:@"general_settings.json"];
+    NSError *error;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:@{@"last_used_favorite_icons": icons} options:0 error:&error];
+    XCTAssertNotNil(data, @"%@", error);
+    XCTAssertTrue([data writeToFile:path options:NSDataWritingAtomic error:&error], @"%@", error);
+    OAGlobalSettingsItem *item = [OAGlobalSettingsItem new];
+    XCTAssertTrue([[item getReader] readFromFile:path error:&error], @"%@", error);
+}
+
+- (void)testLastUsedIconsNormalizeThroughGlobalPreferenceSetter
+{
+    [self setLastUsedIconsMigrationCompleted:YES];
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    NSString *legacy = @"mx_defibrillator,defibrillator,,mx_,mx_barrier_gate,barrier_gate,ic_action_car_dark,"
+                       @"mx_assembly_point,amenity_school,mx_xmas_pyramid,special_star,tourism_hostel,shop_car,"
+                       @"mx_blood_donation,mx_amenity_biergarten,activities_electric_bike,special_bicycle";
+    [settings setGlobalPreference:legacy key:@"last_used_favorite_icons"];
+    NSArray<NSString *> *expected = @[
+        @"defibrillator", @"barrier_gate", @"ic_action_car_dark", @"assembly_point", @"amenity_school",
+        @"xmas_pyramid", @"special_star", @"tourism_hostel", @"shop_car", @"blood_donation",
+        @"amenity_biergarten", @"activities_electric_bike"
+    ];
+    XCTAssertEqualObjects(settings.lastUsedFavIcons.get, expected);
+    NSString *exported = [[settings getGlobalPreference:@"last_used_favorite_icons"] toStringValue:nil];
+    XCTAssertEqualObjects(exported, [expected componentsJoinedByString:@","]);
+    [settings setGlobalPreference:exported key:@"last_used_favorite_icons"];
+    XCTAssertEqualObjects(settings.lastUsedFavIcons.get, expected);
+
+    [settings setGlobalPreference:@"" key:@"last_used_favorite_icons"];
+    XCTAssertEqualObjects(settings.lastUsedFavIcons.get, @[]);
+}
+
+- (void)testLastUsedIconsImportedAfterStartupAreNormalizedForBothConsumers
+{
+    [self setLastUsedIconsMigrationCompleted:YES];
+    [self importLastUsedIcons:@"mx_defibrillator,defibrillator,,mx_,mx_barrier_gate,barrier_gate,ic_action_car_dark"];
+    NSArray<NSString *> *expected = @[@"defibrillator", @"barrier_gate", @"ic_action_car_dark"];
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, expected);
+    ButtonAppearanceIconCollectionHandler *buttons = [[ButtonAppearanceIconCollectionHandler alloc] initWithCustomIconKeys:@[]];
+    XCTAssertEqualObjects(buttons.categoriesByKeyName[buttons.lastUsedKey].iconKeys, expected);
+    PoiIconCollectionHandler *icons = [PoiIconCollectionHandler new];
+    XCTAssertEqualObjects(icons.lastUsedIcons, expected);
+    XCTAssertEqualObjects(icons.categoriesByKeyName[icons.lastUsedKey].iconKeys, expected);
+
+    [self importLastUsedIcons:@""];
+    XCTAssertEqualObjects(OAAppSettings.sharedManager.lastUsedFavIcons.get, @[]);
+    ButtonAppearanceIconCollectionHandler *emptyButtons = [[ButtonAppearanceIconCollectionHandler alloc] initWithCustomIconKeys:@[]];
+    XCTAssertNil(emptyButtons.categoriesByKeyName[emptyButtons.lastUsedKey]);
+    PoiIconCollectionHandler *emptyIcons = [PoiIconCollectionHandler new];
+    XCTAssertEqualObjects(emptyIcons.lastUsedIcons, @[]);
+    XCTAssertNil(emptyIcons.categoriesByKeyName[emptyIcons.lastUsedKey]);
 }
 
 - (void)testLastUsedIconsKeepRecencyAndLimitWithMixedNames

@@ -150,22 +150,7 @@ final class PoiIconCollectionHandler: BasePoiIconCollectionHandler {
     }
     
     override func lastUsed() -> [String] {
-        let storedIcons = OAAppSettings.sharedManager().lastUsedFavIcons.get()
-        var icons: [String] = []
-        // Older iOS builds stored both prefixed and unprefixed names. Keep the newest occurrence.
-        for storedIcon in storedIcons {
-            let iconKey = storedIcon.removePrefix("mx_")
-            if !iconKey.isEmpty && !icons.contains(iconKey) {
-                icons.append(iconKey)
-                if icons.count == lastUsedIconsLimit {
-                    break
-                }
-            }
-        }
-        if icons != storedIcons {
-            saveLastUsed(icons)
-        }
-        return icons
+        OAAppSettings.sharedManager().lastUsedFavIcons.get()
     }
 
     func setOriginalIcon(_ iconName: String) {

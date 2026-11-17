@@ -549,6 +549,12 @@ typedef NS_ENUM(NSInteger, EOADistanceByTapTextSizeConstant)
 
 @end
 
+@interface OACommonLastUsedFavoriteIcons : OACommonStringList
+
+- (NSArray<NSString *> *)normalizedIcons:(NSArray<NSString *> *)storedIcons;
+
+@end
+
 @interface OACommonListOfStringList : OACommonPreference
 
 + (instancetype) withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
@@ -1540,7 +1546,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
 @property (nonatomic) OACommonString *currentTrackRouteActivity;
 
-@property (nonatomic) OACommonStringList *lastUsedFavIcons;
+@property (nonatomic) OACommonLastUsedFavoriteIcons *lastUsedFavIcons;
 @property (nonatomic) OACommonStringList *lastUsedProfileIcons;
 
 @property (nonatomic) OACommonString *gpsStatusApp;

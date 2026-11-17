@@ -1341,6 +1341,7 @@
                                           color:color
                                        iconName:iconName
                              backgroundIconName:backgroundIconName];
+            [OAFavoritesHelper saveCurrentPointsIntoFile];
             group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
         }
         resolvedIconName = _iconSelectedByUser ? _selectedIconName : [self iconNameForGroup:group];

@@ -516,6 +516,10 @@ final class WidgetPanelAppearanceResolver: NSObject {
         OAIAPHelper.isMapsPlusAvailable() || OAIAPHelper.isOsmAndProAvailable()
     }
 
+    static func effectiveBackgroundMode(_ requestedMode: WidgetPanelBackgroundMode) -> WidgetPanelBackgroundMode {
+        requestedMode == .custom && !isCustomBackgroundAvailable ? .default : requestedMode
+    }
+
     @objc(resolveForPanel:appMode:nightMode:) static func resolve(
         panel: WidgetsPanel,
         appMode: OAApplicationMode,
@@ -538,9 +542,7 @@ final class WidgetPanelAppearanceResolver: NSObject {
         let requestedBackgroundMode: WidgetPanelBackgroundMode = colorPreview?.target == .background
             ? .custom
             : settings.backgroundMode(for: panel)
-        let backgroundMode = requestedBackgroundMode == .custom && !isCustomBackgroundAvailable
-            ? .default
-            : requestedBackgroundMode
+        let backgroundMode = effectiveBackgroundMode(requestedBackgroundMode)
         let transparent = backgroundMode == .transparent
         var backgroundColor = WidgetPanelAppearanceSettings.defaultColor(for: .background,
                                                                          panel: panel,
@@ -633,7 +635,7 @@ final class WidgetPanelAppearanceResolver: NSObject {
             : nil
         let settings = WidgetPanelAppearanceSettings(appMode: appMode, layoutMode: layoutMode)
         let requestedMode = settings.backgroundMode(for: panel)
-        let mode = requestedMode == .custom && !isCustomBackgroundAvailable ? .default : requestedMode
+        let mode = effectiveBackgroundMode(requestedMode)
         switch mode {
         case .default:
             return WidgetPanelAppearanceSettings.defaultColor(for: .background,

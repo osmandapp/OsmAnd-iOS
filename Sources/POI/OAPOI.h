@@ -22,6 +22,8 @@ extern NSString * const OPERATOR_TAG;
 extern NSString * const DESCRIPTION_TAG;
 extern NSString * const ROUTE_TAG;
 extern NSString * const OPENING_HOURS_TAG;
+extern NSString * const XMAS_OPENING_HOURS_TAG;
+extern NSString * const XMAS_DAY_DATE_TAG;
 extern NSString * const POPULATION_TAG;
 extern NSString * const WIDTH_TAG;
 extern NSString * const HEIGHT_TAG;

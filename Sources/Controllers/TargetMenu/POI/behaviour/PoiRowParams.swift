@@ -6,6 +6,8 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 final class PoiRowParams: NSObject {
     
     var builder: AmenityInfoRowParams.Builder 
@@ -14,13 +16,15 @@ final class PoiRowParams: NSObject {
     var key: String
     var value: String
     var subtype: String?
+    var additionalInfo: AdditionalInfoBundle?
     
-    init(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType? = nil, rule: PoiAdditionalUiRule, key: String, value: String, subtype: String?) {
+    init(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType? = nil, rule: PoiAdditionalUiRule, key: String, value: String, subtype: String?, additionalInfo: AdditionalInfoBundle? = nil) {
         self.builder = builder
         self.poiType = poiType
         self.rule = rule
         self.key = key
         self.value = value
         self.subtype = subtype
+        self.additionalInfo = additionalInfo
     }
 }

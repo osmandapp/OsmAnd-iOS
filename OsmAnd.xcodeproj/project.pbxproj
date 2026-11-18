@@ -214,6 +214,7 @@
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
 		321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */; };
+		21B2C06B91D0342B9EDC0C1B /* XmasOpeningHoursRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FDAEBD11384949EF49255C /* XmasOpeningHoursRowBehavior.swift */; };
 		321C838A2F335A780028FCCC /* OAOpeningHoursParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321C83892F335A740028FCCC /* OAOpeningHoursParser.mm */; };
 		321C838C2F337D910028FCCC /* MetricRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */; };
 		321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838D2F33BBD50028FCCC /* CapacityRowBehaviour.swift */; };
@@ -2613,6 +2614,7 @@
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
 		3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesUtils.swift; sourceTree = "<group>"; };
 		321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursRowBehavior.swift; sourceTree = "<group>"; };
+		35FDAEBD11384949EF49255C /* XmasOpeningHoursRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XmasOpeningHoursRowBehavior.swift; sourceTree = "<group>"; };
 		321C83882F335A150028FCCC /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpeningHoursParser.h; sourceTree = "<group>"; };
 		321C83892F335A740028FCCC /* OAOpeningHoursParser.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpeningHoursParser.mm; sourceTree = "<group>"; };
 		321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricRowBehaviour.swift; sourceTree = "<group>"; };
@@ -6246,6 +6248,7 @@
 				321C83992F33CC120028FCCC /* PopulationRowBehaviour.swift */,
 				321C839B2F33CDBE0028FCCC /* UsMapsRecreationAreaRowBehaviour.swift */,
 				321C839D2F33CED50028FCCC /* WikipediaRowBehavior.swift */,
+				35FDAEBD11384949EF49255C /* XmasOpeningHoursRowBehavior.swift */,
 			);
 			path = behaviour;
 			sourceTree = "<group>";
@@ -13778,6 +13781,7 @@
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
 				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
 				321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */,
+				21B2C06B91D0342B9EDC0C1B /* XmasOpeningHoursRowBehavior.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
 				D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,

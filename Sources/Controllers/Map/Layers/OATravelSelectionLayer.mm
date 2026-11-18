@@ -8,6 +8,10 @@
 
 #import "OATravelSelectionLayer.h"
 #import "OAPointDescription.h"
+#import "OAAmenitySearcher.h"
+#import "OANetworkRouteDrawable.h"
+#import "OAPOI.h"
+#import "OsmAndSharedWrapper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -111,13 +115,23 @@
             targetPoint.type = OATargetGPX;
             targetPoint.targetObj = travelGpx;
             targetPoint.location = CLLocationCoordinate2DMake(travelGpx.lat, travelGpx.lon);
-            targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
+            targetPoint.icon = [self getRouteIcon:travelGpx];
             targetPoint.title = [self getObjectName:pair].name;
             targetPoint.sortIndex = (NSInteger)targetPoint.type;
             return targetPoint;
         }
     }
     return nil;
+}
+
+// a route found on the map keeps its poi in the shared article, and the poi's shield tags draw the route's own icon
+- (UIImage *)getRouteIcon:(OATravelGpx *)travelGpx
+{
+    OASTravelGpx *sharedGpx = [travelGpx.sharedArticle isKindOfClass:OASTravelGpx.class] ? (OASTravelGpx *)travelGpx.sharedArticle : nil;
+    OASAmenity *amenity = [sharedGpx getAmenity];
+    OAPOI *poi = amenity ? [OAAmenitySearcher parsePOIBySharedAmenity:amenity filterTypes:NO] : nil;
+    UIImage *shieldIcon = poi ? [OANetworkRouteDrawable getIconByAmenityShieldTags:poi textSize:18] : nil;
+    return shieldIcon ?: [UIImage imageNamed:ACImageNameIcCustomTrip];
 }
 
 - (OATargetPoint *)getTargetPointCpp:(const void *)obj

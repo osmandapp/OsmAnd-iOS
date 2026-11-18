@@ -235,7 +235,7 @@ final class AmenityUIHelper: NSObject {
 
         if let additionalType = resolvedType?.additionalType,
            let pType = helper.getAnyPoiAdditionalType(byKey: additionalType.getKeyName()) as? OAPOIType {
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype, additionalInfo: additionalInfo)
         } else {
             let useGenericFallback = genericRowKeys.contains(key)
             let displayKey = useGenericFallback ? Self.genericFallbackDisplayKey(key) : key
@@ -246,7 +246,7 @@ final class AmenityUIHelper: NSObject {
             fallbackType.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
                 ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
             let displayValue = useGenericFallback ? cleanValue : helper.translation(cleanValue, withDefault: false) ?? cleanValue
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: fallbackType, key: key, value: displayValue, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: fallbackType, key: key, value: displayValue, subtype: subtype, additionalInfo: additionalInfo)
             if useGenericFallback {
                 rowParamsBuilder.iconName = Self.defaultAmenityIconName
             }

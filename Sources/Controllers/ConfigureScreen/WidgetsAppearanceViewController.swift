@@ -85,14 +85,6 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
         updateSubview(true)
     }
 
-    override func viewSafeAreaInsetsDidChange() {
-        super.viewSafeAreaInsetsDidChange()
-        let horizontalSafeInset = max(view.safeAreaInsets.left, view.safeAreaInsets.right)
-        guard horizontalSafeInset != subviewHorizontalSafeInset else { return }
-        subviewHorizontalSafeInset = horizontalSafeInset
-        updateSubview(true)
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         previewView.releaseHostedWidgets()
@@ -112,6 +104,14 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                                      with coordinator: UIViewControllerTransitionCoordinator) {
         previewView.preserveCurrentPage()
         super.viewWillTransition(to: size, with: coordinator)
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        let horizontalSafeInset = max(view.safeAreaInsets.left, view.safeAreaInsets.right)
+        guard horizontalSafeInset != subviewHorizontalSafeInset else { return }
+        subviewHorizontalSafeInset = horizontalSafeInset
+        updateSubview(true)
     }
 
     override func getTitle() -> String {
@@ -247,7 +247,8 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
                            value: mode.title,
                            menu: createTextColorMenu(kind: .secondary))
         case .backgroundColor:
-            let mode = appearanceSettings.backgroundMode(for: selectedPanel)
+            let mode = WidgetPanelAppearanceResolver.effectiveBackgroundMode(
+                appearanceSettings.backgroundMode(for: selectedPanel))
             cell.configure(title: title,
                            preview: .color(resolvedAppearance.backgroundColor),
                            value: mode.title,
@@ -372,7 +373,8 @@ final class WidgetsAppearanceViewController: OABaseNavbarSubviewViewController {
     }
 
     private func createBackgroundMenu() -> UIMenu {
-        let selectedMode = appearanceSettings.backgroundMode(for: selectedPanel)
+        let selectedMode = WidgetPanelAppearanceResolver.effectiveBackgroundMode(
+            appearanceSettings.backgroundMode(for: selectedPanel))
         let actions = WidgetPanelBackgroundMode.allCases.map { mode in
             UIAction(title: mode.title,
                      state: mode == selectedMode ? .on : .off) { [weak self] _ in
@@ -1098,9 +1100,9 @@ final class WidgetPanelPreviewView: UIView, WidgetPanelDelegate {
                 // orientation. Replace it synchronously with the layout being
                 // edited, before UIKit can render the intermediate empty panel.
                 self.populatePreviewWidgetsIfNeeded(in: controller,
-                                                     panel: panel,
-                                                     appMode: appMode,
-                                                     layoutMode: layoutMode)
+                                                    panel: panel,
+                                                    appMode: appMode,
+                                                    layoutMode: layoutMode)
             }
             self.restoreCurrentPage(in: controller, for: panel)
             self.refreshExcludedWidgets()
@@ -1608,7 +1610,6 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        isAccessibilityElement = false
         previewContainer.isHidden = false
         valueButton.isHidden = false
         titleLabel.textColor = .textColorPrimary
@@ -1616,20 +1617,15 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         accessibilityLabel = nil
         accessibilityValue = nil
         accessibilityTraits = []
-        valueButton.accessibilityLabel = nil
-        valueButton.accessibilityValue = nil
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if !valueButton.isHidden {
-            valueButton.accessibilityFrame = UIAccessibility.convertToScreenCoordinates(bounds, in: self)
-        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         updateLayoutForContentSizeCategory()
+    }
+
+    override func accessibilityActivate() -> Bool {
+        valueButton.isHidden ? super.accessibilityActivate() : valueButton.accessibilityActivate()
     }
 
     func configure(title: String, preview: Preview, value: String, menu: UIMenu) {
@@ -1657,10 +1653,10 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         valueButton.menu = menu
         valueButton.showsMenuAsPrimaryAction = true
         valueButton.changesSelectionAsPrimaryAction = false
-        isAccessibilityElement = false
-        valueButton.accessibilityLabel = title
-        valueButton.accessibilityValue = value
-        valueButton.accessibilityTraits = .button
+        isAccessibilityElement = true
+        accessibilityLabel = title
+        accessibilityValue = value
+        accessibilityTraits = .button
     }
 
     func configureReset(title: String) {
@@ -1668,8 +1664,6 @@ private final class WidgetsAppearanceOptionCell: UITableViewCell {
         valueButton.isHidden = true
         valueButton.configuration = nil
         valueButton.menu = nil
-        valueButton.accessibilityLabel = nil
-        valueButton.accessibilityValue = nil
         titleLeadingToPreviewConstraint.isActive = false
         titleLeadingToContentConstraint.isActive = true
         titleLabel.text = title

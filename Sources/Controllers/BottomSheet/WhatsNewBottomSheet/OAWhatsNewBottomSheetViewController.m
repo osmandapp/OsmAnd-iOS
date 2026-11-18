@@ -14,6 +14,7 @@
 #import "OALinks.h"
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAAppSettings.h"
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 20.
@@ -27,6 +28,19 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
++ (NSString *) getReleaseNotes
+{
+    // a missing ios_release_x_y string is localized to an empty string
+    NSString *releaseNotes = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersion getVersionWithSeparator:@"_"]]);
+    return releaseNotes.length > 0 ? releaseNotes : nil;
+}
+
++ (BOOL) hasUnseenReleaseNotes
+{
+    NSString *releaseNotes = [self getReleaseNotes];
+    return releaseNotes && ![[HashHelper md5Hex:releaseNotes] isEqualToString:[OAAppSettings sharedManager].lastShownReleaseNotes];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.delegate = self;
@@ -34,6 +48,10 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.sectionHeaderHeight = kVerticalMargin;
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_poi.png"]];
+
+    NSString *releaseNotes = [self.class getReleaseNotes];
+    if (releaseNotes)
+        [OAAppSettings sharedManager].lastShownReleaseNotes = [HashHelper md5Hex:releaseNotes];
 }
 
 - (void) adjustFrame
@@ -65,7 +83,7 @@
 - (NSMutableAttributedString *)getAttributedContentText
 {
     NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), OAAppVersion.getVersion];
-    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersion getVersionWithSeparator:@"_"]]);
+    NSString *description = [self.class getReleaseNotes] ?: @"";
     
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
     NSRange boldRange = NSMakeRange(0, title.length);

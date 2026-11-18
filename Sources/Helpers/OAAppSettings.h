@@ -979,6 +979,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *settingMapLanguageTranslit;
 
 @property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
+// hash of the release notes the "What's new" screen was already shown for
+@property (nonatomic, nullable) NSString *lastShownReleaseNotes;
 
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;

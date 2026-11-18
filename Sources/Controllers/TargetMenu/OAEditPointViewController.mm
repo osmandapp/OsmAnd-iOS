@@ -1693,12 +1693,14 @@
 
         if (_isNewItemAdding && group)
         {
-            if (!_iconSelectedByUser && group.iconName.length > 0 && [OAUtilities getMxIcon:group.iconName] != nil)
+            NSString *iconName = group.iconName.length > 0 ? group.iconName : DEFAULT_ICON_NAME_KEY;
+            if (!_iconSelectedByUser && [OAUtilities getMxIcon:iconName] != nil)
             {
-                _selectedIconName = group.iconName;
+                _selectedIconName = iconName;
                 [self selectIconInController];
             }
-            NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:group.backgroundType ?: @""];
+            NSString *backgroundType = group.backgroundType.length > 0 ? group.backgroundType : DEFAULT_ICON_SHAPE_KEY;
+            NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundType];
             if (backgroundIndex != NSNotFound)
                 _selectedBackgroundIndex = backgroundIndex;
         }

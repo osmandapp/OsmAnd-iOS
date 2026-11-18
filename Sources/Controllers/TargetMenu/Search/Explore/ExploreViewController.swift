@@ -345,6 +345,7 @@ extension ExploreViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
             cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record.item, traitCollection: traitCollection),
                                                                   title: record.item.name ?? "",
+                                                                  iconStyle: .plate,
                                                                   secondaryContent: historySecondaryContent(for: record))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             return cell

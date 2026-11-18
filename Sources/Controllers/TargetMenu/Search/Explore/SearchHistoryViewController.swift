@@ -212,6 +212,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
         cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record.item, traitCollection: traitCollection),
                                                               title: record.item.name ?? "",
+                                                              iconStyle: .plate,
                                                               secondaryContent: secondaryContent(for: record))
         cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
         return cell

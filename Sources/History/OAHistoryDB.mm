@@ -122,6 +122,13 @@
                 }
                 if (errMsg != NULL) sqlite3_free(errMsg);
 
+                sql_stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = 0 WHERE %@ IS NULL", TABLE_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_FROM_NAVIGATION] UTF8String];
+                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                {
+                    OALog(@"Failed to migrate %@: %@", POINT_COL_FROM_NAVIGATION, errMsg ? [NSString stringWithUTF8String:errMsg] : @"");
+                }
+                if (errMsg != NULL) sqlite3_free(errMsg);
+
                 sqlite3_close(historyDB);
             }
             else

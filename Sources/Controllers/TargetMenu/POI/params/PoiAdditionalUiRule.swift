@@ -6,6 +6,8 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 final class PoiAdditionalUiRule: NSObject {
     
     var key: String
@@ -23,8 +25,8 @@ final class PoiAdditionalUiRule: NSObject {
         self.key = key
     }
     
-    func apply(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType, key: String, value: String, subtype: String?) {
-        let params = PoiRowParams(builder: builder, poiType: poiType, rule: self, key: key, value: value, subtype: subtype)
+    func apply(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType, key: String, value: String, subtype: String?, additionalInfo: AdditionalInfoBundle? = nil) {
+        let params = PoiRowParams(builder: builder, poiType: poiType, rule: self, key: key, value: value, subtype: subtype, additionalInfo: additionalInfo)
         apply(params: params)
     }
     

@@ -23,7 +23,8 @@ final class LiveActivityCoordinator: NSObject {
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.locationServices.statusObservable),
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.trackRecordingObservable),
             OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.trackStartStopRecObservable),
-            OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.applicationModeChangedObservable)
+            OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: app.applicationModeChangedObservable),
+            OAAutoObserverProxy(self, withHandler: refreshSelector, andObserve: OARoutingHelper.sharedInstance().routingModeChangedObservable)
         ].compactMap { $0 }
         NotificationCenter.default.addObserver(self, selector: refreshSelector, name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: refreshSelector, name: NSNotification.Name(kNotificationSetProfileSetting), object: nil)

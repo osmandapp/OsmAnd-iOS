@@ -33,8 +33,6 @@
 
 #define kOsmAndNavigation @"osmand_navigation"
 
-static const CGFloat kOpenSettingsRowHeight = 44.0;
-
 @interface OAProfileNavigationSettingsViewController () <OARouteLineAppearanceViewControllerDelegate>
 
 @end
@@ -159,8 +157,7 @@ static const CGFloat kOpenSettingsRowHeight = 44.0;
                 @"type" : OASimpleTableViewCell.reuseIdentifier,
                 @"title" : OALocalizedString(@"ant_plus_open_settings"),
                 @"titleColor" : [UIColor colorNamed:ACColorNameTextColorActive],
-                @"accessoryType" : @(UITableViewCellAccessoryNone),
-                @"height" : @(kOpenSettingsRowHeight)
+                @"accessoryType" : @(UITableViewCellAccessoryNone)
             }];
         }
         [tableData addObject:liveActivityRows];
@@ -190,13 +187,6 @@ static const CGFloat kOpenSettingsRowHeight = 44.0;
 - (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSNumber *height = item[@"height"];
-    return height ? height.doubleValue : UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
@@ -241,11 +231,7 @@ static const CGFloat kOpenSettingsRowHeight = 44.0;
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             cell.accessoryType = item[@"accessoryType"] ? (UITableViewCellAccessoryType) [item[@"accessoryType"] integerValue] : UITableViewCellAccessoryDisclosureIndicator;
             cell.accessibilityTraits = UIAccessibilityTraitButton;
-            if (item[@"height"])
-            {
-                cell.topContentSpaceView.hidden = YES;
-                cell.bottomContentSpaceView.hidden = YES;
-            }
+            cell.titleLabel.lineBreakMode = [item[@"key"] isEqualToString:@"open_live_activity_settings"] ? NSLineBreakByWordWrapping : NSLineBreakByTruncatingTail;
         }
         return cell;
     }

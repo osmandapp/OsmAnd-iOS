@@ -29,8 +29,6 @@
 
 #define kCellTypeCheck @"check"
 
-static const CGFloat kOpenSettingsRowHeight = 44.0;
-
 @interface OATripRecordingSettingsViewController ()
 
 @property (nonatomic) NSDictionary *settingItem;
@@ -286,8 +284,7 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
                         @"name" : @"open_live_activity_settings",
                         @"type" : OASimpleTableViewCell.reuseIdentifier,
                         @"title" : OALocalizedString(@"ant_plus_open_settings"),
-                        @"titleColor" : [UIColor colorNamed:ACColorNameTextColorActive],
-                        @"height" : @(kOpenSettingsRowHeight)
+                        @"titleColor" : [UIColor colorNamed:ACColorNameTextColorActive]
                     }];
                 }
                 [dataArr addObject:liveActivityRows];
@@ -534,13 +531,6 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
     }
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSNumber *height = item[@"height"];
-    return height ? height.doubleValue : UITableViewAutomaticDimension;
-}
-
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
@@ -634,11 +624,6 @@ static NSArray<NSNumber *> *minTrackSpeedValues;
             cell.titleLabel.attributedText = item[@"title"];
         else
             cell.titleLabel.text = item[@"title"];
-        if (item[@"height"])
-        {
-            cell.topContentSpaceView.hidden = YES;
-            cell.bottomContentSpaceView.hidden = YES;
-        }
         return cell;
     }
     else if ([type isEqualToString:OARightIconTableViewCell.reuseIdentifier])

@@ -18,8 +18,6 @@ final class CarPlayService: NSObject {
     static let shared = CarPlayService()
     
     private let navigationModeProvider = CarPlayNavigationModeProvider()
-    private var connectedScenes: Set<CarPlaySceneType> = []
-    private var shouldCenterOnMyLocation = false
     
     private var sessionConfiguration: CPSessionConfiguration?
     private var lastContentStyle: CPContentStyle?
@@ -30,24 +28,6 @@ final class CarPlayService: NSObject {
     private override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(onSceneDidActivate(_:)), name: UIScene.didActivateNotification, object: nil)
-    }
-
-    func connectScene(_ sceneType: CarPlaySceneType) {
-        if connectedScenes.isEmpty {
-            shouldCenterOnMyLocation = true
-        }
-        connectedScenes.insert(sceneType)
-    }
-
-    func centerOnMyLocationIfNeeded() {
-        guard shouldCenterOnMyLocation, !connectedScenes.isEmpty else { return }
-        shouldCenterOnMyLocation = false
-
-        guard let app = OsmAndApp.swiftInstance(), let locationServices = app.locationServices, !locationServices.denied else { return }
-        app.mapMode = .positionTrack
-        if locationServices.status == .suspended {
-            locationServices.resume()
-        }
     }
 
     func configure() {
@@ -63,7 +43,6 @@ final class CarPlayService: NSObject {
     }
     
     func disconnectScene(_ sceneType: CarPlaySceneType) {
-        connectedScenes.remove(sceneType)
         guard OsmAndApp.swiftInstance().initialized else {
             return
         }

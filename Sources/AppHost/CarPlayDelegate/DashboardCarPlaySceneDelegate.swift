@@ -49,7 +49,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
                 dashboardVC?.attachMapToWindow()
                 updateMapViewport()
-                CarPlayService.shared.centerOnMyLocationIfNeeded()
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
                 startObservingMapViewportSettings()
             }
         } else {
@@ -125,7 +125,6 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
         self.window = window
-        CarPlayService.shared.connectScene(.dashboard)
         dashboardController.shortcutButtons = createDashboardButtons(for: templateApplicationDashboardScene)
         if isForegroundScene {
             configureScene()
@@ -134,6 +133,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidDisconnect(templateApplicationDashboardScene)
         CarPlayService.shared.disconnectScene(.dashboard)
         stopObservingMapViewportSettings()
         dashboardVC?.detachFromCarPlayWindow()

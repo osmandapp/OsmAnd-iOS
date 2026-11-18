@@ -78,7 +78,7 @@ final class CarPlaySceneDelegate: UIResponder {
                 mapVc = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
             }
-            CarPlayService.shared.centerOnMyLocationIfNeeded()
+            CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
             carPlayDashboardController?.delegate = carPlayMapController
@@ -151,7 +151,6 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         windowToAttach = window
         carPlayInterfaceController = interfaceController
         interfaceController.delegate = self
-        CarPlayService.shared.connectScene(.app)
         if isWaitingForConfiguration, isForegroundScene {
             isWaitingForConfiguration = false
             configureScene()
@@ -163,6 +162,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         dismissListControllers()
         interfaceController.delegate = nil
         
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidDisconnect(templateApplicationScene)
         CarPlayService.shared.disconnectScene(.app)
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")

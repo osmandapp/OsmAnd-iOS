@@ -284,7 +284,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             OASqliteDbResourceItem *sqliteItem = (OASqliteDbResourceItem *) item;
             OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:sqliteItem.path];
-            return ts.minimumZoomSupported > 0;
+            return MAX(ts.minimumZoomSupported, 1);
         }
     }
     return 1;

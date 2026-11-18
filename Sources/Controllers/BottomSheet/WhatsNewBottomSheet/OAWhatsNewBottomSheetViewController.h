@@ -11,4 +11,7 @@
 
 @interface OAWhatsNewBottomSheetViewController : OABaseBottomSheetViewController
 
+// NO when there are no release notes for this version, or the same notes were already shown
++ (BOOL) hasUnseenReleaseNotes;
+
 @end

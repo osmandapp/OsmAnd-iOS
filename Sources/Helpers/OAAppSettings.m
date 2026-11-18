@@ -93,6 +93,7 @@ static NSString * const lastReceiptValidationDateKey = @"lastReceiptValidationDa
 static NSString * const eligibleForIntroductoryPriceKey = @"eligibleForIntroductoryPriceKey";
 static NSString * const eligibleForSubscriptionOfferKey = @"eligibleForSubscriptionOfferKey";
 static NSString * const shouldShowWhatsNewScreenKey = @"shouldShowWhatsNewScreenKey";
+static NSString * const lastShownReleaseNotesKey = @"lastShownReleaseNotesKey";
 
 static NSString * const mapSettingTrackRecordingKey = @"mapSettingTrackRecordingKey";
 
@@ -5918,6 +5919,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_mapperLiveUpdatesExpireTime forKey:@"mapper_live_updates_expire_time"];
         
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
+        _lastShownReleaseNotes = [[NSUserDefaults standardUserDefaults] stringForKey:lastShownReleaseNotesKey];
         
         // Widgets
         _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
@@ -7294,6 +7296,12 @@ static NSString *kOfflineKey = @"OFFLINE";
 {
     _shouldShowWhatsNewScreen = shouldShowWhatsNewScreen;
     [[NSUserDefaults standardUserDefaults] setBool:_shouldShowWhatsNewScreen forKey:shouldShowWhatsNewScreenKey];
+}
+
+- (void) setLastShownReleaseNotes:(nullable NSString *)lastShownReleaseNotes
+{
+    _lastShownReleaseNotes = lastShownReleaseNotes;
+    [[NSUserDefaults standardUserDefaults] setObject:_lastShownReleaseNotes forKey:lastShownReleaseNotesKey];
 }
 
 // Map Settings

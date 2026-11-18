@@ -540,25 +540,16 @@
 }
 
 // the renderer checks only the class a rule names, so a switched-off parent class is passed on to its children
+// (a parent comes before its children in the style file, so its state is already known)
 - (NSDictionary<NSString *, NSString *> *)getRenderingClassesRendererSettings
 {
-    NSArray<OAMapStyleRenderingClass *> *renderingClasses = [self getRenderingClasses];
-    NSMutableDictionary<NSString *, NSNumber *> *ownStates = [NSMutableDictionary dictionary];
-    for (OAMapStyleRenderingClass *renderingClass in renderingClasses)
-        ownStates[renderingClass.name] = @([self isRenderingClassEnabled:renderingClass]);
-
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary dictionary];
-    for (OAMapStyleRenderingClass *renderingClass in renderingClasses)
+    for (OAMapStyleRenderingClass *renderingClass in [self getRenderingClasses])
     {
-        BOOL enabled = YES;
-        NSString *name = renderingClass.name;
-        while (enabled && name.length > 0)
-        {
-            NSNumber *ownState = ownStates[name];
-            enabled = !ownState || ownState.boolValue;
-            NSRange lastDot = [name rangeOfString:@"." options:NSBackwardsSearch];
-            name = lastDot.location != NSNotFound ? [name substringToIndex:lastDot.location] : @"";
-        }
+        NSRange lastDot = [renderingClass.name rangeOfString:@"." options:NSBackwardsSearch];
+        NSString *parentName = lastDot.location != NSNotFound ? [renderingClass.name substringToIndex:lastDot.location] : nil;
+        BOOL isParentEnabled = !parentName || ![rendererSettings[parentName] isEqualToString:@"false"];
+        BOOL enabled = isParentEnabled && [self isRenderingClassEnabled:renderingClass];
         rendererSettings[renderingClass.name] = enabled ? @"true" : @"false";
     }
     return rendererSettings;

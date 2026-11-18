@@ -79,7 +79,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     private let monthFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
+        formatter.setLocalizedDateFormatFromTemplate("LLLLyyyy")
         return formatter
     }()
 
@@ -186,7 +186,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     }
 
     override func rowsCount(_ section: Int) -> Int {
-        guard sections.indices.contains(section) else { return isLoaded ? 1 : 0 }
+        guard sections.indices.contains(section) else { return isLoaded && (isHistoryDisabled || !query.isEmpty) ? 1 : 0 }
         return sections[section].records.count
     }
 
@@ -220,6 +220,10 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         guard let record = record(at: indexPath) else { return }
         onSelectItem?(record.item)
+    }
+
+    private var query: String {
+        searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private var isSearchHistoryEnabled: Bool {
@@ -319,7 +323,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
 
     private func updateDisplayedRecords() {
         isLoaded = true
-        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let query = self.query
         let matchingRecords = query.isEmpty ? records : records.filter { matches($0, query: query) }
         hasRecords = !matchingRecords.isEmpty
         updateCategories(for: matchingRecords)
@@ -334,7 +338,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     }
 
     private func matches(_ record: SearchHistoryRecord, query: String) -> Bool {
-        [record.item.name, record.item.typeName].contains { $0?.localizedCaseInsensitiveContains(query) == true }
+        [record.item.name, record.item.typeName, record.typeText, record.categoryName].contains { $0?.localizedCaseInsensitiveContains(query) == true }
     }
 
     private func updateCategories(for records: [SearchHistoryRecord]) {
@@ -394,10 +398,10 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     }
 
     private func sectionTitle(for date: Date, todayStart: Date, calendar: Calendar) -> String {
-        if calendar.isDate(date, inSameDayAs: todayStart) {
+        let itemStart = calendar.startOfDay(for: date)
+        if itemStart >= todayStart {
             return localizedString("today")
         }
-        let itemStart = calendar.startOfDay(for: date)
         if let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart),
            itemStart >= yesterdayStart, itemStart < todayStart {
             return localizedString("yesterday")
@@ -454,7 +458,9 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
               !tableView.isDragging,
               !tableView.isDecelerating else { return }
         lastDistanceUpdate = now
-        if sortMode == .nearest, let records = sections.first?.records {
+        if sortMode == .nearest,
+           !tableView.visibleCells.contains(where: \.isHighlighted),
+           let records = sections.first?.records {
             let sorted = sortedRecords(records)
             if !sorted.elementsEqual(records, by: { $0.item === $1.item }) {
                 sections = makeSections(for: sorted)

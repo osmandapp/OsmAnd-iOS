@@ -493,6 +493,18 @@
     return [self getPoints:[NSString stringWithFormat:@"WHERE %@ = %d", POINT_COL_FROM_NAVIGATION, 1] limit:limit];
 }
 
+- (NSArray<OAHistoryItem *> *)pointsHavingSearchTypes:(NSArray<NSNumber *> *)searchTypes fromNavigation:(BOOL)fromNavigation limit:(int)limit
+{
+    NSMutableArray<NSString *> *conditions = [NSMutableArray array];
+    if (searchTypes.count > 0)
+        [conditions addObject:[NSString stringWithFormat:@"(%@ = 0 AND %@ IN (%@))", POINT_COL_FROM_NAVIGATION, POINT_COL_TYPE, [searchTypes componentsJoinedByString:@","]]];
+    if (fromNavigation)
+        [conditions addObject:[NSString stringWithFormat:@"%@ = 1", POINT_COL_FROM_NAVIGATION]];
+    if (conditions.count == 0)
+        return @[];
+    return [self getPoints:[NSString stringWithFormat:@"WHERE %@", [conditions componentsJoinedByString:@" OR "]] limit:limit];
+}
+
 - (NSInteger)getPointsCountFromNavigation
 {
     __block NSInteger res;

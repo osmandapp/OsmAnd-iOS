@@ -152,12 +152,18 @@
         long lastAccessedTime = [object[@"lastAccessedTime"] longValue];
 //        NSString *intervals = object[@"intervals"];
 //        NSString *intervalValues = object[@"intervalValues"];
-        BOOL fromNavigation = [object[@"fromNavigation"] boolValue];
+        BOOL fromNavigation = _fromNavigation;
+        if ([object[@"fromNavigation"] isKindOfClass:NSNumber.class])
+            fromNavigation = [object[@"fromNavigation"] boolValue];
+        else if ([object[@"source"] isKindOfClass:NSString.class])
+            fromNavigation = [object[@"source"] isEqualToString:@"NAVIGATION"];
 
         OAPointDescription *pd = [OAPointDescription deserializeFromString:pointDescription l:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
         OAHistoryItem *item = [[OAHistoryItem alloc] initWithPointDescription:pd];
         item.name = pd.name;
         item.iconName = pd.iconName;
+        NSString *typeName = [object[@"typeName"] isKindOfClass:NSString.class] ? object[@"typeName"] : nil;
+        item.typeName = typeName.length > 0 ? typeName : pd.typeName;
         item.latitude = latitude;
         item.longitude = longitude;
         item.date = [NSDate dateWithTimeIntervalSince1970:lastAccessedTime / 1000];
@@ -209,6 +215,7 @@
             //                jsonObject.put("intervals", historyEntry.getIntervals());
             //                jsonObject.put("intervalValues", historyEntry.getIntervalsValues());
             item[@"fromNavigation"] = @(historyEntry.fromNavigation);
+            item[@"source"] = historyEntry.fromNavigation ? @"NAVIGATION" : @"SEARCH";
             [jsonArray addObject:item];
         }
         json[@"items"] = jsonArray;

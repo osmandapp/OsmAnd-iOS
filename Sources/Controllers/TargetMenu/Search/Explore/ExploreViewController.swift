@@ -27,7 +27,7 @@ final class ExploreViewController: UIViewController {
         case noPopularPlaces
         case downloadWikiMaps
         case wikiMap(OAResourceSwiftItem)
-        case historyItem(OAHistoryItem)
+        case historyItem(SearchHistoryRecord)
         case viewAllHistory
         case historyDisabled
     }
@@ -57,7 +57,7 @@ final class ExploreViewController: UIViewController {
     private var rows: [[Row]] = Section.allCases.map { _ in [] }
     private var popularPlaces: [PopularPlace] = []
     private var wikiMapItems: [OAResourceSwiftItem] = []
-    private var historyItems: [OAHistoryItem] = []
+    private var historyRecords: [SearchHistoryRecord] = []
     private var historyGeneration = 0
 
     override func viewDidLoad() {
@@ -77,6 +77,12 @@ final class ExploreViewController: UIViewController {
         popularPlacesSearcher.cancel()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard isViewLoaded, previousTraitCollection?.userInterfaceStyle != traitCollection.userInterfaceStyle else { return }
+        tableView.reloadData()
+    }
+
     @objc func reloadData() {
         reloadHistory()
         reload(.popularPlaces)
@@ -91,9 +97,9 @@ final class ExploreViewController: UIViewController {
                 guard var configuration = cell.contentConfiguration as? PoiContentConfiguration else { return }
                 configuration.secondaryContent = popularPlaceSecondaryContent(for: place)
                 cell.contentConfiguration = configuration
-            case .historyItem(let item):
+            case .historyItem(let record):
                 guard var configuration = cell.contentConfiguration as? PointContentConfiguration else { return }
-                configuration.secondaryContent = historySecondaryContent(for: item)
+                configuration.secondaryContent = historySecondaryContent(for: record)
                 cell.contentConfiguration = configuration
             default:
                 break
@@ -196,7 +202,7 @@ final class ExploreViewController: UIViewController {
             return [.downloadWikiMaps] + wikiMapItems.map { .wikiMap($0) }
         case .history:
             guard isHistoryEnabled() else { return [.historyDisabled] }
-            return historyItems.map { .historyItem($0) } + [.viewAllHistory]
+            return historyRecords.map { .historyItem($0) } + [.viewAllHistory]
         }
     }
 
@@ -219,7 +225,7 @@ final class ExploreViewController: UIViewController {
         historyGeneration += 1
         let generation = historyGeneration
         guard !isCollapsed(.history), isHistoryEnabled() else {
-            historyItems = []
+            historyRecords = []
             reload(.history, animated: animated)
             return
         }
@@ -227,13 +233,12 @@ final class ExploreViewController: UIViewController {
         let searchHistoryEnabled = settings.searchHistory.get()
         let navigationHistoryEnabled = settings.navigationHistory.get()
         historyQueue.async { [weak self] in
-            let helper: OAHistoryHelper = OAHistoryHelper.sharedInstance()
-            let items = searchHistoryEnabled
-                ? helper.getPointsHavingTypes(helper.searchTypes, exceptNavigation: !navigationHistoryEnabled, limit: Self.historyItemsLimit)
-                : helper.getPointsFromNavigation(Self.historyItemsLimit)
+            let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: Self.historyItemsLimit) ?? []
+            let presenter = SearchHistoryItemPresenter()
+            let records = items.map { presenter.record(for: $0) }
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == historyGeneration else { return }
-                historyItems = items ?? []
+                historyRecords = records
                 reload(.history, animated: animated)
             }
         }
@@ -247,11 +252,8 @@ final class ExploreViewController: UIViewController {
         locationReference.secondaryContent(latitude: place.poi.latitude, longitude: place.poi.longitude, trailingText: place.typeName)
     }
 
-    private func historySecondaryContent(for item: OAHistoryItem) -> PointSecondaryContent {
-        let typeName = item.typeName ?? ""
-        return locationReference.secondaryContent(latitude: item.latitude,
-                                                  longitude: item.longitude,
-                                                  address: typeName.isEmpty ? localizedString("shared_string_history") : typeName)
+    private func historySecondaryContent(for record: SearchHistoryRecord) -> PointSecondaryContent {
+        SearchHistoryItemPresenter.secondaryContent(for: record, locationReference: locationReference)
     }
 
     private func actionCell(at indexPath: IndexPath, title: String) -> UITableViewCell {
@@ -306,23 +308,18 @@ final class ExploreViewController: UIViewController {
     }
 
     private func openAllHistory() {
-        let searchHistoryEnabled = settings.searchHistory.get()
-        let navigationHistoryEnabled = settings.navigationHistory.get()
-        let controller: UIViewController?
-        if searchHistoryEnabled && navigationHistoryEnabled {
-            controller = OAGlobalSettingsViewController(settingsType: EOAHistory)
-        } else {
-            controller = OAHistorySettingsViewController(settingsType: searchHistoryEnabled ? EOAHistorySettingsTypeSearch : EOAHistorySettingsTypeNavigation, editing: false)
+        let controller = SearchHistoryViewController()
+        controller.onSelectItem = { [weak self] item in
+            self?.delegate?.exploreDidSelectHistoryItem(item)
         }
-        guard let controller else { return }
         navigationController?.pushViewController(controller, animated: true)
     }
 
     @objc private func onLongPress(_ gesture: UILongPressGestureRecognizer) {
         guard gesture.state == .began,
               let indexPath = tableView.indexPathForRow(at: gesture.location(in: tableView)),
-              case .historyItem(let item) = row(at: indexPath),
-              let controller = OAHistorySettingsViewController(settingsType: item.fromNavigation ? EOAHistorySettingsTypeNavigation : EOAHistorySettingsTypeSearch, editing: true) else { return }
+              case .historyItem(let record) = row(at: indexPath),
+              let controller = OAHistorySettingsViewController(settingsType: record.item.fromNavigation ? EOAHistorySettingsTypeNavigation : EOAHistorySettingsTypeSearch, editing: true) else { return }
         navigationController?.pushViewController(controller, animated: true)
     }
 }
@@ -344,9 +341,11 @@ extension ExploreViewController: UITableViewDataSource {
             cell.contentConfiguration = place.contentConfiguration(style: .compact, secondaryContent: popularPlaceSecondaryContent(for: place))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             return cell
-        case .historyItem(let item):
+        case .historyItem(let record):
             let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
-            cell.contentConfiguration = PointContentConfiguration(icon: item.icon(), title: item.name ?? "", secondaryContent: historySecondaryContent(for: item))
+            cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record.item, traitCollection: traitCollection),
+                                                                  title: record.item.name ?? "",
+                                                                  secondaryContent: historySecondaryContent(for: record))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             return cell
         case .showAllPopularPlaces:
@@ -423,8 +422,8 @@ extension ExploreViewController: UITableViewDelegate {
             openAllPopularPlaces()
         case .wikiMap(let item):
             downloadingHelper.onCellClicked(item.resourceId())
-        case .historyItem(let item):
-            delegate?.exploreDidSelectHistoryItem(item)
+        case .historyItem(let record):
+            delegate?.exploreDidSelectHistoryItem(record.item)
         case .viewAllHistory:
             openAllHistory()
         default:

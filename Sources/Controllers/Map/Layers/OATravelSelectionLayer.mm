@@ -112,7 +112,7 @@
             targetPoint.targetObj = travelGpx;
             targetPoint.location = CLLocationCoordinate2DMake(travelGpx.lat, travelGpx.lon);
             targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
-            targetPoint.title = [travelGpx getGpxFileName];
+            targetPoint.title = [self getObjectName:pair].name;
             targetPoint.sortIndex = (NSInteger)targetPoint.type;
             return targetPoint;
         }

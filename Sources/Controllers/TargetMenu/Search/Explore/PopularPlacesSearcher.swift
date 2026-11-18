@@ -67,6 +67,11 @@ final class PopularPlace {
         return poi.getName(settings.settingPrefMapLanguage.get(), transliterate: settings.settingMapLanguageTranslit.get()) ?? poi.nameLocalized ?? poi.name ?? ""
     }
 
+    var typeName: String? {
+        guard let key = poi.getOsmandPoiKey() ?? poi.subType else { return nil }
+        return OAPOIHelper.sharedInstance().getPoiType(byName: key)?.nameLocalized
+    }
+
     func matches(_ query: String) -> Bool {
         [name, poi.nameLocalized, poi.name]
             .compactMap { $0 }

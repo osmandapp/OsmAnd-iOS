@@ -25,6 +25,7 @@ final class ExploreViewController: UIViewController {
         case popularPlacesLoading
         case noInternet
         case noPopularPlaces
+        case downloadWikiMaps
         case wikiMap(OAResourceSwiftItem)
         case historyItem(OAHistoryItem)
         case viewAllHistory
@@ -88,7 +89,7 @@ final class ExploreViewController: UIViewController {
             switch row(at: indexPath) {
             case .popularPlace(let place):
                 guard var configuration = cell.contentConfiguration as? PoiContentConfiguration else { return }
-                configuration.secondaryContent = popularPlaceSecondaryContent(for: place.poi)
+                configuration.secondaryContent = popularPlaceSecondaryContent(for: place)
                 cell.contentConfiguration = configuration
             case .historyItem(let item):
                 guard var configuration = cell.contentConfiguration as? PointContentConfiguration else { return }
@@ -189,7 +190,10 @@ final class ExploreViewController: UIViewController {
             if popularPlacesSearcher.isLoading {
                 return [.popularPlacesLoading]
             }
-            return [.noPopularPlaces] + wikiMapItems.map { .wikiMap($0) }
+            if wikiMapItems.isEmpty {
+                return [.noPopularPlaces]
+            }
+            return [.downloadWikiMaps] + wikiMapItems.map { .wikiMap($0) }
         case .history:
             guard isHistoryEnabled() else { return [.historyDisabled] }
             return historyItems.map { .historyItem($0) } + [.viewAllHistory]
@@ -239,8 +243,8 @@ final class ExploreViewController: UIViewController {
         SearchLocationReference(searchNearMapCenter: searchNearMapCenter, searchLocation: searchLocation)
     }
 
-    private func popularPlaceSecondaryContent(for poi: OAPOI) -> PointSecondaryContent {
-        locationReference.secondaryContent(latitude: poi.latitude, longitude: poi.longitude, trailingText: poi.type?.nameLocalized)
+    private func popularPlaceSecondaryContent(for place: PopularPlace) -> PointSecondaryContent {
+        locationReference.secondaryContent(latitude: place.poi.latitude, longitude: place.poi.longitude, trailingText: place.typeName)
     }
 
     private func historySecondaryContent(for item: OAHistoryItem) -> PointSecondaryContent {
@@ -256,8 +260,22 @@ final class ExploreViewController: UIViewController {
         cell.leftIconVisibility(false)
         cell.descriptionVisibility(false)
         cell.titleLabel.text = title
+        cell.titleLabel.font = .preferredFont(forTextStyle: .body)
         cell.titleLabel.textColor = .textColorActive
         cell.accessibilityTraits = .button
+        return cell
+    }
+
+    private func downloadWikiMapsCell(at indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as? OASimpleTableViewCell else { return UITableViewCell() }
+        cell.selectionStyle = .none
+        cell.leftIconVisibility(false)
+        cell.descriptionVisibility(true)
+        cell.titleLabel.text = localizedString("shared_string_download_map")
+        cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
+        cell.titleLabel.textColor = .textColorPrimary
+        cell.descriptionLabel.text = localizedString("wiki_menu_download_descr")
+        cell.accessibilityTraits = .header
         return cell
     }
 
@@ -271,7 +289,7 @@ final class ExploreViewController: UIViewController {
     }
 
     private func openHistorySettings() {
-        guard let controller = OAHistorySettingsViewController(settingsType: EOAHistorySettingsTypeSearch, editing: false) else { return }
+        guard let controller = OAGlobalSettingsViewController(settingsType: EOAHistory) else { return }
         dismiss(animated: true)
         OARootViewController.instance()?.navigationController?.pushViewController(controller, animated: true)
     }
@@ -323,7 +341,7 @@ extension ExploreViewController: UITableViewDataSource {
         switch row {
         case .popularPlace(let place):
             let cell = tableView.dequeueReusableCell(withIdentifier: PoiContentTableViewCell.reuseIdentifier, for: indexPath)
-            cell.contentConfiguration = place.contentConfiguration(style: .compact, secondaryContent: popularPlaceSecondaryContent(for: place.poi))
+            cell.contentConfiguration = place.contentConfiguration(style: .compact, secondaryContent: popularPlaceSecondaryContent(for: place))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
             return cell
         case .historyItem(let item):
@@ -355,19 +373,21 @@ extension ExploreViewController: UITableViewDataSource {
         case .noPopularPlaces:
             guard let cell = emptyCell(at: indexPath) else { return UITableViewCell() }
             cell.configure(title: localizedString("no_places_available"),
-                           description: wikiMapItems.isEmpty ? "" : localizedString("wiki_menu_download_descr"),
-                           icon: .icCustomWikipedia,
+                           description: localizedString("no_photos_available_descr"),
+                           icon: .icCustomDesert,
                            iconTint: .iconColorDefault)
             return cell
+        case .downloadWikiMaps:
+            return downloadWikiMapsCell(at: indexPath)
         case .wikiMap(let item):
             return downloadingHelper.getOrCreateCell(item.resourceId(), swiftResourceItem: item) ?? UITableViewCell()
         case .historyDisabled:
             guard let cell = emptyCell(at: indexPath) else { return UITableViewCell() }
-            cell.configure(title: localizedString("search_history_disabled"),
-                           description: localizedString("enable_search_history"),
+            cell.configure(title: localizedString("history_is_turned_off"),
+                           description: localizedString("search_and_navigation_history_disabled_descr"),
                            icon: .icCustomHistoryDisabled48,
                            iconTint: .iconColorDefault,
-                           actionTitle: localizedString("shared_string_settings"),
+                           actionTitle: localizedString("open_history_settings"),
                            action: { [weak self] in self?.openHistorySettings() })
             return cell
         }

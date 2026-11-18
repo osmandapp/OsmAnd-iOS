@@ -249,7 +249,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     private func secondaryContent(for place: PopularPlace) -> PointSecondaryContent {
         locationReference.secondaryContent(latitude: place.poi.latitude,
                                            longitude: place.poi.longitude,
-                                           trailingText: place.poi.type?.nameLocalized)
+                                           trailingText: place.typeName)
     }
 
     private func updateDisplayedPlaces() {

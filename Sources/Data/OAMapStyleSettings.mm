@@ -42,6 +42,22 @@
 @implementation OAMapStyleParameterValue
 @end
 
+@implementation OAMapStyleRenderingClass
+
+- (instancetype)initWithName:(NSString *)name title:(NSString *)title enabledByDefault:(BOOL)enabledByDefault
+{
+    self = [super init];
+    if (self)
+    {
+        _name = name;
+        _title = title;
+        _enabledByDefault = enabledByDefault;
+    }
+    return self;
+}
+
+@end
+
 @interface OAMapStyleSettings ()
 
 @property (nonatomic) NSString *mapStyleName;
@@ -462,6 +478,89 @@
     if (color.length > 0)
         rendererSettings[@"base3DBuildingsColor"] = color;
     
+    return rendererSettings;
+}
+
+- (NSArray<OAMapStyleRenderingClass *> *)getRenderingClasses
+{
+    const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(self.mapStyleName));
+    if (resolvedMapStyle == nullptr)
+        return @[];
+
+    // the style keeps its classes in a hash, their name ids follow the order of the style file
+    auto symbolClasses = resolvedMapStyle->getSymbolClasses();
+    std::sort(symbolClasses.begin(), symbolClasses.end(), [](const auto& left, const auto& right) {
+        return left->getNameId() < right->getNameId();
+    });
+
+    NSMutableArray<OAMapStyleRenderingClass *> *renderingClasses = [NSMutableArray array];
+    for (const auto& symbolClass : symbolClasses)
+    {
+        NSString *name = resolvedMapStyle->getStringById(symbolClass->getNameId()).toNSString();
+        [renderingClasses addObject:[[OAMapStyleRenderingClass alloc] initWithName:name
+                                                                            title:symbolClass->getTitle().toNSString()
+                                                                 enabledByDefault:symbolClass->getDefaultSetting()]];
+    }
+    return renderingClasses;
+}
+
+- (OAMapStyleRenderingClass *)getRenderingClass:(NSString *)name
+{
+    for (OAMapStyleRenderingClass *renderingClass in [self getRenderingClasses])
+    {
+        if ([renderingClass.name isEqualToString:name])
+            return renderingClass;
+    }
+    return nil;
+}
+
+- (NSArray<OAMapStyleRenderingClass *> *)getRenderingClassChildren:(NSString *)parentName
+{
+    NSString *childPrefix = [parentName stringByAppendingString:@"."];
+    NSMutableArray<OAMapStyleRenderingClass *> *children = [NSMutableArray array];
+    for (OAMapStyleRenderingClass *renderingClass in [self getRenderingClasses])
+    {
+        NSString *name = renderingClass.name;
+        BOOL isDirectChild = [name hasPrefix:childPrefix] && ![[name substringFromIndex:childPrefix.length] containsString:@"."];
+        if (isDirectChild)
+            [children addObject:renderingClass];
+    }
+    return children;
+}
+
+- (BOOL)isRenderingClassEnabled:(OAMapStyleRenderingClass *)renderingClass
+{
+    return [[[OAAppSettings sharedManager] getCustomRenderClassProperty:renderingClass.name defaultValue:renderingClass.enabledByDefault] get];
+}
+
+- (void)setRenderingClass:(OAMapStyleRenderingClass *)renderingClass enabled:(BOOL)enabled
+{
+    [[[OAAppSettings sharedManager] getCustomRenderClassProperty:renderingClass.name defaultValue:renderingClass.enabledByDefault] set:enabled];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+// the renderer checks only the class a rule names, so a switched-off parent class is passed on to its children
+- (NSDictionary<NSString *, NSString *> *)getRenderingClassesRendererSettings
+{
+    NSArray<OAMapStyleRenderingClass *> *renderingClasses = [self getRenderingClasses];
+    NSMutableDictionary<NSString *, NSNumber *> *ownStates = [NSMutableDictionary dictionary];
+    for (OAMapStyleRenderingClass *renderingClass in renderingClasses)
+        ownStates[renderingClass.name] = @([self isRenderingClassEnabled:renderingClass]);
+
+    NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary dictionary];
+    for (OAMapStyleRenderingClass *renderingClass in renderingClasses)
+    {
+        BOOL enabled = YES;
+        NSString *name = renderingClass.name;
+        while (enabled && name.length > 0)
+        {
+            NSNumber *ownState = ownStates[name];
+            enabled = !ownState || ownState.boolValue;
+            NSRange lastDot = [name rangeOfString:@"." options:NSBackwardsSearch];
+            name = lastDot.location != NSNotFound ? [name substringToIndex:lastDot.location] : @"";
+        }
+        rendererSettings[renderingClass.name] = enabled ? @"true" : @"false";
+    }
     return rendererSettings;
 }
 

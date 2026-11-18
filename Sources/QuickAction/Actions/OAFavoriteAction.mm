@@ -99,7 +99,7 @@ static QuickActionType *TYPE;
         groupName = group.name;
 
     UIColor *color = [OADefaultFavorite getColorFromBuiltInNumberOrARGB:[self.getParams[kCategoryColor] integerValue]];
-    if ([group hasColor])
+    if (!self.getParams[kCategoryColor] && [group hasColor])
         color = group.color;
 
     if ([self isItemExists:title])
@@ -107,11 +107,11 @@ static QuickActionType *TYPE;
 
     OAFavoriteItem *point = [[OAFavoriteItem alloc] initWithLat:lat lon:lon name:title category:groupName];
     [point setColor:color];
-    NSString *iconName = group.iconName.length > 0 ? group.iconName : self.getParams[kCategoryIcon];
+    NSString *iconName = [self.getParams[kCategoryIcon] length] > 0 ? self.getParams[kCategoryIcon] : group.iconName;
     if (iconName.length > 0)
         [point setIcon:iconName];
 
-    NSString *backgroundIconName = group.backgroundType.length > 0 ? group.backgroundType : self.getParams[kCategoryBackgroundIcon];
+    NSString *backgroundIconName = [self.getParams[kCategoryBackgroundIcon] length] > 0 ? self.getParams[kCategoryBackgroundIcon] : group.backgroundType;
     if (backgroundIconName.length > 0)
         [point setBackgroundIcon:backgroundIconName];
 

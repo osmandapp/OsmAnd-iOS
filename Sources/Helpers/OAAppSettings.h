@@ -1018,6 +1018,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *settingMapLanguageTranslit;
 
 @property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
+@property (assign, nonatomic) BOOL shouldShowOutdatedMapsWarning;
 
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
@@ -1603,7 +1604,6 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *useOldRouting;
 @property (nonatomic) OACommonBoolean *useSharedRouting;
 @property (nonatomic) OACommonBoolean *useSharedSearch;
-@property (nonatomic) OACommonBoolean *useSpatialTextSearch;
 @property (assign, nonatomic) BOOL ignoreMissingMaps;
 
 @property (nonatomic) OACommonBoolean *wikiShowImagePreviews;

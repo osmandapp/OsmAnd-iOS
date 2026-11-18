@@ -502,9 +502,35 @@ typedef enum
     return [self.hudViewController isOverlayUnderlayViewVisible];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+- (UIVerticalBarBehavior)preferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    return UIVerticalBarBehaviorDisabled;
+}
+
+- (UIViewController *)childViewControllerForPreferredVerticalBarBehavior API_AVAILABLE(ios(27.1))
+{
+    for (UIViewController *controller in self.childViewControllers.reverseObjectEnumerator)
+    {
+        if ([controller isKindOfClass:OADashboardViewController.class])
+            return controller;
+    }
+    return nil;
+}
+#endif
+
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (_dashboard || !_mapillaryController.view.hidden)
+    if (_dashboard)
+    {
+        for (UIViewController *controller in self.childViewControllers.reverseObjectEnumerator)
+        {
+            if ([controller isKindOfClass:OADashboardViewController.class])
+                return controller.preferredStatusBarStyle;
+        }
+        return _dashboard.preferredStatusBarStyle;
+    }
+    else if (!_mapillaryController.view.hidden)
         return UIStatusBarStyleLightContent;
     else if (_targetMenuView != nil && _targetMenuView.customController != nil &&
                                         (_targetMenuView.targetPoint.type == OATargetImpassableRoadSelection ||
@@ -1557,6 +1583,10 @@ typedef enum
 
 - (BOOL)canPresentNewContextMenu
 {
+    if ([_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class]
+        && ((PlanRouteScrollableViewController *)_scrollableHudViewController).isSaving)
+        return NO;
+
     return !self.isNewContextMenuDisabled || _activeTargetType == OATargetGPX;
 }
 
@@ -2207,9 +2237,10 @@ typedef enum
          [_hudViewController.floatingButtonsController hideActionsSheetAnimated:nil];
  }
 
-- (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
+- (void)updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen)
+    const BOOL isLandscape = [self.targetMenuView isLandscape];
+    if ((!isLandscape && self.targetMenuView.showFullScreen)
         || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated)
         || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph
         || self.targetMenuView.targetPoint.type == OATargetTransportRouteDetails
@@ -2218,11 +2249,29 @@ typedef enum
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+
+    if ([self suspendedPlanRouteController])
+    {
+        CGSize mapSize = _mapViewController.view.bounds.size;
+        if (mapSize.width <= 0 || mapSize.height <= 0)
+            return;
+
+        CGFloat leftInset = isLandscape ? self.targetMenuView.frame.size.width : 0;
+        CGFloat bottomInset = isLandscape ? 0 : height;
+        CGPoint center = CGPointMake((MIN(leftInset, mapSize.width) + mapSize.width) / 2,
+                                     MAX(0, mapSize.height - bottomInset) / 2);
+        [_mapViewController.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
+        _mapViewController.viewportXScale = 2 * center.x / mapSize.width;
+        _mapViewController.viewportYScale = 2 * center.y / mapSize.height;
+        _mapViewController.mapView.mapTargetScreenPoint = center;
+        [_mapViewController goToPosition:targetPoint31 animated:animated];
+        return;
+    }
     
     [_mapViewController correctPosition:targetPoint31
                        originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31]
-                              leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0)
-                            bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height)
+                              leftInset:(isLandscape ? self.targetMenuView.frame.size.width + 20.0 : 0.0)
+                            bottomInset:(isLandscape ? 0.0 : height)
                              centerBBox:(_targetMode == EOATargetBBOX)
                                animated:animated];
 }

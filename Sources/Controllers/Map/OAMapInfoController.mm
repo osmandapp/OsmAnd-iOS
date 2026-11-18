@@ -50,6 +50,7 @@
 #import "OAWeatherHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAObservable.h"
+#import "OAIAPHelper.h"
 #import "OsmAndSharedWrapper.h"
 
 #define kWidgetsTopPadding 10.0
@@ -91,6 +92,7 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
 
     NSTimeInterval _lastUpdateTime;
     int _themeId;
+    BOOL _customWidgetBackgroundAvailable;
     BOOL _updateInfoPending;
 
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
@@ -209,6 +211,16 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
         _themeId = -1;
+        _customWidgetBackgroundAvailable = [WidgetPanelAppearanceResolver isCustomBackgroundAvailable];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onProductPurchased:)
+                                                     name:OAIAPProductPurchasedNotification
+                                                   object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onProductsRestored:)
+                                                     name:OAIAPProductsRestoredNotification
+                                                   object:nil];
 
         [self registerAllControls];
         [self recreateControls];
@@ -233,6 +245,29 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
     }
     return self;
+}
+
+- (void)onProductPurchased:(NSNotification *)notification
+{
+    [self refreshPurchaseAppearance];
+}
+
+- (void)onProductsRestored:(NSNotification *)notification
+{
+    [self refreshPurchaseAppearance];
+}
+
+- (void)refreshPurchaseAppearance
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL available = [WidgetPanelAppearanceResolver isCustomBackgroundAvailable];
+        if (_customWidgetBackgroundAvailable != available)
+        {
+            _customWidgetBackgroundAvailable = available;
+            _themeId = -1;
+            [self updateColorShadowsOfText];
+        }
+    });
 }
 
 - (void) updateRuler {
@@ -523,15 +558,15 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     BOOL isCompactPanelsLayout = _settings.isCompactPanelsLayout;
     // Device orientation does not describe the window layout of an iPad app running on Mac.
     BOOL isCompactPortrait = isCompactPanelsLayout && ![OAUtilities isLandscape] && ![OAUtilities isiOSAppOnMac];
+    UIEdgeInsets safeInsets = _mapHudViewController.view.safeAreaInsets;
+    CGFloat availableWidth = MAX(0., CGRectGetWidth(_mapHudViewController.view.bounds) - safeInsets.left - safeInsets.right);
+    if (availableWidth <= 0)
+        availableWidth = DeviceScreenWidth;
     CGFloat topPanelWidth;
     CGFloat bottomPanelWidth;
     CGFloat topPanelCenterX = 0.0;
     if (isCompactPortrait)
     {
-        CGFloat availableWidth = CGRectGetWidth(_mapHudViewController.widgetsView.bounds);
-        if (availableWidth <= 0)
-            availableWidth = DeviceScreenWidth;
-
         CGFloat defaultPanelWidth = availableWidth * kCompactPortraitPanelWidthRatio;
         CGFloat centeredMargin = (availableWidth - defaultPanelWidth) / 2;
         CGFloat defaultMargin = [OASButtonPositionSize companion].DEF_MARGIN_DP;
@@ -554,7 +589,8 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     }
     else
     {
-        CGFloat horizontalPanelWidth = isCompactPanelsLayout ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
+        CGFloat horizontalPanelWidth = (isCompactPanelsLayout || [OAUtilities isLandscapeIpadAware])
+            ? MIN(kInfoViewLandscapeWidthPad, availableWidth) : availableWidth;
         topPanelWidth = horizontalPanelWidth;
         bottomPanelWidth = horizontalPanelWidth;
     }
@@ -619,7 +655,9 @@ static const CGFloat kCompactPortraitPanelWidthRatio = 0.5;
     }
     
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive && ![mapPanel.scrollableHudViewController shouldIgnoreTopBottomOffsets])
+    if (!UIApplication.sharedApplication.isAnyCarPlaySceneActive
+        && ![mapPanel.scrollableHudViewController shouldIgnoreTopBottomOffsets]
+        && ![mapPanel.suspendedPlanRouteController shouldIgnoreTopBottomOffsets])
     {
         OAMapRendererView *mapView = mapPanel.mapViewController.mapView;
         CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;

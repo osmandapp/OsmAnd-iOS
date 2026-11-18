@@ -1485,7 +1485,7 @@
 "map_settings_hide_polygons_desc" = "このオプションはOsmAndがオフライン時に使用するベクターマップにのみ影響します";
 "add_online_source" = "オンラインソースを追加";
 "map_settings_show_slider_map" = "マップにスライダーを表示";
-"map_transparency" = "ベースマップ透明度";
+"map_transparency" = "ベースマップの可視性";
 "osmand_parking_warning" = "注意";
 "import_raster_map_failed" = "ラスターマップのインポートに失敗しました";
 "import_raster_map_success" = "ラスターマップがインポートされました。マップ設定からオーバーレイ/アンダーレイの項目から表示が可能です";

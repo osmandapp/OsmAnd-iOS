@@ -135,7 +135,7 @@
     if (!self.isViewLoaded)
         return;
 
-    CGFloat topY = [OAUtilities getStatusBarHeight];
+    CGFloat topY = MAX(self.view.safeAreaInsets.top, self.view.window.safeAreaInsets.top);
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
     BOOL isWeatherPluginEnabled = [[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled];
@@ -203,7 +203,7 @@
     NSInteger buttonsCount = topButtons.count + bottomButtons.count;
     CGFloat buttonsHeight = buttonHeight * buttonsCount;
 
-    CGFloat scrollHeight = DeviceScreenHeight - topY;
+    CGFloat scrollHeight = self.view.bounds.size.height - topY;
 
     self.scrollView.frame = CGRectMake(0.0, topY, width, scrollHeight);
     self.scrollView.contentSize = CGSizeMake(width, buttonsHeight < scrollHeight ? scrollHeight : buttonsHeight);
@@ -280,17 +280,19 @@
 {
     UIButtonConfiguration *config = btn.configuration;
     NSDirectionalEdgeInsets contentInsets = config.contentInsets;
+    CGFloat leftSafeInset = MAX(self.view.safeAreaInsets.left,
+            MAX(self.parentViewController.view.safeAreaInsets.left, self.view.window.safeAreaInsets.left));
     
     if ([btn isDirectionRTL])
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         contentInsets.leading = 10;
-        contentInsets.trailing = [OAUtilities getLeftMargin];
+        contentInsets.trailing = leftSafeInset;
     }
     else
     {
         btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        contentInsets.leading = [OAUtilities getLeftMargin] + 10;
+        contentInsets.leading = leftSafeInset + 10;
         contentInsets.trailing = 0;
     }
     

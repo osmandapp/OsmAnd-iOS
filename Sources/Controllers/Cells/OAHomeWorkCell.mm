@@ -34,6 +34,7 @@
     UILongPressGestureRecognizer *_longPress;
     
     NSIndexPath *_touchIndexPath;
+    CGSize _collectionViewSize;
 }
 
 - (void) awakeFromNib
@@ -58,6 +59,19 @@
     [self.collectionView addGestureRecognizer:_longPress];
     
     [self generateData];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.contentView layoutIfNeeded];
+
+    CGSize collectionViewSize = self.collectionView.bounds.size;
+    if (!CGSizeEqualToSize(_collectionViewSize, collectionViewSize))
+    {
+        _collectionViewSize = collectionViewSize;
+        [self.collectionView.collectionViewLayout invalidateLayout];
+    }
 }
 
 - (void) generateData

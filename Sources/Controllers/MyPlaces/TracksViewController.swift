@@ -1976,9 +1976,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                           renameToNewName: track.gpxFileName,
                           deleteOriginalFile: false,
                           openTrack: false,
-                          trackItem: track)
+                          trackItem: track) { [weak self] _ in
+            guard let self else { return }
+            if isContextMenuVisible {
+                shouldUpdateAllFolders = true
+            } else {
+                updateAllFoldersVCData(forceLoad: true)
+            }
+        }
         selectedTrack = nil
-        shouldUpdateAllFolders = true
     }
     
     private func onTrackRenameClicked(_ track: TrackItem?) {
@@ -2326,7 +2332,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                           renameToNewName: nil,
                           deleteOriginalFile: true,
                           openTrack: false,
-                          trackItem: trackItem)
+                          trackItem: trackItem,
+                          completion: nil)
     }
     
     private func renameVisibleTracks(oldPath: String, newPath: String) {
@@ -2790,7 +2797,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     override func tableView(_ tableView: UITableView, willEndContextMenuInteraction configuration: UIContextMenuConfiguration, animator: (any UIContextMenuInteractionAnimating)?) {
-        animator?.addCompletion { [weak self] in
+        let applyDeferredUpdates = { [weak self] in
             guard let self else { return }
             let shouldUpdateAllFolders = self.shouldUpdateAllFolders
             let shouldReloadTableView = self.shouldReloadTableView
@@ -2804,6 +2811,12 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             self.isContextMenuVisible = false
             self.shouldUpdateAllFolders = false
             self.shouldReloadTableView = false
+        }
+        // No animator on macOS ("Designed for iPad"): the menu is already closed
+        if let animator {
+            animator.addCompletion(applyDeferredUpdates)
+        } else {
+            applyDeferredUpdates()
         }
     }
     
@@ -2982,7 +2995,8 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
                               renameToNewName: nil,
                               deleteOriginalFile: true,
                               openTrack: false,
-                              trackItem: track)
+                              trackItem: track,
+                              completion: nil)
         } else if let folderPath = selectedFolderPath {
             performMove(toFolder: selectedFolderName, tracks: nil, folders: [folderPath])
         }

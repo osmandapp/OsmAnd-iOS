@@ -99,7 +99,7 @@ final class PopularPlace {
     }
 }
 
-final class PopularPlacesSearcher {
+final class PopularPlacesSearcher: NSObject {
     private final class LoadingToken {
         private let lock = NSLock()
         private var cancelled = false
@@ -117,10 +117,33 @@ final class PopularPlacesSearcher {
         }
     }
 
+    private struct CacheKey: Equatable {
+        let latitude: CLLocationDegrees
+        let longitude: CLLocationDegrees
+        let dataSourceType: EOAWikiDataSourceType
+        let mapLanguage: String?
+        let wikiLanguages: [String]
+        let detailedPlacesCount: Int
+    }
+
     private static let searchRadiusMeters: Int32 = 15000
 
     private let queue = DispatchQueue(label: "net.osmand.explore.popularPlaces", qos: .userInitiated)
     private var token: LoadingToken?
+    private var cachedPlaces: (key: CacheKey, places: [PopularPlace])?
+    private var cacheGeneration = 0
+    private var localResourcesChangedObserver: OAAutoObserverProxy?
+
+    override init() {
+        super.init()
+        localResourcesChangedObserver = OAAutoObserverProxy(self,
+                                                            withHandler: #selector(onLocalResourcesChanged(observer:key:value:)),
+                                                            andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
+    }
+
+    deinit {
+        localResourcesChangedObserver?.detach()
+    }
 
     var isLoading: Bool {
         token != nil
@@ -134,18 +157,24 @@ final class PopularPlacesSearcher {
         OAPOIFiltersHelper.sharedInstance().getTopWikiPoiFilter()
     }
 
-    func load(detailedPlacesCount: Int, completion: @escaping ([PopularPlace]) -> Void) {
+    func load(center: CLLocationCoordinate2D, detailedPlacesCount: Int, completion: @escaping ([PopularPlace]) -> Void) {
         guard token == nil else { return }
-        guard let filter, let center = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else {
+        let cacheKey = Self.cacheKey(center: center, detailedPlacesCount: detailedPlacesCount)
+        if let cachedPlaces, cachedPlaces.key == cacheKey {
+            completion(cachedPlaces.places)
+            return
+        }
+        guard let filter else {
             completion([])
             return
         }
 
         let loadingToken = LoadingToken()
         token = loadingToken
+        let generation = cacheGeneration
         let preferredLocale = PopularPlaceDetails.preferredLocale()
-        let rect = KMapUtils.shared.calculateLatLonBbox(latitude: center.coordinate.latitude,
-                                                         longitude: center.coordinate.longitude,
+        let rect = KMapUtils.shared.calculateLatLonBbox(latitude: center.latitude,
+                                                         longitude: center.longitude,
                                                          radiusMeters: Self.searchRadiusMeters)
         let matcher = OAResultMatcher<OAPOI>(publishFunc: { _ in true }, cancelledFunc: { loadingToken.isCancelled })
         queue.async {
@@ -159,6 +188,9 @@ final class PopularPlacesSearcher {
             DispatchQueue.main.async { [weak self] in
                 guard let self, self.token === loadingToken, !loadingToken.isCancelled else { return }
                 self.token = nil
+                if !places.isEmpty && generation == self.cacheGeneration {
+                    self.cachedPlaces = (cacheKey, places)
+                }
                 completion(places)
             }
         }
@@ -167,6 +199,34 @@ final class PopularPlacesSearcher {
     func cancel() {
         token?.cancel()
         token = nil
+    }
+
+    func invalidate() {
+        cancel()
+        resetCache()
+    }
+
+    private func resetCache() {
+        cacheGeneration += 1
+        cachedPlaces = nil
+    }
+
+    @objc private func onLocalResourcesChanged(observer: Any, key: Any, value: Any) {
+        DispatchQueue.main.async { [weak self] in
+            self?.resetCache()
+        }
+    }
+
+    private static func cacheKey(center: CLLocationCoordinate2D, detailedPlacesCount: Int) -> CacheKey {
+        let settings = OAAppSettings.sharedManager()
+        let wikiPlugin = OAPluginsHelper.getPlugin(OAWikipediaPlugin.self) as? OAWikipediaPlugin
+        let wikiLanguages = wikiPlugin?.hasCustomSettings() == true ? wikiPlugin?.getLanguagesToShow() ?? [] : []
+        return CacheKey(latitude: center.latitude,
+                        longitude: center.longitude,
+                        dataSourceType: settings.wikiDataSourceType.get(),
+                        mapLanguage: settings.settingPrefMapLanguage.get(),
+                        wikiLanguages: wikiLanguages,
+                        detailedPlacesCount: detailedPlacesCount)
     }
 }
 

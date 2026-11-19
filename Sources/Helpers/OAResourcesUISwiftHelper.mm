@@ -556,7 +556,11 @@
 
 + (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation
 {
-    CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
+    return [self findWikiMapRegionsAt:[OAResourcesUIHelper getMapLocation]];
+}
+
++ (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAt:(CLLocationCoordinate2D)coordinate
+{
     NSArray *items = [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
     NSMutableArray<OAResourceSwiftItem *> *result = [NSMutableArray array];
     for (id obj in items)

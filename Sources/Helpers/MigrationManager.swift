@@ -32,6 +32,7 @@ final class MigrationManager: NSObject {
         case migrateKeepScreenOnMode
         case migrateLegacyRouteWidgets
         case migrateTerrainTransparencyToAlpha255
+        case migrateLastUsedFavoriteIcons
     }
     
     private enum LegacyWidgetPanelOrder {
@@ -163,6 +164,18 @@ final class MigrationManager: NSObject {
                 migrateTerrainTransparencyToAlpha255()
                 defaults.set(true, forKey: MigrationKey.migrateTerrainTransparencyToAlpha255.rawValue)
             }
+            if !defaults.bool(forKey: MigrationKey.migrateLastUsedFavoriteIcons.rawValue) {
+                migrateLastUsedFavoriteIcons()
+                defaults.set(true, forKey: MigrationKey.migrateLastUsedFavoriteIcons.rawValue)
+            }
+        }
+    }
+
+    private func migrateLastUsedFavoriteIcons() {
+        let storedIcons = settings.lastUsedFavIcons.get()
+        let icons = settings.lastUsedFavIcons.normalizedIcons(storedIcons)
+        if icons != storedIcons {
+            settings.lastUsedFavIcons.set(icons)
         }
     }
 

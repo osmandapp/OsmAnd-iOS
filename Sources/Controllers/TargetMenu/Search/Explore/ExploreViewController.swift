@@ -46,7 +46,18 @@ final class ExploreViewController: UIViewController {
         }
     }
 
-    @objc var searchLocation = kCLLocationCoordinate2DInvalid
+    @objc var searchLocation = kCLLocationCoordinate2DInvalid {
+        didSet {
+            guard oldValue.latitude != searchLocation.latitude || oldValue.longitude != searchLocation.longitude else { return }
+            popularPlacesSearcher.cancel()
+            popularPlaces = []
+            wikiMapItems = []
+            if viewIfLoaded?.window != nil {
+                startLoadingPopularPlaces()
+            }
+            reload(.popularPlaces)
+        }
+    }
 
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let settings: OAAppSettings = OAAppSettings.sharedManager()
@@ -206,13 +217,23 @@ final class ExploreViewController: UIViewController {
     }
 
     private func startLoadingPopularPlaces() {
-        guard !isCollapsed(.popularPlaces), popularPlacesSearcher.isDataSourceAvailable, !popularPlacesSearcher.isLoading else { return }
-        popularPlacesSearcher.load(detailedPlacesCount: Self.popularPlacesCount) { [weak self] places in
+        guard !isCollapsed(.popularPlaces),
+              popularPlacesSearcher.isDataSourceAvailable,
+              !popularPlacesSearcher.isLoading,
+              let center = popularPlacesCenter() else { return }
+        popularPlacesSearcher.load(center: center, detailedPlacesCount: Self.popularPlacesCount) { [weak self] places in
             guard let self else { return }
             popularPlaces = places
-            wikiMapItems = popularPlaces.isEmpty ? OAResourcesUISwiftHelper.findWikiMapRegionsAtCurrentMapLocation() ?? [] : []
+            wikiMapItems = popularPlaces.isEmpty ? OAResourcesUISwiftHelper.findWikiMapRegions(at: center) ?? [] : []
             reload(.popularPlaces)
         }
+    }
+
+    private func popularPlacesCenter() -> CLLocationCoordinate2D? {
+        if CLLocationCoordinate2DIsValid(searchLocation) {
+            return searchLocation
+        }
+        return OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation().coordinate
     }
 
     private func reloadHistory(animated: Bool = false) {
@@ -443,7 +464,7 @@ extension ExploreViewController: DownloadingCellResourceHelperDelegate {
     func onDownloadTaskFinished(resourceId: String) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            popularPlacesSearcher.cancel()
+            popularPlacesSearcher.invalidate()
             wikiMapItems = []
             startLoadingPopularPlaces()
             reload(.popularPlaces)

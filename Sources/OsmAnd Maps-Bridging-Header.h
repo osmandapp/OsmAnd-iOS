@@ -231,6 +231,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAPOIViewController.h"
+#import "OAMapSelectionHelper.h"
 #import "OACoordinatesGridSettings.h"
 #import "OAGridFormatMappingBridge.h"
 #import "OAAddQuickActionViewController.h"

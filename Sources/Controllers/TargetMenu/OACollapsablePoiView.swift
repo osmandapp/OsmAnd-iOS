@@ -103,6 +103,9 @@ extension OACollapsablePoiView: OAButtonDelegate {
     func onButtonTapped(_ tag: Int) {
         guard amenities.count > tag else { return }
         let amenity = amenities[tag]
+        if OAMapSelectionHelper().showContextMenu(forSearchResult: amenity) {
+            return
+        }
         if let targetPoint = OAPOILayer.getTargetPoint(amenity) {
             targetPoint.centerMap = true
             OARootViewController.instance().mapPanel.showContextMenu(with: [targetPoint], selectedObjects: [], touchPointLatLon: CLLocation(latitude: targetPoint.location.latitude, longitude: targetPoint.location.longitude))

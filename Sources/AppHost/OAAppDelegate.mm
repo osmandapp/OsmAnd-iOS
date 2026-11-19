@@ -307,6 +307,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     [OACrashReportPromptCoordinator.shared start];
     [OACrashDiagnosticsManager.shared start];
     [OAMemoryLog.sharedInstance start];
+    // The Bluetooth central is shared by all scenes and must be configured once per launch.
+    [BLEInitHeader configure];
     _didFinishLaunching = YES;
    
     if (!_dataFetchQueue)

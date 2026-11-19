@@ -86,6 +86,11 @@ struct SearchHistoryItemPresenter {
         image.withTintColor(UIColor.iconColorDefault.resolvedColor(with: traitCollection), renderingMode: .alwaysOriginal)
     }
 
+    private static func isolatedJoined(_ parts: [String]) -> String {
+        guard let first = parts.first else { return "" }
+        return ([first] + parts.dropFirst().map { "\u{2068}\($0)\u{2069}" }).joined(separator: typeNameSeparator)
+    }
+
     private static func routeActivity(for dataItem: GpxDataItem) -> RouteActivity? {
         guard let activityId = dataItem.getParameter(parameter: .activityType) as? String, !activityId.isEmpty else { return nil }
         return RouteActivityHelper.shared.findRouteActivity(id: activityId)
@@ -119,25 +124,25 @@ struct SearchHistoryItemPresenter {
         return SearchHistoryRecord(item: item,
                                    title: title.isEmpty ? path : title,
                                    categoryName: categoryName,
-                                   typeText: details.joined(separator: Self.typeNameSeparator),
+                                   typeText: Self.isolatedJoined(details),
                                    coordinate: coordinate,
                                    object: dataItem)
     }
 
     private func poiObjectRecord(for item: OAHistoryItem) -> SearchHistoryRecord? {
         guard let result = OASearchHistoryAPI.searchResult(for: item), let poiObject = result.object else { return nil }
-        let poiCategory = poiObject as? OAPOICategory
-        let categoryName = poiCategory?.nameLocalized ?? localizedString("poi")
-        var typeText: String?
+        let title = result.localeName ?? item.name ?? ""
+        let categoryName = (poiObject as? OAPOICategory)?.nameLocalized ?? localizedString("poi")
+        var typeText = ""
         if let poiType = poiObject as? OAPOIType {
-            typeText = poiType.parentType?.nameLocalized ?? poiType.category?.nameLocalized
+            typeText = poiType.parentType?.nameLocalized ?? poiType.category?.nameLocalized ?? ""
         } else if let poiFilter = poiObject as? OAPOIFilter {
-            typeText = poiFilter.category?.nameLocalized
+            typeText = poiFilter.category?.nameLocalized ?? ""
         }
         return SearchHistoryRecord(item: item,
-                                   title: result.localeName ?? item.name ?? "",
+                                   title: title,
                                    categoryName: categoryName,
-                                   typeText: typeText ?? categoryName,
+                                   typeText: typeText == title ? "" : typeText,
                                    coordinate: nil,
                                    object: poiObject)
     }

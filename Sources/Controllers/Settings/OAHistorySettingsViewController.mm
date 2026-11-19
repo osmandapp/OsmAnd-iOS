@@ -275,6 +275,11 @@
                             [sortedHistoryItems addObject:historyTableItem];
                         }
                     }
+                    for (OAHistoryItem *historyItem in [historyHelper getPointsHavingTypes:@[@(OAHistoryTypePoiType), @(OAHistoryTypePoiFilter), @(OAHistoryTypeGpxFile)] limit:0])
+                    {
+                        if (![OASearchHistoryAPI searchResultForHistoryItem:historyItem])
+                            [sortedHistoryItems addObject:[[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation]];
+                    }
                 }
                 else if (historyType == EOAHistorySettingsTypeNavigation)
                 {

@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
     OAHistoryTypeLocation,
     OAHistoryTypePoiType,
     OAHistoryTypePoiFilter,
+    OAHistoryTypeGpxFile,
 };
 
 @property (nonatomic) int64_t hId;

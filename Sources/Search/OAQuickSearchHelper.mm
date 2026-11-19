@@ -433,7 +433,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     }
     else if ([pd isGpxFile])
     {
-        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItem:pd.name];
         if (!dataItem)
             return nil;
 

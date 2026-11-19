@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 + (NSString *)getPoiTypeNameWithoutAddress:(OASearchResult *)searchResult;
 + (OAHistoryItem *)historyItem:(OASearchResult *)searchResult;
 + (OAHistoryItem *)categoryHistoryItem:(OASearchResult *)searchResult;
++ (OAHistoryItem *)trackHistoryItem:(OASearchResult *)searchResult;
 
 
 - (OADistanceDirection *)getEvaluatedDistanceDirection:(BOOL)decelerating;

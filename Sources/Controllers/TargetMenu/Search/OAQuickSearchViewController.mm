@@ -1418,8 +1418,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) addHistoryItem:(OASearchResult *)searchResult
 {
-    if (searchResult.location && [[OAAppSettings sharedManager].searchHistory get] && !self.fromNavigation)
-        [[OAHistoryHelper sharedInstance] addPoint:[OAQuickSearchListItem historyItem:searchResult]];
+    if (![[OAAppSettings sharedManager].searchHistory get] || self.fromNavigation)
+        return;
+
+    OAHistoryItem *item;
+    if (searchResult.objectType == EOAObjectTypeGpxTrack)
+        item = [OAQuickSearchListItem trackHistoryItem:searchResult];
+    else if (searchResult.location)
+        item = [OAQuickSearchListItem historyItem:searchResult];
+    if (item)
+        [[OAHistoryHelper sharedInstance] addPoint:item];
 }
 
 - (void)addCategoryHistoryItem:(OASearchResult *)searchResult
@@ -2136,6 +2144,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             [self.navigationController popToViewController:self animated:YES];
             [self completeQueryWithObject:searchResult];
         }
+        return;
+    }
+    if (item.hType == OAHistoryTypeGpxFile)
+    {
+        OASearchResult *searchResult = [OASearchHistoryAPI searchResultForHistoryItem:item];
+        if (searchResult)
+            [_tableController showOnMap:searchResult searchType:self.searchType delegate:self];
         return;
     }
     if (self.searchType == OAQuickSearchType::REGULAR)

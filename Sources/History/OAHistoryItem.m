@@ -71,6 +71,10 @@
         {
             _hType = OAHistoryTypePoiFilter;
         }
+        else if ([pointDescription isGpxFile])
+        {
+            _hType = OAHistoryTypeGpxFile;
+        }
         else
         {
             _hType = OAHistoryTypeUnknown;
@@ -103,6 +107,10 @@
     if (self.hType == OAHistoryTypeParking)
     {
         return [UIImage imageNamed:ACImageNameIcParkingPinSmall];
+    }
+    else if (self.hType == OAHistoryTypeGpxFile)
+    {
+        return [UIImage templateImageNamed:ACImageNameIcCustomTrip];
     }
     else if (self.iconName.length > 0)
     {
@@ -150,6 +158,8 @@
             return POINT_TYPE_POI_TYPE;
         case OAHistoryTypePoiFilter:
             return POINT_TYPE_CUSTOM_POI_FILTER;
+        case OAHistoryTypeGpxFile:
+            return POINT_TYPE_GPX_FILE;
         default:
             return POINT_TYPE_LOCATION;
     }
@@ -157,7 +167,7 @@
 
 - (BOOL)hasLocation
 {
-    return _hType != OAHistoryTypePoiType && _hType != OAHistoryTypePoiFilter;
+    return _hType != OAHistoryTypePoiType && _hType != OAHistoryTypePoiFilter && _hType != OAHistoryTypeGpxFile;
 }
 
 - (float)preferredZoom

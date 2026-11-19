@@ -542,6 +542,23 @@
     return item;
 }
 
++ (OAHistoryItem *)trackHistoryItem:(OASearchResult *)searchResult
+{
+    if (![searchResult.relatedObject isKindOfClass:OASGpxDataItem.class])
+        return nil;
+
+    NSString *path = ((OASGpxDataItem *) searchResult.relatedObject).gpxFilePath;
+    if (path.length == 0)
+        return nil;
+
+    OAHistoryItem *item = [[OAHistoryItem alloc] init];
+    item.hType = OAHistoryTypeGpxFile;
+    item.name = path;
+    item.date = [NSDate date];
+    item.iconName = ACImageNameIcCustomTrip;
+    return item;
+}
+
 + (OAHistoryType)historyType:(EOAObjectType)objectType
 {
     switch (objectType)

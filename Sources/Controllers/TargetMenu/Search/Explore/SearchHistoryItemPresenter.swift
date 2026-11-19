@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OsmAndShared
 
 struct SearchHistoryRecord {
     let item: OAHistoryItem
@@ -13,7 +14,7 @@ struct SearchHistoryRecord {
     let categoryName: String
     let typeText: String
     let coordinate: CLLocationCoordinate2D?
-    let poiObject: NSObject?
+    let object: NSObject?
 }
 
 struct SearchHistoryItemPresenter {
@@ -27,14 +28,17 @@ struct SearchHistoryItemPresenter {
     }
 
     static func icon(for record: SearchHistoryRecord, traitCollection: UITraitCollection) -> UIImage? {
-        if let poiType = record.poiObject as? OAPOIBaseType {
+        if let poiType = record.object as? OAPOIBaseType {
             return poiType.icon()
         }
-        if let filter = record.poiObject as? OAPOIUIFilter {
+        if let filter = record.object as? OAPOIUIFilter {
             if let iconName = filter.getIconResource() as? String, let icon = OAUtilities.getMxIcon(iconName) {
                 return icon
             }
             return OAPOIHelper.getCustomFilterIcon(filter)
+        }
+        if let dataItem = record.object as? GpxDataItem {
+            return UIImage.routeActivityIcon(routeActivity(for: dataItem)?.iconName, fallback: tinted(.icCustomTrip, traitCollection: traitCollection))
         }
         let item = record.item
         if item.fromNavigation {
@@ -64,6 +68,9 @@ struct SearchHistoryItemPresenter {
     }
 
     func record(for item: OAHistoryItem) -> SearchHistoryRecord? {
+        if item.hType == .gpxFile {
+            return trackRecord(for: item)
+        }
         guard item.hasLocation() else { return poiObjectRecord(for: item) }
         let categoryName = categoryName(for: item)
         let typeText = item.fromNavigation ? localizedString("route_descr_destination") : typeText(for: item, categoryName: categoryName)
@@ -72,11 +79,49 @@ struct SearchHistoryItemPresenter {
                                    categoryName: categoryName,
                                    typeText: typeText,
                                    coordinate: CLLocationCoordinate2D(latitude: item.latitude, longitude: item.longitude),
-                                   poiObject: nil)
+                                   object: nil)
     }
 
     private static func tinted(_ image: UIImage, traitCollection: UITraitCollection) -> UIImage {
         image.withTintColor(UIColor.iconColorDefault.resolvedColor(with: traitCollection), renderingMode: .alwaysOriginal)
+    }
+
+    private static func routeActivity(for dataItem: GpxDataItem) -> RouteActivity? {
+        guard let activityId = dataItem.getParameter(parameter: .activityType) as? String, !activityId.isEmpty else { return nil }
+        return RouteActivityHelper.shared.findRouteActivity(id: activityId)
+    }
+
+    private func trackRecord(for item: OAHistoryItem) -> SearchHistoryRecord? {
+        guard let path = item.name, !path.isEmpty, let dataItem = OAGPXDatabase.sharedDb().getGPXItem(path) else { return nil }
+        let title = (path as NSString).deletingPathExtension.replacingOccurrences(of: "/", with: Self.typeNameSeparator).trimmingCharacters(in: .whitespaces)
+        let categoryName = localizedString("shared_string_gpx_track")
+        var details = [categoryName]
+        if let activity = Self.routeActivity(for: dataItem) {
+            details.append(activity.label)
+        }
+        if let city = dataItem.nearestCity, !city.isEmpty {
+            details.append(city)
+        }
+        let analysis = dataItem.getAnalysis()
+        if let analysis, analysis.totalDistance > 0, let length = OAOsmAndFormatter.getFormattedDistance(analysis.totalDistance) {
+            details.append(length)
+        }
+        if let analysis, analysis.diffElevationUp > 0, let uphill = OAOsmAndFormatter.getFormattedAlt(analysis.diffElevationUp) {
+            details.append("↑ " + uphill)
+        }
+        var coordinate: CLLocationCoordinate2D?
+        if let start = analysis?.getLatLonStart() {
+            let startCoordinate = CLLocationCoordinate2D(latitude: start.latitude, longitude: start.longitude)
+            if CLLocationCoordinate2DIsValid(startCoordinate) {
+                coordinate = startCoordinate
+            }
+        }
+        return SearchHistoryRecord(item: item,
+                                   title: title.isEmpty ? path : title,
+                                   categoryName: categoryName,
+                                   typeText: details.joined(separator: Self.typeNameSeparator),
+                                   coordinate: coordinate,
+                                   object: dataItem)
     }
 
     private func poiObjectRecord(for item: OAHistoryItem) -> SearchHistoryRecord? {
@@ -94,7 +139,7 @@ struct SearchHistoryItemPresenter {
                                    categoryName: categoryName,
                                    typeText: typeText ?? categoryName,
                                    coordinate: nil,
-                                   poiObject: poiObject)
+                                   object: poiObject)
     }
 
     private func categoryName(for item: OAHistoryItem) -> String {

@@ -521,6 +521,27 @@
     return item;
 }
 
++ (OAHistoryItem *)categoryHistoryItem:(OASearchResult *)searchResult
+{
+    OAHistoryItem *item = [[OAHistoryItem alloc] init];
+    if ([searchResult.object isKindOfClass:OAPOIBaseType.class])
+    {
+        item.hType = OAHistoryTypePoiType;
+        item.name = ((OAPOIBaseType *) searchResult.object).name;
+    }
+    else if ([searchResult.object isKindOfClass:OAPOIUIFilter.class])
+    {
+        item.hType = OAHistoryTypePoiFilter;
+        item.name = ((OAPOIUIFilter *) searchResult.object).filterId;
+    }
+    if (item.name.length == 0)
+        return nil;
+
+    item.date = [NSDate date];
+    item.iconName = [self getIconName:searchResult];
+    return item;
+}
+
 + (OAHistoryType)historyType:(EOAObjectType)objectType
 {
     switch (objectType)

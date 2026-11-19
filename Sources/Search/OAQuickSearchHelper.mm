@@ -388,73 +388,79 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     return NO;
 }
 
++ (OASearchResult *)searchResultForHistoryItem:(OAHistoryItem *)item
+{
+    return [self searchResultForHistoryItem:item phrase:[[[OAQuickSearchHelper instance] getCore] getPhrase]];
+}
+
++ (OASearchResult *)searchResultForHistoryItem:(OAHistoryItem *)point phrase:(OASearchPhrase *)phrase
+{
+    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+    OAPointDescription *pd = [[OAPointDescription alloc] initWithType:[point getPointDescriptionType]
+                                                             typeName:point.typeName
+                                                                 name:point.name];
+    if ([pd isPoiType])
+    {
+        NSString *name = pd.name;
+        OAPOIHelper *mapPoiTypes = [OAPOIHelper sharedInstance];
+        OAPOIBaseType *pt = [mapPoiTypes getAnyPoiTypeByName:name];
+        if (!pt)
+        {
+            pt = [mapPoiTypes getAnyPoiAdditionalTypeByKey:name];
+        }
+        if (!pt)
+            return nil;
+
+        if ([OSM_WIKI_CATEGORY isEqualToString:pt.name])
+            sr.localeName = [NSString stringWithFormat:@"%@ (%@)", pt.nameLocalized, [mapPoiTypes getAllLanguagesTranslationSuffix]];
+        else
+            sr.localeName = [PoiAdditionalLabels getSearchName:pt];
+        sr.object = pt;
+        sr.relatedObject = point;
+        sr.priorityDistance = 0;
+        sr.objectType = EOAObjectTypePoiType;
+    }
+    else if ([pd isCustomPoiFilter])
+    {
+        OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:pd.name includeDeleted:YES];
+        if (!filter)
+            return nil;
+
+        sr.localeName = filter.name;
+        sr.object = filter;
+        sr.relatedObject = point;
+        sr.objectType = EOAObjectTypePoiType;
+    }
+    else if ([pd isGpxFile])
+    {
+        OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+        if (!dataItem)
+            return nil;
+
+        sr.localeName = [dataItem gpxFileName];
+        sr.object = point;
+        sr.objectType = EOAObjectTypeGpxTrack;
+        sr.relatedObject = dataItem;
+    }
+    else
+    {
+        sr.localeName = pd.name;
+        sr.object = point;
+        sr.objectType = EOAObjectTypeRecentObj;
+        sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
+        sr.preferredZoom = PREFERRED_DEFAULT_RECENT_ZOOM;
+    }
+    return sr;
+}
+
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OAHistoryHelper *historyhelper = [OAHistoryHelper sharedInstance];
     int p = 0;
     for (OAHistoryItem *point in [historyhelper getPointsHavingTypes:historyhelper.searchTypes exceptNavigation:NO limit:0])
     {
-        BOOL publish = NO;
-        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        OAPointDescription *pd = [[OAPointDescription alloc] initWithType:[point getPointDescriptionType]
-                                                                 typeName:point.typeName
-                                                                     name:point.name];
-        if ([pd isPoiType])
-        {
-            NSString *name = pd.name;
-            OAPOIHelper *mapPoiTypes = [OAPOIHelper sharedInstance];
-            OAPOIBaseType *pt = [mapPoiTypes getAnyPoiTypeByName:name];
-            if (!pt)
-            {
-                pt = [mapPoiTypes getAnyPoiAdditionalTypeByKey:name];
-            }
-            if (pt)
-            {
-                if ([OSM_WIKI_CATEGORY isEqualToString:pt.name])
-                    sr.localeName = [NSString stringWithFormat:@"%@ (%@)", pt.nameLocalized, [mapPoiTypes getAllLanguagesTranslationSuffix]];
-                else
-                    sr.localeName = [PoiAdditionalLabels getSearchName:pt];
-                sr.object = pt;
-                sr.relatedObject = point;
-                sr.priorityDistance = 0;
-                sr.objectType = EOAObjectTypePoiType;
-                publish = YES;
-            }
-        }
-        else if ([pd isCustomPoiFilter])
-        {
-            OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:pd.name includeDeleted:YES];
-            if (filter)
-            {
-                sr.localeName = filter.name;
-                sr.object = filter;
-                sr.relatedObject = point;
-                sr.objectType = EOAObjectTypePoiType;
-                publish = YES;
-            }
-        }
-        else if ([pd isGpxFile])
-        {
-            OASGpxDataItem *dataItem = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
-            if (dataItem)
-            {
-                sr.localeName = [dataItem gpxFileName];
-                sr.object = point;
-                sr.objectType = EOAObjectTypeGpxTrack;
-                sr.relatedObject = dataItem;
-                publish = YES;
-            }
-        }
-        else
-        {
-            sr.localeName = pd.name;
-            sr.object = point;
-            sr.objectType = EOAObjectTypeRecentObj;
-            sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
-            sr.preferredZoom = PREFERRED_DEFAULT_RECENT_ZOOM;
-            publish = YES;
-        }
-        if (publish)
+        OASearchResult *sr = [self.class searchResultForHistoryItem:point phrase:phrase];
+        if (sr)
         {
             sr.priority = SEARCH_HISTORY_OBJECT_PRIORITY + (p++);
             if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])

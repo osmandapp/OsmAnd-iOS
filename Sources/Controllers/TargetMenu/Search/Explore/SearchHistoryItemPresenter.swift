@@ -9,8 +9,11 @@ import UIKit
 
 struct SearchHistoryRecord {
     let item: OAHistoryItem
+    let title: String
     let categoryName: String
     let typeText: String
+    let coordinate: CLLocationCoordinate2D?
+    let poiObject: NSObject?
 }
 
 struct SearchHistoryItemPresenter {
@@ -23,7 +26,17 @@ struct SearchHistoryItemPresenter {
         poiTypesByName = OAPOIHelper.sharedInstance().getAllTranslatedNames(false)
     }
 
-    static func icon(for item: OAHistoryItem, traitCollection: UITraitCollection) -> UIImage? {
+    static func icon(for record: SearchHistoryRecord, traitCollection: UITraitCollection) -> UIImage? {
+        if let poiType = record.poiObject as? OAPOIBaseType {
+            return poiType.icon()
+        }
+        if let filter = record.poiObject as? OAPOIUIFilter {
+            if let iconName = filter.getIconResource() as? String, let icon = OAUtilities.getMxIcon(iconName) {
+                return icon
+            }
+            return OAPOIHelper.getCustomFilterIcon(filter)
+        }
+        let item = record.item
         if item.fromNavigation {
             return tinted(.icCustomFinishFlag, traitCollection: traitCollection)
         }
@@ -34,9 +47,14 @@ struct SearchHistoryItemPresenter {
     }
 
     static func secondaryContent(for record: SearchHistoryRecord, locationReference: SearchLocationReference, showsDate: Bool = false) -> PointSecondaryContent {
-        let content = locationReference.secondaryContent(latitude: record.item.latitude,
-                                                         longitude: record.item.longitude,
+        let content: PointSecondaryContent
+        if let coordinate = record.coordinate {
+            content = locationReference.secondaryContent(latitude: coordinate.latitude,
+                                                         longitude: coordinate.longitude,
                                                          address: record.typeText)
+        } else {
+            content = PointSecondaryContent(formattedDistance: nil, direction: 0, address: record.typeText, date: nil)
+        }
         guard showsDate, record.item.fromNavigation, let date = record.item.date else { return content }
         return PointSecondaryContent(formattedDistance: content.formattedDistance,
                                      direction: content.direction,
@@ -45,14 +63,38 @@ struct SearchHistoryItemPresenter {
                                      date: OAOsmAndFormatter.getFormattedDate(date.timeIntervalSince1970))
     }
 
-    func record(for item: OAHistoryItem) -> SearchHistoryRecord {
+    func record(for item: OAHistoryItem) -> SearchHistoryRecord? {
+        guard item.hasLocation() else { return poiObjectRecord(for: item) }
         let categoryName = categoryName(for: item)
         let typeText = item.fromNavigation ? localizedString("route_descr_destination") : typeText(for: item, categoryName: categoryName)
-        return SearchHistoryRecord(item: item, categoryName: categoryName, typeText: typeText)
+        return SearchHistoryRecord(item: item,
+                                   title: item.name ?? "",
+                                   categoryName: categoryName,
+                                   typeText: typeText,
+                                   coordinate: CLLocationCoordinate2D(latitude: item.latitude, longitude: item.longitude),
+                                   poiObject: nil)
     }
 
     private static func tinted(_ image: UIImage, traitCollection: UITraitCollection) -> UIImage {
         image.withTintColor(UIColor.iconColorDefault.resolvedColor(with: traitCollection), renderingMode: .alwaysOriginal)
+    }
+
+    private func poiObjectRecord(for item: OAHistoryItem) -> SearchHistoryRecord? {
+        guard let result = OASearchHistoryAPI.searchResult(for: item), let poiObject = result.object else { return nil }
+        let poiCategory = poiObject as? OAPOICategory
+        let categoryName = poiCategory?.nameLocalized ?? localizedString("poi")
+        var typeText: String?
+        if let poiType = poiObject as? OAPOIType {
+            typeText = poiType.parentType?.nameLocalized ?? poiType.category?.nameLocalized
+        } else if let poiFilter = poiObject as? OAPOIFilter {
+            typeText = poiFilter.category?.nameLocalized
+        }
+        return SearchHistoryRecord(item: item,
+                                   title: result.localeName ?? item.name ?? "",
+                                   categoryName: categoryName,
+                                   typeText: typeText ?? categoryName,
+                                   coordinate: nil,
+                                   poiObject: poiObject)
     }
 
     private func categoryName(for item: OAHistoryItem) -> String {

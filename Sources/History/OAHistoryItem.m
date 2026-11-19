@@ -63,6 +63,14 @@
         {
             _hType = OAHistoryTypeDirection;
         }
+        else if ([pointDescription isPoiType])
+        {
+            _hType = OAHistoryTypePoiType;
+        }
+        else if ([pointDescription isCustomPoiFilter])
+        {
+            _hType = OAHistoryTypePoiFilter;
+        }
         else
         {
             _hType = OAHistoryTypeUnknown;
@@ -99,7 +107,7 @@
     else if (self.iconName.length > 0)
     {
         UIImage *img;
-        if (self.hType == OAHistoryTypePOI)
+        if (self.hType == OAHistoryTypePOI || self.hType == OAHistoryTypePoiType || self.hType == OAHistoryTypePoiFilter)
             img = [UIImage mapSvgImageNamed:self.iconName];
 
         if (img)
@@ -138,9 +146,18 @@
             return POINT_TYPE_FAVORITE;
         case OAHistoryTypeDirection:
             return POINT_TYPE_TARGET;
+        case OAHistoryTypePoiType:
+            return POINT_TYPE_POI_TYPE;
+        case OAHistoryTypePoiFilter:
+            return POINT_TYPE_CUSTOM_POI_FILTER;
         default:
             return POINT_TYPE_LOCATION;
     }
+}
+
+- (BOOL)hasLocation
+{
+    return _hType != OAHistoryTypePoiType && _hType != OAHistoryTypePoiFilter;
 }
 
 - (float)preferredZoom

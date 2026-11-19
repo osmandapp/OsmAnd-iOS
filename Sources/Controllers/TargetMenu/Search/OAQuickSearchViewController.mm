@@ -1422,6 +1422,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [[OAHistoryHelper sharedInstance] addPoint:[OAQuickSearchListItem historyItem:searchResult]];
 }
 
+- (void)addCategoryHistoryItem:(OASearchResult *)searchResult
+{
+    if (![[OAAppSettings sharedManager].searchHistory get])
+        return;
+
+    OAHistoryItem *item = [OAQuickSearchListItem categoryHistoryItem:searchResult];
+    if (item)
+        [[OAHistoryHelper sharedInstance] addPoint:item];
+}
+
 - (IBAction) btnCancelClicked:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:self.onCloseCallback];
@@ -1753,6 +1763,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) completeQueryWithObject:(OASearchResult *)sr
 {
+    [self addCategoryHistoryItem:sr];
     if ([sr.object isKindOfClass:[OAPOIType class]] && [((OAPOIType *) sr.object) isAdditional])
     {
         OAPOIType *additional = (OAPOIType *) sr.object;
@@ -2117,6 +2128,16 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)exploreDidSelectHistoryItem:(OAHistoryItem *)item
 {
+    if (item.hType == OAHistoryTypePoiType || item.hType == OAHistoryTypePoiFilter)
+    {
+        OASearchResult *searchResult = [OASearchHistoryAPI searchResultForHistoryItem:item];
+        if (searchResult)
+        {
+            [self.navigationController popToViewController:self animated:YES];
+            [self completeQueryWithObject:searchResult];
+        }
+        return;
+    }
     if (self.searchType == OAQuickSearchType::REGULAR)
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;

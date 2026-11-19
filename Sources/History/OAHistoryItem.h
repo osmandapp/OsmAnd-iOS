@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
     OAHistoryTypeAddress,
     OAHistoryTypeWpt,
     OAHistoryTypeLocation,
+    OAHistoryTypePoiType,
+    OAHistoryTypePoiFilter,
 };
 
 @property (nonatomic) int64_t hId;
@@ -63,6 +65,7 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 
 - (UIImage *)icon;
 - (NSString *) getPointDescriptionType;
+- (BOOL)hasLocation;
 
 - (float)preferredZoom;
 

@@ -270,6 +270,8 @@
                         if (historyItem)
                         {
                             OASearchHistoryTableItem *historyTableItem = [[OASearchHistoryTableItem alloc] initWithItem:historyItem mapCenterCoordinate:myLocation];
+                            if (![historyItem hasLocation])
+                                historyTableItem.title = searchResult.localeName;
                             [sortedHistoryItems addObject:historyTableItem];
                         }
                     }
@@ -439,11 +441,14 @@
         {
             cell.selectionStyle = self.tableView.editing ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             OASearchHistoryTableItem *historyItem = [item objForKey:@"historyItem"];
-            cell.titleLabel.text = historyItem.item.name;
+            cell.titleLabel.text = historyItem.title.length > 0 ? historyItem.title : historyItem.item.name;
             cell.leftIconView.image = [historyItem.item icon];
             cell.valueLabel.text = historyItem.item.typeName.length > 0 ? historyItem.item.typeName : OALocalizedString(@"shared_string_history");
             OADistanceDirection *distDir = [historyItem getEvaluatedDistanceDirection:_decelerating];
-            cell.descriptionLabel.text = [item.key isEqualToString:@"prevRoute"] ? item.descr : distDir.distance;
+            if ([item.key isEqualToString:@"prevRoute"])
+                cell.descriptionLabel.text = item.descr;
+            else
+                cell.descriptionLabel.text = [historyItem.item hasLocation] ? distDir.distance : nil;
         }
         return cell;
     }

@@ -75,6 +75,7 @@ private final class AnalyzeChartDelegateProxy: NSObject, ChartViewDelegate {
 
 final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabContent {
     private static let contentTopInset: CGFloat = 10
+    private static let attributeHeaderInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 32)
 
     let planRouteTab: PlanRouteTab = .analyze
     var onAttachToRoadsRequested: (() -> Void)?
@@ -254,7 +255,7 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 72, right: 0)
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(AnalyzeRouteAttributeHeaderView.self, forHeaderFooterViewReuseIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier)
+        tableView.register(CollapsibleSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: CollapsibleSectionHeaderView.reuseIdentifier)
         tableView.register(HorizontalEmptyCell.self, forCellReuseIdentifier: HorizontalEmptyCell.reuseIdentifier)
         tableView.register(AnalyzeCardCell.self, forCellReuseIdentifier: AnalyzeCardCell.reuseIdentifier)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -1298,10 +1299,11 @@ extension PlanRouteAnalyzeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard case .hasData = currentState,
               section >= roadAttributesSectionStart,
-              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: AnalyzeRouteAttributeHeaderView.reuseIdentifier) as? AnalyzeRouteAttributeHeaderView,
+              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: CollapsibleSectionHeaderView.reuseIdentifier) as? CollapsibleSectionHeaderView,
               let stat = roadAttributeStatistic(for: section) else { return nil }
 
         let statIndex = section - roadAttributesSectionStart
+        header.fixedHorizontalInsets = Self.attributeHeaderInsets
         header.configure(
             title: roadAttributeTitle(for: stat),
             isExpanded: expandedStatIndexes.contains(statIndex),
@@ -1583,7 +1585,7 @@ private extension PlanRouteAnalyzeViewController {
         let section = index + roadAttributesSectionStart
         let isExpanded = expandedStatIndexes.contains(index)
         let stat = roadAttributeStatistics[index]
-        (tableView.headerView(forSection: section) as? AnalyzeRouteAttributeHeaderView)?.setExpanded(isExpanded)
+        (tableView.headerView(forSection: section) as? CollapsibleSectionHeaderView)?.setExpanded(isExpanded)
 
         if let height = roadAttrRowHeight(for: stat, isExpanded: isExpanded) {
             measuredRowHeights[roadAttrHeightKey(name: stat.name, isExpanded: isExpanded)] = height

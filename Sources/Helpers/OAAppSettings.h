@@ -1471,6 +1471,8 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 @property (nonatomic) OACommonBoolean *searchHistory;
 @property (nonatomic) OACommonBoolean *navigationHistory;
 @property (nonatomic) OACommonBoolean *mapMarkersHistory;
+@property (nonatomic) OACommonBoolean *exploreNearbyItemsCollapsed;
+@property (nonatomic) OACommonBoolean *exploreHistoryCollapsed;
 @property (nonatomic) OACommonString *lastUsedApplicationMode;
 @property (nonatomic) OACommonAppMode * lastRouteApplicationMode;
 

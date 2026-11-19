@@ -115,7 +115,7 @@ struct PointContentConfiguration: UIContentConfiguration {
     }
 }
 
-private final class PointRowContentView: UIView, UIContentView {
+private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayoutGuideProviding {
     var configuration: UIContentConfiguration {
         get { appliedConfiguration }
         set {
@@ -197,5 +197,29 @@ private final class PointRowContentView: UIView, UIContentView {
     private func titleFont(isVisible: Bool) -> UIFont {
         guard !isVisible, let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).withSymbolicTraits(.traitItalic) else { return .preferredFont(forTextStyle: .body) }
         return UIFont(descriptor: descriptor, size: 0)
+    }
+}
+
+protocol PrimaryTextLayoutGuideProviding: UIView {
+    var primaryTextLayoutGuide: UILayoutGuide? { get }
+}
+
+class PointContentTableViewCell: UITableViewCell {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        alignSeparatorWithPrimaryText()
+    }
+
+    private func alignSeparatorWithPrimaryText() {
+        let textLayoutGuide = ([contentView] + contentView.subviews).lazy
+            .compactMap { ($0 as? PrimaryTextLayoutGuideProviding)?.primaryTextLayoutGuide }
+            .first
+        guard let textLayoutGuide, let owningView = textLayoutGuide.owningView else { return }
+        contentView.layoutIfNeeded()
+        let textFrame = owningView.convert(textLayoutGuide.layoutFrame, to: self)
+        guard textFrame.width > 0 else { return }
+        let leadingInset = effectiveUserInterfaceLayoutDirection == .rightToLeft ? bounds.width - textFrame.maxX : textFrame.minX
+        guard abs(separatorInset.left - leadingInset) > 0.5 else { return }
+        separatorInset.left = leadingInset
     }
 }

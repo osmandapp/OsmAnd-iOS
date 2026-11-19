@@ -47,8 +47,7 @@ struct SearchHistoryItemPresenter {
 
     func record(for item: OAHistoryItem) -> SearchHistoryRecord {
         let categoryName = categoryName(for: item)
-        let typeName = item.typeName ?? ""
-        let typeText = item.fromNavigation ? localizedString("route_descr_destination") : typeName.isEmpty ? categoryName : typeName
+        let typeText = item.fromNavigation ? localizedString("route_descr_destination") : typeText(for: item, categoryName: categoryName)
         return SearchHistoryRecord(item: item, categoryName: categoryName, typeText: typeText)
     }
 
@@ -74,7 +73,26 @@ struct SearchHistoryItemPresenter {
         }
     }
 
+    private func typeText(for item: OAHistoryItem, categoryName: String) -> String {
+        let typeName = item.typeName ?? ""
+        let text = typeName.isEmpty ? categoryName : typeName
+        guard let address = item.address, !address.isEmpty, !text.contains(address), !text.contains(Self.typeNameSeparator) else { return text }
+        return text.isEmpty ? address : text + Self.typeNameSeparator + address
+    }
+
     private func poiCategory(for item: OAHistoryItem) -> OAPOICategory? {
+        let poiHelper = OAPOIHelper.sharedInstance()
+        if let key = item.poiCategoryKey, !key.isEmpty, let category = poiHelper.getPoiCategory(byName: key) {
+            return category
+        }
+        if let key = item.poiSubtypeKey, !key.isEmpty, let poiType = poiHelper.getAnyPoiType(byName: key) {
+            if let category = poiType as? OAPOICategory {
+                return category
+            }
+            if let type = poiType as? OAPOIType {
+                return type.category
+            }
+        }
         guard let typeName = item.typeName?.components(separatedBy: Self.typeNameSeparator).first?.trimmingCharacters(in: .whitespaces),
               !typeName.isEmpty else { return nil }
         return poiTypesByName[typeName.lowercased()]?.category

@@ -10,7 +10,7 @@
 #import "OADistanceDirection.h"
 #import "OACity.h"
 
-@class OASearchResult, OAPointDescription, OASGpxDataItem;
+@class OASearchResult, OAPointDescription, OASGpxDataItem, OAHistoryItem;
 
 typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 {
@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 + (NSString *)getTypeName:(OASearchResult *)searchResult;
 // the type of a poi without its address or city, for a list that shows the address on a line of its own
 + (NSString *)getPoiTypeNameWithoutAddress:(OASearchResult *)searchResult;
++ (OAHistoryItem *)historyItem:(OASearchResult *)searchResult;
 
 
 - (OADistanceDirection *)getEvaluatedDistanceDirection:(BOOL)decelerating;

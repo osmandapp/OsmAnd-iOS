@@ -15,6 +15,11 @@
 
 @implementation OAHistoryItem
 
++ (NSArray<NSString *> *)metadataKeys
+{
+    return @[@"objectType", @"cityType", @"displayName", @"poiCategoryKey", @"poiSubtypeKey", @"typeName", @"address", @"relatedObjectName", @"openingHours", @"alternateName", @"photoUrl", @"osmId"];
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -64,6 +69,25 @@
         }
     }
     return self;
+}
+
+- (BOOL)fillMissingMetadataFrom:(OAHistoryItem *)item
+{
+    BOOL filled = NO;
+    for (NSString *key in self.class.metadataKeys)
+    {
+        id value = [item valueForKey:key];
+        if ([self.class isEmptyMetadataValue:value] || ![self.class isEmptyMetadataValue:[self valueForKey:key]])
+            continue;
+        [self setValue:value forKey:key];
+        filled = YES;
+    }
+    return filled;
+}
+
++ (BOOL)isEmptyMetadataValue:(id)value
+{
+    return !value || [value isEqual:@""];
 }
 
 -(UIImage *)icon

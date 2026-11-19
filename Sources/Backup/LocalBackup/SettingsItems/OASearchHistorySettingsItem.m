@@ -121,6 +121,10 @@
                 [self.appliedItems removeObject:original];
                 [self.appliedItems addObject:duplicate];
             }
+            else if ([original fillMissingMetadataFrom:duplicate])
+            {
+                [self.appliedItems addObject:original];
+            }
         }
         // TODO: Sync search history with Android and replace existing items in history!
         [_searchHistoryHelper importBackupPoints:self.appliedItems];
@@ -162,8 +166,15 @@
         OAHistoryItem *item = [[OAHistoryItem alloc] initWithPointDescription:pd];
         item.name = pd.name;
         item.iconName = pd.iconName;
-        NSString *typeName = [object[@"typeName"] isKindOfClass:NSString.class] ? object[@"typeName"] : nil;
-        item.typeName = typeName.length > 0 ? typeName : pd.typeName;
+        for (NSString *key in OAHistoryItem.metadataKeys)
+        {
+            id value = object[key];
+            Class valueClass = [key isEqualToString:@"osmId"] ? NSNumber.class : NSString.class;
+            if ([value isKindOfClass:valueClass])
+                [item setValue:value forKey:key];
+        }
+        if (item.typeName.length == 0)
+            item.typeName = pd.typeName;
         item.latitude = latitude;
         item.longitude = longitude;
         item.date = [NSDate dateWithTimeIntervalSince1970:lastAccessedTime / 1000];
@@ -216,6 +227,12 @@
             //                jsonObject.put("intervalValues", historyEntry.getIntervalsValues());
             item[@"fromNavigation"] = @(historyEntry.fromNavigation);
             item[@"source"] = historyEntry.fromNavigation ? @"NAVIGATION" : @"SEARCH";
+            for (NSString *key in OAHistoryItem.metadataKeys)
+            {
+                id value = [historyEntry valueForKey:key];
+                if (value && ![value isEqual:@""])
+                    item[key] = value;
+            }
             [jsonArray addObject:item];
         }
         json[@"items"] = jsonArray;

@@ -27,6 +27,17 @@
 #define POINT_COL_ICON_NAME @"ficonname"
 #define POINT_COL_TYPE_NAME @"ftypename"
 #define POINT_COL_FROM_NAVIGATION @"ffromnavigation"
+#define POINT_COL_OBJECT_TYPE @"fobjecttype"
+#define POINT_COL_CITY_TYPE @"fcitytype"
+#define POINT_COL_DISPLAY_NAME @"fdisplayname"
+#define POINT_COL_POI_CATEGORY_KEY @"fpoicategorykey"
+#define POINT_COL_POI_SUBTYPE_KEY @"fpoisubtypekey"
+#define POINT_COL_ADDRESS @"faddress"
+#define POINT_COL_RELATED_OBJECT_NAME @"frelatedobjectname"
+#define POINT_COL_OPENING_HOURS @"fopeninghours"
+#define POINT_COL_ALTERNATE_NAME @"falternatename"
+#define POINT_COL_PHOTO_URL @"fphotourl"
+#define POINT_COL_OSM_ID @"fosmid"
 
 #define HISTORY_LAST_MODIFIED_NAME @"history_recents"
 #define MARKERS_HISTORY_LAST_MODIFIED_NAME @"map_markers_history"
@@ -71,74 +82,124 @@
         [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
     
     dispatch_sync(dbQueue, ^{
-        
-        NSFileManager *filemgr = [NSFileManager defaultManager];
         const char *dbpath = [databasePath UTF8String];
-        
-        if ([filemgr fileExistsAtPath: databasePath ] == NO)
+        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
+            char *errMsg;
+            const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ integer, %@ integer, %@ double, %@ double, %@ text, %@ integer, %@ text, %@ text, %@ integer)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION] UTF8String];
+            if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                char *errMsg;
-                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ integer, %@ integer, %@ double, %@ double, %@ text, %@ integer, %@ text, %@ text, %@ integer)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION] UTF8String];
-                
-                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-                {
-                    OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
-                }
-                if (errMsg != NULL) sqlite3_free(errMsg);
+                OALog(@"Failed to create table: %@", errMsg ? [NSString stringWithUTF8String:errMsg] : @"");
+            }
+            if (errMsg != NULL) sqlite3_free(errMsg);
 
-                sqlite3_close(historyDB);
-            }
-            else
+            [self addMissingColumns];
+
+            sql_stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = 0 WHERE %@ IS NULL", TABLE_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_FROM_NAVIGATION] UTF8String];
+            if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
             {
-                // Failed to open/create database
+                OALog(@"Failed to migrate %@: %@", POINT_COL_FROM_NAVIGATION, errMsg ? [NSString stringWithUTF8String:errMsg] : @"");
             }
+            if (errMsg != NULL) sqlite3_free(errMsg);
+
+            sqlite3_close(historyDB);
         }
-        else
-        {
-            // Upgrade if needed
-            if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
-            {
-                char *errMsg;
-                const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TABLE_NAME, POINT_COL_ICON_NAME] UTF8String];
-                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-                {
-                    //Failed to add column. Already exists;
-                }
-                if (errMsg != NULL) sqlite3_free(errMsg);
-
-                sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TABLE_NAME, POINT_COL_TYPE_NAME] UTF8String];
-                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-                {
-                    //Failed to add column. Already exists;
-                }
-                if (errMsg != NULL) sqlite3_free(errMsg);
-
-                sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ integer", TABLE_NAME, POINT_COL_FROM_NAVIGATION] UTF8String];
-                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-                {
-                    //Failed to add column. Already exists;
-                }
-                if (errMsg != NULL) sqlite3_free(errMsg);
-
-                sql_stmt = [[NSString stringWithFormat:@"UPDATE %@ SET %@ = 0 WHERE %@ IS NULL", TABLE_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_FROM_NAVIGATION] UTF8String];
-                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
-                {
-                    OALog(@"Failed to migrate %@: %@", POINT_COL_FROM_NAVIGATION, errMsg ? [NSString stringWithUTF8String:errMsg] : @"");
-                }
-                if (errMsg != NULL) sqlite3_free(errMsg);
-
-                sqlite3_close(historyDB);
-            }
-            else
-            {
-                // Failed to upate database
-            }
-        }
-        
     });
-    
+}
+
+- (void)addMissingColumns
+{
+    NSMutableSet<NSString *> *existingColumns = [NSMutableSet set];
+    sqlite3_stmt *statement;
+    const char *query_stmt = [[NSString stringWithFormat:@"PRAGMA table_info(%@)", TABLE_NAME] UTF8String];
+    if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+    {
+        while (sqlite3_step(statement) == SQLITE_ROW)
+        {
+            NSString *column = [self textColumn:statement index:1];
+            if (column)
+                [existingColumns addObject:column];
+        }
+        sqlite3_finalize(statement);
+    }
+
+    NSDictionary<NSString *, NSString *> *columnTypes = @{
+        POINT_COL_ICON_NAME: @"text",
+        POINT_COL_TYPE_NAME: @"text",
+        POINT_COL_FROM_NAVIGATION: @"integer",
+        POINT_COL_OBJECT_TYPE: @"text",
+        POINT_COL_CITY_TYPE: @"text",
+        POINT_COL_DISPLAY_NAME: @"text",
+        POINT_COL_POI_CATEGORY_KEY: @"text",
+        POINT_COL_POI_SUBTYPE_KEY: @"text",
+        POINT_COL_ADDRESS: @"text",
+        POINT_COL_RELATED_OBJECT_NAME: @"text",
+        POINT_COL_OPENING_HOURS: @"text",
+        POINT_COL_ALTERNATE_NAME: @"text",
+        POINT_COL_PHOTO_URL: @"text",
+        POINT_COL_OSM_ID: @"integer"
+    };
+    for (NSString *column in columnTypes)
+    {
+        if ([existingColumns containsObject:column])
+            continue;
+
+        char *errMsg;
+        const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ %@", TABLE_NAME, column, columnTypes[column]] UTF8String];
+        if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+        {
+            OALog(@"Failed to add column %@: %@", column, errMsg ? [NSString stringWithUTF8String:errMsg] : @"");
+        }
+        if (errMsg != NULL) sqlite3_free(errMsg);
+    }
+}
+
+- (NSString *)selectColumns
+{
+    return [@[@"ROWID", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_OBJECT_TYPE, POINT_COL_CITY_TYPE, POINT_COL_DISPLAY_NAME, POINT_COL_POI_CATEGORY_KEY, POINT_COL_POI_SUBTYPE_KEY, POINT_COL_ADDRESS, POINT_COL_RELATED_OBJECT_NAME, POINT_COL_OPENING_HOURS, POINT_COL_ALTERNATE_NAME, POINT_COL_PHOTO_URL, POINT_COL_OSM_ID] componentsJoinedByString:@", "];
+}
+
+- (OAHistoryItem *)readItem:(sqlite3_stmt *)statement
+{
+    OAHistoryItem *item = [[OAHistoryItem alloc] init];
+    int column = 0;
+    item.hId = sqlite3_column_int64(statement, column++);
+    item.hHash = sqlite3_column_int64(statement, column++);
+    item.date = [NSDate dateWithTimeIntervalSince1970:sqlite3_column_int64(statement, column++)];
+    item.latitude = sqlite3_column_double(statement, column++);
+    item.longitude = sqlite3_column_double(statement, column++);
+    item.name = [self textColumn:statement index:column++];
+    item.hType = (OAHistoryType) sqlite3_column_int(statement, column++);
+    item.iconName = [self textColumn:statement index:column++];
+    item.typeName = [self textColumn:statement index:column++];
+    item.fromNavigation = sqlite3_column_int(statement, column++) == 1;
+    item.objectType = [self textColumn:statement index:column++];
+    item.cityType = [self textColumn:statement index:column++];
+    item.displayName = [self textColumn:statement index:column++];
+    item.poiCategoryKey = [self textColumn:statement index:column++];
+    item.poiSubtypeKey = [self textColumn:statement index:column++];
+    item.address = [self textColumn:statement index:column++];
+    item.relatedObjectName = [self textColumn:statement index:column++];
+    item.openingHours = [self textColumn:statement index:column++];
+    item.alternateName = [self textColumn:statement index:column++];
+    item.photoUrl = [self textColumn:statement index:column++];
+    if (sqlite3_column_type(statement, column) != SQLITE_NULL)
+        item.osmId = @(sqlite3_column_int64(statement, column));
+    return item;
+}
+
+- (NSString *)textColumn:(sqlite3_stmt *)statement index:(int)index
+{
+    const unsigned char *text = sqlite3_column_text(statement, index);
+    return text ? [NSString stringWithUTF8String:(const char *) text] : nil;
+}
+
+- (void)bindText:(NSString *)text statement:(sqlite3_stmt *)statement index:(int)index
+{
+    if (text.length > 0)
+        sqlite3_bind_text(statement, index, [text UTF8String], -1, SQLITE_TRANSIENT);
+    else
+        sqlite3_bind_null(statement, index);
 }
 
 - (int64_t)getRowHash:(double)latitude longitude:(double)longitude name:(NSString *)name
@@ -168,8 +229,8 @@
             bool updateHistory = NO;
             for (OAHistoryItem * item: items)
             {
-                int64_t hId = 0;
-                NSString *querySQL = [NSString stringWithFormat:@"SELECT ROWID FROM %@ WHERE %@ = ? AND %@ = ? ORDER BY %@ DESC LIMIT 1", TABLE_NAME, POINT_COL_HASH, POINT_COL_FROM_NAVIGATION, POINT_COL_TIME];
+                OAHistoryItem *existingItem = nil;
+                NSString *querySQL = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ = ? AND %@ = ? ORDER BY %@ DESC LIMIT 1", [self selectColumns], TABLE_NAME, POINT_COL_HASH, POINT_COL_FROM_NAVIGATION, POINT_COL_TIME];
                 const char *query_stmt = [querySQL UTF8String];
                 int64_t hHash = item.hHash > 0 ? item.hHash : [self getRowHash:item.latitude longitude:item.longitude name:item.name];
                 if (item.hType == OAHistoryTypeDirection)
@@ -182,14 +243,18 @@
                     sqlite3_bind_int64(statement, 1, hHash);
                     sqlite3_bind_int(statement, 2, item.fromNavigation ? 1 : 0);
                     
-                    while (sqlite3_step(statement) == SQLITE_ROW)
-                    {
-                        hId = sqlite3_column_int64(statement, 0);
-                    }
+                    if (sqlite3_step(statement) == SQLITE_ROW)
+                        existingItem = [self readItem:statement];
                     sqlite3_finalize(statement);
                 }
+
+                int64_t hId = existingItem ? existingItem.hId : 0;
+                OAHistoryItem *metadata = [[OAHistoryItem alloc] init];
+                [metadata fillMissingMetadataFrom:item];
+                if (existingItem)
+                    [metadata fillMissingMetadataFrom:existingItem];
                 
-                querySQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(%@%@, %@, %@, %@, %@, %@, %@, %@, %@) VALUES(%@?, ?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, hId > 0 ? @"ROWID, " : @"", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, hId > 0 ? @"?, " : @""];
+                querySQL = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@(%@%@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@, %@) VALUES(%@?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, hId > 0 ? @"ROWID, " : @"", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_OBJECT_TYPE, POINT_COL_CITY_TYPE, POINT_COL_DISPLAY_NAME, POINT_COL_POI_CATEGORY_KEY, POINT_COL_POI_SUBTYPE_KEY, POINT_COL_ADDRESS, POINT_COL_RELATED_OBJECT_NAME, POINT_COL_OPENING_HOURS, POINT_COL_ALTERNATE_NAME, POINT_COL_PHOTO_URL, POINT_COL_OSM_ID, hId > 0 ? @"?, " : @""];
                 query_stmt = [querySQL UTF8String];
                 
                 sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL);
@@ -199,7 +264,7 @@
                     sqlite3_bind_int64(statement, row++, hId);
                 
                 NSString *iconName = item.iconName ?: @"";
-                NSString *typeName = item.typeName ?: @"";
+                NSString *typeName = metadata.typeName ?: @"";
                 int fromNavigation = item.fromNavigation ? 1 : 0;
                 
                 sqlite3_bind_int64(statement, row++, hHash);
@@ -210,7 +275,21 @@
                 sqlite3_bind_int(statement, row++, (int)item.hType);
                 sqlite3_bind_text(statement, row++, [iconName UTF8String], -1, SQLITE_TRANSIENT);
                 sqlite3_bind_text(statement, row++, [typeName UTF8String], -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(statement, row, fromNavigation);
+                sqlite3_bind_int(statement, row++, fromNavigation);
+                [self bindText:metadata.objectType statement:statement index:row++];
+                [self bindText:metadata.cityType statement:statement index:row++];
+                [self bindText:metadata.displayName statement:statement index:row++];
+                [self bindText:metadata.poiCategoryKey statement:statement index:row++];
+                [self bindText:metadata.poiSubtypeKey statement:statement index:row++];
+                [self bindText:metadata.address statement:statement index:row++];
+                [self bindText:metadata.relatedObjectName statement:statement index:row++];
+                [self bindText:metadata.openingHours statement:statement index:row++];
+                [self bindText:metadata.alternateName statement:statement index:row++];
+                [self bindText:metadata.photoUrl statement:statement index:row++];
+                if (metadata.osmId)
+                    sqlite3_bind_int64(statement, row, metadata.osmId.longLongValue);
+                else
+                    sqlite3_bind_null(statement, row);
                 
                 [self checkError:sqlite3_step(statement)];
                 
@@ -286,45 +365,15 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@ FROM %@ WHERE %@ = %@ AND %@ = %d", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME, POINT_COL_NAME, name, POINT_COL_FROM_NAVIGATION, (fromNavigation ? 1 : 0)]];
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE %@ = ? AND %@ = ? ORDER BY %@ DESC LIMIT 1", [self selectColumns], TABLE_NAME, POINT_COL_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_TIME];
             
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
-                while (sqlite3_step(statement) == SQLITE_ROW)
-                {
-                    item = [[OAHistoryItem alloc] init];
-                    int64_t hId = sqlite3_column_int64(statement, 0);
-                    int64_t hHash = sqlite3_column_int64(statement, 1);
-                    int64_t time = sqlite3_column_int64(statement, 2);
-                    
-                    double lat = sqlite3_column_double(statement, 3);
-                    double lon = sqlite3_column_double(statement, 4);
-                    
-                    OAHistoryType type = (OAHistoryType) sqlite3_column_int(statement, 5);
-
-                    NSString *iconName;
-                    if (sqlite3_column_text(statement, 6) != nil)
-                        iconName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 6)];
-
-                    NSString *typeName;
-                    if (sqlite3_column_text(statement, 7) != nil)
-                        typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
-
-                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
-                    
-                    item.hId = hId;
-                    item.hHash = hHash;
-                    item.date = date;
-                    item.latitude = lat;
-                    item.longitude = lon;
-                    item.name = name;
-                    item.hType = type;
-                    item.iconName = iconName;
-                    item.typeName = typeName;
-                    item.fromNavigation = fromNavigation;
-                    break;
-                }
+                sqlite3_bind_text(statement, 1, [name UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_int(statement, 2, fromNavigation ? 1 : 0);
+                if (sqlite3_step(statement) == SQLITE_ROW)
+                    item = [self readItem:statement];
                 sqlite3_finalize(statement);
             }
             sqlite3_close(historyDB);
@@ -350,7 +399,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, POINT_COL_FROM_NAVIGATION, TABLE_NAME]];
+            NSMutableString *querySQL = [NSMutableString stringWithFormat:@"SELECT %@ FROM %@", [self selectColumns], TABLE_NAME];
             
             if (selectPostfix)
                 [querySQL appendFormat:@" %@", selectPostfix];
@@ -377,54 +426,9 @@
                 }
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    OAHistoryItem *item = [[OAHistoryItem alloc] init];
-                    
-                    int64_t hId = sqlite3_column_int64(statement, 0);
-                    int64_t hHash = sqlite3_column_int64(statement, 1);
-                    int64_t time = sqlite3_column_int64(statement, 2);
-                    
-                    double lat = sqlite3_column_double(statement, 3);
-                    double lon = sqlite3_column_double(statement, 4);
-                    
-                    NSString *name;
-                    if (sqlite3_column_text(statement, 5) != nil)
-                        name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
-
-                    OAHistoryType type = (OAHistoryType) sqlite3_column_int(statement, 6);
-
-                    NSString *typeName;
-                    if (sqlite3_column_text(statement, 8) != nil)
-                        typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
-
-                    NSInteger navigation = sqlite3_column_int(statement, 9);
-                    BOOL fromNavigation = navigation == 1 ? YES : NO;
-
-                    BOOL skipDisabledResult = NO;
-                    if (!ignoreDisabledResult)
-                    {
-                        skipDisabledResult = typeName.length > 0 && [disabledPoiTypeNames containsObject:typeName];
-                    }
-                    if (!skipDisabledResult)
-                    {
-                        NSString *iconName;
-                        if (sqlite3_column_text(statement, 7) != nil)
-                            iconName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
-
-                        NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
-
-                        item.hId = hId;
-                        item.hHash = hHash;
-                        item.date = date;
-                        item.latitude = lat;
-                        item.longitude = lon;
-                        item.name = name;
-                        item.hType = type;
-                        item.iconName = iconName;
-                        item.typeName = typeName;
-                        item.fromNavigation = fromNavigation;
-
+                    OAHistoryItem *item = [self readItem:statement];
+                    if (ignoreDisabledResult || item.typeName.length == 0 || ![disabledPoiTypeNames containsObject:item.typeName])
                         [arr addObject:item];
-                    }
                 }
                 sqlite3_finalize(statement);
             }

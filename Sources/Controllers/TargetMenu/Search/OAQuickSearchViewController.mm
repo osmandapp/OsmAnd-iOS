@@ -1418,51 +1418,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) addHistoryItem:(OASearchResult *)searchResult
 {
-    if (searchResult.location && [[OAAppSettings sharedManager].searchHistory get])
-    {
-        OAHistoryItem *h = [[OAHistoryItem alloc] init];
-        h.name = [OAQuickSearchListItem getName:searchResult];
-        h.latitude = searchResult.location.coordinate.latitude;
-        h.longitude = searchResult.location.coordinate.longitude;
-        h.date = [NSDate date];
-        h.iconName = [OAQuickSearchListItem getIconName:searchResult];
-        h.typeName = [OAQuickSearchListItem getTypeName:searchResult];
-
-        switch (searchResult.objectType)
-        {
-            case EOAObjectTypePoi:
-                h.hType = OAHistoryTypePOI;
-                break;
-
-            case EOAObjectTypeFavorite:
-                h.hType = OAHistoryTypeFavorite;
-                break;
-
-            case EOAObjectTypeWpt:
-                h.hType = OAHistoryTypeWpt;
-                break;
-
-            case EOAObjectTypeLocation:
-                h.hType = OAHistoryTypeLocation;
-                break;
-
-            case EOAObjectTypeCity:
-            case EOAObjectTypeVillage:
-            case EOAObjectTypePostcode:
-            case EOAObjectTypeStreet:
-            case EOAObjectTypeHouse:
-            case EOAObjectTypeStreetIntersection:
-                h.hType = OAHistoryTypeAddress;
-                break;
-
-            default:
-                h.hType = OAHistoryTypeUnknown;
-                break;
-        }
-
-        if (!self.fromNavigation)
-            [[OAHistoryHelper sharedInstance] addPoint:h];
-    }
+    if (searchResult.location && [[OAAppSettings sharedManager].searchHistory get] && !self.fromNavigation)
+        [[OAHistoryHelper sharedInstance] addPoint:[OAQuickSearchListItem historyItem:searchResult]];
 }
 
 - (IBAction) btnCancelClicked:(id)sender

@@ -7,6 +7,7 @@
 //
 
 #import "OAWorldRegion.h"
+#import "OsmAndSharedWrapper.h"
 #import "OADownloadsManager.h"
 #import "Localization.h"
 #import "OALog.h"
@@ -31,6 +32,10 @@
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/KeyedEntriesCollection.h>
+
+@interface OAWorldRegion ()
+@property (atomic, strong, readwrite, nullable) OASKCollatorStringMatcherPreparedName *preparedSearchName;
+@end
 
 @implementation OAWorldRegion
 {
@@ -301,6 +306,19 @@
 @synthesize subregions = _subregions;
 @synthesize flattenedSubregions = _flattenedSubregions;
 @synthesize resourceTypes = _resourceTypes;
+
+- (void)setResourceTypes:(NSArray *)types
+{
+    _resourceTypes = types;
+    if (![types containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+        self.preparedSearchName = nil;
+    else if (!self.preparedSearchName)
+    {
+        NSString *name = [[self.allNames componentsJoinedByString:@" "] ?: self.name lowercaseString];
+        if (name.length > 0)
+            self.preparedSearchName = [[OASKCollatorStringMatcherPreparedName alloc] initWithFullName:name];
+    }
+}
 
 - (NSString *) name
 {

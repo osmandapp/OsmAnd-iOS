@@ -437,14 +437,12 @@ static OASSearchResult *favoriteResult(OAFavoriteItem *point, OASSearchPhrase *p
     return [OAResourcesUIHelper uninstalledMapFromResourceIds:ids region:region];
 }
 
-- (void)searchRegion:(OAWorldRegion *)region phrase:(OASSearchPhrase *)phrase matcher:(OASSearchUICoreSearchResultMatcher *)matcher
+- (void)searchRegion:(OAWorldRegion *)region phrase:(OASSearchPhrase *)phrase nameMatcher:(OASNameStringMatcher *)nameMatcher matcher:(OASSearchUICoreSearchResultMatcher *)matcher
 {
     if (!region || [matcher isCancelled])
         return;
-    NSString *name = [[region.allNames componentsJoinedByString:@" "] ?: region.name lowercaseString];
-    if (region.superregion.superregion.resourceTypes
-        && [region.resourceTypes containsObject:@((int) OsmAnd::ResourcesManager::ResourceType::MapRegion)]
-        && [OASOsmandRegions.companion isRegionNameMatchedQuery:[phrase getFullSearchPhrase] regionName:name])
+    OASKCollatorStringMatcherPreparedName *name = region.preparedSearchName;
+    if (name && region.superregion.superregion.resourceTypes && [nameMatcher matchesPreparedName:name])
     {
         OARepositoryResourceItem *item = [self uninstalledMapForRegion:region];
         if (item && ![matcher isCancelled])
@@ -463,13 +461,15 @@ static OASSearchResult *favoriteResult(OAFavoriteItem *point, OASSearchPhrase *p
     {
         if ([matcher isCancelled])
             return;
-        [self searchRegion:child phrase:phrase matcher:matcher];
+        [self searchRegion:child phrase:phrase nameMatcher:nameMatcher matcher:matcher];
     }
 }
 
 - (BOOL)searchPhrase:(OASSearchPhrase *)phrase resultMatcher:(OASSearchUICoreSearchResultMatcher *)matcher
 {
-    [self searchRegion:[self worldRegion] phrase:phrase matcher:matcher];
+    OASNameStringMatcher *nameMatcher = [[OASNameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase]
+                                                                                mode:OASKStringMatcherMode.checkEqualsFromSpace];
+    [self searchRegion:[self worldRegion] phrase:phrase nameMatcher:nameMatcher matcher:matcher];
     return ![matcher isCancelled];
 }
 

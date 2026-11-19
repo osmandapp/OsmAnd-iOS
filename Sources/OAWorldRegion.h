@@ -14,6 +14,8 @@
 
 @class OAProduct, OAPointIContainer, OAResourceGroupItem, QuadRect;
 
+@class OASKCollatorStringMatcherPreparedName;
+
 @interface OAWorldRegion : NSObject
 
 // Region data:
@@ -43,6 +45,7 @@
 @property (nonatomic) QuadRect *boundingBox;
 
 @property (nonatomic) NSArray *resourceTypes;
+@property (atomic, readonly, nullable) OASKCollatorStringMatcherPreparedName *preparedSearchName;
 @property (nonatomic) OAResourceGroupItem *groupItem;
 
 // Hierarchy:

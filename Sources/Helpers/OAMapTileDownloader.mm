@@ -14,6 +14,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OsmAndApp.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
@@ -208,7 +209,8 @@
     BOOL isSqlite = _type == EOATileRequestTypeSqlite;
     if (isSqlite && _sqliteSource)
     {
-        if ([_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom])
+        NSData *cachedTile = [_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom];
+        if (cachedTile.length > 0 && [OANativeUtilities skImageFromNSData:cachedTile])
         {
             return nil;
         }

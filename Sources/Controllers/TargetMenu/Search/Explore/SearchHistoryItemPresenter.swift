@@ -169,16 +169,11 @@ struct SearchHistoryItemPresenter {
 
     private func poiCategory(for item: OAHistoryItem) -> OAPOICategory? {
         let poiHelper = OAPOIHelper.sharedInstance()
-        if let key = item.poiCategoryKey, !key.isEmpty, let category = poiHelper.getPoiCategory(byName: key) {
+        if let key = item.poiCategoryKey, !key.isEmpty, let category = poiHelper.getCategories(true).first(where: { $0.name == key }) {
             return category
         }
-        if let key = item.poiSubtypeKey, !key.isEmpty, let poiType = poiHelper.getAnyPoiType(byName: key) {
-            if let category = poiType as? OAPOICategory {
-                return category
-            }
-            if let type = poiType as? OAPOIType {
-                return type.category
-            }
+        if let key = item.poiSubtypeKey, !key.isEmpty, let category = poiHelper.getPoiType(byKey: key)?.category {
+            return category
         }
         guard let typeName = item.typeName?.components(separatedBy: Self.typeNameSeparator).first?.trimmingCharacters(in: .whitespaces),
               !typeName.isEmpty else { return nil }

@@ -16,7 +16,7 @@
 class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     weak var delegate: DownloadingCellResourceHelperDelegate?
-    var hostViewController: UIViewController?
+    weak var hostViewController: UIViewController?
     var stopWithAlertMessage = false
     var showDownloadingBytesInDescription = false
     

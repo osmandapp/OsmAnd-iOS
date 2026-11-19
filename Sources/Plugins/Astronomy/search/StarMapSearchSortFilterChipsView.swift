@@ -34,19 +34,25 @@ struct SearchSortFilterChipGroup {
     let selectionMode: StarMapSearchSortFilterChipSelectionMode
     let sections: [StarMapSearchSortFilterChipSection]
     let isToggleOn: Bool
+    let menuTitle: String
+    let isEnabled: Bool
 
     init(id: String,
          chipTitle: String,
          chipImage: UIImage?,
          selectionMode: StarMapSearchSortFilterChipSelectionMode,
          sections: [StarMapSearchSortFilterChipSection] = [],
-         isToggleOn: Bool = false) {
+         isToggleOn: Bool = false,
+         menuTitle: String = "",
+         isEnabled: Bool = true) {
         self.id = id
         self.chipTitle = chipTitle
         self.chipImage = chipImage
         self.selectionMode = selectionMode
         self.sections = sections
         self.isToggleOn = isToggleOn
+        self.menuTitle = menuTitle
+        self.isEnabled = isEnabled
     }
 }
 
@@ -99,7 +105,7 @@ private final class StarMapSearchSortFilterChipButton: UIButton {
         addAction(action, for: .touchUpInside)
     }
 
-    func apply(title: String, image: UIImage?, style: StarMapSearchSortFilterChipStyle) {
+    func apply(title: String, image: UIImage?, style: StarMapSearchSortFilterChipStyle, isEnabled: Bool = true) {
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         config.image = image
@@ -107,10 +113,11 @@ private final class StarMapSearchSortFilterChipButton: UIButton {
         config.imagePadding = 6
         config.title = title
         config.titleLineBreakMode = .byTruncatingTail
+        let textColor: UIColor = !isEnabled ? .textColorTertiary : style == .toggleOn ? .filterChipTextActive : .buttonTextColorSecondary
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
             var outgoing = incoming
             outgoing.font = UIFont.preferredFont(forTextStyle: .subheadline)
-            outgoing.foregroundColor = style == .toggleOn ? .filterChipTextActive : .buttonTextColorSecondary
+            outgoing.foregroundColor = textColor
             return outgoing
         }
 
@@ -128,7 +135,15 @@ private final class StarMapSearchSortFilterChipButton: UIButton {
             config.baseForegroundColor = .filterChipIconActive
             config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 10)
         }
+        if image == nil && style != .menu {
+            config.contentInsets.leading = config.contentInsets.trailing
+        }
+        if !isEnabled {
+            config.baseForegroundColor = .iconColorDisabled
+        }
         configuration = config
+        self.isEnabled = isEnabled
+        chevronView.tintColor = isEnabled ? .iconColorActive : .iconColorDisabled
     }
     
     private func setup() {
@@ -299,12 +314,13 @@ final class StarMapSearchSortFilterChipsView: UIView {
             }
             switch group.selectionMode {
             case .single, .multiple:
-                button.apply(title: group.chipTitle, image: group.chipImage, style: .menu)
+                button.apply(title: group.chipTitle, image: group.chipImage, style: .menu, isEnabled: group.isEnabled)
             case .toggle:
                 button.apply(
                     title: group.chipTitle,
                     image: group.chipImage,
-                    style: group.isToggleOn ? .toggleOn : .toggleOff
+                    style: group.isToggleOn ? .toggleOn : .toggleOff,
+                    isEnabled: group.isEnabled
                 )
             }
         }
@@ -336,7 +352,7 @@ final class StarMapSearchSortFilterChipsView: UIView {
                 children.append(UIMenu(title: "", options: .displayInline, children: actions))
             }
         }
-        return UIMenu(children: children)
+        return UIMenu(title: group.menuTitle, children: children)
     }
 
     private func makeMenuAction(option: StarMapSearchSortFilterChipOption, group: SearchSortFilterChipGroup) -> UIAction {

@@ -254,13 +254,13 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
 
     private func updateDisplayedPlaces() {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        let sortedPlaces = sortedPlaces()
+        let sortedPlaces = sorted(places)
         displayedPlaces = query.isEmpty ? sortedPlaces : sortedPlaces.filter { $0.matches(query) }
         detailsLoader.cancelAll()
         tableView.reloadData()
     }
 
-    private func sortedPlaces() -> [PopularPlace] {
+    private func sorted(_ places: [PopularPlace]) -> [PopularPlace] {
         guard sortMode == .nearest,
               let location = locationReference.location ?? OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return places }
         return places
@@ -290,6 +290,14 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
               !tableView.isDragging,
               !tableView.isDecelerating else { return }
         lastDistanceUpdate = now
+        if sortMode == .nearest, !tableView.visibleCells.contains(where: \.isHighlighted) {
+            let sortedPlaces = sorted(displayedPlaces)
+            if !sortedPlaces.elementsEqual(displayedPlaces, by: { $0 === $1 }) {
+                displayedPlaces = sortedPlaces
+                tableView.reloadData()
+                return
+            }
+        }
         tableView.indexPathsForVisibleRows?.forEach { indexPath in
             guard let place = place(at: indexPath),
                   let cell = tableView.cellForRow(at: indexPath),

@@ -5873,7 +5873,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (NSObject *)profileDefaultValue:(OAApplicationMode *)mode {
     BOOL paidVersion = [OAIAPHelper isPaidVersion];
-    return paidVersion ? @(0): @(1) ;
+    return paidVersion ? @(EOAWikiDataSourceTypeOffline) : @(EOAWikiDataSourceTypeOnline);
 }
 
 - (void)resetToDefault

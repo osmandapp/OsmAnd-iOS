@@ -34,6 +34,7 @@
 - (NSInteger) getPointsCountHavingTypes:(NSArray<NSNumber *> *)types;
 - (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit;
 - (NSInteger)getPointsCountFromNavigation;
+- (NSArray<OAHistoryItem *> *)pointsFromSearch:(BOOL)fromSearch fromNavigation:(BOOL)fromNavigation limit:(int)limit NS_SWIFT_NAME(points(fromSearch:fromNavigation:limit:));
 - (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation;
 - (void)importBackupPoints:(NSArray<OAHistoryItem *> *)items;
 

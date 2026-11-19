@@ -535,7 +535,7 @@
         {
             turnResource = [[OATurnResource alloc] initWithTurnType:firstTurnType noOverlap:NO leftSide:leftSide];
         }
-        else if (secondTurnType == OASTurnType.companion.C || thirdTurnType == OASTurnType.companion.C)
+        else if (secondTurnType == OASTurnType.companion.C || thirdTurnType == OASTurnType.companion.C || ((firstTurnType == OASTurnType.companion.TL || firstTurnType == OASTurnType.companion.TR) && (secondTurnType == OASTurnType.companion.TSLL || secondTurnType == OASTurnType.companion.TSLR)))
         {
             turnResource = [[OATurnResource alloc] initWithTurnTypeShort:firstTurnType leftSide:leftSide];
         }
@@ -549,10 +549,22 @@
     }
     else if (turnIndex == SECOND_TURN)
     {
-        if ([OASTurnType.companion isLeftTurnType:firstTurnType] && [OASTurnType.companion isLeftTurnType:secondTurnType])
-            turnResource = nil;
-        else if ([OASTurnType.companion isRightTurnType:firstTurnType] && [OASTurnType.companion isRightTurnType:secondTurnType])
-            turnResource = nil;
+        if (([OASTurnType.companion isLeftTurnType:firstTurnType] && [OASTurnType.companion isLeftTurnType:secondTurnType]) || ([OASTurnType.companion isRightTurnType:firstTurnType] && [OASTurnType.companion isRightTurnType:secondTurnType]))
+        {
+            if ([OASTurnType.companion isSlightTurnType:firstTurnType])
+                turnResource = [[OATurnResource alloc] initWithTurnTypeShort:secondTurnType leftSide:leftSide];
+            else if ([OASTurnType.companion isSlightTurnType:secondTurnType])
+                turnResource = [[OATurnResource alloc] initWithTurnType:secondTurnType noOverlap:NO leftSide:leftSide];
+            else
+                turnResource = nil;
+        }
+        else if (firstTurnType != OASTurnType.companion.C && [OASTurnType.companion isSlightTurnType:firstTurnType] && ![OASTurnType.companion isSlightTurnType:secondTurnType] && ![OASTurnType.companion isSlightTurnType:thirdTurnType])
+        {
+            if ([OASTurnType.companion isLeftTurnType:firstTurnType] && [OASTurnType.companion isRightTurnType:secondTurnType] && (thirdTurnType == 0 || [OASTurnType.companion isLeftTurnType:thirdTurnType]))
+                turnResource = [[OATurnResource alloc] initWithTurnTypeShort:secondTurnType leftSide:leftSide];
+            else if ([OASTurnType.companion isRightTurnType:firstTurnType] && [OASTurnType.companion isLeftTurnType:secondTurnType] && (thirdTurnType == 0 || [OASTurnType.companion isRightTurnType:thirdTurnType]))
+                turnResource = [[OATurnResource alloc] initWithTurnTypeShort:secondTurnType leftSide:leftSide];
+        }
         else if (firstTurnType == OASTurnType.companion.C || thirdTurnType == OASTurnType.companion.C)
             turnResource = [[OATurnResource alloc] initWithTurnTypeShort:secondTurnType leftSide:leftSide];
         else
@@ -560,9 +572,9 @@
     }
     else if (turnIndex == THIRD_TURN)
     {
-        if (([OASTurnType.companion isLeftTurnType:firstTurnType] || [OASTurnType.companion isLeftTurnType:secondTurnType]) && [OASTurnType.companion isLeftTurnType:thirdTurnType])
+        if ((([OASTurnType.companion isLeftTurnType:firstTurnType] && ![OASTurnType.companion isSlightTurnType:firstTurnType]) || [OASTurnType.companion isLeftTurnType:secondTurnType]) && [OASTurnType.companion isLeftTurnType:thirdTurnType])
             turnResource = nil;
-        else if (([OASTurnType.companion isRightTurnType:firstTurnType] || [OASTurnType.companion isRightTurnType:secondTurnType]) && [OASTurnType.companion isRightTurnType:thirdTurnType])
+        else if ((([OASTurnType.companion isRightTurnType:firstTurnType] && ![OASTurnType.companion isSlightTurnType:firstTurnType]) || [OASTurnType.companion isRightTurnType:secondTurnType]) && [OASTurnType.companion isRightTurnType:thirdTurnType])
             turnResource = nil;
         else
             turnResource = [[OATurnResource alloc] initWithTurnTypeShort:thirdTurnType leftSide:leftSide];

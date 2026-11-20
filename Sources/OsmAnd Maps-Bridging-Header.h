@@ -96,6 +96,7 @@
 #import "OASvgHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OASearchUICore.h"
+#import "OASearchCoreFactory.h"
 #import "OASearchSettings.h"
 #import "OAObjectType.h"
 #import "OAResultMatcher.h"

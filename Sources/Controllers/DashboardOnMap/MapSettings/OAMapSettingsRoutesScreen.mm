@@ -23,8 +23,12 @@
 typedef NS_ENUM(NSInteger, EOAMapSettingsRoutesSection)
 {
     EOAMapSettingsRoutesSectionVisibility = 0,
-    EOAMapSettingsRoutesSectionValues
+    EOAMapSettingsRoutesSectionValues,
+    EOAMapSettingsRoutesSectionNetworks
 };
+
+static NSString * const kCycleNetworksRenderingClass = @".route.bicycle.road_network";
+static NSString * const kHikingNetworksRenderingClass = @".route.hiking.routes";
 
 typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
@@ -173,8 +177,35 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         }
     }
     [dataArr addObject:valuesArr];
+
+    NSMutableArray *networksArr = [NSMutableArray new];
+    NSString *networksClassName = [self getNetworksRenderingClassName];
+    OAMapStyleRenderingClass *networksClass = networksClassName ? [_styleSettings getRenderingClass:networksClassName] : nil;
+    if (networksClass)
+    {
+        [networksArr addObject:@{
+            @"type": [OARightIconTableViewCell getCellIdentifier],
+            @"renderingClass": networksClass.name,
+            @"title": networksClass.title
+        }];
+    }
+    [dataArr addObject:networksArr];
     
     _data = dataArr;
+}
+
+// the style splits routes by network level only where they are colored by route (cycling) or by OSMC (hiking)
+- (NSString *)getNetworksRenderingClassName
+{
+    if (_routesSettingType == ERoutesSettingCycle)
+    {
+        OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
+        BOOL isColoredByRoute = !cycleNode || ![cycleNode.value isEqualToString:@"true"];
+        return isColoredByRoute ? kCycleNetworksRenderingClass : nil;
+    }
+    if (_routesSettingType == ERoutesSettingHiking)
+        return [_routesParameter.value isEqualToString:@"walkingRoutesOSMC"] ? kHikingNetworksRenderingClass : nil;
+    return nil;
 }
 
 - (void)setupView
@@ -215,7 +246,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (NSString *)getTextForFooter:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility || section == EOAMapSettingsRoutesSectionNetworks)
         return @"";
 
     if (_routesSettingType == ERoutesSettingCycle)
@@ -318,6 +349,14 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         }
         if (cell)
         {
+            if (item[@"renderingClass"])
+            {
+                [cell descriptionVisibility:NO];
+                cell.titleLabel.text = item[@"title"];
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                return cell;
+            }
+
             BOOL selected;
             if (_routesSettingType == ERoutesSettingCycle)
             {
@@ -379,7 +418,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility || _routesSettingType == ERoutesSettingDifficultyClassification)
+    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility || section == EOAMapSettingsRoutesSectionNetworks
+        || _routesSettingType == ERoutesSettingDifficultyClassification)
         return @"";
 
     return _routesSettingType == ERoutesSettingMountain ? OALocalizedString(@"mtb_segment_classification") : OALocalizedString(@"routes_color_by_type");
@@ -389,6 +429,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return 0.01;
+    if (section == EOAMapSettingsRoutesSectionNetworks)
+        return _data[section].count > 0 ? 20.0 : 0.01;
     if (_routesSettingType == ERoutesSettingDifficultyClassification)
         return 30.0;
     
@@ -492,15 +534,25 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
         }
         [_styleSettings save:_routesParameter];
+        [self initData];
         
         [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionValues] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(EOAMapSettingsRoutesSectionValues, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tblView endUpdates];
     }
 }
 
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {
+    NSString *renderingClassName = [self getItem:indexPath][@"renderingClass"];
+    if (renderingClassName)
+    {
+        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRenderingClass
+                                                                                                                       param:renderingClassName];
+        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+        return;
+    }
+
     NSString *value = [self getItem:indexPath][@"value"];
     if (_routesSettingType == ERoutesSettingCycle)
     {
@@ -559,8 +611,9 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             [_styleSettings save:_routesParameter];
         }
     }
+    [self initData];
     [UIView setAnimationsEnabled:NO];
-    [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionValues] withRowAnimation:UITableViewRowAnimationNone];
+    [tblView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(EOAMapSettingsRoutesSectionValues, 2)] withRowAnimation:UITableViewRowAnimationNone];
     [UIView setAnimationsEnabled:YES];
 }
 

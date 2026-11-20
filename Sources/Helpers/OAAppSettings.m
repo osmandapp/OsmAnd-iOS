@@ -5978,6 +5978,7 @@ static NSString *kOfflineKey = @"OFFLINE";
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRenderProps;
+    NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRenderClassProps;
     NSMapTable<NSString *, OACommonString *> *_customRenderProps;
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
     NSMapTable<NSString *, OACommonString *> *_customRoutingProps;
@@ -6161,6 +6162,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _settingsLock = [[NSObject alloc] init];
         _dayNightHelper = [OADayNightHelper instance];
         _customBooleanRenderProps = [NSMapTable strongToStrongObjectsMapTable];
+        _customBooleanRenderClassProps = [NSMapTable strongToStrongObjectsMapTable];
         _customRenderProps = [NSMapTable strongToStrongObjectsMapTable];
         _customBooleanRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
         _customRoutingProps = [NSMapTable strongToStrongObjectsMapTable];
@@ -7700,6 +7702,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         _profilePreferences,
         _registeredPreferences,
         _customBooleanRenderProps,
+        _customBooleanRenderClassProps,
         _customRenderProps,
         _customBooleanRoutingProps,
         _customRoutingProps
@@ -8155,6 +8158,20 @@ static NSString *kOfflineKey = @"OFFLINE";
         {
             value = [[OACommonBoolean withKey:[NSString stringWithFormat:@"%@%@", kRendererPreferencePrefix, attrName] defValue:defaultValue] makeProfile];
             [_customBooleanRenderProps setObject:value forKey:attrName];
+        }
+        return value;
+    }
+}
+
+- (OACommonBoolean *)getCustomRenderClassProperty:(NSString *)className defaultValue:(BOOL)defaultValue
+{
+    @synchronized (_settingsLock)
+    {
+        OACommonBoolean *value = [_customBooleanRenderClassProps objectForKey:className];
+        if (!value)
+        {
+            value = [[OACommonBoolean withKey:className defValue:defaultValue] makeProfile];
+            [_customBooleanRenderClassProps setObject:value forKey:className];
         }
         return value;
     }

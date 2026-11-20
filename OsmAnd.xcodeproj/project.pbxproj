@@ -784,6 +784,7 @@
 		C5B058F32FAF232400805A7B /* GradientFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B058F22FAF232400805A7B /* GradientFormatter.swift */; };
 		C5B058FC2FB1A73E00805A7B /* GradientPaletteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B058FB2FB1A73E00805A7B /* GradientPaletteHelper.swift */; };
 		C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */; };
+		A25387C1A25387C1A25387C1 /* MapSettingsRenderingClassScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25387C2A25387C2A25387C2 /* MapSettingsRenderingClassScreen.swift */; };
 		C5B2AA612DB00700007FB854 /* GridFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2AA602DB00700007FB854 /* GridFormat.swift */; };
 		C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */; };
 		C5B4AE5E2B1F51740019F357 /* MenuHelpDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */; };
@@ -3493,6 +3494,7 @@
 		C5B058F22FAF232400805A7B /* GradientFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientFormatter.swift; sourceTree = "<group>"; };
 		C5B058FB2FB1A73E00805A7B /* GradientPaletteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientPaletteHelper.swift; sourceTree = "<group>"; };
 		C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsCoordinatesGridScreen.swift; sourceTree = "<group>"; };
+		A25387C2A25387C2A25387C2 /* MapSettingsRenderingClassScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSettingsRenderingClassScreen.swift; sourceTree = "<group>"; };
 		C5B2AA602DB00700007FB854 /* GridFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridFormat.swift; sourceTree = "<group>"; };
 		C5B4AE5B2B1F480C0019F357 /* HelpDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpDetailsViewController.swift; sourceTree = "<group>"; };
 		C5B4AE5D2B1F51740019F357 /* MenuHelpDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHelpDataService.swift; sourceTree = "<group>"; };
@@ -9913,6 +9915,7 @@
 				C573544D2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm */,
 				C573544E2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.xib */,
 				C5B2AA5E2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift */,
+				A25387C2A25387C2A25387C2 /* MapSettingsRenderingClassScreen.swift */,
 				C58A6A482F68920800DCE4F6 /* MapSettingsBuildings3DScreen.swift */,
 				C56F0B222F76B53900FC543B /* MapSettingsBuildings3DParametersViewController.swift */,
 				C56F0B232F76B53900FC543B /* MapSettingsBuildings3DParametersViewController.xib */,
@@ -13174,6 +13177,7 @@
 				DA5A83F526C563A800F274C7 /* OADeleteCustomFiltersViewController.mm in Sources */,
 				DA5A818126C563A700F274C7 /* OATerrainAction.m in Sources */,
 				C5B2AA5F2DAFAA64007FB854 /* MapSettingsCoordinatesGridScreen.swift in Sources */,
+				A25387C1A25387C1A25387C1 /* MapSettingsRenderingClassScreen.swift in Sources */,
 				32A46BC02C6BA430000FC20B /* OAWeatherTimeSegmentedSlider.mm in Sources */,
 				27C768E42E6833F100540266 /* CustomInputDeviceProfile.swift in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,

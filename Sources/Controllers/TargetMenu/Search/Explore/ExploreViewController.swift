@@ -121,6 +121,7 @@ final class ExploreViewController: UIViewController {
     private func setupTableView() {
         view.backgroundColor = .viewBg
         tableView.backgroundColor = .viewBg
+        tableView.separatorColor = SeparatorAppearance.color
         tableView.dataSource = self
         tableView.delegate = self
         tableView.alwaysBounceVertical = true
@@ -360,7 +361,7 @@ extension ExploreViewController: UITableViewDataSource {
         case .popularPlace(let place):
             let cell = tableView.dequeueReusableCell(withIdentifier: PoiContentTableViewCell.reuseIdentifier, for: indexPath)
             cell.contentConfiguration = place.contentConfiguration(style: .compact, secondaryContent: popularPlaceSecondaryContent(for: place))
-            cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
+            PointContentConfiguration.applyHighlightableBackground(to: cell)
             return cell
         case .historyItem(let record):
             let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
@@ -368,7 +369,7 @@ extension ExploreViewController: UITableViewDataSource {
                                                                   title: record.title,
                                                                   iconStyle: .plate,
                                                                   secondaryContent: historySecondaryContent(for: record))
-            cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
+            PointContentConfiguration.applyHighlightableBackground(to: cell)
             return cell
         case .showAllPopularPlaces:
             return actionCell(at: indexPath, title: localizedString("shared_string_show_all"))

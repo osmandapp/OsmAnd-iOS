@@ -331,6 +331,8 @@
 "time_to_go_desc" = "Time in minutes or hours needed to reach your destination.";
 "arrival_time_widget_desc" = "Time of arrival at the destination point.";
 "lanes_widgets_desc" = "Shows the current road lanes layout and highlights the ones to take while navigating.";
+"show_minor_turns" = "Display on minor intersections when navigating straight";
+"show_minor_turns_descr" = "Lanes will be displayed on all passing intersections regardless voice instructions";
 "route_guidance_desc" = "Provides real-time route guidance, including distance to the next turn, road name, current street name, and lane information. Widgets are active during navigation.";
 "route_guidance" = "Route guidance";
 "map_markers_bar_widget_desc" = "The top bar widget displays the distance and direction to the next Map marker from your current location. The widget can be configured to show 1 or 2 markers.";

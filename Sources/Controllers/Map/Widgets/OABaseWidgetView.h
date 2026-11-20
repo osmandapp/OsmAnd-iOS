@@ -66,6 +66,9 @@ extern NSString * const kWidgetPanelKey;
                                       isCreate:(BOOL)isCreate;
 - (nullable OATableDataModel *)settingsDataForSimpleWidget:(OAApplicationMode *)appMode widgetsPanel:(WidgetsPanel *)widgetsPanel widgetConfigurationParams:(NSDictionary<NSString *, id> *_Nullable)widgetConfigurationParams;
 - (BOOL)handleRowSelected:(OATableRowData *)item viewController:(WidgetConfigurationViewController *)viewController;
+- (BOOL)handleSwitchChanged:(OATableRowData *)item isOn:(BOOL)isOn;
+- (void)applySettings:(OAApplicationMode *)appMode;
+- (void)discardSettings;
 
 - (void)showBottomSeparator:(BOOL)show;
 - (void)showRightSeparator:(BOOL)show;

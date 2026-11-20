@@ -115,7 +115,7 @@
         // leave the last accessed history entry between the duplicate and the original
         for (OAHistoryItem *duplicate in self.duplicateItems)
         {
-            OAHistoryItem *original = [_searchHistoryHelper getPointByName:duplicate.name fromNavigation:duplicate.fromNavigation];
+            OAHistoryItem *original = [self existingItemFor:duplicate];
             if (original && original.date.timeIntervalSince1970 < duplicate.date.timeIntervalSince1970)
             {
                 [self.appliedItems removeObject:original];
@@ -187,13 +187,20 @@
 
 - (BOOL)isDuplicate:(id)item
 {
-    OAHistoryItem *historyEntry = item;
+    return [self existingItemFor:item] != nil;
+}
+
+- (nullable OAHistoryItem *)existingItemFor:(OAHistoryItem *)item
+{
     for (OAHistoryItem *entry in self.existingItems)
     {
-        if ([entry.name isEqualToString:historyEntry.name] && entry.fromNavigation == historyEntry.fromNavigation)
-            return YES;
+        if (entry.fromNavigation == item.fromNavigation
+            && [entry.name isEqualToString:item.name]
+            && (int64_t)(entry.latitude * 100000) == (int64_t)(item.latitude * 100000)
+            && (int64_t)(entry.longitude * 100000) == (int64_t)(item.longitude * 100000))
+            return entry;
     }
-    return NO;
+    return nil;
 }
 
 - (void)deleteItem:(OAHistoryItem *)item

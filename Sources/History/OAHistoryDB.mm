@@ -39,6 +39,8 @@
 #define POINT_COL_PHOTO_URL @"fphotourl"
 #define POINT_COL_OSM_ID @"fosmid"
 
+#define HISTORY_LIMIT 1500
+
 #define HISTORY_LAST_MODIFIED_NAME @"history_recents"
 #define MARKERS_HISTORY_LAST_MODIFIED_NAME @"map_markers_history"
 
@@ -296,6 +298,8 @@
                 [self checkError:sqlite3_finalize(statement)];
                 
             }
+            if (updateHistory)
+                [self removeExcessHistoryPoints];
             sqlite3_close(historyDB);
             if (updateLastTime && updateMarkers)
                 [self updateMarkersHistoryLastModifiedTime];
@@ -304,6 +308,16 @@
                 [self updateHistoryLastModifiedTime];
         }
     });
+}
+
+- (void)removeExcessHistoryPoints
+{
+    NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE ROWID IN (SELECT ROWID FROM %@ WHERE %@ = 1 OR %@ NOT IN (%d, %d, %d) ORDER BY %@ DESC LIMIT -1 OFFSET %d)", TABLE_NAME, TABLE_NAME, POINT_COL_FROM_NAVIGATION, POINT_COL_TYPE, (int)OAHistoryTypeDirection, (int)OAHistoryTypeParking, (int)OAHistoryTypeRouteWpt, POINT_COL_TIME, HISTORY_LIMIT];
+    char *errMsg = NULL;
+    if (sqlite3_exec(historyDB, query.UTF8String, NULL, NULL, &errMsg) != SQLITE_OK)
+        OALog(@"Failed to remove excess history points: %@", errMsg ? [NSString stringWithUTF8String:errMsg] : @"");
+    if (errMsg != NULL)
+        sqlite3_free(errMsg);
 }
 
 - (void)deletePoint:(OAHistoryItem *)item

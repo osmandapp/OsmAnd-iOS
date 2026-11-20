@@ -940,17 +940,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void) addHistoryItem:(OASearchResult *)searchResult
 {
     if (searchResult.location && [[OAAppSettings sharedManager].searchHistory get])
-    {
-        OAHistoryItem *h = [[OAHistoryItem alloc] init];
-        h.name = [OAQuickSearchListItem getName:searchResult];
-        h.latitude = searchResult.location.coordinate.latitude;
-        h.longitude = searchResult.location.coordinate.longitude;
-        h.date = [NSDate date];
-        h.iconName = [OAQuickSearchListItem getIconName:searchResult];
-        h.typeName = [OAQuickSearchListItem getTypeName:searchResult];
-        h.hType = OAHistoryTypeLocation;
-        [[OAHistoryHelper sharedInstance] addPoint:h];
-    }
+        [[OAHistoryHelper sharedInstance] addPoint:[OAQuickSearchListItem historyItem:searchResult]];
 }
 
 - (void) showMapMenuForLocationPoint:(CLLocation *)location

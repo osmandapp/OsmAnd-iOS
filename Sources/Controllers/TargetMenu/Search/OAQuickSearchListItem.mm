@@ -474,6 +474,115 @@
     return [OAObjectType toString:searchResult.objectType];
 }
 
++ (OAHistoryItem *)historyItem:(OASearchResult *)searchResult
+{
+    OAHistoryItem *item = [[OAHistoryItem alloc] init];
+    item.name = [self getName:searchResult];
+    item.latitude = searchResult.location.coordinate.latitude;
+    item.longitude = searchResult.location.coordinate.longitude;
+    item.date = [NSDate date];
+    item.iconName = [self getIconName:searchResult];
+    item.typeName = [self getTypeName:searchResult];
+    item.hType = [self historyType:searchResult.objectType];
+
+    if ([searchResult.object isKindOfClass:OAHistoryItem.class])
+    {
+        OAHistoryItem *historyItem = (OAHistoryItem *) searchResult.object;
+        item.hType = historyItem.hType;
+        [item fillMissingMetadataFrom:historyItem];
+        return item;
+    }
+
+    if (searchResult.objectType != EOAObjectTypeUndefined)
+        item.objectType = [OAObjectType toString:searchResult.objectType];
+    if ([searchResult.object isKindOfClass:OACity.class])
+        item.cityType = [[OACity getTypeStr:((OACity *) searchResult.object).type] uppercaseString];
+    item.displayName = searchResult.localeName;
+    item.address = searchResult.addressName;
+    item.relatedObjectName = searchResult.localeRelatedObjectName;
+    item.alternateName = searchResult.alternateName;
+    if (searchResult.objectType == EOAObjectTypeLocation && item.address.length == 0)
+        item.address = searchResult.localeRelatedObjectName;
+
+    if ([searchResult.object isKindOfClass:OAPOI.class])
+    {
+        OAPOI *poi = (OAPOI *) searchResult.object;
+        item.objectType = [OAObjectType toString:EOAObjectTypePoi];
+        NSString *displayName = [OAPOIHelper.sharedInstance getPoiStringWithoutType:poi];
+        if (displayName.length > 0)
+            item.displayName = displayName;
+        item.poiCategoryKey = poi.type.category.name;
+        item.poiSubtypeKey = poi.subType;
+        item.openingHours = poi.openingHours;
+        item.photoUrl = poi.wikiIconUrl;
+        if ([poi isValidObfId])
+            item.osmId = @(poi.obfId);
+    }
+    return item;
+}
+
++ (OAHistoryItem *)categoryHistoryItem:(OASearchResult *)searchResult
+{
+    OAHistoryItem *item = [[OAHistoryItem alloc] init];
+    if ([searchResult.object isKindOfClass:OAPOIBaseType.class])
+    {
+        item.hType = OAHistoryTypePoiType;
+        item.name = ((OAPOIBaseType *) searchResult.object).name;
+    }
+    else if ([searchResult.object isKindOfClass:OAPOIUIFilter.class])
+    {
+        item.hType = OAHistoryTypePoiFilter;
+        item.name = ((OAPOIUIFilter *) searchResult.object).filterId;
+    }
+    if (item.name.length == 0)
+        return nil;
+
+    item.date = [NSDate date];
+    item.iconName = [self getIconName:searchResult];
+    return item;
+}
+
++ (OAHistoryItem *)trackHistoryItem:(OASearchResult *)searchResult
+{
+    if (![searchResult.relatedObject isKindOfClass:OASGpxDataItem.class])
+        return nil;
+
+    NSString *path = ((OASGpxDataItem *) searchResult.relatedObject).gpxFilePath;
+    if (path.length == 0)
+        return nil;
+
+    OAHistoryItem *item = [[OAHistoryItem alloc] init];
+    item.hType = OAHistoryTypeGpxFile;
+    item.name = path;
+    item.date = [NSDate date];
+    item.iconName = ACImageNameIcCustomTrip;
+    return item;
+}
+
++ (OAHistoryType)historyType:(EOAObjectType)objectType
+{
+    switch (objectType)
+    {
+        case EOAObjectTypePoi:
+            return OAHistoryTypePOI;
+        case EOAObjectTypeFavorite:
+            return OAHistoryTypeFavorite;
+        case EOAObjectTypeWpt:
+            return OAHistoryTypeWpt;
+        case EOAObjectTypeLocation:
+            return OAHistoryTypeLocation;
+        case EOAObjectTypeCity:
+        case EOAObjectTypeVillage:
+        case EOAObjectTypePostcode:
+        case EOAObjectTypeStreet:
+        case EOAObjectTypeHouse:
+        case EOAObjectTypeStreetIntersection:
+            return OAHistoryTypeAddress;
+        default:
+            return OAHistoryTypeUnknown;
+    }
+}
+
 - (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating
 {
     if (_distanceDirection)

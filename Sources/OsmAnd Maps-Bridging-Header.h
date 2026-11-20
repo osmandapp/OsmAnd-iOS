@@ -86,6 +86,7 @@
 #import "OAPOIHelper.h"
 #import "OARenderedObject.h"
 #import "OAPOIType.h"
+#import "OAPOIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OARendererRegistry.h"
 #import "OAMapObject.h"

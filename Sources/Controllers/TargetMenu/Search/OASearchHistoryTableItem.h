@@ -12,6 +12,7 @@
 @interface OASearchHistoryTableItem : NSObject
 
 @property (nonatomic) OAHistoryItem *item;
+@property (nonatomic) NSString *title;
 
 - (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;

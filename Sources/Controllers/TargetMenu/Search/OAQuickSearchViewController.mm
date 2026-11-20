@@ -1418,51 +1418,26 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) addHistoryItem:(OASearchResult *)searchResult
 {
-    if (searchResult.location && [[OAAppSettings sharedManager].searchHistory get])
-    {
-        OAHistoryItem *h = [[OAHistoryItem alloc] init];
-        h.name = [OAQuickSearchListItem getName:searchResult];
-        h.latitude = searchResult.location.coordinate.latitude;
-        h.longitude = searchResult.location.coordinate.longitude;
-        h.date = [NSDate date];
-        h.iconName = [OAQuickSearchListItem getIconName:searchResult];
-        h.typeName = [OAQuickSearchListItem getTypeName:searchResult];
+    if (![[OAAppSettings sharedManager].searchHistory get] || self.fromNavigation)
+        return;
 
-        switch (searchResult.objectType)
-        {
-            case EOAObjectTypePoi:
-                h.hType = OAHistoryTypePOI;
-                break;
+    OAHistoryItem *item;
+    if (searchResult.objectType == EOAObjectTypeGpxTrack)
+        item = [OAQuickSearchListItem trackHistoryItem:searchResult];
+    else if (searchResult.location)
+        item = [OAQuickSearchListItem historyItem:searchResult];
+    if (item)
+        [[OAHistoryHelper sharedInstance] addPoint:item];
+}
 
-            case EOAObjectTypeFavorite:
-                h.hType = OAHistoryTypeFavorite;
-                break;
+- (void)addCategoryHistoryItem:(OASearchResult *)searchResult
+{
+    if (![[OAAppSettings sharedManager].searchHistory get])
+        return;
 
-            case EOAObjectTypeWpt:
-                h.hType = OAHistoryTypeWpt;
-                break;
-
-            case EOAObjectTypeLocation:
-                h.hType = OAHistoryTypeLocation;
-                break;
-
-            case EOAObjectTypeCity:
-            case EOAObjectTypeVillage:
-            case EOAObjectTypePostcode:
-            case EOAObjectTypeStreet:
-            case EOAObjectTypeHouse:
-            case EOAObjectTypeStreetIntersection:
-                h.hType = OAHistoryTypeAddress;
-                break;
-
-            default:
-                h.hType = OAHistoryTypeUnknown;
-                break;
-        }
-
-        if (!self.fromNavigation)
-            [[OAHistoryHelper sharedInstance] addPoint:h];
-    }
+    OAHistoryItem *item = [OAQuickSearchListItem categoryHistoryItem:searchResult];
+    if (item)
+        [[OAHistoryHelper sharedInstance] addPoint:item];
 }
 
 - (IBAction) btnCancelClicked:(id)sender
@@ -1796,6 +1771,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) completeQueryWithObject:(OASearchResult *)sr
 {
+    [self addCategoryHistoryItem:sr];
     if ([sr.object isKindOfClass:[OAPOIType class]] && [((OAPOIType *) sr.object) isAdditional])
     {
         OAPOIType *additional = (OAPOIType *) sr.object;
@@ -2160,6 +2136,23 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)exploreDidSelectHistoryItem:(OAHistoryItem *)item
 {
+    if (item.hType == OAHistoryTypePoiType || item.hType == OAHistoryTypePoiFilter)
+    {
+        OASearchResult *searchResult = [OASearchHistoryAPI searchResultForHistoryItem:item];
+        if (searchResult)
+        {
+            [self.navigationController popToViewController:self animated:YES];
+            [self completeQueryWithObject:searchResult];
+        }
+        return;
+    }
+    if (item.hType == OAHistoryTypeGpxFile)
+    {
+        OASearchResult *searchResult = [OASearchHistoryAPI searchResultForHistoryItem:item];
+        if (searchResult)
+            [_tableController showOnMap:searchResult searchType:self.searchType delegate:self];
+        return;
+    }
     if (self.searchType == OAQuickSearchType::REGULAR)
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;

@@ -15,6 +15,11 @@
 
 @implementation OAHistoryItem
 
++ (NSArray<NSString *> *)metadataKeys
+{
+    return @[@"objectType", @"cityType", @"displayName", @"poiCategoryKey", @"poiSubtypeKey", @"typeName", @"address", @"relatedObjectName", @"openingHours", @"alternateName", @"photoUrl", @"osmId"];
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -58,6 +63,18 @@
         {
             _hType = OAHistoryTypeDirection;
         }
+        else if ([pointDescription isPoiType])
+        {
+            _hType = OAHistoryTypePoiType;
+        }
+        else if ([pointDescription isCustomPoiFilter])
+        {
+            _hType = OAHistoryTypePoiFilter;
+        }
+        else if ([pointDescription isGpxFile])
+        {
+            _hType = OAHistoryTypeGpxFile;
+        }
         else
         {
             _hType = OAHistoryTypeUnknown;
@@ -66,16 +83,39 @@
     return self;
 }
 
+- (BOOL)fillMissingMetadataFrom:(OAHistoryItem *)item
+{
+    BOOL filled = NO;
+    for (NSString *key in self.class.metadataKeys)
+    {
+        id value = [item valueForKey:key];
+        if ([self.class isEmptyMetadataValue:value] || ![self.class isEmptyMetadataValue:[self valueForKey:key]])
+            continue;
+        [self setValue:value forKey:key];
+        filled = YES;
+    }
+    return filled;
+}
+
++ (BOOL)isEmptyMetadataValue:(id)value
+{
+    return !value || [value isEqual:@""];
+}
+
 -(UIImage *)icon
 {
     if (self.hType == OAHistoryTypeParking)
     {
         return [UIImage imageNamed:ACImageNameIcParkingPinSmall];
     }
+    else if (self.hType == OAHistoryTypeGpxFile)
+    {
+        return [UIImage templateImageNamed:ACImageNameIcCustomTrip];
+    }
     else if (self.iconName.length > 0)
     {
         UIImage *img;
-        if (self.hType == OAHistoryTypePOI)
+        if (self.hType == OAHistoryTypePOI || self.hType == OAHistoryTypePoiType || self.hType == OAHistoryTypePoiFilter)
             img = [UIImage mapSvgImageNamed:self.iconName];
 
         if (img)
@@ -114,9 +154,20 @@
             return POINT_TYPE_FAVORITE;
         case OAHistoryTypeDirection:
             return POINT_TYPE_TARGET;
+        case OAHistoryTypePoiType:
+            return POINT_TYPE_POI_TYPE;
+        case OAHistoryTypePoiFilter:
+            return POINT_TYPE_CUSTOM_POI_FILTER;
+        case OAHistoryTypeGpxFile:
+            return POINT_TYPE_GPX_FILE;
         default:
             return POINT_TYPE_LOCATION;
     }
+}
+
+- (BOOL)hasLocation
+{
+    return _hType != OAHistoryTypePoiType && _hType != OAHistoryTypePoiFilter && _hType != OAHistoryTypeGpxFile;
 }
 
 - (float)preferredZoom

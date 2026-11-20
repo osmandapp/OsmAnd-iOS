@@ -256,7 +256,7 @@ final class ExploreViewController: UIViewController {
         historyQueue.async { [weak self] in
             let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: Self.historyItemsLimit) ?? []
             let presenter = SearchHistoryItemPresenter()
-            let records = items.map { presenter.record(for: $0) }
+            let records = items.compactMap { presenter.record(for: $0) }
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == historyGeneration else { return }
                 historyRecords = records
@@ -364,8 +364,8 @@ extension ExploreViewController: UITableViewDataSource {
             return cell
         case .historyItem(let record):
             let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
-            cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record.item, traitCollection: traitCollection),
-                                                                  title: record.item.name ?? "",
+            cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record, traitCollection: traitCollection),
+                                                                  title: record.title,
                                                                   iconStyle: .plate,
                                                                   secondaryContent: historySecondaryContent(for: record))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()

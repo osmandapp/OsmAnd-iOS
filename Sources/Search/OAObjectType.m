@@ -106,6 +106,8 @@
             return @"CITY";
         case EOAObjectTypeVillage:
             return @"VILLAGE";
+        case EOAObjectTypeBoundary:
+            return @"BOUNDARY";
         case EOAObjectTypePostcode:
             return @"POSTCODE";
         case EOAObjectTypeStreet:

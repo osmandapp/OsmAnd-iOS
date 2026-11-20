@@ -178,6 +178,7 @@ final class PopularPlacesSearcher: NSObject {
                                                          radiusMeters: Self.searchRadiusMeters)
         let matcher = OAResultMatcher<OAPOI>(publishFunc: { _ in true }, cancelledFunc: { loadingToken.isCancelled })
         queue.async {
+            filter.clearCurrentResults()
             let pois = filter.searchAmenities(rect.top, left: rect.left, bottom: rect.bottom, right: rect.right, zoom: -1, matcher: matcher, filterUnique: true)
             var places: [PopularPlace] = []
             for (index, poi) in pois.enumerated() {

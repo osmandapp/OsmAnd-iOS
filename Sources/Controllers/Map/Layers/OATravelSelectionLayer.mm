@@ -8,6 +8,7 @@
 
 #import "OATravelSelectionLayer.h"
 #import "OANetworkRouteDrawable.h"
+#import "OAPOIViewController.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -109,7 +110,11 @@
             targetPoint.location = CLLocationCoordinate2DMake(travelGpx.lat, travelGpx.lon);
             OAPOI *amenity = [travelGpx getAmenity];
             if (amenity)
+            {
                 targetPoint.icon = [OANetworkRouteDrawable getIconByAmenityShieldTags:amenity textSize:12];
+                targetPoint.ctrlAttrTypeStr = [[NSAttributedString alloc]
+                    initWithString:[OAPOIViewController getTypeStrFor:amenity]];
+            }
             if (!targetPoint.icon)
                 targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
             targetPoint.title = [travelGpx getDisplayName];

@@ -57,8 +57,6 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
 static NSString * const _unitsfts = OALocalizedString(@"ft_s");
 static NSArray<NSNumber *> *roundingBounds = nil;
 
-static NSString *kLTRMark = @"\u200e";  // left-to-right mark
-
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
     int hours, minutes, seconds;

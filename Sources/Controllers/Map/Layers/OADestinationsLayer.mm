@@ -261,7 +261,10 @@
     
     if (self.showCaptions && description.length > 0)
     {
-        builder.setCaption(QString::fromNSString(description));
+        // The map renderer displays LRM as a visible glyph.
+        NSString *caption = [description
+            stringByReplacingOccurrencesOfString:kLTRMark withString:@""];
+        builder.setCaption(QString::fromNSString(caption));
         builder.setCaptionStyle(self.captionStyle);
         builder.setCaptionTopSpace(self.captionTopSpace);
     }

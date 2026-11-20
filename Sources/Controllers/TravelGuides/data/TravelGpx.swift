@@ -96,6 +96,21 @@ final class TravelGpx : TravelArticle {
         }
     }
     
+    func getDisplayName() -> String {
+        guard let shared = SharedTravelArticles.toShared(self) as? OsmAndShared.TravelGpx else {
+            return getGpxFileName()
+        }
+        let settings = OAAppSettings.sharedManager()
+        return shared.getDisplayName(lang: settings.settingPrefMapLanguage.get(),
+                                     transliterate: settings.settingMapLanguageTranslit.get())
+    }
+
+    func getAmenity() -> OAPOI? {
+        guard let shared = sharedArticle as? OsmAndShared.TravelGpx,
+              let amenity = shared.getAmenity() else { return nil }
+        return OAAmenitySearcher.parsePOI(bySharedAmenity: amenity, filterTypes: false)
+    }
+
     override func getAnalysis() -> GpxTrackAnalysis? {
         var analysis = GpxTrackAnalysis()
         if gpxFile != nil && gpxFile!.hasAltitude() {

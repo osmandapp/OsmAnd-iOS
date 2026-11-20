@@ -601,8 +601,6 @@ final class BaseDetailsObject: NSObject {
         var otherPt: OAPOIType?
         var subtype: String?
 
-        var additionalInfo: [String: String] = [:]
-
         guard let tags = renderedObject.tags else { return amenity }
 
         for case let (tag as String, value as String) in tags {
@@ -654,9 +652,9 @@ final class BaseDetailsObject: NSObject {
                 let translate2 = mapPoiTypes.translation(value, withDefault: false)
 
                 if let translate, let translate2 {
-                    additionalInfo[translate] = translate2
+                    amenity.setAdditionalInfo(translate, value: translate2)
                 } else {
-                    additionalInfo[tag] = value
+                    amenity.setAdditionalInfo(tag, value: value)
                 }
             }
         }
@@ -677,8 +675,6 @@ final class BaseDetailsObject: NSObject {
             let objectId = ObfConstants.createMapObjectIdFromOsmId(osmId, type: type)
             amenity.obfId = objectId
         }
-
-        amenity.setAdditionalInfo(additionalInfo)
 
         amenity.x = renderedObject.x
         amenity.y = renderedObject.y

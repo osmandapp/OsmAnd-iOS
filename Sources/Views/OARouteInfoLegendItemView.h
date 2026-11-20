@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OARouteInfoLegendItemView : UIView
 
+@property (nonatomic, getter=isSelected) BOOL selected;
+
 - (instancetype) initWithTitle:(NSString *)title color:(UIColor *)color distance:(NSString *)distance;
 
 @end

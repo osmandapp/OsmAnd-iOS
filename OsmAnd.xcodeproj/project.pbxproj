@@ -939,6 +939,7 @@
 		D1C573510000000000000001 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
 		D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000003 /* PlanRouteTrackSource.swift */; };
 		D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */; };
+		D56690000000000000000001 /* RouteChartLegendSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56690000000000000000002 /* RouteChartLegendSelectionTests.swift */; };
 		D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */; };
 		D1C573520000000000000001 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
 		D1C573520000000000000002 /* PlanRoutePresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C573520000000000000003 /* PlanRoutePresentationContext.swift */; };
@@ -3705,6 +3706,7 @@
 		D1C573500000000000000002 /* OAPlanRouteEditingBridgeTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteEditingBridgeTest.mm; sourceTree = "<group>"; };
 		D1C573510000000000000003 /* PlanRouteTrackSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSource.swift; sourceTree = "<group>"; };
 		D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteTrackSourceTests.swift; sourceTree = "<group>"; };
+		D56690000000000000000002 /* RouteChartLegendSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteChartLegendSelectionTests.swift; sourceTree = "<group>"; };
 		D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteProfileSelectionTests.swift; sourceTree = "<group>"; };
 		D1C573520000000000000003 /* PlanRoutePresentationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRoutePresentationContext.swift; sourceTree = "<group>"; };
 		D3CA6B52398C60EDCB0357E5 /* ka */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ka; path = ka.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -7083,6 +7085,7 @@
 				D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */,
 				D1C573510000000000000005 /* PlanRouteTrackSourceTests.swift */,
 				D1C581200000000000000002 /* PlanRouteProfileSelectionTests.swift */,
+				D56690000000000000000002 /* RouteChartLegendSelectionTests.swift */,
 			);
 			path = PlanRoute;
 			sourceTree = "<group>";
@@ -13964,6 +13967,7 @@
 				D1C573510000000000000002 /* PlanRouteTrackSource.swift in Sources */,
 				D1C573510000000000000004 /* PlanRouteTrackSourceTests.swift in Sources */,
 				D1C581200000000000000001 /* PlanRouteProfileSelectionTests.swift in Sources */,
+				D56690000000000000000001 /* RouteChartLegendSelectionTests.swift in Sources */,
 				D1C571200000000000000002 /* ContextMenuPresentationCoordinatorTest.swift in Sources */,
 				D1C571200000000000000011 /* AmenityCardRowsTests.swift in Sources */,
 				D1C598800000000000000001 /* OAMapPanelMenuRestorationTests.mm in Sources */,

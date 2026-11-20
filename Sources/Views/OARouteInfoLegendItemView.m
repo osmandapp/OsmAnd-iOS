@@ -40,6 +40,16 @@
     return self;
 }
 
+- (void)setSelected:(BOOL)selected
+{
+    if (_selected == selected)
+        return;
+
+    _selected = selected;
+    _titleView.font = [UIFont preferredFontForTextStyle:selected ? UIFontTextStyleHeadline : UIFontTextStyleBody];
+    self.accessibilityTraits = selected ? UIAccessibilityTraitStaticText | UIAccessibilityTraitSelected : UIAccessibilityTraitStaticText;
+}
+
 - (void) commonInit
 {
     [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil];

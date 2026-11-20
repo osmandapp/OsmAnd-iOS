@@ -399,6 +399,7 @@ class GpxUIHelper: NSObject {
     }
 
     private struct StatisticChartElement {
+        let propertyName: String?
         let distance: Double
         let color: NSUIColor
     }
@@ -979,7 +980,8 @@ class GpxUIHelper: NSObject {
 
         if let segments {
             elements = segments.map { segment in
-                StatisticChartElement(distance: Double(segment.distance) * distanceScale,
+                StatisticChartElement(propertyName: segment.propertyName,
+                                      distance: Double(segment.distance) * distanceScale,
                                       color: NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor))
             }
         }
@@ -990,7 +992,7 @@ class GpxUIHelper: NSObject {
         let stacks = elements.map { $0.distance / divX }
         let colors = elements.map(\.color)
 
-        entries.append(BarChartDataEntry(x: 0, yValues: stacks))
+        entries.append(BarChartDataEntry(x: 0, yValues: stacks, data: elements.map(\.propertyName)))
 
         let barDataSet = BarChartDataSet(entries: entries, label: "")
         barDataSet.colors = colors
@@ -1021,17 +1023,18 @@ class GpxUIHelper: NSObject {
                 if distanceBeforeGap > 0 {
                     let coloredDistance = min(distanceBeforeGap, remainingDistance)
                     if coloredDistance > 0 {
-                        result.append(StatisticChartElement(distance: coloredDistance, color: element.color))
+                        result.append(StatisticChartElement(propertyName: element.propertyName, distance: coloredDistance, color: element.color))
                         remainingDistance -= coloredDistance
                         nonGapPosition += coloredDistance
                     }
                 }
-                result.append(StatisticChartElement(distance: gap.distance,
+                result.append(StatisticChartElement(propertyName: nil,
+                                                    distance: gap.distance,
                                                     color: .clear))
                 gapIndex += 1
             }
             if remainingDistance > 0 {
-                result.append(StatisticChartElement(distance: remainingDistance, color: element.color))
+                result.append(StatisticChartElement(propertyName: element.propertyName, distance: remainingDistance, color: element.color))
                 nonGapPosition += remainingDistance
             }
         }

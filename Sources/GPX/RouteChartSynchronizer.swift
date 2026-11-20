@@ -50,21 +50,30 @@ private final class RouteStatisticsYAxisRenderer: YAxisRendererHorizontalBarChar
 
 @objcMembers
 final class RouteChartSynchronizer: NSObject {
+    private struct LegendBinding {
+        let propertyName: String
+        let updateSelection: (Bool) -> Void
+        weak var view: UIView?
+        weak var chart: HorizontalBarChartView?
+    }
+
     private static let maxHighlightDistance: CGFloat = 10_000
 
     @nonobjc var onChartStateChanged: ((TrackChartState?) -> Void)?
 
     private let barCharts = NSHashTable<HorizontalBarChartView>.weakObjects()
-    private weak var primaryChart: ElevationChart?
     private var primarySelectionDataSet: ChartDataSetProtocol?
     private var primaryXAxisType: GPXDataSetAxisType?
     private var primaryXAxisRange: ClosedRange<Double>?
     private var primaryXAxisDivisor: Double?
     private var primaryIncludesSegmentGaps = false
+    private var legendBindings = [LegendBinding]()
     private var selectedProgress: Double?
     private var selectedXAxisValue: Double?
     private var visibleProgressRange: ClosedRange<Double>?
     private var visibleXAxisRange: ClosedRange<Double>?
+    private weak var primaryChart: ElevationChart?
+
     private var synchronizedCharts: [BarLineChartViewBase] {
         var charts = barCharts.allObjects.map { $0 as BarLineChartViewBase }
         if let primaryChart {
@@ -165,6 +174,22 @@ final class RouteChartSynchronizer: NSObject {
         applySelection(to: chart)
     }
 
+    func registerLegendItem(_ item: OARouteInfoLegendItemView, propertyName: String, chart: HorizontalBarChartView) {
+        registerLegend(view: item, propertyName: propertyName, chart: chart) { [weak item] selected in
+            item?.isSelected = selected
+        }
+    }
+
+    func registerLegendLabel(_ label: UILabel, propertyName: String, chart: HorizontalBarChartView) {
+        let font = label.font ?? UIFont.preferredFont(forTextStyle: .footnote)
+        let descriptor = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
+        let selectedFont = UIFont(descriptor: descriptor, size: font.pointSize)
+        registerLegend(view: label, propertyName: propertyName, chart: chart) { [weak label] selected in
+            label?.font = selected ? selectedFont : font
+            label?.accessibilityTraits = selected ? [.staticText, .selected] : .staticText
+        }
+    }
+
     func unregisterBarChart(_ chart: HorizontalBarChartView) {
         removeSelectionGestureTargets(from: chart)
         barCharts.remove(chart)
@@ -229,6 +254,35 @@ final class RouteChartSynchronizer: NSObject {
             removeSelectionGestureTargets(from: chart)
         }
         barCharts.removeAllObjects()
+        legendBindings.forEach { $0.updateSelection(false) }
+        legendBindings.removeAll()
+    }
+
+    private func registerLegend(view: UIView,
+                                propertyName: String,
+                                chart: HorizontalBarChartView,
+                                updateSelection: @escaping (Bool) -> Void) {
+        legendBindings.removeAll { $0.view == nil || $0.chart == nil || $0.view === view }
+        legendBindings.append(LegendBinding(propertyName: propertyName,
+                                            updateSelection: updateSelection,
+                                            view: view,
+                                            chart: chart))
+        updateLegend(in: chart, highlight: selectedProgress == nil ? nil : chart.lastHighlighted)
+    }
+
+    private func updateLegend(in chart: HorizontalBarChartView, highlight: Highlight?) {
+        var selectedPropertyName: String?
+        if let highlight,
+           let entry = chart.barData?.dataSets.first?.entryForIndex(0) as? BarChartDataEntry,
+           let propertyNames = entry.data as? [String?] {
+            let stackIndex = propertyNames.count == 1 ? 0 : highlight.stackIndex
+            if propertyNames.indices.contains(stackIndex) {
+                selectedPropertyName = propertyNames[stackIndex]
+            }
+        }
+        for binding in legendBindings where binding.chart === chart {
+            binding.updateSelection(binding.propertyName == selectedPropertyName)
+        }
     }
 
     private func selectPrimaryChart(atX touchX: CGFloat, sourceChart: BarLineChartViewBase) {
@@ -244,6 +298,9 @@ final class RouteChartSynchronizer: NSObject {
     private func clearHighlight(in chart: ChartViewBase) {
         chart.lastHighlighted = nil
         chart.highlightValue(nil)
+        if let barChart = chart as? HorizontalBarChartView {
+            updateLegend(in: barChart, highlight: nil)
+        }
     }
 
     private func installSelectionGestureTargets(in chart: HorizontalBarChartView) {
@@ -370,11 +427,13 @@ final class RouteChartSynchronizer: NSObject {
     private func applySelection(to chart: HorizontalBarChartView) {
         guard let touchX = touchX(in: chart),
               let highlight = chart.highlighter?.getHighlight(x: 1, y: touchX) else {
+            updateLegend(in: chart, highlight: nil)
             return
         }
         highlight.setDraw(x: touchX, y: 0)
         chart.lastHighlighted = highlight
         chart.highlightValue(highlight)
+        updateLegend(in: chart, highlight: highlight)
     }
 
     private func updateSelection(atX touchX: CGFloat, in chart: BarLineChartViewBase) -> Bool {

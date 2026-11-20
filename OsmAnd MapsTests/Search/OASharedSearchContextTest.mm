@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <thread>
 #import "OAPOIHelper.h"
 #import "OAObfFileList.h"
 #import "OAUtilities.h"
@@ -128,6 +129,31 @@
 @end
 
 @implementation OASPrimaryCollatorTest
+
+- (void)testRegisteredCollationProviderUsesTheCallingThreadAndRequestedLocale
+{
+    id<OASIOSSearchCollationProvider> provider = OASIOSSearchCollation.shared.provider;
+    XCTAssertNotNil(provider);
+    NSString *base = [@"🚲" stringByPaddingToLength:81 withString:@"x" startingAtIndex:0];
+    base = [base stringByAppendingString:@"Ł"];
+    OASKotlinIntArray *positions = [OASKotlinIntArray arrayWithSize:81];
+    for (int i = 0; i < 81; i++)
+        [positions setIndex:i value:i + 1];
+    auto check = [provider, base, positions]() {
+        @autoreleasepool {
+            OASBoolean *en = [provider equalsAtAnyLocale:@"en_US" base:base part:@"l" length:1 offsets:positions count:81];
+            OASBoolean *pl = [provider equalsAtAnyLocale:@"pl_PL" base:base part:@"l" length:1 offsets:positions count:81];
+            OASBoolean *empty = [provider containsLocale:@"en_US" base:@"" part:@""];
+            return en.boolValue && pl != nil && !pl.boolValue && empty.boolValue;
+        }
+    };
+    bool workerMatched = false;
+    std::thread worker([&]() { workerMatched = check(); });
+    BOOL mainMatched = check();
+    worker.join();
+    XCTAssertTrue(mainMatched);
+    XCTAssertTrue(workerMatched);
+}
 
 - (void)testEnglishRegionOrderMatchesAndroid
 {

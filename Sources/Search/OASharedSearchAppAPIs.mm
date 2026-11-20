@@ -417,7 +417,69 @@ static OASSearchResult *favoriteResult(OAFavoriteItem *point, OASSearchPhrase *p
 
 @end
 
+NSNotificationName const OASearchRegionCatalogPrepared = @"OASearchRegionCatalogPrepared";
+
+@interface OASearchRegionIndex : NSObject
+@property (nonatomic, copy) NSArray<OAWorldRegion *> *regions;
+@property (nonatomic, copy) NSArray<OASKCollatorStringMatcherPreparedName *> *names;
+@end
+
+@implementation OASearchRegionIndex
+@end
+
+@interface OASharedSearchIndexItemAPI ()
+@property (atomic, strong) OASearchRegionIndex *regionIndex;
+@end
+
 @implementation OASharedSearchIndexItemAPI
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(catalogPrepared:)
+                                                  name:OASearchRegionCatalogPrepared object:nil];
+        [self rebuildRegionIndex];
+    }
+    return self;
+}
+
+- (void)catalogPrepared:(NSNotification *)notification
+{
+    [self rebuildRegionIndex];
+}
+
+- (void)collectRegion:(OAWorldRegion *)region regions:(NSMutableArray *)regions names:(NSMutableArray *)names
+{
+    if (region.superregion.superregion.resourceTypes &&
+        [region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)])
+    {
+        NSString *name = [[region.allNames componentsJoinedByString:@" "] ?: region.name lowercaseString];
+        if (name.length)
+        {
+            [regions addObject:region];
+            [names addObject:[[OASKCollatorStringMatcherPreparedName alloc] initWithFullName:name]];
+        }
+    }
+    for (OAWorldRegion *child in region.subregions)
+        [self collectRegion:child regions:regions names:names];
+}
+
+- (void)rebuildRegionIndex
+{
+    @synchronized (self)
+    {
+        NSMutableArray *regions = [NSMutableArray array];
+        NSMutableArray *names = [NSMutableArray array];
+        [self collectRegion:[self worldRegion] regions:regions names:names];
+        OASearchRegionIndex *index = [OASearchRegionIndex new];
+        index.regions = regions;
+        index.names = names;
+        self.regionIndex = index;
+    }
+}
+
 
 + (OASObjectType *)searchType { return OASObjectType.indexItem; }
 
@@ -437,13 +499,20 @@ static OASSearchResult *favoriteResult(OAFavoriteItem *point, OASSearchPhrase *p
     return [OAResourcesUIHelper uninstalledMapFromResourceIds:ids region:region];
 }
 
-- (void)searchRegion:(OAWorldRegion *)region phrase:(OASSearchPhrase *)phrase nameMatcher:(OASNameStringMatcher *)nameMatcher matcher:(OASSearchUICoreSearchResultMatcher *)matcher
+- (BOOL)searchPhrase:(OASSearchPhrase *)phrase resultMatcher:(OASSearchUICoreSearchResultMatcher *)matcher
 {
-    if (!region || [matcher isCancelled])
-        return;
-    OASKCollatorStringMatcherPreparedName *name = region.preparedSearchName;
-    if (name && region.superregion.superregion.resourceTypes && [nameMatcher matchesPreparedName:name])
+    OASNameStringMatcher *nameMatcher = [[OASNameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase]
+                                                                                 mode:OASKStringMatcherMode.checkEqualsFromSpace];
+    OASearchRegionIndex *index = self.regionIndex;
+    NSArray<OAWorldRegion *> *regions = index.regions;
+    NSArray<OASKCollatorStringMatcherPreparedName *> *names = index.names;
+    for (NSUInteger i = 0; i < regions.count; i++)
     {
+        if ([matcher isCancelled])
+            return NO;
+        if (![nameMatcher matchesPreparedName:names[i]])
+            continue;
+        OAWorldRegion *region = regions[i];
         OARepositoryResourceItem *item = [self uninstalledMapForRegion:region];
         if (item && ![matcher isCancelled])
         {
@@ -457,19 +526,6 @@ static OASSearchResult *favoriteResult(OAFavoriteItem *point, OASSearchPhrase *p
             [matcher publishObj:result];
         }
     }
-    for (OAWorldRegion *child in region.subregions)
-    {
-        if ([matcher isCancelled])
-            return;
-        [self searchRegion:child phrase:phrase nameMatcher:nameMatcher matcher:matcher];
-    }
-}
-
-- (BOOL)searchPhrase:(OASSearchPhrase *)phrase resultMatcher:(OASSearchUICoreSearchResultMatcher *)matcher
-{
-    OASNameStringMatcher *nameMatcher = [[OASNameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase]
-                                                                                mode:OASKStringMatcherMode.checkEqualsFromSpace];
-    [self searchRegion:[self worldRegion] phrase:phrase nameMatcher:nameMatcher matcher:matcher];
     return ![matcher isCancelled];
 }
 

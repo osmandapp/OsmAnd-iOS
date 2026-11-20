@@ -125,7 +125,7 @@
             return;
         }
         OAMapViewController *mapVC = OARootViewController.instance.mapPanel.mapViewController;
-        [OAResourcesUIHelper clearTilesOf:resource area:mapVC.mapView.getVisibleBBox31 zoom:mapVC.getMapZoom onComplete:^{
+        [OAResourcesUIHelper clearTilesOf:resource area:mapVC.mapView.getVisibleBBox31 zoom:mapVC.mapView.zoomLevel onComplete:^{
             [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
         }];
     }]];

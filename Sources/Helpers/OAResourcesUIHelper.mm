@@ -2211,16 +2211,14 @@ includeHidden:(BOOL)includeHidden
     [viewController presentViewController:alert animated: YES completion: nil];
 }
 
-+ (void)clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete
++ (void)clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        const int tileZoom = (int)zoom;
-
         if ([resource isKindOfClass:OASqliteDbResourceItem.class])
         {
             OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
             OASQLiteTileSource *sqliteTileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-            [sqliteTileSource deleteImages:area zoom:tileZoom];
+            [sqliteTileSource deleteImages:area zoom:zoom];
         }
         else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
         {
@@ -2230,7 +2228,7 @@ includeHidden:(BOOL)includeHidden
             if (!downloadPath)
                 return;
 
-            const int shift = OsmAnd::ZoomLevel31 - tileZoom;
+            const int shift = OsmAnd::ZoomLevel31 - zoom;
             const int left = area.left() >> shift;
             const int right = area.right() >> shift;
             const int top = area.top() >> shift;
@@ -2240,7 +2238,7 @@ includeHidden:(BOOL)includeHidden
             {
                 for (int y = top; y <= bottom; y++)
                 {
-                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(tileZoom).stringValue, @(x).stringValue, @(y).stringValue];
+                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(zoom).stringValue, @(x).stringValue, @(y).stringValue];
                     [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
                 }
             }

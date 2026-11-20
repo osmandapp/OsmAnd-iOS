@@ -10,6 +10,7 @@
 // git revision 744c6b5831ca13767b936d62be8c78138b8dda08
 
 import CoreLocation
+import OsmAndShared
 
 @objcMembers
 final class MapSelectionResult: NSObject {
@@ -48,7 +49,9 @@ final class MapSelectionResult: NSObject {
         let objectsWithKeys = processedObjects.map { object in
             (
                 object: object,
-                order: (object.object as? OARenderedObject)?.order ?? 0,
+                // Match Android GPXLayer.getOrder for local and recording tracks.
+                order: object.object is GpxDataItem || object.object is GpxFile
+                    ? 1000 : (object.object as? OARenderedObject)?.order ?? 0,
                 name: selectionName(object),
                 index: collectionIndex(object)
             )
@@ -69,6 +72,12 @@ final class MapSelectionResult: NSObject {
     }
 
     private func selectionName(_ selectedObject: SelectedMapObject) -> String {
+        if let track = selectedObject.object as? GpxDataItem {
+            return track.gpxFileNameWithoutExtension
+        }
+        if selectedObject.object is GpxFile {
+            return localizedString("shared_string_currently_recording_track")
+        }
         if let renderedObject = selectedObject.object as? OARenderedObject {
             let provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
             let name = provider.nameOnlyString()

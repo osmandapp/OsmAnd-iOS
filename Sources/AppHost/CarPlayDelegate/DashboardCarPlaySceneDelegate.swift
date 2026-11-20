@@ -14,6 +14,10 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         configureScene()
     }
 
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        updateMapViewport()
+    }
+
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
@@ -24,7 +28,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
         stopObservingMapViewportSettings()
-        guard window != nil else { return }
+        guard let window else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
 
@@ -41,10 +45,11 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
             if let mapVC {
                 CarPlayService.shared.configure()
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
-                dashboardVC?.attachMapToWindow()
-                self.window?.rootViewController = dashboardVC
+                window.rootViewController = dashboardVC
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
+                dashboardVC?.attachMapToWindow()
                 updateMapViewport()
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
                 startObservingMapViewportSettings()
             }
         } else {
@@ -121,10 +126,14 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
         self.window = window
         dashboardController.shortcutButtons = createDashboardButtons(for: templateApplicationDashboardScene)
+        if isForegroundScene {
+            configureScene()
+        }
     }
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidDisconnect(templateApplicationDashboardScene)
         CarPlayService.shared.disconnectScene(.dashboard)
         stopObservingMapViewportSettings()
         dashboardVC?.detachFromCarPlayWindow()

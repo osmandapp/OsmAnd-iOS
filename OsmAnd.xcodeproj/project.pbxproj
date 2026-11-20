@@ -2105,6 +2105,7 @@
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
 		FA6BC19F2EE04780006CBA11 /* CarPlayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6BC19E2EE04780006CBA11 /* CarPlayService.swift */; };
+		C0D6048A2FCA110000000002 /* CarPlaySceneLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D6048A2FCA110000000001 /* CarPlaySceneLifecycleCoordinator.swift */; };
 		FA7000012F90000000000001 /* FFCircularProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000013 /* FFCircularProgressView.m */; };
 		FA7000012F90000000000002 /* UIColor+iOS7.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000015 /* UIColor+iOS7.m */; };
 		FA7000012F90000000000003 /* TTRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = FA7000012F90000000000018 /* TTRangeSlider.m */; };
@@ -5676,6 +5677,7 @@
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
 		FA6BC19E2EE04780006CBA11 /* CarPlayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayService.swift; sourceTree = "<group>"; };
+		C0D6048A2FCA110000000001 /* CarPlaySceneLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySceneLifecycleCoordinator.swift; sourceTree = "<group>"; };
 		FA7000012F90000000000012 /* FFCircularProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFCircularProgressView.h; sourceTree = "<group>"; };
 		FA7000012F90000000000013 /* FFCircularProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFCircularProgressView.m; sourceTree = "<group>"; };
 		FA7000012F90000000000014 /* UIColor+iOS7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+iOS7.h"; sourceTree = "<group>"; };
@@ -10858,6 +10860,7 @@
 			children = (
 				FAACFF1D2FC84AD9002D765A /* CarPlayDashboardAction.swift */,
 				FA6BC19E2EE04780006CBA11 /* CarPlayService.swift */,
+				C0D6048A2FCA110000000001 /* CarPlaySceneLifecycleCoordinator.swift */,
 				FA77E7A52AE16E90001BABE2 /* OACarPlayMapDashboardViewController.h */,
 				FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */,
 				FA44BF582A72A91C000D2F5F /* CarPlaySceneDelegates.swift */,
@@ -12887,6 +12890,7 @@
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
 				FAC346F52E052D3D002653CA /* VehicleMetricsItem.swift in Sources */,
 				FA6BC19F2EE04780006CBA11 /* CarPlayService.swift in Sources */,
+				C0D6048A2FCA110000000002 /* CarPlaySceneLifecycleCoordinator.swift in Sources */,
 				27C6D5BB2E81666300695D5B /* KeyEventCommand.swift in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,

@@ -40,7 +40,7 @@
         [_mapVc.mapView setTopOffsetOfViewSize:0 bottomOffset:0];
         [self addChildViewController:_mapVc];
         [self.view addSubview:_mapVc.view];
-        _mapVc.view.frame = self.view.frame;
+        _mapVc.view.frame = self.view.bounds;
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView setMSAAEnabled:[[OAAppSettings sharedManager].enableMsaaForСarPlay get]];
         [_mapVc.mapView resumeRendering];

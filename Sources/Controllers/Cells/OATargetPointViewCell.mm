@@ -22,12 +22,6 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 
-@interface OATargetPointViewCell ()
-
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *iconWidthConstraint;
-
-@end
-
 @implementation OATargetPointViewCell
 
 - (void)awakeFromNib
@@ -101,12 +95,6 @@
         [_titleView setText:title];
         [self updateDescriptionView];
     }
-
-    // Preserve shield proportions while allowing wider icons within the fixed height.
-    CGSize imageSize = _iconView.image.size;
-    CGFloat iconHeight = CGRectGetHeight(_iconView.bounds);
-    CGFloat imageScale = imageSize.height > iconHeight ? iconHeight / imageSize.height : 1.0;
-    _iconWidthConstraint.constant = MAX(iconHeight, imageSize.width * imageScale);
 }
 
 - (void)updateDescriptionView

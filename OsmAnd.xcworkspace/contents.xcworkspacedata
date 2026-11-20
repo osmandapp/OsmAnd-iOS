@@ -563,9 +563,6 @@
                            location = "group:OpeningHoursTime.kt">
                         </FileRef>
                         <FileRef
-                           location = "group:KCollationKey.kt">
-                        </FileRef>
-                        <FileRef
                            location = "group:MultiNameSerializer.kt">
                         </FileRef>
                         <FileRef

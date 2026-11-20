@@ -480,6 +480,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
                 OARouteSegmentAttribute *segment = stat.partition[key];
                 NSString *title = [stat.name isEqualToString:@"routeInfo_steepness"] && ![segment.getUserPropertyName isEqualToString:kUndefinedAttr] ? segment.getUserPropertyName : OALocalizedString([NSString stringWithFormat:@"rendering_attr_%@_name", segment.getUserPropertyName]);
                 OARouteInfoLegendItemView *item = [[OARouteInfoLegendItemView alloc] initWithTitle:title color:UIColorFromARGB(segment.color) distance:[OAOsmAndFormatter getFormattedDistance:segment.distance]];
+                [_chartSynchronizer registerLegendItem:item propertyName:segment.propertyName chart:cell.barChartView];
                 [legend.legendStackView addArrangedSubview:item];
             }
             [dataArr setObject:@[cell, legend] forKey:@(section++)];

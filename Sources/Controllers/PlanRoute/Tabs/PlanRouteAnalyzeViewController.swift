@@ -935,7 +935,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         rightAxis.labelTextColor = .textColorSecondary
         bindChartDelegate(barChart)
 
-        let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
+        let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat, chart: barChart) : makeCompactRoadAttrLegend(stat: stat, chart: barChart)
         card.addSubview(barChart)
         addRoadAttrLegend(legendView, to: card, below: barChart)
 
@@ -964,7 +964,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         ])
     }
 
-    private func makeCompactRoadAttrLegend(stat: OARouteStatistics) -> UIView {
+    private func makeCompactRoadAttrLegend(stat: OARouteStatistics, chart: HorizontalBarChartView? = nil) -> UIView {
         let items = routeAttributeLegendItems(for: stat)
         let container = UIView()
         let stack = UIStackView()
@@ -982,7 +982,10 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
             rowStack.axis = .horizontal
             rowStack.alignment = .center
             rowStack.spacing = 16
-            rowItems.forEach { rowStack.addArrangedSubview(compactLegendItem(title: $0.title, color: $0.color)) }
+            rowItems.forEach { item in
+                let itemView = compactLegendItem(item: item, chart: chart)
+                rowStack.addArrangedSubview(itemView)
+            }
             let spacer = UIView()
             spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
             rowStack.addArrangedSubview(spacer)
@@ -999,7 +1002,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return container
     }
 
-    private func makeExpandedRoadAttrLegend(stat: OARouteStatistics) -> UIView {
+    private func makeExpandedRoadAttrLegend(stat: OARouteStatistics, chart: HorizontalBarChartView? = nil) -> UIView {
         let items = routeAttributeLegendItems(for: stat)
         let container = UIView()
         let stack = UIStackView()
@@ -1011,6 +1014,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
         for (index, item) in items.enumerated() {
             let rowView = OARouteInfoLegendItemView(title: item.title, color: item.color, distance: item.distance)
+            if let chart {
+                chartSynchronizer.registerLegendItem(rowView, propertyName: item.propertyName, chart: chart)
+            }
             stack.addArrangedSubview(rowView)
 
             guard index < items.count - 1 else { continue }
@@ -1039,12 +1045,12 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return container
     }
 
-    private func compactLegendItem(title: String, color: UIColor) -> UIView {
+    private func compactLegendItem(item: RoadAttributeLegendItem, chart: HorizontalBarChartView?) -> UIView {
         let dot = UIView()
-        dot.backgroundColor = color
+        dot.backgroundColor = item.color
         dot.layer.cornerRadius = Self.compactLegendMarkerSize / 2
         dot.layer.borderColor = UIColor.customSeparatorSolid.resolvedColor(with: traitCollection).cgColor
-        let contrastRatio = contrastRatio(foreground: color, background: .groupBg)
+        let contrastRatio = contrastRatio(foreground: item.color, background: .groupBg)
         dot.layer.borderWidth = contrastRatio < Self.compactLegendMinimumContrastRatio
             ? Self.compactLegendBorderWidth
             : 0
@@ -1053,11 +1059,14 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         dot.heightAnchor.constraint(equalToConstant: Self.compactLegendMarkerSize).isActive = true
 
         let label = UILabel()
-        label.text = title
+        label.text = item.title
         label.font = .preferredFont(forTextStyle: .footnote)
         label.textColor = .textColorPrimary
         label.numberOfLines = 1
 
+        if let chart {
+            chartSynchronizer.registerLegendLabel(label, propertyName: item.propertyName, chart: chart)
+        }
         let stack = UIStackView(arrangedSubviews: [dot, label])
         stack.axis = .horizontal
         stack.spacing = Self.compactLegendInnerSpacing
@@ -1486,7 +1495,7 @@ private extension PlanRouteAnalyzeViewController {
             let title = localizedLegendTitle(for: segment, statName: stat.name)
             let distance = OAOsmAndFormatter.getFormattedDistance(segment.distance) ?? ""
             let color = UIColor(argbValue: UInt32(truncatingIfNeeded: segment.color))
-            return RoadAttributeLegendItem(title: title, color: color, distance: distance)
+            return RoadAttributeLegendItem(propertyName: segment.propertyName ?? key, title: title, color: color, distance: distance)
         }
     }
 
@@ -1501,7 +1510,9 @@ private extension PlanRouteAnalyzeViewController {
     }
 
     private func compactLegendRows(items: [RoadAttributeLegendItem], maxWidth: CGFloat) -> [[RoadAttributeLegendItem]] {
-        let font = UIFont.preferredFont(forTextStyle: .footnote)
+        let regularFont = UIFont.preferredFont(forTextStyle: .footnote)
+        let descriptor = regularFont.fontDescriptor.withSymbolicTraits(.traitBold) ?? regularFont.fontDescriptor
+        let font = UIFont(descriptor: descriptor, size: regularFont.pointSize)
         let itemSpacing: CGFloat = 16
         return items.reduce(into: [[RoadAttributeLegendItem]]()) { rows, item in
             let itemWidth = compactLegendItemWidth(title: item.title, font: font)
@@ -1591,13 +1602,13 @@ private extension PlanRouteAnalyzeViewController {
 
         let indexPath = IndexPath(row: 0, section: section)
         guard let cell = tableView.cellForRow(at: indexPath) as? AnalyzeCardCell,
-              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) else {
+              let barChart = cell.cardView.subviews.first(where: { $0 is HorizontalBarChartView }) as? HorizontalBarChartView else {
             tableView.beginUpdates()
             tableView.endUpdates()
             return
         }
 
-        let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
+        let legendView = isExpanded ? makeExpandedRoadAttrLegend(stat: stat, chart: barChart) : makeCompactRoadAttrLegend(stat: stat, chart: barChart)
         legendView.alpha = isExpanded ? 0 : 1
 
         cell.cardView.subviews.filter { $0 !== barChart }.forEach { $0.removeFromSuperview() }

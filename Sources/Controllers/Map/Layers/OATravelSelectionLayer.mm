@@ -109,7 +109,7 @@
             targetPoint.location = CLLocationCoordinate2DMake(travelGpx.lat, travelGpx.lon);
             OAPOI *amenity = [travelGpx getAmenity];
             if (amenity)
-                targetPoint.icon = [OANetworkRouteDrawable getIconByAmenityShieldTags:amenity textSize:18];
+                targetPoint.icon = [OANetworkRouteDrawable getIconByAmenityShieldTags:amenity textSize:12];
             if (!targetPoint.icon)
                 targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
             targetPoint.title = [travelGpx getDisplayName];

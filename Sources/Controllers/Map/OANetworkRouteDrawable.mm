@@ -63,6 +63,7 @@
     
     const auto tag = QString::fromNSString([NSString stringWithFormat:@"route_%@", routeTag]);
     const auto text = QString::fromNSString([_routeKey getRouteValue:@"osmc_text"]);
+    const auto shieldTextColor = QString::fromNSString([_routeKey getRouteValue:@"shield_textcolor"]);
     
     OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
     env->applyTo(textEvaluator);
@@ -70,14 +71,25 @@
 
     if (text.length() > 0)
     {
-        const auto color = QString::fromNSString([_routeKey getRouteValue:@"osmc_textcolor"]);
-        textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, tag);
-        textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QStringLiteral(""));
         textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, 14);
         textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, 14);
         textEvaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_TEXT_LENGTH, (unsigned int) text.length());
-        textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, tag + QStringLiteral("_1_osmc_text"));
-        textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_ADDITIONAL, tag + QStringLiteral("_1_osmc_textcolor=") + color);
+        if (shieldTextColor.isEmpty())
+        {
+            const auto color = QString::fromNSString([_routeKey getRouteValue:@"osmc_textcolor"]);
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, tag);
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QStringLiteral(""));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, tag + QStringLiteral("_1_osmc_text"));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_ADDITIONAL, tag + QStringLiteral("_1_osmc_textcolor=") + color);
+        }
+        else
+        {
+            // Match Android NetworkRouteDrawable.updatePaint() for TravelGpx shields.
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_TAG, QStringLiteral("route"));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_VALUE, QStringLiteral("segment"));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_NAME_TAG, QStringLiteral(""));
+            textEvaluator.setStringValue(env->styleBuiltinValueDefs->id_INPUT_ADDITIONAL, QStringLiteral("shield_textcolor=") + shieldTextColor);
+        }
     }
     textEvaluator.evaluate(nullptr, OsmAnd::MapStyleRulesetType::Text, &evaluationResult);
 
@@ -124,11 +136,11 @@
     evaluationResult.getIntegerValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_COLOR, textColor);
     textStyle.setColor(OsmAnd::ColorARGB(textColor));
     
-    bool bold = false;
+    bool bold = !shieldTextColor.isEmpty();
     evaluationResult.getBooleanValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_BOLD, bold);
     textStyle.setBold(bold);
     
-    float scaledFontSize = _textSize;
+    float scaledFontSize = _textSize * env->displayDensityFactor;
     UITraitCollection *traitCollection = UIScreen.mainScreen.traitCollection;
     evaluationResult.getFloatValue(env->styleBuiltinValueDefs->id_OUTPUT_TEXT_SIZE, scaledFontSize);
     scaledFontSize = [[UIFontMetrics metricsForTextStyle:UIFontTextStyleBody] scaledValueForValue:scaledFontSize compatibleWithTraitCollection:traitCollection];

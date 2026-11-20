@@ -66,6 +66,7 @@
             <connections>
                 <outlet property="descriptionView" destination="cad-YV-DSA" id="VoC-so-hwY"/>
                 <outlet property="iconView" destination="1at-JS-K13" id="Qqd-sM-dfM"/>
+                <outlet property="iconWidthConstraint" destination="6xh-tZ-J8s" id="oYP-ZQ-Pbk"/>
                 <outlet property="titleView" destination="CGc-pw-v0w" id="H4T-S8-IPv"/>
             </connections>
             <point key="canvasLocation" x="28" y="68"/>

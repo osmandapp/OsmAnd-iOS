@@ -6,6 +6,8 @@
 //  Copyright © 2026 OsmAnd. All rights reserved.
 //
 
+import OsmAndShared
+
 final class PoiRowParams: NSObject {
     
     var builder: AmenityInfoRowParams.Builder 
@@ -15,8 +17,9 @@ final class PoiRowParams: NSObject {
     var value: String
     var subtype: String?
     var openingHoursCheckDate: String?
+    var additionalInfo: AdditionalInfoBundle?
     
-    init(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType? = nil, rule: PoiAdditionalUiRule, key: String, value: String, subtype: String?, openingHoursCheckDate: String? = nil) {
+    init(builder: AmenityInfoRowParams.Builder, poiType: OAPOIType? = nil, rule: PoiAdditionalUiRule, key: String, value: String, subtype: String?, openingHoursCheckDate: String? = nil, additionalInfo: AdditionalInfoBundle? = nil) {
         self.builder = builder
         self.poiType = poiType
         self.rule = rule
@@ -24,5 +27,6 @@ final class PoiRowParams: NSObject {
         self.value = value
         self.subtype = subtype
         self.openingHoursCheckDate = openingHoursCheckDate
+        self.additionalInfo = additionalInfo
     }
 }

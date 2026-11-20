@@ -531,7 +531,6 @@ private final class PlanRouteProfileTestDataSource: PlanRoutePointsDataSource {
     var isApproximationNeeded: Bool { false }
     var shouldRequestApproximationBeforeNavigation: Bool { false }
     var shouldShowApproximationWarning: Bool { false }
-    var approximationWarningViewController: UIViewController? { nil }
     var canStartNewSegment: Bool { false }
     var availableModes: [OAApplicationMode] { [OAApplicationMode.bicycle(), OAApplicationMode.pedestrian(), OAApplicationMode.car()].compactMap { $0 } }
 

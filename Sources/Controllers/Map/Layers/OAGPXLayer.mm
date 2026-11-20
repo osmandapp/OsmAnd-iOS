@@ -1646,6 +1646,19 @@ colorizationScheme:(int)colorizationScheme
     }
 }
 
+- (BOOL)isDisplayingGpxFiles:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles
+{
+    if (_gpxFiles.count != gpxFiles.count)
+        return NO;
+
+    for (NSString *path in gpxFiles)
+    {
+        if (_gpxFiles[path] != gpxFiles[path])
+            return NO;
+    }
+    return YES;
+}
+
 - (void) refreshGpxWaypoints
 {
     [self refreshGpxWaypoints:[self collectVisibleWaypoints]];
@@ -2132,6 +2145,7 @@ colorizationScheme:(int)colorizationScheme
 
         OAGpxWptItem *wptItem = [[OAGpxWptItem alloc] init];
         wptItem.point = item;
+        wptItem.gpxFile = gpxFile;
         wptItem.groups = [self visibleWaypointGroupNames:gpxFile];
         wptItem.docPath = docPath;
         return [self getTargetPoint:wptItem touchLocation:nil];
@@ -2303,37 +2317,34 @@ colorizationScheme:(int)colorizationScheme
     return NO;
 }
 
-- (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
         OAGpxWptItem *item = (OAGpxWptItem *)object;
         
-        if (item.docPath)
+        if (item.docPath.length > 0)
         {
-            item.point.lat = position.latitude;
-            item.point.lon = position.longitude;
+            [item prepareForEditing];
+            CLLocationCoordinate2D previousPosition = item.point.position;
             item.point.position = position;
-
-            OASGpxFile *gpxFile = [[OASelectedGPXHelper instance] getGpxFileFor:item.docPath];
-            if (gpxFile)
+            if (![self.mapViewController updateWpts:@[item] docPath:item.docPath updateMap:YES])
             {
-                OASKFile *file = [[OASKFile alloc] initWithFilePath:item.docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
-                [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
-                
-                NSDictionary<NSString *, OASGpxFile *> *dic = @{ item.docPath : gpxFile };
-                [self refreshGpxTracks:dic reset:YES];
+                item.point.position = previousPosition;
+                return NO;
             }
         }
         else
         {
             OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
-            [helper updatePointCoordinates:item.point newLocation:position];
+            if (![helper updatePointCoordinates:item.originalPoint newLocation:position])
+                return NO;
             item.point.position = position;
             [self.app.updateRecTrackOnMapObservable notifyEventWithKey:@(YES)];
         }
+        return YES;
     }
+    return NO;
 }
 
 - (UIImage *)getPointIcon:(id)object

@@ -21,6 +21,7 @@
 @property (nonatomic) std::shared_ptr<OsmAnd::VectorLinesCollection> linesCollection;
 
 - (void)refreshGpxTracks:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles reset:(BOOL)reset;
+- (BOOL)isDisplayingGpxFiles:(NSDictionary<NSString *, OASGpxFile *> *)gpxFiles;
 - (void)refreshGpxWaypoints;
 - (CGFloat)getLineWidth:(NSString *)gpxWidth;
 - (void)updateCachedGpxItem:(NSString *)filePath;

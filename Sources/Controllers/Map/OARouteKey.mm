@@ -232,7 +232,7 @@ static NSString *NETWORK_ROUTE_TYPE = @"type";
     QMap<QString, QString> tagsToGpx = _routeKey.tagsMap();
     NSString *key = [NSString stringWithFormat:@"name:%@", [OAAppSettings sharedManager].settingPrefMapLanguage.get];
     NSString *result = tagsToGpx.value(QString::fromNSString(key)).toNSString();
-    return result;
+    return result.length > 0 ? result : [self getRouteName];
 }
 
 - (id)copyWithZone:(NSZone *)zone

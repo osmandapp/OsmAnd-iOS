@@ -96,6 +96,10 @@ final class TravelGpx : TravelArticle {
         }
     }
     
+    override func getGpxFileName() -> String {
+        return SharedTravelArticles.toShared(self).getGpxFileName()
+    }
+
     func getDisplayName() -> String {
         guard let shared = SharedTravelArticles.toShared(self) as? OsmAndShared.TravelGpx else {
             return getGpxFileName()

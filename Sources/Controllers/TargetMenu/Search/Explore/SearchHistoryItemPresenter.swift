@@ -20,6 +20,8 @@ struct SearchHistoryRecord {
 struct SearchHistoryItemPresenter {
     private static let administrativeCategory = "administrative"
     private static let typeNameSeparator = " • "
+    private static let customCategoryIconName = "mx_special_custom_category"
+    private static let addressObjectTypes = Set(([.city, .village, .boundary, .postcode, .street, .house, .streetIntersection] as [EOAObjectType]).compactMap { OAObjectType.toString($0) })
 
     private let poiTypesByName: [String: OAPOIType]
 
@@ -32,13 +34,10 @@ struct SearchHistoryItemPresenter {
             return poiType.icon()
         }
         if let filter = record.object as? OAPOIUIFilter {
-            if let iconName = filter.getIconResource() as? String, let icon = OAUtilities.getMxIcon(iconName) {
-                return icon
-            }
-            return OAPOIHelper.getCustomFilterIcon(filter)
+            return OAUtilities.getMxIcon(OAPOIUIFilter.getCustomFilterIconName(filter)) ?? OAUtilities.getMxIcon(customCategoryIconName)
         }
-        if let dataItem = record.object as? GpxDataItem {
-            return UIImage.routeActivityIcon(routeActivity(for: dataItem)?.iconName, fallback: tinted(.icCustomTrip, traitCollection: traitCollection))
+        if record.object is GpxDataItem {
+            return UIImage.icCustomTrip.withRenderingMode(.alwaysTemplate)
         }
         let item = record.item
         if item.fromNavigation {
@@ -46,6 +45,9 @@ struct SearchHistoryItemPresenter {
         }
         if item.hType == .location {
             return tinted(.icCustomCoordinatesLocation, traitCollection: traitCollection)
+        }
+        if let objectType = item.objectType, addressObjectTypes.contains(objectType), let icon = item.icon() {
+            return tinted(icon, traitCollection: traitCollection)
         }
         return item.icon()
     }

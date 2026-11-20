@@ -274,9 +274,20 @@
         block();
 }
 
-- (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom
+- (void)deleteImages:(OsmAnd::AreaI)area31 zoom:(int)zoom
 {
-    _db->removeTilesData(area, (OsmAnd::ZoomLevel) zoom);
+    const int shift = OsmAnd::ZoomLevel31 - zoom;
+    const int left = area31.left() >> shift;
+    const int right = area31.right() >> shift;
+    const int top = area31.top() >> shift;
+    const int bottom = area31.bottom() >> shift;
+    QList<OsmAnd::TileId> tileIds;
+    for (int x = left; x <= right; x++)
+    {
+        for (int y = top; y <= bottom; y++)
+            tileIds.push_back(OsmAnd::TileId::fromXY(x, y));
+    }
+    _db->removeTilesData(tileIds, (OsmAnd::ZoomLevel)zoom);
     _db->compact();
 }
 

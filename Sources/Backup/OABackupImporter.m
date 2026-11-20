@@ -469,7 +469,7 @@
                     break;
                 }
             }
-            OAUploadedFileInfo *fileInfo = infoMap[[NSString stringWithFormat:@"%@___%@", remoteFile.type, origFileName]];
+            OAUploadedFileInfo *fileInfo = infoMap[[OABackupDbHelper getUploadedFileInfoKey:remoteFile.type name:origFileName]];
             long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
             if ([self shouldDownloadOnCollecting:remoteFile defValue:readItems]
                 && (uploadTime != remoteFile.updatetimems || delete))

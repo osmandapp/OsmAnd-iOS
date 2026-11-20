@@ -15,6 +15,8 @@
 #import "OAMapRendererView.h"
 #import "OsmAndApp.h"
 
+#include <SkCodec.h>
+#include <SkData.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
@@ -23,6 +25,12 @@
 #define kDefaultUserAgent @"OsmAndiOS"
 
 #define kMaxRequests 50
+
+static BOOL OACanFullyDecodeTile(const void *bytes, size_t length)
+{
+    auto codec = SkCodec::MakeFromData(SkData::MakeWithoutCopy(bytes, length));
+    return codec && std::get<SkCodec::Result>(codec->getImage()) == SkCodec::kSuccess;
+}
 
 @implementation OAMapTileDownloader
 {
@@ -208,7 +216,8 @@
     BOOL isSqlite = _type == EOATileRequestTypeSqlite;
     if (isSqlite && _sqliteSource)
     {
-        if ([_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom])
+        NSData *cachedTile = [_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom];
+        if (cachedTile.length > 0 && OACanFullyDecodeTile(cachedTile.bytes, cachedTile.length))
         {
             return nil;
         }

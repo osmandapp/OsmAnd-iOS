@@ -56,6 +56,7 @@ final class CategoriesViewController: UIViewController {
     private func setupTableView() {
         view.backgroundColor = .viewBg
         tableView.backgroundColor = .viewBg
+        tableView.separatorColor = SeparatorAppearance.color
         tableView.dataSource = self
         tableView.delegate = self
         tableView.alwaysBounceVertical = true
@@ -152,9 +153,7 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: Self.cellIdentifier, for: indexPath)
         let row = rows[indexPath.row]
         cell.contentConfiguration = contentConfiguration(for: row)
-        var background = UIBackgroundConfiguration.listGroupedCell()
-        background.backgroundColor = .groupBg
-        cell.backgroundConfiguration = background
+        PointContentConfiguration.applyHighlightableBackground(to: cell)
         if case .category = row {
             cell.accessibilityTraits = .none
         } else {

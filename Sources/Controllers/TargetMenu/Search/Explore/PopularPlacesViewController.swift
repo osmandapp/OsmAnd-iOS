@@ -154,7 +154,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: PoiContentTableViewCell.reuseIdentifier, for: indexPath)
         cell.contentConfiguration = place.contentConfiguration(style: .detailed, secondaryContent: secondaryContent(for: place))
-        cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
+        PointContentConfiguration.applyHighlightableBackground(to: cell)
         detailsLoader.request(place)
         return cell
     }

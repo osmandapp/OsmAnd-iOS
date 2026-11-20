@@ -21,6 +21,7 @@
 #include <OsmAndCore/Map/MapStyleEvaluationResult.h>
 #include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
 #include <OsmAndCore/TextRasterizer.h>
+#include <QtMath>
 
 @implementation OANetworkRouteDrawable
 {
@@ -147,7 +148,24 @@
     textStyle.setSize(scaledFontSize);
 
     const auto rasterizer = OsmAnd::TextRasterizer::getDefault();
-    const auto textImage = rasterizer->rasterize(text, textStyle);
+    auto textImage = rasterizer->rasterize(text, textStyle);
+    if (textImage && textStyle.backgroundImage)
+    {
+        // Match Android NetworkRouteDrawable.getIntrinsicHeight() and setBounds().
+        // Stretch the background to at least 24 dp, preserving text size.
+        const auto minIconSize = qCeil(24.0f * env->displayDensityFactor);
+        const auto width = qMax(minIconSize, textImage->width());
+        const auto height = qMax(minIconSize, textImage->height());
+        const auto backgroundImage = textStyle.backgroundImage;
+        if (backgroundImage->width() != width || backgroundImage->height() != height)
+        {
+            textStyle.backgroundImage = OsmAnd::SkiaUtilities::scaleImage(
+                backgroundImage,
+                static_cast<float>(width) / backgroundImage->width(),
+                static_cast<float>(height) / backgroundImage->height());
+            textImage = rasterizer->rasterize(text, textStyle);
+        }
+    }
     if (textImage)
     {
         return [OANativeUtilities skImageToUIImage:textImage];

@@ -1795,7 +1795,7 @@
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
                     routeIcon:_reopeningState.trackIcon
-                        title:self.gpx.gpxFileNameWithoutExtension
+                        title:[self getGpxName]
                   nearestCity:self.gpx.nearestCity];
     [self setupUIBuilder];
     [_uiBuilder setupTabBar:self.tabBarView

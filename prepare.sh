@@ -57,3 +57,6 @@ fi
 if [[ "$1" == --sync_translations ]]; then
   "$SRCLOC/Scripts/add_translations.swift"
 fi
+
+# Refresh Kotlin sources timestamp
+touch $SRCLOC/../android/OsmAnd-shared/src

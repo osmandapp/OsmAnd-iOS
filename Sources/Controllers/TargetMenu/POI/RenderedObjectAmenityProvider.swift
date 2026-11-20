@@ -55,14 +55,14 @@ final class RenderedObjectAmenityProvider: NSObject {
                 .replacingOccurrences(of: "osmand_", with: "")
                 .replacingOccurrences(of: ":", with: "_")
             
-            let value = amenity.getAdditionalInfo(key)
+            guard let value = amenity.getAdditionalInfo(key) else { continue }
             
             if let translation, !translation.isEmpty {
                 break
             }
             
             if translation?.isEmpty ?? true {
-                translation = poiTranslator.translation("\(translationKey)_\(String(describing: value))", withDefault: false)
+                translation = poiTranslator.translation("\(translationKey)_\(value)", withDefault: false)
             }
             
             if translation?.isEmpty ?? true {

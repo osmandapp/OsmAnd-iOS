@@ -410,7 +410,10 @@
     headerFrame.size.height += self.sliderView.frame.size.height;
     headerFrame.size.height += 6.;
 
-    CGRect titleFrame = CGRectMake([self isDirectionRTL] ? 46. : 0., 0., headerFrame.size.width - (contentMargin + 46.), 0.);
+    // Preserve wide route shields, as in OATargetMultiView.
+    CGFloat iconWidth = MAX(30., self.titleIconView.image.size.width);
+    CGFloat iconSpace = iconWidth + 16.;
+    CGRect titleFrame = CGRectMake([self isDirectionRTL] ? iconSpace : 0., 0., headerFrame.size.width - (contentMargin + iconSpace), 0.);
     CGSize titleSize = [OAUtilities calculateTextBounds:self.titleView.text
                                                      width:titleFrame.size.width
                                                     height:kTitleHeightMax
@@ -423,7 +426,7 @@
     self.titleIconView.frame = CGRectMake(
             [self isDirectionRTL] ? 0. : titleFrame.size.width + 16.,
             (titleSize.height - 30.) / 2,
-            30.,
+            iconWidth,
             30.
     );
 

@@ -208,7 +208,7 @@
     BOOL isSqlite = _type == EOATileRequestTypeSqlite;
     if (isSqlite && _sqliteSource)
     {
-        if ([_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom])
+        if ([_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom].length > 0)
         {
             return nil;
         }

@@ -2228,31 +2228,14 @@ includeHidden:(BOOL)includeHidden
     [viewController presentViewController:alert animated: YES completion: nil];
 }
 
-+ (void) clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(float)zoom onComplete:(void (^)(void))onComplete
++ (void)clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-
-        const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(area.topLeft);
-        const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(area.bottomRight);
-
-        int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
-        int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
-        int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
-        int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
-        OsmAnd::AreaI tileArea;
-        tileArea.topLeft = OsmAnd::PointI(x1, y1);
-        tileArea.bottomRight = OsmAnd::PointI(x2, y2);
-
-        int left = (int) floor(tileArea.left());
-        int top = (int) floor(tileArea.top());
-        int width = (int) (ceil(tileArea.right()) - left);
-        int height = (int) (ceil(tileArea.bottom()) - top);
-
         if ([resource isKindOfClass:OASqliteDbResourceItem.class])
         {
             OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
             OASQLiteTileSource *sqliteTileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-            [sqliteTileSource deleteImages:tileArea zoom:(int)zoom];
+            [sqliteTileSource deleteImages:area zoom:zoom];
         }
         else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
         {
@@ -2262,11 +2245,17 @@ includeHidden:(BOOL)includeHidden
             if (!downloadPath)
                 return;
 
-            for (int i = 0; i < width; i++)
+            const int shift = OsmAnd::ZoomLevel31 - zoom;
+            const int left = area.left() >> shift;
+            const int right = area.right() >> shift;
+            const int top = area.top() >> shift;
+            const int bottom = area.bottom() >> shift;
+
+            for (int x = left; x <= right; x++)
             {
-                for (int j = 0; j < height; j++)
+                for (int y = top; y <= bottom; y++)
                 {
-                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @((int) zoom).stringValue, @(i + left).stringValue, @(j + top).stringValue];
+                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(zoom).stringValue, @(x).stringValue, @(y).stringValue];
                     [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
                 }
             }

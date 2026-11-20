@@ -123,7 +123,7 @@
     BOOL _isNewColorSelected;
     BOOL _needToScrollToSelectedColor;
     OAColorsPaletteCell *_colorsPaletteCell;
-    
+    OASGpxUtilitiesPointsGroup *_newWaypointGroup;
     PoiIconCollectionHandler *_poiIconCollectionHandler;
 
     UILabel *_subtitle;
@@ -1348,6 +1348,7 @@
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
+        _newWaypointGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:editedGroupName iconName:iconName backgroundType:backgroundIconName color:[color toARGBNumber]];
         if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
         [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
@@ -1683,6 +1684,26 @@
                 _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
                 [_colorCollectionHandler generateData:@[_sortedColorItems]];
             }
+        }
+
+        OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
+        if (!group && [groupName isEqualToString:_newWaypointGroup.name])
+            group = _newWaypointGroup;
+        if (!group && groupName.length == 0)
+            group = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"" iconName:DEFAULT_ICON_NAME_KEY backgroundType:DEFAULT_ICON_SHAPE_KEY color:_selectedColorItem.colorInt];
+
+        if (_isNewItemAdding && group)
+        {
+            NSString *iconName = group.iconName.length > 0 ? group.iconName : DEFAULT_ICON_NAME_KEY;
+            if (!_iconSelectedByUser && [OAUtilities getMxIcon:iconName] != nil)
+            {
+                _selectedIconName = iconName;
+                [self selectIconInController];
+            }
+            NSString *backgroundType = group.backgroundType.length > 0 ? group.backgroundType : DEFAULT_ICON_SHAPE_KEY;
+            NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundType];
+            if (backgroundIndex != NSNotFound)
+                _selectedBackgroundIndex = backgroundIndex;
         }
     }
 

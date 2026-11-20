@@ -42,6 +42,7 @@ static NSString *kGroupRowType = @"kGroupRowType";
 - (void) buildDateRow:(NSMutableArray<OAAmenityInfoRow *> *)rows timestamp:(NSDate *)timestamp;
 - (void) buildCommentRow:(NSMutableArray<OAAmenityInfoRow *> *)rows comment:(NSString *)comment;
 - (void) buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows;
+- (NSInteger)photosRowOrder;
 - (void) buildCoordinateRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;
 - (void) rebuildRows;
 - (void) setInfoRows:(NSMutableArray<OAAmenityInfoRow *> *)rows;

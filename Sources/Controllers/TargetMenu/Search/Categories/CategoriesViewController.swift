@@ -32,6 +32,7 @@ final class CategoriesViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private var rows: [Row] = []
     private var loadingRequest = 0
+    private var isLoadingSuspended = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,16 +41,18 @@ final class CategoriesViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        isLoadingSuspended = false
         loadCategories()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        isLoadingSuspended = true
         loadingRequest += 1
     }
 
     @objc func reloadData() {
-        guard viewIfLoaded?.window != nil else { return }
+        guard !isLoadingSuspended else { return }
         loadCategories()
     }
 

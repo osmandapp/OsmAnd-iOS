@@ -351,7 +351,7 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     _appMode = DEFAULT_APP_MODE;
 }
 
-- (double) getRouteDistance
+- (double)getRouteDistance
 {
     double distance = 0;
     for (NSArray<OASWptPt *> *points in @[_before.points, _after.points])
@@ -363,14 +363,16 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         {
             OASWptPt *first = points[i];
             OASWptPt *second = points[i + 1];
+            if (first.isGap)
+                continue;
             OARoadSegmentData *data = _roadSegmentData[[OAWptPtPair pairWithFirst:first second:second]];
             
             if (data == nil)
             {
                 if (_appMode != OAApplicationMode.DEFAULT || !first.lastPoint || !second.firstPoint)
                 {
-                    double localDist = getDistance(first.getLatitude, first.getLongitude,
-                                                   second.getLatitude, second.getLongitude);
+                    double localDist = [OASKMapUtils.shared getEllipsoidDistanceLat1:first.lat lon1:first.lon
+                                                                               lat2:second.lat lon2:second.lon];
                     if(!isnan(first.ele) && !isnan(second.ele) &&
                        first.ele != 0 && second.ele != 0)
                     {
@@ -1523,8 +1525,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         OAWptPtPair *pair = [OAWptPtPair pairWithFirst:_before.points[i] second:_before.points[i + 1]];
         OARoadSegmentData *data = _roadSegmentData[pair];
         NSArray<OASWptPt *> *dataPoints = data != nil ? data.gpxPoints : nil;
-        NSArray<OASRouteSegmentResult *> *dataSegments = data != nil ? data.segments : @[];
-        if (dataPoints != nil && dataSegments.count > 0)
+        NSArray<OASRouteSegmentResult *> *dataSegments = data.segments ?: @[];
+        if (dataPoints != nil)
         {
             for (OASWptPt *pt in dataPoints)
             {

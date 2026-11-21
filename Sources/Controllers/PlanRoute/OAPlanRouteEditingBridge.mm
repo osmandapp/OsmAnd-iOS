@@ -524,7 +524,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 - (double)routeDistanceFrom:(OASWptPt *)from to:(OASWptPt *)to
 {
     OARoadSegmentData *routeSegment = [self editingContext].roadSegmentData[[OAWptPtPair pairWithFirst:from second:to]];
-    return routeSegment != nil ? routeSegment.distance : [self distanceFrom:from to:to];
+    return routeSegment != nil ? routeSegment.distance : [OASKMapUtils.shared getEllipsoidDistanceLat1:from.lat lon1:from.lon
+                                                                                               lat2:to.lat lon2:to.lon];
 }
 
 - (NSArray<PlanRouteSegmentData *> *)buildSegments

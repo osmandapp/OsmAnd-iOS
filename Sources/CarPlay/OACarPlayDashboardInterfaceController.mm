@@ -90,6 +90,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     int _calculationProgress;
 
     CPMapButton *_mapModeButton;
+    NSMapTable<CPMapButton *, NSNumber *> *_mapButtonTypes;
     EOACarPlayButtonType _mapModeButtonType;
     BOOL _wasIn3DBeforePreview;
 
@@ -485,6 +486,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)updateMapButton:(CPMapButton *)mapButton forType:(EOACarPlayButtonType)type
 {
+    if (@available(iOS 27.0, *))
+    {
+        if (!_mapButtonTypes)
+            _mapButtonTypes = [NSMapTable weakToStrongObjectsMapTable];
+        [_mapButtonTypes setObject:@(type) forKey:mapButton];
+        mapButton.image = [self originalMapButtonImageForType:type];
+        return;
+    }
+
     BOOL templateRendering = NO;
     if (@available(iOS 26.0, *))
         templateRendering = YES;
@@ -511,6 +521,34 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
             break;
     }
     mapButton.image = [UIImage imageNamed:imageName template:templateRendering];
+}
+
+- (UIImage *)originalMapButtonImageForType:(EOACarPlayButtonType)type
+{
+    UITraitCollection *traits = self.interfaceController.carTraitCollection;
+    BOOL isDarkStyle = traits.userInterfaceStyle == UIUserInterfaceStyleDark;
+    NSString *imageName = nil;
+    switch (type)
+    {
+        case EOACarPlayButtonTypeZoomIn:
+            imageName = isDarkStyle ? ACImageNameIcCarplayMapZoomInWhite : ACImageNameIcCarplayMapZoomInBlack;
+            break;
+        case EOACarPlayButtonTypeZoomOut:
+            imageName = isDarkStyle ? ACImageNameIcCarplayMapZoomOutWhite : ACImageNameIcCarplayMapZoomOutBlack;
+            break;
+        case EOACarPlayButtonTypeCenterMap:
+            imageName = isDarkStyle ? ACImageNameIcCarplayMapLocationWhite : ACImageNameIcCarplayMapLocationBlack;
+            break;
+        case EOACarPlayButtonTypeSwitchTo2D:
+            imageName = isDarkStyle ? ACImageNameIcCarplayMap2DWhite : ACImageNameIcCarplayMap2DBlack;
+            break;
+        case EOACarPlayButtonTypeSwitchTo3D:
+            imageName = isDarkStyle ? ACImageNameIcCarplayMap3DWhite : ACImageNameIcCarplayMap3DBlack;
+            break;
+        default:
+            return nil;
+    }
+    return [UIImage imageNamed:imageName inBundle:nil compatibleWithTraitCollection:traits];
 }
 
 - (void)replaceMapModeButton:(CPMapButton *)mapButton
@@ -1418,6 +1456,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     NSLog(@"onUpdateMapTemplateStyle: %d (%@)", int(style), isDarkStyle ? @"dark" : @"light");
     _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
     _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
+    if (@available(iOS 27.0, *))
+    {
+        for (CPMapButton *mapButton in _mapTemplate.mapButtons)
+        {
+            NSNumber *type = [_mapButtonTypes objectForKey:mapButton];
+            if (type)
+                [self updateMapButton:mapButton forType:(EOACarPlayButtonType)type.integerValue];
+        }
+    }
 }
 
 @end

@@ -1674,6 +1674,9 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         cell.textView.textContainer.lineBreakMode = isShortDescription ? NSLineBreakByTruncatingTail : NSLineBreakByWordWrapping;
         [cell setCustomLeftSeparatorInset:YES];
         NSString *label = info.text;
+        // Same as Android MenuBuilder: plain-text preview of an HTML description, info.text keeps the HTML for the full view
+        if (label.length > 0 && [label rangeOfString:@"<(\"[^\"]*\"|'[^']*'|[^'\">])*>" options:NSRegularExpressionSearch].location != NSNotFound)
+            label = [OAWikiArticleHelper getPartialContent:label];
         if (label.length == 0)
         {
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
@@ -1687,8 +1690,8 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
             cell.textView.text = label;
             if (isShortDescription)
                 return cell;
-            
-            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
+
+            CGSize s = [OAUtilities calculateTextBounds:label width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
             CGFloat h = MIN(188.0, s.height + 10.0);
             h = MAX(48.0, h);
             info.height = h;

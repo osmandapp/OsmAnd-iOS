@@ -373,12 +373,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                 {
                     double localDist = [OASKMapUtils.shared getEllipsoidDistanceLat1:first.lat lon1:first.lon
                                                                                lat2:second.lat lon2:second.lon];
-                    if(!isnan(first.ele) && !isnan(second.ele) &&
-                       first.ele != 0 && second.ele != 0)
-                    {
-                        double h = fabs(first.ele - second.ele);
-                        localDist = sqrt(localDist * localDist + h * h);
-                    }
                     distance += localDist;
                 }
             }
@@ -1517,6 +1511,25 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
 
 - (OASTrkSegment *)getRouteSegment:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
 {
+    BOOL hasCachedGeometry = NO;
+    for (NSInteger index = startPointIndex; index < endPointIndex; index++)
+    {
+        OAWptPtPair *pair = [OAWptPtPair pairWithFirst:_before.points[index] second:_before.points[index + 1]];
+        if (_roadSegmentData[pair].gpxPoints.count > 1)
+        {
+            hasCachedGeometry = YES;
+            break;
+        }
+    }
+    if (!hasCachedGeometry)
+    {
+        if (endPointIndex < startPointIndex)
+            return nil;
+        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
+        segment.points = [[_before.points subarrayWithRange:NSMakeRange(startPointIndex, endPointIndex + 1 - startPointIndex)] mutableCopy];
+        return segment;
+    }
+
     NSMutableArray<OASRouteSegmentResult *> *route = [NSMutableArray array];
     NSMutableArray<CLLocation *> *locations = [NSMutableArray new];
     NSMutableArray<NSNumber *> *routePointIndexes = [NSMutableArray arrayWithObject:@(0)];
@@ -1524,26 +1537,43 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     {
         OAWptPtPair *pair = [OAWptPtPair pairWithFirst:_before.points[i] second:_before.points[i + 1]];
         OARoadSegmentData *data = _roadSegmentData[pair];
-        NSArray<OASWptPt *> *dataPoints = data != nil ? data.gpxPoints : nil;
+        NSArray<OASWptPt *> *dataPoints = data.gpxPoints;
         NSArray<OASRouteSegmentResult *> *dataSegments = data.segments ?: @[];
-        if (dataPoints != nil)
+        if (dataPoints.count < 2)
         {
-            for (OASWptPt *pt in dataPoints)
-            {
-                NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0];
-                CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude)
-                                                                     altitude:pt.ele
-                                                           horizontalAccuracy:0
-                                                             verticalAccuracy:0
-                                                                       course:0
-                                                                        speed:pt.speed
-                                                                    timestamp:timestamp];
-                [locations addObject:location];
-            }
-            [pair.second setTrkPtIndexIndex:(int)(i + 1 < _before.points.count - 1 ? locations.count : locations.count - 1)];
-            [route addObjectsFromArray:dataSegments];
-            [routePointIndexes addObject:@((int) (i + 1 == endPointIndex ? locations.count - 1 : locations.count))];
+            dataPoints = @[pair.first, pair.second];
+            dataSegments = @[];
         }
+        NSInteger coveredEdges = 0;
+        for (OASRouteSegmentResult *segment in dataSegments)
+            coveredEdges += abs([segment getEndPointIndex] - [segment getStartPointIndex]);
+        if (coveredEdges >= dataPoints.count)
+        {
+            dataSegments = @[];
+            coveredEdges = 0;
+        }
+        [route addObjectsFromArray:dataSegments];
+        if (coveredEdges < dataPoints.count - 1)
+        {
+            NSArray<OASWptPt *> *unmatchedPoints = [dataPoints subarrayWithRange:NSMakeRange(coveredEdges, dataPoints.count - coveredEdges)];
+            [route addObject:[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[DEFAULT_APP_MODE defaultSpeed]
+                                                                                              points:[self waypointsToLatLons:unmatchedPoints]]];
+        }
+        for (OASWptPt *pt in dataPoints)
+        {
+            NSDate *timestamp = [NSDate dateWithTimeIntervalSince1970:pt.time / 1000.0];
+            CLLocation *location = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(pt.getLatitude, pt.getLongitude)
+                                                                 altitude:pt.ele
+                                                       horizontalAccuracy:0
+                                                         verticalAccuracy:0
+                                                                   course:0
+                                                                    speed:pt.speed
+                                                                timestamp:timestamp];
+            [locations addObject:location];
+        }
+        NSInteger nextPointIndex = i + 1 == endPointIndex ? locations.count - 1 : locations.count;
+        [pair.second setTrkPtIndexIndex:(int)nextPointIndex];
+        [routePointIndexes addObject:@(nextPointIndex)];
     }
     if (locations.count > 0 && route.count > 0)
     {
@@ -1555,12 +1585,6 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
                                                                        points:nil
                                                            preserveTimestamps:YES];
         return [routeExporter generateRouteSegment];
-    }
-    else if (endPointIndex - startPointIndex >= 0)
-    {
-        OASTrkSegment *segment = [[OASTrkSegment alloc] init];
-        segment.points = [[_before.points subarrayWithRange:NSMakeRange(startPointIndex, (endPointIndex + 1) - startPointIndex)] mutableCopy];
-        return segment;
     }
     return nil;
 }

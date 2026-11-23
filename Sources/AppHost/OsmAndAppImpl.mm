@@ -58,6 +58,8 @@
 #include <QHash>
 #include <OsmAndCore.h>
 #include <OsmAndCore/IWebClient.h>
+#include <OsmAndCore/ICU.h>
+#import "OsmAndSharedWrapper.h"
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
 #include "CoreResourcesFromBundleProvider.h"
@@ -76,6 +78,7 @@
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererPerformanceMetrics.h>
 #include <openingHoursParser.h>
+#include <QVarLengthArray>
 #include <OsmAndCore/Search/CommonWords.h>
 
 static const double VERSION_3_10 = 3.10;
@@ -91,6 +94,58 @@ static NSString * const kBuildVersion = @"buildVersion";
 NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFinishedNotification";
 
 #define _(name)
+// NSString may expose contiguous UTF-16 directly. The inline buffer covers ordinary map names.
+class OASearchString
+{
+    QVarLengthArray<UniChar, 128> _buffer;
+public:
+    const int length;
+    const UniChar *characters;
+    explicit OASearchString(NSString *string)
+        : length(static_cast<int>(string.length)), characters(CFStringGetCharactersPtr((__bridge CFStringRef)string))
+    {
+        if (!characters)
+        {
+            _buffer.resize(length);
+            [string getCharacters:_buffer.data() range:NSMakeRange(0, length)];
+            characters = _buffer.constData();
+        }
+    }
+};
+
+@interface OASearchCollationProvider : NSObject <OASIOSSearchCollationProvider>
+@end
+
+@implementation OASearchCollationProvider
+
+static OASBoolean *boxedMatch(OsmAnd::ICU::MatchResult result)
+{
+    if (result == OsmAnd::ICU::MatchResult::Unavailable)
+        return nil;
+    return [OASBoolean numberWithBool:result == OsmAnd::ICU::MatchResult::Match];
+}
+
+- (OASBoolean *)containsLocale:(NSString *)locale base:(NSString *)base part:(NSString *)part
+{
+    const OASearchString text(base), query(part);
+    return boxedMatch(OsmAnd::ICU::containsAligned(QString::fromNSString(locale), text.characters, text.length,
+                                                   query.characters, query.length));
+}
+
+- (OASBoolean *)equalsAtAnyLocale:(NSString *)locale base:(NSString *)base part:(NSString *)part
+                           length:(int32_t)length offsets:(OASKotlinIntArray *)offsets count:(int32_t)count
+{
+    if (count < 0 || count > offsets.size) return nil;
+    const OASearchString text(base), query(part);
+    QVarLengthArray<int32_t, 64> positions(count);
+    for (int i = 0; i < count; i++)
+        positions[i] = [offsets getIndex:i];
+    return boxedMatch(OsmAnd::ICU::equalsAtAny(QString::fromNSString(locale), text.characters, text.length,
+                                               query.characters, query.length, length, positions.constData(), count));
+}
+
+@end
+
 @implementation OsmAndAppImpl
 {
     BOOL _initializedCore;
@@ -377,7 +432,9 @@ NSString *const OARepositoryUpdateFinishedNotification = @"OARepositoryUpdateFin
             // Initialize OsmAnd Core
             NSLog(@"OsmAndApp InitializeCore start");
             const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
-            OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
+            if (!OsmAnd::InitializeCore(coreResourcesFromBundleProvider))
+                return NO;
+            OASIOSSearchCollation.shared.provider = [[OASearchCollationProvider alloc] init];
             _initializedCore = YES;
             NSLog(@"OsmAndApp InitializeCore finish");
             return YES;

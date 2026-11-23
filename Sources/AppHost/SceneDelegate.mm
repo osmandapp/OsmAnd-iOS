@@ -99,9 +99,6 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
     _rootViewController = appDelegate.rootViewController;
     LogStartup(@"rootViewController assigned");
     
-    [self configureServices];
-    LogStartup(@"services configured");
-    
     if (connectionOptions.URLContexts.count > 0)
     {
         UIOpenURLContext *context = connectionOptions.URLContexts.allObjects.firstObject;
@@ -251,11 +248,6 @@ NSNotificationName const OAMainApplicationUIReadyNotification = @"OAMainApplicat
         return;
 
     [self configureLaunchEventSetupRootState];
-}
-
-- (void)configureServices
-{
-    [BLEInitHeader configure];
 }
 
 - (OAAppDelegate *)appDelegate

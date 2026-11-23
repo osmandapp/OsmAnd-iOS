@@ -7,6 +7,7 @@
 //
 
 #import "OAManageResourcesViewController.h"
+#import "OASharedSearchAppAPIs.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
@@ -967,6 +968,8 @@ static NSString * const kResourceGroupsRebuiltNotification = @"OAResourceGroupsR
         
         _resourcesByRegions.insert(region, regionResources);
     }
+    if (doInit)
+        [NSNotificationCenter.defaultCenter postNotificationName:OASearchRegionCatalogPrepared object:nil];
 }
 
 - (void) collectSubregionsDataAndItems

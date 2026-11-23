@@ -3794,19 +3794,4 @@
 
 "ios_release_5_4" = "• Vernieuwd \"Mijn plaatsen\" — met submappen voor Favorieten, vastgemaakte mappen en snellere acties\n• Vernieuwd \"Route plannen\" — voeg route- en POI-punten toe en combineer verschillende routetypes\n• Nieuwe Astronomie-plug-in: sterrenkaart met een gedetailleerde database voor elk object, zichtbaarheidsgrafieken en een waarnemingsschema\n• Visualisatietype \"Terreinschaduwen\" toegevoegd\n• Ondersteuning toegevoegd voor kaarten met alleen wegen\n• Bewerk het kleurenpalet voor sporen en terrein\n• Sporen automatisch ordenen op jaar, lengte, activiteit en meer\n• GPX-bestanden met meerdere sporen splitsen in afzonderlijke bestanden bij import\n• Stel een standaardweergave in voor sporenmappen\n• Instelling voor fietsbreedte toegevoegd om smalle fietspaden te vermijden\n• Widget voor OBD-II-adapterspanning toegevoegd\n• Optie \"Spraakaudio pauzeren\" toegevoegd om podcasts of audioboeken te pauzeren tijdens navigatie-instructies\n• Volledige pictogramselectie nu beschikbaar voor profielen\n• Verbeterde prestaties bij het beheren van een groot aantal Favorieten\n• Probleem met de CarPlay-proefperiode opgelost";
 
-"ios_release_5_5" = "• CarPlay is nu gratis voor iedereen, met nieuwe instellingen voor kaartoriëntatie en framerate\n
-• Thuis is nu met één tik bereikbaar in het menu Navigatie van CarPlay\n
-• Gratis versie: alle kaarten van één regio in plaats van een beperkt aantal downloads\n
-• Nieuwe coördinaatformaten, waaronder EPSG-systemen, Maidenhead-locator en Swiss Grid\n
-• Aparte widgetindelingen voor Portret en Landschap, plus brede of compacte panelen boven en onder\n
-• Aanpasbare weergave van widgetpanelen: widgetgrootte, pictogrammen, tekst- en achtergrondkleuren\n
-• Instelling \"Scherm aan houden\" toegevoegd voor elk profiel\n
-• Labels van hoogtelijnen kunnen bergopwaarts gericht zijn, zoals op topografische kaarten\n
-• Tussenbestemmingen worden nu weergegeven in de routedetails\n
-• Volledige weergave-instellingen bij het bewerken van meerdere Favorieten tegelijk\n
-• Stel \"Te hoge snelheid melden bij\" in met een schuifregelaar\n
-• Sneller laden van grote sporenbibliotheken, met een voortgangsindicator voor het indexeren\n
-• Probleem opgelost waarbij het legen van de OsmAnd Cloud-prullenbak verwijderde kaarten en Favorieten herstelde\n
-• Probleem opgelost waarbij de hoogte naar 0 daalde in sporen die op de achtergrond werden opgenomen\n
-• Synchronisatieconflicten in OsmAnd Cloud opgelost na het bijwerken van kaarten op meerdere apparaten\n
-• Probleem opgelost waarbij sommige OBD-II-Bluetooth-adapters verbinding maakten zonder gegevens te ontvangen\n";
+"ios_release_5_5" = "• CarPlay is nu gratis voor iedereen, met nieuwe instellingen voor kaartoriëntatie en framerate\n• Thuis is nu met één tik bereikbaar in het menu Navigatie van CarPlay\n• Gratis versie: alle kaarten van één regio in plaats van een beperkt aantal downloads\n• Nieuwe coördinaatformaten, waaronder EPSG-systemen, Maidenhead-locator en Swiss Grid\n• Aparte widgetindelingen voor Portret en Landschap, plus brede of compacte panelen boven en onder\n• Aanpasbare weergave van widgetpanelen: widgetgrootte, pictogrammen, tekst- en achtergrondkleuren\n• Instelling \"Scherm aan houden\" toegevoegd voor elk profiel\n• Labels van hoogtelijnen kunnen bergopwaarts gericht zijn, zoals op topografische kaarten\n• Tussenbestemmingen worden nu weergegeven in de routedetails\n• Volledige weergave-instellingen bij het bewerken van meerdere Favorieten tegelijk\n• Stel \"Te hoge snelheid melden bij\" in met een schuifregelaar\n• Sneller laden van grote sporenbibliotheken, met een voortgangsindicator voor het indexeren\n• Probleem opgelost waarbij het legen van de OsmAnd Cloud-prullenbak verwijderde kaarten en Favorieten herstelde\n• Probleem opgelost waarbij de hoogte naar 0 daalde in sporen die op de achtergrond werden opgenomen\n• Synchronisatieconflicten in OsmAnd Cloud opgelost na het bijwerken van kaarten op meerdere apparaten\n• Probleem opgelost waarbij sommige OBD-II-Bluetooth-adapters verbinding maakten zonder gegevens te ontvangen";

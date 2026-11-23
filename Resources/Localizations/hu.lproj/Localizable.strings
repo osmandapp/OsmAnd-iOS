@@ -4564,16 +4564,19 @@
 "coordinate_format_select_other" = "Válasszon más formátumot";
 "navigate_point_format_maidenhead" = "Maidenhead";
 
-"ios_release_5_5" = "• Új koordinátaformátumok, köztük EPSG-rendszerek, Maidenhead-lokátor és svájci rácsrendszer (Swiss Grid)\n
+"ios_release_5_5" = "• A CarPlay mostantól mindenki számára ingyenes, új térképforgatási és képkockasebesség-beállításokkal\n
+• Az Otthon egyetlen koppintással elérhető a CarPlay Navigáció menüjéből\n
+• Ingyenes verzió: egy régió összes térképe korlátozott számú letöltés helyett\n
+• Új koordinátaformátumok, köztük EPSG-rendszerek, Maidenhead-lokátor és svájci rácsrendszer (Swiss Grid)\n
 • Külön widgetelrendezés álló és fekvő tájoláshoz, valamint széles vagy kompakt felső és alsó panelek\n
 • Testreszabható widgetpanel-megjelenés: widgetméret, ikonok, szöveg- és háttérszínek\n
-• Új CarPlay-beállítások a térkép tájolásához és a képkockasebességhez\n
-• Az Otthon egyetlen koppintással elérhető a CarPlay Navigáció menüjéből\n
 • „Képernyő bekapcsolva tartása” beállítás hozzáadva minden profilhoz\n
 • A szintvonalak feliratai az emelkedő irányába fordíthatók, mint a topográfiai térképeken\n
+• A köztes úti célok mostantól megjelennek az útvonal részleteiben\n
 • Teljes megjelenési beállítások több Kedvenc egyidejű szerkesztésekor\n
 • A sebességkorlátozás túllépésének tűréshatára csúszkával állítható\n
 • Nagy nyomvonal-könyvtárak gyorsabb betöltése, indexelési folyamatjelzővel\n
 • Javítva: az OsmAnd Cloud lomtár ürítése visszaállította a törölt térképeket és Kedvenceket\n
 • Javítva: a háttérben rögzített nyomvonalakban a magasság 0-ra esett\n
-• Javítva: OsmAnd Cloud szinkronizálási ütközések a térképek több eszközön történő frissítése után\n";
+• Javítva: OsmAnd Cloud szinkronizálási ütközések a térképek több eszközön történő frissítése után\n
+• Javítva: egyes OBD-II Bluetooth-adapterek csatlakoztak, de nem fogadtak adatokat\n";

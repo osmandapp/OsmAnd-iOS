@@ -15,8 +15,19 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     }
     
     private static let combineFormat = "%@  •  %@"
+    private static let compactDetentIdentifier = UISheetPresentationController.Detent.Identifier("freeRegionCompact")
     
     private let spinner = UIActivityIndicatorView(style: .medium)
+    private let headerLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .textColorPrimary
+        label.adjustsFontForContentSizeCategory = true
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .natural
+        return label
+    }()
+
     private let freeRegion: OAWorldRegion
     private let region: OAWorldRegion
     private let mapsToDelete: [(region: OAWorldRegion, items: [OAResourceSwiftItem])]
@@ -26,6 +37,14 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     private var email = ""
     private var isLoading = false
     private var isEmailErrorShown = false
+    private var compactSheetHeight: CGFloat = 0
+
+    private lazy var headerView: UIView = {
+        let header = UIView()
+        header.backgroundColor = .viewBg
+        header.addSubview(headerLabel)
+        return header
+    }()
     
     private var isEmailValid: Bool {
         (email as NSString).isValidEmail()
@@ -63,6 +82,13 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         bottomButton.addSubview(spinner)
         NSLayoutConstraint.activate([spinner.centerYAnchor.constraint(equalTo: bottomButton.centerYAnchor), spinner.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor, constant: -8)])
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if #available(iOS 16.0, *) {
+            updateSheetDetents()
+        }
+    }
     
     override func systemLeftBarButtonItem() -> UIBarButtonItem? {
         UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(onLeftNavbarButtonPressed))
@@ -72,14 +98,39 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         step == .replace ? String(format: localizedString("free_region_other_title"), region.name) : localizedString("free_region_replace_used_title")
     }
     
-    override func getTableHeaderDescription() -> String {
-        switch step {
+    override func setupTableHeaderView() {
+        let width = tableView.bounds.width
+        let margins = tableView.layoutMargins
+        let textWidth = width - margins.left - margins.right
+        guard textWidth > 0 else { return }
+        let text = switch step {
         case .replace:
             String(format: localizedString("free_region_other_descr"), region.name)
         case .email:
             localizedString("free_region_not_eligible_email_descr")
         case .buy:
             String(format: localizedString("free_region_not_eligible_buy_descr"), freeRegion.name, region.name)
+        }
+
+        if headerLabel.text != text {
+            headerLabel.text = text
+        }
+
+        let font = UIFont.preferredFont(forTextStyle: .body, compatibleWith: traitCollection)
+        if headerLabel.font != font {
+            headerLabel.font = font
+        }
+
+        let topPadding = CGFloat(kPaddingOnSideOfContent)
+        let textHeight = ceil(headerLabel.sizeThatFits(CGSize(width: textWidth, height: .greatestFiniteMagnitude)).height)
+        let labelFrame = CGRect(x: margins.left, y: topPadding, width: textWidth, height: textHeight)
+        if headerLabel.frame != labelFrame {
+            headerLabel.frame = labelFrame
+        }
+
+        if tableView.tableHeaderView !== headerView || headerView.frame.height != labelFrame.maxY {
+            headerView.frame.size = CGSize(width: width, height: labelFrame.maxY)
+            tableView.tableHeaderView = headerView
         }
     }
     
@@ -150,6 +201,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
             cell.titleVisibility(false)
             cell.clearButtonVisibility(false)
             cell.inputField.text = email
+            cell.inputField.placeholder = localizedString("email_example_hint")
             cell.inputField.textAlignment = .natural
             cell.inputField.keyboardType = .emailAddress
             cell.inputField.textContentType = .emailAddress
@@ -192,6 +244,41 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         }
     }
     
+    @available(iOS 16.0, *)
+    private func updateSheetDetents() {
+        guard let navigationController, let sheet = navigationController.sheetPresentationController else { return }
+        let compactIdentifier = Self.compactDetentIdentifier
+        let hasCompactDetent = sheet.detents.first?.identifier == compactIdentifier
+        let needsCompactDetent = step == .buy || (step == .replace && mapsToDelete.isEmpty)
+        let detent: UISheetPresentationController.Detent
+        if needsCompactDetent {
+            let safeArea = view.safeAreaLayoutGuide.layoutFrame
+            let buttonsHeight = safeArea.maxY - separatorBottomView.frame.maxY
+            guard let header = tableView.tableHeaderView, buttonsHeight > 0 else { return }
+            let headerTop = view.convert(safeArea.origin, to: navigationController.view).y
+            let height = ceil(headerTop + header.bounds.height + CGFloat(kFooterHeightDefault) + buttonsHeight)
+            guard !hasCompactDetent || height != compactSheetHeight else { return }
+            compactSheetHeight = height
+            if hasCompactDetent {
+                sheet.invalidateDetents()
+                return
+            }
+            detent = .custom(identifier: compactIdentifier) { [weak self] context in
+                guard let height = self?.compactSheetHeight, height < context.maximumDetentValue else { return nil }
+                return height
+            }
+        } else {
+            guard hasCompactDetent else { return }
+            detent = .medium()
+        }
+
+        let keepLarge = !needsCompactDetent && sheet.selectedDetentIdentifier == .large
+        sheet.animateChanges {
+            sheet.detents = [detent, .large()]
+            sheet.selectedDetentIdentifier = keepLarge ? .large : detent.identifier
+        }
+    }
+
     private func setStep(_ step: Step) {
         self.step = step
         updateUI()

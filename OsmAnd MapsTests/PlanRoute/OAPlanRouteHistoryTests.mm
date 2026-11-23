@@ -678,9 +678,9 @@
 {
     [self prepareThreeProfileRoute];
     for (NSInteger index = 0; index < 5; index++)
-        [self cacheRouteForPair:@[self.original[index], self.original[index + 1]]
+        [self cacheRouteForPair:[OAWptPtPair pairWithFirst:self.original[index] second:self.original[index + 1]]
                           mode:[OAApplicationMode valueOfStringKey:self.original[index].getProfileType def:OAApplicationMode.DEFAULT]];
-    NSDictionary *geometry = [self.context.roadSegmentData copy];
+    NSDictionary<OAWptPtPair *, OARoadSegmentData *> *geometry = [self.context.roadSegmentData copy];
     id<PlanRouteHistoryGroupData> cycling = self.segments.firstObject.groups[1];
     [self.bridge applyMode:OAApplicationMode.CAR pointIndexes:cycling.profilePointIndexes];
     XCTAssertFalse(self.original[0].hasProfile);
@@ -691,11 +691,11 @@
     for (NSNumber *indexNumber in @[@0, @3, @4])
     {
         NSInteger index = indexNumber.integerValue;
-        NSArray *pair = @[self.original[index], self.original[index + 1]];
+        OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[index] second:self.original[index + 1]];
         XCTAssertEqual(self.context.roadSegmentData[pair], geometry[pair]);
     }
-    XCTAssertNil((self.context.roadSegmentData[@[self.original[1], self.original[2]]]));
-    XCTAssertNil((self.context.roadSegmentData[@[self.original[2], self.original[3]]]));
+    XCTAssertNil(self.context.roadSegmentData[[OAWptPtPair pairWithFirst:self.original[1] second:self.original[2]]]);
+    XCTAssertNil(self.context.roadSegmentData[[OAWptPtPair pairWithFirst:self.original[2] second:self.original[3]]]);
     [self.bridge undo];
     XCTAssertEqualObjects(self.original[1].getProfileType, OAApplicationMode.BICYCLE.stringKey);
     XCTAssertEqualObjects(self.original[2].getProfileType, OAApplicationMode.BICYCLE.stringKey);

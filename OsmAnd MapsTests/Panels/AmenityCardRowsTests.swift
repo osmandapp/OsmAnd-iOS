@@ -138,6 +138,96 @@ final class AmenityCardRowsTests: XCTestCase {
         XCTAssertEqual(rows["test:country"]?.text, "Ukraine")
     }
 
+    func testOpeningHoursKeepsRawScheduleAndIndependentCheckDate() throws {
+        let schedule = "Mo-Su sunrise-sunset; week 01-26 Sa 10:00-12:00"
+        let rows = buildRows(["amenity_opening_hours": schedule,
+                              "osm_tag_check_date_opening_hours": "2025-03-28",
+                              "osm_tag_check_date": "2025-11-18"])
+        let row = try XCTUnwrap(rows[OPENING_HOURS_TAG])
+        let view = try XCTUnwrap(row.collapsableView as? OACollapsableLabelView)
+        let text = try XCTUnwrap(view.label.attributedText)
+        let openingDate = try XCTUnwrap(CheckDateFormatter.format("2025-03-28"))
+        let generalDate = try XCTUnwrap(CheckDateFormatter.format("2025-11-18"))
+        XCTAssertTrue(text.string.hasPrefix(schedule + "\n"))
+        XCTAssertTrue(text.string.hasSuffix(openingDate))
+        XCTAssertFalse(text.string.contains(generalDate))
+        XCTAssertTrue(row.collapsed)
+        XCTAssertNil(rows[CHECK_DATE_OPENING_HOURS_TAG])
+        XCTAssertEqual(rows[CHECK_DATE_TAG]?.text, generalDate)
+        XCTAssertEqual(rows[CHECK_DATE_TAG]?.textPrefix, "Check date")
+        XCTAssertEqual(text.attribute(.font, at: 0, effectiveRange: nil) as? UIFont, .preferredFont(forTextStyle: .subheadline))
+        XCTAssertEqual(text.attribute(.font, at: text.length - 1, effectiveRange: nil) as? UIFont, .preferredFont(forTextStyle: .footnote))
+        XCTAssertEqual(text.attribute(.foregroundColor, at: text.length - 1, effectiveRange: nil) as? UIColor, .textColorSecondary)
+        for width in [CGFloat(240), 390, 700] {
+            view.adjustHeight(forWidth: width)
+            let bounds = text.boundingRect(with: CGSize(width: view.label.bounds.width, height: 10000),
+                                           options: .usesLineFragmentOrigin, context: nil)
+            XCTAssertGreaterThanOrEqual(view.label.bounds.height, ceil(bounds.height))
+        }
+    }
+
+    func testGeneralCheckDateDoesNotBecomeOpeningHoursCaption() throws {
+        let schedule = "Mo-Fr 09:00-18:00; Sa 10:00-12:00"
+        let rows = buildRows(["amenity_opening_hours": schedule, "osm_tag_check_date": "2025-11-18"])
+        let view = try XCTUnwrap(rows[OPENING_HOURS_TAG]?.collapsableView as? OACollapsableLabelView)
+        XCTAssertEqual(view.label.text, schedule)
+        XCTAssertEqual(rows[CHECK_DATE_TAG]?.text, CheckDateFormatter.format("2025-11-18"))
+        XCTAssertNil(rows[CHECK_DATE_OPENING_HOURS_TAG])
+    }
+
+    func testOpeningHoursWithoutDatesPreservesExistingScheduleFormatting() throws {
+        let schedule = "Mo,We 09:00-18:00; Sa 10:00-12:00"
+        let rows = buildRows(["amenity_opening_hours": schedule])
+        let view = try XCTUnwrap(rows[OPENING_HOURS_TAG]?.collapsableView as? OACollapsableLabelView)
+        XCTAssertEqual(view.label.text, "Mo, We 09:00-18:00; Sa 10:00-12:00")
+        XCTAssertNil(rows[CHECK_DATE_TAG])
+    }
+
+    func testOpeningHoursDateReadsNormalizedSavedKeys() throws {
+        let helper = AmenityUIHelper(infoBundle: AdditionalInfoBundle(poiTypes: OAPOIHelper.sharedInstance().kPoiTypes,
+                                                                      additionalInfo: ["amenity_opening_hours": "24/7",
+                                                                                       "osm_tag_check_date_opening_hours": "2025-03"]))
+        let row = try XCTUnwrap(helper.buildInternal().first { $0.key == OPENING_HOURS_TAG })
+        let view = try XCTUnwrap(row.collapsableView as? OACollapsableLabelView)
+        let text = try XCTUnwrap(view.label.text)
+        XCTAssertTrue(text.hasPrefix("24/7\n"))
+        XCTAssertTrue(text.hasSuffix("2025-03"))
+    }
+
+    func testGeneralCheckDatePreservesPartialAndInvalidValues() {
+        for date in ["2025-03", "2025-02-30", "checked recently"] {
+            let rows = buildRows(["osm_tag_check_date": date])
+            XCTAssertEqual(rows[CHECK_DATE_TAG]?.text, date)
+        }
+    }
+
+    func testWaypointAmenityWritesTagsWithoutReplacingExistingExtensions() {
+        let poi = OAPOI()
+        poi.setAdditionalInfo([OPENING_HOURS_TAG: "24/7", CHECK_DATE_OPENING_HOURS_TAG: "2025-03-28", CHECK_DATE_TAG: "2025-11-18"])
+        let point = WptPt()
+        point.lat = 50.4359905
+        point.lon = 30.5082094
+        point.ele = 123.5
+        point.speed = 4.5
+        point.time = 1730000000000
+        point.name = "Recorded waypoint"
+        point.getExtensionsToWrite()["test:country"] = "Ukraine"
+        point.setAmenity(poi)
+        point.setAmenity(nil)
+        let extensions = point.getExtensionsToRead()
+        XCTAssertEqual(extensions["amenity_opening_hours"], "24/7")
+        XCTAssertEqual(extensions["osm_tag_check_date_opening_hours"], "2025-03-28")
+        XCTAssertEqual(extensions["osm_tag_check_date"], "2025-11-18")
+        XCTAssertEqual(extensions["test:country"], "Ukraine")
+        XCTAssertNil(point.extensionsWriters)
+        XCTAssertEqual(point.lat, 50.4359905)
+        XCTAssertEqual(point.lon, 30.5082094)
+        XCTAssertEqual(point.ele, 123.5)
+        XCTAssertEqual(point.speed, 4.5)
+        XCTAssertEqual(point.time, 1730000000000)
+        XCTAssertEqual(point.name, "Recorded waypoint")
+    }
+
     private func buildRows(_ extensions: [String: String],
                            genericRowKeysFrom stored: [String: String]? = nil) -> [String: OAAmenityInfoRow] {
         let poi = OAPOI.fromTagValue(extensions, privatePrefix: "amenity_", osmPrefix: "osm_tag_")

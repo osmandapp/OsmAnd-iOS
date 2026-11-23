@@ -1459,12 +1459,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
     cardView.delegate = self;
+    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     __weak __typeof(self) weakSelf = self;
     nearbyImagesRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
         if (!collapsed)
             [weakSelf startLoadingImages];
     };
-    nearbyImagesRowInfo.collapsed = [OAAppSettings sharedManager].onlinePhotosRowCollapsed.get;
     nearbyImagesRowInfo.collapsableView = cardView;
     nearbyImagesRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
     [rows addObject:nearbyImagesRowInfo];
@@ -1492,12 +1492,12 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
         CollapsableCardsView *cardView = [CollapsableCardsView new];
         cardView.contentType = CollapsableCardsTypeMapillary;
         cardView.delegate = self;
+        mapillaryCardsRowInfo.collapsed = [OAAppSettings sharedManager].mapillaryPhotosRowCollapsed.get;
         __weak __typeof(self) weakSelf = self;
         mapillaryCardsRowInfo.collapsedChangedCallback = ^(BOOL collapsed) {
             if (!collapsed)
                 [weakSelf startLoadingImages];
         };
-        mapillaryCardsRowInfo.collapsed = [OAAppSettings sharedManager].mapillaryPhotosRowCollapsed.get;
         mapillaryCardsRowInfo.collapsableView = cardView;
         mapillaryCardsRowInfo.collapsableView.frame = CGRectMake([OAUtilities getLeftMargin], 0, self.view.frame.size.width, 170);
         [rows addObject:mapillaryCardsRowInfo];
@@ -2160,7 +2160,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     _mapillaryAmenityCard = nil;
     _otherCards = nil;
     CollapsableCardsView *onlinePhotoCardsView = (CollapsableCardsView *)_onlinePhotoCardsRowInfo.collapsableView;
-    CollapsableCardsView *mapillaryCardsView;
+    CollapsableCardsView *mapillaryCardsView = nil;
     if (_mapillaryCardsRowInfo)
     {
         mapillaryCardsView = (CollapsableCardsView *)_mapillaryCardsRowInfo.collapsableView;

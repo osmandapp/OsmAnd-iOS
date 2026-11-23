@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D58830010000000000000001 /* CheckDateRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58830010000000000000002 /* CheckDateRowBehaviour.swift */; };
+		05DA372E54E643D5AF16D717 /* CheckDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3AAA61984F4B7C9FA437CD /* CheckDateFormatter.swift */; };
+		71F505F37FC24CB6A9E23D81 /* CheckDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3AAA61984F4B7C9FA437CD /* CheckDateFormatter.swift */; };
+		96982DAE4DE440408D3F6F61 /* CheckDateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CAA9FC8E5C74960A711E46D /* CheckDateFormatterTests.swift */; };
+		ABE5E9FF0B1C4626A4B780BE /* OAOpeningHoursCheckDateTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */; };
 		D1928A110000000000000001 /* SteppedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1928A110000000000000002 /* SteppedSlider.swift */; };
 		E1E5A2200000000000000001 /* OASpatialSearchPresentationTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */; };
 		E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */; };
@@ -192,6 +197,7 @@
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
 		321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */; };
+		21B2C06B91D0342B9EDC0C1B /* XmasOpeningHoursRowBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FDAEBD11384949EF49255C /* XmasOpeningHoursRowBehavior.swift */; };
 		321C838A2F335A780028FCCC /* OAOpeningHoursParser.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321C83892F335A740028FCCC /* OAOpeningHoursParser.mm */; };
 		321C838C2F337D910028FCCC /* MetricRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */; };
 		321C838E2F33BBD70028FCCC /* CapacityRowBehaviour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321C838D2F33BBD50028FCCC /* CapacityRowBehaviour.swift */; };
@@ -2284,6 +2290,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D58830010000000000000002 /* CheckDateRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDateRowBehaviour.swift; sourceTree = "<group>"; };
+		64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpeningHoursCheckDateTest.mm; sourceTree = "<group>"; };
+		9CAA9FC8E5C74960A711E46D /* CheckDateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDateFormatterTests.swift; sourceTree = "<group>"; };
+		AB3AAA61984F4B7C9FA437CD /* CheckDateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDateFormatter.swift; sourceTree = "<group>"; };
 		D1928A110000000000000002 /* SteppedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SteppedSlider.swift; sourceTree = "<group>"; };
 		E1E5A2200000000000000002 /* OASpatialSearchPresentationTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASpatialSearchPresentationTest.mm; sourceTree = "<group>"; };
 		E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OASharedReverseGeocoderTest.mm; sourceTree = "<group>"; };
@@ -2539,6 +2549,7 @@
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
 		3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesUtils.swift; sourceTree = "<group>"; };
 		321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpeningHoursRowBehavior.swift; sourceTree = "<group>"; };
+		35FDAEBD11384949EF49255C /* XmasOpeningHoursRowBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XmasOpeningHoursRowBehavior.swift; sourceTree = "<group>"; };
 		321C83882F335A150028FCCC /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOpeningHoursParser.h; sourceTree = "<group>"; };
 		321C83892F335A740028FCCC /* OAOpeningHoursParser.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOpeningHoursParser.mm; sourceTree = "<group>"; };
 		321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricRowBehaviour.swift; sourceTree = "<group>"; };
@@ -6147,9 +6158,11 @@
 				321C838B2F337D8E0028FCCC /* MetricRowBehaviour.swift */,
 				321C83862F3358680028FCCC /* OpeningHoursRowBehavior.swift */,
 				3260870D2F324DE00038A34B /* PoiRowParams.swift */,
+				D58830010000000000000002 /* CheckDateRowBehaviour.swift */,
 				321C83992F33CC120028FCCC /* PopulationRowBehaviour.swift */,
 				321C839B2F33CDBE0028FCCC /* UsMapsRecreationAreaRowBehaviour.swift */,
 				321C839D2F33CED50028FCCC /* WikipediaRowBehavior.swift */,
+				35FDAEBD11384949EF49255C /* XmasOpeningHoursRowBehavior.swift */,
 			);
 			path = behaviour;
 			sourceTree = "<group>";
@@ -6546,6 +6559,8 @@
 			isa = PBXGroup;
 			children = (
 				D1A0AFFE2F50000100A0B001 /* OpeningHoursParserTest.swift */,
+				9CAA9FC8E5C74960A711E46D /* CheckDateFormatterTests.swift */,
+				64455469F4C74EA5BD5D1E8F /* OAOpeningHoursCheckDateTest.mm */,
 				D1A0AFFF2F50000100A0B001 /* OpeningHoursParserTestSupport.h */,
 				D1A0B0002F50000100A0B001 /* OpeningHoursParserTestSupport.mm */,
 			);
@@ -9212,6 +9227,7 @@
 				326087112F3251890038A34B /* params */,
 				3260870A2F324DA00038A34B /* behaviour */,
 				325FDBAB2E8E984A006E7C07 /* AmenityUIHelper.swift */,
+				AB3AAA61984F4B7C9FA437CD /* CheckDateFormatter.swift */,
 				DA5A7E5126C563A400F274C7 /* OAPOIViewController.xib */,
 				DA5A7E5226C563A400F274C7 /* OAPOIViewController.h */,
 				DA5A7E5326C563A400F274C7 /* OAPOIViewController.mm */,
@@ -13589,6 +13605,9 @@
 				DA5A840226C563A800F274C7 /* OASearchToolbarViewController.mm in Sources */,
 				4671FB902CDE6E3A00446D18 /* GpxUtils.swift in Sources */,
 				321C83872F33586B0028FCCC /* OpeningHoursRowBehavior.swift in Sources */,
+				71F505F37FC24CB6A9E23D81 /* CheckDateFormatter.swift in Sources */,
+				D58830010000000000000001 /* CheckDateRowBehaviour.swift in Sources */,
+				21B2C06B91D0342B9EDC0C1B /* XmasOpeningHoursRowBehavior.swift in Sources */,
 				DA5A847026C563A900F274C7 /* OACompassRulerWidgetState.m in Sources */,
 				D71B9A8C2FC95D8500FBB0F3 /* OrganizeTracksByViewController.swift in Sources */,
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
@@ -13907,6 +13926,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D1A0B0012F50000100A0B001 /* OpeningHoursParserTest.swift in Sources */,
+				05DA372E54E643D5AF16D717 /* CheckDateFormatter.swift in Sources */,
+				96982DAE4DE440408D3F6F61 /* CheckDateFormatterTests.swift in Sources */,
+				ABE5E9FF0B1C4626A4B780BE /* OAOpeningHoursCheckDateTest.mm in Sources */,
 				D1A0B0032F50000100A0B001 /* OpeningHoursParserTestSupport.mm in Sources */,
 				D1A0B0112F50001100A0B001 /* URLExtractionTests.swift in Sources */,
 				FAB6243F2E0953830048965E /* SelectionManagerTests.swift in Sources */,

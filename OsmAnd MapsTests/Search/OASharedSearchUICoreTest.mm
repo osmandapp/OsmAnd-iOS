@@ -113,6 +113,52 @@
     return [OASSearchUICore.companion formatSearchResultForTestSimpleTest:YES r:result phrase:phrase];
 }
 
+- (NSArray<OASSearchResult *> *)resultsForAndroidFixture:(NSString *)name query:(NSString *)query
+{
+    XCTAssertNotNil(OASIOSSearchCollation.shared.provider);
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    NSString *path = [bundle pathForResource:name ofType:@"json" inDirectory:kSearchResourcesPath];
+    XCTAssertNotNil(path);
+    if (!path) return @[];
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:[NSData dataWithContentsOfFile:path] options:0 error:nil];
+    NSArray<NSString *> *maps = [self obfFilesOf:json path:path];
+    XCTAssertEqual(maps.count, 1u);
+    if (maps.count != 1) return @[];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:json[@"settings"] options:0 error:nil];
+    OASharedSearchSettings *settings = [OASharedSearchSettings settingsOfJSON:[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]];
+    [settings setOfflineIndexes:@[maps.firstObject.lastPathComponent.lowercaseString]];
+    OASSearchUICore *core = [[OASSearchUICore alloc] initWithPoiTypes:OAPOIHelper.sharedInstance.kPoiTypes locale:@"en" transliterate:NO];
+    [core doInit];
+    [core updateSettingsSettings:settings.shared];
+    return [[core immediateSearchText:query loc:nil] getCurrentSearchResults];
+}
+
+- (void)testGermanSearchResultOrderMatchesAndroid
+{
+    NSArray<OASSearchResult *> *dorf = [self resultsForAndroidFixture:@"ge3" query:@"6 Dorfstraße R"];
+    XCTAssertGreaterThan(dorf.count, 37u);
+    if (dorf.count > 37) XCTAssertEqualObjects(dorf[37].localeName, @"Rosenberg");
+    NSArray *tempelhof = [self resultsForAndroidFixture:@"Issue-24832-geo-Tempelhof" query:@"1 M"];
+    XCTAssertGreaterThanOrEqual(tempelhof.count, 107u);
+    if (tempelhof.count >= 107)
+        XCTAssertEqualObjects([[tempelhof subarrayWithRange:NSMakeRange(104, 3)] valueForKey:@"localeName"],
+                              (@[@"Mescherin", @"Meßdorf", @"Messingwerksiedlung"]));
+}
+
+- (void)testAndroidClinicWeightWithAppCollation
+{
+    NSArray *results = [self resultsForAndroidFixture:@"kyivska_10-d" query:@"Київська "];
+    for (OASSearchResult *r in results)
+    {
+        if ([r.object isKindOfClass:OASAmenity.class] && [[(OASAmenity *)r.object getId] longLongValue] == 2004839760)
+        {
+            XCTAssertEqual([r getUnknownPhraseMatchWeight], 10.0);
+            return;
+        }
+    }
+    XCTFail(@"The Kyiv fixture must return the clinic with ID 2004839760");
+}
+
 - (void)testTheCasesOfTheSearch
 {
     [self searchTheCasesWithRulesDir:nil];

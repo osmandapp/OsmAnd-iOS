@@ -1202,6 +1202,7 @@ static NSOperationQueue *_favQueue;
     _favoriteGroups = [_favoriteGroups arrayByAddingObject:group];
     
     [[OAGPXAppearanceCollection sharedInstance] saveFavoriteColorsIfNeeded:@[group]];
+    [self notifyFavoritesStorageChanged];
 }
 
 

@@ -27,6 +27,86 @@ final class RouteChartLegendSelectionTests: XCTestCase {
         }
     }
 
+    private final class SelectionTapGestureRecognizer: UITapGestureRecognizer {
+        var tapLocation = CGPoint.zero
+        var selectionAction: Selector?
+        var isSendingTap = false
+        weak var selectionTarget: NSObject?
+
+        override var state: UIGestureRecognizer.State {
+            get { isSendingTap ? .ended : super.state }
+            set { super.state = newValue }
+        }
+
+        override func addTarget(_ target: Any, action: Selector) {
+            super.addTarget(target, action: action)
+            if let target = target as? RouteChartSynchronizer {
+                selectionTarget = target
+                selectionAction = action
+            }
+        }
+
+        override func removeTarget(_ target: Any?, action: Selector?) {
+            super.removeTarget(target, action: action)
+            if target == nil || target as? NSObject === selectionTarget {
+                selectionTarget = nil
+                selectionAction = nil
+            }
+        }
+
+        override func location(in view: UIView?) -> CGPoint {
+            tapLocation
+        }
+
+        func sendTap() throws {
+            let target = try XCTUnwrap(selectionTarget)
+            let action = try XCTUnwrap(selectionAction)
+            isSendingTap = true
+            defer { isSendingTap = false }
+            target.perform(action, with: self)
+        }
+    }
+
+    private final class SelectionPanGestureRecognizer: UIPanGestureRecognizer {
+        var panLocation = CGPoint.zero
+        var selectionAction: Selector?
+        var isSendingPan = false
+        weak var selectionTarget: NSObject?
+
+        override var state: UIGestureRecognizer.State {
+            get { isSendingPan ? .changed : super.state }
+            set { super.state = newValue }
+        }
+
+        override func addTarget(_ target: Any, action: Selector) {
+            super.addTarget(target, action: action)
+            if let target = target as? RouteChartSynchronizer {
+                selectionTarget = target
+                selectionAction = action
+            }
+        }
+
+        override func removeTarget(_ target: Any?, action: Selector?) {
+            super.removeTarget(target, action: action)
+            if target == nil || target as? NSObject === selectionTarget {
+                selectionTarget = nil
+                selectionAction = nil
+            }
+        }
+
+        override func location(in view: UIView?) -> CGPoint {
+            panLocation
+        }
+
+        func sendPan() throws {
+            let target = try XCTUnwrap(selectionTarget)
+            let action = try XCTUnwrap(selectionAction)
+            isSendingPan = true
+            defer { isSendingPan = false }
+            target.perform(action, with: self)
+        }
+    }
+
     private final class AnalyzeDataSource: PlanRouteAnalyzeDataSource {
         let routeInfo = PlanRouteInfo.empty
         let isCalculatingElevation = false
@@ -303,6 +383,110 @@ final class RouteChartLegendSelectionTests: XCTestCase {
         select(0.25, chart: chart, synchronizer: synchronizer)
         XCTAssertFalse(row.isSelected)
         XCTAssertTrue(label.accessibilityTraits.contains(.selected))
+    }
+
+    func testAnalyzeReloadKeepsVisibleChartInteractiveWithoutWillDisplay() throws {
+        let names = ["Reload first", "Reload second"]
+        let elements = try names.map { name in
+            let segment = try XCTUnwrap(OARouteSegmentAttribute(propertyName: name, color: Int(UInt32(bitPattern: UIColor.iconColorActive.toARGBNumber())), slopeIndex: -1, boundariesClass: []))
+            segment.distance = 150
+            return segment
+        }
+        let statistics = try XCTUnwrap(OARouteStatistics(name: "routeInfo_surface", elements: elements, partition: Dictionary(uniqueKeysWithValues: zip(names, elements)), totalDistance: 300))
+        let source = AnalyzeDataSource(statistics: statistics)
+        let controller = PlanRouteAnalyzeViewController(dataSource: source)
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = controller
+        window.isHidden = false
+        defer { window.isHidden = true }
+        controller.view.layoutIfNeeded()
+        let table = try XCTUnwrap(controller.view.subviews.first { $0 is UITableView } as? UITableView)
+        table.layoutIfNeeded()
+        let indexPath = IndexPath(row: 0, section: 1)
+        let cell = try XCTUnwrap(table.cellForRow(at: indexPath) as? AnalyzeCardCell)
+        let chart = try XCTUnwrap(cell.chartView as? HorizontalBarChartView)
+        let labels = descendants(of: cell.cardView).compactMap { $0 as? UILabel }
+        let first = try XCTUnwrap(labels.first { $0.text == names[0] })
+        let second = try XCTUnwrap(labels.first { $0.text == names[1] })
+        let tap = SelectionTapGestureRecognizer()
+        let pan = SelectionPanGestureRecognizer()
+        chart.addGestureRecognizer(tap)
+        chart.addGestureRecognizer(pan)
+
+        for _ in 0..<2 {
+            controller.reloadData()
+            XCTAssertTrue(table.cellForRow(at: indexPath) === cell)
+            XCTAssertTrue(cell.chartView === chart)
+            XCTAssertFalse(first.accessibilityTraits.contains(.selected))
+            XCTAssertFalse(second.accessibilityTraits.contains(.selected))
+            tap.tapLocation = chart.pixelForValues(x: chart.leftAxis.axisMaximum * 0.25, y: 0, axis: .left)
+            try tap.sendTap()
+            XCTAssertTrue(first.accessibilityTraits.contains(.selected))
+            XCTAssertFalse(second.accessibilityTraits.contains(.selected))
+            tap.tapLocation = chart.pixelForValues(x: chart.leftAxis.axisMaximum * 0.75, y: 0, axis: .left)
+            try tap.sendTap()
+            XCTAssertFalse(first.accessibilityTraits.contains(.selected))
+            XCTAssertTrue(second.accessibilityTraits.contains(.selected))
+            XCTAssertTrue(chart.isFullyZoomedOut)
+            pan.panLocation = chart.pixelForValues(x: chart.leftAxis.axisMaximum * 0.25, y: 0, axis: .left)
+            try pan.sendPan()
+            XCTAssertTrue(first.accessibilityTraits.contains(.selected))
+            XCTAssertFalse(second.accessibilityTraits.contains(.selected))
+            pan.panLocation = chart.pixelForValues(x: chart.leftAxis.axisMaximum * 0.75, y: 0, axis: .left)
+            try pan.sendPan()
+            XCTAssertFalse(first.accessibilityTraits.contains(.selected))
+            XCTAssertTrue(second.accessibilityTraits.contains(.selected))
+        }
+    }
+
+    func testLongTrackGapBoundaryUsesSameDistanceInBothChartBuilders() throws {
+        let settings = OAAppSettings.sharedManager()
+        let previousMetricSystem = settings.metricSystem.get()
+        settings.metricSystem.set(.KILOMETERS_AND_METERS)
+        defer { settings.metricSystem.set(previousMetricSystem) }
+        let analysis = GpxTrackAnalysis()
+        analysis.setHasData(tag: GpxUtilities.shared.POINT_ELEVATION, hasData: true)
+        XCTAssertTrue(analysis.hasElevationData())
+        for _ in 0..<150_000 {
+            let point = PointAttributes(distance: 3, timeDiff: 1, firstPoint: false, lastPoint: false)
+            point.elevation = 10
+            analysis.pointAttributes.add(point)
+        }
+        let gapEnd = PointAttributes(distance: 25, timeDiff: 1, firstPoint: true, lastPoint: false)
+        gapEnd.elevation = 11
+        analysis.pointAttributes.add(gapEnd)
+        let lastPoint = PointAttributes(distance: 3, timeDiff: 1, firstPoint: false, lastPoint: true)
+        lastPoint.elevation = 12
+        analysis.pointAttributes.add(lastPoint)
+        analysis.totalDistance = 450_028
+        let names = ["asphalt", "sett"]
+        let elements = try names.enumerated().map { index, name in
+            let segment = try XCTUnwrap(OARouteSegmentAttribute(propertyName: name, color: Int(UInt32(bitPattern: UIColor.iconColorActive.toARGBNumber())), slopeIndex: -1, boundariesClass: []))
+            segment.distance = index == 0 ? 450_000 : 3
+            return segment
+        }
+        let statistics = try XCTUnwrap(OARouteStatistics(name: "routeInfo_surface", elements: elements, partition: Dictionary(uniqueKeysWithValues: zip(names, elements)), totalDistance: 450_003))
+        let primary = ElevationChart(frame: CGRect(x: 0, y: 0, width: 360, height: 120))
+        GpxUIHelper.refreshRouteLineChart(chartView: primary, analysis: analysis, firstType: .altitude, secondType: .none, axisType: .distance)
+        let dataSet = try XCTUnwrap(primary.lineData?.dataSets.first as? GpxUIHelper.OrderedLineDataSet)
+        let initialHeight = try XCTUnwrap(dataSet.entries.first?.y)
+        let pointAfterGap = try XCTUnwrap(dataSet.entries.first { $0.y > initialHeight })
+        let chart = HorizontalBarChartView(frame: CGRect(x: 0, y: 0, width: 360, height: 120))
+        GpxUIHelper.refreshRouteBarChart(chartView: chart, statistics: statistics, analysis: analysis, nightMode: false)
+        let entry = try XCTUnwrap(chart.barData?.dataSets.first?.entryForIndex(0) as? BarChartDataEntry)
+        let gapRange = try XCTUnwrap(entry.ranges?[1])
+        XCTAssertEqual(pointAfterGap.x, gapRange.to, accuracy: 1e-12)
+        let synchronizer = RouteChartSynchronizer()
+        synchronizer.registerBarChart(chart)
+        let sett = makeLegend("Sett")
+        synchronizer.registerLegendItem(sett, propertyName: "sett", chart: chart)
+        synchronizer.setPrimaryChart(primary)
+        synchronizer.syncHighlight(Highlight(x: pointAfterGap.x, y: pointAfterGap.y, dataSetIndex: 0), sourceChart: primary)
+        XCTAssertTrue(sett.isSelected)
+        let insideGap = (gapRange.from + gapRange.to) / 2
+        synchronizer.unregisterPrimaryChart(primary)
+        synchronizer.syncHighlight(Highlight(x: insideGap, y: 0, dataSetIndex: 0), sourceChart: chart)
+        XCTAssertFalse(sett.isSelected)
     }
 
     func testCompactLabelUpdatesOnlyWhenSelectedAttributeChanges() {

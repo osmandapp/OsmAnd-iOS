@@ -219,8 +219,10 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         wasCalculatingElevation = isElevationCalculating
         let analysisData = dataSource?.analysisData
         let nextChartDataSignature = chartDataSignature(for: analysisData)
+        var chartsWereReset = false
         if currentChartDataSignature != nextChartDataSignature {
             chartSynchronizer.reset()
+            chartsWereReset = true
             chartView = nil
             currentChartDataSignature = nextChartDataSignature
             hideChartLocation()
@@ -238,10 +240,18 @@ final class PlanRouteAnalyzeViewController: UIViewController, PlanRouteTabConten
         let renderState = makeRenderState(analysisData: analysisData)
         if renderState.graphSignature == nil {
             chartSynchronizer.reset()
+            chartsWereReset = true
             chartView = nil
             hideChartLocation()
         }
         applyRenderState(renderState)
+        if chartsWereReset {
+            for case let cell as AnalyzeCardCell in tableView.visibleCells {
+                if let barChart = cell.chartView as? HorizontalBarChartView {
+                    chartSynchronizer.registerBarChart(barChart)
+                }
+            }
+        }
     }
 
     private func setupTableView() {

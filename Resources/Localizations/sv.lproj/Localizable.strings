@@ -4558,16 +4558,19 @@
 "keep_screen_on" = "Behåll skärmen på";
 "during_navigation" = "Under navigering";
 
-"ios_release_5_5" = "• Nya koordinatformat, bland annat EPSG-system, Maidenhead-lokator och Swiss Grid\n
+"ios_release_5_5" = "• CarPlay är nu gratis för alla, med nya inställningar för kartorientering och bildfrekvens\n
+• Hem nås nu med ett tryck från navigeringsmenyn i CarPlay\n
+• Gratisversion: alla kartor för en region i stället för ett begränsat antal nedladdningar\n
+• Nya koordinatformat, bland annat EPSG-system, Maidenhead-lokator och Swiss Grid\n
 • Separata widgetlayouter för stående och liggande läge, samt breda eller kompakta paneler överst och nederst\n
 • Anpassningsbart utseende för widgetpaneler: widgetstorlek, ikoner samt text- och bakgrundsfärger\n
-• Nya CarPlay-inställningar för kartorientering och bildfrekvens\n
-• Hem nås nu med ett tryck från navigeringsmenyn i CarPlay\n
 • Lagt till inställningen ”Behåll skärmen på” för varje profil\n
 • Etiketter på höjdkurvor kan vändas uppför sluttningen, som på topografiska kartor\n
+• Mellanliggande destinationer visas nu i ruttdetaljerna\n
 • Fullständiga utseendeinställningar vid redigering av flera favoriter samtidigt\n
 • Ställ in toleransen för hastighetsgräns med ett skjutreglage\n
 • Snabbare inläsning av stora spårbibliotek, med förloppsindikator för indexering\n
 • Åtgärdat ett problem där tömning av papperskorgen i OsmAnd Cloud återställde raderade kartor och favoriter\n
 • Åtgärdat ett problem där höjden sjönk till 0 i spår som spelats in i bakgrunden\n
-• Åtgärdat synkroniseringskonflikter i OsmAnd Cloud efter uppdatering av kartor på flera enheter\n";
+• Åtgärdat synkroniseringskonflikter i OsmAnd Cloud efter uppdatering av kartor på flera enheter\n
+• Åtgärdat ett problem där vissa OBD-II Bluetooth-adaptrar anslöt utan att ta emot data\n";

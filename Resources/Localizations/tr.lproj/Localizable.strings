@@ -3631,16 +3631,19 @@
 
 "ios_release_5_4" = "• Yenilenen \"Yerlerim\" — Favoriler alt klasörleri, sabitlenmiş klasörler ve daha hızlı işlemler\n• Yeniden tasarlanan \"Rota Planla\" — rota ve İKN (POI) noktaları ekleyin, farklı rota türlerini birleştirin\n• Yeni Astronomi eklentisi: her gök cismi için ayrıntılı veritabanı, görünürlük grafikleri ve gözlem takvimi içeren yıldız haritası\n• \"Arazi gölgeleri\" görselleştirme türü eklendi\n• Yalnızca yol içeren haritalar için destek eklendi\n• İzler ve Arazi için renk paletini düzenleyin\n• İzleri yıla, uzunluğa, etkinliğe ve daha fazlasına göre otomatik olarak düzenleyin\n• İçe aktarırken çoklu iz içeren GPX dosyalarını ayrı dosyalara bölün\n• İz klasörleri için varsayılan bir görünüm ayarlayın\n• Dar bisiklet yollarından kaçınmak için bisiklet genişliği ayarı eklendi\n• OBD-II adaptör voltaj widget'ı eklendi\n• Navigasyon talimatları sırasında podcast'leri veya sesli kitapları duraklatmak için \"Konuşma sesini duraklat\" seçeneği eklendi\n• Profiller için artık tüm simge seçenekleri kullanılabilir\n• Çok sayıda Favori yönetilirken performans artırıldı\n• CarPlay deneme süresiyle ilgili bir sorun giderildi";
 
-"ios_release_5_5" = "• EPSG sistemleri, Maidenhead konum belirleyici ve İsviçre Izgarası (Swiss Grid) dahil yeni koordinat biçimleri\n
+"ios_release_5_5" = "• CarPlay artık herkes için ücretsiz; harita yönlendirme ve kare hızı için yeni ayarlar\n
+• CarPlay Navigasyon menüsünden tek dokunuşla Ev'e erişim\n
+• Ücretsiz sürüm: sınırlı sayıda indirme yerine bir bölgenin tüm haritaları\n
+• EPSG sistemleri, Maidenhead konum belirleyici ve İsviçre Izgarası (Swiss Grid) dahil yeni koordinat biçimleri\n
 • Dikey ve yatay mod için ayrı widget düzenleri; üst ve alt paneller Geniş veya Kompakt olabilir\n
 • Özelleştirilebilir widget paneli görünümü: widget boyutu, simgeler, metin ve arka plan renkleri\n
-• Harita yönü ve kare hızı için yeni CarPlay ayarları\n
-• CarPlay Navigasyon menüsünden tek dokunuşla Ev'e erişim\n
 • Her profil için \"Ekranı açık tut\" ayarı eklendi\n
 • Eş yükselti eğrisi etiketleri, topoğrafik haritalarda olduğu gibi yokuş yukarı yönlendirilebilir\n
+• Ara hedefler artık rota ayrıntılarında listeleniyor\n
 • Birden fazla Favoriyi aynı anda düzenlerken tüm görünüm ayarları\n
 • Hız sınırı oynama payını kaydırıcıyla ayarlayın\n
 • Büyük iz kitaplıklarının daha hızlı yüklenmesi ve dizinleme ilerleme göstergesi\n
 • OsmAnd Cloud çöp kutusu boşaltıldığında silinen haritaların ve Favorilerin geri yüklenmesi sorunu giderildi\n
 • Arka planda kaydedilen izlerde yüksekliğin 0'a düşmesi sorunu giderildi\n
-• Haritalar birden fazla cihazda güncellendikten sonra oluşan OsmAnd Cloud eşitleme çakışmaları giderildi\n";
+• Haritalar birden fazla cihazda güncellendikten sonra oluşan OsmAnd Cloud eşitleme çakışmaları giderildi\n
+• Bazı OBD-II Bluetooth adaptörlerinin veri almadan bağlanması sorunu giderildi\n";

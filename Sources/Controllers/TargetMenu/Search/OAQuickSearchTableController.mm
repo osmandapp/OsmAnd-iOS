@@ -899,6 +899,8 @@
                 else if ([res.object isKindOfClass:[OATopIndexFilter class]])
                 {
                     NSString *name = [item getName];
+                    if (res.alternateName.length > 0 && ![res.alternateName isEqualToString:name])
+                        name = [NSString stringWithFormat:@"%@ (%@)", name, res.alternateName];
                     NSString *typeName = [((OATopIndexFilter *)res.object) getName];
                     UIImage *icon = [UIImage imageNamed:[((OATopIndexFilter *)res.object) getIconResource]];
                     OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tableView typeName:typeName icon:icon];

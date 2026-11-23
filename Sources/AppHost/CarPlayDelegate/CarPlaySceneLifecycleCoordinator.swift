@@ -3,17 +3,20 @@ import CarPlay
 final class CarPlaySceneLifecycleCoordinator {
     static let shared = CarPlaySceneLifecycleCoordinator()
 
+    private var connectedScenes: Set<ObjectIdentifier> = []
     private var shouldCenterOnMyLocation = true
 
     private init() {}
 
-    func sceneDidDisconnect(_ scene: UIScene) {
-        let hasConnectedCarPlayScene = UIApplication.shared.connectedScenes.contains {
-            $0 !== scene && $0.activationState != .unattached &&
-                ($0 is CPTemplateApplicationScene || $0 is CPTemplateApplicationDashboardScene)
+    func sceneDidConnect(_ scene: UIScene) {
+        if connectedScenes.isEmpty {
+            shouldCenterOnMyLocation = true
         }
-        guard !hasConnectedCarPlayScene else { return }
-        shouldCenterOnMyLocation = true
+        connectedScenes.insert(ObjectIdentifier(scene))
+    }
+
+    func sceneDidDisconnect(_ scene: UIScene) {
+        connectedScenes.remove(ObjectIdentifier(scene))
     }
 
     func centerOnMyLocationIfNeeded() {
@@ -23,7 +26,10 @@ final class CarPlaySceneLifecycleCoordinator {
         shouldCenterOnMyLocation = false
 
         guard !locationServices.denied else { return }
-        app.mapMode = .positionTrack
+        let routingHelper = OARoutingHelper.sharedInstance()
+        if !routingHelper.isRouteCalculated() || routingHelper.isFollowingMode() {
+            app.mapMode = .positionTrack
+        }
         if locationServices.status == .suspended {
             locationServices.resume()
         }

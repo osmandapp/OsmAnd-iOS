@@ -124,6 +124,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidConnect(templateApplicationDashboardScene)
         self.window = window
         dashboardController.shortcutButtons = createDashboardButtons(for: templateApplicationDashboardScene)
         if isForegroundScene {

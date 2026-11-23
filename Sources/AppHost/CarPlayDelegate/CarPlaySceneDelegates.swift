@@ -147,6 +147,7 @@ final class CarPlaySceneDelegate: UIResponder {
 extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didConnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidConnect(templateApplicationScene)
         
         windowToAttach = window
         carPlayInterfaceController = interfaceController

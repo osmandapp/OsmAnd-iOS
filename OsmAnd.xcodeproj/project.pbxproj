@@ -20,6 +20,7 @@
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
 		D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5848A0000000000000002 /* Model3dHelperTests.swift */; };
 		D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */; };
+		D15937000000000000000011 /* OARasterTileUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D15937000000000000000012 /* OARasterTileUpdateTests.mm */; };
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
@@ -2302,6 +2303,7 @@
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
 		D1C5848A0000000000000002 /* Model3dHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles/Model3dHelperTests.swift; sourceTree = "<group>"; };
 		D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/UtilitiesUrlQueryTests.swift; sourceTree = "<group>"; };
+		D15937000000000000000012 /* OARasterTileUpdateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OARasterTileUpdateTests.mm; sourceTree = "<group>"; };
 		D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -10429,6 +10431,7 @@
 				D1C584800000000000000002 /* OALocationIconTests.m */,
 				D1C5848A0000000000000002 /* Model3dHelperTests.swift */,
 				D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */,
+				D15937000000000000000012 /* OARasterTileUpdateTests.mm */,
 				D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */,
 				E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
@@ -13946,6 +13949,7 @@
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
 				D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */,
 				D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */,
+				D15937000000000000000011 /* OARasterTileUpdateTests.mm in Sources */,
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
 				E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,

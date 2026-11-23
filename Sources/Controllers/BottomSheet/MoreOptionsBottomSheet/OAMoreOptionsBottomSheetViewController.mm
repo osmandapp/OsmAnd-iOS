@@ -125,9 +125,18 @@
             return;
         }
         OAMapViewController *mapVC = OARootViewController.instance.mapPanel.mapViewController;
-        const auto mapState = mapVC.mapView.renderer->getMapState();
-        [OAResourcesUIHelper clearTilesOf:resource visibleArea:mapState.visibleBBoxShifted zoom:mapState.zoomLevel onComplete:^{
-            [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
+        int layerIndex = kObfRasterLayer;
+        if (layer == EOADownloadMapLayerOverlay)
+            layerIndex = mapVC.mapLayers.overlayMapLayer.layerIndex;
+        else if (layer == EOADownloadMapLayerUnderlay)
+            layerIndex = mapVC.mapLayers.underlayMapLayer.layerIndex;
+        [OAResourcesUIHelper clearTilesOf:resource mapView:mapVC.mapView layerIndex:layerIndex onComplete:^{
+            if (layer == EOADownloadMapLayerOverlay)
+                [OsmAndApp.instance.data.overlayMapSourceChangeObservable notifyEvent];
+            else if (layer == EOADownloadMapLayerUnderlay)
+                [OsmAndApp.instance.data.underlayMapSourceChangeObservable notifyEvent];
+            else
+                [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
         }];
     }]];
     [OARootViewController.instance presentViewController:alert animated:YES completion:nil];

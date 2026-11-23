@@ -8,6 +8,7 @@
 
 #import "OAResourcesUIHelper.h"
 #import "OARasterTileCoordinates.h"
+#import "OAMapRendererView.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "OALog.h"
@@ -48,6 +49,9 @@
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/Map/IMapLayerProvider.h>
+#include <OsmAndCore/SkiaUtilities.h>
+#include <SkImage.h>
 #include <OsmAndCore/ObfsCollection.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #import "GeneratedAssetSymbols.h"
@@ -2245,18 +2249,22 @@ includeHidden:(BOOL)includeHidden
     return {};
 }
 
-+ (void)clearTilesOf:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete
++ (void)clearTilesOf:(OAResourceItem *)resource mapView:(OAMapRendererView *)mapView layerIndex:(int)layerIndex onComplete:(void (^)(void))onComplete
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    const auto state = mapView.renderer->getState();
+    const auto mapState = mapView.renderer->getMapState();
+    const auto provider = state.mapLayersProviders.value(layerIndex);
+    const auto zoomOffset = mapView.renderer->getTileZoomOffset();
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0), ^{
         OASQLiteTileSource *sqliteSource;
         NSString *downloadPath;
-        int minZoom = zoom;
-        int maxZoom = zoom;
+        bool ellipsoid = false;
+        int tileSize = 256;
         if ([resource isKindOfClass:OASqliteDbResourceItem.class])
         {
             sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:((OASqliteDbResourceItem *)resource).path];
-            minZoom = sqliteSource.minimumZoomSupported;
-            maxZoom = sqliteSource.maximumZoomSupported;
+            ellipsoid = sqliteSource.isEllipticYTile;
+            tileSize = sqliteSource.tileSize;
         }
         else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
         {
@@ -2264,32 +2272,96 @@ includeHidden:(BOOL)includeHidden
             downloadPath = item.path;
             if (item.onlineTileSource)
             {
-                minZoom = item.onlineTileSource->minZoom;
-                maxZoom = item.onlineTileSource->maxZoom;
+                ellipsoid = item.onlineTileSource->ellipticYTile;
+                tileSize = item.onlineTileSource->tileSize;
             }
         }
-        const auto tileZoom = static_cast<OsmAnd::ZoomLevel>(MAX(minZoom, MIN(maxZoom, zoom)));
-        const auto areas = [self tileAreasFor:resource visibleArea:visibleArea zoom:tileZoom];
-        QList<OsmAnd::TileId> tileIds;
-        for (const auto& area : areas)
-        {
-            for (int x = area.left(); x <= area.right(); x++)
+        auto storageTiles = [&](OsmAnd::TileId tile, OsmAnd::ZoomLevel zoom) {
+            QList<OsmAnd::TileId> ids;
+            double offset = 0;
+            if (ellipsoid)
             {
-                for (int y = area.top(); y <= area.bottom(); y++)
+                const auto row = OARasterTileCoordinates::rowAndOffset(tile.y, zoom, tileSize);
+                tile.y = row.x;
+                offset = row.y;
+            }
+            ids.push_back(tile);
+            if (offset > 0 && int64_t(tile.y) + 1 < (int64_t(1) << zoom))
+                ids.push_back(OsmAnd::TileId::fromXY(tile.x, tile.y + 1));
+            return ids;
+        };
+        QMap<OsmAnd::ZoomLevel, QHash<OsmAnd::TileId, bool>> availability;
+        auto hasImage = [&](OsmAnd::TileId tile, OsmAnd::ZoomLevel zoom) {
+            auto& cache = availability[zoom];
+            const auto cached = cache.constFind(tile);
+            if (cached != cache.cend())
+                return cached.value();
+            const auto id = storageTiles(tile, zoom).first();
+            NSData *data;
+            if (sqliteSource)
+                data = [sqliteSource getBytes:id.x y:id.y zoom:zoom];
+            else if (downloadPath)
+            {
+                NSString *path = [NSString stringWithFormat:@"%@/%d/%d/%d.tile", downloadPath, zoom, id.x, id.y];
+                data = [NSData dataWithContentsOfFile:path];
+            }
+            const bool present = data.length > 0
+                && OsmAnd::SkiaUtilities::createImageFromData(QByteArray::fromNSData(data)) != nullptr;
+            cache.insert(tile, present);
+            return present;
+        };
+        QMap<OsmAnd::ZoomLevel, QSet<OsmAnd::TileId>> tiles;
+        if (provider && (sqliteSource || downloadPath))
+        {
+            tiles = OARasterTileCoordinates::updateTiles(mapState.visibleBBoxShifted, mapState.zoomLevel,
+                provider->getMinZoom(), provider->getMaxZoom(), provider->getMaxMissingDataZoomShift(),
+                provider->getMaxMissingDataUnderZoomShift(), zoomOffset, hasImage);
+        }
+        for (auto entry = tiles.cbegin(); entry != tiles.cend(); ++entry)
+        {
+            const auto zoom = entry.key();
+            QSet<OsmAnd::TileId> storageIds;
+            for (const auto& tile : entry.value())
+            {
+                for (const auto& id : storageTiles(tile, zoom))
+                    storageIds.insert(id);
+            }
+            if (sqliteSource)
+                [sqliteSource deleteTiles:storageIds.values() zoom:zoom];
+            else
+            {
+                for (const auto& id : storageIds)
                 {
-                    if (sqliteSource)
-                        tileIds.push_back(OsmAnd::TileId::fromXY(x, y));
-                    else if (downloadPath)
-                    {
-                        NSString *tilePath = [NSString stringWithFormat:@"%@/%d/%d/%d.tile", downloadPath, tileZoom, x, y];
-                        [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
-                    }
+                    NSString *path = [NSString stringWithFormat:@"%@/%d/%d/%d.tile", downloadPath, zoom, id.x, id.y];
+                    [NSFileManager.defaultManager removeItemAtPath:path error:nil];
                 }
             }
         }
-        if (sqliteSource)
-            [sqliteSource deleteTiles:tileIds zoom:tileZoom];
-
+        NSOperationQueue *refreshQueue = [[NSOperationQueue alloc] init];
+        refreshQueue.maxConcurrentOperationCount = 4;
+        for (auto entry = tiles.cbegin(); entry != tiles.cend(); ++entry)
+        {
+            const auto zoom = entry.key();
+            if (zoom == mapState.zoomLevel)
+                continue;
+            for (const auto& tile : entry.value())
+            {
+                const auto tileId = tile;
+                [refreshQueue addOperationWithBlock:^{
+                    @autoreleasepool
+                    {
+                        OsmAnd::IMapTiledDataProvider::Request request;
+                        request.tileId = tileId;
+                        request.zoom = zoom;
+                        request.detailedZoom = mapState.zoomLevel;
+                        request.cacheOnly = false;
+                        std::shared_ptr<OsmAnd::IMapDataProvider::Data> data;
+                        provider->obtainData(request, data);
+                    }
+                }];
+            }
+        }
+        [refreshQueue waitUntilAllOperationsAreFinished];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (onComplete)
                 onComplete();

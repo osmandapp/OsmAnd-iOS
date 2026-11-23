@@ -15,7 +15,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@class OADownloadDescriptionInfo, OARouteCalculationResult, OAWorldRegion, OAMapSource;
+@class OADownloadDescriptionInfo, OARouteCalculationResult, OAWorldRegion, OAMapSource, OAMapRendererView;
 
 @protocol OADownloadTask;
 
@@ -297,7 +297,7 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (CLLocationCoordinate2D) getMapLocation;
 
 + (QVector<OsmAnd::AreaI>)tileAreasFor:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom;
-+ (void)clearTilesOf:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete;
++ (void)clearTilesOf:(OAResourceItem *)resource mapView:(OAMapRendererView *)mapView layerIndex:(int)layerIndex onComplete:(void (^)(void))onComplete;
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 

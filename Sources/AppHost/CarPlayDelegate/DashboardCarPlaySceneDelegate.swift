@@ -7,6 +7,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     private var window: UIWindow?
     private var isForegroundScene = false
     private var applicationModeChangedObserver: OAAutoObserverProxy?
+    private var isRouteOverviewPending = false
 
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
@@ -22,12 +23,14 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
         stopObservingMapViewportSettings()
+        cancelPendingRouteOverview()
         isForegroundScene = false
     }
 
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
         stopObservingMapViewportSettings()
+        cancelPendingRouteOverview()
         guard let window else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
@@ -49,7 +52,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
                 dashboardVC?.attachMapToWindow()
                 updateMapViewport()
-                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded(showRouteOverview: centerMapOnRoute)
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded(showRouteOverview: requestRouteOverview)
                 startObservingMapViewportSettings()
             }
         } else {
@@ -92,10 +95,31 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         return 2.0 - (bottomMargin / (screenHeight / 2.0))
     }
 
+    private func requestRouteOverview() {
+        isRouteOverviewPending = true
+        OARoutingHelper.sharedInstance().add(self)
+        centerMapOnRoute()
+    }
+
+    private func cancelPendingRouteOverview() {
+        guard isRouteOverviewPending else { return }
+        isRouteOverviewPending = false
+        OARoutingHelper.sharedInstance().remove(self)
+    }
+
     private func centerMapOnRoute() {
+        guard isRouteOverviewPending else { return }
+        let routingHelper = OARoutingHelper.sharedInstance()
+        guard isForegroundScene,
+              mapVC?.parent === dashboardVC,
+              !routingHelper.isFollowingMode() else {
+            cancelPendingRouteOverview()
+            return
+        }
         guard let dashboardVC,
+              routingHelper.isRouteCalculated(),
               let mapPanel = OARootViewController.instance()?.mapPanel else { return }
-        let bounds = OARoutingHelper.sharedInstance().getBBox()
+        let bounds = routingHelper.getBBox()
         let topLeft = CLLocationCoordinate2D(latitude: bounds.top, longitude: bounds.left)
         let bottomRight = CLLocationCoordinate2D(latitude: bounds.bottom, longitude: bounds.right)
         mapPanel.displayArea(onMap: topLeft,
@@ -104,7 +128,26 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                              bottomInset: 0,
                              leftInset: 0,
                              topInset: 0,
-                             changeElevationAngle: true)
+                             changeElevationAngle: true) { [weak self, weak dashboardVC] in
+            guard let self, let dashboardVC,
+                  isRouteOverviewPending,
+                  self.dashboardVC === dashboardVC else { return false }
+            guard isForegroundScene,
+                  mapVC?.parent === dashboardVC,
+                  window?.rootViewController === dashboardVC,
+                  !routingHelper.isFollowingMode() else {
+                cancelPendingRouteOverview()
+                return false
+            }
+            guard routingHelper.isRouteCalculated() else { return false }
+            let currentBounds = routingHelper.getBBox()
+            guard currentBounds.top == bounds.top,
+                  currentBounds.left == bounds.left,
+                  currentBounds.bottom == bounds.bottom,
+                  currentBounds.right == bounds.right else { return false }
+            cancelPendingRouteOverview()
+            return true
+        }
     }
     
     @objc private func onProfileSettingSet(notification: Notification) {
@@ -152,6 +195,7 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
         CarPlaySceneLifecycleCoordinator.shared.sceneDidDisconnect(templateApplicationDashboardScene)
         CarPlayService.shared.disconnectScene(.dashboard)
         stopObservingMapViewportSettings()
+        cancelPendingRouteOverview()
         dashboardVC?.detachFromCarPlayWindow()
         dashboardVC = nil
         mapVC = nil
@@ -188,5 +232,23 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
                 }
             }
         }
+    }
+}
+
+extension DashboardCarPlaySceneDelegate: OARouteInformationListener {
+    func newRouteIsCalculated(_ newRoute: Bool) {
+        centerMapOnRoute()
+    }
+
+    func routeWasUpdated() {}
+
+    func routeWasCancelled() {
+        if OARoutingHelper.sharedInstance().getFinalLocation() == nil {
+            cancelPendingRouteOverview()
+        }
+    }
+
+    func routeWasFinished() {
+        cancelPendingRouteOverview()
     }
 }

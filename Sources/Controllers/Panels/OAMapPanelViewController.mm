@@ -4276,10 +4276,56 @@ typedef enum
                 topInset:(float)topInset
     changeElevationAngle:(BOOL)changeElevationAngle
 {
+    [self displayAreaOnMap:bounds
+               screenBBox:screenBBox
+                  maxZoom:maxZoom
+              bottomInset:bottomInset
+                leftInset:leftInset
+                 topInset:topInset
+     changeElevationAngle:changeElevationAngle
+            shouldDisplay:nil];
+}
+
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+    changeElevationAngle:(BOOL)changeElevationAngle
+           shouldDisplay:(BOOL (^ _Nullable)(void))shouldDisplay
+{
+    OAGpxBounds bounds;
+    bounds.topLeft = topLeft;
+    bounds.bottomRight = bottomRight;
+    bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
+    bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
+
+    [self displayAreaOnMap:bounds
+               screenBBox:screenBBox
+                  maxZoom:kMaxZoom
+              bottomInset:bottomInset
+                leftInset:leftInset
+                 topInset:topInset
+     changeElevationAngle:changeElevationAngle
+            shouldDisplay:shouldDisplay];
+}
+
+- (void)displayAreaOnMap:(OAGpxBounds)bounds
+              screenBBox:(CGSize)screenBBox
+                 maxZoom:(float)maxZoom
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+    changeElevationAngle:(BOOL)changeElevationAngle
+           shouldDisplay:(BOOL (^ _Nullable)(void))shouldDisplay
+{
     if (bounds.topLeft.latitude == DBL_MAX)
         return;
         
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (shouldDisplay && !shouldDisplay())
+            return;
 
         OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
         float appliedLeftInset = 0.0f;

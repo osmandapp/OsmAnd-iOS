@@ -4183,6 +4183,23 @@
 • Improved performance for managing a large number of favorites\n
 • Added \"Pause spoken audio\" option to pause podcasts or audiobooks during navigation instructions\n";
 
+"ios_release_5_5" = "• CarPlay is now free for everyone, with new Map orientation and frame rate settings\n
+• Home is now one tap away in the CarPlay Navigation menu\n
+• Free version: all maps of one region instead of a limited number of downloads\n
+• New coordinate formats, including EPSG systems, Maidenhead locator, and Swiss Grid\n
+• Separate widget layouts for Portrait and Landscape, plus Wide or Compact top and bottom panels\n
+• Customizable widget panel appearance: widget size, icons, and text and background colors\n
+• Added a \"Keep screen on\" setting for each profile\n
+• Contour line labels can face uphill, as on topographic maps\n
+• Intermediate destinations are now listed in route details\n
+• Full appearance settings when editing several Favorites at once\n
+• Set the speed limit tolerance with a slider\n
+• Faster loading of large track libraries, with an indexing progress indicator\n
+• Fixed emptying the OsmAnd Cloud trash restoring deleted maps and Favorites\n
+• Fixed elevation dropping to 0 in tracks recorded in the background\n
+• Fixed OsmAnd Cloud sync conflicts after updating maps on several devices\n
+• Fixed some OBD-II Bluetooth adapters connecting without receiving data\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

@@ -1002,7 +1002,9 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
         return container
     }
 
-    private func makeExpandedRoadAttrLegend(stat: OARouteStatistics, chart: HorizontalBarChartView? = nil) -> UIView {
+    private func makeExpandedRoadAttrLegend(stat: OARouteStatistics,
+                                            chart: HorizontalBarChartView? = nil,
+                                            reservesSelectedFont: Bool = false) -> UIView {
         let items = routeAttributeLegendItems(for: stat)
         let container = UIView()
         let stack = UIStackView()
@@ -1014,6 +1016,7 @@ extension PlanRouteAnalyzeViewController: UITableViewDataSource {
 
         for (index, item) in items.enumerated() {
             let rowView = OARouteInfoLegendItemView(title: item.title, color: item.color, distance: item.distance)
+            rowView.isSelected = reservesSelectedFont
             if let chart {
                 chartSynchronizer.registerLegendItem(rowView, propertyName: item.propertyName, chart: chart)
             }
@@ -1470,7 +1473,7 @@ private extension PlanRouteAnalyzeViewController {
     private func roadAttrRowHeight(for stat: OARouteStatistics, isExpanded: Bool) -> CGFloat? {
         let width = tableView.bounds.width - Self.cardHorizontalInset * 2
         guard width > 0 else { return nil }
-        let legend = isExpanded ? makeExpandedRoadAttrLegend(stat: stat) : makeCompactRoadAttrLegend(stat: stat)
+        let legend = isExpanded ? makeExpandedRoadAttrLegend(stat: stat, reservesSelectedFont: true) : makeCompactRoadAttrLegend(stat: stat)
         legend.translatesAutoresizingMaskIntoConstraints = false
         let legendHeight = legend.systemLayoutSizeFitting(
             CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),

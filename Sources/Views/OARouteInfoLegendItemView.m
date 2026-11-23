@@ -50,12 +50,18 @@
     self.accessibilityTraits = selected ? UIAccessibilityTraitStaticText | UIAccessibilityTraitSelected : UIAccessibilityTraitStaticText;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil];
     
     [self addSubview:_contentView];
-    _contentView.frame = self.bounds;
+    _contentView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_contentView.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [_contentView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_contentView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_contentView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
+    ]];
     
     _colorView.layer.cornerRadius = 12.;
     _colorView.layer.borderWidth = 0.5;

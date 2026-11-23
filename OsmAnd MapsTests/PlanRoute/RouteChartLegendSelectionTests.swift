@@ -14,6 +14,48 @@ final class RouteChartLegendSelectionTests: XCTestCase {
         }
     }
 
+    private final class CountingLegendLabel: UILabel {
+        var fontUpdates = 0
+        var traitUpdates = 0
+
+        override var font: UIFont? {
+            didSet { fontUpdates += 1 }
+        }
+
+        override var accessibilityTraits: UIAccessibilityTraits {
+            didSet { traitUpdates += 1 }
+        }
+    }
+
+    private final class AnalyzeDataSource: PlanRouteAnalyzeDataSource {
+        let routeInfo = PlanRouteInfo.empty
+        let isCalculatingElevation = false
+        let isCalculatingRoute = false
+        let isTerrainElevationAvailable = false
+        let analysisData: PlanRouteAnalysisData?
+
+        init(statistics: OARouteStatistics) {
+            analysisData = PlanRouteAnalysisData(uphill: 0,
+                                                 downhill: 0,
+                                                 altMin: nil,
+                                                 altMax: nil,
+                                                 avgSpeed: nil,
+                                                 maxSpeed: nil,
+                                                 timeInMotion: nil,
+                                                 hasElevationData: false,
+                                                 hasSpeedData: false,
+                                                 gpxAnalysis: GpxTrackAnalysis(),
+                                                 gpxFile: nil,
+                                                 routeStatistics: [statistics])
+        }
+
+        func startElevationCalculation(useNearbyRoads: Bool) {}
+        func cancelElevationCalculation() {}
+        func hideChartHighlight() {}
+        func showChartHighlightedLocation(_ points: TrackChartPoints) {}
+        func showChartStatisticsLocation(_ points: TrackChartPoints) {}
+    }
+
     func testLegendFollowsSelectionAcrossChartsAndRepeatedAttributes() {
         let synchronizer = RouteChartSynchronizer()
         let surface = makeChart(names: ["asphalt", "undefined", "asphalt"])
@@ -239,6 +281,84 @@ final class RouteChartLegendSelectionTests: XCTestCase {
                 XCTAssertTrue(rows[index].isAccessibilityElement)
             }
         }
+    }
+
+    func testResetPreservesBindingsForSurvivingLegendViews() {
+        let synchronizer = RouteChartSynchronizer()
+        let chart = makeChart(names: ["asphalt", "sett"])
+        let label = UILabel()
+        let row = makeLegend("Sett")
+        synchronizer.registerBarChart(chart)
+        synchronizer.registerLegendLabel(label, propertyName: "asphalt", chart: chart)
+        synchronizer.registerLegendItem(row, propertyName: "sett", chart: chart)
+        select(0.25, chart: chart, synchronizer: synchronizer)
+        XCTAssertTrue(label.accessibilityTraits.contains(.selected))
+        synchronizer.reset()
+        XCTAssertFalse(label.accessibilityTraits.contains(.selected))
+        XCTAssertFalse(row.isSelected)
+        synchronizer.registerBarChart(chart)
+        select(0.75, chart: chart, synchronizer: synchronizer)
+        XCTAssertTrue(row.isSelected)
+        XCTAssertFalse(label.accessibilityTraits.contains(.selected))
+        select(0.25, chart: chart, synchronizer: synchronizer)
+        XCTAssertFalse(row.isSelected)
+        XCTAssertTrue(label.accessibilityTraits.contains(.selected))
+    }
+
+    func testCompactLabelUpdatesOnlyWhenSelectedAttributeChanges() {
+        let synchronizer = RouteChartSynchronizer()
+        let chart = makeChart(names: ["asphalt", "sett"])
+        let label = CountingLegendLabel()
+        synchronizer.registerBarChart(chart)
+        synchronizer.registerLegendLabel(label, propertyName: "asphalt", chart: chart)
+        select(0.15, chart: chart, synchronizer: synchronizer)
+        let selectedFontUpdates = label.fontUpdates
+        let selectedTraitUpdates = label.traitUpdates
+        select(0.25, chart: chart, synchronizer: synchronizer)
+        select(0.35, chart: chart, synchronizer: synchronizer)
+        XCTAssertEqual(label.fontUpdates, selectedFontUpdates)
+        XCTAssertEqual(label.traitUpdates, selectedTraitUpdates)
+        select(0.75, chart: chart, synchronizer: synchronizer)
+        XCTAssertEqual(label.fontUpdates, selectedFontUpdates + 1)
+        XCTAssertEqual(label.traitUpdates, selectedTraitUpdates + 1)
+        select(0.85, chart: chart, synchronizer: synchronizer)
+        XCTAssertEqual(label.fontUpdates, selectedFontUpdates + 1)
+        XCTAssertEqual(label.traitUpdates, selectedTraitUpdates + 1)
+    }
+
+    func testExpandedHeightAccommodatesSelectedTitlesOnNarrowScreens() throws {
+        for count in 1...3 {
+            let title = String(repeating: "Unpaved forest road ", count: count)
+            let segment = try XCTUnwrap(OARouteSegmentAttribute(propertyName: title, color: Int(UInt32(bitPattern: UIColor.iconColorActive.toARGBNumber())), slopeIndex: -1, boundariesClass: []))
+            segment.distance = 300
+            let statistics = try XCTUnwrap(OARouteStatistics(name: "routeInfo_steepness", elements: [segment], partition: [title: segment], totalDistance: 300))
+            let source = AnalyzeDataSource(statistics: statistics)
+            let controller = PlanRouteAnalyzeViewController(dataSource: source)
+            controller.loadViewIfNeeded()
+            controller.view.frame = CGRect(x: 0, y: 0, width: 320, height: 1000)
+            controller.view.layoutIfNeeded()
+            let table = try XCTUnwrap(controller.view.subviews.first { $0 is UITableView } as? UITableView)
+            let indexPath = IndexPath(row: 0, section: 1)
+            controller.tableView(table, didSelectRowAt: indexPath)
+            let cachedHeight = controller.tableView(table, heightForRowAt: indexPath)
+            let cell = try XCTUnwrap(controller.tableView(table, cellForRowAt: indexPath) as? AnalyzeCardCell)
+            cell.frame = CGRect(x: 0, y: 0, width: 320, height: cachedHeight)
+            cell.layoutIfNeeded()
+            let row = try XCTUnwrap(descendants(of: cell.cardView).first { $0 is OARouteInfoLegendItemView } as? OARouteInfoLegendItemView)
+            row.isSelected = true
+            let label = try XCTUnwrap(row.value(forKey: "titleView") as? UILabel)
+            XCTAssertEqual(label.font.pointSize, UIFont.preferredFont(forTextStyle: .headline).pointSize)
+            let requiredHeight = cell.cardView.systemLayoutSizeFitting(
+                CGSize(width: 288, height: UIView.layoutFittingCompressedSize.height),
+                withHorizontalFittingPriority: .required,
+                verticalFittingPriority: .fittingSizeLevel
+            ).height
+            XCTAssertGreaterThanOrEqual(cachedHeight + 0.5, requiredHeight, "\(count) title repetitions")
+        }
+    }
+
+    private func descendants(of view: UIView) -> [UIView] {
+        view.subviews.flatMap { [$0] + descendants(of: $0) }
     }
 
     private func makeChart(names: [String?]) -> HorizontalBarChartView {

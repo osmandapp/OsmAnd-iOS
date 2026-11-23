@@ -187,8 +187,9 @@ final class RouteChartSynchronizer: NSObject {
         let descriptor = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
         let selectedFont = UIFont(descriptor: descriptor, size: font.pointSize)
         registerLegend(view: label, propertyName: propertyName, chart: chart) { [weak label] selected in
-            label?.font = selected ? selectedFont : font
-            label?.accessibilityTraits = selected ? [.staticText, .selected] : .staticText
+            guard let label, label.accessibilityTraits.contains(.selected) != selected else { return }
+            label.font = selected ? selectedFont : font
+            label.accessibilityTraits = selected ? [.staticText, .selected] : .staticText
         }
     }
 
@@ -257,7 +258,7 @@ final class RouteChartSynchronizer: NSObject {
         }
         barCharts.removeAllObjects()
         legendBindings.forEach { $0.updateSelection(false) }
-        legendBindings.removeAll()
+        legendBindings.removeAll { $0.view == nil || $0.chart == nil }
     }
 
     private func registerLegend(view: UIView,

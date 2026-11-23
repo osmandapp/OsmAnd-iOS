@@ -64,8 +64,7 @@ class BaseRecordingWidget: OASimpleWidget {
     }
     
     func getAnalysis() -> GpxTrackAnalysis? {
-        guard let currentTrack = OASavingTrackHelper.sharedInstance().currentTrack else { return nil }
-        return currentTrack.getAnalysis(fileTimestamp: 0)
+        OASavingTrackHelper.sharedInstance().getCurrentTrackAnalysis()
     }
     
     func getResolvedTitleForList() -> String {

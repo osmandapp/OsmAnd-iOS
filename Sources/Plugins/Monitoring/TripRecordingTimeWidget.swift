@@ -67,7 +67,7 @@ final class TripRecordingTimeWidget: OASimpleWidget {
         let tracks = (currentTrack.tracks as? [Track]) ?? []
         let firstIsGeneral = tracks.first?.generalTrack ?? false
         let withoutGaps = !joinSegments && (tracks.isEmpty || firstIsGeneral)
-        let analysis = currentTrack.getAnalysis(fileTimestamp: 0)
+        guard let analysis = OASavingTrackHelper.sharedInstance().getCurrentTrackAnalysis() else { return 0 }
         return withoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan
     }
     

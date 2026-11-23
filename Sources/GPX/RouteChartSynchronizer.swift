@@ -58,6 +58,7 @@ final class RouteChartSynchronizer: NSObject {
     }
 
     private static let maxHighlightDistance: CGFloat = 10_000
+    private static let stackBoundaryTolerance = 1e-9
 
     @nonobjc var onChartStateChanged: ((TrackChartState?) -> Void)?
 
@@ -181,6 +182,7 @@ final class RouteChartSynchronizer: NSObject {
     }
 
     func registerLegendLabel(_ label: UILabel, propertyName: String, chart: HorizontalBarChartView) {
+        label.isAccessibilityElement = true
         let font = label.font ?? UIFont.preferredFont(forTextStyle: .footnote)
         let descriptor = font.fontDescriptor.withSymbolicTraits(.traitBold) ?? font.fontDescriptor
         let selectedFont = UIFont(descriptor: descriptor, size: font.pointSize)
@@ -271,11 +273,25 @@ final class RouteChartSynchronizer: NSObject {
     }
 
     private func updateLegend(in chart: HorizontalBarChartView, highlight: Highlight?) {
+        let stackBoundaryTolerance = Self.stackBoundaryTolerance
         var selectedPropertyName: String?
         if let highlight,
            let entry = chart.barData?.dataSets.first?.entryForIndex(0) as? BarChartDataEntry,
            let propertyNames = entry.data as? [String?] {
-            let stackIndex = propertyNames.count == 1 ? 0 : highlight.stackIndex
+            var stackIndex = propertyNames.count == 1 ? 0 : highlight.stackIndex
+            if propertyNames.indices.contains(stackIndex),
+               propertyNames[stackIndex] == nil,
+               propertyNames.indices.contains(stackIndex + 1),
+               propertyNames[stackIndex + 1] != nil,
+               let ranges = entry.ranges,
+               ranges.indices.contains(stackIndex),
+               let selectedProgress,
+               let axisRange = horizontalRange(for: chart) {
+                let selectedValue = selectedXAxisValue ?? value(for: selectedProgress, in: axisRange)
+                if selectedValue + stackBoundaryTolerance >= ranges[stackIndex].to {
+                    stackIndex += 1
+                }
+            }
             if propertyNames.indices.contains(stackIndex) {
                 selectedPropertyName = propertyNames[stackIndex]
             }
@@ -427,7 +443,7 @@ final class RouteChartSynchronizer: NSObject {
     private func applySelection(to chart: HorizontalBarChartView) {
         guard let touchX = touchX(in: chart),
               let highlight = chart.highlighter?.getHighlight(x: 1, y: touchX) else {
-            updateLegend(in: chart, highlight: nil)
+            clearHighlight(in: chart)
             return
         }
         highlight.setDraw(x: touchX, y: 0)

@@ -1495,7 +1495,7 @@ private extension PlanRouteAnalyzeViewController {
             let title = localizedLegendTitle(for: segment, statName: stat.name)
             let distance = OAOsmAndFormatter.getFormattedDistance(segment.distance) ?? ""
             let color = UIColor(argbValue: UInt32(truncatingIfNeeded: segment.color))
-            return RoadAttributeLegendItem(propertyName: segment.propertyName ?? key, title: title, color: color, distance: distance)
+            return RoadAttributeLegendItem(propertyName: key, title: title, color: color, distance: distance)
         }
     }
 

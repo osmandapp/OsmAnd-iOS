@@ -980,7 +980,7 @@ class GpxUIHelper: NSObject {
 
         if let segments {
             elements = segments.map { segment in
-                StatisticChartElement(propertyName: segment.propertyName,
+                StatisticChartElement(propertyName: segment.getUserPropertyName(),
                                       distance: Double(segment.distance) * distanceScale,
                                       color: NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor))
             }

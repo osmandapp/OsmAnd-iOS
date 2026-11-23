@@ -272,7 +272,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
             detent = .medium()
         }
 
-        let keepLarge = !needsCompactDetent && sheet.selectedDetentIdentifier == .large
+        let keepLarge = sheet.selectedDetentIdentifier == .large
         sheet.animateChanges {
             sheet.detents = [detent, .large()]
             sheet.selectedDetentIdentifier = keepLarge ? .large : detent.identifier

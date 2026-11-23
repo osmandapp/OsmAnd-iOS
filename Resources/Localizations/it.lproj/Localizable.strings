@@ -4377,16 +4377,19 @@
 "opening_hours_easter" = "Pasqua";
 "ais_connection_failed" = "Connessione fallita";
 
-"ios_release_5_5" = "• Nuovi formati di coordinate, tra cui sistemi EPSG, localizzatore Maidenhead e Swiss Grid\n
+"ios_release_5_5" = "• CarPlay è ora gratuito per tutti, con nuove impostazioni per l'orientamento della mappa e il frame rate\n
+• Casa ora raggiungibile con un solo tocco dal menu Navigazione di CarPlay\n
+• Versione gratuita: tutte le mappe di una regione invece di un numero limitato di download\n
+• Nuovi formati di coordinate, tra cui sistemi EPSG, localizzatore Maidenhead e Swiss Grid\n
 • Layout dei widget separati per verticale e orizzontale, con pannelli superiore e inferiore in stile Ampio o Compatto\n
 • Aspetto personalizzabile dei pannelli dei widget: dimensione dei widget, icone, colori del testo e dello sfondo\n
-• Nuove impostazioni CarPlay per l'orientamento della mappa e il frame rate\n
-• Casa ora raggiungibile con un solo tocco dal menu Navigazione di CarPlay\n
 • Aggiunta l'impostazione \"Mantieni lo schermo acceso\" per ogni profilo\n
 • Le etichette delle curve di livello possono essere orientate verso monte, come sulle carte topografiche\n
+• Le destinazioni intermedie sono ora elencate nei dettagli del percorso\n
 • Impostazioni complete dell'aspetto quando si modificano più Preferiti contemporaneamente\n
 • Imposta la tolleranza del limite di velocità con un cursore\n
 • Caricamento più rapido di grandi librerie di tracce, con indicatore di avanzamento dell'indicizzazione\n
 • Risolto il problema per cui svuotare il cestino di OsmAnd Cloud ripristinava mappe e Preferiti eliminati\n
 • Risolto il calo dell'altitudine a 0 nelle tracce registrate in background\n
-• Risolti i conflitti di sincronizzazione di OsmAnd Cloud dopo l'aggiornamento delle mappe su più dispositivi\n";
+• Risolti i conflitti di sincronizzazione di OsmAnd Cloud dopo l'aggiornamento delle mappe su più dispositivi\n
+• Risolto il problema per cui alcuni adattatori Bluetooth OBD-II si connettevano senza ricevere dati\n";

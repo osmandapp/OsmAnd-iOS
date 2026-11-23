@@ -19,7 +19,7 @@ final class CarPlaySceneLifecycleCoordinator {
         connectedScenes.remove(ObjectIdentifier(scene))
     }
 
-    func centerOnMyLocationIfNeeded() {
+    func centerOnMyLocationIfNeeded(showRouteOverview: (() -> Void)? = nil) {
         guard shouldCenterOnMyLocation,
               let app = OsmAndApp.swiftInstance(),
               let locationServices = app.locationServices else { return }
@@ -27,7 +27,9 @@ final class CarPlaySceneLifecycleCoordinator {
 
         guard !locationServices.denied else { return }
         let routingHelper = OARoutingHelper.sharedInstance()
-        if !routingHelper.isRouteCalculated() || routingHelper.isFollowingMode() {
+        if routingHelper.isRouteCalculated() && !routingHelper.isFollowingMode() {
+            showRouteOverview?()
+        } else {
             app.mapMode = .positionTrack
         }
         if locationServices.status == .suspended {

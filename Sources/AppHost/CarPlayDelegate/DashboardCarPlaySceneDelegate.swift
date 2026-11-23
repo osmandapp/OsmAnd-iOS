@@ -49,7 +49,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
                 dashboardVC?.attachMapToWindow()
                 updateMapViewport()
-                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded(showRouteOverview: centerMapOnRoute)
                 startObservingMapViewportSettings()
             }
         } else {
@@ -90,6 +90,21 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
             return 1.5
         }
         return 2.0 - (bottomMargin / (screenHeight / 2.0))
+    }
+
+    private func centerMapOnRoute() {
+        guard let dashboardVC,
+              let mapPanel = OARootViewController.instance()?.mapPanel else { return }
+        let bounds = OARoutingHelper.sharedInstance().getBBox()
+        let topLeft = CLLocationCoordinate2D(latitude: bounds.top, longitude: bounds.left)
+        let bottomRight = CLLocationCoordinate2D(latitude: bounds.bottom, longitude: bounds.right)
+        mapPanel.displayArea(onMap: topLeft,
+                             bottomRight: bottomRight,
+                             screenBBox: dashboardVC.view.bounds.size,
+                             bottomInset: 0,
+                             leftInset: 0,
+                             topInset: 0,
+                             changeElevationAngle: true)
     }
     
     @objc private func onProfileSettingSet(notification: Notification) {

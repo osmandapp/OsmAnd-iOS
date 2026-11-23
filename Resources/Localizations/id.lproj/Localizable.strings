@@ -4535,16 +4535,19 @@
 "average_speed" = "Kecepatan rata-rata";
 "tracks_stats_are_being_calculated" = "Statistik trek sedang dihitung...";
 
-"ios_release_5_5" = "• Format koordinat baru, termasuk sistem EPSG, lokator Maidenhead, dan Swiss Grid\n
+"ios_release_5_5" = "• CarPlay kini gratis untuk semua orang, dengan pengaturan baru untuk orientasi peta dan frame rate\n
+• Rumah kini dapat diakses dengan satu ketukan dari menu Navigasi CarPlay\n
+• Versi gratis: semua peta dari satu wilayah, bukan jumlah unduhan yang terbatas\n
+• Format koordinat baru, termasuk sistem EPSG, lokator Maidenhead, dan Swiss Grid\n
 • Tata letak widget terpisah untuk mode Potret dan Lanskap, serta panel atas dan bawah dengan gaya Lebar atau Ringkas\n
 • Tampilan panel widget yang dapat disesuaikan: ukuran widget, ikon, serta warna teks dan latar belakang\n
-• Pengaturan CarPlay baru untuk orientasi peta dan frame rate\n
-• Rumah kini dapat diakses dengan satu ketukan dari menu Navigasi CarPlay\n
 • Menambahkan pengaturan \"Biarkan layar tetap menyala\" untuk setiap profil\n
 • Label garis kontur dapat menghadap ke arah tanjakan, seperti pada peta topografi\n
+• Tujuan perantara kini ditampilkan dalam detail rute\n
 • Pengaturan tampilan lengkap saat mengedit beberapa Favorit sekaligus\n
 • Atur toleransi batas kecepatan dengan penggeser\n
 • Pemuatan pustaka jejak berukuran besar lebih cepat, dengan indikator progres pengindeksan\n
 • Memperbaiki masalah pengosongan tempat sampah OsmAnd Cloud yang memulihkan peta dan Favorit yang telah dihapus\n
 • Memperbaiki ketinggian yang turun menjadi 0 pada jejak yang direkam di latar belakang\n
-• Memperbaiki konflik sinkronisasi OsmAnd Cloud setelah memperbarui peta di beberapa perangkat\n";
+• Memperbaiki konflik sinkronisasi OsmAnd Cloud setelah memperbarui peta di beberapa perangkat\n
+• Memperbaiki beberapa adaptor Bluetooth OBD-II yang terhubung tanpa menerima data\n";

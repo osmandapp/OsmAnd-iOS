@@ -229,7 +229,8 @@ static int TILE_SIZE = 256;
 
                         auto onPathMapSymbol =
                             std::dynamic_pointer_cast<const OsmAnd::IOnPathMapSymbol>(symbolInfo.mapSymbol);
-                        BOOL allowMapObjects = onPathMapSymbol == nullptr &&
+                        // a route segment (its shield) is the route itself, already added by addFilteredOsmRoutes
+                        BOOL allowMapObjects = !isNewOsmRoute && onPathMapSymbol == nullptr &&
                             !OsmAnd::NetworkRouteKey::containsUnclickableRouteTags([self toQHash:tags]);
 
                         if (allowMapObjects)

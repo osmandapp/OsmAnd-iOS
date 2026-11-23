@@ -2860,16 +2860,19 @@
 
 "ios_release_5_4" = "• Nytt design for «Mine steder» — med undermapper for favoritter, festede mapper og raskere handlinger\n• Gjenoppbygd «Planlegg en rute» — legg til rute- og POI-punkter, og kombiner ulike rutetyper\n• Nytt astronomi-tillegg: stjernekart med detaljert database for hvert objekt, synlighetsgrafer og en observasjonsplan\n• Lagt til visualiseringstypen «Terrengskygger»\n• Lagt til støtte for kart med kun veier\n• Rediger fargepaletten for spor og terreng\n• Organiser spor automatisk etter år, lengde, aktivitet og mer\n• Del opp GPX-filer med flere spor i separate filer ved import\n• Angi standardutseende for spormapper\n• Lagt til innstilling for sykkelbredde for å unngå smale sykkelveier\n• Lagt til widget for OBD-II-adapterspenning\n• Lagt til alternativet «Sett tale-lyd på pause» for å pause podkaster eller lydbøker under navigasjonsinstruksjoner\n• Komplett ikonutvalg er nå tilgjengelig for profiler\n• Forbedret ytelse ved håndtering av et stort antall favoritter\n• Rettet et problem med prøveperioden for CarPlay";
 
-"ios_release_5_5" = "• Nye koordinatformater, inkludert EPSG-systemer, Maidenhead-lokator og Swiss Grid\n
+"ios_release_5_5" = "• CarPlay er nå gratis for alle, med nye innstillinger for kartorientering og bildefrekvens\n
+• Hjem er nå bare ett trykk unna i navigeringsmenyen i CarPlay\n
+• Gratisversjon: alle kart over én region i stedet for et begrenset antall nedlastinger\n
+• Nye koordinatformater, inkludert EPSG-systemer, Maidenhead-lokator og Swiss Grid\n
 • Separate widgetoppsett for Portrett og Landskap, samt brede eller kompakte paneler øverst og nederst\n
 • Tilpassbart utseende for widgetpaneler: widgetstørrelse, ikoner samt tekst- og bakgrunnsfarger\n
-• Nye CarPlay-innstillinger for kartretning og bildefrekvens\n
-• Hjem er nå bare ett trykk unna i navigeringsmenyen i CarPlay\n
 • Lagt til innstillingen «Hold skjermen på» for hver profil\n
 • Etiketter på høydekurver kan vende oppover bakken, som på topografiske kart\n
+• Mellomliggende reisemål vises nå i rutedetaljene\n
 • Fullstendige utseendeinnstillinger ved redigering av flere favoritter samtidig\n
 • Angi toleransen for fartsgrense med en glidebryter\n
 • Raskere innlasting av store sporbiblioteker, med fremdriftsindikator for indeksering\n
 • Rettet et problem der tømming av OsmAnd Cloud-papirkurven gjenopprettet slettede kart og favoritter\n
 • Rettet et problem der høyden falt til 0 i spor registrert i bakgrunnen\n
-• Rettet synkroniseringskonflikter i OsmAnd Cloud etter oppdatering av kart på flere enheter\n";
+• Rettet synkroniseringskonflikter i OsmAnd Cloud etter oppdatering av kart på flere enheter\n
+• Rettet et problem der noen OBD-II Bluetooth-adaptere koblet til uten å motta data\n";

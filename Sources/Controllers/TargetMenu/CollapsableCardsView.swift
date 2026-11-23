@@ -52,6 +52,7 @@ final class CollapsableCardsView: OACollapsableView {
             case .mapillary:
                 OAAppSettings.sharedManager().mapillaryPhotosRowCollapsed.set(collapsed)
             }
+            ensureLoadingIndicatorVisible()
         }
     }
     
@@ -60,6 +61,13 @@ final class CollapsableCardsView: OACollapsableView {
     private var cardsViewController: CardsViewController!
     private var сardsFilter: CardsFilter!
     // swiftlint:enable all
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .textColorSecondary
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
     private var bottomButton: UIButton?
     private var heightConstraint: NSLayoutConstraint?
     
@@ -70,11 +78,14 @@ final class CollapsableCardsView: OACollapsableView {
         cardsViewController = CardsViewController(frame: .zero)
         cardsViewController.translatesAutoresizingMaskIntoConstraints = false
         addSubview(cardsViewController)
+        addSubview(loadingIndicator)
         
         NSLayoutConstraint.activate([
             cardsViewController.topAnchor.constraint(equalTo: topAnchor),
             cardsViewController.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            cardsViewController.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor)
+            cardsViewController.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            loadingIndicator.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: cardsViewController.centerYAnchor)
         ])
         
         heightConstraint = cardsViewController.heightAnchor.constraint(equalToConstant: 170)
@@ -110,6 +121,16 @@ final class CollapsableCardsView: OACollapsableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        ensureLoadingIndicatorVisible()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        ensureLoadingIndicatorVisible()
+    }
     
     override func adjustHeight(forWidth width: CGFloat) {
         updateLayout(width: width)
@@ -126,12 +147,28 @@ final class CollapsableCardsView: OACollapsableView {
     
     func clearContent() {
         cardsViewController.clearDataSource()
-        cardsViewController.showSpinner(show: false)
+        isLoading = false
         bottomButton?.removeFromSuperview()
     }
     
     private func updateSpinner() {
-        cardsViewController.showSpinner(show: isLoading)
+        let show = isLoading
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if show {
+                self.cardsViewController.clearDataSource()
+                self.loadingIndicator.startAnimating()
+            } else {
+                self.loadingIndicator.stopAnimating()
+            }
+        }
+    }
+
+    private func ensureLoadingIndicatorVisible() {
+        guard isLoading, !collapsed, window != nil else { return }
+        if !loadingIndicator.isAnimating {
+            loadingIndicator.startAnimating()
+        }
     }
     
     private func configureBottomButton() {

@@ -2574,11 +2574,14 @@ typedef enum
                            title:self.targetMenuView.targetPoint.title];
 }
 
-- (void) targetPointEditWaypoint:(OAGpxWptItem *)item
+- (void)targetPointEditWaypoint:(OAGpxWptItem *)item
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     item.groups = _mapViewController.foundWptGroups;
+    // Keep saved GPX changes isolated until the file is written successfully.
+    if (item.docPath.length > 0)
+        [item prepareForEditing];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithGpxWpt:item];
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
@@ -3272,11 +3275,7 @@ typedef enum
     double lon = item.point.lon;
     
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
-    if ([_mapViewController findWpt:item.point.position])
-    {
-        item.point = _mapViewController.foundWpt;
-        item.groups = _mapViewController.foundWptGroups;
-    }
+    [_mapViewController selectWpt:item];
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     NSString *caption = item.point.name;
@@ -4908,9 +4907,12 @@ typedef enum
 
 #pragma mark - OAGpxWptEditingHandlerDelegate
 
-- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
+- (BOOL)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
-    [_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName];
+    if (![_mapViewController addNewWpt:gpxWpt.point gpxFileName:gpxFileName])
+        return NO;
+    gpxWpt.originalPoint = _mapViewController.foundWpt;
+    [_mapViewController selectWpt:gpxWpt];
 
     gpxWpt.groups = _mapViewController.foundWptGroups;
 
@@ -4926,12 +4928,34 @@ typedef enum
             [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
         [_mapViewController.mapLayers.gpxRecMapLayer refreshGpxWaypoints];
     }
+    return YES;
 }
 
-- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (BOOL)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
-    [_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap];
+    if (![_mapViewController updateWpts:@[gpxWptItem] docPath:docPath updateMap:updateMap])
+        return NO;
     [self.targetMenuView applyTargetObjectChanges];
+    return YES;
+}
+
+- (BOOL)replaceGpxWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
+{
+    if (![_mapViewController replaceWpt:existingItem withItem:item newPoint:newPoint])
+        return NO;
+    if (newPoint && item.docPath.length == 0)
+    {
+        if (![[OAAppSettings sharedManager].mapSettingShowRecordingTrack get])
+            [[OAAppSettings sharedManager].mapSettingShowRecordingTrack set:YES];
+        if (!_mapViewController.recTrackShowing)
+            [_mapViewController showRecGpxTrack:YES];
+    }
+    [_mapViewController selectWpt:item];
+    self.targetMenuView.targetPoint.type = OATargetWpt;
+    self.targetMenuView.targetPoint.targetObj = item;
+    [self.targetMenuView updateTargetPointType:OATargetWpt];
+    [self.targetMenuView applyTargetObjectChanges];
+    return YES;
 }
 
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
@@ -4939,13 +4963,9 @@ typedef enum
     [_mapViewController deleteWpts:@[gpxWptItem] docPath:docPath];
 }
 
-- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
+- (BOOL)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
-    
-    if (gpxWptItem.point)
-    {
-        [_mapViewController saveFoundWpt];
-    }
+    return gpxWptItem.point && [_mapViewController updateWpts:@[gpxWptItem] docPath:gpxWptItem.docPath updateMap:YES];
 }
 
 #pragma mark - OAOpenAddTrackDelegate

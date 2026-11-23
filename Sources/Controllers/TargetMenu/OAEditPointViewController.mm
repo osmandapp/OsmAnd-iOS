@@ -123,7 +123,7 @@
     BOOL _isNewColorSelected;
     BOOL _needToScrollToSelectedColor;
     OAColorsPaletteCell *_colorsPaletteCell;
-    
+    OASGpxUtilitiesPointsGroup *_newWaypointGroup;
     PoiIconCollectionHandler *_poiIconCollectionHandler;
 
     UILabel *_subtitle;
@@ -1084,7 +1084,6 @@
 
 - (void)onRightNavbarButtonPressed
 {
-    _isUnsaved = NO;
     if (_wasChanged || _isNewItemAdding)
     {
         OAPointEditingData *data = [[OAPointEditingData alloc] init];
@@ -1126,7 +1125,8 @@
             data.name = savingName;
             data.category = savingGroup;
 
-            [_pointHandler savePoint:data newPoint:_isNewItemAdding];
+            if (![self savePoint:data newPoint:_isNewItemAdding])
+                return;
         }
         else
         {
@@ -1134,7 +1134,8 @@
             savingName = [savingName trim];
             data.name = savingName;
             data.category = savingGroup;
-            [_pointHandler savePoint:data newPoint:NO];
+            if (![self savePoint:data newPoint:NO])
+                return;
         }
         if (_editPointType == EOAEditPointTypeFavorite && _isNewColorSelected)
             [_appearanceCollection selectColor:_selectedColorItem];
@@ -1143,8 +1144,25 @@
             [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
         }
     }
+    _isUnsaved = NO;
     [self.delegate saveTapped];
     [self dismissViewController];
+}
+
+- (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
+{
+    if ([_pointHandler savePoint:data newPoint:newPoint])
+        return YES;
+
+    _isUnsaved = YES;
+    _renamedPointAlertMessage = nil;
+    if (_editPointType == EOAEditPointTypeWaypoint)
+    {
+        // Match Android: Save closes the waypoint editor even when persistence fails.
+        _isUnsaved = NO;
+        [self dismissViewController];
+    }
+    return NO;
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
@@ -1341,15 +1359,18 @@
                                           color:color
                                        iconName:iconName
                              backgroundIconName:backgroundIconName];
+            [OAFavoritesHelper saveCurrentPointsIntoFile];
             group = [OAFavoritesHelper groupByTrimmedName:editedGroupName];
         }
         resolvedIconName = _iconSelectedByUser ? _selectedIconName : [self iconNameForGroup:group];
     }
     else if (_editPointType == EOAEditPointTypeWaypoint)
     {
+        _newWaypointGroup = [[OASGpxUtilitiesPointsGroup alloc] initWithName:editedGroupName iconName:iconName backgroundType:backgroundIconName color:[color toARGBNumber]];
         if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-        [((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES];
+        if (![((OAGpxWptEditingHandler *) _pointHandler) setGroup:editedGroupName color:color save:YES])
+            _isUnsaved = YES;
         _selectedWaypointGroupKey = editedGroupName;
     }
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[color toARGBNumber]];
@@ -1430,23 +1451,15 @@
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
 
-        OAPointEditingData *data = [[OAPointEditingData alloc] init];
-
-        data.descr = waypointItem.point.desc;
-        data.address = [waypointItem.point getAddress];
-        data.color = waypointItem.color ? waypointItem.color : UIColorFromARGB([waypointItem.point getColor]);
-        data.backgroundIcon = [waypointItem.point getBackgroundType];
-        data.icon = [waypointItem.point getIconName];
-        data.category = waypointItem.point.category;
-        data.name = waypointItem.point.name;
-
-        if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
+        if (!_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
-        if (self.gpxWptDelegate)
-            [self.gpxWptDelegate deleteGpxWpt:waypointItem docPath:[(OAGpxWptEditingHandler *)_pointHandler getGpxDocument].path];
-
-        [_pointHandler savePoint:data newPoint:_isNewItemAdding];
+        if (![(OAGpxWptEditingHandler *)_pointHandler replacePoint:waypointItem newPoint:_isNewItemAdding])
+        {
+            _isUnsaved = YES;
+            return;
+        }
+        _isUnsaved = NO;
         [self dismissViewController];
     }]];
 
@@ -1682,6 +1695,26 @@
                 _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
                 [_colorCollectionHandler generateData:@[_sortedColorItems]];
             }
+        }
+
+        OASGpxUtilitiesPointsGroup *group = [(OAGpxWptEditingHandler *) _pointHandler getGpxDocument].pointsGroups[groupName];
+        if (!group && [groupName isEqualToString:_newWaypointGroup.name])
+            group = _newWaypointGroup;
+        if (!group && groupName.length == 0)
+            group = [[OASGpxUtilitiesPointsGroup alloc] initWithName:@"" iconName:DEFAULT_ICON_NAME_KEY backgroundType:DEFAULT_ICON_SHAPE_KEY color:_selectedColorItem.colorInt];
+
+        if (_isNewItemAdding && group)
+        {
+            NSString *iconName = group.iconName.length > 0 ? group.iconName : DEFAULT_ICON_NAME_KEY;
+            if (!_iconSelectedByUser && [OAUtilities getMxIcon:iconName] != nil)
+            {
+                _selectedIconName = iconName;
+                [self selectIconInController];
+            }
+            NSString *backgroundType = group.backgroundType.length > 0 ? group.backgroundType : DEFAULT_ICON_SHAPE_KEY;
+            NSUInteger backgroundIndex = [_backgroundIconNames indexOfObject:backgroundType];
+            if (backgroundIndex != NSNotFound)
+                _selectedBackgroundIndex = backgroundIndex;
         }
     }
 

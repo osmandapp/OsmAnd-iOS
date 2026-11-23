@@ -147,6 +147,7 @@ struct PlanRouteProfileGroup {
     let distance: Double
     let lastPointIndex: Int
     let points: [PlanRoutePoint]
+    let profilePointIndexes: [Int]
 }
 
 struct PlanRouteSegmentGap {
@@ -166,6 +167,10 @@ struct PlanRouteSegment {
 
     var pointIndexes: [Int] {
         groups.flatMap { $0.points.map { $0.index } }
+    }
+
+    func profileGroup(forLegStartingAt pointIndex: Int) -> PlanRouteProfileGroup? {
+        groups.first { $0.profilePointIndexes.contains(pointIndex) }
     }
 }
 
@@ -302,7 +307,6 @@ protocol PlanRoutePointsDataSource: AnyObject {
     var canStartNewSegment: Bool { get }
     var availableModes: [OAApplicationMode] { get }
 
-    func beginApproximationSession() -> UIViewController?
     func addRoutePoint()
     func undo()
     func redo()
@@ -356,6 +360,7 @@ protocol PlanRouteDataProvider: PlanRoutePoiDataSource, PlanRouteAnalyzeDataSour
     var onChangeRouteTypeAfter: ((Int) -> Void)? { get set }
     var onPointEditModeRequested: ((PlanRoutePointEditMode) -> Void)? { get set }
 
+    func beginApproximationSession() -> UIViewController?
     func setCrosshairPosition(screenPoint: CGPoint)
     func fitTrackOnMap(bottomInset: CGFloat, leftInset: CGFloat)
     func applyPointEdit()

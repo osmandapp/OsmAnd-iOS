@@ -7,7 +7,7 @@
 //
 
 final class TopBottomValuesSliderTableViewCell: UITableViewCell {
-    @IBOutlet weak var slider: UISlider!
+    @IBOutlet weak var slider: SteppedSlider!
     @IBOutlet weak var topLeftLabel: UILabel!
     @IBOutlet weak var topRightLabel: UILabel!
     @IBOutlet weak var bottomLeftLabel: UILabel!
@@ -17,12 +17,41 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet private weak var sliderValuesView: UIView!
     @IBOutlet private weak var segmentValuesView: UIView!
-    @IBOutlet private var topRightLabelLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet private var topRightButtonLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var topLabelsStackView: UIStackView!
+    @IBOutlet private var topLabelsTopConstraint: NSLayoutConstraint!
+    @IBOutlet private var topLabelsTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet private var valuesTopConstraint: NSLayoutConstraint!
+
+    private enum Constants {
+        static let valueTopInset: CGFloat = 13
+        static let buttonTopInset: CGFloat = 7
+        static let valueTrailingInset: CGFloat = 20
+        static let buttonTrailingInset: CGFloat = 9
+        static let valueBottomSpacing: CGFloat = 13
+        static let buttonBottomSpacing: CGFloat = 5
+        static let valueHorizontalSpacing: CGFloat = 16
+        static let buttonHorizontalSpacing: CGFloat = 5
+        static let labelLineCount = 1
+        static let minimumFontScaleFactor: CGFloat = 0.3
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         updateFonts()
+        updateLabelsLayout()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        slider.accessibilityStep = nil
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let isRightToLeft = effectiveUserInterfaceLayoutDirection == .rightToLeft
+        topRightLabel.textAlignment = isRightToLeft ? .left : .right
+        bottomLeftLabel.textAlignment = isRightToLeft ? .right : .left
+        bottomRightLabel.textAlignment = isRightToLeft ? .left : .right
     }
 
     // scaledSystemFont caps the font at the size calculated when it is created.
@@ -31,20 +60,19 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
         super.traitCollectionDidChange(previousTraitCollection)
         guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
         updateFonts()
+        updateLabelsLayout()
     }
 
     func topRightLabelVisibility(_ show: Bool) {
         topRightButton.isHidden = show
         topRightLabel.isHidden = !show
-        topRightButtonLeadingConstraint.isActive = !show
-        topRightLabelLeadingConstraint.isActive = show
+        updateLabelsLayout()
     }
     
     func topRightButtonVisibility(_ show: Bool) {
         topRightButton.isHidden = !show
         topRightLabel.isHidden = show
-        topRightButtonLeadingConstraint.isActive = show
-        topRightLabelLeadingConstraint.isActive = !show
+        updateLabelsLayout()
     }
     
     func sliderValuesVisibility(_ show: Bool) {
@@ -65,5 +93,24 @@ final class TopBottomValuesSliderTableViewCell: UITableViewCell {
         }
         descriptionLabel?.font = UIFont.scaledSystemFont(ofSize: 15)
         descriptionLabel?.adjustsFontForContentSizeCategory = true
+    }
+
+    private func updateLabelsLayout() {
+        guard let topLabelsStackView else { return }
+        let showsValue = !topRightLabel.isHidden
+        topLabelsTopConstraint.constant = showsValue ? Constants.valueTopInset : Constants.buttonTopInset
+        topLabelsTrailingConstraint.constant = showsValue ? Constants.valueTrailingInset : Constants.buttonTrailingInset
+        valuesTopConstraint.constant = showsValue ? Constants.valueBottomSpacing : Constants.buttonBottomSpacing
+        topLabelsStackView.spacing = showsValue ? Constants.valueHorizontalSpacing : Constants.buttonHorizontalSpacing
+        topLabelsStackView.alignment = showsValue ? .firstBaseline : .center
+        topLabelsStackView.distribution = .fillProportionally
+        topRightButton.contentHorizontalAlignment = .trailing
+        topRightButton.configuration?.titleLineBreakMode = .byTruncatingTail
+        for label in [topLeftLabel, topRightLabel, topRightButton.titleLabel] {
+            label?.numberOfLines = Constants.labelLineCount
+            label?.adjustsFontSizeToFitWidth = true
+            label?.minimumScaleFactor = Constants.minimumFontScaleFactor
+            label?.baselineAdjustment = showsValue ? .alignBaselines : .alignCenters
+        }
     }
 }

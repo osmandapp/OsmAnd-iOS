@@ -4,6 +4,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <OsmAndCore/ICU.h>
 #import "OAReverseGeocoder.h"
 
 #include <OsmAndCore.h>
@@ -271,6 +272,35 @@ static bool findStreetPosition31(const std::shared_ptr<const OsmAnd::IObfsCollec
 
     [self waitForExpectations:@[completed] timeout:kLookupTimeout];
     XCTAssertEqualObjects(result, @"");
+}
+
+@end
+
+@interface OACoreSearchCollationTest : XCTestCase
+@end
+
+@implementation OACoreSearchCollationTest
+
+- (void)testBorrowedBuffersAndSpanBounds
+{
+    XCTAssertTrue(initializeTestBundleCore());
+    using namespace OsmAnd::ICU;
+    const QString locale = QStringLiteral("en_US");
+    const uint16_t a = 'a';
+    const int32_t valid = 0;
+    const int32_t invalidAfterMatch[] = {0, 1};
+    XCTAssertTrue(containsAligned(locale, nullptr, 0, nullptr, 0) == MatchResult::Match);
+    XCTAssertTrue(containsAligned(locale, nullptr, 0, &a, 1) == MatchResult::NoMatch);
+    XCTAssertTrue(containsAligned(locale, nullptr, 1, nullptr, 0) == MatchResult::Unavailable);
+    XCTAssertTrue(containsAligned(locale, &a, 1, nullptr, 1) == MatchResult::Unavailable);
+    XCTAssertTrue(containsAligned(locale, &a, -1, &a, 0) == MatchResult::Unavailable);
+    XCTAssertTrue(containsAligned(locale, &a, 1, &a, -1) == MatchResult::Unavailable);
+    XCTAssertTrue(equalsAtAny(locale, nullptr, 0, nullptr, 0, 0, &valid, 1) == MatchResult::Match);
+    XCTAssertTrue(equalsAtAny(locale, &a, 1, &a, 1, 1, nullptr, 0) == MatchResult::NoMatch);
+    XCTAssertTrue(equalsAtAny(locale, &a, 1, &a, 1, 1, nullptr, 1) == MatchResult::Unavailable);
+    XCTAssertTrue(equalsAtAny(locale, &a, 1, &a, 1, 1, &valid, -1) == MatchResult::Unavailable);
+    XCTAssertTrue(equalsAtAny(locale, &a, 1, &a, 1, 2, nullptr, 0) == MatchResult::Unavailable);
+    XCTAssertTrue(equalsAtAny(locale, &a, 1, &a, 1, 1, invalidAfterMatch, 2) == MatchResult::Unavailable);
 }
 
 @end

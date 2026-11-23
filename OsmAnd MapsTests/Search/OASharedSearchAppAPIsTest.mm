@@ -79,9 +79,14 @@
 @property (nonatomic) OAWorldRegion *root;
 @property (nonatomic) NSDictionary<NSString *, OARepositoryResourceItem *> *maps;
 @property (nonatomic) NSInteger lookups;
+@property (nonatomic, copy) void (^onReadRoot)(void);
 @end
 @implementation OATestSharedIndexAPI
-- (OAWorldRegion *)worldRegion { return self.root; }
+- (OAWorldRegion *)worldRegion
+{
+    if (self.onReadRoot) self.onReadRoot();
+    return self.root;
+}
 - (OARepositoryResourceItem *)uninstalledMapForRegion:(OAWorldRegion *)region
 {
     self.lookups++;
@@ -430,6 +435,7 @@
     map.resourceId = QStringLiteral("test_berlin.obf");
     map.title = @"Berlin, Germany";
     api.root = root;
+    [NSNotificationCenter.defaultCenter postNotificationName:OASearchRegionCatalogPrepared object:nil];
     api.maps = @{@"berlin":map};
     NSArray<OASSearchResult *> *results = [self search:api text:@"Berlin"];
     XCTAssertEqual(results.count, 1u);
@@ -440,6 +446,27 @@
     XCTAssertEqual(app.unknownPhraseMatchWeight, -1);
     XCTAssertEqual([self search:api text:@"Berl"].count, 0u);
     api.maps = @{};
+    XCTAssertEqual([self search:api text:@"Berlin"].count, 0u);
+    api.maps = @{@"berlin":map};
+
+    // Pause a writer before it publishes an empty catalog. Readers still see Berlin.
+    XCTestExpectation *building = [self expectationWithDescription:@"rebuild started"];
+    XCTestExpectation *published = [self expectationWithDescription:@"empty catalog published"];
+    dispatch_semaphore_t resume = dispatch_semaphore_create(0);
+    api.root = nil;
+    api.onReadRoot = ^{
+        [building fulfill];
+        dispatch_semaphore_wait(resume, dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC));
+    };
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        [NSNotificationCenter.defaultCenter postNotificationName:OASearchRegionCatalogPrepared object:nil];
+        [published fulfill];
+    });
+    [self waitForExpectations:@[building] timeout:5];
+    XCTAssertEqual([self search:api text:@"Berlin"].count, 1u);
+    dispatch_semaphore_signal(resume);
+    [self waitForExpectations:@[published] timeout:10];
+    api.onReadRoot = nil;
     XCTAssertEqual([self search:api text:@"Berlin"].count, 0u);
 }
 

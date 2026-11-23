@@ -21,10 +21,11 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 
 @required
 
-- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName;
-- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (BOOL)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName;
+- (BOOL)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (BOOL)replaceGpxWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint;
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath;
-- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem;
+- (BOOL)saveItemToStorage:(OAGpxWptItem *)gpxWptItem;
 
 @end
 

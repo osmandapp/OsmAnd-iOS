@@ -942,14 +942,14 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     for (NSNumber *indexNumber in pointIndexes)
     {
         NSInteger index = indexNumber.integerValue;
-        NSString *key = allPoints[index].getProfileType ?: @"";
+        NSInteger profileIndex = index > segmentStartIndex ? index - 1 : index;
+        NSString *key = allPoints[profileIndex].getProfileType ?: @"";
         if (!hasCurrent)
         {
             currentKey = key;
             hasCurrent = YES;
         }
-        BOOL isGap = allPoints[index].isGap;
-        if (!isGap && ![key isEqualToString:currentKey] && currentIndexes.count > 0)
+        if (![key isEqualToString:currentKey] && currentIndexes.count > 0)
         {
             [groups addObject:[self buildGroupWithKey:currentKey
                                               indexes:currentIndexes
@@ -983,7 +983,8 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             PlanRouteGroupData *merged = [[PlanRouteGroupData alloc] initWithAppMode:last.appMode
                                                                                 distance:last.distance + group.distance
                                                                          lastGlobalIndex:group.lastGlobalIndex
-                                                                                  points:combinedPoints];
+                                                                                  points:combinedPoints
+                                                                     profilePointIndexes:[last.profilePointIndexes arrayByAddingObjectsFromArray:group.profilePointIndexes]];
             [mergedGroups replaceObjectAtIndex:mergedGroups.count - 1 withObject:merged];
         }
         else
@@ -1046,6 +1047,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }
 
     NSMutableArray<PlanRoutePointData *> *points = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *profilePointIndexes = [NSMutableArray array];
     double groupDistance = 0;
     for (NSNumber *indexNumber in indexes)
     {
@@ -1061,6 +1063,7 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
             OASWptPt *previous = allPoints[index - 1];
             if (!previous.isGap)
             {
+                [profilePointIndexes addObject:@(index - 1)];
                 legDistance = [self routeDistanceFrom:previous to:point];
                 CLLocation *previousLocation = [[CLLocation alloc] initWithLatitude:previous.lat longitude:previous.lon];
                 CLLocation *pointLocation = [[CLLocation alloc] initWithLatitude:point.lat longitude:point.lon];
@@ -1078,7 +1081,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
                                                               isDestination:isDestination]];
     }
     NSInteger lastIndex = indexes.lastObject.integerValue;
-    return [[PlanRouteGroupData alloc] initWithAppMode:appMode distance:groupDistance lastGlobalIndex:lastIndex points:points];
+    if (lastIndex == (NSInteger)allPoints.count - 1 && !allPoints[lastIndex].isGap)
+    {
+        OAApplicationMode *nextMode = [OAApplicationMode valueOfStringKey:allPoints[lastIndex].getProfileType
+                                                                    def:OAApplicationMode.DEFAULT];
+        if ([nextMode.stringKey isEqualToString:(appMode ?: OAApplicationMode.DEFAULT).stringKey])
+            [profilePointIndexes addObject:@(lastIndex)];
+    }
+    return [[PlanRouteGroupData alloc] initWithAppMode:appMode
+                                            distance:groupDistance
+                                     lastGlobalIndex:lastIndex
+                                              points:points
+                                 profilePointIndexes:profilePointIndexes];
 }
 
 - (void)deletePointAtIndex:(NSInteger)index
@@ -1094,11 +1108,46 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
         self.onChange();
 }
 
+- (BOOL)canMovePointFrom:(NSInteger)from to:(NSInteger)to inContext:(OAMeasurementEditingContext *)ctx
+{
+    NSArray<OASWptPt *> *points = ctx.getPoints;
+    if (ctx == nil || from == to || from < 0 || to < 0 || from >= points.count || to >= points.count)
+        return NO;
+    for (NSInteger index = MIN(from, to); index <= MAX(from, to); index++)
+    {
+        if (points[index].isGap)
+            return NO;
+    }
+    for (PlanRouteSegmentData *segment in [self buildSegments])
+    {
+        for (PlanRouteGroupData *group in segment.groups)
+        {
+            NSInteger first = group.points.firstObject.globalIndex;
+            NSInteger last = group.points.lastObject.globalIndex;
+            if (from < first || from > last || to < first || to > last)
+                continue;
+            return [self canMovePointAtIndex:from inGroup:group points:points]
+                && [self canMovePointAtIndex:to inGroup:group points:points];
+        }
+    }
+    return NO;
+}
+
+- (BOOL)canMovePointAtIndex:(NSInteger)index inGroup:(PlanRouteGroupData *)group points:(NSArray<OASWptPt *> *)points
+{
+    if (points[index].isGap || ![group.profilePointIndexes containsObject:@(index)])
+        return NO;
+    NSString *modeKey = (group.appMode ?: OAApplicationMode.DEFAULT).stringKey;
+    OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:points[index].getProfileType
+                                                            def:OAApplicationMode.DEFAULT];
+    return [mode.stringKey isEqualToString:modeKey];
+}
+
 - (void)movePointFrom:(NSInteger)from to:(NSInteger)to
 {
     OAMeasurementToolLayer *layer = [self layer];
     OAMeasurementEditingContext *ctx = [self editingContext];
-    if (ctx == nil || from == to)
+    if (![self canMovePointFrom:from to:to inContext:ctx])
         return;
     [self invalidateTerrainElevationGpx];
     [ctx.commandManager execute:[[OAReorderPointCommand alloc] initWithLayer:layer from:from to:to move:YES]];
@@ -1125,8 +1174,26 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil)
         return;
+    OAApplicationMode *previousGroupMode = nil;
+    NSSet<NSNumber *> *deletedIndexes = [NSSet setWithArray:indexes];
+    for (PlanRouteSegmentData *segment in [self buildSegments])
+    {
+        for (NSUInteger groupIndex = 1; groupIndex < segment.groups.count; groupIndex++)
+        {
+            PlanRouteGroupData *group = segment.groups[groupIndex];
+            if (group.points.count != deletedIndexes.count)
+                continue;
+            NSUInteger unmatchedPoint = [group.points indexOfObjectPassingTest:^BOOL(PlanRoutePointData *point, NSUInteger index, BOOL *stop) {
+                return ![deletedIndexes containsObject:@(point.globalIndex)];
+            }];
+            if (unmatchedPoint == NSNotFound)
+                previousGroupMode = segment.groups[groupIndex - 1].appMode ?: OAApplicationMode.DEFAULT;
+        }
+    }
     [self invalidateTerrainElevationGpx];
-    [ctx.commandManager execute:[[OARemovePointsCommand alloc] initWithLayer:layer positions:indexes]];
+    [ctx.commandManager execute:[[OARemovePointsCommand alloc] initWithLayer:layer
+                                                               positions:indexes
+                                                       previousGroupMode:previousGroupMode]];
     [layer updateLayer];
     if (self.onChange)
         self.onChange();
@@ -1495,17 +1562,18 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     return _draftGpxFile != nil && (filePath.length == 0 || [_draftGpxPath isEqualToString:filePath]);
 }
 
-- (void)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
+- (BOOL)executePoiStateCommandWithBeforeState:(nullable PlanRoutePoiStateSnapshot *)beforeState operation:(BOOL (^)(void))operation
 {
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || operation == nil)
-        return;
+        return NO;
     
     PlanRoutePoiStateSnapshot *stateBefore = beforeState ?: [self makePoiStateSnapshot];
     if (!operation())
-        return;
+        return NO;
     
     [self commitPoiStateCommandFromState:stateBefore toState:[self makePoiStateSnapshot]];
+    return YES;
 }
 
 - (void)commitPoiStateCommandFromState:(nullable PlanRoutePoiStateSnapshot *)beforeState toState:(nullable PlanRoutePoiStateSnapshot *)afterState
@@ -1667,20 +1735,58 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
 
 #pragma mark - OAGpxWptEditingHandlerDelegate
 
-- (void)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
+- (BOOL)saveGpxWpt:(OAGpxWptItem *)gpxWpt gpxFileName:(NSString *)gpxFileName
 {
-    [self executePoiStateCommandWithBeforeState:nil operation:^BOOL{
+    return [self executePoiStateCommandWithBeforeState:nil operation:^BOOL{
         return [self performSaveGpxWpt:gpxWpt gpxFileName:gpxFileName];
     }];
 }
 
-- (void)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
+- (BOOL)updateGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath updateMap:(BOOL)updateMap
 {
     PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot ?: [self makePoiStateSnapshot];
     PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = nil;
+    return YES;
+}
+
+- (BOOL)replaceGpxWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint
+{
+    OASGpxFile *gpxFile = [self isDraftGpxPath:item.docPath] ? _draftGpxFile : [self editingContext].gpxData.gpxFile;
+    BOOL removingPoint = !newPoint && existingItem.originalPoint != item.originalPoint;
+    NSArray<OASWptPt *> *storedPoints = [OAGpxWptItem storedPointsForItems:removingPoint ? @[existingItem, item] : @[existingItem]
+                                                             inGpxFile:gpxFile];
+    if (!item.point || storedPoints.count == 0)
+        return NO;
+
+    NSMutableArray<OASWptPt *> *remaining = [gpxFile.getPointsList mutableCopy];
+    if (removingPoint)
+        [remaining removeObjectIdenticalTo:storedPoints.lastObject];
+    NSUInteger index = [remaining indexOfObjectIdenticalTo:storedPoints.firstObject];
+    BOOL replaced = [self executePoiStateCommandWithBeforeState:_editingPoiStateSnapshot operation:^BOOL{
+        storedPoints.firstObject.position = item.point.position;
+        [gpxFile setPointsListPoints:remaining];
+        if (removingPoint)
+        {
+            for (OASGpxUtilitiesPointsGroup *group in gpxFile.pointsGroups.allValues)
+                [group.points removeObjectIdenticalTo:storedPoints.lastObject];
+        }
+        gpxFile.modifiedTime = (int64_t)(NSDate.date.timeIntervalSince1970 * 1000.0);
+        gpxFile.pointsModifiedTime = gpxFile.modifiedTime;
+        [self restorePoiStateSnapshot:[self makePoiStateSnapshot]];
+        return YES;
+    }];
+    if (replaced)
+    {
+        // Restoring the committed snapshot creates copies; bind the editor to that point.
+        item.point = gpxFile.getPointsList[index];
+        item.gpxFile = gpxFile;
+        item.groups = gpxFile.pointsGroups.allKeys;
+        _editingPoiStateSnapshot = nil;
+    }
+    return replaced;
 }
 
 - (void)deleteGpxWpt:(OAGpxWptItem *)gpxWptItem docPath:(NSString *)docPath
@@ -1690,16 +1796,17 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     }];
 }
 
-- (void)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
+- (BOOL)saveItemToStorage:(OAGpxWptItem *)gpxWptItem
 {
     if (_editingPoiStateSnapshot == nil)
-        return;
+        return YES;
 
     PlanRoutePoiStateSnapshot *beforeState = _editingPoiStateSnapshot;
     PlanRoutePoiStateSnapshot *afterState = [self makePoiStateSnapshot];
     [self restorePoiStateSnapshot:afterState];
     [self commitPoiStateCommandFromState:beforeState toState:afterState];
     _editingPoiStateSnapshot = afterState;
+    return YES;
 }
 
 - (void)saveAs:(NSString *)fileName
@@ -2213,30 +2320,56 @@ static const NSTimeInterval kRouteInfoRefreshInterval = 0.25;
     OAMeasurementEditingContext *ctx = [self editingContext];
     if (ctx == nil || indexes.count < 3)
         return;
-    [self invalidateTerrainElevationGpx];
-
     NSArray<OASWptPt *> *points = ctx.getPoints;
-    NSMutableArray<NSNumber *> *remaining = [NSMutableArray arrayWithArray:[indexes subarrayWithRange:NSMakeRange(1, indexes.count - 1)]];
-    NSMutableArray<NSNumber *> *ordered = [NSMutableArray arrayWithObject:indexes.firstObject];
-    NSInteger currentIndex = indexes.firstObject.integerValue;
-    while (remaining.count > 0)
+    NSInteger baseIndex = indexes.firstObject.integerValue;
+    for (NSInteger offset = 0; offset < indexes.count; offset++)
     {
-        NSInteger bestPosition = 0;
-        double bestDistance = DBL_MAX;
-        for (NSInteger i = 0; i < (NSInteger) remaining.count; i++)
+        NSInteger index = indexes[offset].integerValue;
+        if (index != baseIndex + offset || index < 0 || index >= points.count
+            || (points[index].isGap && offset < indexes.count - 1))
+            return;
+    }
+    NSMutableArray<NSNumber *> *ordered = [indexes mutableCopy];
+    NSInteger lastIndex = indexes.lastObject.integerValue;
+    for (PlanRouteSegmentData *segment in [self buildSegments])
+    {
+        for (PlanRouteGroupData *group in segment.groups)
         {
-            double dist = [self distanceFrom:points[currentIndex] to:points[remaining[i].integerValue]];
-            if (dist < bestDistance)
+            NSMutableArray<NSNumber *> *remaining = [NSMutableArray array];
+            for (PlanRoutePointData *point in group.points)
             {
-                bestDistance = dist;
-                bestPosition = i;
+                NSInteger index = point.globalIndex;
+                if (index > baseIndex && index <= lastIndex
+                    && [self canMovePointAtIndex:index inGroup:group points:points])
+                    [remaining addObject:@(index)];
+            }
+            if (remaining.count < 2)
+                continue;
+            NSInteger target = remaining.firstObject.integerValue - baseIndex;
+            NSInteger currentIndex = remaining.firstObject.integerValue - 1;
+            while (remaining.count > 0)
+            {
+                NSInteger bestPosition = 0;
+                double bestDistance = DBL_MAX;
+                for (NSInteger index = 0; index < (NSInteger)remaining.count; index++)
+                {
+                    double distance = [self distanceFrom:points[currentIndex] to:points[remaining[index].integerValue]];
+                    if (distance < bestDistance)
+                    {
+                        bestDistance = distance;
+                        bestPosition = index;
+                    }
+                }
+                NSNumber *next = remaining[bestPosition];
+                [remaining removeObjectAtIndex:bestPosition];
+                ordered[target++] = next;
+                currentIndex = next.integerValue;
             }
         }
-        NSNumber *next = remaining[bestPosition];
-        [remaining removeObjectAtIndex:bestPosition];
-        [ordered addObject:next];
-        currentIndex = next.integerValue;
     }
+    if ([ordered isEqualToArray:indexes])
+        return;
+    [self invalidateTerrainElevationGpx];
 
     NSInteger base = indexes.firstObject.integerValue;
     NSMutableArray<NSNumber *> *currentOrder = [NSMutableArray arrayWithCapacity:points.count];

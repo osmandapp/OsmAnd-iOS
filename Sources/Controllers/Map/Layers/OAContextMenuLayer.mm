@@ -200,29 +200,29 @@
     _isInChangePositionMode = YES;
 }
 
-- (void) exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition
+- (BOOL)exitChangePositionMode:(id)targetObject applyNewPosition:(BOOL)applyNewPosition
 {
     if (!_isInChangePositionMode)
-        return;
-    
-    if (_changePositionPin && _changePositionPin.superview)
-        [_changePositionPin removeFromSuperview];
+        return YES;
     
     if (_selectedObjectContextMenuProvider)
     {
         if (applyNewPosition)
         {
             const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapView.target31);
-            [_selectedObjectContextMenuProvider applyNewObjectPosition:targetObject position:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)];
+            if (![_selectedObjectContextMenuProvider applyNewObjectPosition:targetObject position:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)])
+                return NO;
         }
         else
         {
             [_selectedObjectContextMenuProvider setPointVisibility:targetObject hidden:NO];
         }
     }
+    [_changePositionPin removeFromSuperview];
     _selectedObjectContextMenuProvider = nil;
     _isInChangePositionMode = NO;
     _cachedTargetPoint = CGPointZero;
+    return YES;
 }
 
 - (void) onMapFrameRendered

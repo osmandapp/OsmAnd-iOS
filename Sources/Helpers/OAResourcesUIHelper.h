@@ -246,14 +246,13 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
 + (void) deleteResourceOf:(OALocalResourceItem *)item progressHUD:(MBProgressHUD *)progressHUD;
 + (void) deleteResourcesOf:(NSArray<OALocalResourceItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block;
++ (void)deleteResourcesSynchronously:(NSArray<OALocalResourceItem *> *)items;
 
 + (void) offerClearCacheOf:(OALocalResourceItem *)item viewController:(UIViewController *)viewController executeAfterSuccess:(dispatch_block_t)block;
 + (void) clearCacheOf:(OALocalResourceItem *)item executeAfterSuccess:(dispatch_block_t)block;
 
 + (OAWorldRegion *) findRegionOrAnySubregionOf:(OAWorldRegion*)region thatContainsResource:(const QString&)resourceId;
 + (NSString *) getCountryName:(OAResourceItem *)item;
-+ (BOOL) checkIfDownloadAvailable;
-+ (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region;
 + (BOOL) isInOutdatedResourcesList:(NSString *)resourceId;
 
 + (void) requestMapDownloadInfo:(CLLocationCoordinate2D)coordinate

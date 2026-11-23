@@ -30,6 +30,9 @@ extension WptPt {
             return
         }
         
-        extensionsWriters?.addEntries(from: extensions)
+        let targetExtensions = getExtensionsToWrite()
+        for (key, value) in extensions {
+            targetExtensions[key] = value
+        }
     }
 }

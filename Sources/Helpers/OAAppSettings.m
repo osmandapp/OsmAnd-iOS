@@ -93,6 +93,7 @@ static NSString * const lastReceiptValidationDateKey = @"lastReceiptValidationDa
 static NSString * const eligibleForIntroductoryPriceKey = @"eligibleForIntroductoryPriceKey";
 static NSString * const eligibleForSubscriptionOfferKey = @"eligibleForSubscriptionOfferKey";
 static NSString * const shouldShowWhatsNewScreenKey = @"shouldShowWhatsNewScreenKey";
+static NSString * const shouldShowOutdatedMapsWarningKey = @"shouldShowOutdatedMapsWarningKey";
 
 static NSString * const mapSettingTrackRecordingKey = @"mapSettingTrackRecordingKey";
 
@@ -2515,6 +2516,48 @@ static NSString * const useSeparateLayoutsKey = @"use_separate_layouts";
 {
     NSArray<NSString *> *value = [self get:mode];
     return value ? [value componentsJoinedByString:@","] : @"";
+}
+
+@end
+
+@implementation OACommonLastUsedFavoriteIcons
+
++ (instancetype)withKey:(NSString *)key defValue:(NSArray<NSString *> *)defValue
+{
+    OACommonLastUsedFavoriteIcons *obj = [[OACommonLastUsedFavoriteIcons alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (instancetype)copyWithKey:(NSString *)key
+{
+    return (OACommonLastUsedFavoriteIcons *)[self setupCopy:[OACommonLastUsedFavoriteIcons withKey:key defValue:self.defValue]];
+}
+
+- (NSArray<NSString *> *)normalizedIcons:(NSArray<NSString *> *)storedIcons
+{
+    NSMutableArray<NSString *> *icons = [NSMutableArray new];
+    // Older iOS builds stored resource names alongside icon keys. Keep the newest occurrence.
+    for (NSString *storedIcon in storedIcons)
+    {
+        NSString *iconKey = [storedIcon hasPrefix:@"mx_"] ? [storedIcon substringFromIndex:3] : storedIcon;
+        if (iconKey.length > 0 && ![icons containsObject:iconKey])
+        {
+            [icons addObject:iconKey];
+            if (icons.count == 12)
+                break;
+        }
+    }
+    return [icons copy];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    [self set:[self normalizedIcons:[strValue componentsSeparatedByString:@","]] mode:mode];
 }
 
 @end
@@ -6230,6 +6273,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_mapperLiveUpdatesExpireTime forKey:@"mapper_live_updates_expire_time"];
         
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
+        _shouldShowOutdatedMapsWarning = [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowOutdatedMapsWarningKey];
         
         // Widgets
         _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[WidgetsPanel leftPanel] originalOrder]]];
@@ -7079,7 +7123,7 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_currentTrackRouteActivity setModeDefaultValue:@"truck_hgv" mode:OAApplicationMode.TRUCK];
         [_currentTrackRouteActivity setModeDefaultValue:@"adventure_motorcycling" mode:OAApplicationMode.MOTORCYCLE];
         
-        _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
+        _lastUsedFavIcons = [[[OACommonLastUsedFavoriteIcons withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedProfileIcons = [[[OACommonStringList withKey:lastUsedProfileIconsKey defValue:@[]] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
@@ -7750,6 +7794,12 @@ static NSString *kOfflineKey = @"OFFLINE";
 {
     _shouldShowWhatsNewScreen = shouldShowWhatsNewScreen;
     [[NSUserDefaults standardUserDefaults] setBool:_shouldShowWhatsNewScreen forKey:shouldShowWhatsNewScreenKey];
+}
+
+- (void)setShouldShowOutdatedMapsWarning:(BOOL)shouldShowOutdatedMapsWarning
+{
+    _shouldShowOutdatedMapsWarning = shouldShowOutdatedMapsWarning;
+    [[NSUserDefaults standardUserDefaults] setBool:_shouldShowOutdatedMapsWarning forKey:shouldShowOutdatedMapsWarningKey];
 }
 
 // Map Settings

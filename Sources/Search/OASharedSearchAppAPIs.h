@@ -30,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OASharedSearchHistoryAPI : OASharedSearchAppAPI
 @end
 
+FOUNDATION_EXPORT NSNotificationName const OASearchRegionCatalogPrepared;
+
 @interface OASharedSearchIndexItemAPI : OASharedSearchAppAPI
 @end
 

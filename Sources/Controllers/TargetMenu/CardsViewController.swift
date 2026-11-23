@@ -32,22 +32,10 @@ final class CardsViewController: UIView {
     private var collectionView: UICollectionView!
     // swiftlint:enable all
     private var imageDataSource: SimpleImageDatasource?
-    private let loadingIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.color = .textColorSecondary
-        indicator.hidesWhenStopped = true
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        return indicator
-    }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureCollectionView()
-        addSubview(loadingIndicator)
-        NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
         registerCels()
         dataSource = makeDataSource()
     }
@@ -62,18 +50,6 @@ final class CardsViewController: UIView {
 
     func setCardsFilter(_ cardsFilter: CardsFilter) {
         сardsFilter = cardsFilter
-    }
-    
-    func showSpinner(show: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            if show {
-                clearDataSource()
-                loadingIndicator.startAnimating()
-            } else {
-                loadingIndicator.stopAnimating()
-            }
-        }
     }
     
     func clearDataSource() {

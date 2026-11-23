@@ -54,7 +54,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OASWptPt, OASMetadata, OASGpxFile, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint, OASKQuadRect;
+@class OASWptPt, OASMetadata, OASGpxFile, OAGpxWptItem, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAObservable, LineChartView, TrackChartHelper, OASGpxTrackAnalysis, OASTrkSegment, OAPOILayer, OATargetPoint, OASKQuadRect;
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -121,7 +121,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (BOOL) findWpt:(CLLocationCoordinate2D)location;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
-- (BOOL) deleteFoundWpt;
+- (void)selectWpt:(OAGpxWptItem *)item;
+- (BOOL)deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OASWptPt *)wpt gpxFileName:(nullable NSString *)gpxFileName;
 - (NSArray<OASWptPt *> *)getPointsOf:(nullable NSString *)gpxFileName groupName:(NSString *)groupName;
@@ -207,6 +208,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (BOOL)replaceWpt:(OAGpxWptItem *)existingItem withItem:(OAGpxWptItem *)item newPoint:(BOOL)newPoint;
 - (BOOL) updateMetadata:(nullable OASMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;

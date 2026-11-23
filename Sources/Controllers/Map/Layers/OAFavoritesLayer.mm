@@ -363,7 +363,7 @@ static const int START_ZOOM = 6;
     return [object isKindOfClass:OAFavoriteItem.class];
 }
 
-- (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [object isKindOfClass:OAFavoriteItem.class] && [self isObjectMovable:object])
     {
@@ -371,7 +371,9 @@ static const int START_ZOOM = 6;
         OAFavoriteItem *item = (OAFavoriteItem *) object;
         [OAFavoritesHelper editFavorite:item lat:position.latitude lon:position.longitude];
         [OAFavoritesHelper lookupAddress:item];
+        return YES;
     }
+    return NO;
 }
 
 - (UIImage *) getDefaultFavoriteImage

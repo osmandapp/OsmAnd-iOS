@@ -29,7 +29,7 @@
 
 - (BOOL) hasData;
 - (BOOL) hasDataToSave;
-- (void) clearData;
+- (void)clearData;
 - (void) saveDataToGpxWithCompletionHandler:(void (^)(void))completionHandler;
 - (void) saveDataToGpx;
 - (void) startNewSegment;
@@ -44,9 +44,12 @@
 - (void) runSyncBlock:(void (^)(void))block;
 
 - (void)addWpt:(OASWptPt *)wpt;
-- (void)deleteWpt:(OASWptPt *)wpt;
+- (BOOL)deleteWpt:(OASWptPt *)wpt;
+- (BOOL)deleteWpts:(NSArray<OASWptPt *> *)waypoints;
 - (void)deleteAllWpts;
-- (void)saveWpt:(OASWptPt *)wpt;
-- (void)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
+- (BOOL)saveWpt:(OASWptPt *)wpt;
+- (void)saveWpts:(NSArray<OASWptPt *> *)waypoints completion:(void (^)(BOOL saved))completion;
+- (BOOL)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation;
+- (BOOL)updatePointCoordinates:(OASWptPt *)wpt newLocation:(CLLocationCoordinate2D)newLocation removingPoint:(OASWptPt *)removedPoint;
 
 @end

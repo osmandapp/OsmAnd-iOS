@@ -61,7 +61,7 @@ typedef NS_ENUM(NSInteger, EOAPinHorizontalAlignment)
 
 - (BOOL) isObjectMovable:(id) object;
 
-- (void) applyNewObjectPosition:(id) object position:(CLLocationCoordinate2D)position;
+- (BOOL)applyNewObjectPosition:(id) object position:(CLLocationCoordinate2D)position;
 - (void) setPointVisibility:(id) object hidden:(BOOL)hidden;
 - (UIImage *) getPointIcon:(id)object;
 

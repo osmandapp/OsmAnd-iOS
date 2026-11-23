@@ -279,7 +279,8 @@
 
 - (IBAction)buttonDonePressed:(id)sender
 {
-    [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:YES];
+    if (![_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:YES])
+        return;
     [[OARootViewController instance].mapPanel hideContextMenu];
 }
 

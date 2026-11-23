@@ -15,10 +15,6 @@ final class NavigationLiveActivity: BaseLiveActivity {
         return (routingHelper.isFollowingMode() || routingHelper.isPauseNavigation()) && !routingHelper.isPublicTransportMode()
     }
 
-    override func isRunning() -> Bool {
-        OARoutingHelper.sharedInstance().isFollowingMode()
-    }
-
     override func isEnabled() -> Bool {
         OAAppSettings.sharedManager().navigationLiveActivityEnabled.get(OARoutingHelper.sharedInstance().getAppMode())
     }

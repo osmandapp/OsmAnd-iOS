@@ -12,15 +12,18 @@ class BaseLiveActivity {
         static let locationFreshnessInterval: TimeInterval = 15
     }
 
-    var hasActiveSession: Bool { session.isActive }
-
     private let kind: LiveActivityKind
     private let relevanceScore: Double
+    private let sessionDefaultsKey: UserDefaultsKey?
     private var activity: Activity<LiveActivityAttributes>?
     private var latestContent: ActivityKit.ActivityContent<LiveActivityContent>?
     private var lastSentContent: ActivityKit.ActivityContent<LiveActivityContent>?
     private var lastSentAt = Date.distantPast
-    private var session = LiveActivitySessionState()
+    private var session = LiveActivitySessionState() {
+        didSet {
+            if session != oldValue { saveSession() }
+        }
+    }
     private var hasPendingChanges = false
     private var isProcessingChanges = false
     private var needsContentRefresh = false
@@ -28,25 +31,51 @@ class BaseLiveActivity {
     private var isContentSnapshotValid = false
     private var nextRequestAllowedAt = Date.distantPast
     private var scheduledRefreshTask: Task<Void, Never>?
+    private var activityStateTask: Task<Void, Never>?
     private var activitiesToEnd: [Activity<LiveActivityAttributes>] = []
 
-    init(kind: LiveActivityKind, relevanceScore: Double) {
+    private var isActivityFinished: Bool {
+        guard let state = activity?.activityState else { return false }
+        return state == .ended || state == .dismissed
+    }
+
+    init(kind: LiveActivityKind,
+         relevanceScore: Double,
+         sessionIdentifier: String? = nil,
+         sessionDefaultsKey: UserDefaultsKey? = nil) {
         self.kind = kind
         self.relevanceScore = relevanceScore
+        self.sessionDefaultsKey = sessionDefaultsKey
+        let savedSession: LiveActivitySessionState? = sessionDefaultsKey.flatMap { UserDefaults.standard[$0] }
+        let isSameSession = savedSession?.sourceIdentifier == sessionIdentifier
+        if let savedSession, isSameSession {
+            session = savedSession
+        } else {
+            session = LiveActivitySessionState(sourceIdentifier: sessionIdentifier)
+        }
         let existingActivities = Activity<LiveActivityAttributes>.activities.filter { $0.attributes.kind == kind }
-        activity = existingActivities.first { $0.activityState == .active || $0.activityState == .stale }
+        if savedSession == nil || isSameSession {
+            activity = existingActivities.first { $0.activityState == .active || $0.activityState == .stale }
+        }
         activitiesToEnd = existingActivities.filter { $0.id != activity?.id }
+        // A missing activity may have been removed by the system; it does not prove a dismissal.
+        session.updateAuthorization(isEnabled: ActivityAuthorizationInfo().areActivitiesEnabled)
         if let activity {
             lastSentContent = activity.content
-            session.activate(canStart: true)
+            observeActivityState(activity)
         }
+        saveSession()
     }
 
     func isActive() -> Bool { false }
 
     func isEnabled() -> Bool { false }
 
-    func isRunning() -> Bool { false }
+    func resetSession(identifier: String) {
+        guard session.sourceIdentifier != identifier else { return }
+        removeActivity()
+        session = LiveActivitySessionState(sourceIdentifier: identifier)
+    }
 
     // Subclasses await a snapshot from their data source.
     // swiftlint:disable:next async_without_await
@@ -59,15 +88,17 @@ class BaseLiveActivity {
             removeActivity()
             return
         }
-        session.activate(canStart: isRunning())
         let isAuthorized = ActivityAuthorizationInfo().areActivitiesEnabled
+        session.updateAuthorization(isEnabled: isAuthorized)
+        // Let the observer process pending terminal events before removing or updating the card.
+        if isAuthorized, isActivityFinished { return }
         guard isEnabled(), isAuthorized else {
             // A profile or system setting can hide the card without ending the ongoing session.
             removeActivity(endSession: false)
             return
         }
-        syncActivityState()
-        let canRequestActivity = session.canRequestActivity(isForeground: UIApplication.shared.applicationState == .active,
+        let canRequestActivity = session.canRequestActivity(isSourceActive: isActive(),
+                                                            isForeground: UIApplication.shared.applicationState == .active,
                                                             isAuthorized: isAuthorized)
         guard !session.isDismissed,
               activity != nil || (canRequestActivity && Date() >= nextRequestAllowedAt) else {
@@ -83,6 +114,7 @@ class BaseLiveActivity {
     }
 
     func onAuthorizationChanged(isEnabled: Bool) {
+        session.updateAuthorization(isEnabled: isEnabled)
         if isEnabled { session.resetDismissal() }
         removeActivity(endSession: false)
     }
@@ -92,6 +124,8 @@ class BaseLiveActivity {
         needsContentRefresh = false
         isContentSnapshotValid = false
         if let activity { activitiesToEnd.append(activity) }
+        activityStateTask?.cancel()
+        activityStateTask = nil
         activity = nil
         latestContent = nil
         lastSentContent = nil
@@ -114,7 +148,7 @@ class BaseLiveActivity {
                 let content = await buildContent()
                 // A source/profile/session change while awaiting the snapshot needs a new read.
                 guard isContentSnapshotValid else { continue }
-                guard session.isActive, isActive(), isEnabled(), ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+                guard isActive(), isEnabled(), ActivityAuthorizationInfo().areActivitiesEnabled else { return }
                 queueContentUpdate(content)
             }
         }
@@ -152,9 +186,9 @@ class BaseLiveActivity {
         }
     }
 
-    private func syncActivityState() {
+    private func handleActivityState(_ state: ActivityState) {
         guard let activity else { return }
-        switch activity.activityState {
+        switch state {
         case .dismissed:
             session.dismiss()
         case .ended:
@@ -165,9 +199,32 @@ class BaseLiveActivity {
             return
         }
         self.activity = nil
+        activityStateTask?.cancel()
+        activityStateTask = nil
         lastSentContent = nil
         lastSentAt = .distantPast
         hasPendingChanges = true
+    }
+
+    private func saveSession() {
+        guard let sessionDefaultsKey else { return }
+        UserDefaults.standard[sessionDefaultsKey] = session
+    }
+
+    private func observeActivityState(_ activity: Activity<LiveActivityAttributes>) {
+        activityStateTask?.cancel()
+        activityStateTask = Task { [weak self] in
+            for await state in activity.activityStateUpdates {
+                guard !Task.isCancelled, let self, self.activity?.id == activity.id else { return }
+                if state == .dismissed || state == .ended {
+                    // Only the observer classifies terminal states, in the order they are emitted.
+                    if ActivityAuthorizationInfo().areActivitiesEnabled {
+                        self.handleActivityState(state)
+                    }
+                    self.refreshActivity()
+                }
+            }
+        }
     }
 
     private func scheduleRefresh(at date: Date) {
@@ -191,9 +248,8 @@ class BaseLiveActivity {
     }
 
     private func createOrUpdateActivity() async {
-        guard isEnabled(), ActivityAuthorizationInfo().areActivitiesEnabled else { return }
-        syncActivityState()
-        guard activitiesToEnd.isEmpty, session.isActive, !session.isDismissed,
+        guard isActive(), isEnabled(), ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+        guard !isActivityFinished, activitiesToEnd.isEmpty, !session.isDismissed,
               let content = latestContent else { return }
         if let activity {
             // A new fix must extend freshness even when the formatted values have not changed.
@@ -211,7 +267,8 @@ class BaseLiveActivity {
             lastSentContent = content
             lastSentAt = Date()
             await activity.update(content)
-        } else if session.canRequestActivity(isForeground: UIApplication.shared.applicationState == .active,
+        } else if session.canRequestActivity(isSourceActive: isActive(),
+                                             isForeground: UIApplication.shared.applicationState == .active,
                                              isAuthorized: ActivityAuthorizationInfo().areActivitiesEnabled),
                   Date() >= nextRequestAllowedAt {
             do {
@@ -219,7 +276,9 @@ class BaseLiveActivity {
                     ?? Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
                     ?? ""
                 let attributes = LiveActivityAttributes(kind: kind, appName: appName)
-                activity = try Activity.request(attributes: attributes, content: content, pushType: nil)
+                let newActivity = try Activity.request(attributes: attributes, content: content, pushType: nil)
+                activity = newActivity
+                observeActivityState(newActivity)
                 lastSentContent = content
                 lastSentAt = Date()
             } catch {

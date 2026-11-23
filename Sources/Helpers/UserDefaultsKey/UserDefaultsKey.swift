@@ -9,6 +9,7 @@
 enum UserDefaultsKey: String {
     case deviceSettings
     case wasAuthorizationRequestBluetooth
+    case recordingLiveActivitySession
 }
 
 extension UserDefaults {

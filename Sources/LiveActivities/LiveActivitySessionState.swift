@@ -1,24 +1,27 @@
 // Copyright © 2026 OsmAnd. All rights reserved.
 
-/// Remember dismissal until the session ends or system authorization is restored.
-struct LiveActivitySessionState {
-    private(set) var isActive = false
+/// Remember observed dismissal until the session ends or system authorization is restored.
+struct LiveActivitySessionState: Codable, Equatable {
+    let sourceIdentifier: String?
     private(set) var isDismissed = false
+    private(set) var areActivitiesEnabled = true
 
-    mutating func activate(canStart: Bool) {
-        if canStart { isActive = true }
+    init(sourceIdentifier: String? = nil) {
+        self.sourceIdentifier = sourceIdentifier
+    }
+
+    mutating func updateAuthorization(isEnabled: Bool) {
+        if isEnabled && !areActivitiesEnabled { resetDismissal() }
+        areActivitiesEnabled = isEnabled
     }
 
     mutating func dismiss() { isDismissed = true }
 
     mutating func resetDismissal() { isDismissed = false }
 
-    mutating func end() {
-        isActive = false
-        isDismissed = false
-    }
+    mutating func end() { isDismissed = false }
 
-    func canRequestActivity(isForeground: Bool, isAuthorized: Bool) -> Bool {
-        isActive && !isDismissed && isForeground && isAuthorized
+    func canRequestActivity(isSourceActive: Bool, isForeground: Bool, isAuthorized: Bool) -> Bool {
+        isSourceActive && !isDismissed && isForeground && isAuthorized
     }
 }

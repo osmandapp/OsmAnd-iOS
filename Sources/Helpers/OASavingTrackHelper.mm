@@ -62,10 +62,12 @@
 #define recordedTrackFolder @"/rec/"
 
 static const NSInteger kDBVersion = 1;
+static NSString * const kCurrentTrackIdentifier = @"current_recording_track_identifier";
 
 @interface OASavingTrackHelper ()
 
 @property (atomic, readwrite) int currentTrackIndex;
+@property (atomic, copy, readwrite) NSString *currentTrackIdentifier;
 @property (atomic, readwrite) BOOL hasTrackPoints;
 
 @end
@@ -136,8 +138,21 @@ static const NSInteger kDBVersion = 1;
         
         if (![self saveIfNeeded])
             [self loadGpxFromDatabase];
+
+        NSString *savedIdentifier = [NSUserDefaults.standardUserDefaults stringForKey:kCurrentTrackIdentifier];
+        // Recording can be active before the first point passes the recording filters.
+        if ((self.hasTrackPoints || [OAAppSettings sharedManager].mapSettingTrackRecording) && savedIdentifier.length > 0)
+            self.currentTrackIdentifier = savedIdentifier;
+        else
+            [self resetCurrentTrackIdentifier];
     }
     return self;
+}
+
+- (void)resetCurrentTrackIdentifier
+{
+    self.currentTrackIdentifier = NSUUID.UUID.UUIDString;
+    [NSUserDefaults.standardUserDefaults setObject:self.currentTrackIdentifier forKey:kCurrentTrackIdentifier];
 }
 
 - (void)onTrackRecordingChanged
@@ -441,6 +456,7 @@ static const NSInteger kDBVersion = 1;
     _currentTrack.modifiedTime = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
     
     [self prepareCurrentTrackForRecording];
+    [self resetCurrentTrackIdentifier];
     [LiveActivityManager.shared refresh];
 }
 

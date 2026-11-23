@@ -20,6 +20,7 @@
 @property (nonatomic, readonly) float distance;
 @property (nonatomic, readonly) BOOL isRecording;
 @property (atomic, readonly) int currentTrackIndex;
+@property (atomic, copy, readonly) NSString *currentTrackIdentifier;
 @property (atomic, readonly) BOOL hasTrackPoints;
 
 @property (nonatomic, readonly) OASGpxFile *currentTrack;

@@ -43,7 +43,7 @@
 - (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 - (void) deleteImage:(int)x y:(int)y zoom:(int)zoom;
 - (void) deleteCache:(dispatch_block_t)block;
-- (void)deleteImages:(OsmAnd::AreaI)area31 zoom:(int)zoom;
+- (void)deleteTiles:(const QList<OsmAnd::TileId>&)tileIds zoom:(OsmAnd::ZoomLevel)zoom;
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath;
 - (BOOL)insertImage:(int)x y:(int)y zoom:(int)zoom data:(NSData *)data;
 - (NSString *) getUrlToLoad:(int) x y:(int) y zoom:(int) zoom;

@@ -296,7 +296,8 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 
 + (CLLocationCoordinate2D) getMapLocation;
 
-+ (void)clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete;
++ (QVector<OsmAnd::AreaI>)tileAreasFor:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom;
++ (void)clearTilesOf:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete;
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 

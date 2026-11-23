@@ -5296,6 +5296,7 @@
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
 		DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapTileDownloader.h; sourceTree = "<group>"; };
+		D15937000000000000000001 /* OARasterTileCoordinates.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARasterTileCoordinates.h; sourceTree = "<group>"; };
 		DA5A80AB26C563A600F274C7 /* OAMapUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapUtils.h; sourceTree = "<group>"; };
 		DA5A80AD26C563A600F274C7 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
 		DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACustomRegion.mm; sourceTree = "<group>"; };
@@ -10232,6 +10233,7 @@
 				3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */,
 				3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */,
 				DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */,
+				D15937000000000000000001 /* OARasterTileCoordinates.h */,
 				DA5A80D826C563A600F274C7 /* OAMapTileDownloader.mm */,
 				DA5A80AB26C563A600F274C7 /* OAMapUtils.h */,
 				DA5A80E126C563A600F274C7 /* OAMapUtils.mm */,

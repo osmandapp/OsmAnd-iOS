@@ -403,22 +403,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [[OARootViewController instance].navigationController pushViewController:downloadMapProgressVC animated:YES];
 }
 
-- (void) calculateDownloadInfo
+- (void)calculateDownloadInfo
 {
-    OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox.bottomRight);
     _numberOfTiles = 0;
     _downloadSize = 0;
     if (!_currentItem)
         return;
-    for (NSInteger z = _minZoom; z <= _maxZoom; z++)
+    const auto visibleArea = _mapView.renderer->getMapState().visibleBBoxShifted;
+    for (int zoom = _minZoom; zoom <= _maxZoom; zoom++)
     {
-        NSInteger x1 = OsmAnd::Utilities::getTileNumberX(z, topLeft.longitude);
-        NSInteger x2 = OsmAnd::Utilities::getTileNumberX(z, bottomRight.longitude);
-        NSInteger y1 = OsmAnd::Utilities::getTileNumberY(z, topLeft.latitude);
-        NSInteger y2 = OsmAnd::Utilities::getTileNumberY(z, bottomRight.latitude);
-        _numberOfTiles += (x2 - x1 + 1) * (y2 - y1 + 1);
+        for (const auto& area : [OAResourcesUIHelper tileAreasFor:_currentItem visibleArea:visibleArea zoom:static_cast<OsmAnd::ZoomLevel>(zoom)])
+            _numberOfTiles += (NSInteger(area.right()) - area.left() + 1) * (NSInteger(area.bottom()) - area.top() + 1);
     }
     _downloadSize = _numberOfTiles * 12000;
 }

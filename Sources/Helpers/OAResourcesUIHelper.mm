@@ -7,6 +7,7 @@
 //
 
 #import "OAResourcesUIHelper.h"
+#import "OARasterTileCoordinates.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "OALog.h"
@@ -2228,41 +2229,70 @@ includeHidden:(BOOL)includeHidden
     [viewController presentViewController:alert animated: YES completion: nil];
 }
 
-+ (void)clearTilesOf:(OAResourceItem *)resource area:(OsmAnd::AreaI)area zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete
++ (QVector<OsmAnd::AreaI>)tileAreasFor:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom
+{
+    if ([resource isKindOfClass:OASqliteDbResourceItem.class])
+    {
+        OASQLiteTileSource *source = [[OASQLiteTileSource alloc] initWithFilePath:((OASqliteDbResourceItem *)resource).path];
+        return OARasterTileCoordinates::tileAreas(visibleArea, zoom, source.isEllipticYTile, source.tileSize);
+    }
+    if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
+    {
+        const auto source = ((OAOnlineTilesResourceItem *)resource).onlineTileSource;
+        if (source)
+            return OARasterTileCoordinates::tileAreas(visibleArea, zoom, source->ellipticYTile, source->tileSize);
+    }
+    return {};
+}
+
++ (void)clearTilesOf:(OAResourceItem *)resource visibleArea:(OsmAnd::AreaI)visibleArea zoom:(OsmAnd::ZoomLevel)zoom onComplete:(void (^)(void))onComplete
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        OASQLiteTileSource *sqliteSource;
+        NSString *downloadPath;
+        int minZoom = zoom;
+        int maxZoom = zoom;
         if ([resource isKindOfClass:OASqliteDbResourceItem.class])
         {
-            OASqliteDbResourceItem *item = (OASqliteDbResourceItem *) resource;
-            OASQLiteTileSource *sqliteTileSource = [[OASQLiteTileSource alloc] initWithFilePath:item.path];
-            [sqliteTileSource deleteImages:area zoom:zoom];
+            sqliteSource = [[OASQLiteTileSource alloc] initWithFilePath:((OASqliteDbResourceItem *)resource).path];
+            minZoom = sqliteSource.minimumZoomSupported;
+            maxZoom = sqliteSource.maximumZoomSupported;
         }
         else if ([resource isKindOfClass:OAOnlineTilesResourceItem.class])
         {
-            OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *) resource;
-            NSString *downloadPath = item.path;
-
-            if (!downloadPath)
-                return;
-
-            const int shift = OsmAnd::ZoomLevel31 - zoom;
-            const int left = area.left() >> shift;
-            const int right = area.right() >> shift;
-            const int top = area.top() >> shift;
-            const int bottom = area.bottom() >> shift;
-
-            for (int x = left; x <= right; x++)
+            OAOnlineTilesResourceItem *item = (OAOnlineTilesResourceItem *)resource;
+            downloadPath = item.path;
+            if (item.onlineTileSource)
             {
-                for (int y = top; y <= bottom; y++)
+                minZoom = item.onlineTileSource->minZoom;
+                maxZoom = item.onlineTileSource->maxZoom;
+            }
+        }
+        const auto tileZoom = static_cast<OsmAnd::ZoomLevel>(MAX(minZoom, MIN(maxZoom, zoom)));
+        const auto areas = [self tileAreasFor:resource visibleArea:visibleArea zoom:tileZoom];
+        QList<OsmAnd::TileId> tileIds;
+        for (const auto& area : areas)
+        {
+            for (int x = area.left(); x <= area.right(); x++)
+            {
+                for (int y = area.top(); y <= area.bottom(); y++)
                 {
-                    NSString *tilePath = [NSString stringWithFormat:@"%@/%@/%@/%@.tile", downloadPath, @(zoom).stringValue, @(x).stringValue, @(y).stringValue];
-                    [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
+                    if (sqliteSource)
+                        tileIds.push_back(OsmAnd::TileId::fromXY(x, y));
+                    else if (downloadPath)
+                    {
+                        NSString *tilePath = [NSString stringWithFormat:@"%@/%d/%d/%d.tile", downloadPath, tileZoom, x, y];
+                        [NSFileManager.defaultManager removeItemAtPath:tilePath error:nil];
+                    }
                 }
             }
         }
+        if (sqliteSource)
+            [sqliteSource deleteTiles:tileIds zoom:tileZoom];
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            onComplete();
+            if (onComplete)
+                onComplete();
         });
     });
 }

@@ -274,31 +274,16 @@
         block();
 }
 
-- (void)deleteImages:(OsmAnd::AreaI)area31 zoom:(int)zoom
+- (void)deleteTiles:(const QList<OsmAnd::TileId>&)tileIds zoom:(OsmAnd::ZoomLevel)zoom
 {
     static const int kMaxTilesPerBatch = 500;
-    const int shift = OsmAnd::ZoomLevel31 - zoom;
-    const int left = area31.left() >> shift;
-    const int right = area31.right() >> shift;
-    const int top = area31.top() >> shift;
-    const int bottom = area31.bottom() >> shift;
-    QList<OsmAnd::TileId> tileIds;
-    tileIds.reserve(kMaxTilesPerBatch);
-    for (int x = left; x <= right; x++)
+    for (int offset = 0; offset < tileIds.size(); offset += kMaxTilesPerBatch)
     {
-        for (int y = top; y <= bottom; y++)
-        {
-            tileIds.push_back(OsmAnd::TileId::fromXY(x, y));
-            if (tileIds.size() == kMaxTilesPerBatch)
-            {
-                _db->removeTilesData(tileIds, (OsmAnd::ZoomLevel)zoom);
-                tileIds.clear();
-            }
-        }
+        auto batch = tileIds.mid(offset, kMaxTilesPerBatch);
+        _db->removeTilesData(batch, zoom);
     }
     if (!tileIds.isEmpty())
-        _db->removeTilesData(tileIds, (OsmAnd::ZoomLevel)zoom);
-    _db->compact();
+        _db->compact();
 }
 
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath

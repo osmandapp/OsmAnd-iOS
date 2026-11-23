@@ -2574,11 +2574,14 @@ typedef enum
                            title:self.targetMenuView.targetPoint.title];
 }
 
-- (void) targetPointEditWaypoint:(OAGpxWptItem *)item
+- (void)targetPointEditWaypoint:(OAGpxWptItem *)item
 {
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     item.groups = _mapViewController.foundWptGroups;
+    // Keep saved GPX changes isolated until the file is written successfully.
+    if (item.docPath.length > 0)
+        [item prepareForEditing];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithGpxWpt:item];
     controller.gpxWptDelegate = self;
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];

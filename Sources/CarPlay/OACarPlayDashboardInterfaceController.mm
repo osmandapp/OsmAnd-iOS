@@ -526,24 +526,23 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (UIImage *)originalMapButtonImageForType:(EOACarPlayButtonType)type
 {
     UITraitCollection *traits = self.interfaceController.carTraitCollection;
-    BOOL isDarkStyle = traits.userInterfaceStyle == UIUserInterfaceStyleDark;
     NSString *imageName = nil;
     switch (type)
     {
         case EOACarPlayButtonTypeZoomIn:
-            imageName = isDarkStyle ? ACImageNameIcCarplayMapZoomInWhite : ACImageNameIcCarplayMapZoomInBlack;
+            imageName = ACImageNameIcCarplayMapZoomIn;
             break;
         case EOACarPlayButtonTypeZoomOut:
-            imageName = isDarkStyle ? ACImageNameIcCarplayMapZoomOutWhite : ACImageNameIcCarplayMapZoomOutBlack;
+            imageName = ACImageNameIcCarplayMapZoomOut;
             break;
         case EOACarPlayButtonTypeCenterMap:
-            imageName = isDarkStyle ? ACImageNameIcCarplayMapLocationWhite : ACImageNameIcCarplayMapLocationBlack;
+            imageName = ACImageNameIcCarplayMapLocation;
             break;
         case EOACarPlayButtonTypeSwitchTo2D:
-            imageName = isDarkStyle ? ACImageNameIcCarplayMap2DWhite : ACImageNameIcCarplayMap2DBlack;
+            imageName = ACImageNameIcCarplayMap2D;
             break;
         case EOACarPlayButtonTypeSwitchTo3D:
-            imageName = isDarkStyle ? ACImageNameIcCarplayMap3DWhite : ACImageNameIcCarplayMap3DBlack;
+            imageName = ACImageNameIcCarplayMap3D;
             break;
         default:
             return nil;

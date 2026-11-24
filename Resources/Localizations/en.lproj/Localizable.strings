@@ -5108,3 +5108,7 @@
 "download_complete_with_errors" = "Download complete with errors";
 "popular_places_nearby" = "Popular places nearby";
 "no_places_available" = "No places in visible region";
+"sort_by_relevance" = "Relevance";
+"history_is_turned_off" = "History is turned off";
+"search_and_navigation_history_disabled_descr" = "Search and navigation history are disabled. Enable them in settings to see recent activity here.";
+"open_history_settings" = "Open History settings";

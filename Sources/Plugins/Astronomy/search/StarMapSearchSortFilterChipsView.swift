@@ -160,6 +160,26 @@ private final class StarMapSearchSortFilterChipButton: UIButton {
     }
 }
 
+// MARK: - Scroll view
+
+private final class StarMapSearchSortFilterChipsScrollView: UIScrollView {
+
+    private var lastMaxContentOffsetX: CGFloat = 0
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        guard effectiveUserInterfaceLayoutDirection == .rightToLeft else {
+            return
+        }
+        let maxContentOffsetX = max(0, contentSize.width - bounds.width)
+        guard maxContentOffsetX != lastMaxContentOffsetX else {
+            return
+        }
+        contentOffset.x = min(maxContentOffsetX, max(0, contentOffset.x + maxContentOffsetX - lastMaxContentOffsetX))
+        lastMaxContentOffsetX = maxContentOffsetX
+    }
+}
+
 // MARK: - Chips view
 
 final class StarMapSearchSortFilterChipsView: UIView {
@@ -173,7 +193,8 @@ final class StarMapSearchSortFilterChipsView: UIView {
     weak var dataSource: StarMapSearchSortFilterChipsDataSource?
     weak var delegate: StarMapSearchSortFilterChipsDelegate?
 
-    private let scrollView = UIScrollView()
+    private let scrollView = StarMapSearchSortFilterChipsScrollView()
+    private let contentView = UIView()
     private let stackView = UIStackView()
     private var chipButtons: [String: StarMapSearchSortFilterChipButton] = [:]
     private var chipGroups: [SearchSortFilterChipGroup] = []
@@ -210,8 +231,14 @@ final class StarMapSearchSortFilterChipsView: UIView {
         stackView.spacing = Layout.chipSpacing
         stackView.translatesAutoresizingMaskIntoConstraints = false
 
-        scrollView.addSubview(stackView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+
+        contentView.addSubview(stackView)
+        scrollView.addSubview(contentView)
         addSubview(scrollView)
+
+        let contentFittingWidth = contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+        contentFittingWidth.priority = .defaultLow
 
         NSLayoutConstraint.activate([
             heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.barHeight),
@@ -221,11 +248,18 @@ final class StarMapSearchSortFilterChipsView: UIView {
             scrollView.topAnchor.constraint(equalTo: topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            stackView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-            stackView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor)
+            contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
+            contentView.widthAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.widthAnchor),
+            contentFittingWidth,
+
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            stackView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 

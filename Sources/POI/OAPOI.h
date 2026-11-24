@@ -144,7 +144,7 @@ static int DEFAULT_ELO = 900;
 
 - (nullable NSString *) getAdditionalInfo:(NSString *)key;
 - (NSArray<NSString *> *) getAdditionalInfoKeys;
-- (NSString *)getOsmandPoiKey;
+- (nullable NSString *)getOsmandPoiKey;
 
 - (void)setAdditionalInfo:(NSDictionary<NSString *, NSString *> *)additionalInfo;
 - (void)setAdditionalInfo:(NSString *)tag value:(NSString *)value;

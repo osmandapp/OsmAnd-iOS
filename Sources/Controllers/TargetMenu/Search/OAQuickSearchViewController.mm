@@ -28,7 +28,6 @@
 #import "OAHistoryHelper.h"
 #import "OAPOIHistoryType.h"
 #import "OAAddressTableViewController.h"
-#import "OACategoriesTableViewController.h"
 #import "OACustomPOIViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
@@ -89,7 +88,7 @@ typedef void(^OAPublishCallback)(OASearchResultCollection *res, BOOL append);
 typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 
-@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, ExploreViewControllerDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, CategoriesViewControllerDelegate, ExploreViewControllerDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -151,7 +150,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     UIPageViewController *_pageController;
     OAAddressTableViewController *_addressViewController;
-    OACategoriesTableViewController *_categoriesViewController;
+    CategoriesViewController *_categoriesViewController;
     ExploreViewController *_exploreViewController;
 
     OASearchToolbarViewController *_searchToolbarViewController;
@@ -247,14 +246,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     else
         [_addressViewController resetMapCenterSearch];
 
-    _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
+    _categoriesViewController = [[CategoriesViewController alloc] init];
     _categoriesViewController.delegate = self;
-    _categoriesViewController.tableDelegate = self;
-    _categoriesViewController.searchType = self.searchType;
-    if (_searchNearMapCenter)
-        [_categoriesViewController setMapCenterCoordinate:_searchLocation];
-    else
-        [_categoriesViewController resetMapCenterSearch];
 
     _exploreViewController = [[ExploreViewController alloc] init];
     _exploreViewController.delegate = self;
@@ -853,14 +846,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             _exploreViewController.searchLocation = _searchLocation;
             _exploreViewController.searchNearMapCenter = searchNearMapCenter;
             [_addressViewController setMapCenterCoordinate:_searchLocation];
-            [_categoriesViewController setMapCenterCoordinate:_searchLocation];
             [_tableController setMapCenterCoordinate:_searchLocation];
         }
         else
         {
             _exploreViewController.searchNearMapCenter = searchNearMapCenter;
             [_addressViewController resetMapCenterSearch];
-            [_categoriesViewController resetMapCenterSearch];
             [_tableController resetMapCenterSearch];
         }
         [self updateSearchNearMapCenterLabel];
@@ -875,7 +866,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _searchType = searchType;
 
     _addressViewController.searchType = searchType;
-    _categoriesViewController.searchType = searchType;
     _tableController.searchType = searchType;
 
     [self updateBarActionView];
@@ -2098,9 +2088,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self reloadCities];
 }
 
-#pragma mark - OACategoryTableDelegate
+#pragma mark - CategoriesViewControllerDelegate
 
-- (void)showCreateFilterScreen
+- (void)categoriesDidSelectResult:(OASearchResult *)result
+{
+    [self didSelectResult:result];
+}
+
+- (void)categoriesDidRequestAddFilter
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
@@ -2109,27 +2104,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self.navigationController pushViewController:customPOIScreen animated:YES];
 }
 
-- (void)showDeleteFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
+- (void)categoriesDidRequestDeleteFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
     OADeleteCustomFiltersViewController *removeFiltersScreen = [[OADeleteCustomFiltersViewController alloc] initWithFilters:filters];
     removeFiltersScreen.delegate = self;
     [self.navigationController pushViewController:removeFiltersScreen animated:YES];
 }
 
-- (void)showRearrangeFiltersScreen:(NSArray<OAPOIUIFilter *> *)filters
+- (void)categoriesDidRequestRearrangeFilters:(NSArray<OAPOIUIFilter *> *)filters
 {
     OARearrangeCustomFiltersViewController *rearrangeCategoriesScreen = [[OARearrangeCustomFiltersViewController alloc] initWithFilters:filters];
     [self.navigationController pushViewController:rearrangeCategoriesScreen animated:YES];
-}
-
-- (NSArray<OAPOIUIFilter *> *)getCustomFilters
-{
-    return [[OAPOIFiltersHelper sharedInstance] getUserDefinedPoiFilters:NO];
-}
-
-- (NSArray<OAPOIUIFilter *> *)getSortedFiltersIncludeInactive
-{
-    return [[OAPOIFiltersHelper sharedInstance] getSortedPoiFilters:NO];
 }
 
 #pragma mark - ExploreViewControllerDelegate

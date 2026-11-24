@@ -118,6 +118,21 @@ struct PointContentConfiguration: UIContentConfiguration {
         return configuration
     }
 
+    static func backgroundConfiguration(for state: UICellConfigurationState) -> UIBackgroundConfiguration {
+        var configuration = UIBackgroundConfiguration.listGroupedCell().updated(for: state)
+        if !state.isHighlighted && !state.isSelected {
+            configuration.backgroundColor = .groupBg
+        }
+        return configuration
+    }
+
+    static func applyHighlightableBackground(to cell: UITableViewCell) {
+        cell.backgroundConfiguration = backgroundConfiguration()
+        cell.configurationUpdateHandler = { cell, state in
+            cell.backgroundConfiguration = Self.backgroundConfiguration(for: state)
+        }
+    }
+
     func makeContentView() -> UIView & UIContentView {
         PointRowContentView(configuration: self)
     }

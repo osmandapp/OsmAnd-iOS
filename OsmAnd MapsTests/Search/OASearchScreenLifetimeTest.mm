@@ -2,6 +2,7 @@
 #import <objc/runtime.h>
 #import <CarPlay/CarPlay.h>
 #import "OAHistoryItem.h"
+#import "OAHistoryHelper.h"
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
@@ -13,10 +14,10 @@
 #import "OsmAndApp.h"
 #import "OAHistorySettingsViewController.h"
 #import "OAActionAddCategoryViewController.h"
-#import "OACategoriesTableViewController.h"
 #import "OACarPlayCategoryResultListController.h"
 #import "OACarPlayHistoryListController.h"
 #import "OASearchCategoriesListController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OALifetimeSearchCore : OASearchUICore
 @property(nonatomic) NSMutableArray *completions;
@@ -45,9 +46,13 @@ static OALifetimeSearchCore *lifetimeSearchCore;
 - (OASearchUICore *)lifetimeTestCore { return lifetimeSearchCore; }
 @end
 
-@interface OACategoriesTableViewController (LifetimeTest)
-- (void)generateData;
+@interface OAHistoryHelper (LifetimeTest)
+- (NSArray<OAHistoryItem *> *)lifetimeTestPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 @end
+@implementation OAHistoryHelper (LifetimeTest)
+- (NSArray<OAHistoryItem *> *)lifetimeTestPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit { return @[]; }
+@end
+
 @interface OABaseCarPlayListController (LifetimeTest)
 - (NSArray *)generateSections;
 @end
@@ -74,11 +79,30 @@ static OALifetimeSearchCore *lifetimeSearchCore;
 - (void)updateDataWithResults:(OASearchResultCollection *)results { self.appliedCount++; }
 @end
 
-@interface OALifetimeCategoriesController : OACategoriesTableViewController <OALifetimeScreenProbe>
-@property(nonatomic) NSUInteger appliedCount;
+static NSUInteger consumedResultCollections;
+
+@interface OALifetimeResultCollection : OASearchResultCollection
+@property(nonatomic) BOOL consumed;
 @end
-@implementation OALifetimeCategoriesController
-- (void)updateDataWithResults:(OASearchResultCollection *)results { self.appliedCount++; }
+@implementation OALifetimeResultCollection
+- (NSArray<OASearchResult *> *)getCurrentSearchResults
+{
+    if (!self.consumed)
+    {
+        self.consumed = YES;
+        consumedResultCollections++;
+    }
+    return [super getCurrentSearchResults];
+}
+@end
+
+@interface CategoriesViewController (LifetimeTest) <OALifetimeScreenProbe>
+- (void)generateData;
+@end
+@implementation CategoriesViewController (LifetimeTest)
+- (NSUInteger)appliedCount { return consumedResultCollections; }
+- (void)setAppliedCount:(NSUInteger)appliedCount { consumedResultCollections = appliedCount; }
+- (void)generateData { [self reloadData]; }
 @end
 
 @interface OALifetimeCarPlayResults : OACarPlayCategoryResultListController <OALifetimeScreenProbe>
@@ -158,6 +182,8 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     lifetimeSearchCore = [[OALifetimeSearchCore alloc] init];
     method_exchangeImplementations(class_getInstanceMethod(OAQuickSearchHelper.class, @selector(getCore)),
                                    class_getInstanceMethod(OAQuickSearchHelper.class, @selector(lifetimeTestCore)));
+    method_exchangeImplementations(class_getInstanceMethod(OAHistoryHelper.class, @selector(getPointsHavingTypes:limit:)),
+                                   class_getInstanceMethod(OAHistoryHelper.class, @selector(lifetimeTestPointsHavingTypes:limit:)));
     _searchHistory = [OAAppSettings.sharedManager.searchHistory get];
     [OAAppSettings.sharedManager.searchHistory set:YES];
 }
@@ -166,6 +192,8 @@ static OALifetimeSearchCore *lifetimeSearchCore;
 {
     method_exchangeImplementations(class_getInstanceMethod(OAQuickSearchHelper.class, @selector(getCore)),
                                    class_getInstanceMethod(OAQuickSearchHelper.class, @selector(lifetimeTestCore)));
+    method_exchangeImplementations(class_getInstanceMethod(OAHistoryHelper.class, @selector(getPointsHavingTypes:limit:)),
+                                   class_getInstanceMethod(OAHistoryHelper.class, @selector(lifetimeTestPointsHavingTypes:limit:)));
     [OAAppSettings.sharedManager.searchHistory set:_searchHistory];
     lifetimeSearchCore = nil;
     [super tearDown];
@@ -190,7 +218,7 @@ static OALifetimeSearchCore *lifetimeSearchCore;
                     [controller generateData];
                     break;
                 case 2:
-                    controller = [[OACategoriesTableViewController alloc] initWithNibName:nil bundle:nil];
+                    controller = [[CategoriesViewController alloc] init];
                     [controller generateData];
                     break;
                 case 3:
@@ -235,7 +263,7 @@ static OALifetimeSearchCore *lifetimeSearchCore;
 - (void)completeRequest:(NSUInteger)index
 {
     void (^completion)(OASearchResultCollection *) = lifetimeSearchCore.completions[index];
-    completion(nil);
+    completion([[OALifetimeResultCollection alloc] initWithPhrase:nil]);
 }
 
 - (id<OALifetimeScreenProbe>)phoneScreen:(NSInteger)screen
@@ -246,7 +274,10 @@ static OALifetimeSearchCore *lifetimeSearchCore;
     else if (screen == 1)
         controller = [[OALifetimeActionController alloc] initWithNames:[NSMutableArray array]];
     else
-        controller = [[OALifetimeCategoriesController alloc] initWithNibName:@"OACategoriesTableViewController" bundle:nil];
+    {
+        controller = [[CategoriesViewController alloc] init];
+        controller.appliedCount = 0;
+    }
     [controller loadViewIfNeeded];
     [self showController:controller];
     return controller;
@@ -597,7 +628,7 @@ static OALifetimeSearchCore *lifetimeSearchCore;
             else if (screen == 1)
                 controller = [[OALifetimeActionController alloc] initWithNames:[NSMutableArray array]];
             else
-                controller = [[OALifetimeCategoriesController alloc] initWithNibName:nil bundle:nil];
+                controller = [[CategoriesViewController alloc] init];
             [controller generateData];
             [self completeRequest:lifetimeSearchCore.completions.count - 1];
             weakController = controller;

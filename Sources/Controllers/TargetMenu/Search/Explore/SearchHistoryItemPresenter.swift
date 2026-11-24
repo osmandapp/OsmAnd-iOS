@@ -20,7 +20,6 @@ struct SearchHistoryRecord {
 struct SearchHistoryItemPresenter {
     private static let administrativeCategory = "administrative"
     private static let typeNameSeparator = " • "
-    private static let customCategoryIconName = "mx_special_custom_category"
     private static let addressObjectTypes = Set(([.city, .village, .boundary, .postcode, .street, .house, .streetIntersection] as [EOAObjectType]).compactMap { OAObjectType.toString($0) })
 
     private let poiTypesByName: [String: OAPOIType]
@@ -34,7 +33,7 @@ struct SearchHistoryItemPresenter {
             return poiType.icon()
         }
         if let filter = record.object as? OAPOIUIFilter {
-            return OAUtilities.getMxIcon(OAPOIUIFilter.getCustomFilterIconName(filter)) ?? OAUtilities.getMxIcon(customCategoryIconName)
+            return filter.searchIcon
         }
         if record.object is GpxDataItem {
             return UIImage.icCustomTrip.withRenderingMode(.alwaysTemplate)

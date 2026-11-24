@@ -214,7 +214,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
                                                               title: record.title,
                                                               iconStyle: .plate,
                                                               secondaryContent: secondaryContent(for: record))
-        cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
+        PointContentConfiguration.applyHighlightableBackground(to: cell)
         return cell
     }
 

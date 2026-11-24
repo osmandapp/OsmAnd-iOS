@@ -198,6 +198,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
     NSString *_icon;
     NSString *_url;
     NSArray *_conditions;
+    NSArray<NSString *> *_purchasedInApps;
 
     NSDictionary<NSString *, UIColor *> *_colors;
     
@@ -376,11 +377,9 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                                 if ([p isPurchased])
                                     return;
                             }
-                            if (purchasedInApps)
-                                for (NSString *purchased in purchasedInApps)
-                                    if ([identifier hasSuffix:purchased] && [p isPurchased])
-                                        return;
                         }
+                        if ([self isAnyInAppPurchased:purchasedInApps])
+                            return;
                         _product = product;
                         
                         if (AFNetworkReachabilityManager.sharedManager.isReachable)
@@ -389,6 +388,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                                 
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     _conditions = conditions;
+                                    _purchasedInApps = purchasedInApps;
                                     [self showDiscountBanner];
                                 });
                             }];
@@ -403,7 +403,18 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
 - (BOOL) canShowBannerAgain
 {
     return ![OAAppSettings sharedManager].settingDoNotShowPromotions.get
-        && [self matchesOneOfConditions:_conditions];
+        && [self matchesOneOfConditions:_conditions]
+        && ![_product isPurchased]
+        && ![self isAnyInAppPurchased:_purchasedInApps];
+}
+
+- (BOOL) isAnyInAppPurchased:(NSArray<NSString *> *)inAppIds
+{
+    for (OAProduct *p in [OAIAPHelper sharedInstance].inApps)
+        for (NSString *inAppId in inAppIds)
+            if ([p.productIdentifier hasSuffix:inAppId] && [p isPurchased])
+                return YES;
+    return NO;
 }
 
 - (BOOL) matchesOneOfConditions:(NSArray *)conditions

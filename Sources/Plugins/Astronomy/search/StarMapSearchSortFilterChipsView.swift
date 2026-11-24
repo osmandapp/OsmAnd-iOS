@@ -21,6 +21,7 @@ struct StarMapSearchSortFilterChipOption {
     let image: UIImage?
     let originalSizeImage: UIImage?
     let isSelected: Bool
+    var subtitle: String? = nil
 }
 
 struct StarMapSearchSortFilterChipSection {
@@ -356,7 +357,7 @@ final class StarMapSearchSortFilterChipsView: UIView {
     }
 
     private func makeMenuAction(option: StarMapSearchSortFilterChipOption, group: SearchSortFilterChipGroup) -> UIAction {
-        UIAction(
+        let action = UIAction(
             title: option.title,
             image: option.originalSizeImage,
             state: option.isSelected ? .on : .off
@@ -366,5 +367,9 @@ final class StarMapSearchSortFilterChipsView: UIView {
             }
             delegate?.chipsView(self, didSelectOption: option.id, inGroup: group.id)
         }
+        if #available(iOS 16.0, *) {
+            action.subtitle = option.subtitle
+        }
+        return action
     }
 }

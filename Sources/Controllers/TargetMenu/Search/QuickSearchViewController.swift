@@ -11,7 +11,6 @@ import OsmAndShared
 @objc enum QuickSearchBarAction: Int {
     case none
     case showOnMap
-    case editHistory
     case selectTarget
 }
 
@@ -20,38 +19,32 @@ final class QuickSearchViewController: OASuperViewController {
     private typealias PublishCallback = (OASearchResultCollection?, Bool) -> Void
     private typealias SearchFinishedCallback = (OASearchPhrase?) -> Bool
 
-    private static let initialSearchToolbarHeight: CGFloat = 44
-    private static let barActionViewHeight: CGFloat = 44
-    private static let tabsHeight: CGFloat = 40
-    private static let bottomViewHeight: CGFloat = 57
-    private static let cancelButtonY: CGFloat = 5
-    private static let leftImageButtonY: CGFloat = -2
-    private static let inputOffset: CGFloat = 40
-    private static let minStatusBarHeight: CGFloat = 10
-    private static let animationDuration: TimeInterval = 0.25
+    private struct ChipsState: Equatable {
+        let searchNearMapCenter: Bool
+        let showsFilters: Bool
+        let filtersApplied: Bool
+    }
+
+    private struct ToolbarState: Equatable {
+        let barActionTitle: String?
+        let showsSave: Bool
+    }
+
+    private static let tabsVerticalInset: CGFloat = 4
+    private static let chipsTopInset: CGFloat = 4
+    private static let chipsBottomInset: CGFloat = 8
+    private static let chipIconSize: CGFloat = 20
+    private static let estimatedRowHeight: CGFloat = 48
+    private static let collapsibleConstraintPriority = UILayoutPriority(999)
     private static let distanceUpdateInterval: TimeInterval = 0.3
     private static let nearestCitiesLimit = 15
     private static let topIndexBrandPrefix = "top_index_brand"
+    private static let searchAroundGroupId = "search_around"
+    private static let filtersGroupId = "filters"
+    private static let nearMeOptionId = "near_me"
+    private static let mapCenterOptionId = "map_center"
     private static let targetSearchTypes: [OAQuickSearchType] = [.START_POINT, .DESTINATION, .INTERMEDIATE, .HOME, .WORK]
     private static let routeTargetSearchTypes: [OAQuickSearchType] = [.START_POINT, .DESTINATION, .INTERMEDIATE]
-
-    @IBOutlet private weak var topView: UIView!
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var leftImageButton: UIButton!
-    @IBOutlet private weak var textField: UITextField!
-    @IBOutlet private weak var btnCancel: UIButton!
-    @IBOutlet private weak var searchNearCenterView: UIView!
-    @IBOutlet private weak var lbSearchNearCenter: UILabel!
-    @IBOutlet private weak var btnMyLocation: UIButton!
-    @IBOutlet private weak var barActionView: UIView!
-    @IBOutlet private weak var barActionLeftImageButton: UIButton!
-    @IBOutlet private weak var barActionImageView: UIImageView!
-    @IBOutlet private weak var barActionTextButton: UIButton!
-    @IBOutlet private weak var barActionImageButton: UIButton!
-    @IBOutlet private weak var bottomView: UIView!
-    @IBOutlet private weak var bottomTextBtn: UIButton!
-    @IBOutlet private weak var bottomImageBtn: UIButton!
-    @IBOutlet private weak var tabs: UISegmentedControl!
 
     @objc var searchNearMapCenter = false {
         didSet { applySearchNearMapCenter() }
@@ -89,10 +82,27 @@ final class QuickSearchViewController: OASuperViewController {
     private var searchHelper: OAQuickSearchHelper?
     private var searchUICore: OASearchUICore?
 
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let headerStackView = UIStackView()
+    private let tabsContainerView = UIView()
+    private let tabsControl = UISegmentedControl(items: [localizedString("shared_string_explore"),
+                                                         localizedString("search_categories"),
+                                                         localizedString("shared_string_address")])
+    private let chipsContainerView = UIView()
+    private let chipsView = StarMapSearchSortFilterChipsView()
+    private let contentView = UIView()
+    private let tableView = UITableView(frame: .zero, style: .insetGrouped)
+    private let clearButton = UIButton(type: .system)
+    private let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+    private let presentationDelegate = QuickSearchTransitioningDelegate()
+    private var searchIconView: UIView?
+    private var processedSearchText = ""
+    private var pendingPresentation: (() -> Void)?
+    private var chipsState: ChipsState?
+    private var toolbarState: ToolbarState?
+
     private var tblMove: UIPanGestureRecognizer?
     private var dismissEditingTap: UITapGestureRecognizer?
-    private let leftImgView = UIImageView(image: .searchIcon)
-    private let activityIndicatorView = UIActivityIndicatorView(style: .medium)
 
     private var tableController: OAQuickSearchTableController?
     private var pageController: UIPageViewController?
@@ -102,7 +112,6 @@ final class QuickSearchViewController: OASuperViewController {
     private var searchToolbarViewController: OASearchToolbarViewController?
 
     private var barActionType: QuickSearchBarAction = .none
-    private var historyEditing = false
     private var bottomViewVisible = false
 
     private let resultPreparationQueue: OperationQueue = {
@@ -116,6 +125,10 @@ final class QuickSearchViewController: OASuperViewController {
     private var pendingMoreButton = false
     private var pendingEmptyResult = false
 
+    private var searchText: String {
+        searchController.searchBar.text ?? ""
+    }
+
     private var isTargetSearchType: Bool {
         Self.targetSearchTypes.contains(searchType)
     }
@@ -124,17 +137,43 @@ final class QuickSearchViewController: OASuperViewController {
         pageController?.parent != nil
     }
 
+    private var showsChips: Bool {
+        !tabsVisible && !modalInput
+    }
+
+    private var lastSelectedWord: OASearchWord? {
+        searchUICore?.getPhrase()?.getLastSelectedWord()
+    }
+
+    private var showsFiltersChip: Bool {
+        barActionType == .showOnMap && lastSelectedWord?.getType() == .poiType
+    }
+
+    private var isPoiFilterApplied: Bool {
+        if bottomViewVisible {
+            return true
+        }
+        guard let filter = lastSelectedWord?.result?.object as? OAPOIUIFilter else { return false }
+        return !filter.filterByName.isEmpty
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .default
+    }
+
     @objc init() {
-        super.init(nibName: "QuickSearchViewController", bundle: nil)
+        super.init(nibName: nil, bundle: nil)
+        presentationDelegate.onOutsideTap = { [weak self] in
+            self?.dismissSearch(animated: true)
+        }
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
 
-    override func applyLocalization() {
-        btnCancel.setTitle(localizedString("shared_string_hide"), for: .normal)
-        bottomTextBtn.setTitle(localizedString("shared_string_save"), for: .normal)
+    override func loadView() {
+        view = UIView()
     }
 
     override func registerObservers() {
@@ -143,16 +182,24 @@ final class QuickSearchViewController: OASuperViewController {
         _ = addObserver(OAAutoObserverProxy(self, withHandler: #selector(updateDistanceAndDirection), andObserve: locationServices?.updateHeadingObserver))
     }
 
+    override func isNavbarVisible() -> Bool {
+        true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .viewBg
+        setupNavigationItem()
+        setupSearchController()
+        setupHeader()
+        setupContent()
+
         let dismissEditingTap = UITapGestureRecognizer(target: self, action: #selector(dismissTextEditing))
         dismissEditingTap.cancelsTouchesInView = false
         dismissEditingTap.delegate = self
         view.addGestureRecognizer(dismissEditingTap)
         self.dismissEditingTap = dismissEditingTap
-        tableView.separatorColor = SeparatorAppearance.color
 
-        tableView.contentInsetAdjustmentBehavior = .never
         let tableController = OAQuickSearchTableController(tableView: tableView)
         tableController?.delegate = self
         tableController?.searchType = searchType
@@ -163,20 +210,12 @@ final class QuickSearchViewController: OASuperViewController {
         }
         self.tableController = tableController
 
-        bottomView.layer.shadowColor = UIColor.black.cgColor
-        bottomView.layer.shadowOpacity = 0.3
-        bottomView.layer.shadowRadius = 3
-        bottomView.layer.shadowOffset = .zero
-        bottomView.isHidden = true
-
         let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageController.dataSource = self
         pageController.delegate = self
-        pageController.view.frame = tableView.frame
-        pageController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.pageController = pageController
 
-        let addressViewController = OAAddressTableViewController(frame: pageController.view.bounds)
+        let addressViewController = OAAddressTableViewController(frame: .zero)
         addressViewController?.delegate = self
         addressViewController?.tableDelegate = self
         addressViewController?.searchType = searchType
@@ -199,35 +238,16 @@ final class QuickSearchViewController: OASuperViewController {
 
         pageController.setViewControllers([exploreViewController], direction: .forward, animated: false)
 
-        tabs.setTitle(localizedString("shared_string_explore"), forSegmentAt: 0)
-        tabs.setTitle(localizedString("search_categories"), forSegmentAt: 1)
-        tabs.setTitle(localizedString("shared_string_address"), forSegmentAt: 2)
-        tabs.setTitleTextAttributes([.font: UIFont.scaledSystemFont(ofSize: 14)], for: .normal)
-        tabs.setTitleTextAttributes([.font: UIFont.scaledSystemFont(ofSize: 14)], for: .selected)
-
         let tblMove = UIPanGestureRecognizer(target: self, action: #selector(moveGestureDetected))
         tblMove.delegate = self
         self.tblMove = tblMove
-
-        let leftView = UIView(frame: CGRect(x: 4, y: 0, width: 24, height: textField.bounds.height))
-        textField.leftView = leftView
-        textField.leftViewMode = .always
-        activityIndicatorView.frame = leftView.frame
-        leftImgView.contentMode = .center
-        leftImgView.frame = leftView.frame
-        leftView.addSubview(leftImgView)
-        leftView.addSubview(activityIndicatorView)
 
         applyTabIndex()
         setupSearch()
         updateHint()
 
         showSearchIcon()
-        updateSearchNearMapCenterLabel()
         showTabs()
-        if textField.isDirectionRTL() {
-            textField.textAlignment = .right
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -235,6 +255,7 @@ final class QuickSearchViewController: OASuperViewController {
         setupView()
         registerForKeyboardNotifications()
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
 
         if let resultCollection = currentResultCollection() {
             updateSearchResult(resultCollection, append: false)
@@ -245,12 +266,15 @@ final class QuickSearchViewController: OASuperViewController {
         if !searchQuery.isEmpty {
             updateTextField(searchQuery)
         }
+        chipsState = nil
+        toolbarState = nil
+        updateHeader()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showSearchIcon()
-        textField.becomeFirstResponder()
+        focusSearchField()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -258,73 +282,35 @@ final class QuickSearchViewController: OASuperViewController {
         paused = true
         cancelResultPreparation()
         unregisterKeyboardNotifications()
+        if let navigationController, let topViewController = navigationController.topViewController, topViewController !== self {
+            navigationController.setToolbarHidden(true, animated: animated)
+            if !topViewController.isNavbarVisible() {
+                navigationController.setNavigationBarHidden(true, animated: animated)
+            }
+        }
         OARootViewController.instance().keyCommandUpdateObserver.handleObservedEvent(from: nil, withKey: kCommandSearchScreenClose)
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        updateNavbar()
+    @objc func makeNavigationController() -> UINavigationController {
+        let navigationController = UINavigationController(rootViewController: self)
+        navigationController.modalPresentationStyle = .custom
+        navigationController.transitioningDelegate = presentationDelegate
+        navigationController.modalPresentationCapturesStatusBarAppearance = true
+        return navigationController
     }
 
-    @objc func setupBarActionView(_ type: QuickSearchBarAction, title: String?) {
-        switch type {
-        case .selectTarget:
-            barActionLeftImageButton?.isHidden = true
-            barActionImageView?.image = .icCustomLocationMarker
-            barActionImageView?.isHidden = false
-            let word = searchUICore?.getPhrase()?.getLastSelectedWord()
-            UIView.performWithoutAnimation {
-                let select = localizedString("shared_string_select")
-                var buttonTitle = select
-                if let title {
-                    buttonTitle = title
-                } else if !(textField?.text ?? "").isEmpty, let result = word?.result {
-                    buttonTitle = "\(select) \(result.localeName ?? "")"
-                }
-                barActionTextButton?.setTitle(buttonTitle, for: .normal)
-                barActionTextButton?.layoutIfNeeded()
-            }
-            barActionTextButton?.isHidden = false
-            barActionTextButton?.isUserInteractionEnabled = true
-            barActionImageButton?.isHidden = true
-        case .showOnMap:
-            barActionLeftImageButton?.isHidden = true
-            barActionImageView?.image = .icCustomMap.withRenderingMode(.alwaysTemplate)
-            barActionImageView?.isHidden = false
-            let word = searchUICore?.getPhrase()?.getLastSelectedWord()
-            UIView.performWithoutAnimation {
-                var buttonTitle = localizedString("shared_string_show_on_map")
-                if let title {
-                    buttonTitle = title
-                } else if !(textField?.text ?? "").isEmpty, let result = word?.result {
-                    buttonTitle = String(format: localizedString("show_something_on_map"), result.localeName ?? "")
-                }
-                barActionTextButton?.setTitle(buttonTitle, for: .normal)
-                barActionTextButton?.layoutIfNeeded()
-            }
-            barActionTextButton?.isHidden = false
-            barActionTextButton?.isUserInteractionEnabled = true
-            barActionImageButton?.setImage(.icSearchFilter, for: .normal)
-            barActionImageButton?.isHidden = word?.getType() != .poiType
-        case .editHistory:
-            barActionImageView?.isHidden = true
-            barActionLeftImageButton?.setImage(.icClose, for: .normal)
-            barActionLeftImageButton?.isHidden = false
-            UIView.performWithoutAnimation {
-                barActionTextButton?.setTitle(title, for: .normal)
-                barActionTextButton?.layoutIfNeeded()
-            }
-            barActionTextButton?.isHidden = false
-            barActionTextButton?.isUserInteractionEnabled = false
-            barActionImageButton?.setImage(.iconRemove, for: .normal)
-            barActionImageButton?.isHidden = false
-        case .none:
-            break
+    @objc(dismissSearchAnimated:completion:)
+    func dismissSearch(animated: Bool, completion: (() -> Void)? = nil) {
+        guard let presentingViewController = (navigationController ?? self).presentingViewController else {
+            completion?()
+            return
         }
+        presentingViewController.dismiss(animated: animated, completion: completion)
+    }
+
+    @objc func setupBarActionView(_ type: QuickSearchBarAction) {
         barActionType = type
-        if isViewLoaded {
-            view.setNeedsLayout()
-        }
+        updateHeader()
     }
 
     @objc func showToolbar() {
@@ -344,9 +330,129 @@ final class QuickSearchViewController: OASuperViewController {
         if let filter, filter.filterId != BY_NAME_FILTER_ID {
             toolbar.toolbarTitle = filter.filterId.hasPrefix(Self.topIndexBrandPrefix) ? filter.filterByName : filter.name
         } else {
-            toolbar.toolbarTitle = textField?.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            toolbar.toolbarTitle = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         }
         OARootViewController.instance().mapPanel.showToolbar(toolbar)
+    }
+
+    private func setupNavigationItem() {
+        navigationItem.title = localizedString("shared_string_search")
+        navigationItem.largeTitleDisplayMode = .never
+        let backButton = UIBarButtonItem(image: UIImage.icNavbarChevron.imageFlippedForRightToLeftLayoutDirection(),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(onBackButtonPressed))
+        backButton.accessibilityLabel = localizedString("shared_string_back")
+        backButton.tintColor = .iconColorActive
+        navigationItem.leftBarButtonItem = backButton
+
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .viewBg
+        appearance.shadowColor = nil
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.textColorPrimary]
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+        navigationItem.compactAppearance = appearance
+        navigationItem.compactScrollEdgeAppearance = appearance
+    }
+
+    private func setupSearchController() {
+        searchController.delegate = self
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+
+        let searchBar = searchController.searchBar
+        searchBar.delegate = self
+        searchBar.autocorrectionType = .no
+        searchBar.spellCheckingType = .no
+        searchBar.tintColor = .iconColorActive
+
+        var clearConfiguration = UIButton.Configuration.plain()
+        clearConfiguration.image = UIImage(systemName: "xmark.circle.fill")
+        clearConfiguration.baseForegroundColor = .iconColorSecondary
+        clearConfiguration.contentInsets = .zero
+        clearButton.configuration = clearConfiguration
+        clearButton.sizeToFit()
+        clearButton.accessibilityLabel = localizedString("shared_string_clear")
+        clearButton.addTarget(self, action: #selector(onClearButtonPressed), for: .touchUpInside)
+
+        let searchTextField = searchBar.searchTextField
+        searchTextField.clearButtonMode = .never
+        searchTextField.rightView = clearButton
+        searchTextField.rightViewMode = .never
+
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        if #available(iOS 26.0, *) {
+            navigationItem.searchBarPlacementAllowsToolbarIntegration = false
+            navigationItem.preferredSearchBarPlacement = .stacked
+        }
+        definesPresentationContext = true
+    }
+
+    private func setupHeader() {
+        tabsControl.setTitleTextAttributes([.font: UIFont.scaledSystemFont(ofSize: 14)], for: .normal)
+        tabsControl.setTitleTextAttributes([.font: UIFont.scaledSystemFont(ofSize: 14)], for: .selected)
+        tabsControl.addTarget(self, action: #selector(tabChanged(_:)), for: .valueChanged)
+        tabsControl.translatesAutoresizingMaskIntoConstraints = false
+        tabsContainerView.preservesSuperviewLayoutMargins = true
+        tabsContainerView.addSubview(tabsControl)
+
+        chipsView.dataSource = self
+        chipsView.delegate = self
+        chipsView.translatesAutoresizingMaskIntoConstraints = false
+        chipsContainerView.preservesSuperviewLayoutMargins = true
+        chipsContainerView.isHidden = true
+        chipsContainerView.addSubview(chipsView)
+
+        headerStackView.axis = .vertical
+        headerStackView.preservesSuperviewLayoutMargins = true
+        headerStackView.translatesAutoresizingMaskIntoConstraints = false
+        headerStackView.addArrangedSubview(tabsContainerView)
+        headerStackView.addArrangedSubview(chipsContainerView)
+        view.addSubview(headerStackView)
+
+        let tabsBottom = tabsControl.bottomAnchor.constraint(equalTo: tabsContainerView.bottomAnchor, constant: -Self.tabsVerticalInset)
+        tabsBottom.priority = Self.collapsibleConstraintPriority
+        let chipsBottom = chipsView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor, constant: -Self.chipsBottomInset)
+        chipsBottom.priority = Self.collapsibleConstraintPriority
+        NSLayoutConstraint.activate([
+            headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tabsControl.topAnchor.constraint(equalTo: tabsContainerView.topAnchor, constant: Self.tabsVerticalInset),
+            tabsControl.leadingAnchor.constraint(equalTo: tabsContainerView.layoutMarginsGuide.leadingAnchor),
+            tabsControl.trailingAnchor.constraint(equalTo: tabsContainerView.layoutMarginsGuide.trailingAnchor),
+            tabsBottom,
+            chipsView.topAnchor.constraint(equalTo: chipsContainerView.topAnchor, constant: Self.chipsTopInset),
+            chipsView.leadingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.leadingAnchor),
+            chipsView.trailingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.trailingAnchor),
+            chipsBottom
+        ])
+    }
+
+    private func setupContent() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+
+        tableView.backgroundColor = .viewBg
+        tableView.separatorColor = SeparatorAppearance.color
+        tableView.tintColor = .iconColorActive
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = Self.estimatedRowHeight
+        tableView.alwaysBounceVertical = true
+        tableView.isHidden = true
+        tableView.frame = contentView.bounds
+        tableView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        contentView.addSubview(tableView)
     }
 
     private func setupSearch() {
@@ -402,8 +508,7 @@ final class QuickSearchViewController: OASuperViewController {
             addressViewController?.resetMapCenterSearch()
             tableController?.resetMapCenterSearch()
         }
-        updateSearchNearMapCenterLabel()
-        view.setNeedsLayout()
+        updateChips()
     }
 
     private func applySearchLocation() {
@@ -411,9 +516,6 @@ final class QuickSearchViewController: OASuperViewController {
         let settings = searchUICore?.getSearchSettings()?
             .setOriginalLocation(CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude))
         searchUICore?.update(settings)
-        if isViewLoaded {
-            view.setNeedsLayout()
-        }
     }
 
     private func applySearchType() {
@@ -423,7 +525,7 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func applyTabIndex() {
-        tabs.selectedSegmentIndex = tabIndex
+        tabsControl.selectedSegmentIndex = tabIndex
         tabChanged(nil)
     }
 
@@ -439,24 +541,26 @@ final class QuickSearchViewController: OASuperViewController {
     private func showTabs() {
         guard let pageController else { return }
         addChild(pageController)
-        view.addSubview(pageController.view)
-        pageController.view.frame = tableView.frame
-        tabs.isHidden = false
+        pageController.view.frame = contentView.bounds
+        pageController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        contentView.addSubview(pageController.view)
         tableView.isHidden = true
         pageController.didMove(toParent: self)
+        updateHeader()
     }
 
     private func hideTabs() {
-        tabs?.isHidden = true
-        tableView?.isHidden = false
+        tableView.isHidden = false
+        pageController?.willMove(toParent: nil)
         pageController?.view.removeFromSuperview()
         pageController?.removeFromParent()
+        updateHeader()
     }
 
-    @IBAction private func tabChanged(_ sender: Any?) {
+    @objc private func tabChanged(_ sender: Any?) {
         moveGestureDetected()
         if let pageController, let exploreViewController, let categoriesViewController, let addressViewController {
-            switch tabs.selectedSegmentIndex {
+            switch tabsControl.selectedSegmentIndex {
             case 0:
                 pageController.setViewControllers([exploreViewController], direction: .reverse, animated: true)
             case 1:
@@ -473,14 +577,18 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func processTabChange() {
-        addressSearch = tabs.selectedSegmentIndex == 2
+        addressSearch = tabsControl.selectedSegmentIndex == 2
         updateHint()
         if !(addressSearch && !citiesLoaded) {
             restoreSearch()
         }
     }
 
-    @IBAction private func leftImgButtonPress(_ sender: Any) {
+    @objc private func onBackButtonPressed() {
+        guard modalInput else {
+            dismissSearch(animated: true, completion: onCloseCallback)
+            return
+        }
         restoreInputLayout()
         resetSearch()
         if addressSearch && tabsVisible {
@@ -488,7 +596,11 @@ final class QuickSearchViewController: OASuperViewController {
         }
     }
 
-    @IBAction private func barActionTextButtonPress(_ sender: Any) {
+    @objc private func onClearButtonPressed() {
+        clearLastWord()
+    }
+
+    @objc private func onBarActionButtonPressed() {
         guard barActionType == .selectTarget || barActionType == .showOnMap,
               let searchPhrase = searchUICore?.getPhrase() else { return }
 
@@ -526,7 +638,7 @@ final class QuickSearchViewController: OASuperViewController {
             }
             OARootViewController.instance().mapPanel.mapViewController.updatePoiLayer()
             showToolbar(filter)
-            dismiss(animated: true)
+            dismissSearch(animated: true)
         } else if searchPhrase.isLastWord(.favoriteGroup) {
             guard let group = searchPhrase.getLastSelectedWord()?.result?.object as? OAFavoriteGroup else { return }
             let points = OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: group.name)
@@ -540,7 +652,7 @@ final class QuickSearchViewController: OASuperViewController {
                 bottomRight.longitude = max(bottomRight.longitude, point.longitude)
             }
             let mapPanel = OARootViewController.instance().mapPanel
-            dismiss(animated: true) {
+            dismissSearch(animated: true) {
                 guard let mapPanel else { return }
                 mapPanel.displayArea(onMap: topLeft, bottomRight: bottomRight, maxZoom: Float(PREFERRED_FAVORITE_ZOOM), screenBBox: mapPanel.view.bounds.size, bottomInset: 0, leftInset: 0, topInset: 0)
             }
@@ -549,13 +661,7 @@ final class QuickSearchViewController: OASuperViewController {
         }
     }
 
-    @IBAction private func barActionLeftImgButtonPress(_ sender: Any) {
-        if barActionType == .editHistory {
-            finishHistoryEditing()
-        }
-    }
-
-    @IBAction private func barActionImgButtonPress(_ sender: Any) {
+    private func openFilters() {
         guard barActionType == .showOnMap,
               let searchPhrase = searchUICore?.getPhrase(),
               searchPhrase.isLastWord(.poiType) else { return }
@@ -578,41 +684,52 @@ final class QuickSearchViewController: OASuperViewController {
         }
     }
 
-    @IBAction private func bottomTextButtonPress(_ sender: Any) {
+    @objc private func onSaveFilterButtonPressed() {
         guard let customFilter = OAPOIFiltersHelper.sharedInstance().getCustomPOIFilter() else { return }
-        present(createSaveFilterDialog(customFilter, customSaveAction: false), animated: true)
+        presentOverSearch(createSaveFilterDialog(customFilter, customSaveAction: false))
     }
 
-    @IBAction private func bottomImageButtonPress(_ sender: Any) {
-        setBottomViewVisible(false)
-    }
-
-    @IBAction private func btnCancelClicked(_ sender: Any) {
-        dismiss(animated: true, completion: onCloseCallback)
-    }
-
-    @IBAction private func btnMyLocationClicked(_ sender: Any) {
+    private func searchNearMyLocation() {
         guard searchNearMapCenter,
-              let newLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return }
-
-        searchLocation = newLocation.coordinate
+              let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return }
+        searchLocation = myLocation.coordinate
+        distanceFromMyLocation = 0
         searchNearMapCenter = false
-        UIView.animate(withDuration: Self.animationDuration) {
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            if self.addressSearch && self.tabsVisible {
-                self.reloadCities()
-            }
+        searchAroundLocationChanged()
+    }
+
+    private func searchNearMapCenterLocation() {
+        guard !searchNearMapCenter,
+              let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return }
+        if let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
+            distanceFromMyLocation = myLocation.distance(from: mapCenter)
+        }
+        searchLocation = mapCenter.coordinate
+        searchNearMapCenter = true
+        searchAroundLocationChanged()
+    }
+
+    private func searchAroundLocationChanged() {
+        if addressSearch && tabsVisible {
+            reloadCities()
+        }
+        if !searchQuery.isEmpty {
+            runSearch()
         }
     }
 
-    @IBAction private func textFieldValueChanged(_ sender: Any?) {
+    private func searchTextChanged() {
+        let newQueryText = searchText
+        processedSearchText = newQueryText
         hidePoi()
         hideToolbar()
         updateHint()
 
-        let newQueryText = textField?.text ?? ""
         let textEmpty = newQueryText.isEmpty
+        searchController.searchBar.searchTextField.rightViewMode = textEmpty ? .never : .always
+        if textEmpty {
+            bottomViewVisible = false
+        }
         updateTabsVisibility(textEmpty)
         showSearchIcon()
         if textEmpty && addressSearch {
@@ -636,10 +753,6 @@ final class QuickSearchViewController: OASuperViewController {
             runSearchFirstTime = false
             runSearch()
         }
-
-        if isViewLoaded {
-            view.setNeedsLayout()
-        }
     }
 
     private func showFilterScreen(_ filter: OAPOIUIFilter, filterByName: String?) {
@@ -658,179 +771,139 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func updateBarActionView() {
-        guard !historyEditing else { return }
-        var barActionButtonVisible = !(textField?.text ?? "").isEmpty
+        var barActionButtonVisible = !searchText.isEmpty
         if isTargetSearchType {
-            let word = searchUICore?.getPhrase()?.getLastSelectedWord()
+            let word = lastSelectedWord
             barActionButtonVisible = barActionButtonVisible
                 && word?.result != nil
                 && word?.getType() != .poiType
                 && word?.getType() != .favoriteGroup
         }
         if barActionButtonVisible {
-            setupBarActionView(isTargetSearchType ? .selectTarget : .showOnMap, title: nil)
+            setupBarActionView(isTargetSearchType ? .selectTarget : .showOnMap)
         } else {
-            setupBarActionView(.none, title: nil)
+            setupBarActionView(.none)
         }
     }
 
     private func setBottomViewVisible(_ visible: Bool) {
-        if visible {
-            if !bottomViewVisible {
-                bottomView.isHidden = false
-                UIView.animate(withDuration: Self.animationDuration) {
-                    let bottomMargin = OAUtilities.getBottomMargin()
-                    self.bottomView.frame = CGRect(x: 0,
-                                                   y: self.view.frame.height - Self.bottomViewHeight - bottomMargin,
-                                                   width: self.view.frame.width,
-                                                   height: Self.bottomViewHeight + bottomMargin)
-                    var tableFrame = self.tableView.frame
-                    tableFrame.size.height -= self.bottomView.frame.height
-                    self.tableView.frame = tableFrame
-                }
-            }
-            bottomViewVisible = true
-        } else {
-            if bottomViewVisible {
-                UIView.animate(withDuration: Self.animationDuration) {
-                    self.bottomView.frame = CGRect(x: 0, y: self.view.frame.height + 1, width: self.view.frame.width, height: Self.bottomViewHeight)
-                    var tableFrame = self.tableView.frame
-                    tableFrame.size.height = self.view.frame.height - tableFrame.origin.y
-                    self.tableView.frame = tableFrame
-                } completion: { _ in
-                    self.bottomView.isHidden = true
-                }
-            }
-            bottomViewVisible = false
-        }
+        bottomViewVisible = visible
+        updateHeader()
     }
 
-    private func finishHistoryEditing() {
-        historyEditing = false
-        setupBarActionView(.none, title: nil)
-    }
-
-    private func updateNavbar() {
+    private func updateHeader() {
         guard isViewLoaded else { return }
-        let lastWord = searchUICore?.getPhrase()?.getLastSelectedWord()
-        let hasLastWordWithLocation = lastWord?.getLocation() != nil
-        let showBarActionView = barActionType != .none && (!modalInput || hasLastWordWithLocation)
-        let showInputView = barActionType != .editHistory
-        let showMapCenterSearch = !showBarActionView && searchNearMapCenter && searchQuery.isEmpty && distanceFromMyLocation > 0
-        let showTabs = tabsVisible && barActionType != .editHistory
-        var topViewFrame = topView.frame
-        let statusBarHeight = max(Self.minStatusBarHeight, view.safeAreaInsets.top)
-        let margins = view.layoutMargins
-        let contentWidth = view.bounds.width - margins.left - margins.right
-        let cancelFittingWidth = btnCancel.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: btnCancel.bounds.height)).width
-        let cancelWidth = max(btnCancel.bounds.width, ceil(cancelFittingWidth) + 8)
-        topViewFrame.size.height = (showInputView ? Self.initialSearchToolbarHeight + statusBarHeight : statusBarHeight)
-            + (showMapCenterSearch || showBarActionView ? Self.barActionViewHeight : 0)
-            + (showTabs ? Self.tabsHeight : 0)
+        let tabsHidden = !tabsVisible
+        if tabsContainerView.isHidden != tabsHidden {
+            tabsContainerView.isHidden = tabsHidden
+        }
+        let chipsHidden = !showsChips
+        if chipsContainerView.isHidden != chipsHidden {
+            chipsContainerView.isHidden = chipsHidden
+        }
+        updateChips()
+        updateBottomToolbar(animated: view.window != nil)
+    }
 
-        textField.isHidden = !showInputView
-        btnCancel.isHidden = !showInputView || modalInput
-        barActionView.isHidden = !showBarActionView
-        searchNearCenterView.isHidden = !showMapCenterSearch
-        tabs.isHidden = !showTabs
+    private func updateChips() {
+        guard isViewLoaded, showsChips else { return }
+        let showsFilters = showsFiltersChip
+        let state = ChipsState(searchNearMapCenter: searchNearMapCenter,
+                               showsFilters: showsFilters,
+                               filtersApplied: showsFilters && isPoiFilterApplied)
+        guard state != chipsState else { return }
+        chipsState = state
+        chipsView.reloadData()
+    }
 
-        barActionView.frame = CGRect(x: 0,
-                                     y: showInputView ? Self.inputOffset + statusBarHeight : statusBarHeight,
-                                     width: topViewFrame.width,
-                                     height: barActionView.bounds.height)
-        adjustViewPosition(searchNearCenterView, byHeight: showInputView ? Self.inputOffset : 0)
+    private func updateBottomToolbar(animated: Bool) {
+        guard let navigationController, navigationController.topViewController === self else { return }
+        let showsBarAction = barActionType != .none && (!modalInput || lastSelectedWord?.getLocation() != nil)
+        let state = ToolbarState(barActionTitle: showsBarAction ? barActionTitle() : nil,
+                                 showsSave: bottomViewVisible && !tabsVisible)
+        guard state != toolbarState else { return }
+        toolbarState = state
 
-        let actionLeft = max(margins.left, view.safeAreaInsets.left)
-        let actionRight = view.bounds.width - max(margins.right, view.safeAreaInsets.right)
-        var actionImageFrame = barActionImageView.frame
-        actionImageFrame.origin.x = actionLeft
-        barActionImageView.frame = actionImageFrame
-        var actionLeftButtonFrame = barActionLeftImageButton.frame
-        actionLeftButtonFrame.origin.x = actionLeft
-        barActionLeftImageButton.frame = actionLeftButtonFrame
-        var actionRightButtonFrame = barActionImageButton.frame
-        actionRightButtonFrame.origin.x = actionRight - actionRightButtonFrame.width
-        barActionImageButton.frame = actionRightButtonFrame
-        var actionTextFrame = barActionTextButton.frame
-        actionTextFrame.origin.x = actionImageFrame.maxX
-        actionTextFrame.size.width = max(0, actionRightButtonFrame.minX - actionTextFrame.origin.x)
-        barActionTextButton.frame = actionTextFrame
-
-        var nearbyButtonFrame = btnMyLocation.frame
-        nearbyButtonFrame.origin.x = actionRight - nearbyButtonFrame.width
-        btnMyLocation.frame = nearbyButtonFrame
-        var nearbyLabelFrame = lbSearchNearCenter.frame
-        nearbyLabelFrame.origin.x = actionLeft + 10
-        nearbyLabelFrame.size.width = max(0, nearbyButtonFrame.origin.x - nearbyLabelFrame.origin.x)
-        lbSearchNearCenter.frame = nearbyLabelFrame
-
-        adjustViewPosition(btnCancel, byHeight: Self.cancelButtonY)
-        adjustViewPosition(leftImageButton, byHeight: Self.leftImageButtonY)
-
-        if modalInput {
-            leftImageButton.isHidden = false
-            var buttonFrame = leftImageButton.frame
-            buttonFrame.origin.x = max(view.safeAreaInsets.left, margins.left - 8)
-            leftImageButton.frame = buttonFrame
-            let fieldX = buttonFrame.maxX
-            textField.frame = CGRect(x: fieldX,
-                                     y: 5 + statusBarHeight,
-                                     width: max(0, view.bounds.width - margins.right - fieldX),
-                                     height: textField.frame.height)
-        } else {
-            leftImageButton.isHidden = true
-            textField.frame = CGRect(x: margins.left,
-                                     y: 5 + statusBarHeight,
-                                     width: max(0, contentWidth - cancelWidth - 8),
-                                     height: textField.frame.height)
-            tabs.frame = CGRect(x: margins.left, y: tabs.frame.origin.y, width: contentWidth, height: tabs.frame.height)
-            btnCancel.frame = CGRect(x: view.bounds.width - margins.right - cancelWidth,
-                                     y: btnCancel.frame.origin.y,
-                                     width: cancelWidth,
-                                     height: btnCancel.frame.height)
+        var items: [UIBarButtonItem] = []
+        if let barActionTitle = state.barActionTitle {
+            let barActionItem = UIBarButtonItem(title: barActionTitle, style: .plain, target: self, action: #selector(onBarActionButtonPressed))
+            barActionItem.tintColor = .iconColorActive
+            if !state.showsSave {
+                if #available(iOS 26.0, *) {
+                    barActionItem.style = .prominent
+                } else {
+                    barActionItem.style = .done
+                }
+            }
+            items.append(barActionItem)
+        }
+        if state.showsSave {
+            let saveItem = UIBarButtonItem(title: localizedString("shared_string_save"), style: .plain, target: self, action: #selector(onSaveFilterButtonPressed))
+            saveItem.tintColor = .iconColorActive
+            items.append(saveItem)
         }
 
-        topView.frame = topViewFrame
-        let bottomOffset = bottomViewVisible ? view.frame.height - bottomView.frame.origin.y : 0
-        tableView.frame = CGRect(x: 0,
-                                 y: topViewFrame.height,
-                                 width: topViewFrame.width,
-                                 height: view.frame.height - topViewFrame.height - bottomOffset)
-        pageController?.view.frame = tableView.frame
+        switch items.count {
+        case 2:
+            toolbarItems = [items[0], .flexibleSpace(), items[1]]
+        case 1:
+            toolbarItems = state.barActionTitle != nil ? [.flexibleSpace(), items[0], .flexibleSpace()] : [.flexibleSpace(), items[0]]
+        default:
+            toolbarItems = nil
+        }
+        navigationController.setToolbarHidden(items.isEmpty, animated: animated)
     }
 
-    private func updateSearchNearMapCenterLabel() {
-        let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceFromMyLocation)) ?? ""
-        lbSearchNearCenter.text = "\(localizedString("you_searching")) \(distance) \(localizedString("from_location"))"
+    private func barActionTitle() -> String {
+        guard barActionType == .selectTarget else { return localizedString("shared_string_show_on_map") }
+        let select = localizedString("shared_string_select")
+        guard !searchText.isEmpty, let localeName = lastSelectedWord?.result?.localeName else { return select }
+        return "\(select) \(localeName)"
     }
 
-    private func adjustViewPosition(_ targetView: UIView, byHeight height: CGFloat) {
-        var frame = targetView.frame
-        frame.origin.y = max(Self.minStatusBarHeight, view.safeAreaInsets.top) + height
-        targetView.frame = frame
+    private func presentOverSearch(_ controller: UIViewController) {
+        let presenter: UIViewController = searchController.isActive ? searchController : self
+        presenter.present(controller, animated: true)
+    }
+
+    private func presentAfterDeactivatingSearch(_ presentation: @escaping () -> Void) {
+        guard searchController.isActive else {
+            presentation()
+            return
+        }
+        pendingPresentation = presentation
+        searchController.isActive = false
+    }
+
+    private func focusSearchField() {
+        searchController.searchBar.becomeFirstResponder()
     }
 
     private func showWaitingIndicator() {
         DispatchQueue.main.async {
-            self.leftImgView.isHidden = true
-            self.activityIndicatorView.isHidden = false
+            let searchTextField = self.searchController.searchBar.searchTextField
+            guard searchTextField.leftView !== self.activityIndicatorView else { return }
+            self.searchIconView = searchTextField.leftView
             self.activityIndicatorView.startAnimating()
+            searchTextField.leftView = self.activityIndicatorView
         }
     }
 
     private func showSearchIcon() {
         DispatchQueue.main.async {
-            self.activityIndicatorView.isHidden = true
-            self.leftImgView.isHidden = false
+            let searchTextField = self.searchController.searchBar.searchTextField
+            guard searchTextField.leftView === self.activityIndicatorView else { return }
+            self.activityIndicatorView.stopAnimating()
+            searchTextField.leftView = self.searchIconView
         }
     }
 
     @objc private func moveGestureDetected() {
-        textField?.resignFirstResponder()
+        searchController.searchBar.resignFirstResponder()
     }
 
     @objc private func dismissTextEditing() {
-        textField?.resignFirstResponder()
+        searchController.searchBar.resignFirstResponder()
     }
 
     private func registerForKeyboardNotifications() {
@@ -844,42 +917,13 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     @objc private func keyboardWillShow(_ notification: Notification) {
-        DispatchQueue.main.async {
-            if let tblMove = self.tblMove {
-                self.view.addGestureRecognizer(tblMove)
-            }
-            let userInfo = notification.userInfo
-            let keyboardFrame = (userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-            let keyboardHeight = self.view.convert(keyboardFrame, from: nil).height
-            let duration = (userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurve = (userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue ?? 0
-            guard self.bottomViewVisible else { return }
-            UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: animationCurve)) {
-                self.bottomView.frame = CGRect(x: 0,
-                                               y: self.view.frame.height - keyboardHeight - Self.bottomViewHeight,
-                                               width: self.view.frame.width,
-                                               height: Self.bottomViewHeight)
-            }
-        }
+        guard let tblMove else { return }
+        view.addGestureRecognizer(tblMove)
     }
 
     @objc private func keyboardWillBeHidden(_ notification: Notification) {
-        DispatchQueue.main.async {
-            if let tblMove = self.tblMove {
-                self.view.removeGestureRecognizer(tblMove)
-            }
-            let userInfo = notification.userInfo
-            let duration = (userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-            let animationCurve = (userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue ?? 0
-            guard self.bottomViewVisible else { return }
-            UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: animationCurve)) {
-                let bottomMargin = OAUtilities.getBottomMargin()
-                self.bottomView.frame = CGRect(x: 0,
-                                               y: self.view.frame.height - Self.bottomViewHeight - bottomMargin,
-                                               width: self.view.frame.width,
-                                               height: Self.bottomViewHeight + bottomMargin)
-            }
-        }
+        guard let tblMove else { return }
+        view.removeGestureRecognizer(tblMove)
     }
 
     @objc private func updateDistanceAndDirection() {
@@ -897,17 +941,17 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func updateHint() {
-        textField?.placeholder = localizedString(addressSearch ? "type_address" : "search_poi_category_hint")
+        searchController.searchBar.placeholder = localizedString(addressSearch ? "type_address" : "search_poi_category_hint")
     }
 
     private func enterModalInputLayout() {
         modalInput = true
-        updateNavbar()
+        updateHeader()
     }
 
     private func restoreInputLayout() {
         modalInput = false
-        updateNavbar()
+        updateHeader()
     }
 
     private func restoreSearch() {
@@ -1026,19 +1070,19 @@ final class QuickSearchViewController: OASuperViewController {
             }
             rows.append(OAQuickSearchButtonListItem(icon: .icActionBuildingNumber, text: localizedString("select_city")) { [weak self] _ in
                 guard let self else { return }
-                self.textField.placeholder = localizedString("type_city_town")
+                self.searchController.searchBar.placeholder = localizedString("type_city_town")
                 self.startCitySearch()
                 self.updateTabsVisibility(false)
                 self.runCoreSearch("", updateResult: false, searchMore: false)
-                self.textField.becomeFirstResponder()
+                self.focusSearchField()
             })
             rows.append(OAQuickSearchButtonListItem(icon: .icActionPostcode, text: localizedString("select_postcode")) { [weak self] _ in
                 guard let self else { return }
-                self.textField.placeholder = localizedString("type_postcode")
+                self.searchController.searchBar.placeholder = localizedString("type_postcode")
                 self.startPostcodeSearch()
                 self.updateData([], append: false)
                 self.updateTabsVisibility(false)
-                self.textField.becomeFirstResponder()
+                self.focusSearchField()
             })
             rows.append(OAQuickSearchButtonListItem(icon: .icCustomLocationMarker, text: localizedString("coords_search")) { [weak self] _ in
                 guard let self else { return }
@@ -1047,7 +1091,9 @@ final class QuickSearchViewController: OASuperViewController {
                                                                                              lon: latLon?.coordinate.longitude ?? 0) else { return }
                 let navigationController = UINavigationController(rootViewController: coordinatesViewController)
                 navigationController.modalPresentationStyle = .fullScreen
-                self.present(navigationController, animated: true)
+                self.presentAfterDeactivatingSearch { [weak self] in
+                    self?.present(navigationController, animated: true)
+                }
             })
 
             var data: [[OAQuickSearchListItem]] = [rows]
@@ -1100,7 +1146,7 @@ final class QuickSearchViewController: OASuperViewController {
                 replaceQuery(withText: lastCityName + " ")
             }
         }
-        textField.becomeFirstResponder()
+        focusSearchField()
     }
 
     private func reloadCategories() {
@@ -1117,8 +1163,10 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func updateTextField(_ text: String?) {
-        textField?.text = text ?? ""
-        textFieldValueChanged(textField)
+        let text = text ?? ""
+        processedSearchText = text
+        searchController.searchBar.text = text
+        searchTextChanged()
     }
 
     private func addHistoryItem(_ searchResult: OASearchResult) {
@@ -1382,7 +1430,7 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func clearLastWord() {
-        guard !(textField?.text ?? "").isEmpty else { return }
+        guard !searchText.isEmpty else { return }
         updateTextField(searchUICore?.getPhrase()?.getTextWithoutLastWord())
     }
 
@@ -1509,15 +1557,75 @@ final class QuickSearchViewController: OASuperViewController {
     }
 }
 
-extension QuickSearchViewController: UITextFieldDelegate {
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        guard !(textField.text ?? "").isEmpty else { return true }
-        updateTextField(searchUICore?.getPhrase()?.getTextWithoutLastWord())
-        return false
+extension QuickSearchViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard searchText != processedSearchText else { return }
+        searchTextChanged()
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        true
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func didDismissSearchController(_ searchController: UISearchController) {
+        guard let presentation = pendingPresentation else { return }
+        pendingPresentation = nil
+        presentation()
+    }
+}
+
+extension QuickSearchViewController: StarMapSearchSortFilterChipsDataSource, StarMapSearchSortFilterChipsDelegate {
+    func chipGroups(for chipsView: StarMapSearchSortFilterChipsView) -> [SearchSortFilterChipGroup] {
+        var groups = [searchAroundChipGroup()]
+        if let chipsState, chipsState.showsFilters {
+            groups.append(SearchSortFilterChipGroup(id: Self.filtersGroupId,
+                                                    chipTitle: localizedString("shared_string_filters"),
+                                                    chipImage: UIImage.icCustomFilter.resizedTemplateImage(with: Self.chipIconSize),
+                                                    selectionMode: .toggle,
+                                                    isToggleOn: chipsState.filtersApplied))
+        }
+        return groups
+    }
+
+    func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didSelectOption optionId: String, inGroup groupId: String) {
+        guard groupId == Self.searchAroundGroupId else { return }
+        if optionId == Self.nearMeOptionId {
+            searchNearMyLocation()
+        } else if optionId == Self.mapCenterOptionId {
+            searchNearMapCenterLocation()
+        }
+    }
+
+    func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool) {
+        guard groupId == Self.filtersGroupId else { return }
+        openFilters()
+    }
+
+    private func searchAroundChipGroup() -> SearchSortFilterChipGroup {
+        var mapCenterDescription: String?
+        if let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
+           let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() {
+            let distance = OAOsmAndFormatter.getFormattedDistance(Float(myLocation.distance(from: mapCenter))) ?? ""
+            mapCenterDescription = String(format: localizedString("search_around_map_center_description"), distance)
+        }
+        let nearMeOption = StarMapSearchSortFilterChipOption(id: Self.nearMeOptionId,
+                                                             title: localizedString("search_near_me"),
+                                                             image: nil,
+                                                             originalSizeImage: UIImage.icCustomNavigationArrow.withRenderingMode(.alwaysTemplate),
+                                                             isSelected: !searchNearMapCenter,
+                                                             subtitle: localizedString("search_around_my_location_description"))
+        let mapCenterOption = StarMapSearchSortFilterChipOption(id: Self.mapCenterOptionId,
+                                                                title: localizedString("shared_string_map_center"),
+                                                                image: nil,
+                                                                originalSizeImage: UIImage.icCustomMapOutline.withRenderingMode(.alwaysTemplate),
+                                                                isSelected: searchNearMapCenter,
+                                                                subtitle: mapCenterDescription)
+        let selectedOption = searchNearMapCenter ? mapCenterOption : nearMeOption
+        return SearchSortFilterChipGroup(id: Self.searchAroundGroupId,
+                                         chipTitle: selectedOption.title,
+                                         chipImage: selectedOption.originalSizeImage?.resizedTemplateImage(with: Self.chipIconSize),
+                                         selectionMode: .single,
+                                         sections: [StarMapSearchSortFilterChipSection(options: [nearMeOption, mapCenterOption])])
     }
 }
 
@@ -1546,16 +1654,16 @@ extension QuickSearchViewController: UIPageViewControllerDataSource, UIPageViewC
                             didFinishAnimating finished: Bool,
                             previousViewControllers: [UIViewController],
                             transitionCompleted completed: Bool) {
-        let prevTabIndex = tabs.selectedSegmentIndex
+        let prevTabIndex = tabsControl.selectedSegmentIndex
         let currentViewController = pageViewController.viewControllers?.first
         if currentViewController === exploreViewController {
-            tabs.selectedSegmentIndex = 0
+            tabsControl.selectedSegmentIndex = 0
         } else if currentViewController === categoriesViewController {
-            tabs.selectedSegmentIndex = 1
+            tabsControl.selectedSegmentIndex = 1
         } else {
-            tabs.selectedSegmentIndex = 2
+            tabsControl.selectedSegmentIndex = 2
         }
-        if prevTabIndex != tabs.selectedSegmentIndex {
+        if prevTabIndex != tabsControl.selectedSegmentIndex {
             processTabChange()
         }
     }
@@ -1574,12 +1682,12 @@ extension QuickSearchViewController: OAQuickSearchTableDelegate {
     func didShow(onMap result: OASearchResult) {
         hideToolbar()
         addHistoryItem(result)
-        dismiss(animated: true)
+        dismissSearch(animated: true)
     }
 
     func closeSearch() {
         hideToolbar()
-        dismiss(animated: true)
+        dismissSearch(animated: true)
     }
 }
 
@@ -1650,7 +1758,7 @@ extension QuickSearchViewController: ExploreViewControllerDelegate {
                 OATargetPointsHelper.sharedInstance().setWorkPoint(location, description: pointDescription)
             }
         }
-        dismiss(animated: true)
+        dismissSearch(animated: true)
     }
 
     func exploreDidSelectPopularPlace(_ poi: OAPOI) {
@@ -1671,15 +1779,11 @@ extension QuickSearchViewController: ExploreViewControllerDelegate {
         OARootViewController.instance().mapPanel.mapViewController.updatePoiLayer()
         showToolbar(filter)
         searchToolbarViewController?.toolbarTitle = localizedString("popular_places")
-        dismiss(animated: true)
+        dismissSearch(animated: true)
     }
 }
 
 extension QuickSearchViewController: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        gestureRecognizer !== dismissEditingTap || !(touch.view?.isDescendant(of: textField) ?? false)
-    }
-
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true

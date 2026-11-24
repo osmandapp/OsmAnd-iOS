@@ -5113,3 +5113,7 @@
 "search_and_navigation_history_disabled_descr" = "Search and navigation history are disabled. Enable them in settings to see recent activity here.";
 "open_history_settings" = "Open History settings";
 "last_week" = "Last week";
+"shared_string_map_center" = "Map center";
+"search_near_me" = "Near me";
+"search_around_my_location_description" = "Search around your position";
+"search_around_map_center_description" = "%@ away from your location";

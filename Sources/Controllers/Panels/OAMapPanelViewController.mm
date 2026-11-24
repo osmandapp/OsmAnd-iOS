@@ -1378,9 +1378,7 @@ typedef enum
     if (tabIndex != -1)
         _searchViewController.tabIndex = tabIndex;
 
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
-    navController.navigationBarHidden = YES;
-    navController.edgesForExtendedLayout = UIRectEdgeNone;
+    UINavigationController *navController = [_searchViewController makeNavigationController];
 
     if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:PlanRouteScrollableViewController.class])
         _isNewContextMenuStillEnabled = YES;
@@ -2232,7 +2230,7 @@ typedef enum
 - (void) onHandleIncomingURL:(NSString *)ext
  {
      if (_searchViewController)
-         [_searchViewController dismissViewControllerAnimated:YES completion:nil];
+         [_searchViewController dismissSearchAnimated:YES completion:nil];
      if (_hudViewController)
          [_hudViewController.floatingButtonsController hideActionsSheetAnimated:nil];
  }
@@ -4473,7 +4471,7 @@ typedef enum
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
 
-    [_searchViewController setupBarActionView:QuickSearchBarActionShowOnMap title:filter.name];
+    [_searchViewController setupBarActionView:QuickSearchBarActionShowOnMap];
     [_searchViewController showToolbar:filter];
 }
 

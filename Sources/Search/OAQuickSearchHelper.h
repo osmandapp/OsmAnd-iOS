@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OASearchCoreFactory.h"
 
-@class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect;
+@class OASearchUICore, OASearchResultCollection, OASearchResult, QuadRect, OAHistoryItem;
 @class OASGpxFile;
 
 @interface SearchIndexItemAPI : OASearchBaseAPI
@@ -35,6 +35,8 @@
 @end
 
 @interface OASearchHistoryAPI : OASearchBaseAPI
+
++ (OASearchResult *)searchResultForHistoryItem:(OAHistoryItem *)item NS_SWIFT_NAME(searchResult(for:));
 
 @end
 

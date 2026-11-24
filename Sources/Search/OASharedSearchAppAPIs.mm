@@ -331,7 +331,7 @@ static OASSearchResult *favoriteResult(OAFavoriteItem *point, OASSearchPhrase *p
 
 - (OASGpxDataItem *)gpxItemNamed:(NSString *)name
 {
-    return [OAGPXDatabase.sharedDb getGPXItemByFileName:name];
+    return [OAGPXDatabase.sharedDb getGPXItem:name];
 }
 
 - (BOOL)searchPhrase:(OASSearchPhrase *)phrase resultMatcher:(OASSearchUICoreSearchResultMatcher *)resultMatcher

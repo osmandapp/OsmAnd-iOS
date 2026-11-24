@@ -191,7 +191,15 @@
     BOOL originFound = NO;
     if (item.hType == OAHistoryTypePOI)
     {
-        OAPOI *poi = [OAAmenitySearcher findPOIByName:item.name lat:item.latitude lon:item.longitude];
+        OAPOI *poi = nil;
+        if (item.osmId)
+        {
+            OAPOI *storedPoi = [[OAPOI alloc] init];
+            storedPoi.obfId = item.osmId.unsignedLongLongValue;
+            poi = [OAAmenitySearcher findPOIByOsmId:[ObfConstants getOsmObjectId:storedPoi] lat:item.latitude lon:item.longitude];
+        }
+        if (!poi)
+            poi = [OAAmenitySearcher findPOIByName:item.name lat:item.latitude lon:item.longitude];
         if (poi)
         {
             [self.class goToPoint:poi preferredZoom:preferredZoom];

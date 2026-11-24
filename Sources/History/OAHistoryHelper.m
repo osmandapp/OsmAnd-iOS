@@ -30,7 +30,7 @@
     if (self)
     {
         _destinationTypes = @[@(OAHistoryTypeDirection), @(OAHistoryTypeParking), @(OAHistoryTypeRouteWpt)];
-        _searchTypes = @[@(OAHistoryTypeFavorite), @(OAHistoryTypePOI), @(OAHistoryTypeAddress), @(OAHistoryTypeWpt), @(OAHistoryTypeLocation)];
+        _searchTypes = @[@(OAHistoryTypeFavorite), @(OAHistoryTypePOI), @(OAHistoryTypeAddress), @(OAHistoryTypeWpt), @(OAHistoryTypeLocation), @(OAHistoryTypePoiType), @(OAHistoryTypePoiFilter), @(OAHistoryTypeGpxFile)];
 
         _db = [[OAHistoryDB alloc] init];
         _historyPointAddObservable = [[OAObservable alloc] init];

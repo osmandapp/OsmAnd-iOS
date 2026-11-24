@@ -33,7 +33,7 @@ final class ExploreViewController: UIViewController {
     }
 
     private static let popularPlacesCount = 3
-    private static let historyItemsLimit: Int32 = 25
+    private static let historyItemsLimit = 25
     private static let topContentInset: CGFloat = 16
 
     @objc weak var delegate: ExploreViewControllerDelegate?
@@ -254,9 +254,9 @@ final class ExploreViewController: UIViewController {
         let searchHistoryEnabled = settings.searchHistory.get()
         let navigationHistoryEnabled = settings.navigationHistory.get()
         historyQueue.async { [weak self] in
-            let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: Self.historyItemsLimit) ?? []
+            let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: 0) ?? []
             let presenter = SearchHistoryItemPresenter()
-            let records = items.map { presenter.record(for: $0) }
+            let records = Array(items.lazy.compactMap { presenter.record(for: $0) }.prefix(Self.historyItemsLimit))
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == historyGeneration else { return }
                 historyRecords = records
@@ -366,8 +366,8 @@ extension ExploreViewController: UITableViewDataSource {
             return cell
         case .historyItem(let record):
             let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
-            cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record.item, traitCollection: traitCollection),
-                                                                  title: record.item.name ?? "",
+            cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record, traitCollection: traitCollection),
+                                                                  title: record.title,
                                                                   iconStyle: .plate,
                                                                   secondaryContent: historySecondaryContent(for: record))
             cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()

@@ -23,6 +23,9 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
     OAHistoryTypeAddress,
     OAHistoryTypeWpt,
     OAHistoryTypeLocation,
+    OAHistoryTypePoiType,
+    OAHistoryTypePoiFilter,
+    OAHistoryTypeGpxFile,
 };
 
 @property (nonatomic) int64_t hId;
@@ -39,14 +42,31 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 @property (nonatomic) OAHistoryType hType;
 @property (nonatomic, assign) BOOL fromNavigation;
 
+@property (nonatomic) NSString *objectType;
+@property (nonatomic) NSString *cityType;
+@property (nonatomic) NSString *displayName;
+@property (nonatomic) NSString *poiCategoryKey;
+@property (nonatomic) NSString *poiSubtypeKey;
+@property (nonatomic) NSString *address;
+@property (nonatomic) NSString *relatedObjectName;
+@property (nonatomic) NSString *openingHours;
+@property (nonatomic) NSString *alternateName;
+@property (nonatomic) NSString *photoUrl;
+@property (nonatomic) NSNumber *osmId;
+
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double distanceMeters;
 @property (nonatomic, assign) double direction;
 
++ (NSArray<NSString *> *)metadataKeys;
+
 - (instancetype)initWithPointDescription:(OAPointDescription *)pointDescription;
+
+- (BOOL)fillMissingMetadataFrom:(OAHistoryItem *)item;
 
 - (UIImage *)icon;
 - (NSString *) getPointDescriptionType;
+- (BOOL)hasLocation;
 
 - (float)preferredZoom;
 

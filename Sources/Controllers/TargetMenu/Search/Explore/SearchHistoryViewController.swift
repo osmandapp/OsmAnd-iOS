@@ -210,8 +210,8 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
         }
 
         let cell = tableView.dequeueReusableCell(withIdentifier: PointContentTableViewCell.reuseIdentifier, for: indexPath)
-        cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record.item, traitCollection: traitCollection),
-                                                              title: record.item.name ?? "",
+        cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record, traitCollection: traitCollection),
+                                                              title: record.title,
                                                               iconStyle: .plate,
                                                               secondaryContent: secondaryContent(for: record))
         cell.backgroundConfiguration = PointContentConfiguration.backgroundConfiguration()
@@ -313,7 +313,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
         historyQueue.async { [weak self] in
             let items = OAHistoryHelper.sharedInstance().points(fromSearch: source != .navigation, fromNavigation: source != .search, limit: 0) ?? []
             let presenter = SearchHistoryItemPresenter()
-            let records = items.map { presenter.record(for: $0) }
+            let records = items.compactMap { presenter.record(for: $0) }
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == loadGeneration else { return }
                 self.records = records
@@ -339,7 +339,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     }
 
     private func matches(_ record: SearchHistoryRecord, query: String) -> Bool {
-        [record.item.name, record.item.typeName, record.typeText, record.categoryName].contains { $0?.localizedCaseInsensitiveContains(query) == true }
+        [record.title, record.item.typeName, record.typeText, record.categoryName].contains { $0?.localizedCaseInsensitiveContains(query) == true }
     }
 
     private func updateCategories(for records: [SearchHistoryRecord]) {
@@ -375,7 +375,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
         }
         guard let origin = locationReference.location else { return records }
         return records
-            .map { ($0, origin.distance(from: CLLocation(latitude: $0.item.latitude, longitude: $0.item.longitude))) }
+            .map { record in (record, record.coordinate.map { origin.distance(from: CLLocation(latitude: $0.latitude, longitude: $0.longitude)) } ?? .greatestFiniteMagnitude) }
             .sorted { $0.1 < $1.1 }
             .map(\.0)
     }

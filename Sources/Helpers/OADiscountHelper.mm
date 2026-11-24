@@ -221,7 +221,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
 {
     if (_bannerVisible)
     {
-        if ([self matchesOneOfConditions:_conditions])
+        if ([self canShowBannerAgain])
             [self showDiscountBanner];
         else
             [self discountToolbarClose];
@@ -398,6 +398,12 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
             });
         }
     }
+}
+
+- (BOOL) canShowBannerAgain
+{
+    return ![OAAppSettings sharedManager].settingDoNotShowPromotions.get
+        && [self matchesOneOfConditions:_conditions];
 }
 
 - (BOOL) matchesOneOfConditions:(NSArray *)conditions

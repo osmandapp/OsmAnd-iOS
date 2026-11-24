@@ -26,6 +26,7 @@
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types exceptNavigation:(BOOL)exceptNavigation limit:(int)limit;
 - (NSInteger)getPointsCountHavingTypes:(NSArray<NSNumber *> *)types;
 - (NSArray<OAHistoryItem *> *)getPointsFromNavigation:(int)limit;
+- (NSArray<OAHistoryItem *> *)pointsHavingSearchTypes:(NSArray<NSNumber *> *)searchTypes fromNavigation:(BOOL)fromNavigation limit:(int)limit;
 - (NSInteger)getPointsCountFromNavigation;
 
 - (long)getMarkersHistoryLastModifiedTime;

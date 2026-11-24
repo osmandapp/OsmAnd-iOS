@@ -5106,3 +5106,5 @@
 "opening_hours_easter" = "Easter";
 "download_complete" = "Download complete";
 "download_complete_with_errors" = "Download complete with errors";
+"popular_places_nearby" = "Popular places nearby";
+"no_places_available" = "No places in visible region";

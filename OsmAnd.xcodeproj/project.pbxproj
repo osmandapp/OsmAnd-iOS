@@ -714,6 +714,9 @@
 		C547116F2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */; };
 		C5484DC72CD21F03004C5F27 /* FormattedValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5484DC62CD21F03004C5F27 /* FormattedValue.swift */; };
 		C54BBE6E3023553E00691F10 /* PointRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C54BBE6D3023553E00691F10 /* PointRowContentView.swift */; };
+		D7AEC6DAA9CF2D53E798E866 /* PoiRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9F1729792F7EF1FA2D8F9C /* PoiRowContentView.swift */; };
+		B9389B938BA4592B3257F0F5 /* PopularPlacesSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3AD8FC336D1C7CCD0393057 /* PopularPlacesSearcher.swift */; };
+		0C7F9A5D9FA48AA861692B93 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5B17E077C7CEB69D193BE9 /* ExploreViewController.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
 		C55357392F56D76F00F7154E /* DeepLinkAppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */; };
 		C553A28D2D53CD33007C9444 /* AverageSpeedComputerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C553A28C2D53CD33007C9444 /* AverageSpeedComputerService.swift */; };
@@ -937,7 +940,7 @@
 		D71B9A8E2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */; };
 		D71B9A902FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */; };
 		D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */; };
-		D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */; };
+		D721016A301B768C003CECB8 /* CollapsibleSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D721013E301B768C003CECB8 /* CollapsibleSectionHeaderView.swift */; };
 		D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */; };
 		D721016D301B768C003CECB8 /* HorizontalEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210141301B768C003CECB8 /* HorizontalEmptyCell.swift */; };
 		D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */; };
@@ -3329,6 +3332,9 @@
 		C547116E2F4DB1C9007DF8FC /* ButtonConfigurationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonConfigurationHelper.swift; sourceTree = "<group>"; };
 		C5484DC62CD21F03004C5F27 /* FormattedValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedValue.swift; sourceTree = "<group>"; };
 		C54BBE6D3023553E00691F10 /* PointRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointRowContentView.swift; sourceTree = "<group>"; };
+		ED9F1729792F7EF1FA2D8F9C /* PoiRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiRowContentView.swift; sourceTree = "<group>"; };
+		E3AD8FC336D1C7CCD0393057 /* PopularPlacesSearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularPlacesSearcher.swift; sourceTree = "<group>"; };
+		AE5B17E077C7CEB69D193BE9 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
 		C55357382F56D76F00F7154E /* DeepLinkAppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkAppRouter.swift; sourceTree = "<group>"; };
@@ -3699,7 +3705,7 @@
 		D71B9A8D2FC96D2D00FBB0F3 /* OrganizeByTypeExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeExtension.swift; sourceTree = "<group>"; };
 		D71B9A8F2FC99D5D00FBB0F3 /* OrganizeByTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizeByTypeCell.swift; sourceTree = "<group>"; };
 		D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeCardCell.swift; sourceTree = "<group>"; };
-		D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzeRouteAttributeHeaderView.swift; sourceTree = "<group>"; };
+		D721013E301B768C003CECB8 /* CollapsibleSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollapsibleSectionHeaderView.swift; sourceTree = "<group>"; };
 		D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteActionCell.swift; sourceTree = "<group>"; };
 		D7210141301B768C003CECB8 /* HorizontalEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalEmptyCell.swift; sourceTree = "<group>"; };
 		D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanRouteMenuActionCell.swift; sourceTree = "<group>"; };
@@ -7073,7 +7079,6 @@
 			isa = PBXGroup;
 			children = (
 				D721013D301B768C003CECB8 /* AnalyzeCardCell.swift */,
-				D721013E301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift */,
 				D7210140301B768C003CECB8 /* PlanRouteActionCell.swift */,
 				D7210142301B768C003CECB8 /* PlanRouteMenuActionCell.swift */,
 				D7210143301B768C003CECB8 /* PlanRoutePoiGroupHeaderView.swift */,
@@ -8643,6 +8648,8 @@
 				468CD3822C809E3400CC3436 /* ElevationChartCell.swift */,
 				46BCB15F2CC2AC6D004E0283 /* GradientChartCell.swift */,
 				C54BBE6D3023553E00691F10 /* PointRowContentView.swift */,
+				ED9F1729792F7EF1FA2D8F9C /* PoiRowContentView.swift */,
+				D721013E301B768C003CECB8 /* CollapsibleSectionHeaderView.swift */,
 				CE0BA2083045A00300089B64 /* DescriptionDeviceCell.swift */,
 			);
 			path = Cells;
@@ -9146,9 +9153,19 @@
 			path = Wiki;
 			sourceTree = "<group>";
 		};
+		BA724B8041959AA4CCFABCF4 /* Explore */ = {
+			isa = PBXGroup;
+			children = (
+				AE5B17E077C7CEB69D193BE9 /* ExploreViewController.swift */,
+				E3AD8FC336D1C7CCD0393057 /* PopularPlacesSearcher.swift */,
+			);
+			path = Explore;
+			sourceTree = "<group>";
+		};
 		DA5A7E2526C563A400F274C7 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				BA724B8041959AA4CCFABCF4 /* Explore */,
 				DA5A7E3426C563A400F274C7 /* OAAddressTableViewController.h */,
 				DA5A7E4E26C563A400F274C7 /* OAAddressTableViewController.mm */,
 				DA5A7E2726C563A400F274C7 /* OAAddressTableViewController.xib */,
@@ -12496,7 +12513,7 @@
 				DA5A850D26C563A900F274C7 /* OAScrollView.m in Sources */,
 				32AD5D5C2A2F11A200A51B60 /* OsmUserDataModel.swift in Sources */,
 				D7210169301B768C003CECB8 /* AnalyzeCardCell.swift in Sources */,
-				D721016A301B768C003CECB8 /* AnalyzeRouteAttributeHeaderView.swift in Sources */,
+				D721016A301B768C003CECB8 /* CollapsibleSectionHeaderView.swift in Sources */,
 				D721016C301B768C003CECB8 /* PlanRouteActionCell.swift in Sources */,
 				D721016D301B768C003CECB8 /* HorizontalEmptyCell.swift in Sources */,
 				D721016E301B768C003CECB8 /* PlanRouteMenuActionCell.swift in Sources */,
@@ -13793,6 +13810,9 @@
 				C56E3AF82B4DA0D60084080A /* MapSettingsGpxViewController.swift in Sources */,
 				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
 				C54BBE6E3023553E00691F10 /* PointRowContentView.swift in Sources */,
+				D7AEC6DAA9CF2D53E798E866 /* PoiRowContentView.swift in Sources */,
+				B9389B938BA4592B3257F0F5 /* PopularPlacesSearcher.swift in Sources */,
+				0C7F9A5D9FA48AA861692B93 /* ExploreViewController.swift in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,

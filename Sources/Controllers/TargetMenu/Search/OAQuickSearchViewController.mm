@@ -29,7 +29,6 @@
 #import "OAPOIHistoryType.h"
 #import "OAAddressTableViewController.h"
 #import "OACategoriesTableViewController.h"
-#import "OAHistoryTableViewController.h"
 #import "OACustomPOIViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
@@ -90,7 +89,7 @@ typedef void(^OAPublishCallback)(OASearchResultCollection *res, BOOL append);
 typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 
-@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, ExploreViewControllerDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -153,7 +152,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     UIPageViewController *_pageController;
     OAAddressTableViewController *_addressViewController;
     OACategoriesTableViewController *_categoriesViewController;
-    OAHistoryTableViewController *_historyViewController;
+    ExploreViewController *_exploreViewController;
 
     OASearchToolbarViewController *_searchToolbarViewController;
 
@@ -257,15 +256,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     else
         [_categoriesViewController resetMapCenterSearch];
 
-    _historyViewController = [[OAHistoryTableViewController alloc] initWithFrame:_pageController.view.bounds];
-    _historyViewController.delegate = self;
-    _historyViewController.searchNearMapCenter = _searchNearMapCenter;
-    _historyViewController.myLocation = _myLocation;
-    _historyViewController.searchType = self.searchType;
+    _exploreViewController = [[ExploreViewController alloc] init];
+    _exploreViewController.delegate = self;
+    _exploreViewController.searchLocation = _searchLocation;
+    _exploreViewController.searchNearMapCenter = _searchNearMapCenter;
 
-    [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
+    [_pageController setViewControllers:@[_exploreViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
 
-    [_tabs setTitle:OALocalizedString(@"shared_string_history") forSegmentAtIndex:0];
+    [_tabs setTitle:OALocalizedString(@"shared_string_explore") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
@@ -522,13 +520,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         case 0:
         {
-            [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:nil];
+            [_pageController setViewControllers:@[_exploreViewController] direction:UIPageViewControllerNavigationDirectionReverse animated:YES completion:nil];
             break;
         }
         case 1:
         {
             [self.searchHelper refreshCustomPoiFilters];
-            [_pageController setViewControllers:@[_categoriesViewController] direction: (_pageController.viewControllers[0] == _historyViewController ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse) animated:YES completion:nil];
+            [_pageController setViewControllers:@[_categoriesViewController] direction: (_pageController.viewControllers[0] == _exploreViewController ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse) animated:YES completion:nil];
             break;
         }
         case 2:
@@ -670,7 +668,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     switch (_barActionType)
     {
         case BarActionEditHistory:
-            [_historyViewController editDone];
             [self finishHistoryEditing];
             break;
 
@@ -727,11 +724,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     }
                 }
             }
-            break;
-        }
-        case BarActionEditHistory:
-        {
-            [_historyViewController deleteSelected];
             break;
         }
         default:
@@ -858,15 +850,15 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         if (searchNearMapCenter)
         {
-            _historyViewController.myLocation = _myLocation;
-            _historyViewController.searchNearMapCenter = searchNearMapCenter;
+            _exploreViewController.searchLocation = _searchLocation;
+            _exploreViewController.searchNearMapCenter = searchNearMapCenter;
             [_addressViewController setMapCenterCoordinate:_searchLocation];
             [_categoriesViewController setMapCenterCoordinate:_searchLocation];
             [_tableController setMapCenterCoordinate:_searchLocation];
         }
         else
         {
-            _historyViewController.searchNearMapCenter = searchNearMapCenter;
+            _exploreViewController.searchNearMapCenter = searchNearMapCenter;
             [_addressViewController resetMapCenterSearch];
             [_categoriesViewController resetMapCenterSearch];
             [_tableController resetMapCenterSearch];
@@ -882,7 +874,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     _searchType = searchType;
 
-    _historyViewController.searchType = searchType;
     _addressViewController.searchType = searchType;
     _categoriesViewController.searchType = searchType;
     _tableController.searchType = searchType;
@@ -904,6 +895,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _myLocation = myLocation;
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(myLocation);
     _searchLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    _exploreViewController.searchLocation = _searchLocation;
 
     OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
     [self.searchUICore updateSettings:settings];
@@ -1120,7 +1112,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         dispatch_async(dispatch_get_main_queue(), ^{
             self.lastUpdate = [[NSDate date] timeIntervalSince1970];
             [_tableController updateDistanceAndDirection];
-            [_historyViewController updateDistanceAndDirection];
+            [_exploreViewController updateDistanceAndDirection];
             [_addressViewController updateDistanceAndDirection];
         });
     }
@@ -1394,7 +1386,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void) reloadHistory
 {
-    [_historyViewController reloadData];
+    [_exploreViewController reloadData];
 }
 
 - (void) hidePoi
@@ -2060,12 +2052,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-    if (viewController == _historyViewController)
+    if (viewController == _exploreViewController)
         return nil;
     else if (viewController == _addressViewController)
         return _categoriesViewController;
     else
-        return _historyViewController;
+        return _exploreViewController;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
@@ -2083,7 +2075,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     NSInteger prevTabIndex = _tabs.selectedSegmentIndex;
-    if (pageViewController.viewControllers[0] == _historyViewController)
+    if (pageViewController.viewControllers[0] == _exploreViewController)
         _tabs.selectedSegmentIndex = 0;
     else if (pageViewController.viewControllers[0] == _categoriesViewController)
         _tabs.selectedSegmentIndex = 1;
@@ -2164,9 +2156,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     return [[OAPOIFiltersHelper sharedInstance] getSortedPoiFilters:NO];
 }
 
-#pragma mark - OAHistoryTableDelegate
+#pragma mark - ExploreViewControllerDelegate
 
-- (void) didSelectHistoryItem:(OAHistoryItem *)item
+- (void)exploreDidSelectHistoryItem:(OAHistoryItem *)item
 {
     if (self.searchType == OAQuickSearchType::REGULAR)
     {
@@ -2196,27 +2188,31 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void) enterHistoryEditingMode
+- (void)exploreDidSelectPopularPlace:(OAPOI *)poi
 {
-    _historyEditing = YES;
-    [self setupBarActionView:BarActionEditHistory title:@""];
+    OASearchResult *searchResult = [[OASearchResult alloc] initWithPhrase:[self.searchUICore getPhrase]];
+    searchResult.object = poi;
+    searchResult.objectType = EOAObjectTypePoi;
+    searchResult.localeName = poi.nameLocalized.length > 0 ? poi.nameLocalized : poi.name;
+    searchResult.location = [poi getLocation];
+    searchResult.preferredZoom = PREFERRED_POI_ZOOM;
+    searchResult.cityName = poi.cityName;
+    [_tableController showOnMap:searchResult searchType:self.searchType delegate:self];
 }
 
-- (void) exitHistoryEditingMode
+- (void)exploreDidRequestAllPopularPlaces
 {
-    [self finishHistoryEditing];
-}
+    OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter];
+    if (!filter)
+        return;
 
-- (void) historyItemsSelected:(int)count
-{
-    [UIView performWithoutAnimation:^{
-        if (count > 0)
-            [_barActionTextButton setTitle:[NSString stringWithFormat:OALocalizedString(@"items_selected"), count] forState:UIControlStateNormal];
-        else
-            [_barActionTextButton setTitle:@"" forState:UIControlStateNormal];
-
-        [_barActionTextButton layoutIfNeeded];
-    }];
+    OASearchResult *searchResult = [[OASearchResult alloc] initWithPhrase:[self.searchUICore getPhrase]];
+    searchResult.localeName = filter.name;
+    searchResult.object = filter;
+    searchResult.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+    searchResult.priorityDistance = 0;
+    searchResult.objectType = EOAObjectTypePoiType;
+    [self completeQueryWithObject:searchResult];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

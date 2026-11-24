@@ -10,6 +10,7 @@
 // So we can use this adapter for new Swit classes
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @protocol OADownloadTask;
 
@@ -138,6 +139,7 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (NSArray<OAResourceSwiftItem *> *)getUnsupportedResourcesWith:(OAWorldRegion *)region;
 
 + (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation;
++ (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAt:(CLLocationCoordinate2D)coordinate;
 
 + (NSString *)getCountryName:(OAResourceSwiftItem *)item;
 

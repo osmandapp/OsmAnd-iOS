@@ -6945,6 +6945,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         _searchHistory = [[[OACommonBoolean withKey:searchHistoryKey defValue:YES] makeGlobal] makeShared];
         _navigationHistory = [[[OACommonBoolean withKey:navigationHistoryKey defValue:YES] makeGlobal] makeShared];
         _mapMarkersHistory = [[[OACommonBoolean withKey:mapMarkersHistoryKey defValue:YES] makeGlobal] makeShared];
+        _exploreNearbyItemsCollapsed = [[OACommonBoolean withKey:@"exploreNearbyItemsCollapsed" defValue:NO] makeGlobal];
+        _exploreHistoryCollapsed = [[OACommonBoolean withKey:@"exploreHistoryCollapsed" defValue:NO] makeGlobal];
 
         [_globalPreferences setObject:_numberOfStartsFirstXmasShown forKey:@"number_of_starts_first_xmas_shown"];
         [_globalPreferences setObject:_lastFavCategoryEntered forKey:@"last_fav_category"];
@@ -6954,6 +6956,8 @@ static NSString *kOfflineKey = @"OFFLINE";
         [_globalPreferences setObject:_searchHistory forKey:@"search_history"];
         [_globalPreferences setObject:_navigationHistory forKey:@"navigation_history"];
         [_globalPreferences setObject:_mapMarkersHistory forKey:@"map_markers_history"];
+        [_globalPreferences setObject:_exploreNearbyItemsCollapsed forKey:@"explore_nearby_items_menu_collapsed"];
+        [_globalPreferences setObject:_exploreHistoryCollapsed forKey:@"explore_history_menu_collapsed"];
         
         _userIosId = [[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal];
 

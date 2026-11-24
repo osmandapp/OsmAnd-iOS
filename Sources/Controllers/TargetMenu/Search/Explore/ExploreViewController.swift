@@ -192,11 +192,11 @@ final class ExploreViewController: UIViewController {
         guard !isCollapsed(section) else { return [] }
         switch section {
         case .popularPlaces:
-            if !popularPlaces.isEmpty {
-                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
-            }
             if !popularPlacesSearcher.isDataSourceAvailable {
                 return [.noInternet]
+            }
+            if !popularPlaces.isEmpty {
+                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
             }
             if popularPlacesSearcher.isLoading {
                 return [.popularPlacesLoading]
@@ -248,13 +248,10 @@ final class ExploreViewController: UIViewController {
         let searchHistoryEnabled = settings.searchHistory.get()
         let navigationHistoryEnabled = settings.navigationHistory.get()
         historyQueue.async { [weak self] in
-            let helper: OAHistoryHelper = OAHistoryHelper.sharedInstance()
-            let items = searchHistoryEnabled
-                ? helper.getPointsHavingTypes(helper.searchTypes, exceptNavigation: !navigationHistoryEnabled, limit: Self.historyItemsLimit)
-                : helper.getPointsFromNavigation(Self.historyItemsLimit)
+            let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: Self.historyItemsLimit) ?? []
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == historyGeneration else { return }
-                historyItems = items ?? []
+                historyItems = items
                 reload(.history, animated: animated)
             }
         }

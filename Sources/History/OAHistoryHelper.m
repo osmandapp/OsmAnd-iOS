@@ -123,6 +123,11 @@
     return [_db getPointsCountFromNavigation];
 }
 
+- (NSArray<OAHistoryItem *> *)pointsFromSearch:(BOOL)fromSearch fromNavigation:(BOOL)fromNavigation limit:(int)limit
+{
+    return [_db pointsHavingSearchTypes:fromSearch ? _searchTypes : @[] fromNavigation:fromNavigation limit:limit];
+}
+
 - (OAHistoryItem *)getPointByName:(NSString *)name fromNavigation:(BOOL)fromNavigation
 {
     return [_db getPointByName:name fromNavigation:fromNavigation];

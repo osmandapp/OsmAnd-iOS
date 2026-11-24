@@ -124,6 +124,21 @@ static NSString * const kShowMinorTurnsRowKey = @"show_minor_turns";
     return self;
 }
 
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary<NSString *, id> *)widgetParams
+{
+    self = [self init];
+    if (self)
+    {
+        id showMinorTurns = widgetParams[kShowMinorTurnsRowKey];
+        if ([showMinorTurns isKindOfClass:NSNumber.class])
+        {
+            _pendingShowMinorTurns = showMinorTurns;
+            [self applySettings:appMode];
+        }
+    }
+    return self;
+}
+
 - (void) commonInit
 {
     self.widgetType = OAWidgetType.lanes;

@@ -472,6 +472,9 @@ final class WidgetConfigurationViewController: OABaseButtonsViewController, Widg
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)
         if widgetInfo.handleSwitchChanged(data, isOn: sw.isOn) {
+            if let key = data.key {
+                widgetConfigurationParams?[key] = sw.isOn
+            }
             return false
         }
         
@@ -552,7 +555,6 @@ extension WidgetConfigurationViewController {
     override func onBottomButtonPressed() {
         guard let navigationController else { return }
         
-        widgetInfo.applySettings(selectedAppMode)
         if let targetViewController = navigationController.viewControllers.compactMap({ $0 as? WidgetsListViewController }).first {
             targetViewController.addWidget(newWidget: widgetInfo, params: widgetConfigurationParams)
             navigationController.popToViewController(targetViewController, animated: true)

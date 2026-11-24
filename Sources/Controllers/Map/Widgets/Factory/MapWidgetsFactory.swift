@@ -57,7 +57,7 @@ final class MapWidgetsFactory: NSObject {
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .lanes:
-            let widget = OALanesControl()
+            let widget = OALanesControl(appMode: appMode, widgetParams: widgetParams)
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController?.mapInfoController
             return widget
         case .distanceToDestination:

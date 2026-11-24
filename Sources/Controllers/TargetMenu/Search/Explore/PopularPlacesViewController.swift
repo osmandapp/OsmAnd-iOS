@@ -78,7 +78,9 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
         tableView.prefetchDataSource = self
         setupSearchController()
         setupSortChips()
-        setupShowOnMapButton()
+        if onShowOnMap != nil {
+            setupShowOnMapButton()
+        }
         detailsLoader.onDetailsLoaded = { [weak self] place in
             self?.reconfigureRow(for: place)
         }
@@ -235,6 +237,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     }
 
     private func updateContentInsetForShowOnMapButton() {
+        guard showOnMapButton.superview != nil else { return }
         let inset = max(0, view.safeAreaLayoutGuide.layoutFrame.maxY - showOnMapButton.frame.minY) + Self.showOnMapButtonListSpacing
         guard abs(tableView.contentInset.bottom - inset) > 0.5 else { return }
         tableView.contentInset.bottom = inset
@@ -254,13 +257,22 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
 
     private func updateDisplayedPlaces() {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        let sortedPlaces = sortedPlaces()
+        let sortedPlaces = sortedPlaces(places)
         displayedPlaces = query.isEmpty ? sortedPlaces : sortedPlaces.filter { $0.matches(query) }
         detailsLoader.cancelAll()
         tableView.reloadData()
     }
 
-    private func sortedPlaces() -> [PopularPlace] {
+    private func resortDisplayedPlacesIfNeeded() -> Bool {
+        guard sortMode == .nearest else { return false }
+        let sortedPlaces = sortedPlaces(displayedPlaces)
+        guard !sortedPlaces.elementsEqual(displayedPlaces, by: ===) else { return false }
+        displayedPlaces = sortedPlaces
+        tableView.reloadData()
+        return true
+    }
+
+    private func sortedPlaces(_ places: [PopularPlace]) -> [PopularPlace] {
         guard sortMode == .nearest,
               let location = locationReference.location ?? OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return places }
         return places
@@ -290,6 +302,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
               !tableView.isDragging,
               !tableView.isDecelerating else { return }
         lastDistanceUpdate = now
+        guard !resortDisplayedPlacesIfNeeded() else { return }
         tableView.indexPathsForVisibleRows?.forEach { indexPath in
             guard let place = place(at: indexPath),
                   let cell = tableView.cellForRow(at: indexPath),

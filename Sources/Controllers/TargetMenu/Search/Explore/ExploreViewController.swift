@@ -317,8 +317,10 @@ final class ExploreViewController: UIViewController {
         controller.onSelectPlace = { [weak self] poi in
             self?.delegate?.exploreDidSelectPopularPlace(poi)
         }
-        controller.onShowOnMap = { [weak self] in
-            self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+        if OAPluginsHelper.isEnabled(OAWikipediaPlugin.self) {
+            controller.onShowOnMap = { [weak self] in
+                self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+            }
         }
         navigationController?.pushViewController(controller, animated: true)
     }
@@ -391,7 +393,7 @@ extension ExploreViewController: UITableViewDataSource {
         case .noPopularPlaces:
             guard let cell = emptyCell(at: indexPath) else { return UITableViewCell() }
             cell.configure(title: localizedString("no_places_available"),
-                           description: localizedString("no_photos_available_descr"),
+                           description: "",
                            icon: .icCustomDesert,
                            iconTint: .iconColorDefault)
             return cell

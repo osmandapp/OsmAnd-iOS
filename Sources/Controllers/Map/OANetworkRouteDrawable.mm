@@ -128,7 +128,7 @@
         }
     }
 
-    if (background.isEmpty() && foreground.isEmpty() && text.isEmpty())
+    if (layers.isEmpty() && text.isEmpty())
         return nil;
     
     textStyle.backgroundImage = OsmAnd::SkiaUtilities::mergeImages(layers);

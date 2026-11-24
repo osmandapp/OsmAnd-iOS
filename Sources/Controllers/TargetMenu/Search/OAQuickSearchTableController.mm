@@ -57,6 +57,8 @@
 #import "OAMapSelectionHelper.h"
 #import "OAAmenitySearcher.h"
 #import "OANetworkRouteDrawable.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -348,6 +350,13 @@
     }
 }
 
+- (OAQuickSearchListItem *)itemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section >= _dataGroups.count || indexPath.row >= _dataGroups[indexPath.section].count)
+        return nil;
+    return _dataGroups[indexPath.section][indexPath.row];
+}
+
 - (void) reloadData
 {
     [self.tableView reloadData];
@@ -625,6 +634,72 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     return cell;
+}
+
++ (UIImage *)iconForSearchResult:(OASearchResult *)searchResult
+{
+    switch (searchResult.objectType)
+    {
+        case EOAObjectTypeFavorite:
+        {
+            auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
+            return favorite ? [[[OAFavoriteItem alloc] initWithFavorite:favorite] getCompositeIcon] : nil;
+        }
+        case EOAObjectTypeWpt:
+            return [[OAGpxWptItem withGpxWpt:(OASWptPt *)searchResult.object] getCompositeIcon];
+        case EOAObjectTypeCity:
+        case EOAObjectTypeVillage:
+        case EOAObjectTypePostcode:
+        case EOAObjectTypeStreet:
+        case EOAObjectTypeHouse:
+        case EOAObjectTypeBoundary:
+            return [(OAAddress *)searchResult.object icon];
+        case EOAObjectTypePoi:
+            return [(OAPOI *)searchResult.object icon];
+        case EOAObjectTypeRecentObj:
+            return [(OAHistoryItem *)searchResult.object icon];
+        case EOAObjectTypeLocation:
+        case EOAObjectTypePartialLocation:
+            return [UIImage templateImageNamed:ACImageNameIcActionWorldGlobe];
+        default:
+            return [UIImage templateImageNamed:[OAQuickSearchListItem getIconName:searchResult]];
+    }
+}
+
++ (UIImage *)routeShieldForSearchResult:(OASearchResult *)searchResult
+{
+    if (searchResult.objectType != EOAObjectTypePoi || ![searchResult.object isKindOfClass:OAPOI.class])
+        return nil;
+    OAPOI *poi = (OAPOI *)searchResult.object;
+    return [poi isRouteTrack] ? [OANetworkRouteDrawable getIconByAmenityShieldTags:poi textSize:18] : nil;
+}
+
++ (NSString *)poiTypeNameForSearchResult:(OASearchResult *)searchResult
+{
+    id object = searchResult.object;
+    if ([object isKindOfClass:OAPOI.class])
+    {
+        OAPOI *poi = (OAPOI *)object;
+        OAPOICategory *category = poi.type.category;
+        if (!category || poi.subType.length == 0)
+            return nil;
+        for (NSString *subType in [poi.subType componentsSeparatedByString:@";"])
+        {
+            OAPOIType *poiType = [category getPoiTypeByKeyName:subType];
+            if (poiType && ![poiType isAdditional])
+                return poiType.nameLocalized;
+        }
+        return nil;
+    }
+    if ([object isKindOfClass:OAPOIType.class])
+        return [PoiAdditionalLabels getSearchName:(OAPOIType *)object];
+    if ([object isKindOfClass:OACity.class])
+        return [OACity getLocalizedTypeStr:((OACity *)object).type];
+    if ([object isKindOfClass:OAStreet.class])
+        return OALocalizedString(@"search_address_street");
+    if ([object isKindOfClass:OABuilding.class])
+        return OALocalizedString(@"search_address_building_option");
+    return nil;
 }
 
 - (NSInteger) getPoiFiltersCount:(NSArray<OAQuickSearchListItem *> *)dataArray

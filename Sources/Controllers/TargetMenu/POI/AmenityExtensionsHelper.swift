@@ -37,8 +37,8 @@ final class AmenityExtensionsHelper: NSObject {
     
     static func formattedAmenityMetrics(_ amenity: OAPOI) -> String? {
         let distMeters = amenityDistanceMeters(amenity)
-        let upMeters = KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_UP), def: 0)
-        let downMeters = KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_DOWN), def: 0)
+        let upMeters = amenityUphillMeters(amenity)
+        let downMeters = amenityDownhillMeters(amenity)
         
         guard let dist = OAOsmAndFormatter.getFormattedDistance(distMeters, with: OsmAndFormatterParams.noTrailingZeros),
               let uphill = OAOsmAndFormatter.getFormattedDistance(upMeters, with: OsmAndFormatterParams.noTrailingZeros),
@@ -62,7 +62,15 @@ final class AmenityExtensionsHelper: NSObject {
         return metrics.isEmpty ? nil : metrics.joined(separator: " ")
     }
     
-    private static func amenityDistanceMeters(_ amenity: OAPOI) -> Float {
+    static func amenityUphillMeters(_ amenity: OAPOI) -> Float {
+        KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_UP), def: 0)
+    }
+
+    static func amenityDownhillMeters(_ amenity: OAPOI) -> Float {
+        KAlgorithms.shared.parseFloatSilently(input: amenity.getAdditionalInfo(TravelGpx.DIFF_ELEVATION_DOWN), def: 0)
+    }
+
+    static func amenityDistanceMeters(_ amenity: OAPOI) -> Float {
         let distanceTag = amenity.getAdditionalInfo(TravelGpx.DISTANCE) ?? ""
         var km = KAlgorithms.shared.parseFloatSilently(input: distanceTag, def: 0)
         if km > 0 && !distanceTag.contains(".") {

@@ -39,6 +39,7 @@
 
 - (void) updateData:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data append:(BOOL)append;
 - (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex;
+- (OAQuickSearchListItem *)itemAtIndexPath:(NSIndexPath *)indexPath;
 - (void) reloadData;
 - (BOOL) isShowResult;
 - (void) showOnMap:(OASearchResult *)searchResult searchType:(OAQuickSearchType)searchType delegate:(id<OAQuickSearchTableDelegate>)delegate;
@@ -46,5 +47,8 @@
 + (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate preferredZoom:(float)preferredZoom;
 + (OASimpleTableViewCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon;
 + (NSString *) applySynonyms:(OASearchResult *)res;
++ (UIImage *)iconForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(icon(for:));
++ (UIImage *)routeShieldForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(routeShield(for:));
++ (NSString *)poiTypeNameForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(poiTypeName(for:));
 
 @end

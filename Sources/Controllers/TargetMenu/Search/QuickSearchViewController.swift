@@ -19,10 +19,50 @@ final class QuickSearchViewController: OASuperViewController {
     private typealias PublishCallback = (OASearchResultCollection?, Bool) -> Void
     private typealias SearchFinishedCallback = (OASearchPhrase?) -> Bool
 
+    private enum SearchAroundOption {
+        case myLocation
+        case mapCenter
+        case spatialLocation
+    }
+
+    private enum SortOption: CaseIterable {
+        case nearest
+        case relevance
+
+        var id: String {
+            self == .nearest ? "nearest" : "relevance"
+        }
+
+        var title: String {
+            localizedString(self == .nearest ? "shared_string_nearest" : "sort_by_relevance")
+        }
+
+        var sortType: OASearchSortType {
+            self == .nearest ? .onlyByDistance : .byRelevance
+        }
+    }
+
+    private struct SpatialSearchScope {
+        let name: String
+        let location: CLLocation
+    }
+
     private struct ChipsState: Equatable {
-        let searchNearMapCenter: Bool
+        let sortOption: SortOption
+        let nearestSortOnly: Bool
+        let searchAroundOption: SearchAroundOption
+        let showsSearchAround: Bool
+        let showsMapCenterOption: Bool
+        let spatialScopeName: String?
         let showsFilters: Bool
+        let appliedFiltersCount: Int
         let filtersApplied: Bool
+    }
+
+    private struct PoiTypeChipsState: Equatable {
+        let names: [String]
+        let selectedNames: Set<String>
+        let isEnabled: Bool
     }
 
     private struct ToolbarState: Equatable {
@@ -33,16 +73,21 @@ final class QuickSearchViewController: OASuperViewController {
     private static let tabsVerticalInset: CGFloat = 4
     private static let chipsTopInset: CGFloat = 4
     private static let chipsBottomInset: CGFloat = 8
+    private static let chipsSpacing: CGFloat = 8
     private static let chipIconSize: CGFloat = 20
+    private static let sortIconPointSize: CGFloat = 15
     private static let estimatedRowHeight: CGFloat = 48
     private static let collapsibleConstraintPriority = UILayoutPriority(999)
     private static let distanceUpdateInterval: TimeInterval = 0.3
     private static let nearestCitiesLimit = 15
     private static let topIndexBrandPrefix = "top_index_brand"
+    private static let sortGroupId = "sort"
     private static let searchAroundGroupId = "search_around"
     private static let filtersGroupId = "filters"
     private static let nearMeOptionId = "near_me"
     private static let mapCenterOptionId = "map_center"
+    private static let spatialLocationOptionId = "spatial_location"
+    private static let searchAroundDistanceThreshold: CLLocationDistance = 70000
     private static let targetSearchTypes: [OAQuickSearchType] = [.START_POINT, .DESTINATION, .INTERMEDIATE, .HOME, .WORK]
     private static let routeTargetSearchTypes: [OAQuickSearchType] = [.START_POINT, .DESTINATION, .INTERMEDIATE]
 
@@ -78,6 +123,15 @@ final class QuickSearchViewController: OASuperViewController {
     private var modalInput = false
     private var citySearchedRect: QuadRect?
     private var storedOriginalLocation: CLLocation?
+    private var spatialSearchScope: SpatialSearchScope?
+    private var useSpatialSearchLocation = false
+    private var openedNearMapCenter = false
+    private var selectedSortOption: SortOption = .relevance
+    private var sortContextId: String?
+    private var searching = false
+    private var unfilteredResults: [OASearchResult] = []
+    private var resultPoiTypeNames: [String] = []
+    private var selectedPoiTypeNames: Set<String> = []
 
     private var searchHelper: OAQuickSearchHelper?
     private var searchUICore: OASearchUICore?
@@ -89,7 +143,9 @@ final class QuickSearchViewController: OASuperViewController {
                                                          localizedString("search_categories"),
                                                          localizedString("shared_string_address")])
     private let chipsContainerView = UIView()
+    private let chipsStackView = UIStackView()
     private let chipsView = StarMapSearchSortFilterChipsView()
+    private let poiTypeChipsView = StarMapSearchSortFilterChipsView()
     private let contentView = UIView()
     private let tableView = UITableView(frame: .zero, style: .insetGrouped)
     private let clearButton = UIButton(type: .system)
@@ -99,12 +155,13 @@ final class QuickSearchViewController: OASuperViewController {
     private var processedSearchText = ""
     private var pendingPresentation: (() -> Void)?
     private var chipsState: ChipsState?
+    private var poiTypeChipsState: PoiTypeChipsState?
     private var toolbarState: ToolbarState?
 
     private var tblMove: UIPanGestureRecognizer?
     private var dismissEditingTap: UITapGestureRecognizer?
 
-    private var tableController: OAQuickSearchTableController?
+    private var tableController: QuickSearchResultsTableController?
     private var pageController: UIPageViewController?
     private var addressViewController: OAAddressTableViewController?
     private var categoriesViewController: CategoriesViewController?
@@ -149,12 +206,30 @@ final class QuickSearchViewController: OASuperViewController {
         barActionType == .showOnMap && lastSelectedWord?.getType() == .poiType
     }
 
-    private var isPoiFilterApplied: Bool {
-        if bottomViewVisible {
-            return true
+    private var selectedSearchAroundOption: SearchAroundOption {
+        if useSpatialSearchLocation, spatialSearchScope != nil {
+            return .spatialLocation
         }
-        guard let filter = lastSelectedWord?.result?.object as? OAPOIUIFilter else { return false }
-        return !filter.filterByName.isEmpty
+        return searchNearMapCenter ? .mapCenter : .myLocation
+    }
+
+    private var mapCenterDistanceFromMyLocation: CLLocationDistance? {
+        guard let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
+              let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return nil }
+        return myLocation.distance(from: mapCenter)
+    }
+
+    private var isMapCenterSearchAroundAvailable: Bool {
+        guard let distance = mapCenterDistanceFromMyLocation else { return false }
+        return openedNearMapCenter || distance >= Self.searchAroundDistanceThreshold
+    }
+
+    private var showsSearchAroundChip: Bool {
+        spatialSearchScope != nil || isMapCenterSearchAroundAvailable
+    }
+
+    private var isNearestPoiSearch: Bool {
+        Self.isNearestPoiSearch(lastSelectedWord)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -200,7 +275,7 @@ final class QuickSearchViewController: OASuperViewController {
         view.addGestureRecognizer(dismissEditingTap)
         self.dismissEditingTap = dismissEditingTap
 
-        let tableController = OAQuickSearchTableController(tableView: tableView)
+        let tableController = QuickSearchResultsTableController(tableView: tableView)
         tableController?.delegate = self
         tableController?.searchType = searchType
         if searchNearMapCenter {
@@ -280,6 +355,8 @@ final class QuickSearchViewController: OASuperViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         paused = true
+        interruptedSearch = searching
+        searching = false
         cancelResultPreparation()
         unregisterKeyboardNotifications()
         if let navigationController, let topViewController = navigationController.topViewController, topViewController !== self {
@@ -292,6 +369,7 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     @objc func makeNavigationController() -> UINavigationController {
+        openedNearMapCenter = searchNearMapCenter
         let navigationController = UINavigationController(rootViewController: self)
         navigationController.modalPresentationStyle = .custom
         navigationController.transitioningDelegate = presentationDelegate
@@ -402,10 +480,17 @@ final class QuickSearchViewController: OASuperViewController {
 
         chipsView.dataSource = self
         chipsView.delegate = self
-        chipsView.translatesAutoresizingMaskIntoConstraints = false
+        poiTypeChipsView.dataSource = self
+        poiTypeChipsView.delegate = self
+        poiTypeChipsView.isHidden = true
+        chipsStackView.axis = .vertical
+        chipsStackView.spacing = Self.chipsSpacing
+        chipsStackView.translatesAutoresizingMaskIntoConstraints = false
+        chipsStackView.addArrangedSubview(chipsView)
+        chipsStackView.addArrangedSubview(poiTypeChipsView)
         chipsContainerView.preservesSuperviewLayoutMargins = true
         chipsContainerView.isHidden = true
-        chipsContainerView.addSubview(chipsView)
+        chipsContainerView.addSubview(chipsStackView)
 
         headerStackView.axis = .vertical
         headerStackView.preservesSuperviewLayoutMargins = true
@@ -416,7 +501,7 @@ final class QuickSearchViewController: OASuperViewController {
 
         let tabsBottom = tabsControl.bottomAnchor.constraint(equalTo: tabsContainerView.bottomAnchor, constant: -Self.tabsVerticalInset)
         tabsBottom.priority = Self.collapsibleConstraintPriority
-        let chipsBottom = chipsView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor, constant: -Self.chipsBottomInset)
+        let chipsBottom = chipsStackView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor, constant: -Self.chipsBottomInset)
         chipsBottom.priority = Self.collapsibleConstraintPriority
         NSLayoutConstraint.activate([
             headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -426,9 +511,9 @@ final class QuickSearchViewController: OASuperViewController {
             tabsControl.leadingAnchor.constraint(equalTo: tabsContainerView.layoutMarginsGuide.leadingAnchor),
             tabsControl.trailingAnchor.constraint(equalTo: tabsContainerView.layoutMarginsGuide.trailingAnchor),
             tabsBottom,
-            chipsView.topAnchor.constraint(equalTo: chipsContainerView.topAnchor, constant: Self.chipsTopInset),
-            chipsView.leadingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.leadingAnchor),
-            chipsView.trailingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.trailingAnchor),
+            chipsStackView.topAnchor.constraint(equalTo: chipsContainerView.topAnchor, constant: Self.chipsTopInset),
+            chipsStackView.leadingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.leadingAnchor),
+            chipsStackView.trailingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.trailingAnchor),
             chipsBottom
         ])
     }
@@ -470,7 +555,8 @@ final class QuickSearchViewController: OASuperViewController {
 
         let settings = searchUICore?.getSearchSettings()?
             .setOriginalLocation(CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude))?
-            .setLang(locale, transliterateIfMissing: transliterate)
+            .setLang(locale, transliterateIfMissing: transliterate)?
+            .setSortType(selectedSortOption.sortType)
         searchUICore?.update(settings)
 
         searchUICore?.onSearchStart = { [weak self] in
@@ -690,32 +776,104 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func searchNearMyLocation() {
-        guard searchNearMapCenter,
+        guard selectedSearchAroundOption != .myLocation,
               let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return }
+        useSpatialSearchLocation = false
         searchLocation = myLocation.coordinate
         distanceFromMyLocation = 0
         searchNearMapCenter = false
-        searchAroundLocationChanged()
+        searchAroundLocationChanged(myLocation)
     }
 
     private func searchNearMapCenterLocation() {
-        guard !searchNearMapCenter,
+        guard selectedSearchAroundOption != .mapCenter,
               let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return }
         if let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
             distanceFromMyLocation = myLocation.distance(from: mapCenter)
         }
+        useSpatialSearchLocation = false
         searchLocation = mapCenter.coordinate
         searchNearMapCenter = true
-        searchAroundLocationChanged()
+        searchAroundLocationChanged(mapCenter)
     }
 
-    private func searchAroundLocationChanged() {
+    private func searchNearSpatialLocation() {
+        guard selectedSearchAroundOption != .spatialLocation, let spatialSearchScope else { return }
+        useSpatialSearchLocation = true
+        applySpatialSearchLocation(spatialSearchScope.location)
+        searchAroundLocationChanged(spatialSearchScope.location)
+    }
+
+    private func searchAroundLocationChanged(_ location: CLLocation) {
+        if let word = lastSelectedWord, word.getType() == .poiType {
+            Self.setLocation(location, of: word.result)
+        }
         if addressSearch && tabsVisible {
             reloadCities()
         }
         if !searchQuery.isEmpty {
             runSearch()
         }
+    }
+
+    private func applySpatialSearchLocation(_ location: CLLocation) {
+        tableController?.setMapCenter(location.coordinate)
+        searchUICore?.update(searchUICore?.getSearchSettings()?.setOriginalLocation(location)?.setSearchBBox31(nil))
+        updateChips()
+    }
+
+    private func resetSpatialSearchScope() {
+        let wasUsingSpatialSearchLocation = useSpatialSearchLocation
+        spatialSearchScope = nil
+        useSpatialSearchLocation = false
+        guard wasUsingSpatialSearchLocation else { return }
+        applySearchLocation()
+        applySearchNearMapCenter()
+        if let word = lastSelectedWord, word.getType() == .poiType {
+            Self.setLocation(CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude), of: word.result)
+        }
+    }
+
+    private func completeSpatialCategoryQuery(with searchResult: OASearchResult) {
+        if let reference = searchResult.spatialCategoryReference, let latLon = reference.getLocation() {
+            let location = CLLocation(latitude: latLon.latitude, longitude: latLon.longitude)
+            spatialSearchScope = SpatialSearchScope(name: reference.getName(), location: location)
+            useSpatialSearchLocation = true
+            Self.setLocation(location, of: searchResult)
+            applySpatialSearchLocation(location)
+        }
+        completeQuery(with: searchResult)
+    }
+
+    private static func setLocation(_ location: CLLocation, of result: OASearchResult?) {
+        guard let result else { return }
+        result.location = location
+        result.sharedResult?.location = KLatLon(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+    }
+
+    private func appliedFiltersCount() -> Int {
+        guard let filter = lastSelectedWord?.result?.object as? OAPOIUIFilter else { return 0 }
+        var params = filter.filterByName.split(whereSeparator: \.isWhitespace).map(String.init)
+        guard !params.isEmpty else { return 0 }
+        for savedParam in filter.savedFilterByName.split(whereSeparator: \.isWhitespace) {
+            if let index = params.firstIndex(of: String(savedParam)) {
+                params.remove(at: index)
+            }
+        }
+        let openingHoursParams = ["shared_string_is_open", "shared_string_is_open_24_7"].map {
+            localizedString($0).replacingOccurrences(of: " ", with: "_").lowercased()
+        }
+        var count = 0
+        var hasNameFilter = false
+        for param in params {
+            let key = param.replacingOccurrences(of: "_", with: ":").lowercased()
+            if filter.hasPoiAdditional(param) || filter.hasPoiAdditional(key) || openingHoursParams.contains(param) {
+                count += 1
+            } else {
+                hasNameFilter = true
+            }
+        }
+        return hasNameFilter ? count + 1 : count
     }
 
     private func searchTextChanged() {
@@ -740,10 +898,12 @@ final class QuickSearchViewController: OASuperViewController {
             reloadCategories()
         }
         if searchQuery.localizedCaseInsensitiveCompare(newQueryText) != .orderedSame {
+            resetSpatialSearchScope()
             cancelResultPreparation()
             searchQuery = newQueryText
             if searchQuery.isEmpty {
                 restoreInputLayout()
+                resetResultPoiTypes()
                 searchUICore?.resetPhrase()
                 searchUICore?.cancelSearch(false)
             } else {
@@ -797,23 +957,44 @@ final class QuickSearchViewController: OASuperViewController {
         if tabsContainerView.isHidden != tabsHidden {
             tabsContainerView.isHidden = tabsHidden
         }
-        let chipsHidden = !showsChips
-        if chipsContainerView.isHidden != chipsHidden {
-            chipsContainerView.isHidden = chipsHidden
-        }
         updateChips()
         updateBottomToolbar(animated: view.window != nil)
     }
 
     private func updateChips() {
-        guard isViewLoaded, showsChips else { return }
+        guard isViewLoaded else { return }
+        let chipsHidden = !showsChips
+        if chipsContainerView.isHidden != chipsHidden {
+            chipsContainerView.isHidden = chipsHidden
+        }
+        guard !chipsHidden else { return }
         let showsFilters = showsFiltersChip
-        let state = ChipsState(searchNearMapCenter: searchNearMapCenter,
+        let filtersCount = showsFilters ? appliedFiltersCount() : 0
+        let state = ChipsState(sortOption: selectedSortOption,
+                               nearestSortOnly: isNearestPoiSearch,
+                               searchAroundOption: selectedSearchAroundOption,
+                               showsSearchAround: showsSearchAroundChip,
+                               showsMapCenterOption: isMapCenterSearchAroundAvailable,
+                               spatialScopeName: spatialSearchScope?.name,
                                showsFilters: showsFilters,
-                               filtersApplied: showsFilters && isPoiFilterApplied)
-        guard state != chipsState else { return }
-        chipsState = state
-        chipsView.reloadData()
+                               appliedFiltersCount: filtersCount,
+                               filtersApplied: showsFilters && (filtersCount > 0 || bottomViewVisible))
+        if state != chipsState {
+            chipsState = state
+            chipsView.reloadData()
+        }
+        updatePoiTypeChips()
+    }
+
+    private func updatePoiTypeChips() {
+        let state = PoiTypeChipsState(names: resultPoiTypeNames, selectedNames: selectedPoiTypeNames, isEnabled: !searching)
+        let poiTypeChipsHidden = state.names.isEmpty
+        if poiTypeChipsView.isHidden != poiTypeChipsHidden {
+            poiTypeChipsView.isHidden = poiTypeChipsHidden
+        }
+        guard state != poiTypeChipsState else { return }
+        poiTypeChipsState = state
+        poiTypeChipsView.reloadData()
     }
 
     private func updateBottomToolbar(animated: Bool) {
@@ -929,7 +1110,7 @@ final class QuickSearchViewController: OASuperViewController {
     @objc private func updateDistanceAndDirection() {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
-        if paused || cancelPrev || searchNearMapCenter || Date().timeIntervalSince1970 - lastUpdate < Self.distanceUpdateInterval {
+        if paused || cancelPrev || searchNearMapCenter || useSpatialSearchLocation || Date().timeIntervalSince1970 - lastUpdate < Self.distanceUpdateInterval {
             return
         }
         DispatchQueue.main.async {
@@ -1223,10 +1404,10 @@ final class QuickSearchViewController: OASuperViewController {
         runSearch(searchQuery)
     }
 
-    private func runSearch(_ text: String) {
+    private func runSearch(_ text: String, preserveSelectedPoiTypeNames: Bool = false) {
         showWaitingIndicator()
         resetRadiusLevel(searchUICore?.getSearchSettings())
-        runCoreSearch(text, updateResult: true, searchMore: false)
+        runCoreSearch(text, updateResult: true, searchMore: false, preserveSelectedPoiTypeNames: preserveSelectedPoiTypeNames)
     }
 
     private func resetRadiusLevel(_ settings: OASearchSettings?) {
@@ -1234,9 +1415,14 @@ final class QuickSearchViewController: OASuperViewController {
         searchUICore?.update(settings.setRadiusLevel(1))
     }
 
-    private func runCoreSearch(_ text: String, updateResult: Bool, searchMore: Bool) {
+    private func runCoreSearch(_ text: String, updateResult: Bool, searchMore: Bool, preserveSelectedPoiTypeNames: Bool = false) {
         showWaitingIndicator()
-        runCoreSearch(text, updateResult: updateResult, searchMore: searchMore, onSearchStarted: nil, onPublish: { [weak self] resultCollection, append in
+        runCoreSearch(text,
+                      updateResult: updateResult,
+                      searchMore: searchMore,
+                      preserveSelectedPoiTypeNames: preserveSelectedPoiTypeNames,
+                      onSearchStarted: nil,
+                      onPublish: { [weak self] resultCollection, append in
             self?.updateSearchResult(resultCollection, append: append)
         }, onSearchFinished: { [weak self] _ in
             guard let self else { return true }
@@ -1253,11 +1439,19 @@ final class QuickSearchViewController: OASuperViewController {
     private func runCoreSearch(_ text: String,
                                updateResult: Bool,
                                searchMore: Bool,
+                               preserveSelectedPoiTypeNames: Bool = false,
                                onSearchStarted: SearchStartedCallback?,
                                onPublish: PublishCallback?,
                                onSearchFinished: SearchFinishedCallback?) {
         cancelResultPreparation()
+        if !searchMore && !preserveSelectedPoiTypeNames {
+            selectedPoiTypeNames.removeAll()
+        }
+        searching = true
+        updateDefaultSortOption()
+        applySelectedSortSetting()
         updateBarActionView()
+        updateChips()
         interruptedSearch = false
         cancelPrev = true
 
@@ -1287,6 +1481,7 @@ final class QuickSearchViewController: OASuperViewController {
             case .searchFinished:
                 DispatchQueue.main.async {
                     guard !self.paused else { return }
+                    self.finishResultPoiTypes()
                     guard onSearchFinished?(result.requiredSearchPhrase) ?? true else { return }
                     self.showSearchIcon()
                     if self.isResultEmpty() {
@@ -1455,7 +1650,7 @@ final class QuickSearchViewController: OASuperViewController {
             searchUICore?.update(settings.setRadiusLevel(settings.getRadiusLevel() + 1))
         }
         let spatialResults = currentResultCollection()?.isSkipSorting() == true
-        runCoreSearch(searchQuery, updateResult: false, searchMore: !spatialResults)
+        runCoreSearch(searchQuery, updateResult: false, searchMore: !spatialResults, preserveSelectedPoiTypeNames: spatialResults)
     }
 
     private func addMoreButton() {
@@ -1467,8 +1662,8 @@ final class QuickSearchViewController: OASuperViewController {
         let moreListItem = OAQuickSearchMoreListItem(name: name) { [weak self] _ in
             self?.increaseSearchRadius()
         }
-        if !paused && !cancelPrev {
-            tableController?.add(moreListItem, groupIndex: 0)
+        if !paused && !cancelPrev, let moreListItem {
+            tableController?.appendItem(moreListItem)
             tableController?.reloadData()
         }
     }
@@ -1487,7 +1682,7 @@ final class QuickSearchViewController: OASuperViewController {
             item.title = "\(localizedString("nothing_found")): \(distance)"
         }
         if !paused && !cancelPrev {
-            tableController?.add(item, groupIndex: 0)
+            tableController?.appendItem(item)
             tableController?.reloadData()
         }
     }
@@ -1501,7 +1696,121 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func displayPreparedResults(_ results: [OASearchResult], append: Bool) {
-        updateData(results.map { OAQuickSearchListItem(searchResult: $0) }, append: append)
+        unfilteredResults = results
+        refreshResultPoiTypeNames()
+        renderResults(append: append)
+        updateChips()
+    }
+
+    private func renderResults(append: Bool) {
+        let results = selectedPoiTypeNames.isEmpty
+            ? unfilteredResults
+            : unfilteredResults.filter { OAQuickSearchTableController.poiTypeName(for: $0).map(selectedPoiTypeNames.contains) ?? false }
+        updateData(results.map { OAQuickSearchListItem(searchResult: $0) }, append: append && selectedPoiTypeNames.isEmpty)
+    }
+
+    private func refreshResultPoiTypeNames() {
+        guard !searching || resultPoiTypeNames.isEmpty else { return }
+        resultPoiTypeNames = Self.poiTypeNames(for: unfilteredResults)
+        if !searching {
+            selectedPoiTypeNames.formIntersection(resultPoiTypeNames)
+        }
+    }
+
+    private func finishResultPoiTypes() {
+        searching = false
+        if !preparingResults {
+            let selectedNames = selectedPoiTypeNames
+            refreshResultPoiTypeNames()
+            if selectedNames != selectedPoiTypeNames {
+                renderResults(append: false)
+            }
+        }
+        updateChips()
+    }
+
+    private func resetResultPoiTypes() {
+        searching = false
+        unfilteredResults = []
+        resultPoiTypeNames = []
+        selectedPoiTypeNames.removeAll()
+        updateChips()
+    }
+
+    private func toggleResultPoiType(_ name: String) {
+        if selectedPoiTypeNames.remove(name) == nil {
+            selectedPoiTypeNames.insert(name)
+        }
+        renderResults(append: false)
+        updateChips()
+        if isSearchMoreAvailable(currentResultCollection()?.phrase) {
+            addMoreButton()
+        }
+    }
+
+    private func updateDefaultSortOption() {
+        let word = lastSelectedWord
+        let contextId = Self.searchFilterId(for: word)
+        if Self.isNearestPoiSearch(word) {
+            sortContextId = contextId
+            selectedSortOption = .nearest
+        } else if sortContextId != contextId {
+            sortContextId = contextId
+            selectedSortOption = .relevance
+        }
+    }
+
+    private func applySelectedSortSetting() {
+        if isNearestPoiSearch {
+            selectedSortOption = .nearest
+        }
+        guard let settings = searchUICore?.getSearchSettings(), settings.getSortType() != selectedSortOption.sortType else { return }
+        searchUICore?.update(settings.setSortType(selectedSortOption.sortType))
+    }
+
+    private func selectSortOption(_ option: SortOption) {
+        guard !isNearestPoiSearch || option == .nearest, option != selectedSortOption else { return }
+        selectedSortOption = option
+        updateChips()
+        if !searchQuery.isEmpty {
+            runSearch(searchQuery, preserveSelectedPoiTypeNames: true)
+        }
+    }
+
+    private static func searchFilterId(for word: OASearchWord?) -> String? {
+        guard let word, word.getType() == .poiType else { return nil }
+        switch word.result?.object {
+        case let filter as OACustomSearchPoiFilter:
+            return filter.getId()
+        case let filter as OATopIndexFilter:
+            return filter.getId()
+        case let poiType as OAPOIBaseType:
+            return STD_PREFIX + poiType.name
+        default:
+            return nil
+        }
+    }
+
+    private static func isNearestPoiSearch(_ word: OASearchWord?) -> Bool {
+        guard let word, word.getType() == .poiType, let filter = word.result?.object as? OACustomSearchPoiFilter else { return false }
+        return filter.getDefaultSearchType() == .onlyByDistance
+    }
+
+    private static func poiTypeNames(for results: [OASearchResult]) -> [String] {
+        var names: [String] = []
+        var counts: [String: Int] = [:]
+        for result in results {
+            guard let name = OAQuickSearchTableController.poiTypeName(for: result), !name.isEmpty else { continue }
+            if counts[name] == nil {
+                names.append(name)
+            }
+            counts[name, default: 0] += 1
+        }
+        return names.indices.sorted { lhs, rhs in
+            let lhsCount = counts[names[lhs], default: 0]
+            let rhsCount = counts[names[rhs], default: 0]
+            return lhsCount != rhsCount ? lhsCount > rhsCount : lhs < rhs
+        }.map { names[$0] }
     }
 
     private func updateSearchResult(_ resultCollection: OASearchResultCollection?, append: Bool) {
@@ -1576,56 +1885,115 @@ extension QuickSearchViewController: UISearchControllerDelegate, UISearchResults
 
 extension QuickSearchViewController: StarMapSearchSortFilterChipsDataSource, StarMapSearchSortFilterChipsDelegate {
     func chipGroups(for chipsView: StarMapSearchSortFilterChipsView) -> [SearchSortFilterChipGroup] {
-        var groups = [searchAroundChipGroup()]
-        if let chipsState, chipsState.showsFilters {
+        if chipsView === poiTypeChipsView {
+            return poiTypeChipGroups()
+        }
+        guard let chipsState else { return [] }
+        var groups: [SearchSortFilterChipGroup] = []
+        if chipsState.showsFilters {
+            let count = chipsState.appliedFiltersCount
             groups.append(SearchSortFilterChipGroup(id: Self.filtersGroupId,
-                                                    chipTitle: localizedString("shared_string_filters"),
+                                                    chipTitle: count > 0 ? String(count) : localizedString("shared_string_filters"),
                                                     chipImage: UIImage.icCustomFilter.resizedTemplateImage(with: Self.chipIconSize),
                                                     selectionMode: .toggle,
                                                     isToggleOn: chipsState.filtersApplied))
+        }
+        groups.append(sortChipGroup(chipsState))
+        if chipsState.showsSearchAround {
+            groups.append(searchAroundChipGroup(chipsState))
         }
         return groups
     }
 
     func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didSelectOption optionId: String, inGroup groupId: String) {
+        if groupId == Self.sortGroupId {
+            if let option = SortOption.allCases.first(where: { $0.id == optionId }) {
+                selectSortOption(option)
+            }
+            return
+        }
         guard groupId == Self.searchAroundGroupId else { return }
         if optionId == Self.nearMeOptionId {
             searchNearMyLocation()
         } else if optionId == Self.mapCenterOptionId {
             searchNearMapCenterLocation()
+        } else if optionId == Self.spatialLocationOptionId {
+            searchNearSpatialLocation()
         }
     }
 
     func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool) {
-        guard groupId == Self.filtersGroupId else { return }
-        openFilters()
+        if chipsView === poiTypeChipsView {
+            toggleResultPoiType(groupId)
+        } else if groupId == Self.filtersGroupId {
+            openFilters()
+        }
     }
 
-    private func searchAroundChipGroup() -> SearchSortFilterChipGroup {
-        var mapCenterDescription: String?
-        if let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
-           let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() {
-            let distance = OAOsmAndFormatter.getFormattedDistance(Float(myLocation.distance(from: mapCenter))) ?? ""
-            mapCenterDescription = String(format: localizedString("search_around_map_center_description"), distance)
+    private func sortChipGroup(_ chipsState: ChipsState) -> SearchSortFilterChipGroup {
+        let options = SortOption.allCases.map { option in
+            StarMapSearchSortFilterChipOption(id: option.id,
+                                              title: option.title,
+                                              image: nil,
+                                              originalSizeImage: nil,
+                                              isSelected: option == chipsState.sortOption,
+                                              isEnabled: !chipsState.nearestSortOnly || option == .nearest)
         }
-        let nearMeOption = StarMapSearchSortFilterChipOption(id: Self.nearMeOptionId,
-                                                             title: localizedString("search_near_me"),
+        return SearchSortFilterChipGroup(id: Self.sortGroupId,
+                                         chipTitle: chipsState.sortOption.title,
+                                         chipImage: UIImage(systemName: "arrow.up.arrow.down",
+                                                            withConfiguration: UIImage.SymbolConfiguration(pointSize: Self.sortIconPointSize)),
+                                         selectionMode: .single,
+                                         sections: [StarMapSearchSortFilterChipSection(options: options)],
+                                         menuTitle: localizedString("sort_by"))
+    }
+
+    private func poiTypeChipGroups() -> [SearchSortFilterChipGroup] {
+        guard let poiTypeChipsState else { return [] }
+        return poiTypeChipsState.names.map { name in
+            SearchSortFilterChipGroup(id: name,
+                                      chipTitle: name,
+                                      chipImage: nil,
+                                      selectionMode: .toggle,
+                                      isToggleOn: poiTypeChipsState.selectedNames.contains(name),
+                                      isEnabled: poiTypeChipsState.isEnabled)
+        }
+    }
+
+    private func searchAroundChipGroup(_ chipsState: ChipsState) -> SearchSortFilterChipGroup {
+        var options: [StarMapSearchSortFilterChipOption] = []
+        if chipsState.showsMapCenterOption {
+            var mapCenterDescription: String?
+            if let distance = mapCenterDistanceFromMyLocation {
+                let formattedDistance = OAOsmAndFormatter.getFormattedDistance(Float(distance)) ?? ""
+                mapCenterDescription = String(format: localizedString("search_around_map_center_description"), formattedDistance)
+            }
+            options.append(StarMapSearchSortFilterChipOption(id: Self.mapCenterOptionId,
+                                                             title: localizedString("shared_string_map_center"),
                                                              image: nil,
-                                                             originalSizeImage: UIImage.icCustomNavigationArrow.withRenderingMode(.alwaysTemplate),
-                                                             isSelected: !searchNearMapCenter,
-                                                             subtitle: localizedString("search_around_my_location_description"))
-        let mapCenterOption = StarMapSearchSortFilterChipOption(id: Self.mapCenterOptionId,
-                                                                title: localizedString("shared_string_map_center"),
-                                                                image: nil,
-                                                                originalSizeImage: UIImage.icCustomMapOutline.withRenderingMode(.alwaysTemplate),
-                                                                isSelected: searchNearMapCenter,
-                                                                subtitle: mapCenterDescription)
-        let selectedOption = searchNearMapCenter ? mapCenterOption : nearMeOption
+                                                             originalSizeImage: UIImage.icCustomMapOutline.withRenderingMode(.alwaysTemplate),
+                                                             isSelected: chipsState.searchAroundOption == .mapCenter,
+                                                             subtitle: mapCenterDescription))
+        }
+        options.append(StarMapSearchSortFilterChipOption(id: Self.nearMeOptionId,
+                                                         title: localizedString("search_near_me"),
+                                                         image: nil,
+                                                         originalSizeImage: UIImage.icCustomNavigationArrow.withRenderingMode(.alwaysTemplate),
+                                                         isSelected: chipsState.searchAroundOption == .myLocation,
+                                                         subtitle: localizedString("search_around_my_location_description")))
+        if let spatialScopeName = chipsState.spatialScopeName {
+            options.append(StarMapSearchSortFilterChipOption(id: Self.spatialLocationOptionId,
+                                                             title: spatialScopeName.isEmpty ? localizedString("shared_string_location") : spatialScopeName,
+                                                             image: nil,
+                                                             originalSizeImage: UIImage.icCustomLocationMarker.withRenderingMode(.alwaysTemplate),
+                                                             isSelected: chipsState.searchAroundOption == .spatialLocation))
+        }
+        let selectedOption = options.first(where: \.isSelected) ?? options[0]
         return SearchSortFilterChipGroup(id: Self.searchAroundGroupId,
                                          chipTitle: selectedOption.title,
                                          chipImage: selectedOption.originalSizeImage?.resizedTemplateImage(with: Self.chipIconSize),
                                          selectionMode: .single,
-                                         sections: [StarMapSearchSortFilterChipSection(options: [nearMeOption, mapCenterOption])])
+                                         sections: [StarMapSearchSortFilterChipSection(options: options)])
     }
 }
 
@@ -1674,6 +2042,8 @@ extension QuickSearchViewController: OAQuickSearchTableDelegate {
         if result.objectType == .suggestion {
             let query = result.localeName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
             replaceQuery(withText: query + " ")
+        } else if result.spatialCategoryReference != nil {
+            completeSpatialCategoryQuery(with: result)
         } else {
             completeQuery(with: result)
         }

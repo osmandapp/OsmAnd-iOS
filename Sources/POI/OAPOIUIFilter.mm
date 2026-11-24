@@ -1201,6 +1201,11 @@
     return poiAdditionals;
 }
 
+- (BOOL)hasPoiAdditional:(NSString *)key
+{
+    return [poiAdditionals objectForKey:key] != nil;
+}
+
 - (NSString *) getIconId
 {
     NSString *iconName;

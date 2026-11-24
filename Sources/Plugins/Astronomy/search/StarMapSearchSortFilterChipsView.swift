@@ -22,6 +22,7 @@ struct StarMapSearchSortFilterChipOption {
     let originalSizeImage: UIImage?
     let isSelected: Bool
     var subtitle: String? = nil
+    var isEnabled = true
 }
 
 struct StarMapSearchSortFilterChipSection {
@@ -369,6 +370,9 @@ final class StarMapSearchSortFilterChipsView: UIView {
         }
         if #available(iOS 16.0, *) {
             action.subtitle = option.subtitle
+        }
+        if !option.isEnabled {
+            action.attributes = .disabled
         }
         return action
     }

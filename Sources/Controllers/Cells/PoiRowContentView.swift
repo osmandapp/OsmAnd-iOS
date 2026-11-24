@@ -8,10 +8,17 @@
 import UIKit
 import Kingfisher
 
+struct PoiRouteStatistics {
+    let length: String
+    let uphill: String?
+    let downhill: String?
+}
+
 struct PoiContentConfiguration: UIContentConfiguration {
     enum Style {
         case compact
         case detailed
+        case route
 
         fileprivate var imageSize: CGFloat {
             switch self {
@@ -19,12 +26,14 @@ struct PoiContentConfiguration: UIContentConfiguration {
                 return 42
             case .detailed:
                 return 66
+            case .route:
+                return 36
             }
         }
 
         fileprivate var iconSize: CGFloat {
             switch self {
-            case .compact:
+            case .compact, .route:
                 return 24
             case .detailed:
                 return 36
@@ -33,6 +42,8 @@ struct PoiContentConfiguration: UIContentConfiguration {
     }
 
     static let estimatedRowHeight: CGFloat = 76
+
+    fileprivate static let shieldMaxSize = CGSize(width: 72, height: 36)
 
     let style: Style
     let title: String
@@ -43,6 +54,10 @@ struct PoiContentConfiguration: UIContentConfiguration {
     var openingHours: String?
     var openingHoursColor: UIColor?
     var descriptionText: String?
+    var alternateTitle: String?
+    var iconTintColor: UIColor?
+    var shieldImage: UIImage?
+    var routeStatistics: PoiRouteStatistics?
 
     init(style: Style,
          title: String,
@@ -52,7 +67,11 @@ struct PoiContentConfiguration: UIContentConfiguration {
          address: String? = nil,
          openingHours: String? = nil,
          openingHoursColor: UIColor? = nil,
-         descriptionText: String? = nil) {
+         descriptionText: String? = nil,
+         alternateTitle: String? = nil,
+         iconTintColor: UIColor? = nil,
+         shieldImage: UIImage? = nil,
+         routeStatistics: PoiRouteStatistics? = nil) {
         self.style = style
         self.title = title
         self.icon = icon
@@ -62,6 +81,10 @@ struct PoiContentConfiguration: UIContentConfiguration {
         self.openingHours = openingHours
         self.openingHoursColor = openingHoursColor
         self.descriptionText = descriptionText
+        self.alternateTitle = alternateTitle
+        self.iconTintColor = iconTintColor
+        self.shieldImage = shieldImage
+        self.routeStatistics = routeStatistics
     }
 
     func makeContentView() -> UIView & UIContentView {
@@ -79,6 +102,8 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
     private static let imageCornerRadius: CGFloat = 10
     private static let detailsSpacing: CGFloat = 2
     private static let descriptionSpacing: CGFloat = 8
+    private static let statisticsSeparator = "  "
+    private static let detailsSeparator = " • "
 
     var configuration: UIContentConfiguration {
         get { appliedConfiguration }
@@ -127,6 +152,8 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         super.traitCollectionDidChange(previousTraitCollection)
         guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
         secondaryLabel.attributedText = appliedConfiguration.secondaryContent?.attributedText()
+        titleLabel.attributedText = Self.titleText(for: appliedConfiguration)
+        addressLabel.attributedText = Self.detailsText(for: appliedConfiguration)
     }
 
     private func setupView() {
@@ -247,35 +274,39 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
     }
 
     private func apply(_ configuration: PoiContentConfiguration) {
-        titleLabel.text = configuration.title
+        titleLabel.attributedText = Self.titleText(for: configuration)
         secondaryLabel.attributedText = configuration.secondaryContent?.attributedText()
         secondaryLabel.isHidden = secondaryLabel.attributedText == nil
 
         let address = configuration.address ?? ""
-        addressLabel.text = address
-        addressLabel.isHidden = address.isEmpty
+        let detailsText = Self.detailsText(for: configuration)
+        addressLabel.attributedText = detailsText
+        addressLabel.isHidden = detailsText == nil
         let openingHours = configuration.openingHours ?? ""
         openingHoursLabel.text = openingHours
         openingHoursLabel.textColor = configuration.openingHoursColor ?? .textColorSecondary
         openingHoursIconView.tintColor = configuration.openingHoursColor ?? .textColorSecondary
         openingHoursStackView.isHidden = openingHours.isEmpty
-        detailsStackView.isHidden = address.isEmpty && openingHours.isEmpty
+        detailsStackView.isHidden = detailsText == nil && openingHours.isEmpty
         placeDetails(for: configuration.style)
-        let detailsBelowTopContent = configuration.style == .compact && !detailsStackView.isHidden
+        let detailsBelowTopContent = configuration.style != .detailed && !detailsStackView.isHidden
         mainStackView.setCustomSpacing(detailsBelowTopContent ? Self.detailsSpacing : Self.descriptionSpacing, after: topStackView)
 
         let descriptionText = configuration.style == .detailed ? configuration.descriptionText ?? "" : ""
         descriptionLabel.text = descriptionText
         descriptionLabel.isHidden = descriptionText.isEmpty
 
-        imageSizeConstraints.forEach { $0.constant = configuration.style.imageSize }
-        iconSizeConstraints.forEach { $0.constant = configuration.style.iconSize }
-        iconView.image = configuration.icon?.withRenderingMode(.alwaysTemplate)
+        applyIcon(configuration)
         applyImage(configuration.imageURL, style: configuration.style)
 
+        let statistics = configuration.routeStatistics
         accessibilityLabel = [configuration.title,
+                              configuration.alternateTitle,
                               configuration.secondaryContent?.formattedDistance,
                               configuration.secondaryContent?.trailingText,
+                              statistics?.length,
+                              statistics?.uphill,
+                              statistics?.downhill,
                               address,
                               openingHours,
                               descriptionText]
@@ -289,11 +320,81 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         guard detailsStackView.superview !== container else { return }
         detailsStackView.removeFromSuperview()
         switch style {
-        case .compact:
+        case .compact, .route:
             mainStackView.insertArrangedSubview(detailsStackView, at: 1)
         case .detailed:
             textStackView.addArrangedSubview(detailsStackView)
         }
+    }
+
+    private func applyIcon(_ configuration: PoiContentConfiguration) {
+        if let shieldImage = configuration.shieldImage {
+            let size = Self.fittedSize(shieldImage.size, in: PoiContentConfiguration.shieldMaxSize)
+            setImageContainerSize(size, iconSize: size)
+            imageContainerView.backgroundColor = .clear
+            iconView.image = shieldImage.withRenderingMode(.alwaysOriginal)
+        } else {
+            let imageSize = configuration.style.imageSize
+            let iconSize = configuration.style.iconSize
+            setImageContainerSize(CGSize(width: imageSize, height: imageSize), iconSize: CGSize(width: iconSize, height: iconSize))
+            imageContainerView.backgroundColor = .imagePlaceholderBg
+            iconView.image = configuration.icon?.withRenderingMode(.alwaysTemplate)
+            iconView.tintColor = configuration.iconTintColor ?? .iconColorSelected
+        }
+    }
+
+    private func setImageContainerSize(_ size: CGSize, iconSize: CGSize) {
+        imageSizeConstraints[0].constant = size.width
+        imageSizeConstraints[1].constant = size.height
+        iconSizeConstraints[0].constant = iconSize.width
+        iconSizeConstraints[1].constant = iconSize.height
+    }
+
+    private static func fittedSize(_ size: CGSize, in maxSize: CGSize) -> CGSize {
+        guard size.width > 0, size.height > 0 else { return .zero }
+        let scale = min(1, maxSize.width / size.width, maxSize.height / size.height)
+        return CGSize(width: size.width * scale, height: size.height * scale)
+    }
+
+    private static func titleText(for configuration: PoiContentConfiguration) -> NSAttributedString {
+        let font = UIFont.preferredFont(forTextStyle: .headline)
+        let text = NSMutableAttributedString(string: configuration.title, attributes: [.font: font, .foregroundColor: UIColor.textColorPrimary])
+        if let alternateTitle = configuration.alternateTitle, !alternateTitle.isEmpty, alternateTitle != configuration.title {
+            text.append(NSAttributedString(string: " (\(alternateTitle))", attributes: [.font: font, .foregroundColor: UIColor.textColorSecondary]))
+        }
+        return text
+    }
+
+    private static func detailsText(for configuration: PoiContentConfiguration) -> NSAttributedString? {
+        let attributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .subheadline), .foregroundColor: UIColor.textColorSecondary]
+        let text = NSMutableAttributedString()
+        if let statistics = configuration.routeStatistics {
+            appendStatistic(statistics.length, symbolName: "arrow.left.and.right", to: text, attributes: attributes)
+            appendStatistic(statistics.uphill, symbolName: "arrow.up.right", to: text, attributes: attributes)
+            appendStatistic(statistics.downhill, symbolName: "arrow.down.right", to: text, attributes: attributes)
+        }
+        if let address = configuration.address, !address.isEmpty {
+            if text.length > 0 {
+                text.append(NSAttributedString(string: detailsSeparator, attributes: attributes))
+            }
+            text.append(NSAttributedString(string: address, attributes: attributes))
+        }
+        return text.length > 0 ? text : nil
+    }
+
+    private static func appendStatistic(_ value: String?, symbolName: String, to text: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
+        guard let value, !value.isEmpty else { return }
+        if text.length > 0 {
+            text.append(NSAttributedString(string: statisticsSeparator, attributes: attributes))
+        }
+        let configuration = UIImage.SymbolConfiguration(textStyle: .subheadline, scale: .small)
+        if let symbol = UIImage(systemName: symbolName, withConfiguration: configuration)?.withRenderingMode(.alwaysTemplate) {
+            let symbolText = NSMutableAttributedString(attachment: NSTextAttachment(image: symbol))
+            symbolText.addAttributes(attributes, range: NSRange(location: 0, length: symbolText.length))
+            text.append(symbolText)
+            text.append(NSAttributedString(string: " ", attributes: attributes))
+        }
+        text.append(NSAttributedString(string: value, attributes: attributes))
     }
 
     private func applyImage(_ url: URL?, style: PoiContentConfiguration.Style) {

@@ -109,6 +109,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (void) selectSubTypesToAccept:(OAPOICategory *)t accept:(NSMutableSet<NSString *> *)accept;
 - (void) setTypeToAccept:(OAPOICategory *)poiCategory b:(BOOL)b;
 - (NSDictionary<NSString *, OAPOIType *> *) getPoiAdditionals;
+- (BOOL)hasPoiAdditional:(NSString *)key;
 - (NSString *) getIconId;
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
 - (BOOL) isEmpty;

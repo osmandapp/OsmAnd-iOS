@@ -92,7 +92,7 @@ struct SearchHistoryItemPresenter {
         return ([first] + parts.dropFirst().map { "\u{2068}\($0)\u{2069}" }).joined(separator: typeNameSeparator)
     }
 
-    private static func routeActivity(for dataItem: GpxDataItem) -> RouteActivity? {
+    static func routeActivity(for dataItem: GpxDataItem) -> RouteActivity? {
         guard let activityId = dataItem.getParameter(parameter: .activityType) as? String, !activityId.isEmpty else { return nil }
         return RouteActivityHelper.shared.findRouteActivity(id: activityId)
     }

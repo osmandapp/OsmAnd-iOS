@@ -79,7 +79,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
 - (BOOL) matches:(NSString *)value
 {
     if ([FEATURE_PRO isEqualToString:value])
-        return !OAIAPHelper.isSubscribedToOsmAndPro;
+        return !OAIAPHelper.isOsmAndProAvailable;
     else if ([FEATURE_MAPS isEqualToString:value])
         return !OAIAPHelper.isSubscribedToMaps && !OAIAPHelper.isFullVersionPurchased;
     else if ([FEATURE_LIVE isEqualToString:value])
@@ -266,7 +266,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
 - (NSArray<NSString *> *)getFeatures
 {
     NSMutableArray<NSString *> *res = [NSMutableArray array];
-    if (OAIAPHelper.isSubscribedToOsmAndPro)
+    if (OAIAPHelper.isOsmAndProAvailable)
         [res addObject:FEATURE_PRO];
     if (OAIAPHelper.isSubscribedToMaps || OAIAPHelper.isFullVersionPurchased)
         [res addObject:FEATURE_MAPS];

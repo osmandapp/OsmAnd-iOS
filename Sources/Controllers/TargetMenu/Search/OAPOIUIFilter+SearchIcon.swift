@@ -14,6 +14,9 @@ extension OAPOIUIFilter {
         if isTopWikiFilter() {
             return .icCustomPopularPlaces
         }
+        if let iconName = getIconResource() as? String, let icon = OAUtilities.getMxIcon(iconName) {
+            return icon
+        }
         return OAUtilities.getMxIcon(OAPOIUIFilter.getCustomFilterIconName(self)) ?? OAUtilities.getMxIcon(OAPOIUIFilter.customCategoryIconName)
     }
 }

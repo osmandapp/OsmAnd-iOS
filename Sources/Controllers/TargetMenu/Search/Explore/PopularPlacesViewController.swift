@@ -78,7 +78,9 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
         tableView.prefetchDataSource = self
         setupSearchController()
         setupSortChips()
-        setupShowOnMapButton()
+        if onShowOnMap != nil {
+            setupShowOnMapButton()
+        }
         detailsLoader.onDetailsLoaded = { [weak self] place in
             self?.reconfigureRow(for: place)
         }
@@ -235,6 +237,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     }
 
     private func updateContentInsetForShowOnMapButton() {
+        guard showOnMapButton.superview != nil else { return }
         let inset = max(0, view.safeAreaLayoutGuide.layoutFrame.maxY - showOnMapButton.frame.minY) + Self.showOnMapButtonListSpacing
         guard abs(tableView.contentInset.bottom - inset) > 0.5 else { return }
         tableView.contentInset.bottom = inset

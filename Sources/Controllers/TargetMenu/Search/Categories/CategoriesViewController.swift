@@ -157,11 +157,7 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         let row = rows[indexPath.row]
         cell.contentConfiguration = contentConfiguration(for: row)
         PointContentConfiguration.applyHighlightableBackground(to: cell)
-        if case .category = row {
-            cell.accessibilityTraits = .none
-        } else {
-            cell.accessibilityTraits = .button
-        }
+        cell.accessibilityTraits = .button
         return cell
     }
 

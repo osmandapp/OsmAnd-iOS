@@ -422,7 +422,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     }
     else if ([pd isCustomPoiFilter])
     {
-        OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:pd.name includeDeleted:YES];
+        OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:pd.name];
         if (!filter)
             return nil;
 

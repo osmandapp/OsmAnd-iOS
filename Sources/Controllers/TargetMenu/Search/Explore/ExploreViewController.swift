@@ -33,7 +33,7 @@ final class ExploreViewController: UIViewController {
     }
 
     private static let popularPlacesCount = 3
-    private static let historyItemsLimit: Int32 = 25
+    private static let historyItemsLimit = 25
     private static let topContentInset: CGFloat = 16
 
     @objc weak var delegate: ExploreViewControllerDelegate?
@@ -199,11 +199,11 @@ final class ExploreViewController: UIViewController {
         guard !isCollapsed(section) else { return [] }
         switch section {
         case .popularPlaces:
-            if !popularPlaces.isEmpty {
-                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
-            }
             if !popularPlacesSearcher.isDataSourceAvailable {
                 return [.noInternet]
+            }
+            if !popularPlaces.isEmpty {
+                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
             }
             if popularPlacesSearcher.isLoading {
                 return [.popularPlacesLoading]
@@ -255,9 +255,9 @@ final class ExploreViewController: UIViewController {
         let searchHistoryEnabled = settings.searchHistory.get()
         let navigationHistoryEnabled = settings.navigationHistory.get()
         historyQueue.async { [weak self] in
-            let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: Self.historyItemsLimit) ?? []
+            let items = OAHistoryHelper.sharedInstance().points(fromSearch: searchHistoryEnabled, fromNavigation: navigationHistoryEnabled, limit: 0) ?? []
             let presenter = SearchHistoryItemPresenter()
-            let records = items.compactMap { presenter.record(for: $0) }
+            let records = Array(items.lazy.compactMap { presenter.record(for: $0) }.prefix(Self.historyItemsLimit))
             DispatchQueue.main.async { [weak self] in
                 guard let self, generation == historyGeneration else { return }
                 historyRecords = records
@@ -323,8 +323,10 @@ final class ExploreViewController: UIViewController {
         controller.onSelectPlace = { [weak self] poi in
             self?.delegate?.exploreDidSelectPopularPlace(poi)
         }
-        controller.onShowOnMap = { [weak self] in
-            self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+        if OAPluginsHelper.isEnabled(OAWikipediaPlugin.self) {
+            controller.onShowOnMap = { [weak self] in
+                self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+            }
         }
         navigationController?.pushViewController(controller, animated: true)
     }
@@ -395,7 +397,7 @@ extension ExploreViewController: UITableViewDataSource {
         case .noPopularPlaces:
             guard let cell = emptyCell(at: indexPath) else { return UITableViewCell() }
             cell.configure(title: localizedString("no_places_available"),
-                           description: localizedString("no_photos_available_descr"),
+                           description: "",
                            icon: .icCustomDesert,
                            iconTint: .iconColorDefault)
             return cell

@@ -30,7 +30,8 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-static const NSInteger kOrderDescriptionRow = 0;
+static const NSInteger kOrderDescriptionRow = -3;
+static const NSInteger kOrderPhotoRow = -2;
 static const NSInteger kOrderFavGroupRow = 1;
 
 @implementation OAFavoriteViewController
@@ -64,6 +65,7 @@ static const NSInteger kOrderFavGroupRow = 1;
         _originObject = [OAAmenitySearcher findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
     if (!_originObject)
         _originObject = [_favorite getAmenity];
+    self.customOnlinePhotosPosition = [[_originObject getAmenityExtensions:NO].allKeys containsObject:WIKIDATA_TAG];
 }
 
 - (void) buildTopInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
@@ -100,6 +102,13 @@ static const NSInteger kOrderFavGroupRow = 1;
         OAAmenityInfoRow *descriptionRow = [[OAAmenityInfoRow alloc] initWithKey:nil icon:nil textPrefix:OALocalizedString(@"enter_description") text:desc textColor:nil isText:NO needLinks:NO order:kOrderDescriptionRow typeName:kDescriptionRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:descriptionRow];
     }
+    if (self.customOnlinePhotosPosition)
+        [self buildPhotosRow:rows];
+}
+
+- (NSInteger)photosRowOrder
+{
+    return self.customOnlinePhotosPosition ? kOrderPhotoRow : [super photosRowOrder];
 }
 
 - (void) buildGroupFavouritesView:(NSMutableArray<OAAmenityInfoRow *> *)rows

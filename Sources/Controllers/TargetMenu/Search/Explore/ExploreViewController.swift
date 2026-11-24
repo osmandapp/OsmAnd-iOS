@@ -198,11 +198,11 @@ final class ExploreViewController: UIViewController {
         guard !isCollapsed(section) else { return [] }
         switch section {
         case .popularPlaces:
-            if !popularPlaces.isEmpty {
-                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
-            }
             if !popularPlacesSearcher.isDataSourceAvailable {
                 return [.noInternet]
+            }
+            if !popularPlaces.isEmpty {
+                return popularPlaces.prefix(Self.popularPlacesCount).map { .popularPlace($0) } + [.showAllPopularPlaces]
             }
             if popularPlacesSearcher.isLoading {
                 return [.popularPlacesLoading]
@@ -322,8 +322,10 @@ final class ExploreViewController: UIViewController {
         controller.onSelectPlace = { [weak self] poi in
             self?.delegate?.exploreDidSelectPopularPlace(poi)
         }
-        controller.onShowOnMap = { [weak self] in
-            self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+        if OAPluginsHelper.isEnabled(OAWikipediaPlugin.self) {
+            controller.onShowOnMap = { [weak self] in
+                self?.delegate?.exploreDidRequestShowPopularPlacesOnMap()
+            }
         }
         navigationController?.pushViewController(controller, animated: true)
     }
@@ -394,7 +396,7 @@ extension ExploreViewController: UITableViewDataSource {
         case .noPopularPlaces:
             guard let cell = emptyCell(at: indexPath) else { return UITableViewCell() }
             cell.configure(title: localizedString("no_places_available"),
-                           description: localizedString("no_photos_available_descr"),
+                           description: "",
                            icon: .icCustomDesert,
                            iconTint: .iconColorDefault)
             return cell

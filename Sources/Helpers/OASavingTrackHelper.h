@@ -21,7 +21,8 @@
 @property (nonatomic, readonly) BOOL isRecording;
 @property (atomic, readonly) int currentTrackIndex;
 @property (atomic, copy, readonly) NSString *currentTrackIdentifier;
-@property (atomic, readonly) BOOL hasTrackPoints;
+// Track points or waypoints, without querying the recording database.
+@property (nonatomic, readonly) BOOL hasRecordedData;
 
 @property (nonatomic, readonly) OASGpxFile *currentTrack;
 

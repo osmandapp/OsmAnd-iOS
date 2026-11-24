@@ -14,7 +14,7 @@ final class TrackRecordingLiveActivity: BaseLiveActivity {
     override func isActive() -> Bool {
         guard let trackHelper = OASavingTrackHelper.sharedInstance() else { return false }
         let isRecordingPluginEnabled = OAPluginsHelper.getEnabledPlugin(OAMonitoringPlugin.self) != nil
-        return isRecordingPluginEnabled && (trackHelper.getIsRecording() || trackHelper.hasTrackPoints)
+        return isRecordingPluginEnabled && (trackHelper.getIsRecording() || trackHelper.hasRecordedData)
     }
 
     override func isEnabled() -> Bool {
@@ -41,7 +41,7 @@ final class TrackRecordingLiveActivity: BaseLiveActivity {
             return nil
         }
         let isRecording = trackHelper.getIsRecording()
-        guard isRecording || snapshot.hasTrackPoints else { return nil }
+        guard isRecording || snapshot.hasRecordedData else { return nil }
         var content = LiveActivityContent()
         content.phase = isRecording ? .active : .paused
         content.title = localizedString(isRecording ? "record_plugin_name" : "shared_string_paused")

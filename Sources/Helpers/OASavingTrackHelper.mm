@@ -68,7 +68,8 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
 
 @property (atomic, readwrite) int currentTrackIndex;
 @property (atomic, copy, readwrite) NSString *currentTrackIdentifier;
-@property (atomic, readwrite) BOOL hasTrackPoints;
+@property (atomic) BOOL hasTrackPoints;
+@property (atomic) BOOL hasWaypoints;
 
 @end
 
@@ -105,6 +106,7 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
     
     _currentTrack = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
     self.hasTrackPoints = NO;
+    self.hasWaypoints = NO;
     _currentTrack.showCurrentTrack = YES;
     [_currentTrack setWidthWidth:[settings.currentTrackWidth get]];
     [_currentTrack setShowArrowsShowArrows:[settings.currentTrackShowArrows get]];
@@ -147,7 +149,7 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
 
         NSString *savedIdentifier = [NSUserDefaults.standardUserDefaults stringForKey:kCurrentTrackIdentifier];
         // Recording can be active before the first point passes the recording filters.
-        if ((self.hasTrackPoints || [OAAppSettings sharedManager].mapSettingTrackRecording) && savedIdentifier.length > 0)
+        if ((self.hasRecordedData || [OAAppSettings sharedManager].mapSettingTrackRecording) && savedIdentifier.length > 0)
             self.currentTrackIdentifier = savedIdentifier;
         else
             [self resetCurrentTrackIdentifier];
@@ -356,6 +358,11 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
     });
     
     return res;
+}
+
+- (BOOL)hasRecordedData
+{
+    return self.hasTrackPoints || self.hasWaypoints;
 }
 
 - (BOOL) hasData
@@ -1007,6 +1014,7 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
     _currentTrack.modifiedTime = wpt.time;
     
     points++;
+    self.hasWaypoints = points > 0;
     
     [self doAddPointsLat:wpt.lat
                      lon:wpt.lon
@@ -1018,6 +1026,7 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
                     icon:wpt.getIconName
               background:[wpt getBackgroundType]
                    point:wpt];
+    [LiveActivityManager.shared refresh];
 }
 
 - (void) doUpdateTrackLat:(double)lat
@@ -1281,6 +1290,8 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
     _currentTrack.modifiedTime = (long)(NSDate.date.timeIntervalSince1970 * 1000.0);
     _currentTrack.pointsModifiedTime = _currentTrack.modifiedTime;
     points = (int)remaining.count;
+    self.hasWaypoints = points > 0;
+    [LiveActivityManager.shared refresh];
     return YES;
 }
 
@@ -1289,8 +1300,10 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
     [_currentTrack clearPoints];
     
     points = 0;
-    
+    self.hasWaypoints = NO;
+
     [self doDeleteAllPoints];
+    [LiveActivityManager.shared refresh];
 }
 
 - (BOOL)saveWpt:(OASWptPt *)wpt
@@ -1375,6 +1388,7 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
         distance = analysisNew.totalDistance;
         points = analysisNew.wptPoints;
         self.hasTrackPoints = [_currentTrack hasTrkPt];
+        self.hasWaypoints = points > 0;
     });
 }
 
@@ -1419,7 +1433,7 @@ static NSString * const kCurrentTrackIdentifier = @"current_recording_track_iden
         TrackRecordingSnapshot *snapshot = [[TrackRecordingSnapshot alloc] initWithTrackIndex:self.currentTrackIndex
                                                                                      distance:self->distance
                                                                                      duration:duration
-                                                                               hasTrackPoints:self.hasTrackPoints];
+                                                                              hasRecordedData:self.hasRecordedData];
         completion(snapshot);
     });
 }

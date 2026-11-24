@@ -9,13 +9,13 @@ final class TrackRecordingSnapshot: NSObject, Codable, Sendable {
     let trackIndex: Int32
     let distance: Float
     let duration: TimeInterval
-    let hasTrackPoints: Bool
+    let hasRecordedData: Bool
 
-    init(trackIndex: Int32, distance: Float, duration: TimeInterval, hasTrackPoints: Bool) {
+    init(trackIndex: Int32, distance: Float, duration: TimeInterval, hasRecordedData: Bool) {
         self.trackIndex = trackIndex
         self.distance = distance
         self.duration = duration
-        self.hasTrackPoints = hasTrackPoints
+        self.hasRecordedData = hasRecordedData
         super.init()
     }
 }

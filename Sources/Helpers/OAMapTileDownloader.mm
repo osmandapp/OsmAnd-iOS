@@ -342,7 +342,7 @@ static BOOL OACanFullyDecodeTile(const void *bytes, size_t length)
         }
 
         NSData *data = [NSData dataWithContentsOfFile:location.path];
-        if (data && [tileSource insertImage:x y:y zoom:zoom data:data])
+        if (data.length > 0 && OACanFullyDecodeTile(data.bytes, data.length) && [tileSource insertImage:x y:y zoom:zoom data:data])
         {
             [NSFileManager.defaultManager removeItemAtURL:location error:nil];
             if (_delegate)

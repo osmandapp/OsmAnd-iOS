@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
     OAHistoryTypeParking,
     OAHistoryTypeRouteWpt,
     OAHistoryTypeFavorite,
-    OAHistoryTypePOI,
+    OAHistoryTypePOI NS_SWIFT_NAME(poi),
     OAHistoryTypeAddress,
     OAHistoryTypeWpt,
     OAHistoryTypeLocation,

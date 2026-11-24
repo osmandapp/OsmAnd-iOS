@@ -80,23 +80,35 @@ struct PointSecondaryContent {
 }
 
 struct PointContentConfiguration: UIContentConfiguration {
+    enum IconStyle {
+        case plain
+        case plate
+    }
+
     static let estimatedRowHeight: CGFloat = 66
 
     fileprivate static let iconSize: CGFloat = 36
+    fileprivate static let plateSize: CGFloat = 42
+    fileprivate static let plateIconSize: CGFloat = 24
+    fileprivate static let plateCornerRadius: CGFloat = 10
+    fileprivate static let plateSpacing: CGFloat = 12
+    fileprivate static let plateVerticalInset: CGFloat = 12
     fileprivate static let directionIconSize: CGFloat = 18
     fileprivate static let secondaryTextSize: CGFloat = 15
 
     var icon: UIImage?
     let title: String
     let isVisible: Bool
+    let iconStyle: IconStyle
 
     var secondaryContent: PointSecondaryContent?
     var primaryTextLayoutGuideHandler: ((UILayoutGuide?) -> Void)?
 
-    init(icon: UIImage?, title: String, isVisible: Bool = true, secondaryContent: PointSecondaryContent?) {
+    init(icon: UIImage?, title: String, isVisible: Bool = true, iconStyle: IconStyle = .plain, secondaryContent: PointSecondaryContent?) {
         self.icon = icon
         self.title = title
         self.isVisible = isVisible
+        self.iconStyle = iconStyle
         self.secondaryContent = secondaryContent
     }
 
@@ -133,8 +145,12 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
     var primaryTextLayoutGuide: UILayoutGuide? { rowContentView.textLayoutGuide }
 
     private let rowContentView = UIListContentView(configuration: .cell())
+    private let plateView = UIView()
+    private let plateIconView = UIImageView()
 
     private var appliedConfiguration: PointContentConfiguration
+    private var plainConstraints: [NSLayoutConstraint] = []
+    private var plateConstraints: [NSLayoutConstraint] = []
 
     init(configuration: PointContentConfiguration) {
         appliedConfiguration = configuration
@@ -162,22 +178,68 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
         appliedConfiguration.icon === configuration.icon
         && appliedConfiguration.title == configuration.title
         && appliedConfiguration.isVisible == configuration.isVisible
+        && appliedConfiguration.iconStyle == configuration.iconStyle
     }
 
     private func setupView() {
         rowContentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(rowContentView)
-        NSLayoutConstraint.activate([
+
+        plateView.backgroundColor = .imagePlaceholderBg
+        plateView.layer.cornerRadius = PointContentConfiguration.plateCornerRadius
+        plateView.layer.cornerCurve = .continuous
+        plateView.clipsToBounds = true
+        plateView.isHidden = true
+        plateView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(plateView)
+
+        plateIconView.contentMode = .scaleAspectFit
+        plateIconView.tintColor = .iconColorSelected
+        plateIconView.translatesAutoresizingMaskIntoConstraints = false
+        plateView.addSubview(plateIconView)
+
+        plainConstraints = [
+            rowContentView.leadingAnchor.constraint(equalTo: leadingAnchor)
+        ]
+        plateConstraints = [
+            rowContentView.leadingAnchor.constraint(equalTo: plateView.trailingAnchor, constant: PointContentConfiguration.plateSpacing),
+            plateView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: PointContentConfiguration.plateVerticalInset),
+            plateView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -PointContentConfiguration.plateVerticalInset)
+        ]
+        NSLayoutConstraint.activate(plainConstraints + [
             rowContentView.topAnchor.constraint(equalTo: topAnchor),
-            rowContentView.leadingAnchor.constraint(equalTo: leadingAnchor),
             rowContentView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            rowContentView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            rowContentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            plateView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+            plateView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            plateView.widthAnchor.constraint(equalToConstant: PointContentConfiguration.plateSize),
+            plateView.heightAnchor.constraint(equalToConstant: PointContentConfiguration.plateSize),
+            plateIconView.centerXAnchor.constraint(equalTo: plateView.centerXAnchor),
+            plateIconView.centerYAnchor.constraint(equalTo: plateView.centerYAnchor),
+            plateIconView.widthAnchor.constraint(equalToConstant: PointContentConfiguration.plateIconSize),
+            plateIconView.heightAnchor.constraint(equalToConstant: PointContentConfiguration.plateIconSize)
         ])
     }
 
+    private func applyIconStyle(_ iconStyle: PointContentConfiguration.IconStyle) {
+        let isPlate = iconStyle == .plate
+        preservesSuperviewLayoutMargins = isPlate
+        plateView.isHidden = !isPlate
+        NSLayoutConstraint.deactivate(isPlate ? plainConstraints : plateConstraints)
+        NSLayoutConstraint.activate(isPlate ? plateConstraints : plainConstraints)
+    }
+
     private func apply(_ configuration: PointContentConfiguration) {
+        applyIconStyle(configuration.iconStyle)
         var content = UIListContentConfiguration.cell()
-        content.image = configuration.icon.flatMap { OAUtilities.resize($0, newSize: CGSize(width: PointContentConfiguration.iconSize, height: PointContentConfiguration.iconSize)) }
+        switch configuration.iconStyle {
+        case .plain:
+            content.image = configuration.icon.flatMap { OAUtilities.resize($0, newSize: CGSize(width: PointContentConfiguration.iconSize, height: PointContentConfiguration.iconSize)) }
+            plateIconView.image = nil
+        case .plate:
+            content.directionalLayoutMargins.leading = 0
+            plateIconView.image = configuration.icon
+        }
         content.text = configuration.title
         content.textProperties.color = configuration.isVisible ? .textColorPrimary : .textColorSecondary
         content.textProperties.font = titleFont(isVisible: configuration.isVisible)

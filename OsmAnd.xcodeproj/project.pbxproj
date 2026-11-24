@@ -717,6 +717,8 @@
 		D7AEC6DAA9CF2D53E798E866 /* PoiRowContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED9F1729792F7EF1FA2D8F9C /* PoiRowContentView.swift */; };
 		B9389B938BA4592B3257F0F5 /* PopularPlacesSearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3AD8FC336D1C7CCD0393057 /* PopularPlacesSearcher.swift */; };
 		7EC16A095601886431ADE66C /* PopularPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E4579121C806657BEFBC45 /* PopularPlacesViewController.swift */; };
+		54E4B744F1E8A508F22E636B /* SearchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F0A43A3363F2C5B12E48C80 /* SearchHistoryViewController.swift */; };
+		D828F4D5EFDA68AD7011D067 /* SearchHistoryItemPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E144527879606661D8751C /* SearchHistoryItemPresenter.swift */; };
 		6AF7C2BAA99E9D3ECD8B26AF /* SearchLocationReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F29858BEC7C133A606D812E /* SearchLocationReference.swift */; };
 		0C7F9A5D9FA48AA861692B93 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5B17E077C7CEB69D193BE9 /* ExploreViewController.swift */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
@@ -3337,6 +3339,8 @@
 		ED9F1729792F7EF1FA2D8F9C /* PoiRowContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoiRowContentView.swift; sourceTree = "<group>"; };
 		E3AD8FC336D1C7CCD0393057 /* PopularPlacesSearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularPlacesSearcher.swift; sourceTree = "<group>"; };
 		17E4579121C806657BEFBC45 /* PopularPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularPlacesViewController.swift; sourceTree = "<group>"; };
+		8F0A43A3363F2C5B12E48C80 /* SearchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryViewController.swift; sourceTree = "<group>"; };
+		96E144527879606661D8751C /* SearchHistoryItemPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHistoryItemPresenter.swift; sourceTree = "<group>"; };
 		9F29858BEC7C133A606D812E /* SearchLocationReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchLocationReference.swift; sourceTree = "<group>"; };
 		AE5B17E077C7CEB69D193BE9 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
@@ -9163,6 +9167,8 @@
 				AE5B17E077C7CEB69D193BE9 /* ExploreViewController.swift */,
 				E3AD8FC336D1C7CCD0393057 /* PopularPlacesSearcher.swift */,
 				17E4579121C806657BEFBC45 /* PopularPlacesViewController.swift */,
+				8F0A43A3363F2C5B12E48C80 /* SearchHistoryViewController.swift */,
+				96E144527879606661D8751C /* SearchHistoryItemPresenter.swift */,
 				9F29858BEC7C133A606D812E /* SearchLocationReference.swift */,
 			);
 			path = Explore;
@@ -13819,6 +13825,8 @@
 				D7AEC6DAA9CF2D53E798E866 /* PoiRowContentView.swift in Sources */,
 				B9389B938BA4592B3257F0F5 /* PopularPlacesSearcher.swift in Sources */,
 				7EC16A095601886431ADE66C /* PopularPlacesViewController.swift in Sources */,
+				54E4B744F1E8A508F22E636B /* SearchHistoryViewController.swift in Sources */,
+				D828F4D5EFDA68AD7011D067 /* SearchHistoryItemPresenter.swift in Sources */,
 				6AF7C2BAA99E9D3ECD8B26AF /* SearchLocationReference.swift in Sources */,
 				0C7F9A5D9FA48AA861692B93 /* ExploreViewController.swift in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,

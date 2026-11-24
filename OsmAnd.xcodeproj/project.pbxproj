@@ -1562,6 +1562,8 @@
 		DA5A83EB26C563A800F274C7 /* OAQuickSearchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2626C563A400F274C7 /* OAQuickSearchViewController.mm */; };
 		DA5A83EC26C563A800F274C7 /* OAAddressTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2726C563A400F274C7 /* OAAddressTableViewController.xib */; };
 		DA5A83ED26C563A800F274C7 /* OAQuickSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2926C563A400F274C7 /* OAQuickSearchViewController.xib */; };
+		D4D42C4A3BE8E73AC0BC82DC /* QuickSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCFF1D4E5495ED95AD153E4 /* QuickSearchViewController.swift */; };
+		BCAAEC6268FABF6283F30552 /* QuickSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 87405AB3A36F32D29A644D2F /* QuickSearchViewController.xib */; };
 		DA5A83EF26C563A800F274C7 /* OAQuickSearchHeaderListItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2B26C563A400F274C7 /* OAQuickSearchHeaderListItem.mm */; };
 		DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2C26C563A400F274C7 /* OAQuickSearchTableController.mm */; };
 		DA5A83F226C563A800F274C7 /* OASearchToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E3526C563A400F274C7 /* OASearchToolbarViewController.xib */; };
@@ -4796,6 +4798,8 @@
 		DA5A7E2726C563A400F274C7 /* OAAddressTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAAddressTableViewController.xib; sourceTree = "<group>"; };
 		DA5A7E2826C563A400F274C7 /* OAQuickSearchButtonListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchButtonListItem.h; sourceTree = "<group>"; };
 		DA5A7E2926C563A400F274C7 /* OAQuickSearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAQuickSearchViewController.xib; sourceTree = "<group>"; };
+		8BCFF1D4E5495ED95AD153E4 /* QuickSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSearchViewController.swift; sourceTree = "<group>"; };
+		87405AB3A36F32D29A644D2F /* QuickSearchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QuickSearchViewController.xib; sourceTree = "<group>"; };
 		DA5A7E2B26C563A400F274C7 /* OAQuickSearchHeaderListItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchHeaderListItem.mm; sourceTree = "<group>"; };
 		DA5A7E2C26C563A400F274C7 /* OAQuickSearchTableController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchTableController.mm; sourceTree = "<group>"; };
 		DA5A7E2D26C563A400F274C7 /* OAHistoryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryTableViewController.h; sourceTree = "<group>"; };
@@ -9222,6 +9226,8 @@
 				DA5A7E4126C563A400F274C7 /* OAQuickSearchViewController.h */,
 				DA5A7E2626C563A400F274C7 /* OAQuickSearchViewController.mm */,
 				DA5A7E2926C563A400F274C7 /* OAQuickSearchViewController.xib */,
+				8BCFF1D4E5495ED95AD153E4 /* QuickSearchViewController.swift */,
+				87405AB3A36F32D29A644D2F /* QuickSearchViewController.xib */,
 				DA5A7E2E26C563A400F274C7 /* OARearrangeCustomFiltersViewController.h */,
 				DA5A7E3626C563A400F274C7 /* OARearrangeCustomFiltersViewController.mm */,
 				DA5A7E3326C563A400F274C7 /* OASearchToolbarViewController.h */,
@@ -11946,6 +11952,7 @@
 				2745FEF92F3A1216004F6AB4 /* PreviewImageView.xib in Resources */,
 				DA5A83AC26C563A800F274C7 /* OAAdvancedEditingViewController.xib in Resources */,
 				DA5A83ED26C563A800F274C7 /* OAQuickSearchViewController.xib in Resources */,
+				BCAAEC6268FABF6283F30552 /* QuickSearchViewController.xib in Resources */,
 				DA5A826426C563A700F274C7 /* OABottomSheetHeaderButtonCell.xib in Resources */,
 				C5879A4D299FC24700F53249 /* id_tts.js in Resources */,
 				B247453E27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib in Resources */,
@@ -13619,6 +13626,7 @@
 				DA5A82E626C563A800F274C7 /* OATableViewCustomHeaderView.m in Sources */,
 				DA5A81C926C563A700F274C7 /* OAPointIContainer.mm in Sources */,
 				DA5A83EB26C563A800F274C7 /* OAQuickSearchViewController.mm in Sources */,
+				D4D42C4A3BE8E73AC0BC82DC /* QuickSearchViewController.swift in Sources */,
 				DA5A813026C563A700F274C7 /* OAOnlineOsmNote.mm in Sources */,
 				DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */,
 				DA5A831A26C563A800F274C7 /* OATextInputFloatingCellWithIcon.mm in Sources */,

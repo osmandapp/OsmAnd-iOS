@@ -14,7 +14,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OASearchResult.h"
 
+#if defined(__cplusplus)
 #include <OsmAndCore/Data/DataCommonTypes.h>
+#endif
 
 typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 {
@@ -125,8 +127,10 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 + (NSMutableArray<NSString *> *) stripBracesArray:(NSMutableArray<NSString *> *)names;
 + (NSString *) ALLDELIMITERS;
 - (NSString *) selectMainUnknownWordToSearch:(NSMutableArray<NSString *> *)searchWords;
+#if defined(__cplusplus)
 - (NSString *) selectMainUnknownWordToSearchQt:(QStringList)searchWords;
 - (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
+#endif
 - (NSNumber *) getRegionPriority:(NSString *) resId;
 
 

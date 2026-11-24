@@ -56,7 +56,6 @@
 #import "OANativeUtilities.h"
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
-#import "OAQuickSearchViewController.h"
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
@@ -192,7 +191,7 @@ typedef enum
     OADestination *_targetDestination;
 
     OADashboardViewController *_dashboard;
-    OAQuickSearchViewController *_searchViewController;
+    QuickSearchViewController *_searchViewController;
     UILongPressGestureRecognizer *_shadowLongPress;
 
     BOOL _customStatusBarStyleNeeded;
@@ -1319,9 +1318,10 @@ typedef enum
     }
     
     if (!_searchViewController || location || searchQuery)
-        _searchViewController = [[OAQuickSearchViewController alloc] init];
+        _searchViewController = [[QuickSearchViewController alloc] init];
     
-    _searchViewController.myLocation = searchLocation;
+    OsmAnd::LatLon searchLatLon = OsmAnd::Utilities::convert31ToLatLon(searchLocation);
+    _searchViewController.searchLocation = CLLocationCoordinate2DMake(searchLatLon.latitude, searchLatLon.longitude);
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
@@ -4462,18 +4462,18 @@ typedef enum
 
     if (!_searchViewController)
     {
-        _searchViewController = [[OAQuickSearchViewController alloc] init];
+        _searchViewController = [[QuickSearchViewController alloc] init];
         __weak OAMapPanelViewController *selfWeak = self;
         _searchViewController.onCloseCallback = ^{
             [selfWeak clearSearchViewController];
         };
     }
 
-    _searchViewController.myLocation = myLocation;
+    _searchViewController.searchLocation = CLLocationCoordinate2DMake(latitude, longitude);
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
 
-    [_searchViewController setupBarActionView:BarActionShowOnMap title:filter.name];
+    [_searchViewController setupBarActionView:QuickSearchBarActionShowOnMap title:filter.name];
     [_searchViewController showToolbar:filter];
 }
 

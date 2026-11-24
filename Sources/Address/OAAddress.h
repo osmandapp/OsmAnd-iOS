@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#if defined(__cplusplus)
 #include <OsmAndCore/Data/Address.h>
+#endif
 
 @class OASMapObject;
 
@@ -23,7 +25,9 @@ typedef NS_ENUM(NSInteger, EOAAddressType)
 
 @interface OAAddress : NSObject
 
+#if defined(__cplusplus)
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Address> address;
+#endif
 
 // The same address out of the shared search, which the getters read instead of the C++ one
 @property (nonatomic, readonly) OASMapObject *sharedAddress;
@@ -37,11 +41,15 @@ typedef NS_ENUM(NSInteger, EOAAddressType)
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *localizedNames;
 
+#if defined(__cplusplus)
 - (instancetype)initWithAddress:(const std::shared_ptr<const OsmAnd::Address>&)address;
+#endif
 - (instancetype)initWithSharedAddress:(OASMapObject *)address type:(EOAAddressType)type;
 
 - (NSString *) getName:(NSString *)lang transliterate:(BOOL)transliterate;
+#if defined(__cplusplus)
 - (NSString *) getNameQ:(QString)lang transliterate:(BOOL)transliterate;
+#endif
 
 - (UIImage *)icon;
 - (NSString *)iconName;

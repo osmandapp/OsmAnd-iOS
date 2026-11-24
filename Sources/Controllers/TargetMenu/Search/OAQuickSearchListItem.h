@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "OADistanceDirection.h"
+#if defined(__cplusplus)
 #import "OACity.h"
+#endif
 
 @class OASearchResult, OAPointDescription, OASGpxDataItem, OAHistoryItem;
 

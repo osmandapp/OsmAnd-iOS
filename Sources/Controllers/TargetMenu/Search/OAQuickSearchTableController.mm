@@ -314,7 +314,9 @@
 - (void) updateData:(NSArray<NSArray<OAQuickSearchListItem *> *> *)data append:(BOOL)append
 {
     BOOL needUpdateScrollPosition = ![self isEqualFirstItemDataSource:data];
-    _dataGroups = [NSMutableArray arrayWithArray:data];
+    _dataGroups = [NSMutableArray arrayWithCapacity:data.count];
+    for (NSArray<OAQuickSearchListItem *> *items in data)
+        [_dataGroups addObject:[items mutableCopy]];
     if (self.searchNearMapCenter)
     {
         for (NSMutableArray<OAQuickSearchListItem *> *items in _dataGroups)

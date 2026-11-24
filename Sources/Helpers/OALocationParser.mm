@@ -16,8 +16,6 @@
 #define SEPARATOR @"+"
 #define SEPARATOR_POSITION 8
 
-static NSString *kRTLMark = @"\u200f";  // right-to-right mark
-
 @implementation OAParsedOpenLocationCode
 {
     

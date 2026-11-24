@@ -46,6 +46,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 }
 
 static NSString * const kLTRMark = @"\u200e"; // left-to-right mark
+static NSString * const kRTLMark = @"\u200f"; // right-to-left mark
 
 static inline BOOL NSStringIsEmpty(NSString * _Nullable string)
 {

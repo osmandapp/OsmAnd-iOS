@@ -10,15 +10,20 @@
 final class OACollapsablePoiView: OACollapsableView  {
     
     private let kButtonHeight: CGFloat = 36.0
+    private let kButtonInset: CGFloat = 12.0
+    private let kDistanceSpacing: CGFloat = 4.0
 
     private var titles = [String]()
+    private var distances = [String]()
+    private var distanceLabels = [UILabel?]()
     private var amenities = [OAPOI]()
     private var buttons = [OAButton]()
     private var selectedButtonIndex = 0
     
-    func setData(titles: [String], amenities: [OAPOI]) {
+    func setData(titles: [String], distances: [String], amenities: [OAPOI]) {
         self.amenities = amenities
         self.titles = titles
+        self.distances = distances
         buildViews()
     }
     
@@ -34,6 +39,7 @@ final class OACollapsablePoiView: OACollapsableView  {
             
             let height: CGFloat = kButtonHeight
             button.frame = CGRect(x: kMarginLeft, y: y, width: width - kMarginLeft - kMarginRight, height: height)
+            layoutDistanceLabel(at: i, in: button)
             viewHeight += button.frame.size.height
             i += 1
         }
@@ -46,16 +52,43 @@ final class OACollapsablePoiView: OACollapsableView  {
         for i in 0..<amenities.count {
             let btn = createButton(title: titles[i])
             btn.tag = i
+            var distanceLabel: UILabel?
+            if i < distances.count, !distances[i].isEmpty {
+                let label = createDistanceLabel(text: distances[i])
+                btn.addSubview(label)
+                btn.accessibilityValue = distances[i]
+                distanceLabel = label
+            }
             self.addSubview(btn)
             buttons.append(btn)
+            distanceLabels.append(distanceLabel)
         }
+    }
+    
+    private func createDistanceLabel(text: String) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = .preferredFont(forTextStyle: .footnote)
+        label.textColor = .iconColorActive
+        label.isUserInteractionEnabled = false
+        return label
+    }
+    
+    private func layoutDistanceLabel(at index: Int, in button: OAButton) {
+        guard index < distanceLabels.count, let label = distanceLabels[index] else { return }
+        label.sizeToFit()
+        let labelWidth = min(label.frame.width, button.bounds.width / 2)
+        let titleWidth = ceil(button.titleLabel?.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: button.bounds.height)).width ?? 0)
+        let x = min(kButtonInset + titleWidth + kDistanceSpacing, button.bounds.width - kButtonInset - labelWidth)
+        label.frame = CGRect(x: x, y: (button.bounds.height - label.frame.height) / 2, width: labelWidth, height: label.frame.height)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: kButtonInset, bottom: 0, right: kButtonInset + labelWidth + kDistanceSpacing)
     }
     
     private func createButton(title: String) -> OAButton {
         let btn = OAButton(type: .system)
         btn.setTitle(title, for: .normal)
         btn.contentHorizontalAlignment = .left
-        btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: 12.0, bottom: 0, right: 12.0)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 0, left: kButtonInset, bottom: 0, right: kButtonInset)
         btn.titleLabel?.lineBreakMode = .byTruncatingTail
         btn.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         btn.layer.cornerRadius = 4.0

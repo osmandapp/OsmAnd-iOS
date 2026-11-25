@@ -436,6 +436,22 @@
     }
 }
 
+- (void)setObject:(NSObject *)object
+{
+    @synchronized (self)
+    {
+        _sharedObject = [OASharedSearchObjects sharedObjectFor:object];
+        _appObject = object;
+        self.sharedResult.object = _sharedObject;
+    }
+}
+
+- (void)setLocaleName:(NSString *)localeName
+{
+    [super setLocaleName:localeName];
+    self.sharedResult.localeName = localeName;
+}
+
 - (NSObject *)relatedObject
 {
     @synchronized (self)

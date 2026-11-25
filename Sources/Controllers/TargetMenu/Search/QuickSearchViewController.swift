@@ -1987,7 +1987,9 @@ extension QuickSearchViewController: StarMapSearchSortFilterChipsDataSource, Sta
         if chipsState.showsFilters {
             let count = chipsState.appliedFiltersCount
             groups.append(SearchSortFilterChipGroup(id: Self.filtersGroupId,
-                                                    chipTitle: count > 0 ? String(count) : localizedString("shared_string_filters"),
+                                                    chipTitle: count > 0
+                                                        ? String(format: localizedString("ltr_or_rtl_combine_with_brackets"), localizedString("shared_string_filters"), String(count))
+                                                        : localizedString("shared_string_filters"),
                                                     chipImage: UIImage.icCustomFilter.resizedTemplateImage(with: Self.chipIconSize),
                                                     selectionMode: .toggle,
                                                     isToggleOn: chipsState.filtersApplied))

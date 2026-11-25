@@ -50,6 +50,8 @@
 static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
 static const int START_ZOOM = 7;
+// The copy of the selected track goes below the order of every other track line, so it is drawn above them
+static const int kSelectedTrackOrderShift = 100000;
 
 namespace
 {
@@ -158,6 +160,10 @@ namespace
     OASRTMPlugin *_plugin;
     
     NSMutableDictionary<NSString *, OASGpxFile *> *_gpxFiles;
+
+    NSString *_selectedTrackPath;
+    std::shared_ptr<OsmAnd::VectorLinesCollection> _selectedLinesCollection;
+    std::shared_ptr<OsmAnd::VectorLineArrowsProvider> _selectedArrowsProvider;
 }
 
 - (NSString *) layerId
@@ -204,6 +210,7 @@ namespace
     _displayedPointsModifiedTimes = nil;
     [self removeStartFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
+    [self removeSelectedTrackLines];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     [_gpxFiles removeAllObjects];
@@ -432,12 +439,77 @@ namespace
         _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
     }
 
-    if (_gpxFiles.count > 0)
+    [self drawTracks:[self sortedTrackKeys] collection:_linesCollection baseOrder:self.baseOrder];
+    [self setVectorLineProvider:_linesCollection sync:YES];
+    [self drawSelectedTrackLines];
+    [self refreshGpxWaypointsIfChanged];
+    [self refreshStartFinishPoints];
+}
+
+// Tracks are drawn in the order they were shown on the map, like on Android: a later shown track lies above
+- (NSArray<NSString *> *)sortedTrackKeys
+{
+    NSArray<NSString *> *visibleGpx = [[OAAppSettings sharedManager].mapSettingVisibleGpx get];
+    NSMutableDictionary<NSString *, NSNumber *> *showIndexes = [NSMutableDictionary dictionary];
+    for (NSString *key in _gpxFiles.allKeys)
     {
-        int baseOrder = self.baseOrder;
+        NSUInteger index = [visibleGpx indexOfObject:[OAUtilities getGpxShortPath:key]];
+        showIndexes[key] = @(index == NSNotFound ? visibleGpx.count : index);
+    }
+    return [_gpxFiles.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString *key1, NSString *key2) {
+        NSComparisonResult result = [showIndexes[key1] compare:showIndexes[key2]];
+        return result != NSOrderedSame ? result : [key1 compare:key2];
+    }];
+}
+
+- (void)setSelectedTrackPath:(NSString *)path
+{
+    if (_selectedTrackPath == path || [_selectedTrackPath isEqualToString:path])
+        return;
+
+    _selectedTrackPath = [path copy];
+    [self.mapViewController runWithRenderSync:^{
+        [self removeSelectedTrackLines];
+        [self drawSelectedTrackLines];
+    }];
+}
+
+// The selected track is drawn once more into its own collection on top of the others.
+// Its own lines are not recreated with a new order, so nothing blinks when another track is selected
+- (void)drawSelectedTrackLines
+{
+    if (!_selectedTrackPath || [_selectedTrackPath isEqualToString:kCurrentTrack] || !_gpxFiles[_selectedTrackPath])
+        return;
+
+    _selectedLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(_linesCollection->hasVolumetricSymbols);
+    [self drawTracks:@[_selectedTrackPath] collection:_selectedLinesCollection baseOrder:self.baseOrder - kSelectedTrackOrderShift];
+    _selectedArrowsProvider = _selectedLinesCollection->getVectorLineArrowsProvider();
+    [self.mapView addKeyedSymbolsProvider:_selectedArrowsProvider];
+}
+
+- (void)removeSelectedTrackLines
+{
+    if (_selectedArrowsProvider)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_selectedArrowsProvider];
+        _selectedArrowsProvider = nullptr;
+    }
+    if (_selectedLinesCollection)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_selectedLinesCollection];
+        _selectedLinesCollection = nullptr;
+    }
+}
+
+- (void)drawTracks:(NSArray<NSString *> *)keys
+        collection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection
+         baseOrder:(int)baseOrder
+{
+    if (keys.count > 0)
+    {
         int lineId = 1;
         
-        for (NSString *key in _gpxFiles.allKeys)
+        for (NSString *key in keys)
         {
             OASGpxFile *gpxFile_ = _gpxFiles[key];
 
@@ -652,7 +724,7 @@ namespace
                             }
                             else
                             {
-                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
+                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations collection:collection];
                             }
                             points.clear();
                             segmentColors.clear();
@@ -669,7 +741,7 @@ namespace
                     }
                     else
                     {
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors segmentWallColors:segmentWallColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations collection:collection];
                     }
                 }
             }
@@ -708,16 +780,13 @@ namespace
                     }
                     else
                     {
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} segmentWallColors:{} colorizationScheme:COLORIZATION_NONE elevations:elevations];
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} segmentWallColors:{} colorizationScheme:COLORIZATION_NONE elevations:elevations collection:collection];
                     }
                 }
             }
         }
-        [self.mapView addKeyedSymbolsProvider:_linesCollection];
+        [self.mapView addKeyedSymbolsProvider:collection];
     }
-    [self setVectorLineProvider:_linesCollection sync:YES];
-    [self refreshGpxWaypointsIfChanged];
-    [self refreshStartFinishPoints];
 }
 
 - (void)processGPXDataElements:(NSArray *)elements withGPX:(OASGpxDataItem *)gpx addToElevations:(NSMutableArray *)elevations
@@ -822,6 +891,7 @@ namespace
 segmentWallColors:(const QList<OsmAnd::FColorARGB> &)segmentWallColors
 colorizationScheme:(int)colorizationScheme
        elevations:(NSArray <NSNumber *>* _Nullable)elevations
+       collection:(const std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection
 {
     if (points.size() > 1)
     {
@@ -902,7 +972,7 @@ colorizationScheme:(int)colorizationScheme
             }
         }
         
-        builder.buildAndAddToCollection(_linesCollection);
+        builder.buildAndAddToCollection(collection);
     }
 }
 

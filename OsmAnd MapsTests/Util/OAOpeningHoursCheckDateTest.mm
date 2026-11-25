@@ -5,12 +5,93 @@
 #import "OACollapsableLabelView.h"
 #import "OALabel.h"
 #import "OAUtilities.h"
+#import "OAMapPanelViewController.h"
+#import "OATargetPointView.h"
+#import "OAPOIViewController.h"
+#import "OARenderedObject.h"
 #import "OsmAnd_Maps-Swift.h"
+
+@interface OAMapPanelViewController (SavedPoiMetadataTests)
+@property (nonatomic, strong) OATargetPointView *targetMenuView;
+- (OAPOI *)getTargetPointPoi;
+@end
 
 @interface OAOpeningHoursCheckDateTest : XCTestCase
 @end
 
 @implementation OAOpeningHoursCheckDateTest
+
+- (void)checkResolvedCardMetadataForTargetType:(OATargetPointType)type object:(id)object
+{
+    OAPOI *poi = [[OAPOI alloc] init];
+    [poi setAdditionalInfo:@{OPENING_HOURS_TAG: @"Mo-Su 08:00-22:00", CHECK_DATE_OPENING_HOURS_TAG: @"2025-03-28", CHECK_DATE_TAG: @"2025-11-18", @"payment_cash_yes": @"yes", @"payment_credit_cards_yes": @"yes", @"payment_debit_cards_yes": @"yes"}];
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    OATargetPointView *menu = [[OATargetPointView alloc] init];
+    OATargetPoint *target = [[OATargetPoint alloc] init];
+    target.type = type;
+    target.targetObj = object;
+    menu.targetPoint = target;
+    menu.customController = [[OAPOIViewController alloc] initWithPOI:poi];
+    panel.targetMenuView = menu;
+
+    OAPOI *resolvedPoi = [panel getTargetPointPoi];
+    XCTAssertEqual(resolvedPoi, poi);
+    OAFavoriteItem *favorite = [[OAFavoriteItem alloc] initWithLat:50.43599 lon:30.50821 name:@"Resolved POI" category:@""];
+    [favorite setAmenity:resolvedPoi];
+    OASWptPt *favoritePoint = [favorite toWpt];
+    OASWptPt *waypoint = [[OASWptPt alloc] init];
+    [waypoint setAmenity:resolvedPoi];
+    NSSet *expectedPayments = [NSSet setWithArray:@[@"payment_cash_yes", @"payment_credit_cards_yes", @"payment_debit_cards_yes"]];
+    for (OASWptPt *point in @[favoritePoint, waypoint])
+    {
+        NSDictionary *extensions = [point getExtensionsToRead];
+        XCTAssertEqualObjects(extensions[@"amenity_opening_hours"], @"Mo-Su 08:00-22:00");
+        XCTAssertEqualObjects(extensions[@"osm_tag_check_date_opening_hours"], @"2025-03-28");
+        XCTAssertEqualObjects(extensions[@"osm_tag_check_date"], @"2025-11-18");
+        NSSet *payments = [NSSet setWithArray:[extensions[@"collapsable_payment_type"] componentsSeparatedByString:@";"] ?: @[]];
+        XCTAssertEqualObjects(payments, expectedPayments);
+    }
+}
+
+- (void)testRenderedObjectSavesResolvedCardMetadata
+{
+    [self checkResolvedCardMetadataForTargetType:OATargetRenderedObject object:[[OARenderedObject alloc] init]];
+}
+
+- (void)testPoiSavesResolvedCardMetadataInsteadOfOriginalObject
+{
+    [self checkResolvedCardMetadataForTargetType:OATargetPOI object:[[OAPOI alloc] init]];
+}
+
+- (void)testDetailsObjectSavesResolvedCardMetadataInsteadOfOriginalObject
+{
+    [self checkResolvedCardMetadataForTargetType:OATargetBaseDetailsObject object:[[BaseDetailsObject alloc] init]];
+}
+
+- (void)testCoordinateTargetDoesNotSaveSyntheticCardMetadata
+{
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    OATargetPointView *menu = [[OATargetPointView alloc] init];
+    OATargetPoint *target = [[OATargetPoint alloc] init];
+    target.type = OATargetLocation;
+    menu.targetPoint = target;
+    menu.customController = [[OAPOIViewController alloc] initWithPOI:[[OAPOI alloc] init]];
+    panel.targetMenuView = menu;
+    XCTAssertNil([panel getTargetPointPoi]);
+}
+
+- (void)testPoiTargetWithoutCardKeepsOriginalMetadata
+{
+    OAPOI *poi = [[OAPOI alloc] init];
+    OAMapPanelViewController *panel = [[OAMapPanelViewController alloc] initWithNibName:nil bundle:nil];
+    OATargetPointView *menu = [[OATargetPointView alloc] init];
+    OATargetPoint *target = [[OATargetPoint alloc] init];
+    target.type = OATargetPOI;
+    target.targetObj = poi;
+    menu.targetPoint = target;
+    panel.targetMenuView = menu;
+    XCTAssertEqual([panel getTargetPointPoi], poi);
+}
 
 - (void)testCheckDateReachesCardAndSavedExtensions
 {

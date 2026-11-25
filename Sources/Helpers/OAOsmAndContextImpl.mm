@@ -24,6 +24,7 @@ static NSString * const kGpxImportDir = @"import";
 @implementation OASettingsAPIImpl
 {
     NSMutableDictionary<NSString *, id<OASKStateChangedListener>> *_prefListeners;
+    NSMutableDictionary<NSString *, NSString *> *_sharedLibWrittenValues;
 }
 
 - (instancetype)init
@@ -31,6 +32,7 @@ static NSString * const kGpxImportDir = @"import";
     self = [super init];
     if (self) {
         _prefListeners = [NSMutableDictionary dictionary];
+        _sharedLibWrittenValues = [NSMutableDictionary dictionary];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onPreferenceSet:) name:kNotificationSetProfileSetting object:nil];
     }
     return self;
@@ -53,11 +55,27 @@ static NSString * const kGpxImportDir = @"import";
                 OACommonPreference *pref = [[OAAppSettings.sharedManager getRegisteredPreferences] objectForKey:listenerKey];
                 if (!pref)
                     continue;
+                NSObject *value = [pref getPrefValue];
+                if ([self consumeSharedLibWrittenValue:value forKey:pref.key])
+                    continue;
                 id<OASKStateChangedListener> listener = _prefListeners[pref.key];
                 if (listener)
-                    [listener stateChangedChange:[pref getPrefValue]];
+                    [listener stateChangedChange:value];
             }
         }
+    }
+}
+
+// Preference notifications are delivered asynchronously, so a listener in the shared library can't rely
+// on a guard set around its own write (SmartFolderHelper.isWritingSettings). On Android the listener runs
+// inside set(), under that guard. Here the echo of a write made by the shared library is dropped instead.
+- (BOOL)consumeSharedLibWrittenValue:(NSObject *)value forKey:(NSString *)key
+{
+    @synchronized (_sharedLibWrittenValues)
+    {
+        NSString *writtenValue = _sharedLibWrittenValues[key];
+        [_sharedLibWrittenValues removeObjectForKey:key];
+        return writtenValue && [writtenValue isEqual:value];
     }
 }
 
@@ -102,7 +120,13 @@ static NSString * const kGpxImportDir = @"import";
 {
     OACommonPreference *pref = [OAAppSettings.sharedManager getPreferenceByKey:name];
     if ([pref isKindOfClass:OACommonString.class])
+    {
+        @synchronized (_sharedLibWrittenValues)
+        {
+            _sharedLibWrittenValues[name] = value;
+        }
         [(OACommonString *)pref set:value];
+    }
 }
 
 - (void)addEnumPreferenceListenerName:(nonnull NSString *)name listener:(nonnull id<OASKStateChangedListener>)listener {

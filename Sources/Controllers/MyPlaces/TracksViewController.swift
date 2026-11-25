@@ -1386,9 +1386,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
 
     private func reloadAfterOrganizeByChange() {
-        if let name = smartFolder?.getName(), let refreshed = smartFolderHelper.getSmartFolder(name: name) {
-            smartFolder = refreshed
-        }
+        refreshSmartFolderReference()
         resetSortModeForOrganizeByChange()
         smartFolderHelper.refreshSmartFolder(smartFolder: smartFolder)
         updateData()
@@ -1737,8 +1735,15 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         configureToolbar()
     }
     
+    private func refreshSmartFolderReference() {
+        if let name = smartFolder?.getName(), let refreshed = smartFolderHelper.getSmartFolder(name: name) {
+            smartFolder = refreshed
+        }
+    }
+    
     @objc private func onNavbarDoneButtonClicked() {
         if let filters = baseFilters?.getCurrentFilters() {
+            refreshSmartFolderReference()
             smartFolderHelper.saveSmartFolder(smartFolder: smartFolder, filters: NSMutableArray(array: filters))
         }
         

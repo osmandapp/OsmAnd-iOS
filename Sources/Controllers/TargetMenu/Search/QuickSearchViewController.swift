@@ -2065,14 +2065,14 @@ extension QuickSearchViewController: StarMapSearchSortFilterChipsDataSource, Sta
             options.append(StarMapSearchSortFilterChipOption(id: Self.mapCenterOptionId,
                                                              title: localizedString("shared_string_map_center"),
                                                              image: nil,
-                                                             originalSizeImage: UIImage.icCustomMapOutline.withRenderingMode(.alwaysTemplate),
+                                                             originalSizeImage: UIImage(systemName: "map"),
                                                              isSelected: chipsState.searchAroundOption == .mapCenter,
                                                              subtitle: mapCenterDescription))
         }
         options.append(StarMapSearchSortFilterChipOption(id: Self.nearMeOptionId,
                                                          title: localizedString("search_near_me"),
                                                          image: nil,
-                                                         originalSizeImage: UIImage.icCustomNavigationArrow.withRenderingMode(.alwaysTemplate),
+                                                         originalSizeImage: UIImage(systemName: "location.fill"),
                                                          isSelected: chipsState.searchAroundOption == .myLocation,
                                                          subtitle: localizedString("search_around_my_location_description")))
         if let spatialScopeName = chipsState.spatialScopeName {
@@ -2085,9 +2085,17 @@ extension QuickSearchViewController: StarMapSearchSortFilterChipsDataSource, Sta
         let selectedOption = options.first(where: \.isSelected) ?? options[0]
         return SearchSortFilterChipGroup(id: Self.searchAroundGroupId,
                                          chipTitle: selectedOption.title,
-                                         chipImage: selectedOption.originalSizeImage?.resizedTemplateImage(with: Self.chipIconSize),
+                                         chipImage: Self.chipImage(selectedOption.originalSizeImage),
                                          selectionMode: .single,
                                          sections: [StarMapSearchSortFilterChipSection(options: options)])
+    }
+
+    private static func chipImage(_ image: UIImage?) -> UIImage? {
+        guard let image else { return nil }
+        if image.isSymbolImage {
+            return image.applyingSymbolConfiguration(UIImage.SymbolConfiguration(textStyle: .subheadline))
+        }
+        return image.resizedTemplateImage(with: chipIconSize)
     }
 }
 

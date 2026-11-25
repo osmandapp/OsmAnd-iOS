@@ -696,10 +696,7 @@
     if ([object isKindOfClass:OAPOIType.class])
         return [PoiAdditionalLabels getSearchName:(OAPOIType *)object];
     if ([object isKindOfClass:OACity.class])
-    {
-        EOACityType type = ((OACity *)object).type;
-        return type == CITY_TYPE_POSTCODE ? OALocalizedString(@"postcode") : [OACity getLocalizedTypeStr:type];
-    }
+        return [OACity getLocalizedTypeStr:((OACity *)object).type];
     if ([object isKindOfClass:OAStreet.class])
         return OALocalizedString(@"search_address_street");
     if ([object isKindOfClass:OABuilding.class])

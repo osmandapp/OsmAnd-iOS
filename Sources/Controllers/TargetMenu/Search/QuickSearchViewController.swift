@@ -129,6 +129,7 @@ final class QuickSearchViewController: OASuperViewController {
     private var spatialSearchScope: SpatialSearchScope?
     private var useSpatialSearchLocation = false
     private var openedNearMapCenter = false
+    private var restoresSearchFromMap = false
     private var selectedSortOption: SortOption = .relevance
     private var sortContextId: String?
     private var searching = false
@@ -412,6 +413,11 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     @objc func showToolbar(_ filter: OAPOIUIFilter?) {
+        showToolbar(filter, restoresSearch: false)
+    }
+
+    private func showToolbar(_ filter: OAPOIUIFilter?, restoresSearch: Bool) {
+        restoresSearchFromMap = restoresSearch
         let toolbar: OASearchToolbarViewController
         if let searchToolbarViewController {
             toolbar = searchToolbarViewController
@@ -782,7 +788,7 @@ final class QuickSearchViewController: OASuperViewController {
                 OAPOIFiltersHelper.sharedInstance().replaceSelectedPoiFilters(filter)
             }
             OARootViewController.instance().mapPanel.mapViewController.updatePoiLayer()
-            showToolbar(filter)
+            showToolbar(filter, restoresSearch: true)
             dismissSearch(animated: true)
         } else if searchPhrase.isLastWord(.favoriteGroup) {
             guard let group = searchPhrase.getLastSelectedWord()?.result?.object as? OAFavoriteGroup else { return }
@@ -988,6 +994,7 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func hideToolbar() {
+        restoresSearchFromMap = false
         guard let searchToolbarViewController else { return }
         OARootViewController.instance().mapPanel.hideToolbar(searchToolbarViewController)
     }
@@ -2314,7 +2321,10 @@ extension QuickSearchViewController: OASearchToolbarViewControllerProtocol {
             OAPOIFiltersHelper.sharedInstance().removeSelectedPoiFilter(filter)
         }
         let mapPanel = OARootViewController.instance().mapPanel
-        if let filter {
+        if restoresSearchFromMap {
+            hideToolbar()
+            mapPanel?.reopenSearch()
+        } else if let filter {
             hideToolbar()
             mapPanel?.openSearch(filter,
                                  location: CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude),

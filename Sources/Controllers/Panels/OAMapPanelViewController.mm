@@ -1271,11 +1271,6 @@ typedef enum
 
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object
 {
-    [OAAnalyticsHelper logEvent:@"search_open"];
-    [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandSearchScreenOpen];
-
-    [self removeGestureRecognizers];
-    
     OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
     BOOL isMyLocationVisible = [_mapViewController isMyLocationVisible];
     
@@ -1377,6 +1372,24 @@ typedef enum
 
     if (tabIndex != -1)
         _searchViewController.tabIndex = tabIndex;
+
+    [self presentSearchViewController];
+}
+
+- (void)reopenSearch
+{
+    if (_searchViewController)
+        [self presentSearchViewController];
+    else
+        [self openSearch];
+}
+
+- (void)presentSearchViewController
+{
+    [OAAnalyticsHelper logEvent:@"search_open"];
+    [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandSearchScreenOpen];
+
+    [self removeGestureRecognizers];
 
     UINavigationController *navController = [_searchViewController makeNavigationController];
 

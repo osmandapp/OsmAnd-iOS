@@ -37,7 +37,12 @@
 
 static float kRotateAnimationTime = 1.0f;
 static int MODEL_3D_MAX_SIZE_DP = 6;
-static double BEARING_SPEED_THRESHOLD = 0.1;
+// GPS speed of a standing device jitters around a few tenths of m/s. The speed is smoothed with
+// a time-based exponential moving average and the marker switches with hysteresis (#26907).
+static const double kMovementStartSpeed = 0.5; // m/s
+static const double kMovementStopSpeed = 0.2; // m/s
+static const double kMovementTimeConstant = 2.0; // s
+static const double kMovementResetGap = 10.0; // s
 
 typedef enum {
 
@@ -417,6 +422,11 @@ typedef enum {
     float _courseIconScaleFactor;
     
     EOAMarkerState _currentMarkerState;
+
+    BOOL _movementInitialized;
+    BOOL _movementMoving;
+    double _movementSmoothedSpeed;
+    NSTimeInterval _movementLastTime;
 
     OAAutoObserverProxy* _appModeChangedObserver;
     OAAutoObserverProxy* _availableAppModesChangedObserver;
@@ -1001,11 +1011,35 @@ typedef enum {
     {
         BOOL hasCourse = location.course > 0.0;
         BOOL courseValid = hasCourse || (self.isUseRouting && _lastCourse >= 0.0);
-        BOOL speedValid = location.speed < 0 || location.speed > BEARING_SPEED_THRESHOLD;
+        BOOL speedValid = location.speed < 0 || [self updateMovementState:location];
         if (courseValid && (speedValid || self.isLocationSnappedToRoad))
             return hasCourse ? location.course : _lastCourse;
     }
     return -1.0;
+}
+
+- (BOOL) updateMovementState:(CLLocation *)location
+{
+    NSTimeInterval time = location.timestamp.timeIntervalSince1970;
+    if (_movementInitialized && time == _movementLastTime)
+        return _movementMoving;
+
+    double speed = location.speed;
+    NSTimeInterval dt = time - _movementLastTime;
+    if (!_movementInitialized || dt < 0 || dt > kMovementResetGap)
+    {
+        _movementSmoothedSpeed = speed;
+        _movementMoving = speed > kMovementStartSpeed;
+    }
+    else
+    {
+        double alpha = 1.0 - exp(-dt / kMovementTimeConstant);
+        _movementSmoothedSpeed += alpha * (speed - _movementSmoothedSpeed);
+        _movementMoving = _movementMoving ? _movementSmoothedSpeed >= kMovementStopSpeed : _movementSmoothedSpeed > kMovementStartSpeed;
+    }
+    _movementLastTime = time;
+    _movementInitialized = YES;
+    return _movementMoving;
 }
 
 - (BOOL) isUseRouting

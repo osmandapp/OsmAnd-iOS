@@ -197,6 +197,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
     NSString *_textButtonTitle;
     NSString *_icon;
     NSString *_url;
+    NSArray *_conditions;
 
     NSDictionary<NSString *, UIColor *> *_colors;
     
@@ -219,7 +220,12 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
 - (void) checkAndDisplay
 {
     if (_bannerVisible)
-        [self showDiscountBanner];
+    {
+        if ([self matchesOneOfConditions:_conditions])
+            [self showDiscountBanner];
+        else
+            [self discountToolbarClose];
+    }
     
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
     if ([OAAppSettings sharedManager].settingDoNotShowPromotions.get || currentTime - _lastCheckTime < 60 * 60 * 24 || !AFNetworkReachabilityManager.sharedManager.isReachable)
@@ -327,35 +333,8 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
         
         OAIAPHelper *helper = [OAIAPHelper sharedInstance];
         NSArray *conditions = [map objectForKey:@"oneOfConditions"];
-        if (conditions)
-        {
-            BOOL oneOfConditionsMatch = NO;
-            
-            NSArray <id<OACondition>> *purchaseConditions = [NSArray arrayWithObjects:[[OAPurchasedPluginCondition alloc] initWithIAPHelper:helper],
-                [[OANotPurchasedFeatureCondition alloc] initWithIAPHelper:helper],
-                [[OANotPurchasedPluginCondition alloc] initWithIAPHelper:helper],
-                [[OANotPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
-                [[OAPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
-                [[OANotPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper],
-                [[OAPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper], nil];
-            for (NSDictionary *conditionDictionary in conditions)
-            {
-                NSArray *conditionsArray = [conditionDictionary valueForKey:@"condition"];
-                if (conditionsArray && [conditionsArray count] > 0)
-                {
-                    BOOL conditionMatch = YES;
-                    for (NSDictionary *condition in conditionsArray)
-                    {
-                        conditionMatch = [self matchesCondition:purchaseConditions condition:condition];
-                        if (!conditionMatch)
-                            break;
-                    }
-                    oneOfConditionsMatch |= conditionMatch;
-                }
-            }
-            if (!oneOfConditionsMatch)
-                return;
-        }
+        if (![self matchesOneOfConditions:conditions])
+            return;
 
         NSDate *date = [NSDate date];
         if ([date timeIntervalSinceDate:start] > 0 && [date timeIntervalSinceDate:end] < 0)
@@ -409,6 +388,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                             [helper requestProductsWithCompletionHandler:^(BOOL success) {
                                 
                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                    _conditions = conditions;
                                     [self showDiscountBanner];
                                 });
                             }];
@@ -418,6 +398,38 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
             });
         }
     }
+}
+
+- (BOOL) matchesOneOfConditions:(NSArray *)conditions
+{
+    if (!conditions)
+        return YES;
+
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    NSArray <id<OACondition>> *purchaseConditions = [NSArray arrayWithObjects:[[OAPurchasedPluginCondition alloc] initWithIAPHelper:helper],
+        [[OANotPurchasedFeatureCondition alloc] initWithIAPHelper:helper],
+        [[OANotPurchasedPluginCondition alloc] initWithIAPHelper:helper],
+        [[OANotPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
+        [[OAPurchasedSubscriptionCondition alloc] initWithIAPHelper:helper],
+        [[OANotPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper],
+        [[OAPurchasedInAppPurchaseCondition alloc] initWithIAPHelper:helper], nil];
+    BOOL oneOfConditionsMatch = NO;
+    for (NSDictionary *conditionDictionary in conditions)
+    {
+        NSArray *conditionsArray = [conditionDictionary valueForKey:@"condition"];
+        if (conditionsArray && [conditionsArray count] > 0)
+        {
+            BOOL conditionMatch = YES;
+            for (NSDictionary *condition in conditionsArray)
+            {
+                conditionMatch = [self matchesCondition:purchaseConditions condition:condition];
+                if (!conditionMatch)
+                    break;
+            }
+            oneOfConditionsMatch |= conditionMatch;
+        }
+    }
+    return oneOfConditionsMatch;
 }
 
 - (BOOL) matchesCondition:(NSArray<id<OACondition>> *)purchaseConditions condition:(NSDictionary *)condition

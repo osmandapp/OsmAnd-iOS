@@ -56,6 +56,16 @@ final class StarView: UIView {
 
     var isCameraMode = false
     var isGyroTrackingEnabled = false
+    /// Insets of UI covering the view, such as the object context menu or the iPad left panel.
+    /// Direction arrows and the "object is on screen" check use only the uncovered part,
+    /// so an arrow is never hidden behind that UI.
+    var obstructedInsets: UIEdgeInsets = .zero {
+        didSet {
+            if obstructedInsets != oldValue {
+                setNeedsDisplay()
+            }
+        }
+    }
     var onAnimationFinished: (() -> Void)?
     var onAzimuthManualChangeListener: ((Double) -> Void)?
     var onViewAngleChangeListener: ((Double) -> Void)?
@@ -1741,11 +1751,12 @@ final class StarView: UIView {
             return
         }
 
-        let center = CGPoint(x: bounds.midX, y: bounds.midY)
-        let radius = min(bounds.width, bounds.height) * 0.42
+        let visibleRect = unobstructedRect()
+        let center = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        let radius = min(visibleRect.width, visibleRect.height) * 0.42
         for object in trackableObjects where object.showDirection && isObjectVisibleInSettings(object) {
             guard let projected = skyToScreen(azimuth: object.azimuth, altitude: object.altitude, allowAnyOffScreen: true),
-                  !bounds.contains(projected) else {
+                  !visibleRect.contains(projected) else {
                 continue
             }
 
@@ -1754,6 +1765,17 @@ final class StarView: UIView {
                                 y: center.y + radius * CGFloat(sin(Double(angle))))
             drawDirectionArrow(at: point, angle: angle, color: directionColor(object.colorIndex), in: context)
         }
+    }
+
+    /// The part of the view not covered by `obstructedInsets`, never smaller than half of the view on each axis.
+    private func unobstructedRect() -> CGRect {
+        let rect = bounds.inset(by: obstructedInsets)
+        let width = max(rect.width, bounds.width / 2)
+        let height = max(rect.height, bounds.height / 2)
+        return CGRect(x: min(max(rect.minX, bounds.minX), bounds.maxX - width),
+                      y: min(max(rect.minY, bounds.minY), bounds.maxY - height),
+                      width: width,
+                      height: height)
     }
 
     private func drawArrow(at point: CGPoint, angle: CGFloat, in context: CGContext) {

@@ -208,7 +208,7 @@ final class PoiAdditionalUiRules: NSObject {
         rulesByKey["ele"] = ele
     }
     
-    func findRule(key: String) -> PoiAdditionalUiRule {
+    func findRule(key: String, matchSubstrings: Bool = true) -> PoiAdditionalUiRule {
         let baseKey = key.components(separatedBy: ":")[0]
         
         // First, try exact match
@@ -222,7 +222,7 @@ final class PoiAdditionalUiRules: NSObject {
             
             // If the rule requires "contains" match
             if rule.checkKeyOnContains {
-                if keyToSearch.contains(rule.key) {
+                if matchSubstrings && keyToSearch.contains(rule.key) {
                     return rule
                 }
             } else {

@@ -232,13 +232,13 @@ final class AmenityUIHelper: NSObject {
         let openingHoursCheckDate = key == OPENING_HOURS_TAG ? additionalInfo.getFilteredInfo()[CHECK_DATE_OPENING_HOURS_TAG] : nil
         let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
         rowParamsBuilder.collapsableView = collapsableView
-        let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
-
         if let additionalType = resolvedType?.additionalType,
            let pType = helper.getAnyPoiAdditionalType(byKey: additionalType.getKeyName()) as? OAPOIType {
+            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
             poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype, openingHoursCheckDate: openingHoursCheckDate, additionalInfo: additionalInfo)
         } else {
             let useGenericFallback = genericRowKeys.contains(key)
+            let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key, matchSubstrings: !useGenericFallback || !key.contains(":"))
             let displayKey = useGenericFallback ? Self.genericFallbackDisplayKey(key) : key
             let fallbackType: OAPOIType? = OAPOIType(name: displayKey, category: poiCategory)
             guard let fallbackType else { return nil }

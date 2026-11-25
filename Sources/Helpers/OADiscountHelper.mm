@@ -364,7 +364,6 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                         _url = url ? url : @"";
                         _product = nil;
                         _textButtonTitle = textButtonTitle ? textButtonTitle : @"";
-                        _conditions = conditions;
                         
                         NSArray<OAProduct *> *inApps = helper.inApps;
                         OAProduct *product = nil;
@@ -389,6 +388,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                             [helper requestProductsWithCompletionHandler:^(BOOL success) {
                                 
                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                    _conditions = conditions;
                                     [self showDiscountBanner];
                                 });
                             }];

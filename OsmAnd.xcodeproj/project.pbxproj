@@ -2015,6 +2015,7 @@
 		DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */; };
 		DAF50C70299D111B006AAF2E /* osmassistant.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */; };
 		E15829768D8BA09FF2202074 /* OACppRouteConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 148094AEE96E39C20FEBF9B8 /* OACppRouteConverter.mm */; };
+		E9470A65E134E0E01DC90060 /* AddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3898C970B7E1DDCAD4CF96BD /* AddressViewController.swift */; };
 		F6F46B0B694F4614B2A305A8 /* OAObfFileList.mm in Sources */ = {isa = PBXBuildFile; fileRef = 731A97689A654400B3FE08E0 /* OAObfFileList.mm */; };
 		FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */; };
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
@@ -2785,6 +2786,7 @@
 		32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellMultipleResourceHelper.swift; sourceTree = "<group>"; };
 		32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellCloudHelper.swift; sourceTree = "<group>"; };
 		37D0E6FEC5680A3DB6AFD44A /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		3898C970B7E1DDCAD4CF96BD /* AddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressViewController.swift; sourceTree = "<group>"; };
 		396BAE2DCC35A0441E3698A5 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pt; path = pt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3D3CE050EAE7CFA8AB354C9B /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		3D511879AF069E81F7982D8D /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bs; path = bs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -6556,6 +6558,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		6B96BE37C8CA378022B36F14 /* Address */ = {
+			isa = PBXGroup;
+			children = (
+				3898C970B7E1DDCAD4CF96BD /* AddressViewController.swift */,
+			);
+			path = Address;
+			sourceTree = "<group>";
+		};
 		7600F13F2F8010AC00DC552B /* Util */ = {
 			isa = PBXGroup;
 			children = (
@@ -9192,6 +9202,7 @@
 			children = (
 				0F1C0357F6E0A24F24579386 /* Categories */,
 				BA724B8041959AA4CCFABCF4 /* Explore */,
+				6B96BE37C8CA378022B36F14 /* Address */,
 				6AD994718C09557423590363 /* OAPOIUIFilter+SearchIcon.swift */,
 				DA5A7E3426C563A400F274C7 /* OAAddressTableViewController.h */,
 				DA5A7E4E26C563A400F274C7 /* OAAddressTableViewController.mm */,
@@ -13846,6 +13857,7 @@
 				6AF7C2BAA99E9D3ECD8B26AF /* SearchLocationReference.swift in Sources */,
 				0C7F9A5D9FA48AA861692B93 /* ExploreViewController.swift in Sources */,
 				D4EA4D0D5D930AFC6952BE99 /* CategoriesViewController.swift in Sources */,
+				E9470A65E134E0E01DC90060 /* AddressViewController.swift in Sources */,
 				A5FFD471AF097961CC507FEC /* OAPOIUIFilter+SearchIcon.swift in Sources */,
 				32AFDC7E2A9500D800809EE0 /* TravelArticleDialogViewController.swift in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,

@@ -38,6 +38,7 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
     private var isLoading = false
     private var isEmailErrorShown = false
     private var compactSheetHeight: CGFloat = 0
+    private var measuredCompactLayout: (step: Step, width: CGFloat, textSize: UIContentSizeCategory)?
 
     private lazy var headerView: UIView = {
         let header = UIView()
@@ -251,11 +252,14 @@ final class FreeRegionBottomSheet: OABaseButtonsViewController {
         let needsCompactDetent = step == .buy || (step == .replace && mapsToDelete.isEmpty)
         let detent: UISheetPresentationController.Detent
         if needsCompactDetent {
+            let layout = (step: step, width: headerLabel.bounds.width, textSize: traitCollection.preferredContentSizeCategory)
+            if hasCompactDetent, let measuredCompactLayout, measuredCompactLayout == layout { return }
             let safeArea = view.safeAreaLayoutGuide.layoutFrame
             let buttonsHeight = safeArea.maxY - separatorBottomView.frame.maxY
-            guard let header = tableView.tableHeaderView, buttonsHeight > 0 else { return }
+            guard let header = tableView.tableHeaderView, layout.width > 0, buttonsHeight > 0 else { return }
             let headerTop = view.convert(safeArea.origin, to: navigationController.view).y
             let height = ceil(headerTop + header.bounds.height + CGFloat(kFooterHeightDefault) + buttonsHeight)
+            measuredCompactLayout = layout
             guard !hasCompactDetent || height != compactSheetHeight else { return }
             compactSheetHeight = height
             if hasCompactDetent {

@@ -44,7 +44,8 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         let identifier = configuration is PoiContentConfiguration ? PoiContentTableViewCell.reuseIdentifier : PointContentTableViewCell.reuseIdentifier
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         cell.contentConfiguration = configuration
-        cell.accessoryType = .none
+        cell.accessoryType = result.objectType == .poiType ? .disclosureIndicator : .none
+        (cell as? PointContentTableViewCell)?.alignsSeparatorWithTrailingMargin = true
         PointContentConfiguration.applyHighlightableBackground(to: cell)
         return cell
     }
@@ -72,7 +73,10 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         if objectType == .poiType {
             return categoryConfiguration(for: item, result: result)
         }
-        if objectType == .location || Self.addressObjectTypes.contains(objectType) || Self.pointObjectTypes.contains(objectType) {
+        if Self.addressObjectTypes.contains(objectType) {
+            return addressConfiguration(for: item, result: result)
+        }
+        if objectType == .location || Self.pointObjectTypes.contains(objectType) {
             return PointContentConfiguration(icon: Self.icon(for: result),
                                              title: item.getName() ?? "",
                                              iconStyle: .plate,
@@ -100,6 +104,22 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
                                        openingHours: openingHours,
                                        openingHoursColor: openingHoursColor,
                                        alternateTitle: result.alternateName)
+    }
+
+    private func addressConfiguration(for item: OAQuickSearchListItem, result: OASearchResult) -> PoiContentConfiguration {
+        let title = OAQuickSearchTableController.addressTitle(for: result) ?? item.getName() ?? ""
+        let typeName = OAQuickSearchTableController.poiTypeName(for: result) ?? OAQuickSearchListItem.getTypeName(result)
+        var configuration = PoiContentConfiguration(style: .compact,
+                                                    title: title,
+                                                    icon: Self.icon(for: result),
+                                                    secondaryContent: secondaryContent(for: result,
+                                                                                       text: typeName,
+                                                                                       trailingText: OAQuickSearchTableController.addressDescription(for: result)),
+                                                    address: OAQuickSearchTableController.distanceToCity(for: result),
+                                                    alternateTitle: result.alternateName,
+                                                    iconTintColor: .iconColorSecondary)
+        configuration.secondaryNumberOfLines = 2
+        return configuration
     }
 
     private func routeConfiguration(for item: OAQuickSearchListItem, result: OASearchResult, poi: OAPOI) -> PoiContentConfiguration {
@@ -155,13 +175,14 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
                                          secondaryContent: PointSecondaryContent(formattedDistance: nil, direction: 0, address: text == title ? nil : text, date: nil))
     }
 
-    private func secondaryContent(for result: OASearchResult, text: String?) -> PointSecondaryContent {
+    private func secondaryContent(for result: OASearchResult, text: String?, trailingText: String? = nil) -> PointSecondaryContent {
         guard let location = result.location else {
-            return PointSecondaryContent(formattedDistance: nil, direction: 0, address: text, date: nil)
+            return PointSecondaryContent(formattedDistance: nil, direction: 0, address: text, date: nil, trailingText: trailingText)
         }
         return locationReference.secondaryContent(latitude: location.coordinate.latitude,
                                                   longitude: location.coordinate.longitude,
-                                                  address: text)
+                                                  address: text,
+                                                  trailingText: trailingText)
     }
 
     private static func categoryIcon(for result: OASearchResult) -> UIImage? {

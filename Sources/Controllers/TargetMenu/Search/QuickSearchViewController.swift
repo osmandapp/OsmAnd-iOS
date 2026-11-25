@@ -72,7 +72,6 @@ final class QuickSearchViewController: OASuperViewController {
 
     private static let tabsVerticalInset: CGFloat = 4
     private static let chipsTopInset: CGFloat = 4
-    private static let chipsBottomInset: CGFloat = 8
     private static let chipsSpacing: CGFloat = 8
     private static let chipIconSize: CGFloat = 20
     private static let sortIconPointSize: CGFloat = 15
@@ -416,12 +415,20 @@ final class QuickSearchViewController: OASuperViewController {
     private func setupNavigationItem() {
         navigationItem.title = localizedString("shared_string_search")
         navigationItem.largeTitleDisplayMode = .never
-        let backButton = UIBarButtonItem(image: UIImage.icNavbarChevron.imageFlippedForRightToLeftLayoutDirection(),
+        let backButton: UIBarButtonItem
+        if #available(iOS 26.0, *) {
+            backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"),
                                          style: .plain,
                                          target: self,
                                          action: #selector(onBackButtonPressed))
+        } else {
+            backButton = UIBarButtonItem(image: UIImage.icNavbarChevron.imageFlippedForRightToLeftLayoutDirection(),
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(onBackButtonPressed))
+            backButton.tintColor = .iconColorActive
+        }
         backButton.accessibilityLabel = localizedString("shared_string_back")
-        backButton.tintColor = .iconColorActive
         navigationItem.leftBarButtonItem = backButton
 
         let appearance = UINavigationBarAppearance()
@@ -439,7 +446,7 @@ final class QuickSearchViewController: OASuperViewController {
         searchController.delegate = self
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = true
 
         let searchBar = searchController.searchBar
         searchBar.delegate = self
@@ -501,7 +508,7 @@ final class QuickSearchViewController: OASuperViewController {
 
         let tabsBottom = tabsControl.bottomAnchor.constraint(equalTo: tabsContainerView.bottomAnchor, constant: -Self.tabsVerticalInset)
         tabsBottom.priority = Self.collapsibleConstraintPriority
-        let chipsBottom = chipsStackView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor, constant: -Self.chipsBottomInset)
+        let chipsBottom = chipsStackView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor)
         chipsBottom.priority = Self.collapsibleConstraintPriority
         NSLayoutConstraint.activate([
             headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -533,6 +540,9 @@ final class QuickSearchViewController: OASuperViewController {
         tableView.tintColor = .iconColorActive
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = Self.estimatedRowHeight
+        tableView.sectionHeaderTopPadding = 0
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
         tableView.alwaysBounceVertical = true
         tableView.isHidden = true
         tableView.frame = contentView.bounds
@@ -1012,6 +1022,7 @@ final class QuickSearchViewController: OASuperViewController {
             if !state.showsSave {
                 if #available(iOS 26.0, *) {
                     barActionItem.style = .prominent
+                    barActionItem.tintColor = .buttonAccentsBlue
                 } else {
                     barActionItem.style = .done
                 }

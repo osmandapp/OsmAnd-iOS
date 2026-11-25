@@ -50,5 +50,8 @@
 + (UIImage *)iconForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(icon(for:));
 + (UIImage *)routeShieldForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(routeShield(for:));
 + (NSString *)poiTypeNameForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(poiTypeName(for:));
++ (NSString *)addressTitleForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(addressTitle(for:));
++ (NSString *)addressDescriptionForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(addressDescription(for:));
++ (NSString *)distanceToCityForSearchResult:(OASearchResult *)searchResult NS_SWIFT_NAME(distanceToCity(for:));
 
 @end

@@ -59,6 +59,8 @@
 #import "OANetworkRouteDrawable.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
+#import "OAWorldRegion.h"
+#import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -694,12 +696,147 @@
     if ([object isKindOfClass:OAPOIType.class])
         return [PoiAdditionalLabels getSearchName:(OAPOIType *)object];
     if ([object isKindOfClass:OACity.class])
-        return [OACity getLocalizedTypeStr:((OACity *)object).type];
+    {
+        EOACityType type = ((OACity *)object).type;
+        return type == CITY_TYPE_POSTCODE ? OALocalizedString(@"postcode") : [OACity getLocalizedTypeStr:type];
+    }
     if ([object isKindOfClass:OAStreet.class])
         return OALocalizedString(@"search_address_street");
     if ([object isKindOfClass:OABuilding.class])
         return OALocalizedString(@"search_address_building_option");
     return nil;
+}
+
++ (NSString *)addressTitleForSearchResult:(OASearchResult *)searchResult
+{
+    NSString *title = [OAQuickSearchListItem getName:searchResult];
+    if (![searchResult.object isKindOfClass:OABuilding.class] || ![searchResult.relatedObject isKindOfClass:OAStreet.class])
+        return title;
+    NSString *streetName = [self nameWithoutCityPart:[self localizedNameOfAddress:(OAStreet *)searchResult.relatedObject searchResult:searchResult]];
+    if (streetName.length == 0)
+        return title;
+    return title.length > 0 ? [NSString stringWithFormat:@"%@, %@", title, streetName] : streetName;
+}
+
++ (NSString *)addressDescriptionForSearchResult:(OASearchResult *)searchResult
+{
+    id object = searchResult.object;
+    NSString *description = searchResult.addressName;
+    if ([object isKindOfClass:OACity.class])
+    {
+        NSString *regionName = [self regionNameForResourceId:searchResult.resourceId ?: searchResult.relatedResourceId];
+        if (regionName.length > 0)
+            description = regionName;
+    }
+    else if ([object isKindOfClass:OAStreet.class])
+    {
+        NSMutableArray<NSString *> *parts = [NSMutableArray array];
+        NSString *cityPart = [self cityPartOfName:searchResult.localeName];
+        if (cityPart.length > 0)
+            [parts addObject:cityPart];
+        NSString *cityName = [self localizedNameOfAddress:((OAStreet *)object).city searchResult:searchResult];
+        if (cityName.length > 0)
+            [parts addObject:cityName];
+        description = [parts componentsJoinedByString:@", "];
+    }
+    else if ([object isKindOfClass:OABuilding.class] && [searchResult.relatedObject isKindOfClass:OAStreet.class])
+    {
+        OAStreet *street = (OAStreet *)searchResult.relatedObject;
+        NSMutableArray<NSString *> *parts = [NSMutableArray array];
+        NSString *cityName = [self localizedNameOfAddress:street.city searchResult:searchResult];
+        if (cityName.length > 0)
+            [parts addObject:cityName];
+        NSString *cityPart = [self cityPartOfName:[self localizedNameOfAddress:street searchResult:searchResult]];
+        if (cityPart.length > 0)
+            [parts addObject:cityPart];
+        description = [parts componentsJoinedByString:@", "];
+    }
+    return description.length > 0 ? description : nil;
+}
+
++ (NSString *)distanceToCityForSearchResult:(OASearchResult *)searchResult
+{
+    if (searchResult.objectType != EOAObjectTypeVillage
+        || ![searchResult.object isKindOfClass:OACity.class]
+        || searchResult.localeRelatedObjectName.length == 0
+        || searchResult.distRelatedObjectName <= 0)
+        return nil;
+    EOACityType type = ((OACity *)searchResult.object).type;
+    if (type != CITY_TYPE_VILLAGE && type != CITY_TYPE_HAMLET)
+        return nil;
+    return [NSString stringWithFormat:@"%@ %@ %@",
+            [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName],
+            OALocalizedString(@"shared_string_from"),
+            searchResult.localeRelatedObjectName];
+}
+
++ (NSString *)localizedNameOfAddress:(OAAddress *)address searchResult:(OASearchResult *)searchResult
+{
+    if (!address)
+        return nil;
+    OASearchSettings *settings = [searchResult.requiredSearchPhrase getSettings];
+    NSString *name = settings ? [address getName:[settings getLang] transliterate:[settings isTransliterate]] : address.name;
+    return name.length > 0 ? name : address.name;
+}
+
++ (NSRange)cityPartRangeOfName:(NSString *)name
+{
+    if (![name hasSuffix:@")"])
+        return NSMakeRange(NSNotFound, 0);
+    NSRange openingBracket = [name rangeOfString:@"("];
+    if (openingBracket.location == NSNotFound || openingBracket.location == 0)
+        return NSMakeRange(NSNotFound, 0);
+    return NSMakeRange(openingBracket.location, name.length - openingBracket.location);
+}
+
++ (NSString *)cityPartOfName:(NSString *)name
+{
+    NSRange range = [self cityPartRangeOfName:name];
+    if (range.location == NSNotFound)
+        return nil;
+    NSString *cityPart = [name substringWithRange:NSMakeRange(range.location + 1, range.length - 2)];
+    return [cityPart stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+}
+
++ (NSString *)nameWithoutCityPart:(NSString *)name
+{
+    NSRange range = [self cityPartRangeOfName:name];
+    if (range.location == NSNotFound)
+        return name;
+    return [[name substringToIndex:range.location] stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+}
+
++ (NSString *)regionNameForResourceId:(NSString *)resourceId
+{
+    if (resourceId.length == 0)
+        return nil;
+    static NSCache<NSString *, NSString *> *regionNames;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        regionNames = [[NSCache alloc] init];
+    });
+    NSString *cachedName = [regionNames objectForKey:resourceId];
+    if (cachedName)
+        return cachedName.length > 0 ? cachedName : nil;
+
+    NSString *downloadName = resourceId.lowercaseString;
+    NSRange extension = [downloadName rangeOfString:@"."];
+    if (extension.location != NSNotFound)
+        downloadName = [downloadName substringToIndex:extension.location];
+    NSRange version = [downloadName rangeOfString:@"_[0-9]+$" options:NSRegularExpressionSearch];
+    if (version.location != NSNotFound)
+        downloadName = [downloadName substringToIndex:version.location];
+
+    NSMutableArray<NSString *> *names = [NSMutableArray array];
+    OAWorldRegion *region = [[OsmAndApp instance].worldRegion getRegionDataByDownloadName:downloadName];
+    for (; region.superregion && ![region isContinent]; region = region.superregion)
+    {
+        if (region.localizedName.length > 0)
+            [names addObject:region.localizedName];
+    }
+    NSString *regionName = [names componentsJoinedByString:@", "];
+    [regionNames setObject:regionName forKey:resourceId];
+    return regionName.length > 0 ? regionName : nil;
 }
 
 - (NSInteger) getPoiFiltersCount:(NSArray<OAQuickSearchListItem *> *)dataArray

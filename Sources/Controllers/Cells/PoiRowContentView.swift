@@ -58,6 +58,7 @@ struct PoiContentConfiguration: UIContentConfiguration {
     var iconTintColor: UIColor?
     var shieldImage: UIImage?
     var routeStatistics: PoiRouteStatistics?
+    var secondaryNumberOfLines = 1
 
     init(style: Style,
          title: String,
@@ -276,6 +277,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
     private func apply(_ configuration: PoiContentConfiguration) {
         titleLabel.attributedText = Self.titleText(for: configuration)
         secondaryLabel.attributedText = configuration.secondaryContent?.attributedText()
+        secondaryLabel.numberOfLines = configuration.secondaryNumberOfLines
         secondaryLabel.isHidden = secondaryLabel.attributedText == nil
 
         let address = configuration.address ?? ""

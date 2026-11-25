@@ -282,9 +282,21 @@ protocol PrimaryTextLayoutGuideProviding: UIView {
 }
 
 class PointContentTableViewCell: UITableViewCell {
+    var alignsSeparatorWithTrailingMargin = false {
+        didSet { setNeedsLayout() }
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
         alignSeparatorWithPrimaryText()
+        alignSeparatorWithTrailingMargin()
+    }
+
+    private func alignSeparatorWithTrailingMargin() {
+        guard alignsSeparatorWithTrailingMargin else { return }
+        let trailingInset = directionalLayoutMargins.trailing
+        guard abs(separatorInset.right - trailingInset) > 0.5 else { return }
+        separatorInset.right = trailingInset
     }
 
     private func alignSeparatorWithPrimaryText() {

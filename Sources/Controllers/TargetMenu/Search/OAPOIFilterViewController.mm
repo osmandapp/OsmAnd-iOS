@@ -17,6 +17,7 @@
 #import "OAPOIType.h"
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
+#import "OARootViewController.h"
 #import "OARightIconTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
@@ -233,6 +234,12 @@ typedef enum
 -(CGFloat) getToolBarHeight
 {
     return customSearchToolBarHeight;
+}
+
+- (CGFloat)statusBarHeight
+{
+    UIWindow *window = self.view.window ?: [OARootViewController instance].view.window;
+    return MAX(window.safeAreaInsets.top, window.windowScene.statusBarManager.statusBarFrame.size.height);
 }
 
 - (void)filterTextChanged:(id)sender

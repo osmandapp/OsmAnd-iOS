@@ -2319,7 +2319,8 @@ colorizationScheme:(int)colorizationScheme
             if (gpxFile)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:item.docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                if (gpxFile.author.length == 0)
+                    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 NSDictionary<NSString *, OASGpxFile *> *dic = @{ item.docPath : gpxFile };

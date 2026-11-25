@@ -3786,7 +3786,8 @@ static char kMapSourceUpdateQueueKey;
                   }
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                if (gpxFile.author.length == 0)
+                    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
@@ -3849,7 +3850,8 @@ static char kMapSourceUpdateQueueKey;
                 }
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:self.foundWptDocPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                if (gpxFile.author.length == 0)
+                    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
                 // update map
@@ -3911,7 +3913,8 @@ static char kMapSourceUpdateQueueKey;
                 [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                if (gpxFile.author.length == 0)
+                    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
                 self.foundWpt = wpt;
@@ -3948,7 +3951,8 @@ static char kMapSourceUpdateQueueKey;
             [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor]]];
             
             OASKFile *file = [[OASKFile alloc] initWithFilePath:gpxFileName];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            if (gpxFile.author.length == 0)
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             NSMutableSet *groups = [NSMutableSet set];
@@ -4067,7 +4071,8 @@ static char kMapSourceUpdateQueueKey;
             if (found)
             {
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                if (gpxFile.author.length == 0)
+                    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
@@ -4106,7 +4111,8 @@ static char kMapSourceUpdateQueueKey;
         if (found)
         {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            if (gpxFile.author.length == 0)
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             // update map
@@ -4144,7 +4150,8 @@ static char kMapSourceUpdateQueueKey;
             [_selectedGpxHelper addGpxFile:gpxFile for:docPath];
 
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            if (gpxFile.author.length == 0)
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
             OASKException *exception = [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             if (!exception) {
                 NSLog(@"writeGpxFileFile is true");
@@ -4164,7 +4171,8 @@ static char kMapSourceUpdateQueueKey;
             [gpxFile updateTrackNameNewName:metadata.name];
 
         OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-        gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+        if (gpxFile.author.length == 0)
+            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
         [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
 
         return YES;
@@ -4226,7 +4234,8 @@ static char kMapSourceUpdateQueueKey;
             {
                 
                 OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+                if (gpxFile.author.length == 0)
+                    gpxFile.author = [OAAppVersion getFullVersionWithAppName];
                 [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
                 
                 // update map
@@ -4261,7 +4270,8 @@ static char kMapSourceUpdateQueueKey;
         if (found)
         {
             OASKFile *file = [[OASKFile alloc] initWithFilePath:docPath];
-            gpxFile.author = [OAAppVersion getFullVersionWithAppName];
+            if (gpxFile.author.length == 0)
+                gpxFile.author = [OAAppVersion getFullVersionWithAppName];
             [OASGpxUtilities.shared writeGpxFileFile:file gpxFile:gpxFile];
             
             // update map

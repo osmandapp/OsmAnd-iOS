@@ -355,6 +355,11 @@ final class QuickSearchViewController: OASuperViewController {
         updateChipsHeaderSize()
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        view.layoutIfNeeded()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showSearchIcon()

@@ -204,7 +204,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)QUICK_ACTIONS
 {
     if (!QUICK_ACTIONS)
-        QUICK_ACTIONS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions") name:@"QUICK_ACTIONS" itemName:@"QUICK_ACTIONS" iconName:ACImageNameIcCustomQuickAction isAvailableInFreeVersion:NO];
+        QUICK_ACTIONS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_quick_actions") name:@"QUICK_ACTIONS" itemName:@"QUICK_ACTIONS" iconName:ACImageNameIcCustomQuickAction isAvailableInFreeVersion:YES];
     return QUICK_ACTIONS;
 }
 
@@ -258,28 +258,28 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)ACTIVE_MARKERS
 {
     if (!ACTIVE_MARKERS)
-        ACTIVE_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"map_markers") name:@"ACTIVE_MARKERS" itemName:@"ACTIVE_MARKERS" iconName:ACImageNameIcCustomMarker isAvailableInFreeVersion:NO];
+        ACTIVE_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"map_markers") name:@"ACTIVE_MARKERS" itemName:@"ACTIVE_MARKERS" iconName:ACImageNameIcCustomMarker isAvailableInFreeVersion:YES];
     return ACTIVE_MARKERS;
 }
 
 + (OAExportSettingsType *)HISTORY_MARKERS
 {
     if (!HISTORY_MARKERS)
-        HISTORY_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"markers_history") name:@"HISTORY_MARKERS" itemName:@"HISTORY_MARKERS" iconName:ACImageNameIcCustomMarker isAvailableInFreeVersion:NO];
+        HISTORY_MARKERS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"markers_history") name:@"HISTORY_MARKERS" itemName:@"HISTORY_MARKERS" iconName:ACImageNameIcCustomMarker isAvailableInFreeVersion:YES];
     return HISTORY_MARKERS;
 }
 
 + (OAExportSettingsType *)SEARCH_HISTORY
 {
     if (!SEARCH_HISTORY)
-        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" iconName:ACImageNameIcCustomSearch isAvailableInFreeVersion:NO];
+        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" iconName:ACImageNameIcCustomSearch isAvailableInFreeVersion:YES];
     return SEARCH_HISTORY;
 }
 
 + (OAExportSettingsType *)NAVIGATION_HISTORY
 {
     if (!NAVIGATION_HISTORY)
-        NAVIGATION_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"navigation_history") name:@"NAVIGATION_HISTORY" itemName:@"NAVIGATION_HISTORY" iconName:ACImageNameIcCustomNavigation isAvailableInFreeVersion:NO];
+        NAVIGATION_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"navigation_history") name:@"NAVIGATION_HISTORY" itemName:@"NAVIGATION_HISTORY" iconName:ACImageNameIcCustomNavigation isAvailableInFreeVersion:YES];
     return NAVIGATION_HISTORY;
 }
 

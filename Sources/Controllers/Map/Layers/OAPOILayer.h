@@ -9,8 +9,12 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
+@class OAPOI;
+
 @interface OAPOILayer : OASymbolMapLayer<OAContextMenuProvider>
 
 + (OATargetPoint *)getTargetPoint:(id)obj;
+
+- (void)setCustomPois:(NSArray<OAPOI *> *)pois;
 
 @end

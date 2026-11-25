@@ -171,6 +171,7 @@ final class QuickSearchViewController: OASuperViewController {
     private var categoriesViewController: CategoriesViewController?
     private var exploreViewController: ExploreViewController?
     private var searchToolbarViewController: OASearchToolbarViewController?
+    private var showsSpatialResultsOnMap = false
 
     private var barActionType: QuickSearchBarAction = .none
     private var bottomViewVisible = false
@@ -784,12 +785,19 @@ final class QuickSearchViewController: OASuperViewController {
             } else {
                 filter = lastSelectedObject as? OAPOIUIFilter
             }
-            if let filter {
-                OAPOIFiltersHelper.sharedInstance().replaceSelectedPoiFilters(filter)
+            let spatialResultPois = spatialResultPois()
+            if let spatialResultPois {
+                showSpatialResultsOnMap(spatialResultPois)
+            } else {
+                clearSpatialResultsOnMap()
+                if let filter {
+                    OAPOIFiltersHelper.sharedInstance().replaceSelectedPoiFilters(filter)
+                }
+                OARootViewController.instance().mapPanel.mapViewController.updatePoiLayer()
             }
-            OARootViewController.instance().mapPanel.mapViewController.updatePoiLayer()
             showToolbar(filter, restoresSearch: true)
             dismissSearch(animated: true)
+            moveMapToSearchLocation()
         } else if searchPhrase.isLastWord(.favoriteGroup) {
             guard let group = searchPhrase.getLastSelectedWord()?.result?.object as? OAFavoriteGroup else { return }
             let points = OAFavoritesHelperBridge.shared().favoritePoints(forGroupName: group.name)
@@ -993,8 +1001,39 @@ final class QuickSearchViewController: OASuperViewController {
         navigationController?.pushViewController(filterViewController, animated: true)
     }
 
+    private func spatialResultPois() -> [OAPOI]? {
+        guard currentResultCollection()?.isSkipSorting() == true else { return nil }
+        return visibleResults().compactMap { $0.object as? OAPOI }
+    }
+
+    private func showSpatialResultsOnMap(_ pois: [OAPOI]) {
+        showsSpatialResultsOnMap = true
+        OARootViewController.instance().mapPanel.mapViewController.getMapPoiLayer().setCustomPois(pois)
+    }
+
+    private func clearSpatialResultsOnMap() {
+        guard showsSpatialResultsOnMap else { return }
+        showsSpatialResultsOnMap = false
+        OARootViewController.instance().mapPanel.mapViewController.getMapPoiLayer().setCustomPois(nil)
+    }
+
+    private func moveMapToSearchLocation() {
+        let location: CLLocationCoordinate2D
+        if useSpatialSearchLocation, let spatialSearchScope {
+            location = spatialSearchScope.location.coordinate
+        } else if !searchNearMapCenter, let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
+            location = myLocation.coordinate
+        } else {
+            return
+        }
+        let position = Point31(x: KMapUtils.shared.get31TileNumberX(longitude: location.longitude),
+                               y: KMapUtils.shared.get31TileNumberY(latitude: location.latitude))
+        OARootViewController.instance().mapPanel.mapViewController.go(toPosition: position, animated: true)
+    }
+
     private func hideToolbar() {
         restoresSearchFromMap = false
+        clearSpatialResultsOnMap()
         guard let searchToolbarViewController else { return }
         OARootViewController.instance().mapPanel.hideToolbar(searchToolbarViewController)
     }
@@ -1797,10 +1836,13 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func renderResults(append: Bool) {
-        let results = selectedPoiTypeNames.isEmpty
+        updateData(visibleResults().map { OAQuickSearchListItem(searchResult: $0) }, append: append && selectedPoiTypeNames.isEmpty)
+    }
+
+    private func visibleResults() -> [OASearchResult] {
+        selectedPoiTypeNames.isEmpty
             ? unfilteredResults
             : unfilteredResults.filter { OAQuickSearchTableController.poiTypeName(for: $0).map(selectedPoiTypeNames.contains) ?? false }
-        updateData(results.map { OAQuickSearchListItem(searchResult: $0) }, append: append && selectedPoiTypeNames.isEmpty)
     }
 
     private func refreshResultPoiTypeNames() {
@@ -2258,6 +2300,7 @@ extension QuickSearchViewController: ExploreViewControllerDelegate {
     func exploreDidRequestShowPopularPlacesOnMap() {
         let filtersHelper: OAPOIFiltersHelper = .sharedInstance()
         guard let filter = filtersHelper.getTopWikiPoiFilter() else { return }
+        clearSpatialResultsOnMap()
         filtersHelper.replaceSelectedPoiFilters(filter)
         OARootViewController.instance().mapPanel.mapViewController.updatePoiLayer()
         showToolbar(filter)

@@ -776,7 +776,8 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     NSString *_poiTypeName;
     NSString *_poiKeyword;
     NSString *_prefLang;
-    
+    NSArray<OAPOI *> *_customPois;
+
     OAPOIFiltersHelper *_filtersHelper;
     OAPOILayerTopPlacesProvider *_topPlacesProvider;
     
@@ -999,8 +1000,11 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     [OAPOIUIFilter combineStandardPoiFilters:filters];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self showPoiOnMap:filters wikiOnMap:wikiFilter];
-        [self syncTopPlacesProviderStateWithWikiFilter:wikiFilter];
+        OAPOIUIFilter *visibleWikiFilter = _customPois ? nil : wikiFilter;
+        if (_customPois)
+            [filters removeAllObjects];
+        [self showPoiOnMap:filters wikiOnMap:visibleWikiFilter];
+        [self syncTopPlacesProviderStateWithWikiFilter:visibleWikiFilter];
     });
 }
 
@@ -1040,9 +1044,71 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     if (noValidByName)
         [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
 
+    NSArray<OAPOI *> *customPois = _customPois;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self doShowPoiUiFilterOnMap];
+        if (customPois)
+            [self doShowCustomPoisOnMap:customPois];
+        else
+            [self doShowPoiUiFilterOnMap];
     });
+}
+
+- (void)setCustomPois:(NSArray<OAPOI *> *)pois
+{
+    _customPois = [pois copy];
+    [self updateVisiblePoiFilter];
+}
+
+- (void)doShowCustomPoisOnMap:(NSArray<OAPOI *> *)pois
+{
+    __block CGFloat displayDensityFactor = UIScreen.mainScreen.scale;
+    __block unsigned int rasterTileSize = 0;
+    [self.mapViewController runWithRenderSync:^{
+        displayDensityFactor = self.mapViewController.displayDensityFactor;
+        rasterTileSize = self.mapViewController.referenceTileSizeRasterOrigInPixels;
+    }];
+    if (rasterTileSize == 0)
+        return;
+
+    QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
+    for (OAPOI *poi in pois)
+    {
+        const auto amenity = OASyntheticAmenityFromPoi(poi);
+        if (amenity)
+            amenities.push_back(amenity);
+    }
+    OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesProvider externalAmenitiesProvider =
+        [amenities]
+        (const OsmAnd::TileId tileId,
+         const OsmAnd::ZoomLevel tileZoom,
+         const std::function<bool()>& isCancelled,
+         OsmAnd::AmenitySymbolsProvider::ExternalAmenitiesResponse& outResponse) -> bool
+        {
+            outResponse.amenities = amenities;
+            return true;
+        };
+
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    const auto iconProvider = std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), displayDensityFactor, 1.0, settings.textSize.get, settings.isCurrentMapNightMode, settings.mapSettingShowPoiLabel.get, QString::fromNSString(settings.settingPrefMapLanguage.get), settings.settingMapLanguageTranslit.get);
+    const auto categoriesFilter = QHash<QString, QStringList>();
+    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> symbolsProvider(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, nullptr, iconProvider, self.pointsOrder, OACalculatePoiCacheSize(_screenSize, rasterTileSize), externalAmenitiesProvider));
+
+    [self.mapViewController runWithRenderSync:^{
+        if (_customPois != pois)
+            return;
+
+        if (_amenitySymbolsProvider)
+            [self.mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+        if (_wikiSymbolsProvider)
+        {
+            [self.mapView removeTiledSymbolsProvider:_wikiSymbolsProvider];
+            _wikiSymbolsProvider.reset();
+        }
+        _poiUiNameFilter = nil;
+        _wikiUiNameFilter = nil;
+        _amenitySymbolsProvider = symbolsProvider;
+        [self.mapView addTiledSymbolsProvider:kPOISymbolSection provider:_amenitySymbolsProvider];
+    }];
 }
 
 - (void) doShowPoiUiFilterOnMap

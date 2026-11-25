@@ -337,7 +337,9 @@ final class QuickSearchViewController: OASuperViewController {
 
         if let resultCollection = currentResultCollection() {
             updateSearchResult(resultCollection, append: false)
-            if interruptedSearch || isSearchMoreAvailable(searchUICore?.getPhrase()) {
+            if !interruptedSearch && !tabsVisible && isResultEmpty() {
+                addEmptyResult()
+            } else if interruptedSearch || isSearchMoreAvailable(searchUICore?.getPhrase()) {
                 addMoreButton()
             }
         }
@@ -825,6 +827,13 @@ final class QuickSearchViewController: OASuperViewController {
             guard let custom = createPOIUIFilter(with: topIndexFilter) else { return }
             showFilterScreen(custom, filterByName: topIndexFilter.getValue())
         }
+    }
+
+    private func clearFilters() {
+        guard let filter = lastSelectedWord?.result?.object as? OAPOIUIFilter else { return }
+        filter.removeUnsavedFilterByName()
+        setBottomViewVisible(false)
+        replaceQuery(with: filter, nameFilter: "")
     }
 
     @objc private func onSaveFilterButtonPressed() {
@@ -1732,6 +1741,7 @@ final class QuickSearchViewController: OASuperViewController {
             pendingMoreButton = true
             return
         }
+        guard interruptedSearch || !isResultEmpty() else { return }
         let name = localizedString(currentResultCollection()?.hasMoreSpatialSearchResults() == true ? "show_more" : "search_POI_level_btn")
         let moreListItem = OAQuickSearchMoreListItem(name: name) { [weak self] _ in
             self?.increaseSearchRadius()
@@ -1747,14 +1757,17 @@ final class QuickSearchViewController: OASuperViewController {
             pendingEmptyResult = true
             return
         }
-        let item = OAQuickSearchEmptyResultListItem()
         let phrase = searchUICore?.getPhrase()
         let minimalSearchRadius = searchUICore?.getMinimalSearchRadius(phrase) ?? 0
+        var radius: String?
         if searchUICore?.isSearchMoreAvailable(phrase) == true && minimalSearchRadius != Int32.max {
             let roundedDistance = OAOsmAndFormatter.calculateRoundedDist(Double(minimalSearchRadius))
-            let distance = OAOsmAndFormatter.getFormattedDistance(Float(roundedDistance), with: OsmAndFormatterParams.noTrailingZeros) ?? ""
-            item.title = "\(localizedString("nothing_found")): \(distance)"
+            radius = OAOsmAndFormatter.getFormattedDistance(Float(roundedDistance), with: OsmAndFormatterParams.noTrailingZeros)
         }
+        let item = QuickSearchEmptyStateListItem(query: searchText.trimmingCharacters(in: .whitespacesAndNewlines),
+                                                 radius: radius,
+                                                 onIncreaseRadius: isSearchMoreAvailable(phrase) ? { [weak self] in self?.increaseSearchRadius() } : nil,
+                                                 onClearFilters: showsFiltersChip && appliedFiltersCount() > 0 ? { [weak self] in self?.clearFilters() } : nil)
         if !paused && !cancelPrev {
             tableController?.appendItem(item)
             tableController?.reloadData()

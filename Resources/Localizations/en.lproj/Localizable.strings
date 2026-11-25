@@ -5117,3 +5117,6 @@
 "search_near_me" = "Near me";
 "search_around_my_location_description" = "Search around your position";
 "search_around_map_center_description" = "%@ away from your location";
+"search_no_results_for" = "No results for \"%@\"";
+"search_nothing_found_within_radius" = "We couldn't find anything within a %@ radius.";
+"increase_radius" = "Increase radius";

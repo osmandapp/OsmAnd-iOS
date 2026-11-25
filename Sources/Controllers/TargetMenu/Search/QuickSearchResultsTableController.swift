@@ -24,6 +24,7 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         super.init(tableView: tableView)
         tableView.register(PoiContentTableViewCell.self, forCellReuseIdentifier: PoiContentTableViewCell.reuseIdentifier)
         tableView.register(PointContentTableViewCell.self, forCellReuseIdentifier: PointContentTableViewCell.reuseIdentifier)
+        tableView.register(QuickSearchEmptyStateCell.self, forCellReuseIdentifier: QuickSearchEmptyStateCell.reuseIdentifier)
     }
 
     override func updateData(_ data: [[OAQuickSearchListItem]]!, append: Bool) {
@@ -36,6 +37,11 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let emptyStateItem = item(at: indexPath) as? QuickSearchEmptyStateListItem {
+            let cell = tableView.dequeueReusableCell(withIdentifier: QuickSearchEmptyStateCell.reuseIdentifier, for: indexPath)
+            (cell as? QuickSearchEmptyStateCell)?.configure(with: emptyStateItem)
+            return cell
+        }
         guard let item = item(at: indexPath),
               let result = item.getSearchResult(),
               let configuration = contentConfiguration(for: item, result: result) else {

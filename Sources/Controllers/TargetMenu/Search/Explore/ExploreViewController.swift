@@ -474,3 +474,9 @@ extension ExploreViewController: DownloadingCellResourceHelperDelegate {
         }
     }
 }
+
+extension ExploreViewController: QuickSearchPageContent {
+    var pageScrollView: UIScrollView {
+        tableView
+    }
+}

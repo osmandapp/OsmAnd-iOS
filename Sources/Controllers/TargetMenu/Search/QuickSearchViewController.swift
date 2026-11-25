@@ -14,6 +14,10 @@ import OsmAndShared
     case selectTarget
 }
 
+protocol QuickSearchPageContent: AnyObject {
+    var pageScrollView: UIScrollView { get }
+}
+
 final class QuickSearchViewController: OASuperViewController {
     private typealias SearchStartedCallback = (OASearchPhrase?) -> Void
     private typealias PublishCallback = (OASearchResultCollection?, Bool) -> Void
@@ -345,6 +349,12 @@ final class QuickSearchViewController: OASuperViewController {
         updateHeader()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updatePageSafeAreaInsets()
+        updateChipsHeaderSize()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showSearchIcon()
@@ -432,8 +442,10 @@ final class QuickSearchViewController: OASuperViewController {
         navigationItem.leftBarButtonItem = backButton
 
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .viewBg
+        if #unavailable(iOS 26) {
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .viewBg
+        }
         appearance.shadowColor = nil
         appearance.titleTextAttributes = [.foregroundColor: UIColor.textColorPrimary]
         navigationItem.standardAppearance = appearance
@@ -483,6 +495,9 @@ final class QuickSearchViewController: OASuperViewController {
         tabsControl.addTarget(self, action: #selector(tabChanged(_:)), for: .valueChanged)
         tabsControl.translatesAutoresizingMaskIntoConstraints = false
         tabsContainerView.preservesSuperviewLayoutMargins = true
+        if #unavailable(iOS 26) {
+            tabsContainerView.backgroundColor = .viewBg
+        }
         tabsContainerView.addSubview(tabsControl)
 
         chipsView.dataSource = self
@@ -496,20 +511,16 @@ final class QuickSearchViewController: OASuperViewController {
         chipsStackView.addArrangedSubview(chipsView)
         chipsStackView.addArrangedSubview(poiTypeChipsView)
         chipsContainerView.preservesSuperviewLayoutMargins = true
-        chipsContainerView.isHidden = true
         chipsContainerView.addSubview(chipsStackView)
 
         headerStackView.axis = .vertical
         headerStackView.preservesSuperviewLayoutMargins = true
         headerStackView.translatesAutoresizingMaskIntoConstraints = false
         headerStackView.addArrangedSubview(tabsContainerView)
-        headerStackView.addArrangedSubview(chipsContainerView)
         view.addSubview(headerStackView)
 
         let tabsBottom = tabsControl.bottomAnchor.constraint(equalTo: tabsContainerView.bottomAnchor, constant: -Self.tabsVerticalInset)
         tabsBottom.priority = Self.collapsibleConstraintPriority
-        let chipsBottom = chipsStackView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor)
-        chipsBottom.priority = Self.collapsibleConstraintPriority
         NSLayoutConstraint.activate([
             headerStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -521,15 +532,15 @@ final class QuickSearchViewController: OASuperViewController {
             chipsStackView.topAnchor.constraint(equalTo: chipsContainerView.topAnchor, constant: Self.chipsTopInset),
             chipsStackView.leadingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.leadingAnchor),
             chipsStackView.trailingAnchor.constraint(equalTo: chipsContainerView.layoutMarginsGuide.trailingAnchor),
-            chipsBottom
+            chipsStackView.bottomAnchor.constraint(equalTo: chipsContainerView.bottomAnchor)
         ])
     }
 
     private func setupContent() {
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(contentView)
+        view.insertSubview(contentView, belowSubview: headerStackView)
         NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
+            contentView.topAnchor.constraint(equalTo: view.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -643,6 +654,7 @@ final class QuickSearchViewController: OASuperViewController {
         tableView.isHidden = true
         pageController.didMove(toParent: self)
         updateHeader()
+        updateContentScrollView()
     }
 
     private func hideTabs() {
@@ -651,20 +663,50 @@ final class QuickSearchViewController: OASuperViewController {
         pageController?.view.removeFromSuperview()
         pageController?.removeFromParent()
         updateHeader()
+        updateContentScrollView()
+    }
+
+    private func updatePageSafeAreaInsets() {
+        guard let pageController else { return }
+        let topInset = headerStackView.bounds.height
+        guard pageController.additionalSafeAreaInsets.top != topInset else { return }
+        pageController.additionalSafeAreaInsets.top = topInset
+    }
+
+    private func updateContentScrollView() {
+        let scrollView: UIScrollView
+        if tabsVisible {
+            guard let page = pageController?.viewControllers?.first as? QuickSearchPageContent else { return }
+            scrollView = page.pageScrollView
+        } else {
+            scrollView = tableView
+        }
+        setContentScrollView(scrollView, for: .top)
+        if #available(iOS 26.0, *) {
+            let interaction = tabsContainerView.interactions.compactMap { $0 as? UIScrollEdgeElementContainerInteraction }.first ?? UIScrollEdgeElementContainerInteraction()
+            interaction.scrollView = scrollView
+            interaction.edge = .top
+            if interaction.view == nil {
+                tabsContainerView.addInteraction(interaction)
+            }
+        }
     }
 
     @objc private func tabChanged(_ sender: Any?) {
         moveGestureDetected()
         if let pageController, let exploreViewController, let categoriesViewController, let addressViewController {
+            let completion: (Bool) -> Void = { [weak self] _ in
+                self?.updateContentScrollView()
+            }
             switch tabsControl.selectedSegmentIndex {
             case 0:
-                pageController.setViewControllers([exploreViewController], direction: .reverse, animated: true)
+                pageController.setViewControllers([exploreViewController], direction: .reverse, animated: true, completion: completion)
             case 1:
                 searchHelper?.refreshCustomPoiFilters()
                 let direction: UIPageViewController.NavigationDirection = pageController.viewControllers?.first === exploreViewController ? .forward : .reverse
-                pageController.setViewControllers([categoriesViewController], direction: direction, animated: true)
+                pageController.setViewControllers([categoriesViewController], direction: direction, animated: true, completion: completion)
             case 2:
-                pageController.setViewControllers([addressViewController], direction: .forward, animated: true)
+                pageController.setViewControllers([addressViewController], direction: .forward, animated: true, completion: completion)
             default:
                 break
             }
@@ -973,11 +1015,12 @@ final class QuickSearchViewController: OASuperViewController {
 
     private func updateChips() {
         guard isViewLoaded else { return }
-        let chipsHidden = !showsChips
-        if chipsContainerView.isHidden != chipsHidden {
-            chipsContainerView.isHidden = chipsHidden
+        guard showsChips else {
+            if tableView.tableHeaderView != nil {
+                tableView.tableHeaderView = nil
+            }
+            return
         }
-        guard !chipsHidden else { return }
         let showsFilters = showsFiltersChip
         let filtersCount = showsFilters ? appliedFiltersCount() : 0
         let state = ChipsState(sortOption: selectedSortOption,
@@ -994,6 +1037,21 @@ final class QuickSearchViewController: OASuperViewController {
             chipsView.reloadData()
         }
         updatePoiTypeChips()
+        updateChipsHeaderSize()
+    }
+
+    private func updateChipsHeaderSize() {
+        guard showsChips else { return }
+        let width = tableView.bounds.width
+        guard width > 0 else { return }
+        let height = chipsContainerView.systemLayoutSizeFitting(CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
+                                                                withHorizontalFittingPriority: .required,
+                                                                verticalFittingPriority: .fittingSizeLevel).height
+        guard tableView.tableHeaderView !== chipsContainerView
+                || chipsContainerView.frame.width != width
+                || abs(chipsContainerView.frame.height - height) > 0.5 else { return }
+        chipsContainerView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        tableView.tableHeaderView = chipsContainerView
     }
 
     private func updatePoiTypeChips() {
@@ -2045,6 +2103,15 @@ extension QuickSearchViewController: UIPageViewControllerDataSource, UIPageViewC
         if prevTabIndex != tabsControl.selectedSegmentIndex {
             processTabChange()
         }
+        if completed {
+            updateContentScrollView()
+        }
+    }
+}
+
+extension OAAddressTableViewController: QuickSearchPageContent {
+    var pageScrollView: UIScrollView {
+        tableView
     }
 }
 

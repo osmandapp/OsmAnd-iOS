@@ -330,7 +330,7 @@
     _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     [_tableView reloadData];
     if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0 && needUpdateScrollPosition)
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        [self.tableView setContentOffset:CGPointMake(0, -self.tableView.adjustedContentInset.top) animated:NO];
 }
 
 - (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex

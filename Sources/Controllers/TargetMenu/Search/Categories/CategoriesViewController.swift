@@ -179,3 +179,9 @@ extension CategoriesViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
+extension CategoriesViewController: QuickSearchPageContent {
+    var pageScrollView: UIScrollView {
+        tableView
+    }
+}

@@ -22,9 +22,12 @@
 #define kOATargetPointViewCellHeight 60.0
 #define kMaxRowCount 4
 
+static const CGFloat kDefaultIconWidth = 25.0;
+
 @interface OATargetMultiView ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic) CGFloat iconColumnWidth;
 
 @end
 
@@ -107,8 +110,9 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATargetPointViewCell getCellIdentifier] owner:self options:nil];
         cell = (OATargetPointViewCell *)[nib objectAtIndex:0];
     }
+    cell.iconWidthConstraint.constant = self.iconColumnWidth;
     cell.targetPoint = targetPoint;
-    cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 60, 0., 0.);
+    cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 60 + self.iconColumnWidth - kDefaultIconWidth, 0., 0.);
     return cell;
 }
 
@@ -135,6 +139,10 @@
 -(void) setTargetPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
     _targetPoints = targetPoints;
+    // Keep titles aligned using the widest icon in the list.
+    self.iconColumnWidth = kDefaultIconWidth;
+    for (OATargetPoint *targetPoint in targetPoints)
+        self.iconColumnWidth = MAX(self.iconColumnWidth, targetPoint.icon.size.width);
     [self.tableView reloadData];
 }
 

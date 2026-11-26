@@ -30,7 +30,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     
     // libxml2 parsing stuff
     NSString *_currentName;
-    NSString *_currentString;
+    NSMutableString *_currentString;
     BOOL _parsingString;
     
     NSMutableDictionary *_dictionary;
@@ -158,7 +158,10 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     if(0 == strncmp((const char *)localname, kStringElementName, kStringElementNameLength)) {
         
         if (_currentString && _currentName)
-            [_dictionary setObject:_currentString forKey:_currentName];
+        {
+            NSString *value = [_currentString stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
+            _dictionary[_currentName] = [value stringByReplacingOccurrencesOfString:@"\\'" withString:@"'"];
+        }
         
         _currentString = nil;
         _currentName = nil;
@@ -168,14 +171,10 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 
 - (void)charactersFound:(const xmlChar *)characters length:(int)length {
     if(_parsingString) {
-        NSString *value = [[[[NSString alloc] initWithBytes:(const void *)characters
-                                                   length:length encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:
-                           [NSCharacterSet whitespaceCharacterSet]] stringByReplacingOccurrencesOfString:@"\\'" withString:@"\'"];
-        
-        if (_currentString)
-            _currentString = [_currentString stringByAppendingString:value];
-        else
-            _currentString = value;
+        NSString *fragment = [[NSString alloc] initWithBytes:characters length:length encoding:NSUTF8StringEncoding];
+        if (!_currentString)
+            _currentString = [NSMutableString string];
+        [_currentString appendString:fragment];
     }
 }
 

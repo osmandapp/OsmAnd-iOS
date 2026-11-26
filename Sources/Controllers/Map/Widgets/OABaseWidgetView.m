@@ -81,6 +81,19 @@ NSString * const kWidgetPanelKey = @"widgetPanel";
     return NO;
 }
 
+- (BOOL)handleSwitchChanged:(OATableRowData *)item isOn:(BOOL)isOn
+{
+    return NO;
+}
+
+- (void)applySettings:(OAApplicationMode *)appMode
+{
+}
+
+- (void)discardSettings
+{
+}
+
 
 - (void)replaceHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority
 {

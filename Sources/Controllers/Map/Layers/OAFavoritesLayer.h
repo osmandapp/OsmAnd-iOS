@@ -13,4 +13,7 @@
 
 + (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon;
 
+// Called by the Parking position plugin when it is enabled or disabled
+- (void) updateParkingVisibility;
+
 @end

@@ -20,6 +20,7 @@
 #import "OATargetInfoViewController.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
+#import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
 #import "OAAppData.h"
 #import "OARootViewController.h"
@@ -43,6 +44,7 @@ static const int START_ZOOM = 6;
     std::shared_ptr<OAFavoritesMapLayerProvider> _favoritesMapProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
+    BOOL _showHiddenParking;
     double _textScaleFactor;
     dispatch_queue_t _favoritesUpdateQueue;
 }
@@ -132,8 +134,20 @@ static const int START_ZOOM = 6;
     const float textScale = _textScaleFactor;
     const auto hiddenPoint = _hiddenPointPos31;
 
+    // The parking point stays on the map while the Parking position plugin is enabled, even if its folder is hidden
+    _showHiddenParking = [OAPluginsHelper isEnabled:OAParkingPositionPlugin.class];
+    std::shared_ptr<OsmAnd::IFavoriteLocation> hiddenParking;
+    if (_showHiddenParking)
+    {
+        OAFavoriteItem *parking = [OAFavoritesHelper getSpecialPoint:OASpecialPointType.PARKING];
+        if (parking && !parking.isVisible)
+            hiddenParking = parking.favorite;
+    }
+
     dispatch_async(_favoritesUpdateQueue, ^{
         auto favorites = [OAFavoritesHelper getFavoritesCollection]->getVisibleFavoriteLocations();
+        if (hiddenParking)
+            favorites.append(hiddenParking);
         
         QList<OsmAnd::PointI> hiddenPoints;
         if (hiddenPoint != OsmAnd::PointI())
@@ -173,6 +187,21 @@ static const int START_ZOOM = 6;
 - (void) onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
 {
     [self reloadFavorites];
+}
+
+- (void) updateParkingVisibility
+{
+    if (self.isVisible && _showHiddenParking != [OAPluginsHelper isEnabled:OAParkingPositionPlugin.class])
+        [self reloadFavorites];
+}
+
+/**
+ * The parking favorite stays on the map while the Parking position plugin is enabled,
+ * even if its folder is hidden. Other points follow the visibility of their folder.
+ */
+- (BOOL) isPointVisibleOnMap:(OAFavoriteItem *)point
+{
+    return point.isVisible || (_showHiddenParking && point.specialPointType == OASpecialPointType.PARKING);
 }
 
 - (void) reloadFavorites
@@ -260,22 +289,23 @@ static const int START_ZOOM = 6;
         double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
         targetPoint.location = CLLocationCoordinate2DMake(favLat, favLon);
 
-        OAFavoriteItem *storedItem = [OAFavoritesHelper getVisibleFavByLat:favLat lon:favLon];
+        // Look the item up by the drawn location: the parking point may be drawn from a hidden folder
+        OAFavoriteItem *storedItem = nil;
+        for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
+        {
+            if (favLoc->isEqual(point.favorite.get()))
+            {
+                storedItem = point;
+                break;
+            }
+        }
         targetPoint.title = storedItem ? [storedItem getDisplayName] : favLoc->getTitle().toNSString();
         targetPoint.titleAddress = storedItem ? [storedItem getAddress] : favLoc->getAddress().toNSString();
         if (storedItem && storedItem.specialPointType == [OASpecialPointType PARKING])
             targetPoint.type = OATargetParking;
         targetPoint.symbolGroupId = favLoc->getGroup().toNSString();
         targetPoint.icon = [self getFavoriteImage:favLoc];
-        
-        for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
-        {
-            if (favLoc->isEqual(point.favorite.get()))
-            {
-                targetPoint.targetObj = point;
-                break;
-            }
-        }
+        targetPoint.targetObj = storedItem;
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;
@@ -303,7 +333,7 @@ static const int START_ZOOM = 6;
     
     for (OAFavoriteItem *favouritePoint in favouritePoints)
     {
-        if (!favouritePoint.isVisible)
+        if (![self isPointVisibleOnMap:favouritePoint])
             continue;
         
         double lat = [favouritePoint getLatitude];

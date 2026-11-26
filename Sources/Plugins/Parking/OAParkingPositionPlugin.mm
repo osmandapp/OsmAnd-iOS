@@ -22,6 +22,9 @@
 #import "OADestination.h"
 #import "OARoutingHelper.h"
 #import "OAMapViewController.h"
+#import "OAMapLayers.h"
+#import "OAFavoritesLayer.h"
+#import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAParkingAction.h"
 #import "OAFavoritesHelper.h"
@@ -224,6 +227,10 @@
 
 - (void) updateLayers
 {
+    // The favorites layer shows the parking point from a hidden folder only while the plugin is enabled
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[OARootViewController instance].mapPanel.mapViewController.mapLayers.favoritesLayer updateParkingVisibility];
+    });
 }
 
 - (OASimpleWidget *)createParkingPlaceInfoControlWithAppMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams

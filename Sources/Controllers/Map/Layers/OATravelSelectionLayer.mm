@@ -7,6 +7,8 @@
 //
 
 #import "OATravelSelectionLayer.h"
+#import "OANetworkRouteDrawable.h"
+#import "OAPOIViewController.h"
 #import "OAPointDescription.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
@@ -43,12 +45,7 @@
         if (pair.count > 1 && [pair[0] isKindOfClass:OATravelGpx.class] && [pair[1] isKindOfClass:SelectedGpxPoint.class])
         {
             OATravelGpx *travelGpx = pair[0];
-            if (!NSStringIsEmpty(travelGpx.title))
-                return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:travelGpx.title];
-            else if (!NSStringIsEmpty(travelGpx.descr))
-                return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:travelGpx.descr];
-            else
-                return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:travelGpx.routeId];
+            return [[OAPointDescription alloc] initWithType:POINT_TYPE_GPX name:[travelGpx getDisplayName]];
         }
     }
     return nil;
@@ -111,8 +108,16 @@
             targetPoint.type = OATargetGPX;
             targetPoint.targetObj = travelGpx;
             targetPoint.location = CLLocationCoordinate2DMake(travelGpx.lat, travelGpx.lon);
-            targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
-            targetPoint.title = [travelGpx getGpxFileName];
+            OAPOI *amenity = [travelGpx getAmenity];
+            if (amenity)
+            {
+                targetPoint.icon = [OANetworkRouteDrawable getIconByAmenityShieldTags:amenity textSize:12];
+                targetPoint.ctrlAttrTypeStr = [[NSAttributedString alloc]
+                    initWithString:[OAPOIViewController getTypeStrFor:amenity]];
+            }
+            if (!targetPoint.icon)
+                targetPoint.icon = [UIImage imageNamed:ACImageNameIcCustomTrip];
+            targetPoint.title = [travelGpx getDisplayName];
             targetPoint.sortIndex = (NSInteger)targetPoint.type;
             return targetPoint;
         }

@@ -19,6 +19,7 @@
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
+#import "OAPointDescription.h"
 #import "OAOsmAndFormatter.h"
 #import "OADestinationsHelper.h"
 #import "OADestinationItem.h"

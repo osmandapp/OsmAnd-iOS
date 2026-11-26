@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) deleteItem:(BOOL)isNewItemAdding;
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group;
 
-- (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;
+- (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint;
 
 + (NSString *) getPoiIconName:(id)object;
 

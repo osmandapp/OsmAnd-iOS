@@ -261,7 +261,10 @@
     
     if (self.showCaptions && description.length > 0)
     {
-        builder.setCaption(QString::fromNSString(description));
+        // The map renderer displays LRM as a visible glyph.
+        NSString *caption = [description
+            stringByReplacingOccurrencesOfString:kLTRMark withString:@""];
+        builder.setCaption(QString::fromNSString(caption));
         builder.setCaptionStyle(self.captionStyle);
         builder.setCaptionTopSpace(self.captionTopSpace);
     }
@@ -712,10 +715,10 @@
     return [object isKindOfClass:OADestination.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (!object || ![self isObjectMovable:object])
-        return;
+        return NO;
 
     OADestination *dest = (OADestination *)object;
     OADestination *destCopy = [dest copy];
@@ -747,6 +750,7 @@
         [strongSelf->_destinationLayerWidget moveMarker:-1];
         [strongSelf drawDestinationLines];
     }];
+    return YES;
 }
 
 - (UIImage *)getPointIcon:(id)object

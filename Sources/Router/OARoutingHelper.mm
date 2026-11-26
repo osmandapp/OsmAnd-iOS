@@ -355,6 +355,17 @@ static BOOL _isDeviatedFromRoute = false;
     [_recalcHelper removeCalculationProgressCallback:callback];
 }
 
+- (void)routeCalculationFailed
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (id<OARouteInformationListener> listener in [self currentListeners])
+        {
+            if ([listener respondsToSelector:@selector(routeCalculationFailed)])
+                [listener routeCalculationFailed];
+        }
+    });
+}
+
 - (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMaps
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps

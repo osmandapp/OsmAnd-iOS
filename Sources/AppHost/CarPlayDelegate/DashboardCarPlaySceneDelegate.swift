@@ -251,4 +251,28 @@ extension DashboardCarPlaySceneDelegate: OARouteInformationListener {
     func routeWasFinished() {
         cancelPendingRouteOverview()
     }
+    func routeCalculationFailed() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, isRouteOverviewPending else { return }
+            let routingHelper = OARoutingHelper.sharedInstance()
+            guard !routingHelper.isRouteBeingCalculated() else { return }
+            if routingHelper.isRouteCalculated() {
+                centerMapOnRoute()
+                return
+            }
+            cancelPendingRouteOverview()
+            guard let dashboardVC,
+                  isForegroundScene,
+                  mapVC?.parent === dashboardVC,
+                  window?.rootViewController === dashboardVC,
+                  !routingHelper.isFollowingMode(),
+                  let app = OsmAndApp.swiftInstance(),
+                  let locationServices = app.locationServices,
+                  !locationServices.denied else { return }
+            app.mapMode = .positionTrack
+            if locationServices.status == .suspended {
+                locationServices.resume()
+            }
+        }
+    }
 }

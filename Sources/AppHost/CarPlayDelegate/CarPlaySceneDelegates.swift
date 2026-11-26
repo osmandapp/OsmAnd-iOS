@@ -65,6 +65,9 @@ final class CarPlaySceneDelegate: UIResponder {
             }
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
             CarPlayService.shared.configure()
+            if OAIAPHelper.sharedInstance().isCarPlayAvailable() {
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
+            }
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
@@ -78,7 +81,6 @@ final class CarPlaySceneDelegate: UIResponder {
                 mapVc = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
             }
-            CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
             carPlayDashboardController?.delegate = carPlayMapController

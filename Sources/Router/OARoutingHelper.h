@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) routeWasCancelled;
 - (void) routeWasFinished;
 @optional
+- (void)routeCalculationFailed;
 - (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMap
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                      potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps;
@@ -102,6 +103,7 @@ struct GpxRouteApproximation;
 - (BOOL) removeListener:(id<OARouteInformationListener>)lt;
 - (void) addCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)progressRoute;
 - (void)removeCalculationProgressCallback:(id<OARouteCalculationProgressCallback>)callback;
+- (void)routeCalculationFailed;
 
 - (void)updateLocation:(CLLocation *)currentLocation;
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation;

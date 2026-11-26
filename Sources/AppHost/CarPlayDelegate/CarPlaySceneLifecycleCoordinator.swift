@@ -25,14 +25,13 @@ final class CarPlaySceneLifecycleCoordinator {
               let locationServices = app.locationServices else { return }
         shouldCenterOnMyLocation = false
 
-        guard !locationServices.denied else { return }
         let routingHelper = OARoutingHelper.sharedInstance()
         if (routingHelper.isRouteCalculated() || routingHelper.isRouteBeingCalculated()) && !routingHelper.isFollowingMode() {
             showRouteOverview?()
-        } else {
+        } else if !locationServices.denied {
             app.mapMode = .positionTrack
         }
-        if locationServices.status == .suspended {
+        if !locationServices.denied, locationServices.status == .suspended {
             locationServices.resume()
         }
     }

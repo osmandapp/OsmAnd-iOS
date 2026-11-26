@@ -1427,6 +1427,10 @@
                 {
                     res.localeName = [NSString stringWithFormat:@"%@ (%@)", ptr.pt.nameLocalized, _types.getAllLanguagesTranslationSuffix];
                 }
+                else if ([ptr.pt isKindOfClass:OAPoiAdditionalCustomFilter.class])
+                {
+                    res.localeName = [PoiAdditionalLabels getSearchName:((OAPoiAdditionalCustomFilter *) ptr.pt).additionalPoiTypes.firstObject];
+                }
                 else
                 {
                     res.localeName = [PoiAdditionalLabels getSearchName:ptr.pt];

@@ -36,6 +36,12 @@
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
 
+@interface OAAddDestinationBottomSheetViewController ()
+
+@property (nonatomic) BOOL selectingOnMap;
+
+@end
+
 @interface OAAddDestinationBottomSheetScreen () <OACollectionViewCellDelegate, OADestinationPointListDelegate>
 
 @end
@@ -458,6 +464,8 @@
     }
     else if ([item[@"key"] isEqualToString:@"select_on_map"])
     {
+        vwController.selectingOnMap = YES;
+        [vwController setNeedsStatusBarAppearanceUpdate];
         OATargetPointType type = OATargetRouteFinishSelection;
         if (_type == EOADestinationTypeFinish)
             type = OATargetRouteFinishSelection;
@@ -602,10 +610,6 @@
 
 @end
 
-@interface OAAddDestinationBottomSheetViewController ()
-
-@end
-
 @implementation OAAddDestinationBottomSheetViewController
 
 - (instancetype) initWithType:(EOADestinationType)type
@@ -621,6 +625,11 @@
     [[ThemeManager shared] configureWithAppMode:[OAAppSettings sharedManager].applicationMode.get];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return self.selectingOnMap || ![[ThemeManager shared] isLightTheme] ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
+}
+
 - (void) setupView
 {
     if (!self.screenObj)
@@ -632,6 +641,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
+    if (@available(iOS 26.0, *))
+        self.tableView.topEdgeEffect.hidden = YES;
     self.tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     self.buttonsView.subviews.firstObject.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     [self hideDoneButton];

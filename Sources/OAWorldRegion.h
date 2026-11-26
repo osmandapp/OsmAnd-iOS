@@ -71,7 +71,6 @@
 - (OAWorldRegion *) getSubregion:(NSString *)regionId;
 - (OAWorldRegion *) getFlattenedSubregion:(NSString *)regionId;
 - (NSArray<OAWorldRegion *> *) getFlattenedSubregions:(NSArray<NSString *> *)regionIds;
-- (OAWorldRegion *) getPrimarySuperregion;
 - (OAWorldRegion *) getRegionDataByDownloadName:(NSString *)downloadName;
 - (OAProduct *) getProduct;
 

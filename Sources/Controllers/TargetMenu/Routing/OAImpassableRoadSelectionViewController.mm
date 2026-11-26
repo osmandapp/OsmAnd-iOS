@@ -128,9 +128,19 @@
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width
 {
-    CGFloat w = width - 32.0 - OAUtilities.getLeftMargin * 2;
+    CGFloat leftInset = 0.;
+    CGFloat rightInset = 0.;
+    UIWindow *window = self.bottomToolBarView.window;
+    if (window)
+    {
+        CGRect toolbarFrame = [self.bottomToolBarView convertRect:self.bottomToolBarView.bounds toView:window];
+        CGRect safeFrame = UIEdgeInsetsInsetRect(window.bounds, window.safeAreaInsets);
+        leftInset = MAX(0., CGRectGetMinX(safeFrame) - CGRectGetMinX(toolbarFrame));
+        rightInset = MAX(0., CGRectGetMinX(toolbarFrame) + width - CGRectGetMaxX(safeFrame));
+    }
+    CGFloat w = MAX(0., width - 32.0 - leftInset - rightInset);
     CGRect leftBtnFrame = _clearAllButton.frame;
-    leftBtnFrame.origin.x = 16.0 + OAUtilities.getLeftMargin;
+    leftBtnFrame.origin.x = 16.0 + leftInset;
     leftBtnFrame.size.width = w / 2 - 8;
     _clearAllButton.frame = leftBtnFrame;
     

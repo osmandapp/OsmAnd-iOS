@@ -82,10 +82,10 @@ static UIFont *_titleFont;
 
 - (void) applyCornerRadius
 {
-    CGFloat fullCellWidth = self.bounds.size.width;
-    CGFloat width = self.bounds.size.width - 2*cellMargin;
+    CGFloat fullCellWidth = self.contentView.bounds.size.width;
+    CGFloat width = self.contentView.bounds.size.width - 2*cellMargin;
     if (_hasLeftMargin)
-        width -= [OAUtilities getLeftMargin];
+        width -= MAX(0., [OAUtilities getLeftMargin] - self.contentView.frame.origin.x);
 
     CGFloat height = [self.class getHeight:_titleView.text cellWidth:fullCellWidth];
     _contentContainer.frame = CGRectMake(cellMargin, 0., width, height);

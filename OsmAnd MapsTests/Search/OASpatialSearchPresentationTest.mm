@@ -213,12 +213,42 @@
     XCTAssertEqualObjects(more.getName, OALocalizedString(@"search_POI_level_btn"));
     more.onClickFunction(more);
     XCTAssertEqual(controller.searchCount, 1);
-    XCTAssertTrue(controller.lastSearchMore);
+    XCTAssertFalse(controller.lastSearchMore, @"a wider spatial search replaces the previous collection");
     XCTAssertEqual([self.core.getSearchSettings getRadiusLevel], 4);
     controller.interruptedSearch = YES;
     [controller increaseSearchRadius];
     XCTAssertEqual(controller.searchCount, 2);
     XCTAssertEqual([self.core.getSearchSettings getRadiusLevel], 4, @"resuming an interrupted search keeps its radius");
+}
+
+- (void)testSharedFacadeExposesSpatialRadiusExpansionUntilSevenHundredKilometers
+{
+    OASharedSearchUICore *core = [[OASharedSearchUICore alloc] initWithLang:@"en" transliterate:NO];
+    [core initApiUseSpatialSearch:YES searchRulesDir:[NSBundle.mainBundle.bundlePath stringByAppendingPathComponent:@"abbr"]];
+    for (NSString *text in @[@"Amsterdam", @"Amsterdam "])
+    {
+        for (int level = 1; level <= 3; level++)
+        {
+            [core updateSettings:[core.getSearchSettings setRadiusLevel:level]];
+            OASearchPhrase *phrase = [core resetPhrase:text];
+            XCTAssertEqual([core isSearchMoreAvailable:phrase], level < 3);
+            int expectedRadius = level == 1 ? ([text hasSuffix:@" "] ? 400000 : 300000) : (level == 2 ? 500000 : 700000);
+            XCTAssertEqual([core getMinimalSearchRadius:phrase], expectedRadius);
+            XCTAssertEqual([core getNextSearchRadius:phrase], level == 1 ? 500000 : 700000);
+        }
+    }
+}
+
+- (void)testClassicRadiusExpansionKeepsAppendingResults
+{
+    OAQuickSearchTableController *table;
+    OASpatialPresentationTestController *controller = [self controllerWithTable:&table];
+    controller.collection = [[OASearchResultCollection alloc] initWithPhrase:self.phrase];
+    XCTAssertFalse(controller.collection.isSkipSorting);
+    [self.core updateSettings:[self.core.getSearchSettings setRadiusLevel:1]];
+    [controller increaseSearchRadius];
+    XCTAssertTrue(controller.lastSearchMore);
+    XCTAssertEqual([self.core.getSearchSettings getRadiusLevel], 2);
 }
 
 - (void)testApiPublicationKeepsLevelsWhenAppResultsArriveFirst

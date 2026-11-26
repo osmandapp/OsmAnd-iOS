@@ -141,19 +141,12 @@
 
     if (_duplicate)
     {
-        NSRange range = [_fileName rangeOfString:@"_copy\\s*\\d*$" options:NSRegularExpressionSearch];
-        if (range.location == NSNotFound)
-            _fileName = [_fileName stringByAppendingString:@"_copy"];
-
         NSString *path = [[OsmAndApp instance].gpxPath
                 stringByAppendingPathComponent:[_filePath stringByDeletingLastPathComponent]];
         while ([[NSFileManager defaultManager] fileExistsAtPath:[[path stringByAppendingPathComponent:_fileName]
                 stringByAppendingPathExtension:@"gpx"]])
         {
-            if ([_fileName hasSuffix:@"_copy"])
-                _fileName = [_fileName stringByAppendingString:@" 1"];
-
-            _fileName = [OAUtilities createNewFileName:_fileName];
+            _fileName = [[OAUtilities createNewFileName:[_fileName stringByAppendingPathExtension:@"gpx"]] stringByDeletingPathExtension];
         }
     }
 

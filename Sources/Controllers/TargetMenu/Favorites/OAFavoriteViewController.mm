@@ -92,6 +92,18 @@ static const NSInteger kOrderFavGroupRow = 1;
     [self setInfoRows:rows];
 }
 
+- (void)buildInternal:(NSMutableArray<OAAmenityInfoRow *> *)rows
+{
+    if (_originObject)
+    {
+        OASAdditionalInfoBundle *infoBundle = [[OASAdditionalInfoBundle alloc] initWithPoiTypes:OAPOIHelper.sharedInstance.kPoiTypes
+                                                                              additionalInfo:[_originObject getAmenityExtensions:NO]];
+        AmenityUIHelper *helper = [[AmenityUIHelper alloc] initWithInfoBundle:infoBundle];
+        helper.latLon = CLLocationCoordinate2DMake(_favorite.getLatitude, _favorite.getLongitude);
+        [rows addObjectsFromArray:[helper buildInternal]];
+    }
+}
+
 - (void) buildDescription:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     NSString *desc = [_favorite getDescription];

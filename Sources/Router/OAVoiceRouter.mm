@@ -81,8 +81,20 @@ std::string preferredLanguage;
         
         NSString *prefLang =  _settings.settingPrefMapLanguage.get == nil ? OALocalizedString(@"local_map_names") : _settings.settingPrefMapLanguage.get;
         preferredLanguage = std::string([prefLang UTF8String]);
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onProfileSettingSet:)
+                                                     name:kNotificationSetProfileSetting
+                                                   object:nil];
     }
     return self;
+}
+
+- (void)onProfileSettingSet:(NSNotification *)notification
+{
+    NSSet<NSString *> *preferenceKeys = notification.userInfo[kPreferenceKeysUserInfoKey];
+    if ([preferenceKeys containsObject:_settings.voiceMute.key] && [self isMute])
+        [self interruptRouteCommands];
 }
 
 - (void) setPlayer:(id<OACommandPlayer>)player_

@@ -1561,7 +1561,7 @@
 "app_mode_bicycle" = "Велосипед";
 "app_mode_car" = "Автівка";
 "app_mode_default" = "Огляд мапи";
-"map_transparency" = "Прозорість мапи";
+"map_transparency" = "Видимість базової карти";
 "srtm_color_scheme" = "Схема кольорів";
 "shared_string_appearance" = "Вигляд";
 "enable_contour_lines" = "Вмикає показ ізоліній на мапі";

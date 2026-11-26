@@ -10,12 +10,14 @@
 #import <OsmAndShared/OsmAndShared.h>
 #import "OAMeasurementToolLayer.h"
 #import "OAMeasurementEditingContext.h"
+#import "OAApplicationMode.h"
 
 @implementation OARemovePointCommand
 {
     NSInteger _position;
     OASWptPt *_point;
     NSString *_previousPointProfile;
+    OAApplicationMode *_appMode;
 }
 
 - (instancetype) initWithLayer:(OAMeasurementToolLayer *)measurementLayer position:(NSInteger)position
@@ -35,8 +37,8 @@
         return NO;
     if (_position > 0)
         _previousPointProfile = [points[_position - 1].getProfileType copy];
-    _point = [ctx removePoint:_position updateSnapToRoad:YES];
-    [self.measurementLayer updateLayer];
+    _appMode = ctx.appMode;
+    [self removePoint];
     return YES;
 }
 
@@ -51,6 +53,7 @@
         else
             [previousPoint removeProfileType];
     }
+    ctx.appMode = _appMode;
     [ctx addPoint:_position pt:_point];
     [self.measurementLayer updateLayer];
     [self.measurementLayer moveMapToPoint:_position];
@@ -58,7 +61,16 @@
 
 - (void)redo
 {
-    [self.getEditingCtx removePoint:_position updateSnapToRoad:YES];
+    [self removePoint];
+}
+
+- (void)removePoint
+{
+    OAMeasurementEditingContext *ctx = self.getEditingCtx;
+    _point = [ctx removePoint:_position updateSnapToRoad:YES];
+    OASWptPt *lastPoint = ctx.getAllPoints.lastObject;
+    if (lastPoint && !lastPoint.isGap)
+        ctx.appMode = [OAApplicationMode valueOfStringKey:lastPoint.getProfileType def:OAApplicationMode.DEFAULT];
     [self.measurementLayer updateLayer];
 }
 

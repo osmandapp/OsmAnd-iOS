@@ -516,10 +516,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                            renameToNewName: track.gpxFileName,
                            deleteOriginalFile: false,
                            openTrack: false,
-                           trackItem: track)
-        updateContent()
-        updateBottomButtons()
-        delegate?.onVisibleTracksUpdate()
+                           trackItem: track) { [weak self] _ in
+            self?.updateContent()
+            self?.updateBottomButtons()
+            self?.delegate?.onVisibleTracksUpdate()
+        }
     }
     
     private func updateContent() {
@@ -895,7 +896,7 @@ extension MapSettingsGpxViewController: OASelectTrackFolderDelegate {
                 let trackItem = TrackItem(file: selectedTrack.file)
                 trackItem.dataItem = selectedTrack
                 
-                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem)
+                gpxHelper?.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, trackItem: trackItem, completion: nil)
                 updateContent()
                 delegate?.onVisibleTracksUpdate()
             }

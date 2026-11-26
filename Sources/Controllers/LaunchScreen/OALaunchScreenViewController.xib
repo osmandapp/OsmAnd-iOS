@@ -22,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Kz-Jd-246">
-                    <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <subviews>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_openstreetmap" translatesAutoresizingMaskIntoConstraints="NO" id="KbO-MP-P2o">
                             <rect key="frame" x="40" y="510" width="240" height="30"/>
@@ -91,10 +91,10 @@
             <viewLayoutGuide key="safeArea" id="g27-cL-Lzo"/>
             <color key="backgroundColor" name="launchScreenBgColor"/>
             <constraints>
-                <constraint firstItem="5Kz-Jd-246" firstAttribute="trailing" secondItem="g27-cL-Lzo" secondAttribute="trailing" id="7Ac-jb-m99"/>
-                <constraint firstItem="5Kz-Jd-246" firstAttribute="top" secondItem="g27-cL-Lzo" secondAttribute="top" id="7QW-HY-cQg"/>
-                <constraint firstItem="5Kz-Jd-246" firstAttribute="bottom" secondItem="g27-cL-Lzo" secondAttribute="bottom" id="Oil-FU-4AW"/>
-                <constraint firstItem="5Kz-Jd-246" firstAttribute="leading" secondItem="g27-cL-Lzo" secondAttribute="leading" id="Z8P-cd-nFX"/>
+                <constraint firstItem="5Kz-Jd-246" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="7Ac-jb-m99"/>
+                <constraint firstItem="5Kz-Jd-246" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="7QW-HY-cQg"/>
+                <constraint firstItem="5Kz-Jd-246" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="bottom" id="Oil-FU-4AW"/>
+                <constraint firstItem="5Kz-Jd-246" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Z8P-cd-nFX"/>
             </constraints>
             <point key="canvasLocation" x="52.173913043478265" y="40.178571428571423"/>
         </view>

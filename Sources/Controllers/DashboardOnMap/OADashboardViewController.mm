@@ -21,6 +21,8 @@
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
+static const CGFloat kOADashboardNavbarHeight = 48.0;
+static const CGFloat kOADashboardNavbarMinimumTopInset = 12.0;
 
 @interface OADashboardViewController () <OATableViewDelegate>
 {
@@ -40,6 +42,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     BOOL _showing;
     BOOL _hiding;
     BOOL _rotating;
+    BOOL _navbarAppearanceInitialized;
+    BOOL _navbarOpaqueBackground;
+    BOOL _navbarLightTheme;
 }
 
 @synthesize screenObj;
@@ -80,7 +85,19 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (void) viewWillLayoutSubviews
 {
     if (![self.tableView isSliding] && !_showing && !_hiding)
+    {
         [self updateLayout:NO];
+        if (self.navbarView.superview)
+        {
+            CGRect navbarFrame = [self navbarViewFrame];
+            if (!CGRectEqualToRect(self.navbarView.frame, navbarFrame))
+            {
+                self.navbarView.frame = navbarFrame;
+                self.navbarGradientBackgroundView.frame = navbarFrame;
+                [self updateTableHeaderForNavbarFrame:navbarFrame];
+            }
+        }
+    }
 }
 
 - (CGFloat) calculateTableHeight
@@ -169,8 +186,8 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
 - (CGRect)navbarViewFrame
 {
     CGSize screenSize = [self screenSize];
-    CGFloat navBarHeight = [OAUtilities getStatusBarHeight];
-    navBarHeight = navBarHeight == inCallStatusBarHeight ? navBarHeight / 2 : navBarHeight;
+    UIEdgeInsets safeInsets = self.parentViewController.view.safeAreaInsets;
+    CGFloat navBarHeight = MAX(safeInsets.top, kOADashboardNavbarMinimumTopInset);
     if (![OAUtilities isLandscapeIpadAware])
     {
         return CGRectMake(0.0, 0.0, screenSize.width, kOADashboardNavbarHeight + navBarHeight);
@@ -179,6 +196,20 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     {
         CGFloat frameWidth = [OAUtilities isIPad] ? [self getViewWidthForPad] : kMapSettingsLandscapeWidth;
         return CGRectMake(0.0, 0.0, frameWidth + [OAUtilities getLeftMargin], kOADashboardNavbarHeight + navBarHeight);
+    }
+}
+
+- (void)updateTableHeaderForNavbarFrame:(CGRect)navbarFrame
+{
+    UIView *headerView = self.tableView.tableHeaderView;
+    CGFloat headerHeight = [self getInitialPosY];
+    if (headerView && (headerView.frame.size.height != headerHeight || headerView.frame.size.width != navbarFrame.size.width))
+    {
+        CGRect headerFrame = headerView.frame;
+        headerFrame.size.width = navbarFrame.size.width;
+        headerFrame.size.height = headerHeight;
+        headerView.frame = headerFrame;
+        self.tableView.tableHeaderView = headerView;
     }
 }
 
@@ -197,6 +228,10 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     [rootViewController addChildViewController:self];
     [self willMoveToParentViewController:rootViewController];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+        [rootViewController setNeedsUpdateOfVerticalBarConfiguration];
+#endif
     
     CGRect parentFrame;
     CGRect parentNavbarFrame;
@@ -208,6 +243,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     
     CGRect frame = [self contentViewFrame];
     CGRect navbarFrame = [self navbarViewFrame];
+    [self updateTableHeaderForNavbarFrame:navbarFrame];
     if ([self isMainScreen] && [OAUtilities isPortrait] && [OAUtilities isIPhone])
     {
         frame.origin.y = DeviceScreenHeight + 10.0;
@@ -258,7 +294,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
                 _navbarGradientBackgroundView.frame = [self navbarViewFrame];
             }
             
-            _navbarView.frame = [self navbarViewFrame];
+            CGRect finalNavbarFrame = [self navbarViewFrame];
+            _navbarView.frame = finalNavbarFrame;
+            [self updateTableHeaderForNavbarFrame:finalNavbarFrame];
             self.view.frame = [self contentViewFrame];
             
         } completion:^(BOOL finished) {
@@ -273,7 +311,9 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     }
     else
     {
-        _navbarView.frame = [self navbarViewFrame];
+        CGRect finalNavbarFrame = [self navbarViewFrame];
+        _navbarView.frame = finalNavbarFrame;
+        [self updateTableHeaderForNavbarFrame:finalNavbarFrame];
         self.view.frame = [self contentViewFrame];
         
         [self didMoveToParentViewController:rootViewController];
@@ -390,7 +430,14 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         self.parentVC = nil;
     }
     
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    UIViewController *parentViewController = self.parentViewController;
+#endif
     [self removeFromParentViewController];
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 270100
+    if (@available(iOS 27.1, *))
+        [parentViewController setNeedsUpdateOfVerticalBarConfiguration];
+#endif
     [self.navbarView removeFromSuperview];
     [self.view removeFromSuperview];
     
@@ -442,6 +489,33 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         if (navbarGradientBackgroundView)
             navbarGradientBackgroundView.alpha = 0.0;
     }
+    if (@available(iOS 27.0, *))
+    {
+        BOOL opaqueBackground = self.navbarBackgroundView.alpha > 0.5;
+        BOOL lightTheme = [ThemeManager shared].isLightTheme;
+        if (_navbarAppearanceInitialized && _navbarOpaqueBackground == opaqueBackground && _navbarLightTheme == lightTheme)
+            return;
+        _navbarAppearanceInitialized = YES;
+        _navbarOpaqueBackground = opaqueBackground;
+        _navbarLightTheme = lightTheme;
+        self.navbarBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+        self.titleView.textColor = [UIColor colorNamed:opaqueBackground ? ACColorNameTextColorPrimary : ACColorNameNavBarTextColorPrimary];
+        UIColor *buttonColor = [UIColor colorNamed:opaqueBackground ? ACColorNameIconColorActive : ACColorNameNavBarTextColorPrimary];
+        self.backButton.tintColor = buttonColor;
+        self.okButton.tintColor = buttonColor;
+        [self.okButton setTitleColor:buttonColor forState:UIControlStateNormal];
+        [[OARootViewController instance] setNeedsStatusBarAppearanceUpdate];
+    }
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    if (@available(iOS 27.0, *))
+    {
+        if (self.navbarBackgroundView.alpha > 0.5 && [ThemeManager shared].isLightTheme)
+            return UIStatusBarStyleDarkContent;
+    }
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) viewDidLoad
@@ -453,13 +527,13 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self.backButton setImage:[UIImage imageNamed:ACImageNameIcNavbarChevron].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
 
     _okButton.hidden = YES;
-    
+
     CGRect navbarFrame = [self navbarViewFrame];
     [self.navbarView addBlurEffect:UIAccessibilityIsReduceTransparencyEnabled() ? NO : [ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
 
     self.tableView = (OATableView *)self.view;
     self.tableView.oaDelegate = self;
-    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - [OAUtilities getStatusBarHeight], 0, 0, 0);
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake(navbarFrame.size.height - self.parentViewController.view.safeAreaInsets.top, 0, 0, 0);
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
@@ -539,7 +613,10 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
         [self.navbarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+        [self updateNavbarBackground];
+    }
 }
 
 - (void)onLeftNavbarButtonPressed
@@ -601,7 +678,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     {
         CGFloat initialPosY = [self getInitialPosY];
         CGRect navbarFrame = [self navbarViewFrame];
-        CGFloat a = initialPosY - [OAUtilities getStatusBarHeight];
+        CGFloat a = initialPosY - self.parentViewController.view.safeAreaInsets.top;
         CGFloat b = initialPosY - navbarFrame.size.height;
         CGFloat c = self.tableView.contentOffset.y;
         alpha = (c - b) / (a - b);

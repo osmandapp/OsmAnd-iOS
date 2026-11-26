@@ -115,8 +115,8 @@ final class AmenityUIHelper: NSObject {
                 icon = .icDescription
             }
             // "Name: value" values: "Smoking" over "No", "Rented boats" over "Kayaks"
-            let label = PoiAdditionalLabels.getCardGroupLabel(categoryTypes)
-            let row = OAAmenityInfoRow(key: entry.key, icon: icon, textPrefix: label.prefix ?? pType.poiAdditionalCategoryLocalized, text: label.text, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(entry.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
+            let group = AmenityTagEntriesBuilder.shared.buildPoiTypesGroupEntry(key: entry.key, name: pType.name, textPrefix: pType.poiAdditionalCategoryLocalized, types: entry.collapsablePoiTypes ?? [], typeEntries: entry.collapsableEntries, order: entry.order, iconId: 0, iconNameCandidates: [], fallbackIconId: 0, poiAdditional: true, collapsableCategory: entry.collapsableCategory)
+            let row = OAAmenityInfoRow(key: entry.key, icon: icon, textPrefix: group.textPrefix, text: group.text, hiddenUrl: nil, collapsableView: collapsableView, textColor: nil, isWiki: false, isText: true, needLinks: true, isPhoneNumber: false, isUrl: false, order: Int(entry.order), name: pType.name, matchWidthDivider: false, textLinesLimit: 1)
             row.collapsed = collapsableView?.collapsed ?? true
             return row
         }
@@ -229,13 +229,14 @@ final class AmenityUIHelper: NSObject {
     private func createPoiAdditionalInfoRow(key: String, value: String, resolvedType: AdditionalInfoBundle.ResolvedPoiType?,
                                             collapsableView: OACollapsableView?) -> OAAmenityInfoRow? {
         let cleanValue = value.replacingNbsp()
+        let openingHoursCheckDate = key == OPENING_HOURS_TAG ? additionalInfo.getFilteredInfo()[CHECK_DATE_OPENING_HOURS_TAG] : nil
         let rowParamsBuilder = AmenityInfoRowParams.Builder(key: key)
         rowParamsBuilder.collapsableView = collapsableView
         let poiAdditionalUiRule = PoiAdditionalUiRules.shared.findRule(key: key)
 
         if let additionalType = resolvedType?.additionalType,
            let pType = helper.getAnyPoiAdditionalType(byKey: additionalType.getKeyName()) as? OAPOIType {
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: pType, key: key, value: cleanValue, subtype: subtype, openingHoursCheckDate: openingHoursCheckDate, additionalInfo: additionalInfo)
         } else {
             let useGenericFallback = genericRowKeys.contains(key)
             let displayKey = useGenericFallback ? Self.genericFallbackDisplayKey(key) : key
@@ -246,7 +247,7 @@ final class AmenityUIHelper: NSObject {
             fallbackType.nameLocalized = helper.getPhraseByName(displayKey, withDefatultValue: false)
                 ?? OAUtilities.capitalizeFirstLetter(displayKey.replacingOccurrences(of: "_", with: " "))
             let displayValue = useGenericFallback ? cleanValue : helper.translation(cleanValue, withDefault: false) ?? cleanValue
-            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: fallbackType, key: key, value: displayValue, subtype: subtype)
+            poiAdditionalUiRule.apply(builder: rowParamsBuilder, poiType: fallbackType, key: key, value: displayValue, subtype: subtype, openingHoursCheckDate: openingHoursCheckDate, additionalInfo: additionalInfo)
             if useGenericFallback {
                 rowParamsBuilder.iconName = Self.defaultAmenityIconName
             }

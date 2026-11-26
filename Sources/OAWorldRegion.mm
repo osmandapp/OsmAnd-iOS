@@ -32,8 +32,6 @@
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/KeyedEntriesCollection.h>
 
-#define kWorld @"world"
-
 @implementation OAWorldRegion
 {
     std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
@@ -337,16 +335,6 @@
 - (void) setSuperregion:(OAWorldRegion *)superregion
 {
     _superregion = superregion;
-}
-
-- (OAWorldRegion *) getPrimarySuperregion
-{
-    OAWorldRegion *primarySuperregion = _superregion;
-    while (primarySuperregion.superregion.regionId)
-    {
-        primarySuperregion = primarySuperregion.superregion;
-    }
-    return primarySuperregion;
 }
 
 - (OAWorldRegion *) makeImmutable
@@ -989,7 +977,7 @@
     {
         NSString *superRegionId = _superregion.regionId;
         NSString *thisRegionId = _regionId;
-        return [kWorld isEqualToString:superRegionId] && ![OsmAnd::WorldRegions::RussiaRegionId.toNSString() isEqualToString:thisRegionId];
+        return !superRegionId && ![OsmAnd::WorldRegions::RussiaRegionId.toNSString() isEqualToString:thisRegionId];
     }
     return false;
 }

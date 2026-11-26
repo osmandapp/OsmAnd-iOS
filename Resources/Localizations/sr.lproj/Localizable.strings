@@ -648,7 +648,7 @@
 "map_settings_offline" = "Стилови за ванмрежне мапе";
 "shared_string_online_maps" = "Мрежне карте";
 "shared_string_transparency" = "Прозирнност";
-"map_transparency" = "Прозирност основне карте";
+"map_transparency" = "Видљивост основне карте";
 "map_settings_avail_lay" = "Доступни слојеви";
 "mapillary" = "Мапилари";
 "street_level_imagery" = "Слике на нивоу улице";

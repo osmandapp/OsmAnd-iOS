@@ -655,7 +655,7 @@
 "map_settings_offline" = "Stilovi za vanmrežne mape";
 "shared_string_online_maps" = "Internet mape";
 "shared_string_transparency" = "Prozirnnost";
-"map_transparency" = "Prozirnost osnovne mape";
+"map_transparency" = "Vidljivost osnovne mape";
 "map_settings_avail_lay" = "Dostupni slojevi";
 "mapillary" = "Mapilari";
 "street_level_imagery" = "Slike na nivou ulice";

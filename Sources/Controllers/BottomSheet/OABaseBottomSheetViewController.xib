@@ -115,6 +115,7 @@
                                             </connections>
                                         </view>
                                     </subviews>
+                                    <viewLayoutGuide key="safeArea" id="alt-safe-header"/>
                                     <color key="backgroundColor" name="viewBg"/>
                                     <constraints>
                                         <constraint firstItem="2WI-Sn-Wv2" firstAttribute="leading" secondItem="875-IQ-1ra" secondAttribute="leading" id="DCJ-vE-Sac"/>
@@ -124,9 +125,9 @@
                                         <constraint firstItem="Nec-3O-1tg" firstAttribute="top" secondItem="875-IQ-1ra" secondAttribute="top" priority="999" constant="7" id="OEM-ec-3Bt"/>
                                         <constraint firstAttribute="bottom" secondItem="2WI-Sn-Wv2" secondAttribute="bottom" id="eH9-Sl-ugn"/>
                                         <constraint firstItem="Nec-3O-1tg" firstAttribute="centerX" secondItem="875-IQ-1ra" secondAttribute="centerX" id="gXX-HO-muk"/>
-                                        <constraint firstAttribute="trailing" secondItem="jZK-Dd-dDt" secondAttribute="trailing" id="pWB-hI-lBk"/>
+                                        <constraint firstItem="alt-safe-header" firstAttribute="trailing" secondItem="jZK-Dd-dDt" secondAttribute="trailing" id="pWB-hI-lBk"/>
                                         <constraint firstItem="jZK-Dd-dDt" firstAttribute="top" secondItem="Nec-3O-1tg" secondAttribute="bottom" priority="999" id="wS5-j1-HAI"/>
-                                        <constraint firstItem="jZK-Dd-dDt" firstAttribute="leading" secondItem="875-IQ-1ra" secondAttribute="leading" id="z1Y-mE-BW1"/>
+                                        <constraint firstItem="jZK-Dd-dDt" firstAttribute="leading" secondItem="alt-safe-header" secondAttribute="leading" id="z1Y-mE-BW1"/>
                                     </constraints>
                                 </view>
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" contentInsetAdjustmentBehavior="never" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="hAJ-kw-6N6" customClass="OATableView">

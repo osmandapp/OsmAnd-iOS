@@ -20,8 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
  hand the calls to the shared objects they hold. Results come back as the app's own, their objects
  made by OASharedSearchObjects.
 
- The app picks it at start with the useSharedSearch setting, and the spatial search or the classic one
- with useSpatialTextSearch. App sources (favorites, history, GPX and downloadable regions)
+ The app picks the shared spatial search at start with the useSharedSearch setting.
+ App sources (favorites, history, GPX and downloadable regions)
  register their shared implementations through the same facade.
  */
 @interface OASharedSearchUICore : OASearchUICore

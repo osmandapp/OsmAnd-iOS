@@ -8,3 +8,6 @@
 #import "OAAmenityInfoRow.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXWptViewController.h"
+
+#import "OALabel.h"
+#import "OACollapsableLabelView.h"

@@ -208,12 +208,12 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             let sectionKey = tableData.sectionData(for: UInt(indexPath.section)).key
             if sectionKey == SectionKey.receivedData.rawValue || sectionKey == SectionKey.vehicleInfo.rawValue {
                 if let widgetType = item.obj(forKey: "widgetType") as? OBDDataComputer.OBDTypeWidget {
-                    cell.valueLabel.text = description(for: widgetType)
+                    setValue(description(for: widgetType), to: cell)
                 } else {
-                    cell.valueLabel.text = item.descr
+                    setValue(item.descr, to: cell)
                 }
             } else {
-                cell.valueLabel.text = item.descr
+                setValue(item.descr, to: cell)
             }
             if sectionKey == SectionKey.receivedData.rawValue || sectionKey == SectionKey.vehicleInfo.rawValue {
                 cell.leftIconVisibility(sectionKey == SectionKey.receivedData.rawValue)
@@ -299,11 +299,18 @@ final class VehicleMetricsDescriptionViewController: OABaseNavbarViewController 
             let item = tableData.item(for: indexPath)
 
             if let widgetType = item.obj(forKey: "widgetType") as? OBDDataComputer.OBDTypeWidget {
-                cell.valueLabel.text = description(for: widgetType)
+                setValue(description(for: widgetType), to: cell)
             } else {
-                cell.valueLabel.text = item.descr
+                setValue(item.descr, to: cell)
             }
         }
+    }
+
+    // VoiceOver must read the title even when a long value such as a VIN leaves no room for the title label.
+    private func setValue(_ value: String?, to cell: OAValueTableViewCell) {
+        cell.valueLabel.text = value
+        cell.accessibilityLabel = cell.titleLabel.text
+        cell.accessibilityValue = value
     }
     
     private func scrollToSearchSection() {

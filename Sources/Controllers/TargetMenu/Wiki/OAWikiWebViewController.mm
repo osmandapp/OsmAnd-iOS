@@ -27,23 +27,11 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OsmAndSharedWrapper.h"
+#import "OAWebImagesCacheHelper.h"
 
 #define kHeaderImageHeight 170
 static NSString * const kWikidataHeaderImageCacheSuffix = @"#wikidata-header-image-v1";
-static NSString * const kWikimediaThumbnailSize = @"330px-";
 static NSString * const kTransparentPixel = @"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
-static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
-{
-    static NSRegularExpression *regex;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        regex = [NSRegularExpression regularExpressionWithPattern:@"((?:https?:)?//upload\\.wikimedia\\.org/[^\\s\"'<>]*?/)320px-"
-                                                          options:NSRegularExpressionCaseInsensitive
-                                                            error:nil];
-    });
-    return regex;
-}
 
 @interface OAWikiWebViewController () <SFSafariViewControllerDelegate, OAWikiLanguagesWebDelegate>
 
@@ -543,18 +531,6 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
     _isDownloadImagesOnlyNow = onlyNow;
 }
 
-- (NSString *)normalizeLegacyWikimediaThumbnailUrls:(NSString *)html
-{
-    if (html.length == 0)
-        return html;
-    
-    NSRegularExpression *regex = LegacyWikimediaThumbnailRegex();
-    return [regex stringByReplacingMatchesInString:html
-                                           options:0
-                                             range:NSMakeRange(0, html.length)
-                                      withTemplate:[NSString stringWithFormat:@"$1%@", kWikimediaThumbnailSize]];
-}
-
 #pragma mark - Web load
 
 - (void)loadHeaderImage:(void(^)(NSString *content))loadWebView
@@ -974,7 +950,7 @@ static NSRegularExpression *LegacyWikimediaThumbnailRegex(void)
     if (content == nil)
         return nil;
     
-    content = [self normalizeLegacyWikimediaThumbnailUrls:content];
+    content = [OAWebImagesCacheHelper normalizeLegacyWikimediaThumbnailUrls:content];
     
     NSString *nightModeClass = [ThemeManager shared].isLightTheme ? @"" : @" nightmode";
     return [NSString stringWithFormat:@"<html class=\"%@\"><head> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" /> <meta http-equiv=\"cleartype\" content=\"on\" />  </head> <div class=\"main%@\">%@ </body></html>", nightModeClass, nightModeClass, content];

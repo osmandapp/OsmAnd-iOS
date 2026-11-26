@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#include <thread>
 #import "OAPOIHelper.h"
 #import "OAObfFileList.h"
 #import "OAUtilities.h"
@@ -120,6 +121,97 @@
     NSMutableSet<NSString *> *expected = [NSMutableSet setWithArray:withTravel];
     [expected minusSet:[NSSet setWithArray:travel]];
     XCTAssertEqualObjects([NSSet setWithArray:[OAObfFileList searchResourceIdsIncludingTravel:NO]], expected);
+}
+
+@end
+
+@interface OASPrimaryCollatorTest : XCTestCase
+@end
+
+@implementation OASPrimaryCollatorTest
+
+- (void)testRegisteredCollationProviderUsesTheCallingThreadAndRequestedLocale
+{
+    id<OASIOSSearchCollationProvider> provider = OASIOSSearchCollation.shared.provider;
+    XCTAssertNotNil(provider);
+    NSString *base = [@"🚲" stringByPaddingToLength:81 withString:@"x" startingAtIndex:0];
+    base = [base stringByAppendingString:@"Ł"];
+    OASKotlinIntArray *positions = [OASKotlinIntArray arrayWithSize:81];
+    for (int i = 0; i < 81; i++)
+        [positions setIndex:i value:i + 1];
+    auto check = [provider, base, positions]() {
+        @autoreleasepool {
+            OASBoolean *en = [provider equalsAtAnyLocale:@"en_US" base:base part:@"l" length:1 offsets:positions count:81];
+            OASBoolean *pl = [provider equalsAtAnyLocale:@"pl_PL" base:base part:@"l" length:1 offsets:positions count:81];
+            OASBoolean *empty = [provider containsLocale:@"en_US" base:@"" part:@""];
+            return en.boolValue && pl != nil && !pl.boolValue && empty.boolValue;
+        }
+    };
+    bool workerMatched = false;
+    std::thread worker([&]() { workerMatched = check(); });
+    BOOL mainMatched = check();
+    worker.join();
+    XCTAssertTrue(mainMatched);
+    XCTAssertTrue(workerMatched);
+}
+
+- (void)testEnglishRegionOrderMatchesAndroid
+{
+    XCTAssertEqualObjects(NSLocale.currentLocale.languageCode, @"en", @"This fixture uses the Android en_US baseline");
+    id<OASKCollator> collator = [OASKCollatorKt primaryCollator];
+    NSComparator compare = ^NSComparisonResult(NSString *a, NSString *b) {
+        return (NSComparisonResult)[collator compareSource:a target:b];
+    };
+    NSArray<NSString *> *norway = @[
+        @"Agder",
+        @"Akershus",
+        @"Bouvet Island",
+        @"Buskerud",
+        @"Finnmark",
+        @"Innlandet",
+        @"Møre og Romsdal",
+        @"Nordland",
+        @"Oslo",
+        @"Østfold",
+        @"Rogaland",
+        @"Svalbard",
+        @"Telemark",
+        @"Troms",
+        @"Trøndelag",
+        @"Vestfold",
+        @"Vestland"
+    ];
+    XCTAssertEqualObjects([norway sortedArrayUsingComparator:compare], norway, @"Norway: Android English order");
+    NSArray<NSString *> *poland = @[
+        @"Greater Poland Voivodeship",
+        @"Holy Cross Voivodeship",
+        @"Kuyavian-Pomeranian Voivodeship",
+        @"Lesser Poland Voivodeship",
+        @"Łódź Voivodeship",
+        @"Lower Silesian Voivodeship",
+        @"Lublin Voivodeship",
+        @"Lubusz Voivodeship",
+        @"Masovian Voivodeship",
+        @"Opole Voivodeship",
+        @"Podlachian Voivodeship",
+        @"Pomeranian Voivodeship",
+        @"Silesian Voivodeship",
+        @"Subcarpathian Voivodeship",
+        @"Warmian-Masurian Voivodeship",
+        @"West Pomeranian Voivodeship"
+    ];
+    XCTAssertEqualObjects([poland sortedArrayUsingComparator:compare], poland, @"Poland: Android English order");
+    NSArray<NSString *> *greenland = @[
+        @"Greenland (central-west)",
+        @"Greenland (north-east)",
+        @"Greenland (north-west)",
+        @"Greenland (north)",
+        @"Greenland (south-east)",
+        @"Greenland (south-west)"
+    ];
+    XCTAssertEqualObjects([greenland sortedArrayUsingComparator:compare], greenland, @"Greenland: Android English order");
+    XCTAssertEqual([collator compareSource:@"Café" target:@"CAFE"], 0);
+    XCTAssertTrue([collator equalsSource:@"NC 42" target:@"NC 42"]);
 }
 
 @end

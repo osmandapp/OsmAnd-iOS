@@ -35,11 +35,11 @@ final class CardsFilter: NSObject {
     }()
     
     lazy var hasOnlyOnlinePhotosContent: Bool = {
-        cards.contains { $0 is WikiImageCard || $0 is UrlImageCard || type(of: $0) == ImageCard.self }
+        cards.contains { $0 is WikiImageCard || $0 is UrlImageCard || $0 is MapillaryAmenityImageCard || type(of: $0) == ImageCard.self }
     }()
     
     lazy var hasOnlyMapillaryPhotosContent: Bool = {
-        cards.contains { ($0 is MapillaryContributeCard || $0 is MapillaryImageCard) }
+        cards.contains { $0 is MapillaryImageCard }
     }()
     
     // MARK: - Init

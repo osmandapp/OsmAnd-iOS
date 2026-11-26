@@ -244,7 +244,7 @@
 "map_magnifier" = "வரைபடத்தின் உருப்பெருக்கம்";
 "text_size" = "உரை அளவு";
 "shared_string_online_maps" = "நிகழ்நிலை வரைபடம்";
-"map_transparency" = "அடிப்படை வரைபடத்தின் வெளிப்படைத்தன்மை";
+"map_transparency" = "அடிப்படை வரைபடத்தின் தெரிவுநிலை";
 
 // Intro
 "next_proceed" = "அடுத்தது";

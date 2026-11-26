@@ -114,6 +114,12 @@
     return res.sizePkg;
 }
 
+- (long long)size
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.size;
+}
+
 - (NSString *) formatedSize
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
@@ -158,6 +164,12 @@
         OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
         return [OsmAndApp instance].resourcesManager->isResourceInstalled(res.resourceId);
     }
+}
+
+- (BOOL)isFree
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return [res isFree];
 }
 
 - (NSString *) resourceId
@@ -312,7 +324,7 @@
         }
     }
 
-    return swiftResources;
+    return [swiftResources copy];
 }
 
 + (OAResourceSwiftItem *) getResourceFromDownloadTask:(id<OADownloadTask>)downloadTask
@@ -320,6 +332,42 @@
     if (downloadTask && downloadTask.resourceItem)
         return [[OAResourceSwiftItem alloc] initWithItem:downloadTask.resourceItem];
     return nil;
+}
+
++ (BOOL)isFreeRepositoryResource:(NSString *)resourceId
+{
+    const auto resource = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+    return resource && resource->free;
+}
+
++ (NSArray<OAResourceSwiftItem *> *) getInstalledMapResources
+{
+    NSMutableArray<OAResourceSwiftItem *> *swiftResources = [NSMutableArray array];
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager->isRepositoryAvailable())
+        return nil;
+
+    for (const auto& localResource : app.resourcesManager->getLocalResources())
+    {
+        if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed || app.resourcesManager->isLocalResourceHidden(localResource))
+            continue;
+
+        if (localResource->type != OsmAndResourceType::MapRegion && localResource->type != OsmAndResourceType::RoadMapRegion)
+            continue;
+
+        if ([self isFreeRepositoryResource:localResource->id.toNSString()])
+            continue;
+        
+        OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
+        item.resourceId = localResource->id;
+        item.resourceType = localResource->type;
+        item.resource = localResource;
+        item.size = localResource->size;
+        item.worldRegion = [OAResourcesUIHelper findRegionOrAnySubregionOf:app.worldRegion thatContainsResource:localResource->id];
+        [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+    }
+    
+    return [swiftResources copy];
 }
 
 + (OAResourceItem *) resourceItemByResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> &)resource region:(OAWorldRegion *)region
@@ -551,7 +599,7 @@
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];
         [swiftResources addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }
-    return swiftResources;
+    return [swiftResources copy];
 }
 
 + (NSArray<OAResourceSwiftItem *> *)findWikiMapRegionsAtCurrentMapLocation

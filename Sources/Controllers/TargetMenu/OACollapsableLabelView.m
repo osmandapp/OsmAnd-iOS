@@ -47,10 +47,20 @@
     return self;
 }
 
-- (void) adjustHeightForWidth:(CGFloat)width
+- (void)adjustHeightForWidth:(CGFloat)width
 {
     CGFloat leftMargin = OAUtilities.isLandscape && !OAUtilities.isIPad ? 2 * kMarginLeft : kMarginLeft;
-    CGSize bounds = [OAUtilities calculateTextBounds:_label.text width:width - leftMargin - kMarginRight font:_label.font];
+    CGFloat textWidth = width - leftMargin - kMarginRight;
+    NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:_label.text ?: @""
+                                                                            attributes:@{NSFontAttributeName: _label.font}];
+    [_label.attributedText enumerateAttribute:NSFontAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(UIFont *font, NSRange range, BOOL *stop) {
+        if (font)
+            [text addAttribute:NSFontAttributeName value:font range:range];
+    }];
+    CGSize bounds = [text boundingRectWithSize:CGSizeMake(ceil(textWidth), 10000.0)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                     context:nil].size;
+    bounds.height = ceil(bounds.height);
     CGFloat viewHeight = MAX(bounds.height, 21.0) + 0.0 + 11.0;
     self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, width, viewHeight);
     _label.frame = CGRectMake(leftMargin, 0.0, width - leftMargin - kMarginRight, viewHeight - 0.0 - 11.0);

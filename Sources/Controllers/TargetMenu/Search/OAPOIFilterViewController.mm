@@ -180,6 +180,35 @@ typedef enum
     [self applySafeAreaMargins];
 }
 
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+
+    CGRect safeFrame = [self.view convertRect:self.view.safeAreaLayoutGuide.layoutFrame toView:_topView];
+    CGFloat leftEdge = MAX(0., CGRectGetMinX(safeFrame));
+    CGFloat rightEdge = MIN(CGRectGetWidth(_topView.bounds), CGRectGetMaxX(safeFrame));
+
+    CGRect closeFrame = _btnClose.frame;
+    closeFrame.origin.x = leftEdge;
+    _btnClose.frame = closeFrame;
+
+    CGRect moreFrame = _btnMore.frame;
+    moreFrame.origin.x = rightEdge - CGRectGetWidth(moreFrame);
+    _btnMore.frame = moreFrame;
+
+    CGFloat textX = CGRectGetMaxX(closeFrame) + 6.;
+    CGFloat textWidth = MAX(0., CGRectGetMinX(moreFrame) - textX - 6.);
+    CGRect titleFrame = _textView.frame;
+    titleFrame.origin.x = textX;
+    titleFrame.size.width = textWidth;
+    _textView.frame = titleFrame;
+
+    CGRect descriptionFrame = _descView.frame;
+    descriptionFrame.origin.x = textX;
+    descriptionFrame.size.width = textWidth;
+    _descView.frame = descriptionFrame;
+}
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];

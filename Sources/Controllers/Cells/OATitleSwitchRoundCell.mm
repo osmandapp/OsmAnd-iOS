@@ -58,13 +58,13 @@ static UIFont *_titleFont;
 
 - (void)applyCornerRadius
 {
-    CGFloat width = self.bounds.size.width - 2*kSideMargin;
+    CGFloat width = self.contentView.bounds.size.width - 2*kSideMargin;
     if (_hasLeftMargin && (_bottomCorners || _topCorners))
-        width -= [OAUtilities getLeftMargin];
-    CGFloat height = [self.class getHeight:_titleView.text cellWidth:self.bounds.size.width];
+        width -= MAX(0., [OAUtilities getLeftMargin] - self.contentView.frame.origin.x);
+    CGFloat height = [self.class getHeight:_titleView.text cellWidth:self.contentView.bounds.size.width];
     _contentContainer.frame = CGRectMake(kSideMargin, 0., width, height + 0*kSideMargin);
     
-    CGFloat textWidth = self.bounds.size.width - 4 * kSideMargin - kSwitchWidth - kSideMargin;
+    CGFloat textWidth = self.contentView.bounds.size.width - 4 * kSideMargin - kSwitchWidth - kSideMargin;
     _titleView.frame = CGRectMake(kSideMargin, 0, textWidth, height);
     _switchView.frame = CGRectMake(width - _switchView.frame.size.width - kSideMargin, height/2 - _switchView.frame.size.height/2, _switchView.frame.size.width, _switchView.frame.size.height);
     

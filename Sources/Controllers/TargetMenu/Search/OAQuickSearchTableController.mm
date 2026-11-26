@@ -330,7 +330,7 @@
     _tableView.separatorInset = UIEdgeInsetsMake(0, 62, 0, 0);
     [_tableView reloadData];
     if (!append && _dataGroups.count > 0 && _dataGroups[0].count > 0 && needUpdateScrollPosition)
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        [self.tableView setContentOffset:CGPointMake(0, -self.tableView.adjustedContentInset.top) animated:NO];
 }
 
 - (void) addItem:(OAQuickSearchListItem *)item groupIndex:(NSInteger)groupIndex
@@ -696,10 +696,7 @@
     if ([object isKindOfClass:OAPOIType.class])
         return [PoiAdditionalLabels getSearchName:(OAPOIType *)object];
     if ([object isKindOfClass:OACity.class])
-    {
-        EOACityType type = ((OACity *)object).type;
-        return type == CITY_TYPE_POSTCODE ? OALocalizedString(@"postcode") : [OACity getLocalizedTypeStr:type];
-    }
+        return [OACity getLocalizedTypeStr:((OACity *)object).type];
     if ([object isKindOfClass:OAStreet.class])
         return OALocalizedString(@"search_address_street");
     if ([object isKindOfClass:OABuilding.class])

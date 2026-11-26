@@ -331,15 +331,18 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
 
     private func applyIcon(_ configuration: PoiContentConfiguration) {
         if let shieldImage = configuration.shieldImage {
-            let size = Self.fittedSize(shieldImage.size, in: PoiContentConfiguration.shieldMaxSize)
-            setImageContainerSize(size, iconSize: size)
+            let maxSize = PoiContentConfiguration.shieldMaxSize
+            let size = Self.fittedSize(shieldImage.size, in: maxSize)
+            setImageContainerSize(CGSize(width: size.width, height: maxSize.height), iconSize: size)
             imageContainerView.backgroundColor = .clear
+            imageContainerView.layer.cornerRadius = 0
             iconView.image = shieldImage.withRenderingMode(.alwaysOriginal)
         } else {
             let imageSize = configuration.style.imageSize
             let iconSize = configuration.style.iconSize
             setImageContainerSize(CGSize(width: imageSize, height: imageSize), iconSize: CGSize(width: iconSize, height: iconSize))
             imageContainerView.backgroundColor = .imagePlaceholderBg
+            imageContainerView.layer.cornerRadius = Self.imageCornerRadius
             iconView.image = configuration.icon?.withRenderingMode(.alwaysTemplate)
             iconView.tintColor = configuration.iconTintColor ?? .iconColorSelected
         }
@@ -354,7 +357,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
 
     private static func fittedSize(_ size: CGSize, in maxSize: CGSize) -> CGSize {
         guard size.width > 0, size.height > 0 else { return .zero }
-        let scale = min(1, maxSize.width / size.width, maxSize.height / size.height)
+        let scale = min(maxSize.width / size.width, maxSize.height / size.height)
         return CGSize(width: size.width * scale, height: size.height * scale)
     }
 

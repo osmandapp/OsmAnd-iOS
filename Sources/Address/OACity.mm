@@ -8,6 +8,7 @@
 
 #import "OACity.h"
 #import "Localization.h"
+#import "OAPOIHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAndSharedWrapper.h"
 
@@ -73,11 +74,9 @@
         case CITY_TYPE_SUBURB:
             return OALocalizedString(@"city_type_suburb");
         case CITY_TYPE_BOROUGH:
-            return OALocalizedString(@"city_type_borough");
-        case CITY_TYPE_CENSUS:
-            return OALocalizedString(@"city_type_census");
+            return [OAPOIHelper.sharedInstance getPhraseByName:@"borough"];
         case CITY_TYPE_POSTCODE:
-            return OALocalizedString(@"city_type_postcode");
+            return OALocalizedString(@"postcode");
         case CITY_TYPE_BOUNDARY:
             return OALocalizedString(@"city_type_boundary");
         case CITY_TYPE_DISTRICT:

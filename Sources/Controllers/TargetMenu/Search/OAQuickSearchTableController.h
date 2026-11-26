@@ -11,7 +11,7 @@
 #import "OACommonTypes.h"
 #import "OASimpleTableViewCell.h"
 
-@class OAQuickSearchListItem, OASearchResult, OAHistoryItem, OAPOI;
+@class OAQuickSearchListItem, OASearchResult, OAHistoryItem, OAPOI, SearchDownloadingCellResourceHelper;
 
 @protocol OAQuickSearchTableDelegate <NSObject>
 
@@ -29,6 +29,7 @@
 @property (nonatomic, readonly) BOOL searchNearMapCenter;
 @property (nonatomic, readonly) CLLocationCoordinate2D mapCenterCoordinate;
 @property (nonatomic, assign) OAQuickSearchType searchType;
+@property (nonatomic, readonly) SearchDownloadingCellResourceHelper *downloadingCellResourceHelper;
 
 - (instancetype) initWithTableView:(UITableView *)tableView;
 

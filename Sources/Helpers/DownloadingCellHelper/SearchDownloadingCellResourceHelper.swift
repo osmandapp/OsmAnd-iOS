@@ -8,6 +8,11 @@
 
 @objcMembers
 final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
+    private static let iconPlateSize: CGFloat = 42
+    private static let iconPlateCornerRadius: CGFloat = 10
+
+    var showsIconOnPlate = false
+
     override func setupCell(_ resourceId: String) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
             resourceItem.refreshDownloadTask()
@@ -40,5 +45,20 @@ final class SearchDownloadingCellResourceHelper: DownloadingCellResourceHelper {
             return cell
         }
         return nil
+    }
+
+    override func getLeftIconName(_ resourceId: String) -> String? {
+        showsIconOnPlate ? nil : super.getLeftIconName(resourceId)
+    }
+
+    override func setupRightIconForIdleCell(cell: DownloadingCell, rightIconName: String?, resourceId: String) {
+        super.setupRightIconForIdleCell(cell: cell, rightIconName: rightIconName, resourceId: resourceId)
+        guard showsIconOnPlate else { return }
+        cell.rightIconView.constraints
+            .filter { $0.firstItem === cell.rightIconView && ($0.firstAttribute == .width || $0.firstAttribute == .height) }
+            .forEach { $0.constant = Self.iconPlateSize }
+        cell.rightIconView.backgroundColor = .imagePlaceholderBg
+        cell.rightIconView.layer.cornerRadius = Self.iconPlateCornerRadius
+        cell.rightIconView.layer.cornerCurve = .continuous
     }
 }

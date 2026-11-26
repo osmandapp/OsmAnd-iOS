@@ -95,7 +95,7 @@ final class PopularPlace {
                                        address: details?.address,
                                        openingHours: openingHours,
                                        openingHoursColor: openingHoursColor,
-                                       descriptionText: details?.descriptionText)
+                                       descriptionText: style == .detailed ? details?.descriptionText : nil)
     }
 }
 

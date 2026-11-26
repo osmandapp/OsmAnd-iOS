@@ -27,29 +27,30 @@ struct PointSecondaryContent {
         self.isDateFirst = isDateFirst
     }
     
-    func attributedText() -> NSAttributedString? {
+    func attributedText(separatorColor: UIColor = .textColorSecondary) -> NSAttributedString? {
         let font = UIFont.scaledSystemFont(ofSize: PointContentConfiguration.secondaryTextSize)
         let directionAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: directionColor ?? UIColor.textColorDirectionActive]
         let directionIconColor = directionColor ?? UIColor.iconColorDirectionActive
         let secondaryAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: UIColor.textColorSecondary]
+        let separatorAttributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: separatorColor]
         let result = NSMutableAttributedString()
         if isDateFirst {
-            append(date, to: result, attributes: secondaryAttributes)
-            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
-            append(address, to: result, attributes: secondaryAttributes)
+            append(date, to: result, attributes: secondaryAttributes, separatorAttributes: separatorAttributes)
+            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: separatorAttributes)
+            append(address, to: result, attributes: secondaryAttributes, separatorAttributes: separatorAttributes)
         } else {
-            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: secondaryAttributes)
-            append(address, to: result, attributes: secondaryAttributes)
-            append(date, to: result, attributes: secondaryAttributes)
+            appendDistance(to: result, font: font, directionAttributes: directionAttributes, directionIconColor: directionIconColor, separatorAttributes: separatorAttributes)
+            append(address, to: result, attributes: secondaryAttributes, separatorAttributes: separatorAttributes)
+            append(date, to: result, attributes: secondaryAttributes, separatorAttributes: separatorAttributes)
         }
 
-        append(trailingText, to: result, attributes: secondaryAttributes)
+        append(trailingText, to: result, attributes: secondaryAttributes, separatorAttributes: separatorAttributes)
         return result.length > 0 ? result : nil
     }
 
-    private func append(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any]) {
+    private func append(_ text: String?, to result: NSMutableAttributedString, attributes: [NSAttributedString.Key: Any], separatorAttributes: [NSAttributedString.Key: Any]) {
         guard let text, !text.isEmpty else { return }
-        appendSeparatorIfNeeded(to: result, attributes: attributes)
+        appendSeparatorIfNeeded(to: result, attributes: separatorAttributes)
         result.append(NSAttributedString(string: text, attributes: attributes))
     }
 

@@ -80,7 +80,6 @@
 @implementation OAQuickSearchTableController
 {
     NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *_dataGroups;
-    SearchDownloadingCellResourceHelper *_downloadingCellResourceHelper;
     BOOL _decelerating;
     
     BOOL _showResult;

@@ -91,6 +91,7 @@ final class QuickSearchViewController: OASuperViewController {
     private static let mapCenterOptionId = "map_center"
     private static let spatialLocationOptionId = "spatial_location"
     private static let searchAroundDistanceThreshold: CLLocationDistance = 70000
+    private static let myLocationThreshold: CLLocationDistance = 50
     private static let targetSearchTypes: [OAQuickSearchType] = [.START_POINT, .DESTINATION, .INTERMEDIATE, .HOME, .WORK]
     private static let routeTargetSearchTypes: [OAQuickSearchType] = [.START_POINT, .DESTINATION, .INTERMEDIATE]
 
@@ -222,6 +223,14 @@ final class QuickSearchViewController: OASuperViewController {
         guard let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
               let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return nil }
         return myLocation.distance(from: mapCenter)
+    }
+
+    @objc static func isMapCenterAtMyLocation(_ mapCenter: CLLocation) -> Bool {
+        guard let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return false }
+        if OAMapViewTrackingUtilities.instance()?.isMapLinkedToLocation() == true {
+            return true
+        }
+        return myLocation.distance(from: mapCenter) < myLocationThreshold
     }
 
     private var isMapCenterSearchAroundAvailable: Bool {
@@ -627,13 +636,33 @@ final class QuickSearchViewController: OASuperViewController {
             exploreViewController?.searchLocation = searchLocation
             exploreViewController?.searchNearMapCenter = true
             addressViewController?.setMapCenter(searchLocation)
-            tableController?.setMapCenter(searchLocation)
         } else {
             exploreViewController?.searchNearMapCenter = false
             addressViewController?.resetMapCenterSearch()
-            tableController?.resetMapCenterSearch()
         }
+        updateResultsMapCenter(currentResultCollection())
         updateChips()
+    }
+
+    private func updateResultsMapCenter(_ resultCollection: OASearchResultCollection?) {
+        guard !useSpatialSearchLocation, let tableController else { return }
+        let useMapCenter = searchNearMapCenter && isFoundFromSearchLocation(resultCollection)
+        let changed = tableController.searchNearMapCenter != useMapCenter
+        if useMapCenter {
+            tableController.setMapCenter(searchLocation)
+        } else {
+            tableController.resetMapCenterSearch()
+        }
+        if changed {
+            tableController.updateDistanceAndDirection()
+        }
+    }
+
+    private func isFoundFromSearchLocation(_ resultCollection: OASearchResultCollection?) -> Bool {
+        guard let phrase = resultCollection?.phrase else { return true }
+        let foundFrom = phrase.getSettings()?.getOriginalLocation()?.coordinate
+        let current = searchUICore?.getSearchSettings()?.getOriginalLocation()?.coordinate
+        return foundFrom?.latitude == current?.latitude && foundFrom?.longitude == current?.longitude
     }
 
     private func applySearchLocation() {
@@ -911,10 +940,33 @@ final class QuickSearchViewController: OASuperViewController {
         spatialSearchScope = nil
         useSpatialSearchLocation = false
         guard wasUsingSpatialSearchLocation else { return }
-        applySearchLocation()
-        applySearchNearMapCenter()
+        restoreDefaultSearchLocation()
+    }
+
+    private func restoreDefaultSearchLocation() {
+        if let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation(),
+           !Self.isMapCenterAtMyLocation(mapCenter) {
+            updateSearchAroundLocation(mapCenter, nearMapCenter: true)
+        } else if let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
+            updateSearchAroundLocation(myLocation, nearMapCenter: false)
+        } else {
+            updateSearchAroundLocation(CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude), nearMapCenter: searchNearMapCenter)
+        }
+    }
+
+    private func updateSearchAroundLocationAfterMapReturn() {
+        guard !useSpatialSearchLocation,
+              let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return }
+        let nearMapCenter = !Self.isMapCenterAtMyLocation(mapCenter)
+        guard let location = nearMapCenter ? mapCenter : OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return }
+        updateSearchAroundLocation(location, nearMapCenter: nearMapCenter)
+    }
+
+    private func updateSearchAroundLocation(_ location: CLLocation, nearMapCenter: Bool) {
+        searchLocation = location.coordinate
+        searchNearMapCenter = nearMapCenter
         if let word = lastSelectedWord, word.getType() == .poiType {
-            Self.setLocation(CLLocation(latitude: searchLocation.latitude, longitude: searchLocation.longitude), of: word.result)
+            Self.setLocation(location, of: word.result)
         }
     }
 
@@ -1956,6 +2008,7 @@ final class QuickSearchViewController: OASuperViewController {
     private func updateSearchResult(_ resultCollection: OASearchResultCollection?, append: Bool) {
         cancelResultPreparation()
         guard !paused else { return }
+        updateResultsMapCenter(resultCollection)
         guard let sharedCollection = resultCollection as? OASharedSearchResultCollection else {
             displayPreparedResults(resultCollection?.getVisibleSpatialSearchResults() ?? [], append: append)
             return
@@ -2380,6 +2433,7 @@ extension QuickSearchViewController: OASearchToolbarViewControllerProtocol {
         let mapPanel = OARootViewController.instance().mapPanel
         if restoresSearchFromMap {
             hideToolbar()
+            updateSearchAroundLocationAfterMapReturn()
             mapPanel?.reopenSearch()
         } else if let filter {
             hideToolbar()

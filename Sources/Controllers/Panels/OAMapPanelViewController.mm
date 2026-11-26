@@ -1272,8 +1272,7 @@ typedef enum
 - (void) openSearch:(OAQuickSearchType)searchType location:(CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(NSString *)searchQuery object:(NSObject *)object
 {
     OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
-    BOOL isMyLocationVisible = [_mapViewController isMyLocationVisible];
-    
+
     BOOL searchNearMapCenter = NO;
     OsmAnd::PointI searchLocation;
     
@@ -1288,23 +1287,9 @@ typedef enum
     else if (newLocation)
     {
         myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
-        if (!isMyLocationVisible)
-        {
-            distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
-            if (distanceFromMyLocation > 15000)
-            {
-                searchNearMapCenter = YES;
-                searchLocation = mapView.target31;
-            }
-            else
-            {
-                searchLocation = myLocation;
-            }
-        }
-        else
-        {
-            searchLocation = myLocation;
-        }
+        distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
+        searchNearMapCenter = ![QuickSearchViewController isMapCenterAtMyLocation:[_mapViewController getMapLocation]];
+        searchLocation = searchNearMapCenter ? mapView.target31 : myLocation;
     }
     else
     {

@@ -818,9 +818,8 @@ final class QuickSearchViewController: OASuperViewController {
             } else {
                 filter = lastSelectedObject as? OAPOIUIFilter
             }
-            let spatialResultPois = spatialResultPois()
-            if let spatialResultPois {
-                showSpatialResultsOnMap(spatialResultPois)
+            if let spatialResults = spatialResultsOnMap() {
+                showSpatialResultsOnMap(spatialResults)
             } else {
                 clearSpatialResultsOnMap()
                 if let filter {
@@ -1057,20 +1056,20 @@ final class QuickSearchViewController: OASuperViewController {
         navigationController?.pushViewController(filterViewController, animated: true)
     }
 
-    private func spatialResultPois() -> [OAPOI]? {
+    private func spatialResultsOnMap() -> [OASearchResult]? {
         guard currentResultCollection()?.isSkipSorting() == true else { return nil }
-        return visibleResults().compactMap { $0.object as? OAPOI }
+        return visibleResults().filter { $0.object is OAPOI || $0.object is OAAddress }
     }
 
-    private func showSpatialResultsOnMap(_ pois: [OAPOI]) {
+    private func showSpatialResultsOnMap(_ results: [OASearchResult]) {
         showsSpatialResultsOnMap = true
-        OARootViewController.instance().mapPanel.mapViewController.getMapPoiLayer().setCustomPois(pois)
+        OARootViewController.instance().mapPanel.mapViewController.getMapPoiLayer().setCustomSearchResults(results)
     }
 
     private func clearSpatialResultsOnMap() {
         guard showsSpatialResultsOnMap else { return }
         showsSpatialResultsOnMap = false
-        OARootViewController.instance().mapPanel.mapViewController.getMapPoiLayer().setCustomPois(nil)
+        OARootViewController.instance().mapPanel.mapViewController.getMapPoiLayer().setCustomSearchResults(nil)
     }
 
     private func moveMapToSearchLocation() {

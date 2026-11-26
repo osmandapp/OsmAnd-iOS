@@ -21,6 +21,7 @@
 #import "OALog.h"
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
+#import "OAPOI.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAColors.h"
@@ -102,30 +103,37 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             if (!type)
                 continue;
 
-            auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name) + QString("_%1").arg(textScaleFactor, 0, 'f', 2);
-            sk_sp<SkImage> bitmap;
-            bool isNew = false;
-            {
-                QReadLocker scopedLocker(&_iconsCacheLock);
-                const auto bitmapIt = _iconsCache.find(iconId);
-                isNew = bitmapIt == _iconsCache.end();
-                if (!isNew)
-                {
-                    bitmap = bitmapIt.value();
-                }
-            }
-            if (isNew)
-            {
-                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:type.iconName isFullSize:!isSmallIcon icon:nil scale:textScaleFactor];
-                QWriteLocker scopedLocker(&_iconsCacheLock);
-                _iconsCache[iconId] = bitmap;
-            }
-
-            return bitmap;
+            const auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name) + QString("_%1").arg(textScaleFactor, 0, 'f', 2);
+            NSString *iconName = type.iconName;
+            return getCachedIcon(iconId, [this, iconName, isSmallIcon]() {
+                return [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:iconName isFullSize:!isSmallIcon icon:nil scale:textScaleFactor];
+            });
         }
-        
-        return nullptr;
+
+        const QString gpxIconName = amenity->getDecodedValue(QString::fromNSString(GPX_ICON));
+        if (gpxIconName.isEmpty())
+            return nullptr;
+
+        const auto iconId = isSmallIcon ? QStringLiteral("small_ic") : gpxIconName + QString("_%1").arg(textScaleFactor, 0, 'f', 2);
+        NSString *iconName = gpxIconName.toNSString();
+        return getCachedIcon(iconId, [this, iconName, isSmallIcon]() {
+            return [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:iconName isFullSize:!isSmallIcon icon:[UIImage imageNamed:iconName] scale:textScaleFactor];
+        });
     }
+}
+
+sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getCachedIcon(const QString& iconId, const std::function<sk_sp<SkImage>()>& createIcon)
+{
+    {
+        QReadLocker scopedLocker(&_iconsCacheLock);
+        const auto bitmapIt = _iconsCache.find(iconId);
+        if (bitmapIt != _iconsCache.end())
+            return bitmapIt.value();
+    }
+    const auto bitmap = createIcon();
+    QWriteLocker scopedLocker(&_iconsCacheLock);
+    _iconsCache[iconId] = bitmap;
+    return bitmap;
 }
 
 OsmAnd::TextRasterizer::Style OACoreResourcesAmenityIconProvider::getCaptionStyle(

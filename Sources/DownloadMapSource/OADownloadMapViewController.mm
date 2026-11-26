@@ -500,7 +500,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     });
 }
 
-- (NSString *) getZoomTileUrl:(NSInteger)zoom
+- (NSString *)getZoomTileUrl:(NSInteger)zoom
 {
     OAResourceItem *item = [self getCurrentItem];
     const auto point = OsmAnd::Utilities::convert31ToLatLon(_mapView.target31);
@@ -513,7 +513,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OAOnlineTilesResourceItem *onlineSource = (OAOnlineTilesResourceItem *) item;
             NSString *urlToLoad = onlineSource.onlineTileSource->urlToLoad.toNSString();
             QList<QString> randomsArray;
-            url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(zoom)).toNSString();
+            int32_t serverY = tileId.y;
+            if (onlineSource.onlineTileSource->invertedYTile)
+                serverY = (1 << zoom) - 1 - serverY;
+            url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, serverY, OsmAnd::ZoomLevel(zoom)).toNSString();
         }
         else if ([item isKindOfClass:OASqliteDbResourceItem.class])
         {

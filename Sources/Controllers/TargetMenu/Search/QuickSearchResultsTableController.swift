@@ -57,6 +57,11 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
     }
 
     private static func groupedItems(_ items: [OAQuickSearchListItem]) -> [[OAQuickSearchListItem]] {
+        let isSuggestion: (OAQuickSearchListItem) -> Bool = { $0.getSearchResult()?.objectType == .suggestion }
+        let suggestions = items.filter(isSuggestion)
+        if !suggestions.isEmpty {
+            return [suggestions] + groupedItems(items.filter { !isSuggestion($0) })
+        }
         guard let firstType = items.first?.getSearchResult()?.objectType,
               separatedObjectTypes.contains(firstType),
               let splitIndex = items.indices.dropFirst().first(where: { items[$0].getSearchResult()?.objectType != firstType }),
@@ -78,6 +83,9 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         }
         if objectType == .poiType {
             return categoryConfiguration(for: item, result: result)
+        }
+        if objectType == .suggestion {
+            return PointContentConfiguration(icon: Self.icon(for: result), title: item.getName() ?? "", iconStyle: .plate, secondaryContent: nil)
         }
         if Self.addressObjectTypes.contains(objectType) {
             return addressConfiguration(for: item, result: result)

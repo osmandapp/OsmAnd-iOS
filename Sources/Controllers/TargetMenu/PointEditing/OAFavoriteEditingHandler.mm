@@ -165,7 +165,7 @@
     return [OAFavoritesHelper checkDuplicates:comparingPoint];
 }
 
-- (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
+- (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
     [_favorite setName:data.name];
     [_favorite setDescription:data.descr];
@@ -184,6 +184,7 @@
         if ([OAFavoritesHelper editFavoriteName:_favorite newName:data.name group:data.category descr:[_favorite getDescription] address:[_favorite getAddress]])
             [OAFavoritesHelper notifyFavoritesStorageChanged];
     }
+    return YES;
 }
 
 - (OAFavoriteItem *) getFavoriteItem

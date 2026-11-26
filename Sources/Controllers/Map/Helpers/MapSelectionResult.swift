@@ -10,6 +10,7 @@
 // git revision 744c6b5831ca13767b936d62be8c78138b8dda08
 
 import CoreLocation
+import OsmAndShared
 
 @objcMembers
 final class MapSelectionResult: NSObject {
@@ -39,7 +40,65 @@ final class MapSelectionResult: NSObject {
     }
     
     func getProcessedObjects() -> [SelectedMapObject] {
-        processedObjects
+        guard processedObjects.contains(where: {
+            ($0.object as? [Any])?.first is TravelGpx
+        }) else {
+            return processedObjects
+        }
+
+        let objectsWithKeys = processedObjects.map { object in
+            (
+                object: object,
+                // Match Android GPXLayer.getOrder for local and recording tracks.
+                order: object.object is GpxDataItem || object.object is GpxFile
+                    ? 1000 : (object.object as? OARenderedObject)?.order ?? 0,
+                name: selectionName(object),
+                index: collectionIndex(object)
+            )
+        }
+
+        // Match Android MultiSelectionMenuComparator for amenity-based routes.
+        return objectsWithKeys.sorted { first, second in
+            if first.order != second.order {
+                return first.order < second.order
+            }
+
+            let comparison = first.name.caseInsensitiveCompare(second.name)
+            if comparison != .orderedSame {
+                return comparison == .orderedAscending
+            }
+            return first.index < second.index
+        }.map { $0.object }
+    }
+
+    private func selectionName(_ selectedObject: SelectedMapObject) -> String {
+        if let track = selectedObject.object as? GpxDataItem {
+            return track.gpxFileNameWithoutExtension
+        }
+        if selectedObject.object is GpxFile {
+            return localizedString("shared_string_currently_recording_track")
+        }
+        if let renderedObject = selectedObject.object as? OARenderedObject {
+            let provider = RenderedObjectAmenityProvider(renderedObject: renderedObject)
+            let name = provider.nameOnlyString()
+            return name.isEmpty ? provider.typeString() ?? "" : name
+        }
+        let provider = selectedObject.provider ?? poiProvider
+        let description: OAPointDescription? = provider.getObjectName(selectedObject.object)
+        return description?.name ?? ""
+    }
+
+    private func collectionIndex(_ selectedObject: SelectedMapObject) -> Int {
+        let objects = (selectedObject.object as? BaseDetailsObject)?.objects
+            ?? [selectedObject.object]
+        return allObjects.firstIndex { original in
+            if original === selectedObject { return true }
+            let originalObjects = (original.object as? BaseDetailsObject)?.objects
+                ?? [original.object]
+            return objects.contains { object in
+                originalObjects.contains { ($0 as AnyObject) === (object as AnyObject) }
+            }
+        } ?? allObjects.count
     }
 
     func collect(_ object: Any, provider: Any?) {

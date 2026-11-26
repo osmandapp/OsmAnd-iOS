@@ -61,9 +61,10 @@
     return nil; //override
 }
 
-- (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
+- (BOOL)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint
 {
     // override
+    return NO;
 }
 
 + (NSString *) getPoiIconName:(id)object

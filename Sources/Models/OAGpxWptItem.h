@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@class OASWptPt, OAPOI;
+@class OASWptPt, OASGpxFile, OAPOI;
 
 @interface OAGpxWptItem : NSObject
 
 + (instancetype)withGpxWpt:(OASWptPt *)gpxWpt;
 
 @property (nonatomic) OASWptPt *point;
+@property (nonatomic) OASWptPt *originalPoint;
+@property (nonatomic) OASGpxFile *gpxFile;
 @property (nonatomic) UIColor *color;
 @property (nonatomic) NSArray *groups;
 
@@ -25,6 +27,9 @@
 @property (nonatomic, assign) BOOL routePoint;
 
 @property (nonatomic) NSString *docPath;
+
+- (void)prepareForEditing;
++ (NSArray<OASWptPt *> *)storedPointsForItems:(NSArray<OAGpxWptItem *> *)items inGpxFile:(OASGpxFile *)gpxFile;
 
 - (UIImage *) getCompositeIcon;
 - (UIImage *)compositeIconWithDefaultColor;

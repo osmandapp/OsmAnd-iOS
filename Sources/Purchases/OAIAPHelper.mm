@@ -360,6 +360,12 @@ static OASubscriptionState *EXPIRED;
     return res;
 }
 
+- (void) resetPurchases
+{
+    _subscriptionStateMap = nil;
+    _inAppStateMap = nil;
+}
+
 - (NSNumber *) getInAppPurchaseTime:(NSString *)sku
 {
     OAInAppStateHolder *holder = _inAppStateMap[sku];

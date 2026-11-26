@@ -389,7 +389,7 @@
     return [object isKindOfClass:OARTargetPoint.class];
 }
 
-- (void)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
+- (BOOL)applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position
 {
     if (object && [self isObjectMovable:object])
     {
@@ -408,7 +408,9 @@
         {
             [_targetPoints navigateToPoint:[[CLLocation alloc] initWithLatitude:position.latitude longitude:position.longitude] updateRoute:YES intermediate:-1];
         }
+        return YES;
     }
+    return NO;
 }
 
 - (UIImage *)getPointIcon:(id)object

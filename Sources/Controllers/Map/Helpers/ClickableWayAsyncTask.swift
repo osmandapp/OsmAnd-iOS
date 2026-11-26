@@ -20,6 +20,12 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
         self.clickableWay = clickableWay
         super.init()
     }
+
+    override func onPreExecute() {
+        if shouldShowProgress {
+            OARootViewController.instance().view.addSpinner(inCenterOfCurrentView: true)
+        }
+    }
     
     override func doInBackground() -> Any? {
         let result = ClickableWayHelper.readHeightData(clickableWay, canceller: self)
@@ -28,6 +34,8 @@ class ClickableWayAsyncTask: OABaseLoadAsyncTask {
     
     override func onPostExecute(result: Any?) {
         ClickableWayHelper.openAsGpxFile(result as? ClickableWay)
-        super.onPostExecute(result: result)
+        if shouldShowProgress {
+            OARootViewController.instance().view.removeSpinner()
+        }
     }
 }

@@ -20,7 +20,8 @@ struct CLLocationCoordinate2D;
 - (NSArray<NSDictionary<NSString *, NSString *> *> *)getGroups;
 - (NSDictionary<NSString *, NSString *> *)getGroupsWithColors;
 - (NSString *)getAddress;
-- (void)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save;
+- (BOOL)setGroup:(NSString *)groupName color:(UIColor *)color save:(BOOL)save;
+- (BOOL)replacePoint:(OAGpxWptItem *)existingItem newPoint:(BOOL)newPoint;
 
 - (instancetype)initWithItem:(OAGpxWptItem *)gpxWpt;
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedTitle address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi;

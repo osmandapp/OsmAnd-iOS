@@ -732,6 +732,10 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     @objc private func onBackButtonPressed() {
+        if addressSearch && !tabsVisible && !searchText.isEmpty {
+            clearLastWord()
+            return
+        }
         guard modalInput else {
             dismissSearch(animated: true, completion: onCloseCallback)
             return

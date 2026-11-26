@@ -236,3 +236,9 @@ extension AddressViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
+extension AddressViewController: QuickSearchPageContent {
+    var pageScrollView: UIScrollView {
+        tableView
+    }
+}

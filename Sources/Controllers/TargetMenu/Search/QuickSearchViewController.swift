@@ -417,6 +417,10 @@ final class QuickSearchViewController: OASuperViewController {
         showToolbar(filter, restoresSearch: false)
     }
 
+    @objc func closeQuickSearch() {
+        resetSearch()
+    }
+
     private func showToolbar(_ filter: OAPOIUIFilter?, restoresSearch: Bool) {
         restoresSearchFromMap = restoresSearch
         let toolbar: OASearchToolbarViewController

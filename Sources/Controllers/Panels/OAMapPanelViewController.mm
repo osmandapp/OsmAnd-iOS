@@ -1405,6 +1405,14 @@ typedef enum
     _isNewContextMenuStillEnabled = NO;
 }
 
+- (void)closeQuickSearch
+{
+    if (!_searchViewController)
+        return;
+    [_searchViewController closeQuickSearch];
+    [self clearSearchViewController];
+}
+
 - (void)disablePlanRouteSearchContextMenuForMapGesture
 {
     // Search may leave its one-time context-menu permission set after dismissal.

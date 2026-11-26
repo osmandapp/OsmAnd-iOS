@@ -25,6 +25,19 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAQuickSearchHelper.h"
+#import "OASearchUICore.h"
+#import "OASearchPhrase.h"
+#import "OAPOI.h"
+#import "QuadRect.h"
+
+#include <OsmAndCore/Utilities.h>
+
+static const int kPlacesCountRadius = 10000;
+static const NSInteger kMaxValuesWithPlaces = 5;
+static NSString * const kOtherCategories = @"poi_filter_other_categories";
+static NSString * const kTopIndexFilterPrefix = @"top_index_";
+static const NSInteger kCountBadgeTag = 0x5C0;
 
 typedef enum
 {
@@ -45,6 +58,7 @@ typedef enum
 @property (nonatomic) BOOL checked;
 @property (nonatomic) NSString *category;
 @property (nonatomic) NSString *keyName;
+@property (nonatomic) NSInteger count;
 
 - (instancetype)initWithType:(OAPOIFilterListItemType)type icon:(UIImage *)icon text:(NSString *)text groupIndex:(int)groupIndex expandable:(BOOL)expandable expanded:(BOOL)expanded checked:(BOOL)checked category:(NSString *)category keyName:(NSString *)keyName;
 
@@ -66,6 +80,7 @@ typedef enum
         self.checked = checked;
         self.category = category;
         self.keyName = keyName;
+        self.count = -1;
     }
     return self;
 }
@@ -98,6 +113,10 @@ typedef enum
     NSMutableSet<NSString *> *_selectedPoiAdditionalsOrig;
     NSMutableArray<NSString *> *_collapsedCategories;
     NSMutableArray<NSString *> *_showAllCategories;
+    NSMutableArray<NSString *> *_showAllCountedCategories;
+    NSDictionary<NSString *, NSNumber *> *_placesCounts;
+    NSDictionary<NSString *, NSNumber *> *_categoryPlacesCounts;
+    NSUInteger _placesCountRequest;
 
     OAPOIFiltersHelper *_helper;
     
@@ -135,7 +154,8 @@ typedef enum
         _selectedPoiAdditionalsOrig = [NSMutableSet set];
         _collapsedCategories = [NSMutableArray array];
         _showAllCategories = [NSMutableArray array];
-        
+        _showAllCountedCategories = [NSMutableArray array];
+
         [self processFilterFields];
         [self initListItems];
 
@@ -172,6 +192,8 @@ typedef enum
     _tableView.separatorColor = [SeparatorAppearance color];
     _tableView.sectionHeaderHeight = 0.001;
     _tableView.sectionFooterHeight = 0.001;
+
+    [self countPlaces];
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -560,11 +582,195 @@ typedef enum
         [excludedPoiAdditionalCategories addObjectsFromArray:categories];
 }
 
+- (void)countPlaces
+{
+    NSUInteger request = ++_placesCountRequest;
+    OASearchPhrase *phrase = [[[OAQuickSearchHelper instance] getCore] getPhrase];
+    QuadRect *rect = phrase ? [phrase getRadiusBBox31ToSearch:kPlacesCountRadius] : nil;
+    NSDictionary<NSString *, OAPOIType *> *poiAdditionals = [_filter getPoiAdditionals];
+    if (!rect || !poiAdditionals || [_filter isEmpty])
+        return;
+
+    NSSet<NSString *> *excludedPoiAdditionalCategories = [self getExcludedPoiAdditionalCategories];
+    NSArray<OAPOIType *> *otherAdditionalCategories = [OAPOIHelper sharedInstance].otherMapCategory.poiAdditionalsCategorized;
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *additionalsMap = [NSMutableDictionary dictionary];
+    [self extractPoiAdditionals:poiAdditionals.objectEnumerator.allObjects additionalsMap:additionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:YES];
+    [self extractPoiAdditionals:otherAdditionalCategories additionalsMap:additionalsMap excludedPoiAdditionalCategories:excludedPoiAdditionalCategories extractAll:YES];
+
+    double top = OsmAnd::Utilities::get31LatitudeY(rect.top);
+    double left = OsmAnd::Utilities::get31LongitudeX(rect.left);
+    double bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom);
+    double right = OsmAnd::Utilities::get31LongitudeX(rect.right);
+    OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithFilter:_filter name:_filter.name filterId:_filter.filterId];
+    BOOL topIndexFilter = [_filter.filterId hasPrefix:kTopIndexFilterPrefix];
+    filter.filterByName = topIndexFilter ? _nameFilterTextOrig : nil;
+    filter.filterByKey = topIndexFilter ? _filter.filterByKey : nil;
+    OAResultMatcher<OAPOI *> *matcher = [filter wrapResultMatcher:nil];
+
+    __weak OAPOIFilterViewController *weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray<OAPOI *> *amenities = [filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:matcher filterUnique:YES];
+
+        OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+        NSMapTable<OAPOIType *, OAPOIType *> *textPoiAdditionals = [NSMapTable strongToStrongObjectsMapTable];
+        for (NSArray<OAPOIType *> *categoryPoiAdditionals in additionalsMap.allValues)
+        {
+            for (OAPOIType *poiType in categoryPoiAdditionals)
+            {
+                NSString *osmTag = [poiType getOsmTag];
+                if (osmTag.length < poiType.name.length)
+                {
+                    OAPOIType *textPoiType = [poiHelper getTextPoiAdditionalByKey:osmTag];
+                    if (textPoiType)
+                        [textPoiAdditionals setObject:textPoiType forKey:poiType];
+                }
+            }
+        }
+
+        NSMutableDictionary<NSString *, NSNumber *> *counts = [NSMutableDictionary dictionary];
+        NSMutableDictionary<NSString *, NSNumber *> *categoryCounts = [NSMutableDictionary dictionary];
+        for (OAPOI *amenity in amenities)
+        {
+            MutableOrderedDictionary<NSString *, NSString *> *info = [amenity getAdditionalInfo];
+            for (NSString *category in additionalsMap)
+            {
+                BOOL accepted = NO;
+                for (OAPOIType *poiType in additionalsMap[category])
+                {
+                    if ([OAPOIFilterViewController additionalInfo:info hasPoiAdditional:poiType textPoiType:[textPoiAdditionals objectForKey:poiType]])
+                    {
+                        counts[poiType.name] = @(counts[poiType.name].integerValue + 1);
+                        accepted = YES;
+                    }
+                }
+                if (accepted)
+                    categoryCounts[category] = @(categoryCounts[category].integerValue + 1);
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf onPlacesCounted:amenities.count counts:counts categoryCounts:categoryCounts additionalsMap:additionalsMap request:request];
+        });
+    });
+}
+
++ (BOOL)additionalInfo:(MutableOrderedDictionary<NSString *, NSString *> *)info hasPoiAdditional:(OAPOIType *)poiType textPoiType:(OAPOIType *)textPoiType
+{
+    if (info[poiType.name])
+        return YES;
+    if (!textPoiType)
+        return NO;
+
+    NSString *value = info[textPoiType.name];
+    if (value.length == 0)
+        return NO;
+
+    NSString *osmValue = [[poiType getOsmValue] trim].lowercaseString;
+    for (NSString *item in [value componentsSeparatedByString:@";"])
+    {
+        if ([[item trim].lowercaseString isEqualToString:osmValue])
+            return YES;
+    }
+    return NO;
+}
+
+- (void)onPlacesCounted:(NSInteger)placesCount
+                 counts:(NSDictionary<NSString *, NSNumber *> *)counts
+         categoryCounts:(NSDictionary<NSString *, NSNumber *> *)categoryCounts
+         additionalsMap:(NSDictionary<NSString *, NSArray<OAPOIType *> *> *)additionalsMap
+                request:(NSUInteger)request
+{
+    if (request != _placesCountRequest || placesCount == 0)
+        return;
+
+    _placesCounts = counts;
+    _categoryPlacesCounts = categoryCounts;
+    for (NSString *category in additionalsMap)
+    {
+        if (category.length > 0 && [self categoryPlacesCount:category] == 0 && [self poiAdditionalsWithPlaces:additionalsMap[category]].count == 0
+            && ![_collapsedCategories containsObject:category])
+            [_collapsedCategories addObject:category];
+    }
+    if (![_collapsedCategories containsObject:kOtherCategories])
+        [_collapsedCategories addObject:kOtherCategories];
+
+    NSString *places = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), OALocalizedString(@"shared_string_places"), @(placesCount).stringValue];
+    _descView.text = [NSString stringWithFormat:@"%@ • %@", _filter.name, places];
+    [self updateGroups];
+    [self.tableView reloadData];
+}
+
+- (NSInteger)placesCount:(OAPOIType *)poiType
+{
+    return _placesCounts[poiType.name].integerValue;
+}
+
+- (NSInteger)categoryPlacesCount:(NSString *)category
+{
+    return _categoryPlacesCounts[category].integerValue;
+}
+
+- (NSString *)selectedKeyName:(OAPOIType *)poiType
+{
+    return [[[poiType.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] stringByReplacingOccurrencesOfString:@" " withString:@":"] lowerCase];
+}
+
+- (NSArray<OAPOIType *> *)poiAdditionalsWithPlaces:(NSArray<OAPOIType *> *)poiAdditionals
+{
+    NSMutableArray<OAPOIType *> *withPlaces = [NSMutableArray array];
+    for (OAPOIType *poiType in poiAdditionals)
+    {
+        if ([self placesCount:poiType] > 0 || [_selectedPoiAdditionals containsObject:[self selectedKeyName:poiType]])
+            [withPlaces addObject:poiType];
+    }
+    return withPlaces;
+}
+
+- (void)setCount:(NSInteger)count forCell:(OASimpleTableViewCell *)cell
+{
+    UIStackView *stackView = cell.contentInsideStackView;
+    UIView *badge = [stackView viewWithTag:kCountBadgeTag];
+    if (!badge)
+    {
+        if (count <= 0)
+            return;
+
+        badge = [[UIView alloc] init];
+        badge.tag = kCountBadgeTag;
+        badge.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+        badge.layer.cornerRadius = 11.;
+        UILabel *label = [[UILabel alloc] init];
+        label.translatesAutoresizingMaskIntoConstraints = NO;
+        label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+        label.adjustsFontForContentSizeCategory = YES;
+        label.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        label.textAlignment = NSTextAlignmentCenter;
+        [badge addSubview:label];
+        [NSLayoutConstraint activateConstraints:@[
+            [label.leadingAnchor constraintEqualToAnchor:badge.leadingAnchor constant:8.],
+            [label.trailingAnchor constraintEqualToAnchor:badge.trailingAnchor constant:-8.],
+            [label.topAnchor constraintEqualToAnchor:badge.topAnchor constant:3.],
+            [label.bottomAnchor constraintEqualToAnchor:badge.bottomAnchor constant:-3.],
+            [badge.widthAnchor constraintGreaterThanOrEqualToConstant:24.]
+        ]];
+        [label setContentHuggingPriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        [label setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisHorizontal];
+        [stackView insertArrangedSubview:badge atIndex:stackView.arrangedSubviews.count - 1];
+        [stackView setCustomSpacing:8. afterView:badge];
+    }
+    ((UILabel *) badge.subviews.firstObject).text = @(count).stringValue;
+    badge.hidden = count <= 0;
+}
+
 - (void)refreshList
 {
+    _placesCounts = nil;
+    _categoryPlacesCounts = nil;
+    _descView.text = _filter.name;
     [self initListItems];
     [self updateGroups];
     [self.tableView reloadData];
+    [self countPlaces];
 }
 
 - (void) initListItems
@@ -673,9 +879,51 @@ typedef enum
             NSArray<NSString *> *keys = [additionalsMap.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString * _Nonnull s1, NSString * _Nonnull s2) {
                 return [s1 localizedCaseInsensitiveCompare:s2];
             }];
-            
+            if (_placesCounts)
+            {
+                keys = [keys sortedArrayWithOptions:NSSortStable usingComparator:^NSComparisonResult(NSString * _Nonnull c1, NSString * _Nonnull c2) {
+                    return [@([self categoryPlacesCount:c2]) compare:@([self categoryPlacesCount:c1])];
+                }];
+                NSMutableArray<NSString *> *otherCategories = [NSMutableArray array];
+                for (NSString *category in keys)
+                {
+                    NSArray<OAPOIType *> *all = allAdditionalsMap[category];
+                    if ([self categoryPlacesCount:category] == 0 && (!all || [self poiAdditionalsWithPlaces:all].count == 0))
+                        [otherCategories addObject:category];
+                }
+                if (otherCategories.count > 0)
+                {
+                    NSMutableArray<NSString *> *categories = [keys mutableCopy];
+                    [categories removeObjectsInArray:otherCategories];
+                    [categories addObject:kOtherCategories];
+                    if (![_collapsedCategories containsObject:kOtherCategories])
+                        [categories addObjectsFromArray:otherCategories];
+                    keys = categories;
+                }
+            }
+            NSComparator poiAdditionalsComparator = ^NSComparisonResult(OAPOIType * _Nonnull p1, OAPOIType * _Nonnull p2) {
+                if (_placesCounts)
+                {
+                    NSComparisonResult compare = [@([self placesCount:p2]) compare:@([self placesCount:p1])];
+                    if (compare != NSOrderedSame)
+                        return compare;
+                }
+                if (p1.nameLocalized && p2.nameLocalized)
+                    return [p1.nameLocalized localizedCaseInsensitiveCompare:p2.nameLocalized];
+                else
+                    return NSOrderedSame;
+            };
+
             for (NSString *category in keys)
             {
+                if ([category isEqualToString:kOtherCategories])
+                {
+                    groupId++;
+                    UIImage *otherIcon = [OAUtilities getTintableImage:[UIImage imageNamed:ACImageNameIcCustomFolder]];
+                    OAPOIFilterListItem *otherItem = [[OAPOIFilterListItem alloc] initWithType:GROUP_HEADER icon:otherIcon text:OALocalizedString(@"shared_string_other") groupIndex:groupId expandable:YES expanded:![_collapsedCategories containsObject:kOtherCategories] checked:NO category:kOtherCategories keyName:nil];
+                    [groups setObject:[NSMutableArray arrayWithObject:otherItem] forKey:[NSNumber numberWithInt:groupId]];
+                    continue;
+                }
                 NSMutableArray<OAPOIType *> *value = [additionalsMap objectForKey:category];
                
                 NSString *categoryLocalizedName = [poiTypes getPhraseByName:category];
@@ -712,7 +960,10 @@ typedef enum
                     // a group of one "yes" value is a single switch
                     NSString *keyName = [[allCategoryPoiAdditionals.firstObject.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase];
                     NSString *label = [PoiAdditionalLabels getSwitchLabel:translations.firstObject groupName:categoryLocalizedName];
-                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:categoryIcon text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
+                    OAPOIFilterListItem *switchItem = [[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:categoryIcon text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName];
+                    if (_placesCounts)
+                        switchItem.count = [self categoryPlacesCount:category];
+                    [items addObject:switchItem];
                     [groups setObject:items forKey:[NSNumber numberWithInt:groupId]];
                     continue;
                 }
@@ -721,23 +972,41 @@ typedef enum
                 for (NSInteger i = 0; i < allCategoryPoiAdditionals.count; i++)
                     poiAdditionalLabels[allCategoryPoiAdditionals[i].name] = labels[i];
 
-                [items addObject:[[OAPOIFilterListItem alloc] initWithType:GROUP_HEADER icon:categoryIcon text:categoryLocalizedName groupIndex:groupId expandable:YES expanded:expanded checked:NO category:category keyName:nil]];
-                
+                OAPOIFilterListItem *headerItem = [[OAPOIFilterListItem alloc] initWithType:GROUP_HEADER icon:categoryIcon text:categoryLocalizedName groupIndex:groupId expandable:YES expanded:expanded checked:NO category:category keyName:nil];
+                if (_placesCounts)
+                    headerItem.count = [self categoryPlacesCount:category];
+                [items addObject:headerItem];
+
                 NSMutableArray<OAPOIType *> *categoryPoiAdditionals = value;
-                [categoryPoiAdditionals sortUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull p1, OAPOIType * _Nonnull p2) {
-                    if (p1.nameLocalized && p2.nameLocalized)
-                        return [p1.nameLocalized localizedCaseInsensitiveCompare:p2.nameLocalized];
-                    else
-                        return NSOrderedSame;
-                }];
+                BOOL hasMore = !showAll && categoryPoiAdditionals.count > 0;
+                if (_placesCounts)
+                {
+                    NSArray<OAPOIType *> *sorted = [allCategoryPoiAdditionals sortedArrayUsingComparator:poiAdditionalsComparator];
+                    BOOL showAllCounted = [_showAllCountedCategories containsObject:category];
+                    NSMutableArray<OAPOIType *> *visible = [NSMutableArray array];
+                    for (OAPOIType *poiType in sorted)
+                    {
+                        if (showAllCounted || [_selectedPoiAdditionals containsObject:[self selectedKeyName:poiType]]
+                            || ([self placesCount:poiType] > 0 && visible.count < kMaxValuesWithPlaces))
+                            [visible addObject:poiType];
+                    }
+                    if (visible.count == 0)
+                        visible = [sorted mutableCopy];
+                    categoryPoiAdditionals = expanded ? visible : [NSMutableArray array];
+                    hasMore = expanded && visible.count < sorted.count;
+                }
+                [categoryPoiAdditionals sortUsingComparator:poiAdditionalsComparator];
                 for (OAPOIType *poiType in categoryPoiAdditionals)
                 {
                     NSString *keyName = [[poiType.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase];
-                    
+
                     NSString *label = poiAdditionalLabels[poiType.name] ?: poiType.nameLocalized;
-                    [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName]];
+                    OAPOIFilterListItem *valueItem = [[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:nil text:label groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyName] category:category keyName:keyName];
+                    if (_placesCounts)
+                        valueItem.count = [self placesCount:poiType];
+                    [items addObject:valueItem];
                 }
-                if (!showAll && categoryPoiAdditionals.count > 0)
+                if (hasMore)
                 {
                     [items addObject:[[OAPOIFilterListItem alloc] initWithType:BUTTON_ITEM icon:nil text:[OALocalizedString(@"shared_string_show_all") upperCase] groupIndex:groupId expandable:NO expanded:NO checked:NO category:category keyName:nil]];
                 }
@@ -969,7 +1238,7 @@ typedef enum
                 {
                     [cell rightIconVisibility:NO];
                 }
-                
+                [self setCount:item.count forCell:cell];
             }
             return cell;
         }
@@ -1004,6 +1273,7 @@ typedef enum
                 }
                 cell.titleLabel.text = item.text;
                 cell.switchView.on = item.checked;
+                [self setCount:item.count forCell:cell];
             }
             return cell;
         }
@@ -1089,7 +1359,10 @@ typedef enum
         {
             if (item.category)
             {
-                [_showAllCategories addObject:item.category];
+                if (_placesCounts)
+                    [_showAllCountedCategories addObject:item.category];
+                else
+                    [_showAllCategories addObject:item.category];
                 [self updateGroups];
                 [tableView reloadData];
             }

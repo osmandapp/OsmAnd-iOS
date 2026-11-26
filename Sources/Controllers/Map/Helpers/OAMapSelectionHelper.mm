@@ -33,6 +33,8 @@
 #import "OAClickableWayMenuProvider.h"
 #import "OATravelSelectionLayer.h"
 #import "OAAmenitySearcher.h"
+#import "OAPOILayer.h"
+#import "OASearchResult.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
@@ -171,6 +173,15 @@ static int TILE_SIZE = 256;
             
             if (cppAmenity != nullptr)
             {
+                OAPOILayer *poiLayer = mapVc.mapLayers.poiLayer;
+                OASearchResult *addressResult = [poiLayer customAddressResultWithAmenityId:cppAmenity->id.id];
+                if (addressResult)
+                {
+                    if (![self isCollected:addressResult result:result])
+                        [result collect:addressResult provider:poiLayer];
+                    continue;
+                }
+
                 NSMutableArray<NSString *> *names = [NSMutableArray new];
                 for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(cppAmenity->localizedNames)))
                 {
@@ -251,6 +262,16 @@ static int TILE_SIZE = 256;
             }
         }
     }
+}
+
+- (BOOL)isCollected:(id)object result:(MapSelectionResult *)result
+{
+    for (SelectedMapObject *selectedObject in result.allObjects)
+    {
+        if (selectedObject.object == object)
+            return YES;
+    }
+    return NO;
 }
 
 - (CLLocation *)parsePoiLatLon:(NSString *)value

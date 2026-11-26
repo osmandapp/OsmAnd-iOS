@@ -16,7 +16,7 @@ extension OASearchResult {
 }
 
 final class QuickSearchResultsTableController: OAQuickSearchTableController {
-    private static let separatedObjectTypes: [EOAObjectType] = [.poiType, .indexItem, .location]
+    private static let separatedObjectTypes: [EOAObjectType] = [.poiType, .location]
     private static let addressObjectTypes: [EOAObjectType] = [.city, .village, .postcode, .street, .house, .streetIntersection, .boundary]
     private static let pointObjectTypes: [EOAObjectType] = [.favorite, .wpt, .recentObj, .partialLocation]
 
@@ -25,6 +25,7 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         tableView.register(PoiContentTableViewCell.self, forCellReuseIdentifier: PoiContentTableViewCell.reuseIdentifier)
         tableView.register(PointContentTableViewCell.self, forCellReuseIdentifier: PointContentTableViewCell.reuseIdentifier)
         tableView.register(QuickSearchEmptyStateCell.self, forCellReuseIdentifier: QuickSearchEmptyStateCell.reuseIdentifier)
+        downloadingCellResourceHelper.showsIconOnPlate = true
     }
 
     override func updateData(_ data: [[OAQuickSearchListItem]]!, append: Bool) {
@@ -42,6 +43,13 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
             (cell as? QuickSearchEmptyStateCell)?.configure(with: emptyStateItem)
             return cell
         }
+        if let result = item(at: indexPath)?.getSearchResult(), result.objectType == .indexItem {
+            let cell = super.tableView(tableView, cellForRowAt: indexPath)
+            if let downloadingCell = cell as? DownloadingCell {
+                configureMapToDownloadCell(downloadingCell, result: result)
+            }
+            return cell
+        }
         guard let item = item(at: indexPath),
               let result = item.getSearchResult(),
               let configuration = contentConfiguration(for: item, result: result) else {
@@ -57,6 +65,22 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
     }
 
     private static func groupedItems(_ items: [OAQuickSearchListItem]) -> [[OAQuickSearchListItem]] {
+        let isSuggestion: (OAQuickSearchListItem) -> Bool = { $0.getSearchResult()?.objectType == .suggestion }
+        let suggestions = items.filter(isSuggestion)
+        if !suggestions.isEmpty {
+            return [suggestions] + groupedItems(items.filter { !isSuggestion($0) })
+        }
+        let isMapToDownload: (OAQuickSearchListItem) -> Bool = { $0.getSearchResult()?.objectType == .indexItem }
+        let maps = items.filter(isMapToDownload)
+        if !maps.isEmpty {
+            var groups = groupedItems(items.filter { !isMapToDownload($0) })
+            if let specialItems = groups.first, !specialItems.isEmpty, specialItems.allSatisfy({ $0.getSearchResult()?.objectType == .poiType }) {
+                groups[0] += maps
+            } else {
+                groups.insert(maps, at: 0)
+            }
+            return groups
+        }
         guard let firstType = items.first?.getSearchResult()?.objectType,
               separatedObjectTypes.contains(firstType),
               let splitIndex = items.indices.dropFirst().first(where: { items[$0].getSearchResult()?.objectType != firstType }),
@@ -78,6 +102,9 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         }
         if objectType == .poiType {
             return categoryConfiguration(for: item, result: result)
+        }
+        if objectType == .suggestion {
+            return PointContentConfiguration(icon: Self.icon(for: result), title: item.getName() ?? "", iconStyle: .plate, secondaryContent: nil)
         }
         if Self.addressObjectTypes.contains(objectType) {
             return addressConfiguration(for: item, result: result)
@@ -109,6 +136,7 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
                                        address: result.addressName,
                                        openingHours: openingHours,
                                        openingHoursColor: openingHoursColor,
+                                       descriptionText: poi.getTagContent("description", lang: PopularPlaceDetails.preferredLocale()),
                                        alternateTitle: result.alternateName)
     }
 
@@ -143,10 +171,7 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
     }
 
     private func trackConfiguration(for item: OAQuickSearchListItem, result: OASearchResult, dataItem: GpxDataItem) -> PoiContentConfiguration {
-        var typeParts = [localizedString("shared_string_gpx_track")]
-        if let activity = SearchHistoryItemPresenter.routeActivity(for: dataItem) {
-            typeParts.append(activity.label)
-        }
+        let activity = SearchHistoryItemPresenter.routeActivity(for: dataItem)
         var statistics: PoiRouteStatistics?
         if let analysis = dataItem.getAnalysis() {
             statistics = Self.routeStatistics(length: analysis.totalDistance,
@@ -157,7 +182,9 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
         return PoiContentConfiguration(style: .route,
                                        title: item.getName() ?? "",
                                        icon: .icCustomTrip,
-                                       secondaryContent: secondaryContent(for: result, text: typeParts.joined(separator: " • ")),
+                                       secondaryContent: secondaryContent(for: result,
+                                                                          text: localizedString("shared_string_gpx_track"),
+                                                                          trailingText: activity?.label),
                                        address: dataItem.nearestCity,
                                        iconTintColor: isVisible ? .iconColorActive : .iconColorDefault,
                                        routeStatistics: statistics)
@@ -179,6 +206,27 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
                                          title: title,
                                          iconStyle: .plate,
                                          secondaryContent: PointSecondaryContent(formattedDistance: nil, direction: 0, address: text == title ? nil : text, date: nil))
+    }
+
+    private func configureMapToDownloadCell(_ cell: DownloadingCell, result: OASearchResult) {
+        let resourceItem = OAResourceSwiftItem(item: result.relatedObject)
+        let region = resourceItem?.worldRegion()
+        let size = (resourceItem?.sizePkg() ?? 0) > 0 ? resourceItem?.formatedSizePkg() : nil
+        let secondaryContent: PointSecondaryContent
+        if let center = region?.regionCenter, CLLocationCoordinate2DIsValid(center) {
+            secondaryContent = locationReference.secondaryContent(latitude: center.latitude,
+                                                                  longitude: center.longitude,
+                                                                  address: region?.superregion?.localizedName,
+                                                                  trailingText: size)
+        } else {
+            secondaryContent = PointSecondaryContent(formattedDistance: nil, direction: 0, address: region?.superregion?.localizedName, date: nil, trailingText: size)
+        }
+        let description = secondaryContent.attributedText(separatorColor: .textColorTertiary)
+        cell.titleLabel.font = .preferredFont(forTextStyle: .headline)
+        cell.titleLabel.numberOfLines = 2
+        cell.descriptionLabel.numberOfLines = 1
+        cell.descriptionLabel.attributedText = description
+        cell.descriptionVisibility(description != nil)
     }
 
     private func secondaryContent(for result: OASearchResult, text: String?, trailingText: String? = nil) -> PointSecondaryContent {

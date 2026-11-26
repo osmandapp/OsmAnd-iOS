@@ -151,8 +151,9 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
             cell.leftIconView.image = [item.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.titleLabel.text = item.title ? title : @"";
+            cell.titleLabel.text = item.title ?: @"";
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -172,6 +173,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
             icon = [OAUtilities getMxIcon:@"mx_special_custom_category"];
         
         OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
+        cell.leftIconView.contentMode = UIViewContentModeScaleAspectFit;
         [self prepareCell:cell uiFilter:filter];
         cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
@@ -209,10 +211,30 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     }
 }
 
+- (void)closeQuickSearch
+{
+    NSSet<OAPOIUIFilter *> *visibleFilters = [_poiFiltersHelper getSelectedPoiFilters];
+    [[OARootViewController instance].mapPanel closeQuickSearch];
+    for (OAPOIFilterTableRow *row in rows)
+    {
+        OAPOIUIFilter *filter = row.filter;
+        if (!filter)
+            continue;
+        BOOL visible = [visibleFilters containsObject:filter];
+        if (visible == [_poiFiltersHelper isPoiFilterSelected:filter])
+            continue;
+        if (visible)
+            [_poiFiltersHelper addSelectedPoiFilter:filter];
+        else
+            [_poiFiltersHelper removeSelectedPoiFilter:filter];
+    }
+}
+
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAPOIFilterTableRow *item = [rows objectAtIndex:indexPath.row];
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    [self closeQuickSearch];
     if (item.rowType == EOAPoiRowTypeButton)
     {
         OAPOIUIFilter *topWikiPoiFilter = [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter];

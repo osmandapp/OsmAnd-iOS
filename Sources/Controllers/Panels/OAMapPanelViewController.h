@@ -245,6 +245,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) openSearch:(OAQuickSearchType)searchType location:(nullable CLLocation *)location tabIndex:(NSInteger)tabIndex;
 - (void) openSearch:(OAQuickSearchType)searchType location:(nullable CLLocation *)location tabIndex:(NSInteger)tabIndex searchQuery:(nullable NSString *)searchQuery object:(nullable NSObject *)object;
 - (void)reopenSearch;
+- (void)closeQuickSearch;
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(nullable OAPointDescription *)pointDescription;
 

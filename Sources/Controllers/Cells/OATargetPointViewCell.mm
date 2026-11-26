@@ -18,6 +18,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPOI.h"
+#import "OAAddress.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
@@ -67,7 +68,7 @@
         
         _iconView.image = image;
         
-        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class])
+        if ([_targetPoint.targetObj isKindOfClass:OAMapObject.class] || [_targetPoint.targetObj isKindOfClass:OAAddress.class])
             _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         
         NSString *title;

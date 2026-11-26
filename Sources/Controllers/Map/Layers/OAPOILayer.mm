@@ -36,6 +36,10 @@
 #import "OAMapTopPlace.h"
 #import "OANativeUtilities.h"
 #import "OAPOILayerTopPlacesProvider.h"
+#import "OASearchResult.h"
+#import "OAAddress.h"
+#import "OAQuickSearchListItem.h"
+#import "OAQuickSearchTableController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
@@ -95,19 +99,47 @@ static uint32_t OACalculatePoiCacheSize(CGSize viewSize, uint32_t rasterTileSize
     return std::max(kMinPoiCacheSize, cacheSize);
 }
 
-static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
+static uint64_t OAResolveSyntheticObjectId(uint64_t rawId, double latitude, double longitude, NSString *name, uint64_t salt)
 {
-    const uint64_t rawId = poi.obfId;
     const uint64_t invalidId = [OAMapObject getInvalidObfId];
     if (rawId != 0 && rawId != invalidId)
         return rawId;
 
-    const uint64_t latHash = static_cast<uint64_t>(llround((poi.latitude + 90.0) * 1000000.0));
-    const uint64_t lonHash = static_cast<uint64_t>(llround((poi.longitude + 180.0) * 1000000.0));
-    const uint64_t nameHash = static_cast<uint64_t>(qHash(QString::fromNSString(poi.name ?: @"")));
-    uint64_t syntheticId = (latHash << 21) ^ lonHash ^ nameHash ^ static_cast<uint64_t>([poi getTravelEloNumber]);
+    const uint64_t latHash = static_cast<uint64_t>(llround((latitude + 90.0) * 1000000.0));
+    const uint64_t lonHash = static_cast<uint64_t>(llround((longitude + 180.0) * 1000000.0));
+    const uint64_t nameHash = static_cast<uint64_t>(qHash(QString::fromNSString(name ?: @"")));
+    uint64_t syntheticId = (latHash << 21) ^ lonHash ^ nameHash ^ salt;
     syntheticId &= static_cast<uint64_t>(std::numeric_limits<int64_t>::max());
     return syntheticId != 0 ? syntheticId : 1;
+}
+
+static uint64_t OAResolveSyntheticAmenityId(OAPOI *poi)
+{
+    return OAResolveSyntheticObjectId(poi.obfId, poi.latitude, poi.longitude, poi.name, static_cast<uint64_t>([poi getTravelEloNumber]));
+}
+
+static CLLocationCoordinate2D OAAddressResultCoordinate(OASearchResult *result)
+{
+    if (result.location)
+        return result.location.coordinate;
+    OAAddress *address = (OAAddress *)result.object;
+    return CLLocationCoordinate2DMake(address.latitude, address.longitude);
+}
+
+static OASearchResult *OAAddressSearchResultFromObject(id object)
+{
+    if ([object isKindOfClass:SelectedMapObject.class])
+        object = ((SelectedMapObject *)object).object;
+    if ([object isKindOfClass:OASearchResult.class] && [((OASearchResult *)object).object isKindOfClass:OAAddress.class])
+        return object;
+    return nil;
+}
+
+static uint64_t OAResolveSyntheticAddressId(OASearchResult *result)
+{
+    OAAddress *address = (OAAddress *)result.object;
+    const CLLocationCoordinate2D coordinate = OAAddressResultCoordinate(result);
+    return OAResolveSyntheticObjectId(address.addrId, coordinate.latitude, coordinate.longitude, address.name, 0);
 }
 
 static OsmAnd::AreaI OATileBoundsForVisibleBBox31(const OsmAnd::AreaI& visibleBBox31,
@@ -225,6 +257,21 @@ static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromPoi(OAPOI *p
     if (poi.type && !NSStringIsEmpty(poi.type.name))
         amenity->decodedValuesOverride.insert(QStringLiteral("osmand_poi_key"), QString::fromNSString(poi.type.name));
 
+    return amenity;
+}
+
+static std::shared_ptr<const OsmAnd::Amenity> OASyntheticAmenityFromAddressResult(OASearchResult *result)
+{
+    const CLLocationCoordinate2D coordinate = OAAddressResultCoordinate(result);
+    NSString *iconName = [OAQuickSearchListItem getIconName:result];
+    if (!CLLocationCoordinate2DIsValid(coordinate) || NSStringIsEmpty(iconName))
+        return nullptr;
+
+    auto amenity = std::make_shared<OsmAnd::Amenity>(std::shared_ptr<const OsmAnd::ObfPoiSectionInfo>());
+    amenity->id.id = OAResolveSyntheticAddressId(result);
+    amenity->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(coordinate.latitude, coordinate.longitude));
+    amenity->nativeName = QString::fromNSString([OAQuickSearchTableController addressTitleForSearchResult:result] ?: @"");
+    amenity->decodedValuesOverride.insert(QString::fromNSString(GPX_ICON), QString::fromNSString(iconName));
     return amenity;
 }
 
@@ -776,7 +823,8 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     NSString *_poiTypeName;
     NSString *_poiKeyword;
     NSString *_prefLang;
-    NSArray<OAPOI *> *_customPois;
+    NSArray<OASearchResult *> *_customSearchResults;
+    NSDictionary<NSNumber *, OASearchResult *> *_customAddressResults;
 
     OAPOIFiltersHelper *_filtersHelper;
     OAPOILayerTopPlacesProvider *_topPlacesProvider;
@@ -1000,8 +1048,8 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     [OAPOIUIFilter combineStandardPoiFilters:filters];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAPOIUIFilter *visibleWikiFilter = _customPois ? nil : wikiFilter;
-        if (_customPois)
+        OAPOIUIFilter *visibleWikiFilter = _customSearchResults ? nil : wikiFilter;
+        if (_customSearchResults)
             [filters removeAllObjects];
         [self showPoiOnMap:filters wikiOnMap:visibleWikiFilter];
         [self syncTopPlacesProviderStateWithWikiFilter:visibleWikiFilter];
@@ -1044,22 +1092,34 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     if (noValidByName)
         [_filtersHelper removeSelectedPoiFilter:filters.allObjects.firstObject];
 
-    NSArray<OAPOI *> *customPois = _customPois;
+    NSArray<OASearchResult *> *customSearchResults = _customSearchResults;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        if (customPois)
-            [self doShowCustomPoisOnMap:customPois];
+        if (customSearchResults)
+            [self doShowCustomSearchResultsOnMap:customSearchResults];
         else
             [self doShowPoiUiFilterOnMap];
     });
 }
 
-- (void)setCustomPois:(NSArray<OAPOI *> *)pois
+- (void)setCustomSearchResults:(NSArray<OASearchResult *> *)results
 {
-    _customPois = [pois copy];
+    _customSearchResults = [results copy];
+    NSMutableDictionary<NSNumber *, OASearchResult *> *addressResults = [NSMutableDictionary dictionary];
+    for (OASearchResult *result in _customSearchResults)
+    {
+        if ([result.object isKindOfClass:OAAddress.class])
+            addressResults[@(OAResolveSyntheticAddressId(result))] = result;
+    }
+    _customAddressResults = addressResults;
     [self updateVisiblePoiFilter];
 }
 
-- (void)doShowCustomPoisOnMap:(NSArray<OAPOI *> *)pois
+- (OASearchResult *)customAddressResultWithAmenityId:(uint64_t)amenityId
+{
+    return _customAddressResults[@(amenityId)];
+}
+
+- (void)doShowCustomSearchResultsOnMap:(NSArray<OASearchResult *> *)results
 {
     __block CGFloat displayDensityFactor = UIScreen.mainScreen.scale;
     __block unsigned int rasterTileSize = 0;
@@ -1071,9 +1131,13 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         return;
 
     QList<std::shared_ptr<const OsmAnd::Amenity>> amenities;
-    for (OAPOI *poi in pois)
+    for (OASearchResult *result in results)
     {
-        const auto amenity = OASyntheticAmenityFromPoi(poi);
+        std::shared_ptr<const OsmAnd::Amenity> amenity;
+        if ([result.object isKindOfClass:OAPOI.class])
+            amenity = OASyntheticAmenityFromPoi((OAPOI *)result.object);
+        else if ([result.object isKindOfClass:OAAddress.class])
+            amenity = OASyntheticAmenityFromAddressResult(result);
         if (amenity)
             amenities.push_back(amenity);
     }
@@ -1094,7 +1158,7 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
     std::shared_ptr<OsmAnd::AmenitySymbolsProvider> symbolsProvider(new OsmAnd::AmenitySymbolsProvider(self.app.resourcesManager->obfsCollection, displayDensityFactor, rasterTileSize, &categoriesFilter, nullptr, iconProvider, self.pointsOrder, OACalculatePoiCacheSize(_screenSize, rasterTileSize), externalAmenitiesProvider));
 
     [self.mapViewController runWithRenderSync:^{
-        if (_customPois != pois)
+        if (_customSearchResults != results)
             return;
 
         if (_amenitySymbolsProvider)
@@ -1542,7 +1606,24 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
         return [self getTargetPoint:nil renderedObject:obj placeDetailsObject:nil];
     else if ([obj isKindOfClass:BaseDetailsObject.class])
         return [self getTargetPoint:nil renderedObject:nil placeDetailsObject:obj];
-    return nil;
+    OASearchResult *addressResult = OAAddressSearchResultFromObject(obj);
+    return addressResult ? [self addressTargetPoint:addressResult] : nil;
+}
+
++ (OATargetPoint *)addressTargetPoint:(OASearchResult *)result
+{
+    OAAddress *address = (OAAddress *)result.object;
+    NSString *typeName = [OAQuickSearchListItem getTypeName:result];
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    targetPoint.type = OATargetAddress;
+    targetPoint.location = OAAddressResultCoordinate(result);
+    targetPoint.title = [OAQuickSearchTableController addressTitleForSearchResult:result];
+    targetPoint.titleAddress = typeName.length > 0 ? typeName : [address getAddressTypeName];
+    targetPoint.addressFound = YES;
+    targetPoint.icon = [UIImage templateImageNamed:[OAQuickSearchListItem getIconName:result]];
+    targetPoint.targetObj = address;
+    targetPoint.sortIndex = (NSInteger)targetPoint.type;
+    return targetPoint;
 }
 
 + (OATargetPoint *) getTargetPoint:(OAPOI *)poi renderedObject:(OARenderedObject *)renderedObject placeDetailsObject:(BaseDetailsObject *)placeDetailsObject
@@ -1796,12 +1877,21 @@ static QuadRect *OAExpandedVisibleQuadRect(const OsmAnd::AreaI& visibleBBox31, c
 
 - (CLLocation *) getObjectLocation:(id)obj
 {
+    OASearchResult *addressResult = OAAddressSearchResultFromObject(obj);
+    if (addressResult)
+    {
+        const CLLocationCoordinate2D coordinate = OAAddressResultCoordinate(addressResult);
+        return [[CLLocation alloc] initWithLatitude:coordinate.latitude longitude:coordinate.longitude];
+    }
     OAPOI *amenity = [self getAmenity:obj];
     return amenity ? [amenity getLocation] : nil;
 }
 
 - (OAPointDescription *) getObjectName:(id)obj
 {
+    OASearchResult *addressResult = OAAddressSearchResultFromObject(obj);
+    if (addressResult)
+        return [[OAPointDescription alloc] initWithType:POINT_TYPE_ADDRESS name:[OAQuickSearchTableController addressTitleForSearchResult:addressResult]];
     OAPOI *amenity = [self getAmenity:obj];
     if (amenity)
         return [[OAPointDescription alloc] initWithType:POINT_TYPE_POI name:[self getAmenityName:amenity]];

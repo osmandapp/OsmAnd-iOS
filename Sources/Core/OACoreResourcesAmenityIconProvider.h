@@ -8,6 +8,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
+#include <functional>
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/ignore_warnings_on_external_includes.h>
@@ -24,6 +25,8 @@ private:
     
     mutable QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
+
+    sk_sp<SkImage> getCachedIcon(const QString& iconId, const std::function<sk_sp<SkImage>()>& createIcon);
 protected:
 public:
     OACoreResourcesAmenityIconProvider(

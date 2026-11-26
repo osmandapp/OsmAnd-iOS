@@ -9,12 +9,13 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
-@class OAPOI;
+@class OASearchResult;
 
 @interface OAPOILayer : OASymbolMapLayer<OAContextMenuProvider>
 
 + (OATargetPoint *)getTargetPoint:(id)obj;
 
-- (void)setCustomPois:(NSArray<OAPOI *> *)pois;
+- (void)setCustomSearchResults:(NSArray<OASearchResult *> *)results;
+- (OASearchResult *)customAddressResultWithAmenityId:(uint64_t)amenityId;
 
 @end

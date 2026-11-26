@@ -152,7 +152,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         guard previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
-        secondaryLabel.attributedText = appliedConfiguration.secondaryContent?.attributedText()
+        secondaryLabel.attributedText = appliedConfiguration.secondaryContent?.attributedText(separatorColor: .textColorTertiary)
         titleLabel.attributedText = Self.titleText(for: appliedConfiguration)
         addressLabel.attributedText = Self.detailsText(for: appliedConfiguration)
     }
@@ -276,7 +276,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
 
     private func apply(_ configuration: PoiContentConfiguration) {
         titleLabel.attributedText = Self.titleText(for: configuration)
-        secondaryLabel.attributedText = configuration.secondaryContent?.attributedText()
+        secondaryLabel.attributedText = configuration.secondaryContent?.attributedText(separatorColor: .textColorTertiary)
         secondaryLabel.numberOfLines = configuration.secondaryNumberOfLines
         secondaryLabel.isHidden = secondaryLabel.attributedText == nil
 
@@ -294,7 +294,7 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         let detailsBelowTopContent = configuration.style != .detailed && !detailsStackView.isHidden
         mainStackView.setCustomSpacing(detailsBelowTopContent ? Self.detailsSpacing : Self.descriptionSpacing, after: topStackView)
 
-        let descriptionText = configuration.style == .detailed ? configuration.descriptionText ?? "" : ""
+        let descriptionText = configuration.descriptionText ?? ""
         descriptionLabel.text = descriptionText
         descriptionLabel.isHidden = descriptionText.isEmpty
 

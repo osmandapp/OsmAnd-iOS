@@ -230,7 +230,10 @@ static BOOL OACanFullyDecodeTile(const void *bytes, size_t length)
         {
             NSString *urlToLoad = _onlineSource->urlToLoad.toNSString();
             QList<QString> randomsArray = OsmAnd::OnlineTileSources::parseRandoms(_onlineSource->randoms);
-            NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(_currZoom)).toNSString();
+            int32_t serverY = tileId.y;
+            if (_onlineSource->invertedYTile)
+                serverY = (1 << _currZoom) - 1 - serverY;
+            NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, serverY, OsmAnd::ZoomLevel(_currZoom)).toNSString();
             return url;
         }
     }

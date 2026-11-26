@@ -47,6 +47,10 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/Data/ObfFile.h>
+#include <OsmAndCore/Data/ObfInfo.h>
+#include <OsmAndCore/Utilities.h>
 
 static const int SEARCH_FAVORITE_API_PRIORITY = 150;
 static const int SEARCH_FAVORITE_API_CATEGORY_PRIORITY = 150;
@@ -61,8 +65,16 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 153;
 static const int SEARCH_INDEX_ITEM_API_PRIORITY = 150;
 // NOTE: Android uses 150, but sometimes the values of ITEM_PRIORITY are mixed. (search: "den")
 static const int SEARCH_INDEX_ITEM_PRIORITY = 149;
+static const int SPATIAL_SEARCH_MAPS_RADIUS = 100000;
+static const uint64_t POI_TYPES_IN_NAME_INDEX_EDITION = 1782864000000;
 
 static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
+
+// the rules files rules*.xml of resources/abbr
+static NSString *searchRulesDir()
+{
+    return [NSBundle.mainBundle pathForResource:@"abbr" ofType:nil] ?: @"";
+}
 
 @implementation SearchIndexItemAPI
 
@@ -494,6 +506,8 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     
     BOOL _resourcesInvalidated;
     OAAutoObserverProxy *_backgroundStateObserver;
+    BOOL _spatialSearch;
+    NSArray<NSString *> *_mapsWithoutSpatialSearch;
 }
 
 + (OAQuickSearchHelper *) instance
@@ -519,6 +533,7 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
 
         _searchRequestsCount = [OAAtomicInteger atomicInteger:0];
         _searchCitiesQueue = dispatch_queue_create("net.osmand.downloadCities", DISPATCH_QUEUE_SERIAL);
+        _mapsWithoutSpatialSearch = @[];
 
         _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onBackgroundStateChanged)
@@ -581,19 +596,23 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     [self setResourcesForSearchUICore];
     if ([_core isKindOfClass:OASharedSearchUICore.class])
     {
-        // The app's shared engine always uses the spatial search APIs.
         OASharedSearchUICore *core = (OASharedSearchUICore *) _core;
         [core.shared clearAPIs];
         [core.shared resetSearch];
         _resultCollection = nil;
-        // the rules files rules*.xml of resources/abbr
-        NSString *searchRulesDir = [NSBundle.mainBundle pathForResource:@"abbr" ofType:nil];
-        [core initApiUseSpatialSearch:YES searchRulesDir:searchRulesDir ?: @""];
+        _spatialSearch = [self useSpatialTextSearch];
+        [core initApiUseSpatialSearch:_spatialSearch searchRulesDir:searchRulesDir()];
     }
     else
     {
         [_core initApi];
     }
+    [self registerNonMapSearchAPIs];
+    [self refreshCustomPoiFilters];
+}
+
+- (void)registerNonMapSearchAPIs
+{
     // Register map search api
     [_core registerAPI:[[SearchIndexItemAPI alloc] init]];
     
@@ -609,8 +628,64 @@ static NSString * const GPX_TEMP_FOLDER_NAME = @"Temp";
     
     // Register Gpx search api
     [_core registerAPI:[[OASearchGpxAPI alloc] init]];
-    
-    [self refreshCustomPoiFilters];
+}
+
+- (BOOL)useSpatialTextSearch
+{
+    return _mapsWithoutSpatialSearch.count == 0;
+}
+
+- (BOOL)updateSearchEngine:(CLLocation *)location
+{
+    @synchronized (self)
+    {
+        if (![_core isKindOfClass:OASharedSearchUICore.class])
+        {
+            _mapsWithoutSpatialSearch = @[];
+            return NO;
+        }
+        _mapsWithoutSpatialSearch = location ? [self mapsWithoutSpatialSearchAround:location radius:SPATIAL_SEARCH_MAPS_RADIUS] : @[];
+        BOOL spatial = [self useSpatialTextSearch];
+        if (_spatialSearch == spatial)
+            return NO;
+        _spatialSearch = spatial;
+        OASharedSearchUICore *core = (OASharedSearchUICore *) _core;
+        [core.shared clearAPIs];
+        [core initApiUseSpatialSearch:spatial searchRulesDir:searchRulesDir()];
+        [self registerNonMapSearchAPIs];
+        [self refreshCustomPoiFilters];
+        return YES;
+    }
+}
+
+- (NSArray<NSString *> *)mapsWithoutSpatialSearch
+{
+    return [[OAAppSettings sharedManager].useSharedSearch get] ? _mapsWithoutSpatialSearch : @[];
+}
+
+- (NSArray<NSString *> *)mapsWithoutSpatialSearchAround:(CLLocation *)location radius:(int)radius
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    if (!app.resourcesManager)
+        return @[];
+
+    const auto center31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+    const auto bbox31 = (OsmAnd::AreaI) OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, center31);
+    NSMutableArray<NSString *> *maps = [NSMutableArray array];
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+    {
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
+            || resource->type == OsmAnd::ResourcesManager::ResourceType::Travel)
+            continue;
+
+        const auto obfMetadata = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(resource->metadata);
+        const auto obfInfo = obfMetadata ? obfMetadata->obfFile->obfInfo : nullptr;
+        if (obfInfo && !obfInfo->isBasemap
+            && obfInfo->creationTimestamp < POI_TYPES_IN_NAME_INDEX_EDITION
+            && obfInfo->containsPOIFor(bbox31))
+            [maps addObject:resource->id.toNSString()];
+    }
+    return maps;
 }
 
 - (void) refreshCustomPoiFilters

@@ -1628,6 +1628,17 @@ final class QuickSearchViewController: OASuperViewController {
                                onSearchStarted: SearchStartedCallback?,
                                onPublish: PublishCallback?,
                                onSearchFinished: SearchFinishedCallback?) {
+        if searchHelper?.updateSearchEngine(searchUICore?.getSearchSettings()?.getOriginalLocation()) == true, searchMore {
+            resetRadiusLevel(searchUICore?.getSearchSettings())
+            runCoreSearch(text,
+                          updateResult: updateResult,
+                          searchMore: false,
+                          preserveSelectedPoiTypeNames: true,
+                          onSearchStarted: onSearchStarted,
+                          onPublish: onPublish,
+                          onSearchFinished: onSearchFinished)
+            return
+        }
         cancelResultPreparation()
         if !searchMore && !preserveSelectedPoiTypeNames {
             selectedPoiTypeNames.removeAll()
@@ -1892,7 +1903,21 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func renderResults(append: Bool) {
-        updateData(visibleResults().map { OAQuickSearchListItem(searchResult: $0) }, append: append && selectedPoiTypeNames.isEmpty)
+        var groups: [[OAQuickSearchListItem]] = [visibleResults().map { OAQuickSearchListItem(searchResult: $0) }]
+        if let updateMapsItem = updateMapsForNewSearchItem() {
+            groups.insert([updateMapsItem], at: 0)
+        }
+        tableController?.updateData(groups, append: append && selectedPoiTypeNames.isEmpty)
+    }
+
+    private func updateMapsForNewSearchItem() -> OAQuickSearchButtonListItem? {
+        let maps = searchHelper?.mapsWithoutSpatialSearch().count ?? 0
+        guard maps > 0, !searchText.isEmpty else { return nil }
+        let title = String(format: localizedString("update_maps_to_use_new_search"), "\(maps)")
+        return OAQuickSearchButtonListItem(icon: .icCustomUpdate, text: title) { [weak self] _ in
+            guard let controller = OADeepLinkBridge.mapsAndResourcesUpdatesViewController() else { return }
+            self?.navigationController?.pushViewController(controller, animated: true)
+        }
     }
 
     private func visibleResults() -> [OASearchResult] {

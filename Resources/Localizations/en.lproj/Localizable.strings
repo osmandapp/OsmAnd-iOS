@@ -5121,3 +5121,4 @@
 "search_nothing_found_within_radius" = "We couldn't find anything within a %@ radius.";
 "increase_radius" = "Increase radius";
 "city_type_boundary" = "Area";
+"update_maps_to_use_new_search" = "Update maps to use the new search (%@)";

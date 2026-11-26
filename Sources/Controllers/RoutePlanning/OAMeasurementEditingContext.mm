@@ -1068,6 +1068,8 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         NSInteger endIndex = pair.second.getTrkPtIndex;
         if (endIndex < 0 || endIndex < startIndex || endIndex >= points.count)
             endIndex = [self findPointIndex:pair.second points:points firstIndex:startIndex];
+        if (endIndex + 1 == points.count)
+            endIndex++;
         if (startIndex >= 0 && endIndex >= 0)
         {
             NSMutableArray<OASWptPt *> *pairPoints = [NSMutableArray new];
@@ -1509,6 +1511,32 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
     return res;
 }
 
+- (BOOL)routeSegment:(OASRouteSegmentResult *)segment matchesPoints:(NSArray<OASWptPt *> *)points atIndex:(NSInteger)index
+{
+    int start = [segment getStartPointIndex];
+    int end = [segment getEndPointIndex];
+    OASRouteDataObject *road = segment.getObject;
+    if (start < 0 || end < 0 || start >= road.getPointsLength || end >= road.getPointsLength)
+        return NO;
+
+    NSInteger count = abs(end - start) + 1;
+    if (index < 0 || index + count > points.count)
+        return NO;
+
+    int step = end >= start ? 1 : -1;
+    for (NSInteger offset = 0; offset < count; offset++)
+    {
+        OASWptPt *point = points[index + offset];
+        int roadIndex = start + (int)offset * step;
+        int64_t pointX = [OASKMapUtils.shared get31TileNumberXLongitude:point.lon];
+        int64_t pointY = [OASKMapUtils.shared get31TileNumberYLatitude:point.lat];
+        if (llabs(pointX - [road getPoint31XTileI:roadIndex]) > 1
+            || llabs(pointY - [road getPoint31YTileI:roadIndex]) > 1)
+            return NO;
+    }
+    return YES;
+}
+
 - (OASTrkSegment *)getRouteSegment:(NSInteger)startPointIndex endPointIndex:(NSInteger)endPointIndex
 {
     BOOL hasCachedGeometry = NO;
@@ -1546,13 +1574,27 @@ static int MIN_METERS_BETWEEN_INTERMEDIATES = 100;
         }
         NSInteger coveredEdges = 0;
         for (OASRouteSegmentResult *segment in dataSegments)
-            coveredEdges += abs([segment getEndPointIndex] - [segment getStartPointIndex]);
-        if (coveredEdges >= dataPoints.count)
         {
-            dataSegments = @[];
-            coveredEdges = 0;
+            NSInteger edgeCount = abs([segment getEndPointIndex] - [segment getStartPointIndex]);
+            if (edgeCount == 0 || edgeCount >= dataPoints.count)
+                continue;
+
+            NSInteger segmentStartIndex = coveredEdges;
+            while (segmentStartIndex + edgeCount < dataPoints.count
+                   && ![self routeSegment:segment matchesPoints:dataPoints atIndex:segmentStartIndex])
+                segmentStartIndex++;
+            if (segmentStartIndex + edgeCount >= dataPoints.count)
+                continue;
+
+            if (segmentStartIndex > coveredEdges)
+            {
+                NSArray<OASWptPt *> *unmatchedPoints = [dataPoints subarrayWithRange:NSMakeRange(coveredEdges, segmentStartIndex - coveredEdges + 1)];
+                [route addObject:[OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:[DEFAULT_APP_MODE defaultSpeed]
+                                                                                                  points:[self waypointsToLatLons:unmatchedPoints]]];
+            }
+            [route addObject:segment];
+            coveredEdges = segmentStartIndex + edgeCount;
         }
-        [route addObjectsFromArray:dataSegments];
         if (coveredEdges < dataPoints.count - 1)
         {
             NSArray<OASWptPt *> *unmatchedPoints = [dataPoints subarrayWithRange:NSMakeRange(coveredEdges, dataPoints.count - coveredEdges)];

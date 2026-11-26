@@ -1060,6 +1060,122 @@
     [self verifyUnmatchedEndpointRoundTripWithFollowingWalking:NO];
 }
 
+- (OASRouteSegmentResult *)roadFrom:(OASWptPt *)start to:(OASWptPt *)end highway:(NSString *)highway
+{
+    NSArray<OASKLatLon *> *points = @[
+        [[OASKLatLon alloc] initWithLatitude:start.lat longitude:start.lon],
+        [[OASKLatLon alloc] initWithLatitude:end.lat longitude:end.lon]
+    ];
+    OASRouteSegmentResult *segment = [OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:1.1 points:points];
+    [segment.getObject.region doInitRouteEncodingRuleId:0 tags:@"highway" val:highway];
+    return segment;
+}
+
+- (void)verifyRoadRecordsOnDiskWithPoints:(NSArray<OASWptPt *> *)points highways:(NSArray<NSString *> *)highways
+{
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"gpx"]];
+    [self addTeardownBlock:^{
+        [NSFileManager.defaultManager removeItemAtPath:path error:nil];
+    }];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        OASGpxFile *exported = [self.context exportGpx:@"road-record-round-trip"];
+        XCTAssertNil([OASGpxUtilities.shared writeGpxFileFile:file gpxFile:exported]);
+        OASGpxFile *loaded = [OASGpxUtilities.shared loadGpxFileFile:file];
+        XCTAssertNil(loaded.error);
+        OASTrkSegment *track = loaded.tracks.firstObject.segments.firstObject;
+        XCTAssertEqualObjects([self coordinates:track.points], [self coordinates:points]);
+        NSArray<OASRouteSegmentResult *> *records = [[[OARouteImporter alloc] initWithGpxFile:loaded] importRoute];
+        XCTAssertEqual(records.count, highways.count);
+        XCTAssertEqual(track.routeSegments.count, highways.count);
+        for (NSInteger index = 0; index < MIN(records.count, highways.count); index++)
+        {
+            OASRouteSegmentResult *record = records[index];
+            XCTAssertEqualObjects(record.getObject.getHighway, highways[index], @"cycle %ld record %ld", (long)cycle, (long)index);
+            XCTAssertEqual(track.routeSegments[index].startTrackPointIndex.integerValue, index);
+            XCTAssertEqualWithAccuracy(record.getStartPoint.latitude, points[index].lat, 0.000001);
+            XCTAssertEqualWithAccuracy(record.getStartPoint.longitude, points[index].lon, 0.000001);
+            XCTAssertEqualWithAccuracy(record.getEndPoint.latitude, points[index + 1].lat, 0.000001);
+            XCTAssertEqualWithAccuracy(record.getEndPoint.longitude, points[index + 1].lon, 0.000001);
+        }
+        OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+        reopened.gpxData = [[OAGpxData alloc] initWithFile:loaded];
+        [reopened addPoints];
+        self.context = reopened;
+    }
+}
+
+- (void)testOffRoadApproachPrecedesFootwayRecordOnDisk
+{
+    OASWptPt *start = self.original[0];
+    OASWptPt *roadStart = self.original[1];
+    OASWptPt *end = self.original[2];
+    [start setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[start, end]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:start second:end];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:start end:end
+                                                                         points:@[start, roadStart, end]
+                                                                       segments:@[[self roadFrom:roadStart to:end highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:@[start, roadStart, end] highways:@[@"highway_unmatched", @"footway"]];
+}
+
+- (void)testFinalPairRetainsBothRoadRecordsOnDisk
+{
+    OASWptPt *start = self.original[0];
+    OASWptPt *middle = self.original[1];
+    OASWptPt *end = self.original[2];
+    [start setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[start, end]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:start second:end];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:start end:end
+                                                                         points:@[start, middle, end]
+                                                                       segments:@[[self roadFrom:start to:middle highway:@"residential"],
+                                                                                  [self roadFrom:middle to:end highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:@[start, middle, end] highways:@[@"residential", @"footway"]];
+}
+
+- (void)testOffRoadApproachAndEndingSurroundFootwayRecordOnDisk
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 4)];
+    [points.firstObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[points.firstObject, points.lastObject]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points.firstObject second:points.lastObject];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second points:points
+                                                                       segments:@[[self roadFrom:points[1] to:points[2] highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:points highways:@[@"highway_unmatched", @"footway", @"highway_unmatched"]];
+}
+
+- (void)testUnmatchedGeometryBetweenRoadRecordsOnDisk
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 4)];
+    [points.firstObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[points.firstObject, points.lastObject]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points.firstObject second:points.lastObject];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second points:points
+                                                                       segments:@[[self roadFrom:points[0] to:points[1] highway:@"residential"],
+                                                                                  [self roadFrom:points[2] to:points[3] highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:points highways:@[@"residential", @"highway_unmatched", @"footway"]];
+}
+
+- (void)testReversedFootwayRecordFollowsOffRoadApproachOnDisk
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 3)];
+    [points.firstObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[points.firstObject, points.lastObject]];
+    OASRouteSegmentResult *road = [self roadFrom:points[2] to:points[1] highway:@"footway"];
+    [road setStartPointIndexStartPointIndex:1];
+    [road setEndPointIndexEndPointIndex:0];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points.firstObject second:points.lastObject];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second points:points segments:@[road]];
+    [self verifyRoadRecordsOnDiskWithPoints:points highways:@[@"highway_unmatched", @"footway"]];
+}
+
 - (void)testWalkingThenStraightThenWalkingPreservesImportedSegmentBoundaries
 {
     [self verifyUnmatchedEndpointRoundTripWithFollowingWalking:YES];

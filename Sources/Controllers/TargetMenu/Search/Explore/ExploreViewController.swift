@@ -370,6 +370,7 @@ extension ExploreViewController: UITableViewDataSource {
             cell.contentConfiguration = PointContentConfiguration(icon: SearchHistoryItemPresenter.icon(for: record, traitCollection: traitCollection),
                                                                   title: record.title,
                                                                   iconStyle: .plate,
+                                                                  imageURL: SearchHistoryItemPresenter.imageURL(for: record),
                                                                   secondaryContent: historySecondaryContent(for: record))
             PointContentConfiguration.applyHighlightableBackground(to: cell)
             return cell

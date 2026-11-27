@@ -511,6 +511,9 @@
         NSString *displayName = [OAPOIHelper.sharedInstance getPoiStringWithoutType:poi];
         if (displayName.length > 0)
             item.displayName = displayName;
+        NSString *typeName = poi.type ? [poi getSubTypeStr] : poi.subType;
+        if (typeName.length > 0)
+            item.typeName = typeName;
         item.poiCategoryKey = poi.type.category.name;
         item.poiSubtypeKey = poi.subType;
         item.openingHours = poi.openingHours;

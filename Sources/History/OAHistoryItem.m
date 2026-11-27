@@ -10,6 +10,10 @@
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OAPOIHelper.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
+#import "OAObjectType.h"
 #import "OASearchCoreFactory.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -116,7 +120,11 @@
     {
         UIImage *img;
         if (self.hType == OAHistoryTypePOI || self.hType == OAHistoryTypePoiType || self.hType == OAHistoryTypePoiFilter)
+        {
             img = [UIImage mapSvgImageNamed:self.iconName];
+            if (!img && ![self.iconName hasPrefix:@"mx_"])
+                img = [UIImage mapSvgImageNamed:[@"mx_" stringByAppendingString:self.iconName]];
+        }
 
         if (img)
         {
@@ -134,7 +142,18 @@
             }
         }
     }
-    return [UIImage imageNamed:ACImageNameIcMapPinSmall];
+    return [self poiTypeIcon] ?: [UIImage imageNamed:ACImageNameIcMapPinSmall];
+}
+
+- (nullable UIImage *)poiTypeIcon
+{
+    if (self.poiSubtypeKey.length == 0 || ![self.objectType isEqualToString:[OAObjectType toString:EOAObjectTypePoi]])
+        return nil;
+    OAPOIHelper *poiHelper = OAPOIHelper.sharedInstance;
+    NSString *subtype = [self.poiSubtypeKey componentsSeparatedByString:@";"].firstObject;
+    OAPOICategory *category = self.poiCategoryKey.length > 0 ? [poiHelper getPoiCategoryByName:self.poiCategoryKey] : nil;
+    OAPOIType *poiType = [category getPoiTypeByKeyName:subtype] ?: [poiHelper getAnyPoiTypeByKey:subtype];
+    return poiType ? [poiType icon] : [category icon];
 }
 
 - (NSString *) getPointDescriptionType

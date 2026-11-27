@@ -51,6 +51,14 @@ struct SearchHistoryItemPresenter {
         return item.icon()
     }
 
+    static func imageURL(for record: SearchHistoryRecord) -> URL? {
+        let item = record.item
+        guard !item.fromNavigation,
+              let photoUrl = item.photoUrl, !photoUrl.isEmpty,
+              OAAppSettings.sharedManager().wikiShowImagePreviews.get() else { return nil }
+        return URL(string: photoUrl)
+    }
+
     static func secondaryContent(for record: SearchHistoryRecord, locationReference: SearchLocationReference, showsDate: Bool = false) -> PointSecondaryContent {
         let content: PointSecondaryContent
         if let coordinate = record.coordinate {

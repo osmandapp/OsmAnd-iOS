@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 struct PointSecondaryContent {
     let formattedDistance: String?
@@ -101,15 +102,17 @@ struct PointContentConfiguration: UIContentConfiguration {
     let title: String
     let isVisible: Bool
     let iconStyle: IconStyle
+    let imageURL: URL?
 
     var secondaryContent: PointSecondaryContent?
     var primaryTextLayoutGuideHandler: ((UILayoutGuide?) -> Void)?
 
-    init(icon: UIImage?, title: String, isVisible: Bool = true, iconStyle: IconStyle = .plain, secondaryContent: PointSecondaryContent?) {
+    init(icon: UIImage?, title: String, isVisible: Bool = true, iconStyle: IconStyle = .plain, imageURL: URL? = nil, secondaryContent: PointSecondaryContent?) {
         self.icon = icon
         self.title = title
         self.isVisible = isVisible
         self.iconStyle = iconStyle
+        self.imageURL = imageURL
         self.secondaryContent = secondaryContent
     }
 
@@ -163,8 +166,10 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
     private let rowContentView = UIListContentView(configuration: .cell())
     private let plateView = UIView()
     private let plateIconView = UIImageView()
+    private let platePhotoView = UIImageView()
 
     private var appliedConfiguration: PointContentConfiguration
+    private var loadedImageURL: URL?
     private var plainConstraints: [NSLayoutConstraint] = []
     private var plateConstraints: [NSLayoutConstraint] = []
 
@@ -195,6 +200,7 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
         && appliedConfiguration.title == configuration.title
         && appliedConfiguration.isVisible == configuration.isVisible
         && appliedConfiguration.iconStyle == configuration.iconStyle
+        && appliedConfiguration.imageURL == configuration.imageURL
     }
 
     private func setupView() {
@@ -213,6 +219,12 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
         plateIconView.tintColor = .iconColorSelected
         plateIconView.translatesAutoresizingMaskIntoConstraints = false
         plateView.addSubview(plateIconView)
+
+        platePhotoView.contentMode = .scaleAspectFill
+        platePhotoView.clipsToBounds = true
+        platePhotoView.isHidden = true
+        platePhotoView.translatesAutoresizingMaskIntoConstraints = false
+        plateView.addSubview(platePhotoView)
 
         plainConstraints = [
             rowContentView.leadingAnchor.constraint(equalTo: leadingAnchor)
@@ -233,7 +245,11 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
             plateIconView.centerXAnchor.constraint(equalTo: plateView.centerXAnchor),
             plateIconView.centerYAnchor.constraint(equalTo: plateView.centerYAnchor),
             plateIconView.widthAnchor.constraint(equalToConstant: PointContentConfiguration.plateIconSize),
-            plateIconView.heightAnchor.constraint(equalToConstant: PointContentConfiguration.plateIconSize)
+            plateIconView.heightAnchor.constraint(equalToConstant: PointContentConfiguration.plateIconSize),
+            platePhotoView.leadingAnchor.constraint(equalTo: plateView.leadingAnchor),
+            platePhotoView.trailingAnchor.constraint(equalTo: plateView.trailingAnchor),
+            platePhotoView.topAnchor.constraint(equalTo: plateView.topAnchor),
+            platePhotoView.bottomAnchor.constraint(equalTo: plateView.bottomAnchor)
         ])
     }
 
@@ -252,9 +268,11 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
         case .plain:
             content.image = configuration.icon.flatMap { OAUtilities.resize($0, newSize: CGSize(width: PointContentConfiguration.iconSize, height: PointContentConfiguration.iconSize)) }
             plateIconView.image = nil
+            applyImage(nil)
         case .plate:
             content.directionalLayoutMargins.leading = 0
             plateIconView.image = configuration.icon
+            applyImage(configuration.imageURL)
         }
         content.text = configuration.title
         content.textProperties.color = configuration.isVisible ? .textColorPrimary : .textColorSecondary
@@ -264,6 +282,22 @@ private final class PointRowContentView: UIView, UIContentView, PrimaryTextLayou
         content.secondaryTextProperties.color = .textColorSecondary
         content.secondaryTextProperties.numberOfLines = 1
         rowContentView.configuration = content
+    }
+
+    private func applyImage(_ url: URL?) {
+        guard url != loadedImageURL else { return }
+        platePhotoView.kf.cancelDownloadTask()
+        platePhotoView.image = nil
+        platePhotoView.isHidden = true
+        plateIconView.isHidden = false
+        loadedImageURL = url
+        guard let url else { return }
+        let size = CGSize(width: PointContentConfiguration.plateSize, height: PointContentConfiguration.plateSize)
+        platePhotoView.setPlacePhoto(with: url, size: size) { [weak self] in
+            guard let self, self.loadedImageURL == url else { return }
+            self.platePhotoView.isHidden = false
+            self.plateIconView.isHidden = true
+        }
     }
 
     private func applySecondaryContent(_ secondaryContent: PointSecondaryContent?) {

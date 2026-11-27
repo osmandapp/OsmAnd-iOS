@@ -228,7 +228,9 @@
             NSMutableDictionary *item = [NSMutableDictionary new];
             item[@"latitude"] = @(historyEntry.latitude);
             item[@"longitude"] = @(historyEntry.longitude);
-            item[@"pointDescription"] = [OAPointDescription serializeToString:[[OAPointDescription alloc] initWithType:historyEntry.getPointDescriptionType typeName:historyEntry.typeName name:historyEntry.name]];
+            OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:historyEntry.getPointDescriptionType typeName:historyEntry.typeName name:historyEntry.name];
+            pointDescription.iconName = historyEntry.iconName;
+            item[@"pointDescription"] = [OAPointDescription serializeToString:pointDescription];
             item[@"lastAccessedTime"] = @(historyEntry.date.timeIntervalSince1970 * 1000);
             //                jsonObject.put("intervals", historyEntry.getIntervals());
             //                jsonObject.put("intervalValues", historyEntry.getIntervalsValues());

@@ -411,8 +411,17 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
         loadedImageURL = url
         guard let url else { return }
 
-        let size = CGSize(width: style.imageSize, height: style.imageSize)
-        photoView.kf.setImage(
+        photoView.setPlacePhoto(with: url, size: CGSize(width: style.imageSize, height: style.imageSize)) { [weak self] in
+            guard let self, self.loadedImageURL == url else { return }
+            self.photoView.isHidden = false
+            self.iconView.isHidden = true
+        }
+    }
+}
+
+extension UIImageView {
+    func setPlacePhoto(with url: URL, size: CGSize, onSuccess: @escaping () -> Void) {
+        kf.setImage(
             with: url,
             options: [
                 .targetCache(.onlinePhotoAndMapillaryDefaultCache),
@@ -420,10 +429,9 @@ private final class PoiRowContentView: UIView, UIContentView, PrimaryTextLayoutG
                 .processor(DownsamplingImageProcessor(size: size)),
                 .scaleFactor(UIScreen.main.scale),
                 .cacheOriginalImage
-            ]) { [weak self] result in
-                guard let self, self.loadedImageURL == url, case .success = result else { return }
-                self.photoView.isHidden = false
-                self.iconView.isHidden = true
+            ]) { result in
+                guard case .success = result else { return }
+                onSuccess()
             }
     }
 }

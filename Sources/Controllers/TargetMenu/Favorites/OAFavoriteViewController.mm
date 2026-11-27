@@ -105,7 +105,7 @@ static const NSInteger kOrderFavGroupRow = 1;
 
 - (NSInteger)photosRowOrder
 {
-    return [_originObject getAmenityExtensions:NO][WIKIDATA_TAG] ? kOrderPhotoRow : [super photosRowOrder];
+    return !NSStringIsEmpty([_originObject getWikidata]) ? kOrderPhotoRow : [super photosRowOrder];
 }
 
 - (void) buildGroupFavouritesView:(NSMutableArray<OAAmenityInfoRow *> *)rows

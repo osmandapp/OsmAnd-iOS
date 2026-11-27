@@ -15,6 +15,8 @@
 #import "OAMapRendererView.h"
 #import "OsmAndApp.h"
 
+#include <SkCodec.h>
+#include <SkData.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
@@ -23,6 +25,12 @@
 #define kDefaultUserAgent @"OsmAndiOS"
 
 #define kMaxRequests 50
+
+static BOOL OACanFullyDecodeTile(const void *bytes, size_t length)
+{
+    auto codec = SkCodec::MakeFromData(SkData::MakeWithoutCopy(bytes, length));
+    return codec && std::get<SkCodec::Result>(codec->getImage()) == SkCodec::kSuccess;
+}
 
 @implementation OAMapTileDownloader
 {
@@ -33,7 +41,8 @@
     NSInteger _activeDownloads;
     EOATileRequestType _type;
     
-    QVector<OsmAnd::AreaI> _areasByZoomIndex;
+    QVector<QPair<OsmAnd::ZoomLevel, OsmAnd::AreaI>> _tileAreas;
+    int _areaIndex;
     
     int _currZoom;
     int _currX;
@@ -77,7 +86,6 @@
         {
             _type = EOATileRequestTypeUndefined;
         }
-        _areasByZoomIndex = [self getAreasForZooms];
         
         if (_type == EOATileRequestTypeSqlite)
         {
@@ -90,6 +98,7 @@
             _onlineSource = onlineItem.onlineTileSource;
             _downloadPath = [OsmAndApp.instance.cachePath stringByAppendingPathComponent:_onlineSource->name.toNSString()];
         }
+        _tileAreas = [self tileAreasForZooms];
     }
     return self;
 }
@@ -97,66 +106,58 @@
 - (OAMapTileDownloader *)downloaderForRetry
 {
     OAMapTileDownloader *downloader = [[OAMapTileDownloader alloc] initWithItem:_item minZoom:_minZoom maxZoom:_maxZoom];
-    downloader->_areasByZoomIndex = _areasByZoomIndex;
+    downloader->_tileAreas = _tileAreas;
     return downloader;
 }
 
-- (BOOL) hasNextTileId
+- (BOOL)hasNextTileId
 {
-    if (_cancelled)
+    if (_cancelled || _tileAreas.isEmpty())
         return NO;
-    
-    const auto largestArea = _areasByZoomIndex.last();
-    return !(_currZoom == _maxZoom && _currY + 1 > largestArea.bottomRight.y && _currX + 1 > largestArea.bottomRight.x);
+    return _currZoom == -1 || _areaIndex + 1 < _tileAreas.size()
+        || _currX < _currArea.right() || _currY < _currArea.bottom();
 }
 
-- (OsmAnd::TileId) getNextTileId
+- (OsmAnd::TileId)getNextTileId
 {
     if (_currZoom == -1)
     {
-        _currZoom = _minZoom;
-        _currArea = _areasByZoomIndex[_currZoom - _minZoom];
-        _currX = _currArea.topLeft.x;
-        _currY = _currArea.topLeft.y - 1;
+        _areaIndex = 0;
+        _currZoom = _tileAreas.first().first;
+        _currArea = _tileAreas.first().second;
+        _currX = _currArea.left();
+        _currY = _currArea.top();
     }
-    
-    _currY++;
-    if (_currY > _currArea.bottomRight.y)
+    else if (_currY < _currArea.bottom())
+        _currY++;
+    else if (_currX < _currArea.right())
     {
         _currX++;
-        _currY = _currArea.topLeft.y;
+        _currY = _currArea.top();
     }
-    
-    if (_currX > _currArea.bottomRight.x)
+    else
     {
-        _currZoom++;
-        _currArea = _areasByZoomIndex[_currZoom - _minZoom];
-        _currX = _currArea.topLeft.x;
-        _currY = _currArea.topLeft.y;
+        _areaIndex++;
+        _currZoom = _tileAreas[_areaIndex].first;
+        _currArea = _tileAreas[_areaIndex].second;
+        _currX = _currArea.left();
+        _currY = _currArea.top();
     }
-    
     return OsmAnd::TileId::fromXY(_currX, _currY);
 }
 
-- (QVector<OsmAnd::AreaI>) getAreasForZooms
+- (QVector<QPair<OsmAnd::ZoomLevel, OsmAnd::AreaI>>)tileAreasForZooms
 {
-    QVector<OsmAnd::AreaI> res;
-    OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
-    OsmAnd::AreaI bbox = [mapView getVisibleBBox31];
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(bbox.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(bbox.bottomRight);
-    for (NSInteger zoom = _minZoom; zoom <= _maxZoom; zoom++)
+    QVector<QPair<OsmAnd::ZoomLevel, OsmAnd::AreaI>> result;
+    OAMapRendererView *mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    const auto visibleArea = mapView.renderer->getMapState().visibleBBoxShifted;
+    for (int zoom = _minZoom; zoom <= _maxZoom; zoom++)
     {
-        int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
-        int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
-        int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
-        int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
-        OsmAnd::AreaI area;
-        area.topLeft = OsmAnd::PointI(x1, y1);
-        area.bottomRight = OsmAnd::PointI(x2, y2);
-        res.push_back(area);
+        const auto tileZoom = static_cast<OsmAnd::ZoomLevel>(zoom);
+        for (const auto& area : [OAResourcesUIHelper tileAreasFor:_item visibleArea:visibleArea zoom:tileZoom])
+            result.push_back(qMakePair(tileZoom, area));
     }
-    return res;
+    return result;
 }
 
 - (void) skipDownload
@@ -208,7 +209,8 @@
     BOOL isSqlite = _type == EOATileRequestTypeSqlite;
     if (isSqlite && _sqliteSource)
     {
-        if ([_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom])
+        NSData *cachedTile = [_sqliteSource getBytes:tileId.x y:tileId.y zoom:_currZoom];
+        if (cachedTile.length > 0 && OACanFullyDecodeTile(cachedTile.bytes, cachedTile.length))
         {
             return nil;
         }
@@ -228,7 +230,10 @@
         {
             NSString *urlToLoad = _onlineSource->urlToLoad.toNSString();
             QList<QString> randomsArray = OsmAnd::OnlineTileSources::parseRandoms(_onlineSource->randoms);
-            NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, tileId.y, OsmAnd::ZoomLevel(_currZoom)).toNSString();
+            int32_t serverY = tileId.y;
+            if (_onlineSource->invertedYTile)
+                serverY = (1 << _currZoom) - 1 - serverY;
+            NSString *url = OsmAnd::OnlineRasterMapLayerProvider::buildUrlToLoad(QString::fromNSString(urlToLoad), randomsArray, tileId.x, serverY, OsmAnd::ZoomLevel(_currZoom)).toNSString();
             return url;
         }
     }
@@ -333,7 +338,7 @@
         }
 
         NSData *data = [NSData dataWithContentsOfFile:location.path];
-        if (data && [tileSource insertImage:x y:y zoom:zoom data:data])
+        if (data.length > 0 && OACanFullyDecodeTile(data.bytes, data.length) && [tileSource insertImage:x y:y zoom:zoom data:data])
         {
             [NSFileManager.defaultManager removeItemAtURL:location error:nil];
             if (_delegate)

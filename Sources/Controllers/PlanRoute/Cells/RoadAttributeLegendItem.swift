@@ -8,6 +8,7 @@
 import UIKit
 
 struct RoadAttributeLegendItem {
+    let propertyName: String
     let title: String
     let color: UIColor
     let distance: String

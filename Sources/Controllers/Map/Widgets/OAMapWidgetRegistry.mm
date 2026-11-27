@@ -116,13 +116,26 @@
         currentPage = [NSMutableArray array];
     }
 
-    if (widgetsToShow.count == 1)
+    // Like Android LanesWidget: a special widget that is the last visible widget of the panel
+    // goes to the floating special container, whatever number of rows the panel has.
+    if (stack.specialPanelController)
     {
-        OABaseWidgetView *lastWidget = widgetsToShow[0].lastObject;
-        if (lastWidget.widgetType && lastWidget.widgetType.special && stack.specialPanelController)
+        NSMutableArray<OABaseWidgetView *> *lastPage = nil;
+        for (NSMutableArray<OABaseWidgetView *> *page in widgetsToShow.reverseObjectEnumerator)
+        {
+            if (page.count > 0)
+            {
+                lastPage = page;
+                break;
+            }
+        }
+        OABaseWidgetView *lastWidget = lastPage.lastObject;
+        if (lastWidget.widgetType && lastWidget.widgetType.special)
         {
             [stack.specialPanelController updateWidgetPages:@[@[lastWidget]]];
-            [widgetsToShow[0] removeLastObject];
+            [lastPage removeLastObject];
+            if (lastPage.count == 0 && widgetsToShow.count > 1)
+                [widgetsToShow removeObjectIdenticalTo:lastPage];
         }
     }
     [stack updateWidgetPages:widgetsToShow];

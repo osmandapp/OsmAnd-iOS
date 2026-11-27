@@ -101,11 +101,9 @@ static const CGFloat kTextMaxHeight = 150.0;
 static const NSInteger kTitleLimit = 60;
 
 static const NSInteger kOrderShortDescrRow = -10000;
-static const NSInteger kOrderDetailsRow = -104;
-static const NSInteger kOrderPhotoRow = -103;
-static const NSInteger kOrderMapillaryRow = -102;
+static const NSInteger kOrderDetailsRow = -105;
+static const NSInteger kOrderPhotoRow = -104;
 static const NSInteger kOrderWithinRow = -101;
-static const NSInteger kOrderTravelGuides = -100;
 static const NSInteger kOrderTopInternalRow = 0;
 static const NSInteger kOrderDescriptionRow = 0;
 static const NSInteger kOrderInternalRow = 0;
@@ -117,6 +115,7 @@ static const NSInteger kOrderNearestPoiRow = 1001;
 static const NSInteger kOrderNamesRow = 18000;
 static const NSInteger kOrderOsmRow = 19000;
 static const NSInteger kOrderCoordinatesRow = 20000;
+static const NSInteger kOrderLastPhotoRow = 30000;
 
 @interface OATargetInfoViewController() <CollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -781,14 +780,19 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:key icon:icon textPrefix:nil text:text textColor:nil isText:YES needLinks:NO order:0 typeName:nil isPhoneNumber:NO isUrl:NO];
     
     NSMutableArray<NSString *> *titles = [NSMutableArray new];
-    for (OAPOI *amenity in amenities)
+    NSMutableArray<NSString *> *distances = [NSMutableArray new];
+    for (OAPOI *member in amenities)
     {
-        NSString * title = [[OAPOILayer getTargetPoint:amenity] title];
-        [titles addObject:title ? title : @""];
+        NSString *name = [[OAPOILayer getTargetPoint:member] title];
+        if (NSStringIsEmpty([name trim]))
+            name = [OAPOIViewController getTypeStrFor:member];
+        [titles addObject:name ?: @""];
+        const auto distance = OsmAnd::Utilities::distance(member.longitude, member.latitude, self.location.longitude, self.location.latitude);
+        [distances addObject:[NSString stringWithFormat:@"(%@)", [OAOsmAndFormatter getFormattedDistance:distance]]];
     }
     
     OACollapsablePoiView *collapsableView = [[OACollapsablePoiView alloc] init];
-    [collapsableView setDataWithTitles:titles amenities:amenities];
+    [collapsableView setDataWithTitles:titles distances:distances amenities:amenities];
     collapsableView.collapsed = YES;
     row.collapsableView = collapsableView;
     row.collapsed = YES;
@@ -1452,9 +1456,14 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     [cards setArray:uniqueOrderedSet.array];
 }
 
+- (NSInteger)photosRowOrder
+{
+    return self.customOnlinePhotosPosition ? kOrderPhotoRow : kOrderLastPhotoRow;
+}
+
 - (void)buildPhotosRow:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
-    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcCustomPhoto] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:kOrderPhotoRow typeName:@"" isPhoneNumber:NO isUrl:NO];
+    OAAmenityInfoRow *nearbyImagesRowInfo = [[OAAmenityInfoRow alloc] initWithKey:nil icon:[UIImage imageNamed:ACImageNameIcCustomPhoto] textPrefix:nil text:OALocalizedString(@"online_photos") textColor:nil isText:NO needLinks:NO order:[self photosRowOrder] typeName:@"" isPhoneNumber:NO isUrl:NO];
     
     CollapsableCardsView *cardView = [CollapsableCardsView new];
     cardView.contentType = CollapsableCardsTypeOnlinePhoto;
@@ -1485,7 +1494,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
                                                                 textColor:nil
                                                                    isText:NO
                                                                 needLinks:NO
-                                                                    order:kOrderMapillaryRow
+                                                                    order:[self photosRowOrder] + 1
                                                                  typeName:@""
                                                             isPhoneNumber:NO isUrl:NO];
 

@@ -16,8 +16,6 @@ enum PlanRouteButtonFactory {
 
     static let toolbarButtonSize: CGFloat = 48
     static let bottomButtonHeight: CGFloat = OAUtilities.isIPad() ? 48 : 44
-    private static let bottomButtonHorizontalInset: CGFloat = 18
-    private static let bottomButtonImagePadding: CGFloat = 8
     private static let bottomToolbarIconSideInset: CGFloat = 9
     private static let bottomToolbarTitleSideInset: CGFloat = 16
     private static let bottomToolbarImagePadding: CGFloat = 6
@@ -51,8 +49,14 @@ enum PlanRouteButtonFactory {
     }
 
     static func labeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge = .leading, height: CGFloat = bottomButtonHeight) -> UIButton {
-        let contentInsets = NSDirectionalEdgeInsets(top: 0, leading: bottomButtonHorizontalInset, bottom: 0, trailing: bottomButtonHorizontalInset)
-        return labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: .map, contentInsets: contentInsets, imagePadding: bottomButtonImagePadding)
+        let isIconLeading = imagePlacement == .leading
+        let contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                    leading: isIconLeading ? bottomToolbarIconSideInset : bottomToolbarTitleSideInset,
+                                                    bottom: 0,
+                                                    trailing: isIconLeading ? bottomToolbarTitleSideInset : bottomToolbarIconSideInset)
+        let button = labeledButton(title: title, image: image, imagePlacement: imagePlacement, height: height, style: .map, contentInsets: contentInsets, imagePadding: bottomToolbarImagePadding)
+        button.contentHorizontalAlignment = isIconLeading ? .leading : .trailing
+        return button
     }
 
     static func bottomToolbarLabeledButton(title: String, image: UIImage?, imagePlacement: NSDirectionalRectEdge = .leading, height: CGFloat = bottomButtonHeight) -> UIButton {

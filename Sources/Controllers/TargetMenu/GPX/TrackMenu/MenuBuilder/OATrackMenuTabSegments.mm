@@ -350,7 +350,7 @@
     };
 }
 
-- (float)convertToSeconds:(float)timestamp
+- (double)convertToSeconds:(double)timestamp
 {
     return timestamp > 10000000000 ? timestamp / 1000 : timestamp;
 }

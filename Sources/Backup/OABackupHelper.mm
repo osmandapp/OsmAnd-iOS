@@ -224,6 +224,10 @@ static const NSUInteger EMPTY_TRASH_CHUNK_SIZE = 50;
 - (void) logout
 {
     [_settings.backupPromocode resetToDefault];
+    [_settings.backupPurchaseActive resetToDefault];
+    [_settings.backupPurchaseSku resetToDefault];
+    [_settings.proSubscriptionOrigin resetToDefault];
+    [OAIAPHelper.sharedInstance resetPurchases];
     [_settings.backupDeviceId resetToDefault];
     [_settings.backupAccessToken resetToDefault];
 }

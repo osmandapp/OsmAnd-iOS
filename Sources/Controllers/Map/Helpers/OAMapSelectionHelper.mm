@@ -746,10 +746,7 @@ static int TILE_SIZE = 256;
     }
 
     if ([_clickableWayHelper isClickableWayAmenity:poi])
-    {
-        [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
-        return YES;
-    }
+        return [ClickableWayHelper openClickableWayAmenityWithAmenity:poi adjustMapPosition:YES];
 
     return NO;
 }

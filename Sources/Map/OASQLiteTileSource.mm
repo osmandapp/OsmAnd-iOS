@@ -274,10 +274,16 @@
         block();
 }
 
-- (void) deleteImages:(OsmAnd::AreaI)area zoom:(int)zoom
+- (void)deleteTiles:(const QList<OsmAnd::TileId>&)tileIds zoom:(OsmAnd::ZoomLevel)zoom
 {
-    _db->removeTilesData(area, (OsmAnd::ZoomLevel) zoom);
-    _db->compact();
+    static const int kMaxTilesPerBatch = 500;
+    for (int offset = 0; offset < tileIds.size(); offset += kMaxTilesPerBatch)
+    {
+        auto batch = tileIds.mid(offset, kMaxTilesPerBatch);
+        _db->removeTilesData(batch, zoom);
+    }
+    if (!tileIds.isEmpty())
+        _db->compact();
 }
 
 - (void) insertImage:(int)x y:(int)y zoom:(int)zoom filePath:(NSString *)filePath

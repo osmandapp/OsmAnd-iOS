@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOACalculationMode)
 
 - (NSArray<OASWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OASWptPt *> *)originalPoints mode:(OAApplicationMode *)mode;
 
-- (double) getRouteDistance;
+- (double)getRouteDistance;
 - (BOOL) isNewData;
 - (BOOL) hasRoutePoints;
 - (BOOL) isInMultiProfileMode;

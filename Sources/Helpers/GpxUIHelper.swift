@@ -399,6 +399,7 @@ class GpxUIHelper: NSObject {
     }
 
     private struct StatisticChartElement {
+        let propertyName: String?
         let distance: Double
         let color: NSUIColor
     }
@@ -449,7 +450,7 @@ class GpxUIHelper: NSObject {
                                    secondType: secondType,
                                    gpxDataSetAxisType: axisType,
                                    calcWithoutGaps: false,
-                                   distanceAxisMeters: distanceLayout?.totalDistance)
+                                   distanceLayout: distanceLayout)
         dataSets.compactMap { $0 as? OrderedLineDataSet }.forEach {
             $0.includesSegmentGaps = distanceLayout?.gaps.isEmpty == false
         }
@@ -828,7 +829,7 @@ class GpxUIHelper: NSObject {
                     secondType: secondType,
                     gpxDataSetAxisType: gpxDataSetAxisType,
                     calcWithoutGaps: calcWithoutGaps,
-                    distanceAxisMeters: nil)
+                    distanceLayout: nil)
     }
 
     private static func getDataSets(chartView: LineChartView?,
@@ -837,7 +838,7 @@ class GpxUIHelper: NSObject {
                                     secondType: GPXDataSetType,
                                     gpxDataSetAxisType: GPXDataSetAxisType,
                                     calcWithoutGaps: Bool,
-                                    distanceAxisMeters: Double?) -> [LineChartDataSet] {
+                                    distanceLayout: RouteChartDistanceLayout?) -> [LineChartDataSet] {
         guard let chartView, let analysis else {
             return [LineChartDataSet]()
         }
@@ -849,7 +850,7 @@ class GpxUIHelper: NSObject {
                                         otherType: nil,
                                         gpxDataSetAxisType: gpxDataSetAxisType,
                                         calcWithoutGaps: calcWithoutGaps,
-                                        distanceAxisMeters: distanceAxisMeters,
+                                        distanceLayout: distanceLayout,
                                         useRightAxis: false) {
                 result.append(dataSet)
             }
@@ -860,7 +861,7 @@ class GpxUIHelper: NSObject {
                                       otherType: secondType,
                                       gpxDataSetAxisType: gpxDataSetAxisType,
                                       calcWithoutGaps: calcWithoutGaps,
-                                      distanceAxisMeters: distanceAxisMeters,
+                                      distanceLayout: distanceLayout,
                                       useRightAxis: false)
             let dataSet2 = getDataSet(chartView: chartView,
                                       analysis: analysis,
@@ -868,7 +869,7 @@ class GpxUIHelper: NSObject {
                                       otherType: firstType,
                                       gpxDataSetAxisType: gpxDataSetAxisType,
                                       calcWithoutGaps: calcWithoutGaps,
-                                      distanceAxisMeters: distanceAxisMeters,
+                                      distanceLayout: distanceLayout,
                                       useRightAxis: true)
             guard let dataSet1 else {
                 if let dataSet2 {
@@ -907,7 +908,7 @@ class GpxUIHelper: NSObject {
                                    otherType: GPXDataSetType?,
                                    gpxDataSetAxisType: GPXDataSetAxisType,
                                    calcWithoutGaps: Bool,
-                                   distanceAxisMeters: Double?,
+                                   distanceLayout: RouteChartDistanceLayout?,
                                    useRightAxis: Bool) -> OrderedLineDataSet? {
         switch type {
         case .altitude:
@@ -918,7 +919,7 @@ class GpxUIHelper: NSObject {
                                              useRightAxis: useRightAxis,
                                              drawFilled: true,
                                              calcWithoutGaps: calcWithoutGaps,
-                                             distanceAxisMeters: distanceAxisMeters)
+                                             distanceLayout: distanceLayout)
         case .slope:
             return createGPXSlopeDataSet(chartView: chartView,
                                          analysis: analysis,
@@ -928,7 +929,7 @@ class GpxUIHelper: NSObject {
                                          useRightAxis: useRightAxis,
                                          drawFilled: true,
                                          calcWithoutGaps: calcWithoutGaps,
-                                         distanceAxisMeters: distanceAxisMeters)
+                                         distanceAxisMeters: distanceLayout?.totalDistance)
         case .speed:
             return createGPXSpeedDataSet(chartView: chartView,
                                          analysis: analysis,
@@ -938,7 +939,7 @@ class GpxUIHelper: NSObject {
                                          setYAxisMinimum: true,
                                          drawFilled: true,
                                          calcWithoutGaps: calcWithoutGaps,
-                                         distanceAxisMeters: distanceAxisMeters)
+                                         distanceAxisMeters: distanceLayout?.totalDistance)
         default:
             return OAPluginsHelper.getOrderedLineDataSet(chart: chartView,
                                                          analysis: analysis,
@@ -979,7 +980,8 @@ class GpxUIHelper: NSObject {
 
         if let segments {
             elements = segments.map { segment in
-                StatisticChartElement(distance: Double(segment.distance) * distanceScale,
+                StatisticChartElement(propertyName: segment.getUserPropertyName(),
+                                      distance: Double(segment.distance) * distanceScale,
                                       color: NSUIColor(cgColor: UIColor(argbValue: UInt32(segment.color)).cgColor))
             }
         }
@@ -990,7 +992,7 @@ class GpxUIHelper: NSObject {
         let stacks = elements.map { $0.distance / divX }
         let colors = elements.map(\.color)
 
-        entries.append(BarChartDataEntry(x: 0, yValues: stacks))
+        entries.append(BarChartDataEntry(x: 0, yValues: stacks, data: elements.map(\.propertyName)))
 
         let barDataSet = BarChartDataSet(entries: entries, label: "")
         barDataSet.colors = colors
@@ -1021,17 +1023,18 @@ class GpxUIHelper: NSObject {
                 if distanceBeforeGap > 0 {
                     let coloredDistance = min(distanceBeforeGap, remainingDistance)
                     if coloredDistance > 0 {
-                        result.append(StatisticChartElement(distance: coloredDistance, color: element.color))
+                        result.append(StatisticChartElement(propertyName: element.propertyName, distance: coloredDistance, color: element.color))
                         remainingDistance -= coloredDistance
                         nonGapPosition += coloredDistance
                     }
                 }
-                result.append(StatisticChartElement(distance: gap.distance,
+                result.append(StatisticChartElement(propertyName: nil,
+                                                    distance: gap.distance,
                                                     color: .clear))
                 gapIndex += 1
             }
             if remainingDistance > 0 {
-                result.append(StatisticChartElement(distance: remainingDistance, color: element.color))
+                result.append(StatisticChartElement(propertyName: element.propertyName, distance: remainingDistance, color: element.color))
                 nonGapPosition += remainingDistance
             }
         }
@@ -1045,14 +1048,14 @@ class GpxUIHelper: NSObject {
                                                   useRightAxis: Bool,
                                                   drawFilled: Bool,
                                                   calcWithoutGaps: Bool,
-                                                  distanceAxisMeters: Double?) -> OrderedLineDataSet {
+                                                  distanceLayout: RouteChartDistanceLayout?) -> OrderedLineDataSet {
         let useFeet: Bool = OAAltitudeMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().altitudeMetric.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let divX: Double = getDivX(lineChart: chartView,
                                    analysis: analysis,
                                    axisType: axisType,
                                    calcWithoutGaps: calcWithoutGaps,
-                                   distanceAxisMeters: distanceAxisMeters)
+                                   distanceAxisMeters: distanceLayout?.totalDistance)
         let mainUnitY: String = graphType.getMainUnitY()
         let yAxis = getYAxis(chart: chartView,
                              textColor: .chartTextColorElevation,
@@ -1065,7 +1068,8 @@ class GpxUIHelper: NSObject {
                                              divX: divX,
                                              convEle: convEle,
                                              useGeneralTrackPoints: true,
-                                             calcWithoutGaps: calcWithoutGaps)
+                                             calcWithoutGaps: calcWithoutGaps,
+                                             pointDistances: axisType == .distance ? distanceLayout?.pointDistances : nil)
         let dataSet = OrderedLineDataSet(entries: values,
                                          label: "",
                                          dataSetType: graphType,
@@ -1123,7 +1127,8 @@ class GpxUIHelper: NSObject {
                                              divX: 1.0,
                                              convEle: 1.0,
                                              useGeneralTrackPoints: false,
-                                             calcWithoutGaps: calcWithoutGaps)
+                                             calcWithoutGaps: calcWithoutGaps,
+                                             pointDistances: nil)
         }
 
         if values.isEmpty {
@@ -1302,7 +1307,8 @@ class GpxUIHelper: NSObject {
                                                 divX: Double,
                                                 convEle: Double,
                                                 useGeneralTrackPoints: Bool,
-                                                calcWithoutGaps: Bool) -> [ChartDataEntry] {
+                                                calcWithoutGaps: Bool,
+                                                pointDistances: [Double]?) -> [ChartDataEntry] {
         var values: [ChartDataEntry] = []
         if !analysis.hasElevationData() {
             return values
@@ -1327,7 +1333,9 @@ class GpxUIHelper: NSObject {
                 x = Double(e.distance)
             }
             if x >= 0 {
-                if !(calcWithoutGaps && e.firstPoint && lastEntry != nil) {
+                if let pointDistances, pointDistances.indices.contains(i) {
+                    nextX = pointDistances[i] / divX
+                } else if !(calcWithoutGaps && e.firstPoint && lastEntry != nil) {
                     nextX += x / divX
                 }
                 if !e.elevation.isNaN {

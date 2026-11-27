@@ -221,6 +221,8 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
         if (!filter)
             continue;
         BOOL visible = [visibleFilters containsObject:filter];
+        if (visible && filter.isStandardFilter)
+            [filter removeUnsavedFilterByName];
         if (visible == [_poiFiltersHelper isPoiFilterSelected:filter])
             continue;
         if (visible)

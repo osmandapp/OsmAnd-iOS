@@ -1872,7 +1872,11 @@ static std::shared_ptr<const OsmAnd::Amenity> OAGetAmenityFromSearchResult(const
     {
         searchCriteria->bbox31 = bbox31;
     }
-    
+    if (additionalFilter)
+    {
+        searchCriteria->poiAdditionalFilter = QPair<QString, QString>(QString::fromNSString(additionalFilter.poiSubType), QString::fromNSString(additionalFilter.value));
+    }
+
     BOOL isEmpty = !filter || [filter isEmpty];
     
     if (isEmpty && additionalFilter)

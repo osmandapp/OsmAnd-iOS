@@ -887,8 +887,7 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func searchNearMyLocation() {
-        guard selectedSearchAroundOption != .myLocation,
-              let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return }
+        guard let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation else { return }
         useSpatialSearchLocation = false
         searchLocation = myLocation.coordinate
         distanceFromMyLocation = 0
@@ -897,8 +896,7 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func searchNearMapCenterLocation() {
-        guard selectedSearchAroundOption != .mapCenter,
-              let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return }
+        guard let mapCenter = OARootViewController.instance()?.mapPanel?.mapViewController.getMapLocation() else { return }
         if let myLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
             distanceFromMyLocation = myLocation.distance(from: mapCenter)
         }
@@ -1056,8 +1054,9 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func spatialResultsOnMap() -> [OASearchResult]? {
-        guard currentResultCollection()?.isSkipSorting() == true else { return nil }
-        return visibleResults().filter { $0.object is OAPOI || $0.object is OAAddress }
+        guard let resultCollection = currentResultCollection(), resultCollection.isSkipSorting() else { return nil }
+        let results = preparingResults ? visibleResults(resultCollection.getVisibleSpatialSearchResults() ?? []) : visibleResults()
+        return results.filter { $0.object is OAPOI || $0.object is OAAddress }
     }
 
     private func showSpatialResultsOnMap(_ results: [OASearchResult]) {
@@ -1085,7 +1084,7 @@ final class QuickSearchViewController: OASuperViewController {
         OARootViewController.instance().mapPanel.mapViewController.go(toPosition: position, animated: true)
     }
 
-    private func hideToolbar() {
+    @objc func hideToolbar() {
         restoresSearchFromMap = false
         clearSpatialResultsOnMap()
         guard let searchToolbarViewController else { return }
@@ -1293,12 +1292,15 @@ final class QuickSearchViewController: OASuperViewController {
     @objc private func updateDistanceAndDirection() {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
-        if paused || cancelPrev || searchNearMapCenter || useSpatialSearchLocation || Date().timeIntervalSince1970 - lastUpdate < Self.distanceUpdateInterval {
+        if paused || cancelPrev || Date().timeIntervalSince1970 - lastUpdate < Self.distanceUpdateInterval {
             return
         }
         DispatchQueue.main.async {
             self.lastUpdate = Date().timeIntervalSince1970
-            self.tableController?.updateDistanceAndDirection()
+            if self.tableController?.searchNearMapCenter == false {
+                self.tableController?.updateDistanceAndDirection()
+            }
+            guard !self.searchNearMapCenter && !self.useSpatialSearchLocation else { return }
             self.exploreViewController?.updateDistanceAndDirection()
             self.addressViewController?.updateDistanceAndDirection()
         }
@@ -1868,9 +1870,13 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func visibleResults() -> [OASearchResult] {
+        visibleResults(unfilteredResults)
+    }
+
+    private func visibleResults(_ results: [OASearchResult]) -> [OASearchResult] {
         selectedPoiTypeNames.isEmpty
-            ? unfilteredResults
-            : unfilteredResults.filter { OAQuickSearchTableController.poiTypeName(for: $0).map(selectedPoiTypeNames.contains) ?? false }
+            ? results
+            : results.filter { OAQuickSearchTableController.poiTypeName(for: $0).map(selectedPoiTypeNames.contains) ?? false }
     }
 
     private func refreshResultPoiTypeNames() {

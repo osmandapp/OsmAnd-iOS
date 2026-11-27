@@ -361,6 +361,12 @@
     return [_shared getRadiusLevel];
 }
 
+- (QuadRect *)getRadiusBBox31ToSearch:(int)radius
+{
+    OASKQuadRect *r = [_shared getRadiusBBoxToSearchRadius:radius];
+    return r ? [[QuadRect alloc] initWithLeft:r.left top:r.top right:r.right bottom:r.bottom] : nil;
+}
+
 - (BOOL)isNoSelectedType
 {
     return [_shared isNoSelectedType];

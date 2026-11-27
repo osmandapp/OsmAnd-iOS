@@ -92,9 +92,7 @@ static inline BOOL backupDebugLogs()
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile
                   listener:(id<OAOnDownloadFileListener>)listener;
-- (void) generateBackupInfo:(NSDictionary<NSString *, OALocalFile *> *)localFiles
-          uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
-         deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+- (void) generateBackupInfo:(OAPrepareBackupResult *)backup
                  onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete;
 
 - (NSString *) uploadFile:(NSString *)fileName

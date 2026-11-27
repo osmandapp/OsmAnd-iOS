@@ -88,6 +88,11 @@
         return type;
 }
 
+- (NSString *) getNormalizedTypeFileName
+{
+    return [self getTypeFileName].precomposedStringWithCanonicalMapping;
+}
+
 
 - (NSString *) toString
 {

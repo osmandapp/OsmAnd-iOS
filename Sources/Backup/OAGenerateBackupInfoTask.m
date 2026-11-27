@@ -17,6 +17,7 @@
 #import "OAFavoritesBackupMerger.h"
 #import "OAOperationLog.h"
 #import "OAFileSettingsItem.h"
+#import "OAPrepareBackupResult.h"
 
 static const NSInteger kMaxDeflateRatio = 1032;
 
@@ -30,35 +31,15 @@ static const NSInteger kMaxDeflateRatio = 1032;
     OAOperationLog *_operationLog;
 }
 
-- (instancetype) initWithLocalFiles:(NSDictionary<NSString *, OALocalFile *> *)localFiles
-                  uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
-                 deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
-                         onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
+- (instancetype) initWithBackup:(OAPrepareBackupResult *)backup
+                     onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
 {
     self = [super init];
     if (self)
     {
-        _localFiles = localFiles;
-        NSMutableDictionary<NSString *, OALocalFile *> *normalizedLocalFiles = [NSMutableDictionary dictionaryWithCapacity:_localFiles.count];
-        for (NSString *originalKey in _localFiles)
-        {
-            NSString *normalizedKey = originalKey.precomposedStringWithCanonicalMapping;
-            normalizedLocalFiles[normalizedKey] = _localFiles[originalKey];
-        }
-        _localFilesWithNormalizedNames = normalizedLocalFiles;
-        NSMutableDictionary<NSString *, OARemoteFile *>* localMap = [NSMutableDictionary dictionaryWithCapacity:uniqueRemoteFiles.count + deletedRemoteFiles.count];
-        for (NSDictionary<NSString *, OARemoteFile *> *files in @[uniqueRemoteFiles, deletedRemoteFiles])
-        {
-            for (NSString *originalKey in files)
-            {
-                NSString *normalizedKey = originalKey.precomposedStringWithCanonicalMapping;
-                OARemoteFile *remoteFile = files[originalKey];
-                OARemoteFile *existing = localMap[normalizedKey];
-                if (!existing || [self.class isRemoteFile:remoteFile preferredTo:existing])
-                    localMap[normalizedKey] = remoteFile;
-            }
-        }
-        _remoteFilesWithNormalizedNames = localMap;
+        _localFiles = backup.localFiles;
+        _localFilesWithNormalizedNames = backup.normalizedLocalFiles;
+        _remoteFilesWithNormalizedNames = backup.normalizedRemoteFiles;
         _onComplete = onComplete;
         _operationLog = [[OAOperationLog alloc] initWithOperationName:@"generateBackupInfo" debug:BACKUP_DEBUG_LOGS logThreshold:0.2];
         [_operationLog startOperation];
@@ -102,7 +83,7 @@ static const NSInteger kMaxDeflateRatio = 1032;
         OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType] || remoteFile.isRecordedVoiceFile)
             continue;
-        NSString* normalizedRemoteName = remoteFile.getTypeNamePath.precomposedStringWithCanonicalMapping;
+        NSString* normalizedRemoteName = [remoteFile getNormalizedTypeNamePath];
         OALocalFile *localFile = _localFilesWithNormalizedNames[normalizedRemoteName];
         if (localFile != nil)
         {
@@ -158,7 +139,7 @@ static const NSInteger kMaxDeflateRatio = 1032;
             : nil;
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType])
             continue;
-        NSString *normalizedLocalKey = localFile.getTypeFileName.precomposedStringWithCanonicalMapping;
+        NSString *normalizedLocalKey = [localFile getNormalizedTypeFileName];
         BOOL hasRemoteFile = _remoteFilesWithNormalizedNames[normalizedLocalKey] != nil;
         BOOL fileToDelete = [info.localFilesToDelete containsObject:localFile];
         if (!hasRemoteFile && !fileToDelete)
@@ -180,7 +161,7 @@ static const NSInteger kMaxDeflateRatio = 1032;
     [_operationLog log:@"=== filesToDownload ==="];
     for (OARemoteFile *remoteFile in info.filesToDownload)
     {
-        OALocalFile *localFile = _localFilesWithNormalizedNames[remoteFile.getTypeNamePath.precomposedStringWithCanonicalMapping];
+        OALocalFile *localFile = _localFilesWithNormalizedNames[[remoteFile getNormalizedTypeNamePath]];
         if (localFile)
             [_operationLog log:[NSString stringWithFormat:@"%@ localUploadTime=%ld", remoteFile.toString, localFile.uploadTime]];
         else
@@ -206,13 +187,6 @@ static const NSInteger kMaxDeflateRatio = 1032;
     }
     [_operationLog log:@"=== filesToMerge ==="];
     return info;
-}
-
-+ (BOOL) isRemoteFile:(OARemoteFile *)remoteFile preferredTo:(OARemoteFile *)other
-{
-    if (remoteFile.isDeleted != other.isDeleted)
-        return other.isDeleted;
-    return remoteFile.updatetimems > other.updatetimems;
 }
 
 - (BOOL) isServerMapReference:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile

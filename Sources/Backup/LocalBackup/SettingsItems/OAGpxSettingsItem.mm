@@ -157,7 +157,7 @@
 
 - (void)updateGpxParams
 {
-    OASKFile *file = [[OASKFile alloc] initWithFilePath:self.filePath.decomposedStringWithCanonicalMapping];
+    OASKFile *file = [self prepareGpxDbFile:self.filePath];
     OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
     BOOL readItem = [gpxDbHelper hasGpxDataItemFile:file];
     OASGpxDataItem *dataItem = nil;

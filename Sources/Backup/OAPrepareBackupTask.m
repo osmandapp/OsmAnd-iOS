@@ -186,7 +186,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
         [self onTaskFinished:OABackupTaskType.GENERATE_BACKUP_INFO];
         return;
     }
-    [_backupHelper generateBackupInfo:_backup.localFiles uniqueRemoteFiles:[_backup getRemoteFiles:EOARemoteFilesTypeUnique] deletedRemoteFiles:[_backup getRemoteFiles:EOARemoteFilesTypeDeleted] onComplete:^(OABackupInfo *backupInfo, NSString *error) {
+    [_backupHelper generateBackupInfo:_backup onComplete:^(OABackupInfo *backupInfo, NSString *error) {
         if (error.length == 0)
             _backup.backupInfo = backupInfo;
         else

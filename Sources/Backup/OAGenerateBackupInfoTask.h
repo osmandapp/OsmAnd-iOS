@@ -8,13 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@class OALocalFile, OARemoteFile, OABackupInfo;
+@class OABackupInfo, OAPrepareBackupResult;
 
 @interface OAGenerateBackupInfoTask : NSOperation
 
-- (instancetype) initWithLocalFiles:(NSDictionary<NSString *, OALocalFile *> *)localFiles
-                  uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
-                 deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
-                         onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete;
+- (instancetype) initWithBackup:(OAPrepareBackupResult *)backup
+                     onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete;
 
 @end

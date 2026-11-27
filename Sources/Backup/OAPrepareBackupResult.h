@@ -28,12 +28,15 @@ typedef NS_ENUM(NSInteger, EOARemoteFilesType) {
 @property (nonatomic) NSDictionary<NSString *, OARemoteFile *> *remoteFiles;
 
 @property (nonatomic) NSDictionary<NSString *, OALocalFile *> *localFiles;
+@property (nonatomic, readonly) NSDictionary<NSString *, OALocalFile *> *normalizedLocalFiles;
+@property (nonatomic, readonly) NSDictionary<NSString *, OARemoteFile *> *normalizedRemoteFiles;
 @property (nonatomic) NSString *error;
 
 - (void)setLocalFilesFromArray:(NSArray<OALocalFile *> *)localFiles;
 
 - (NSDictionary<NSString *, OARemoteFile *> *) getRemoteFiles:(EOARemoteFilesType)type;
 - (OARemoteFile *) getRemoteFile:(NSString *)type fileName:(NSString *)fileName;
+- (nullable OARemoteFile *) getNormalizedRemoteFile:(NSString *)type fileName:(NSString *)fileName;
 
 - (void)setRemoteFilesFromArray:(NSArray<OARemoteFile *> *)remoteFiles;
 

@@ -280,7 +280,10 @@
     OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
     if (exportType != nil && ![[BackupUtils getVersionHistoryTypePref:exportType] get])
     {
-        OARemoteFile *remoteFile = [_backupHelper.backup getRemoteFile:type fileName:fileName];
+        OAPrepareBackupResult *backup = _backupHelper.backup;
+        OARemoteFile *remoteFile = [backup getRemoteFile:type fileName:fileName];
+        if (remoteFile == nil)
+            remoteFile = [backup getNormalizedRemoteFile:type fileName:fileName];
         if (remoteFile != nil)
             [_oldFilesToDelete addObjectSync:remoteFile];
     }

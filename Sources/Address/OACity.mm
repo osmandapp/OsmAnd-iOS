@@ -56,7 +56,7 @@
 
 -(NSString *)iconName
 {
-    return ACImageNameIcActionBuildingNumber;
+    return _type == CITY_TYPE_POSTCODE ? ACImageNameIcActionPostcode : ACImageNameIcActionBuildingNumber;
 }
 
 + (NSString *)getLocalizedTypeStr:(EOACityType)type

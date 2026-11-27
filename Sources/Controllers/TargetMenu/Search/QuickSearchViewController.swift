@@ -168,7 +168,7 @@ final class QuickSearchViewController: OASuperViewController {
 
     private var tableController: QuickSearchResultsTableController?
     private var pageController: UIPageViewController?
-    private var addressViewController: OAAddressTableViewController?
+    private var addressViewController: AddressViewController?
     private var categoriesViewController: CategoriesViewController?
     private var exploreViewController: ExploreViewController?
     private var searchToolbarViewController: OASearchToolbarViewController?
@@ -304,15 +304,10 @@ final class QuickSearchViewController: OASuperViewController {
         pageController.delegate = self
         self.pageController = pageController
 
-        let addressViewController = OAAddressTableViewController(frame: .zero)
-        addressViewController?.delegate = self
-        addressViewController?.tableDelegate = self
-        addressViewController?.searchType = searchType
-        if searchNearMapCenter {
-            addressViewController?.setMapCenter(searchLocation)
-        } else {
-            addressViewController?.resetMapCenterSearch()
-        }
+        let addressViewController = AddressViewController()
+        addressViewController.delegate = self
+        addressViewController.searchLocation = searchLocation
+        addressViewController.searchNearMapCenter = searchNearMapCenter
         self.addressViewController = addressViewController
 
         let categoriesViewController = CategoriesViewController()
@@ -635,10 +630,11 @@ final class QuickSearchViewController: OASuperViewController {
         if searchNearMapCenter {
             exploreViewController?.searchLocation = searchLocation
             exploreViewController?.searchNearMapCenter = true
-            addressViewController?.setMapCenter(searchLocation)
+            addressViewController?.searchLocation = searchLocation
+            addressViewController?.searchNearMapCenter = true
         } else {
             exploreViewController?.searchNearMapCenter = false
-            addressViewController?.resetMapCenterSearch()
+            addressViewController?.searchNearMapCenter = false
         }
         updateResultsMapCenter(currentResultCollection())
         updateChips()
@@ -673,7 +669,6 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     private func applySearchType() {
-        addressViewController?.searchType = searchType
         tableController?.searchType = searchType
         updateBarActionView()
     }
@@ -770,6 +765,10 @@ final class QuickSearchViewController: OASuperViewController {
     }
 
     @objc private func onBackButtonPressed() {
+        if addressSearch && !tabsVisible && !searchText.isEmpty {
+            clearLastWord()
+            return
+        }
         guard modalInput else {
             dismissSearch(animated: true, completion: onCloseCallback)
             return
@@ -1427,64 +1426,12 @@ final class QuickSearchViewController: OASuperViewController {
                 lastCity = results.first { $0.objectType == .city && ($0.object as? OAAddress)?.addrId == lastCityId }
             }
 
-            var rows: [OAQuickSearchListItem] = []
             let lastCityName = lastCity == nil ? appSettings.lastSearchedCityName : lastCity?.localeName
-            if let lastCityName, !lastCityName.isEmpty {
-                rows.append(OAQuickSearchButtonListItem(icon: .icActionStreetName,
-                                                        attributedText: Self.selectStreetsTitle(cityName: lastCityName)) { [weak self] _ in
-                    self?.selectStreets(lastCity: lastCity, lastCityName: lastCityName)
-                })
-            }
-            rows.append(OAQuickSearchButtonListItem(icon: .icActionBuildingNumber, text: localizedString("select_city")) { [weak self] _ in
-                guard let self else { return }
-                self.searchController.searchBar.placeholder = localizedString("type_city_town")
-                self.startCitySearch()
-                self.updateTabsVisibility(false)
-                self.runCoreSearch("", updateResult: false, searchMore: false)
-                self.focusSearchField()
-            })
-            rows.append(OAQuickSearchButtonListItem(icon: .icActionPostcode, text: localizedString("select_postcode")) { [weak self] _ in
-                guard let self else { return }
-                self.searchController.searchBar.placeholder = localizedString("type_postcode")
-                self.startPostcodeSearch()
-                self.updateData([], append: false)
-                self.updateTabsVisibility(false)
-                self.focusSearchField()
-            })
-            rows.append(OAQuickSearchButtonListItem(icon: .icCustomLocationMarker, text: localizedString("coords_search")) { [weak self] _ in
-                guard let self else { return }
-                let latLon = self.searchUICore?.getSearchSettings()?.getOriginalLocation()
-                guard let coordinatesViewController = OAQuickSearchCoordinatesViewController(lat: latLon?.coordinate.latitude ?? 0,
-                                                                                             lon: latLon?.coordinate.longitude ?? 0) else { return }
-                let navigationController = UINavigationController(rootViewController: coordinatesViewController)
-                navigationController.modalPresentationStyle = .fullScreen
-                self.presentAfterDeactivatingSearch { [weak self] in
-                    self?.present(navigationController, animated: true)
-                }
-            })
-
-            var data: [[OAQuickSearchListItem]] = [rows]
-            if let results = resultCollection?.getCurrentSearchResults(), !results.isEmpty {
-                var cityRows: [OAQuickSearchListItem] = [OAQuickSearchHeaderListItem(name: localizedString("nearest_cities"))]
-                cityRows.append(contentsOf: results.prefix(Self.nearestCitiesLimit).map { OAQuickSearchListItem(searchResult: $0) })
-                data.append(cityRows)
-            }
-            self.addressViewController?.setData(data)
+            let nearestCities = resultCollection?.getCurrentSearchResults() ?? []
+            self.addressViewController?.setData(lastCity: lastCity, lastCityName: lastCityName, nearestCities: Array(nearestCities.prefix(Self.nearestCitiesLimit)))
             return true
         }
         restoreSearch()
-    }
-
-    private static func selectStreetsTitle(cityName: String) -> NSAttributedString {
-        let selectStreets = localizedString("select_street")
-        let inCityName = String(format: localizedString("shared_string_in_name"), cityName)
-        let title = NSMutableAttributedString(string: "\(selectStreets) \(inCityName)")
-        let selectStreetsLength = (selectStreets as NSString).length
-        title.addAttribute(.foregroundColor, value: UIColor.textColorActive, range: NSRange(location: 0, length: selectStreetsLength))
-        title.addAttribute(.foregroundColor,
-                           value: UIColor.textColorSecondary,
-                           range: NSRange(location: selectStreetsLength + 1, length: (inCityName as NSString).length))
-        return title
     }
 
     private func selectStreets(lastCity: OASearchResult?, lastCityName: String) {
@@ -1789,6 +1736,7 @@ final class QuickSearchViewController: OASuperViewController {
                 appSettings.lastSearchedCity = city.addrId
                 appSettings.lastSearchedCityName = result.localeName
                 appSettings.lastSearchedPoint = CLLocation(latitude: city.latitude, longitude: city.longitude)
+                addressViewController?.updateLastCity(result)
             }
         }
         let text = searchUICore?.getPhrase()?.getText(true) ?? ""
@@ -2303,9 +2251,44 @@ extension QuickSearchViewController: OAQuickSearchTableDelegate {
     }
 }
 
-extension QuickSearchViewController: OAAddressTableDelegate {
-    func reloadAddressData() {
+extension QuickSearchViewController: AddressViewControllerDelegate {
+    func addressDidRequestReload() {
         reloadCities()
+    }
+
+    func addressDidRequestStreetSearch(lastCity: OASearchResult?, cityName: String) {
+        selectStreets(lastCity: lastCity, lastCityName: cityName)
+    }
+
+    func addressDidRequestCitySearch() {
+        searchController.searchBar.placeholder = localizedString("type_city_town")
+        startCitySearch()
+        updateTabsVisibility(false)
+        runCoreSearch("", updateResult: false, searchMore: false)
+        focusSearchField()
+    }
+
+    func addressDidRequestPostcodeSearch() {
+        searchController.searchBar.placeholder = localizedString("type_postcode")
+        startPostcodeSearch()
+        setResultCollection(nil)
+        updateData([], append: false)
+        updateTabsVisibility(false)
+        focusSearchField()
+    }
+
+    func addressDidRequestCoordinatesSearch() {
+        let latLon = searchUICore?.getSearchSettings()?.getOriginalLocation()
+        guard let coordinatesViewController = OAQuickSearchCoordinatesViewController(lat: latLon?.coordinate.latitude ?? 0, lon: latLon?.coordinate.longitude ?? 0) else { return }
+        let navigationController = UINavigationController(rootViewController: coordinatesViewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        presentAfterDeactivatingSearch { [weak self] in
+            self?.present(navigationController, animated: true)
+        }
+    }
+
+    func addressDidSelectCity(_ city: OASearchResult) {
+        didSelect(city)
     }
 }
 

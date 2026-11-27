@@ -12,6 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OASKFile;
+
 typedef NS_ENUM(NSInteger, EOAFileSettingsItemFileSubtype) {
     EOAFileSettingsItemFileSubtypeUnknown = -1,
     EOAFileSettingsItemFileSubtypeOther = 0,
@@ -58,6 +60,7 @@ typedef NS_ENUM(NSInteger, EOAFileSettingsItemFileSubtype) {
 - (NSString *) renameFile:(NSString *)file;
 - (NSString *) getPluginPath;
 - (void) installItem:(NSString *)destFilePath;
+- (OASKFile *) prepareGpxDbFile:(NSString *)filePath;
 - (NSString *) getIconName;
 
 - (BOOL) needMd5Digest;

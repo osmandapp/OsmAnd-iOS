@@ -37,12 +37,24 @@
 
 - (OARemoteFile *) getRemoteFile:(NSString *)type fileName:(NSString *)fileName
 {
-    NSString *typeWithName;
-    if (fileName.length > 0)
-        typeWithName = [type stringByAppendingPathComponent:fileName];
-    else
-        typeWithName = type;
-    return _remoteFiles[typeWithName];
+    return _remoteFiles[[self getTypeWithName:type fileName:fileName]];
+}
+
+- (OARemoteFile *) getNormalizedRemoteFile:(NSString *)type fileName:(NSString *)fileName
+{
+    return _normalizedRemoteFiles[[self getTypeWithName:type fileName:fileName].precomposedStringWithCanonicalMapping];
+}
+
+- (NSString *) getTypeWithName:(NSString *)type fileName:(NSString *)fileName
+{
+    return fileName.length > 0 ? [type stringByAppendingPathComponent:fileName] : type;
+}
+
++ (BOOL) isRemoteFile:(OARemoteFile *)remoteFile preferredTo:(OARemoteFile *)other
+{
+    if (remoteFile.isDeleted != other.isDeleted)
+        return other.isDeleted;
+    return remoteFile.updatetimems > other.updatetimems;
 }
 
 - (void)setRemoteFilesFromArray:(NSArray<OARemoteFile *> *)remoteFiles
@@ -78,16 +90,34 @@
     _deletedRemoteFiles = deletedRemoteFiles;
     _oldRemoteFiles = oldRemoteFiles;
     _remoteFiles = remoteFilesMap;
+    NSMutableDictionary<NSString *, OARemoteFile *> *normalizedRemoteFiles = [NSMutableDictionary dictionaryWithCapacity:uniqueRemoteFiles.count + deletedRemoteFiles.count];
+    for (NSDictionary<NSString *, OARemoteFile *> *files in @[uniqueRemoteFiles, deletedRemoteFiles])
+    {
+        for (OARemoteFile *remoteFile in files.allValues)
+        {
+            NSString *normalizedKey = [remoteFile getNormalizedTypeNamePath];
+            OARemoteFile *existing = normalizedRemoteFiles[normalizedKey];
+            if (!existing || [self.class isRemoteFile:remoteFile preferredTo:existing])
+                normalizedRemoteFiles[normalizedKey] = remoteFile;
+        }
+    }
+    _normalizedRemoteFiles = normalizedRemoteFiles;
 }
 
 - (void)setLocalFilesFromArray:(NSArray<OALocalFile *> *)localFiles
 {
     NSMutableDictionary<NSString *, OALocalFile *> *localFileMap = [NSMutableDictionary dictionary];
+    NSMutableDictionary<NSString *, OALocalFile *> *normalizedLocalFiles = [NSMutableDictionary dictionary];
     for (OALocalFile *localFile in localFiles)
     {
         localFileMap[localFile.getTypeFileName] = localFile;
+        NSString *normalizedKey = [localFile getNormalizedTypeFileName];
+        OALocalFile *existing = normalizedLocalFiles[normalizedKey];
+        if (!existing || localFile.localModifiedTime > existing.localModifiedTime)
+            normalizedLocalFiles[normalizedKey] = localFile;
     }
     _localFiles = localFileMap;
+    _normalizedLocalFiles = normalizedLocalFiles;
 }
 
 @end

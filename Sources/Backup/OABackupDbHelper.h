@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OABackupDbHelper : NSObject
 
 + (OABackupDbHelper *)sharedDatabase;
++ (NSString *) getUploadedFileInfoKey:(NSString *)type name:(NSString *)name;
 
 - (void) removeUploadedFileInfo:(OAUploadedFileInfo *)info;
 - (void) removeUploadedFileInfos;

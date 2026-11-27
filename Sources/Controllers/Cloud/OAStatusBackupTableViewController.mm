@@ -274,14 +274,14 @@
             NSArray<OALocalFile *> *localFiles = info.filteredFilesToUpload;
             for (OALocalFile *localFile in localFiles)
             {
-                NSString *key = [localFile getTypeFileName];
+                NSString *key = [localFile getNormalizedTypeFileName];
                 filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
                 filesByName[key].localFile = localFile;
             }
             NSArray<OARemoteFile *> *deletedFiles = info.filteredFilesToDelete;
             for (OARemoteFile *deletedFile in deletedFiles)
             {
-                NSString *key = [deletedFile getTypeNamePath];
+                NSString *key = [deletedFile getNormalizedTypeNamePath];
                 filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
                 filesByName[key].deleted = @(YES);
                 filesByName[key].remoteFile = deletedFile;
@@ -291,7 +291,7 @@
                 NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
                 for (OARemoteFile *remoteFile in downloadItems.allKeys)
                 {
-                    NSString *key = [remoteFile getTypeNamePath];
+                    NSString *key = [remoteFile getNormalizedTypeNamePath];
                     if ([filesByName.allKeys containsObject:key] && !filesByName[key].remoteFile)
                         filesByName[key].remoteFile = remoteFile;
                 }
@@ -299,7 +299,7 @@
                 {
                     if (!filesByName[key].remoteFile)
                     {
-                        OARemoteFile *remoteFile = _backupHelper.backup.remoteFiles[key];
+                        OARemoteFile *remoteFile = _backupHelper.backup.normalizedRemoteFiles[key];
                         if (remoteFile)
                             filesByName[key].remoteFile = remoteFile;
                     }
@@ -313,14 +313,14 @@
             NSDictionary<OARemoteFile *, OASettingsItem *> *downloadItems = [BackupUtils getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
             for (OARemoteFile *remoteFile in downloadItems.allKeys)
             {
-                NSString *key = [remoteFile getTypeNamePath];
+                NSString *key = [remoteFile getNormalizedTypeNamePath];
                 filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
                 filesByName[key].remoteFile = remoteFile;
             }
             NSArray<OALocalFile *> *deletedFiles = info.localFilesToDelete;
             for (OALocalFile *deletedFile in deletedFiles)
             {
-                NSString *key = [deletedFile getTypeFileName];
+                NSString *key = [deletedFile getNormalizedTypeFileName];
                 filesByName[key] = [[OAStatusBackupItem alloc] initWithKey:key];
                 filesByName[key].deleted = @(YES);
                 filesByName[key].localFile = deletedFile;
@@ -330,7 +330,7 @@
                 NSArray<OALocalFile *> *localFiles = info.filteredFilesToUpload;
                 for (OALocalFile *localFile in localFiles)
                 {
-                    NSString *key = [localFile getTypeFileName];
+                    NSString *key = [localFile getNormalizedTypeFileName];
                     if ([filesByName.allKeys containsObject:key] && !filesByName[key].localFile)
                         filesByName[key].localFile = localFile;
                 }
@@ -338,7 +338,7 @@
                 {
                     if (!filesByName[key].localFile)
                     {
-                        OALocalFile *localFile = _backupHelper.backup.localFiles[key];
+                        OALocalFile *localFile = _backupHelper.backup.normalizedLocalFiles[key];
                         if (localFile)
                             filesByName[key].localFile = localFile;
                     }
@@ -622,7 +622,7 @@
 
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary
 {
-    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfo:[OASettingsItemType typeName:type] name:fileName];
+    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfoMap][[OABackupDbHelper getUploadedFileInfoKey:[OASettingsItemType typeName:type] name:fileName]];
     return [self generateTimeString:info.uploadTime summary:summary];
 }
 

@@ -70,6 +70,11 @@
         return _type;
 }
 
+- (NSString *) getNormalizedTypeNamePath
+{
+    return [self getTypeNamePath].precomposedStringWithCanonicalMapping;
+}
+
 - (BOOL)isEqual:(id)object
 {
     if (self == object)

@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) OASettingsItem *item;
 
 - (NSString *) getTypeFileName;
+- (NSString *) getNormalizedTypeFileName;
 
 - (NSString *) toString;
 

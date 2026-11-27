@@ -325,7 +325,10 @@ static const NSInteger kDBVersion = 1;
                     long uploadTime = sqlite3_column_int64(statement, 2);
                     NSString *md5Digest = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
                     OAUploadedFileInfo *info = [[OAUploadedFileInfo alloc] initWithType:type name:name uploadTime:uploadTime md5Digest:md5Digest];
-                    res[[NSString stringWithFormat:@"%@___%@", info.type, info.name]] = info;
+                    NSString *key = [OABackupDbHelper getUploadedFileInfoKey:info.type name:info.name];
+                    OAUploadedFileInfo *existing = res[key];
+                    if (!existing || info.uploadTime > existing.uploadTime)
+                        res[key] = info;
                 }
                 sqlite3_finalize(statement);
             }
@@ -373,6 +376,11 @@ static const NSInteger kDBVersion = 1;
         }
     });
     return info;
+}
+
++ (NSString *) getUploadedFileInfoKey:(NSString *)type name:(NSString *)name
+{
+    return [NSString stringWithFormat:@"%@___%@", type, name.precomposedStringWithCanonicalMapping];
 }
 
 - (void) updateFileUploadTime:(NSString *)type name:(NSString *)name updateTime:(long)updateTime

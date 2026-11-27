@@ -552,12 +552,10 @@ static const NSUInteger EMPTY_TRASH_CHUNK_SIZE = 50;
     return error;
 }
 
-- (void) generateBackupInfo:(NSDictionary<NSString *, OALocalFile *> *)localFiles
-          uniqueRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)uniqueRemoteFiles
-         deletedRemoteFiles:(NSDictionary<NSString *, OARemoteFile *> *)deletedRemoteFiles
+- (void) generateBackupInfo:(OAPrepareBackupResult *)backup
                  onComplete:(void(^)(OABackupInfo *backupInfo, NSString *error))onComplete
 {
-    OAGenerateBackupInfoTask *task = [[OAGenerateBackupInfoTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
+    OAGenerateBackupInfoTask *task = [[OAGenerateBackupInfoTask alloc] initWithBackup:backup onComplete:onComplete];
     [_executor addOperation:task];
 }
 

@@ -355,6 +355,20 @@
     return self;
 }
 
+- (OASKFile *) prepareGpxDbFile:(NSString *)filePath
+{
+    NSString *nfdPath = filePath.decomposedStringWithCanonicalMapping;
+    NSString *nfcPath = filePath.precomposedStringWithCanonicalMapping;
+    if (![nfcPath isEqualToString:nfdPath])
+    {
+        OASKFile *nfcFile = [[OASKFile alloc] initWithFilePath:nfcPath];
+        OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
+        if ([gpxDbHelper hasGpxDataItemFile:nfcFile])
+            [gpxDbHelper removeFile:nfcFile];
+    }
+    return [[OASKFile alloc] initWithFilePath:nfdPath];
+}
+
 - (void) installItem:(NSString *)destFilePath
 {
     switch (self.subtype)
@@ -362,7 +376,7 @@
         case EOAFileSettingsItemFileSubtypeGpx:
         {
             OASGpxDbHelper *gpxDbHelper = [OASGpxDbHelper shared];
-            OASKFile *file = [[OASKFile alloc] initWithFilePath:destFilePath];
+            OASKFile *file = [self prepareGpxDbFile:destFilePath];
             if (![gpxDbHelper hasGpxDataItemFile:file])
                 [gpxDbHelper addItem:[[OASGpxDataItem alloc] initWithFile:file]];
             break;

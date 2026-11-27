@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithJson:(NSDictionary *)json;
 
 - (NSString *) getTypeNamePath;
+- (NSString *) getNormalizedTypeNamePath;
 
 - (BOOL) isInfoFile;
 - (BOOL) isDeleted;

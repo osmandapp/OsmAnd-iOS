@@ -14623,6 +14623,7 @@
 					"-lz",
 				);
 				INFOPLIST_PREPROCESS = NO;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				LIBRARY_SEARCH_PATHS = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";

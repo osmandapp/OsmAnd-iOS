@@ -16,6 +16,8 @@
 #import "OAJoinPointsCommand.h"
 #import "OAPlanningPopupBaseViewController.h"
 #import "OsmAndSharedWrapper.h"
+#import "OAGpxData.h"
+#import "OARouteImporter.h"
 
 @protocol PlanRouteHistoryPointData <NSObject>
 @property (nonatomic, readonly) double distanceFromPrevious;
@@ -911,6 +913,442 @@
         XCTAssertGreaterThanOrEqual(point.getTrkPtIndex, 0);
         XCTAssertLessThan(point.getTrkPtIndex, segment.points.count);
     }
+}
+
+- (double)exportedDistance:(OASGpxFile *)gpx
+{
+    double distance = 0;
+    for (OASTrack *track in gpx.tracks)
+    {
+        for (OASTrkSegment *segment in track.segments)
+        {
+            for (NSInteger index = 1; index < segment.points.count; index++)
+            {
+                OASWptPt *first = segment.points[index - 1];
+                OASWptPt *second = segment.points[index];
+                distance += [OASKMapUtils.shared getEllipsoidDistanceLat1:first.lat lon1:first.lon lat2:second.lat lon2:second.lon];
+            }
+        }
+    }
+    return distance;
+}
+
+- (void)testRouteDistanceExcludesExplicitGapsInEveryApplicationMode
+{
+    [self.original[3] setGap];
+    double expected = [self exportedDistance:[self.context exportGpx:@"gap-distance"]];
+    for (OAApplicationMode *mode in @[OAApplicationMode.DEFAULT, OAApplicationMode.PEDESTRIAN, OAApplicationMode.BICYCLE, OAApplicationMode.CAR])
+    {
+        self.context.appMode = mode;
+        XCTAssertEqualWithAccuracy(self.context.getRouteDistance, expected, 0.001, @"%@", mode.stringKey);
+    }
+}
+
+- (void)testRouteDistanceIgnoresCachedGeometryAcrossGap
+{
+    [self.original[3] setGap];
+    double expected = [self exportedDistance:[self.context exportGpx:@"cached-gap-distance"]];
+    [self cacheRouteForPair:[OAWptPtPair pairWithFirst:self.original[3] second:self.original[4]] mode:OAApplicationMode.PEDESTRIAN];
+    XCTAssertEqualWithAccuracy(self.context.getRouteDistance, expected, 0.001);
+}
+
+- (void)testRouteDistanceIncludesIncomingLegAtGapEndpoint
+{
+    [self.context setPoints:[self.original subarrayWithRange:NSMakeRange(0, 3)]];
+    [self.original[2] setGap];
+    double expected = [self exportedDistance:[self.context exportGpx:@"incoming-gap-distance"]];
+    [self cacheRouteForPair:[OAWptPtPair pairWithFirst:self.original[1] second:self.original[2]] mode:OAApplicationMode.PEDESTRIAN];
+    XCTAssertGreaterThan(expected, 0);
+    XCTAssertEqualWithAccuracy(self.context.getRouteDistance, expected, 0.001);
+}
+
+- (void)testRouteDistanceHandlesConsecutiveGapsAndSinglePointSegments
+{
+    [self.original[0] setGap];
+    [self.original[1] setGap];
+    [self.original[4] setGap];
+    [self.original[7] setGap];
+    OASGpxFile *gpx = [self.context exportGpx:@"multiple-gap-distance"];
+    XCTAssertEqual(gpx.tracks.firstObject.segments.count, 4);
+    XCTAssertEqualWithAccuracy(self.context.getRouteDistance, [self exportedDistance:gpx], 0.001);
+}
+
+- (void)testRouteDistanceExcludesGapsInBothSidesOfEditingSplit
+{
+    [self.original[1] setGap];
+    [self.original[5] setGap];
+    double expected = [self exportedDistance:[self.context exportGpx:@"editing-gap-distance"]];
+    expected -= [OASKMapUtils.shared getEllipsoidDistanceLat1:self.original[3].lat lon1:self.original[3].lon
+                                                       lat2:self.original[4].lat lon2:self.original[4].lon];
+    [self.context splitSegments:4];
+    self.context.appMode = OAApplicationMode.PEDESTRIAN;
+    XCTAssertEqualWithAccuracy(self.context.getRouteDistance, expected, 0.001);
+}
+
+- (void)testMixedRouteDistanceMatchesExportWithAndWithoutGap
+{
+    for (BOOL gap : {NO, YES})
+    {
+        for (NSInteger routedStart : {0, 2})
+        {
+            [self.context.roadSegmentData removeAllObjects];
+            for (OASWptPt *point in self.original)
+                [point removeProfileType];
+            [self.context setPoints:[self.original subarrayWithRange:NSMakeRange(0, 4)]];
+            if (gap)
+                [self.original[1] setGap];
+            [self.original[routedStart] setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+            [self cacheRouteForPair:[OAWptPtPair pairWithFirst:self.original[routedStart] second:self.original[routedStart + 1]] mode:OAApplicationMode.PEDESTRIAN];
+            for (OAWptPtPair *pair in self.context.getPointsToCalculate)
+                [self cacheRouteForPair:pair mode:OAApplicationMode.DEFAULT];
+            self.context.appMode = OAApplicationMode.PEDESTRIAN;
+            OASGpxFile *gpx = [self.context exportGpx:@"mixed-gap-distance"];
+            XCTAssertEqual(gpx.tracks.firstObject.segments.count, gap ? 2 : 1);
+            XCTAssertEqualWithAccuracy(self.context.getRouteDistance, [self exportedDistance:gpx], 0.001);
+        }
+    }
+}
+
+- (void)testRouteDistanceRestoresGapOnUndoRedo
+{
+    [self.context setPoints:[self.original subarrayWithRange:NSMakeRange(0, 4)]];
+    double connectedDistance = self.context.getRouteDistance;
+    double gapDistance = [OASKMapUtils.shared getEllipsoidDistanceLat1:self.original[1].lat lon1:self.original[1].lon
+                                                               lat2:self.original[2].lat lon2:self.original[2].lon];
+    self.context.selectedPointPosition = 1;
+    [self.context.commandManager execute:[[OASplitPointsCommand alloc] initWithLayer:self.layer after:YES]];
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        XCTAssertTrue(self.context.getPoints[1].isGap);
+        XCTAssertEqualWithAccuracy(self.context.getRouteDistance, connectedDistance - gapDistance, 0.001);
+        [self.bridge undo];
+        XCTAssertFalse(self.context.getPoints[1].isGap);
+        XCTAssertEqualWithAccuracy(self.context.getRouteDistance, connectedDistance, 0.001);
+        [self.bridge redo];
+    }
+}
+
+- (void)testRouteDistanceMatchesHorizontalAnalysisWithElevationAndEmptyRoute
+{
+    [self.context setPoints:@[]];
+    XCTAssertEqual(self.context.getRouteDistance, 0);
+    [self.context setPoints:@[self.original[0]]];
+    XCTAssertEqual(self.context.getRouteDistance, 0);
+    [self.context setPoints:@[self.original[0], self.original[1]]];
+    self.original[0].ele = 100;
+    self.original[1].ele = 200;
+    double horizontal = [OASKMapUtils.shared getEllipsoidDistanceLat1:self.original[0].lat lon1:self.original[0].lon
+                                                              lat2:self.original[1].lat lon2:self.original[1].lon];
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        XCTAssertEqualWithAccuracy(self.context.getRouteDistance, horizontal, 0.001);
+        OASGpxFile *gpx = [self.context exportGpx:@"elevation-distance"];
+        XCTAssertEqualWithAccuracy([gpx getAnalysisFileTimestamp:0].totalDistance, horizontal, 0.01);
+        XCTAssertEqualWithAccuracy(gpx.tracks.firstObject.segments.firstObject.points.firstObject.ele, 100, 0.001);
+        XCTAssertEqualWithAccuracy(gpx.tracks.firstObject.segments.firstObject.points.lastObject.ele, 200, 0.001);
+        OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+        reopened.gpxData = [[OAGpxData alloc] initWithFile:gpx];
+        [reopened addPoints];
+        self.context = reopened;
+        OAWptPtPair *pair = [OAWptPtPair pairWithFirst:reopened.getPoints.firstObject second:reopened.getPoints.lastObject];
+        [self cacheRouteForPair:pair mode:OAApplicationMode.DEFAULT];
+    }
+}
+
+- (void)testWalkingThenStraightWithUnmatchedEndpointSurvivesRepeatedExport
+{
+    [self verifyUnmatchedEndpointRoundTripWithFollowingWalking:NO];
+}
+
+- (OASRouteSegmentResult *)roadFrom:(OASWptPt *)start to:(OASWptPt *)end highway:(NSString *)highway
+{
+    NSArray<OASKLatLon *> *points = @[
+        [[OASKLatLon alloc] initWithLatitude:start.lat longitude:start.lon],
+        [[OASKLatLon alloc] initWithLatitude:end.lat longitude:end.lon]
+    ];
+    OASRouteSegmentResult *segment = [OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:1.1 points:points];
+    [segment.getObject.region doInitRouteEncodingRuleId:0 tags:@"highway" val:highway];
+    return segment;
+}
+
+- (void)verifyRoadRecordsOnDiskWithPoints:(NSArray<OASWptPt *> *)points highways:(NSArray<NSString *> *)highways
+{
+    NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSUUID.UUID.UUIDString stringByAppendingPathExtension:@"gpx"]];
+    [self addTeardownBlock:^{
+        [NSFileManager.defaultManager removeItemAtPath:path error:nil];
+    }];
+    OASKFile *file = [[OASKFile alloc] initWithFilePath:path];
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        OASGpxFile *exported = [self.context exportGpx:@"road-record-round-trip"];
+        XCTAssertNil([OASGpxUtilities.shared writeGpxFileFile:file gpxFile:exported]);
+        OASGpxFile *loaded = [OASGpxUtilities.shared loadGpxFileFile:file];
+        XCTAssertNil(loaded.error);
+        OASTrkSegment *track = loaded.tracks.firstObject.segments.firstObject;
+        XCTAssertEqualObjects([self coordinates:track.points], [self coordinates:points]);
+        NSArray<OASRouteSegmentResult *> *records = [[[OARouteImporter alloc] initWithGpxFile:loaded] importRoute];
+        XCTAssertEqual(records.count, highways.count);
+        XCTAssertEqual(track.routeSegments.count, highways.count);
+        for (NSInteger index = 0; index < MIN(records.count, highways.count); index++)
+        {
+            OASRouteSegmentResult *record = records[index];
+            XCTAssertEqualObjects(record.getObject.getHighway, highways[index], @"cycle %ld record %ld", (long)cycle, (long)index);
+            XCTAssertEqual(track.routeSegments[index].startTrackPointIndex.integerValue, index);
+            XCTAssertEqualWithAccuracy(record.getStartPoint.latitude, points[index].lat, 0.000001);
+            XCTAssertEqualWithAccuracy(record.getStartPoint.longitude, points[index].lon, 0.000001);
+            XCTAssertEqualWithAccuracy(record.getEndPoint.latitude, points[index + 1].lat, 0.000001);
+            XCTAssertEqualWithAccuracy(record.getEndPoint.longitude, points[index + 1].lon, 0.000001);
+        }
+        OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+        reopened.gpxData = [[OAGpxData alloc] initWithFile:loaded];
+        [reopened addPoints];
+        self.context = reopened;
+    }
+}
+
+- (void)testOffRoadApproachPrecedesFootwayRecordOnDisk
+{
+    OASWptPt *start = self.original[0];
+    OASWptPt *roadStart = self.original[1];
+    OASWptPt *end = self.original[2];
+    [start setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[start, end]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:start second:end];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:start end:end
+                                                                         points:@[start, roadStart, end]
+                                                                       segments:@[[self roadFrom:roadStart to:end highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:@[start, roadStart, end] highways:@[@"highway_unmatched", @"footway"]];
+}
+
+- (void)testFinalPairRetainsBothRoadRecordsOnDisk
+{
+    OASWptPt *start = self.original[0];
+    OASWptPt *middle = self.original[1];
+    OASWptPt *end = self.original[2];
+    [start setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[start, end]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:start second:end];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:start end:end
+                                                                         points:@[start, middle, end]
+                                                                       segments:@[[self roadFrom:start to:middle highway:@"residential"],
+                                                                                  [self roadFrom:middle to:end highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:@[start, middle, end] highways:@[@"residential", @"footway"]];
+}
+
+- (void)testOffRoadApproachAndEndingSurroundFootwayRecordOnDisk
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 4)];
+    [points.firstObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[points.firstObject, points.lastObject]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points.firstObject second:points.lastObject];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second points:points
+                                                                       segments:@[[self roadFrom:points[1] to:points[2] highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:points highways:@[@"highway_unmatched", @"footway", @"highway_unmatched"]];
+}
+
+- (void)testUnmatchedGeometryBetweenRoadRecordsOnDisk
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 4)];
+    [points.firstObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[points.firstObject, points.lastObject]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points.firstObject second:points.lastObject];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second points:points
+                                                                       segments:@[[self roadFrom:points[0] to:points[1] highway:@"residential"],
+                                                                                  [self roadFrom:points[2] to:points[3] highway:@"footway"]]];
+    [self verifyRoadRecordsOnDiskWithPoints:points highways:@[@"residential", @"highway_unmatched", @"footway"]];
+}
+
+- (void)testReversedFootwayRecordFollowsOffRoadApproachOnDisk
+{
+    NSArray<OASWptPt *> *points = [self.original subarrayWithRange:NSMakeRange(0, 3)];
+    [points.firstObject setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[points.firstObject, points.lastObject]];
+    OASRouteSegmentResult *road = [self roadFrom:points[2] to:points[1] highway:@"footway"];
+    [road setStartPointIndexStartPointIndex:1];
+    [road setEndPointIndexEndPointIndex:0];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points.firstObject second:points.lastObject];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second points:points segments:@[road]];
+    [self verifyRoadRecordsOnDiskWithPoints:points highways:@[@"highway_unmatched", @"footway"]];
+}
+
+- (void)testWalkingThenStraightThenWalkingPreservesImportedSegmentBoundaries
+{
+    [self verifyUnmatchedEndpointRoundTripWithFollowingWalking:YES];
+}
+
+- (NSArray<NSArray<NSNumber *> *> *)coordinates:(NSArray<OASWptPt *> *)points
+{
+    NSMutableArray *coordinates = [NSMutableArray arrayWithCapacity:points.count];
+    for (OASWptPt *point in points)
+        [coordinates addObject:@[@(point.lat), @(point.lon)]];
+    return coordinates;
+}
+
+- (void)verifyUnmatchedEndpointRoundTripWithFollowingWalking:(BOOL)followingWalking
+{
+    OASWptPt *start = self.original[0];
+    OASWptPt *roadEnd = self.original[1];
+    OASWptPt *destination = self.original[2];
+    OASWptPt *straightEnd = self.original[3];
+    [start setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+    [self.context setPoints:@[start, destination, straightEnd]];
+    OAWptPtPair *walkingPair = [OAWptPtPair pairWithFirst:start second:destination];
+    NSArray<OASKLatLon *> *roadCoordinates = @[
+        [[OASKLatLon alloc] initWithLatitude:start.lat longitude:start.lon],
+        [[OASKLatLon alloc] initWithLatitude:roadEnd.lat longitude:roadEnd.lon]
+    ];
+    OASRouteSegmentResult *road = [OASRoutePlannerFrontEnd.companion generateStraightLineSegmentAverageSpeed:1.1 points:roadCoordinates];
+    self.context.roadSegmentData[walkingPair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                                  start:start end:destination
+                                                                                 points:@[start, roadEnd, destination] segments:@[road]];
+    [self cacheRouteForPair:[OAWptPtPair pairWithFirst:destination second:straightEnd] mode:OAApplicationMode.DEFAULT];
+    NSMutableArray<OASWptPt *> *expectedPoints = [@[start, roadEnd, destination, destination, straightEnd] mutableCopy];
+    NSMutableArray<NSNumber *> *expectedStarts = [@[@0, @1, @3] mutableCopy];
+    if (followingWalking)
+    {
+        OASWptPt *walkingEnd = self.original[4];
+        [straightEnd setProfileTypeProfileType:OAApplicationMode.PEDESTRIAN.stringKey];
+        [self.context setPoints:@[start, destination, straightEnd, walkingEnd]];
+        [self cacheRouteForPair:[OAWptPtPair pairWithFirst:straightEnd second:walkingEnd] mode:OAApplicationMode.PEDESTRIAN];
+        [expectedPoints addObjectsFromArray:@[straightEnd, walkingEnd]];
+        [expectedStarts addObject:@5];
+    }
+    OASGpxFile *gpx = [self.context exportGpx:@"walking-straight-round-trip"];
+    NSArray *expectedCoordinates = [self coordinates:expectedPoints];
+    double expectedDistance = self.context.getRouteDistance;
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        OASTrkSegment *track = gpx.tracks.firstObject.segments.firstObject;
+        XCTAssertEqualObjects([self coordinates:track.points], expectedCoordinates);
+        XCTAssertEqual(track.routeSegments.count, expectedStarts.count);
+        NSArray<OASRouteSegmentResult *> *imported = [[[OARouteImporter alloc] initWithGpxFile:gpx] importRoute];
+        XCTAssertEqual(imported.count, expectedStarts.count);
+        for (NSInteger index = 0; index < MIN(imported.count, expectedStarts.count); index++)
+        {
+            NSInteger startIndex = expectedStarts[index].integerValue;
+            XCTAssertEqual(track.routeSegments[index].startTrackPointIndex.integerValue, startIndex);
+            OASRouteSegmentResult *segment = imported[index];
+            XCTAssertEqual(abs([segment getEndPointIndex] - [segment getStartPointIndex]), 1);
+            OASKLatLon *first = [segment getStartPoint];
+            OASKLatLon *last = [segment getEndPoint];
+            XCTAssertEqualWithAccuracy(first.latitude, expectedPoints[startIndex].lat, 0.000001);
+            XCTAssertEqualWithAccuracy(first.longitude, expectedPoints[startIndex].lon, 0.000001);
+            XCTAssertEqualWithAccuracy(last.latitude, expectedPoints[startIndex + 1].lat, 0.000001);
+            XCTAssertEqualWithAccuracy(last.longitude, expectedPoints[startIndex + 1].lon, 0.000001);
+        }
+        OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+        reopened.gpxData = [[OAGpxData alloc] initWithFile:gpx];
+        [reopened addPoints];
+        XCTAssertEqualWithAccuracy(reopened.getRouteDistance, expectedDistance, 0.001);
+        gpx = [reopened exportGpx:@"walking-straight-round-trip"];
+        XCTAssertEqualObjects([self coordinates:gpx.tracks.firstObject.segments.firstObject.points], expectedCoordinates);
+        XCTAssertEqualWithAccuracy([self exportedDistance:gpx], expectedDistance, 0.001);
+    }
+}
+
+- (void)testCachedGeometryWithoutRoutingMetadataSurvivesRepeatedExport
+{
+    [self.context setPoints:@[self.original[0], self.original[2]]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[0] second:self.original[2]];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second
+                                                                         points:@[self.original[0], self.original[1], self.original[2]] segments:@[]];
+    NSArray *expected = [self coordinates:[self.original subarrayWithRange:NSMakeRange(0, 3)]];
+    double expectedDistance = self.context.getRouteDistance;
+    for (NSInteger cycle = 0; cycle < 3; cycle++)
+    {
+        OASGpxFile *gpx = [self.context exportGpx:@"geometry-without-metadata"];
+        XCTAssertEqualObjects([self coordinates:gpx.tracks.firstObject.segments.firstObject.points], expected);
+        XCTAssertEqualWithAccuracy([self exportedDistance:gpx], expectedDistance, 0.001);
+        OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+        reopened.gpxData = [[OAGpxData alloc] initWithFile:gpx];
+        [reopened addPoints];
+        XCTAssertEqualWithAccuracy(reopened.getRouteDistance, expectedDistance, 0.001);
+        self.context = reopened;
+    }
+}
+
+- (void)testPartialCachePreservesUncachedLegsBeforeAndAfterCachedGeometry
+{
+    for (NSInteger cachedIndex = 0; cachedIndex < 3; cachedIndex++)
+    {
+        [self.context.roadSegmentData removeAllObjects];
+        NSArray<OASWptPt *> *points = @[self.original[0], self.original[2], self.original[4], self.original[6]];
+        [self.context setPoints:points];
+        OAWptPtPair *pair = [OAWptPtPair pairWithFirst:points[cachedIndex] second:points[cachedIndex + 1]];
+        self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                              start:pair.first end:pair.second
+                                                                             points:@[pair.first, self.original[cachedIndex * 2 + 1], pair.second] segments:@[]];
+        NSMutableArray *expected = [NSMutableArray array];
+        for (NSInteger index = 0; index < 3; index++)
+        {
+            [expected addObject:points[index]];
+            if (index == cachedIndex)
+                [expected addObject:self.original[index * 2 + 1]];
+            [expected addObject:points[index + 1]];
+        }
+        OASGpxFile *gpx = [self.context exportGpx:@"partial-cache"];
+        XCTAssertEqualObjects([self coordinates:gpx.tracks.firstObject.segments.firstObject.points], [self coordinates:expected]);
+        XCTAssertEqualWithAccuracy([self exportedDistance:gpx], self.context.getRouteDistance, 0.001);
+        OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+        reopened.gpxData = [[OAGpxData alloc] initWithFile:gpx];
+        [reopened addPoints];
+        XCTAssertEqual(reopened.getPoints.count, points.count);
+        XCTAssertEqualWithAccuracy(reopened.getRouteDistance, self.context.getRouteDistance, 0.001);
+        XCTAssertEqualObjects([self coordinates:[reopened exportGpx:@"partial-cache-reopened"].tracks.firstObject.segments.firstObject.points], [self coordinates:expected]);
+    }
+}
+
+- (void)testInvalidImportedRoutingMetadataRetainsUsableGeometry
+{
+    [self.context setPoints:@[self.original[0], self.original[2]]];
+    OAWptPtPair *pair = [OAWptPtPair pairWithFirst:self.original[0] second:self.original[2]];
+    self.context.roadSegmentData[pair] = [[OARoadSegmentData alloc] initWithAppMode:OAApplicationMode.PEDESTRIAN
+                                                                          start:pair.first end:pair.second
+                                                                         points:@[self.original[0], self.original[1], self.original[2]] segments:@[]];
+    OASGpxFile *gpx = [self.context exportGpx:@"invalid-routing-metadata"];
+    OASTrkSegment *segment = gpx.tracks.firstObject.segments.firstObject;
+    XCTAssertEqual(segment.routeSegments.count, 1);
+    segment.routeSegments.firstObject.length = @"999";
+    OAMeasurementEditingContext *reopened = [[OAPlanRouteHistoryContext alloc] init];
+    reopened.gpxData = [[OAGpxData alloc] initWithFile:gpx];
+    [reopened addPoints];
+    XCTAssertEqual(reopened.orderedRoadSegmentData.count, 1);
+    XCTAssertEqual(reopened.orderedRoadSegmentData.firstObject.segments.count, 0);
+    OASGpxFile *resaved = [reopened exportGpx:@"invalid-routing-metadata-resaved"];
+    XCTAssertEqualObjects([self coordinates:resaved.tracks.firstObject.segments.firstObject.points], [self coordinates:segment.points]);
+}
+
+- (void)testCachedGeometryRangeExportKeepsEndpointIndexInsideTrack
+{
+    [self.context setPoints:[self.original subarrayWithRange:NSMakeRange(0, 3)]];
+    [self cacheRouteForPair:[OAWptPtPair pairWithFirst:self.original[0] second:self.original[1]] mode:OAApplicationMode.PEDESTRIAN];
+    [self.original[0] setTrkPtIndexIndex:7];
+    [self.original[1] setTrkPtIndexIndex:9];
+    OASGpxFile *gpx = [self.context exportGpx:@"cached-range" startPointIndex:0 endPointIndex:1];
+    NSArray *expectedCoordinates = [self coordinates:@[self.original[0], self.original[1]]];
+    XCTAssertEqualObjects([self coordinates:gpx.tracks.firstObject.segments.firstObject.points], expectedCoordinates);
+    NSArray<OASWptPt *> *routePoints = [gpx getRoutePointsRouteIndex:0];
+    XCTAssertEqual(routePoints.count, 2);
+    XCTAssertEqual(routePoints.firstObject.getTrkPtIndex, 0);
+    XCTAssertEqual(routePoints.lastObject.getTrkPtIndex, 1);
+    XCTAssertEqual(self.original[0].getTrkPtIndex, 7);
+    XCTAssertEqual(self.original[1].getTrkPtIndex, 9);
+}
+
+- (void)testRouteDistanceMatchesSavedTrackAnalysis
+{
+    [self.original[3] setGap];
+    [self cacheRouteForPair:[OAWptPtPair pairWithFirst:self.original[5] second:self.original[6]] mode:OAApplicationMode.PEDESTRIAN];
+    for (OAWptPtPair *pair in self.context.getPointsToCalculate)
+        [self cacheRouteForPair:pair mode:OAApplicationMode.DEFAULT];
+    OASGpxFile *gpx = [self.context exportGpx:@"saved-analysis-distance"];
+    XCTAssertEqualWithAccuracy(self.context.getRouteDistance, [gpx getAnalysisFileTimestamp:0].totalDistance, 0.01);
 }
 
 - (void)testIndependentRecordedSegmentPreservesMetadataOnExport

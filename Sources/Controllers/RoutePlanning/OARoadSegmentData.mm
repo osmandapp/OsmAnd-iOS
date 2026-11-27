@@ -34,8 +34,8 @@
         {
             for (NSInteger i = 1; i < points.count; i++)
             {
-                distance += getDistance(points[i - 1].getLatitude, points[i - 1].getLongitude,
-                        points[i].getLatitude, points[i].getLongitude);
+                distance += [OASKMapUtils.shared getEllipsoidDistanceLat1:points[i - 1].lat lon1:points[i - 1].lon
+                                                                    lat2:points[i].lat lon2:points[i].lon];
             }
         }
         else if (segments.count > 0)

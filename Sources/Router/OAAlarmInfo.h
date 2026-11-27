@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, EOAAlarmInfoType)
     AIT_HAZARD,
     AIT_MAXIMUM,
     AIT_RED_LIGHT_CAMERA,
+    AIT_TRAM,
 };
 
 @interface OAAlarmInfo : NSObject<OALocationPoint>

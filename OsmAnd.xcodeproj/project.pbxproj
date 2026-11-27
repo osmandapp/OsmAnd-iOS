@@ -20,6 +20,7 @@
 		D1C584800000000000000001 /* OALocationIconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D1C584800000000000000002 /* OALocationIconTests.m */; };
 		D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C5848A0000000000000002 /* Model3dHelperTests.swift */; };
 		D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */; };
+		D15937000000000000000011 /* OARasterTileUpdateTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D15937000000000000000012 /* OARasterTileUpdateTests.mm */; };
 		D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */; };
 		D1C578200000000000000001 /* OAPlanRouteHistoryTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */; };
 		051177FF2B25A51A006B4774 /* OARouteRecalculationHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 051177FE2B25A51A006B4774 /* OARouteRecalculationHelper.mm */; };
@@ -1166,6 +1167,7 @@
 		DA5A819C26C563A700F274C7 /* OAAddPOIAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A1B26C563A000F274C7 /* OAAddPOIAction.mm */; };
 		DA5A819D26C563A700F274C7 /* OASwitchProfileAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A1C26C563A000F274C7 /* OASwitchProfileAction.m */; };
 		DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */; };
+		295600000000000000000003 /* OADownloadMapLayerHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 295600000000000000000002 /* OADownloadMapLayerHelper.mm */; };
 		DA5A81A126C563A700F274C7 /* OADownloadMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */; };
 		DA5A81A226C563A700F274C7 /* OASelectMapSourceViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */; };
 		DA5A81A326C563A700F274C7 /* OASelectMapSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7A2A26C563A000F274C7 /* OASelectMapSourceViewController.xib */; };
@@ -2303,6 +2305,7 @@
 		D1C584800000000000000002 /* OALocationIconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Profiles/OALocationIconTests.m; sourceTree = "<group>"; };
 		D1C5848A0000000000000002 /* Model3dHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profiles/Model3dHelperTests.swift; sourceTree = "<group>"; };
 		D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/UtilitiesUrlQueryTests.swift; sourceTree = "<group>"; };
+		D15937000000000000000012 /* OARasterTileUpdateTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OARasterTileUpdateTests.mm; sourceTree = "<group>"; };
 		D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Helpers/OAReverseGeocoderStopTests.mm; sourceTree = "<group>"; };
 		D1C578200000000000000002 /* OAPlanRouteHistoryTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanRouteHistoryTests.mm; sourceTree = "<group>"; };
 		0215F9145791D44EF7A9E6BA /* es-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "es-US"; path = "es-US.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -4119,6 +4122,8 @@
 		DA5A7A2126C563A000F274C7 /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAWorldRegion+Protected.h"; sourceTree = "<group>"; };
 		DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
+		295600000000000000000001 /* OADownloadMapLayerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMapLayerHelper.h; sourceTree = "<group>"; };
+		295600000000000000000002 /* OADownloadMapLayerHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapLayerHelper.mm; sourceTree = "<group>"; };
 		DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadMapViewController.mm; sourceTree = "<group>"; };
 		DA5A7A2926C563A000F274C7 /* OASelectMapSourceViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASelectMapSourceViewController.mm; sourceTree = "<group>"; };
 		DA5A7A2A26C563A000F274C7 /* OASelectMapSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASelectMapSourceViewController.xib; sourceTree = "<group>"; };
@@ -5296,6 +5301,7 @@
 		DA5A80A826C563A600F274C7 /* OADiscountHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADiscountHelper.mm; sourceTree = "<group>"; };
 		DA5A80A926C563A600F274C7 /* OASettingsExporter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OASettingsExporter.mm; sourceTree = "<group>"; };
 		DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapTileDownloader.h; sourceTree = "<group>"; };
+		D15937000000000000000001 /* OARasterTileCoordinates.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARasterTileCoordinates.h; sourceTree = "<group>"; };
 		DA5A80AB26C563A600F274C7 /* OAMapUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapUtils.h; sourceTree = "<group>"; };
 		DA5A80AD26C563A600F274C7 /* OAOsmAndLiveHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmAndLiveHelper.h; sourceTree = "<group>"; };
 		DA5A80AE26C563A600F274C7 /* OACustomRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACustomRegion.mm; sourceTree = "<group>"; };
@@ -7907,6 +7913,8 @@
 		DA5A7A2426C563A000F274C7 /* DownloadMapSource */ = {
 			isa = PBXGroup;
 			children = (
+				295600000000000000000001 /* OADownloadMapLayerHelper.h */,
+				295600000000000000000002 /* OADownloadMapLayerHelper.mm */,
 				C57E1E46308635D200112730 /* DownloadMapProgressViewController.swift */,
 				DA5A7A2D26C563A000F274C7 /* OADownloadMapViewController.h */,
 				DA5A7A2726C563A000F274C7 /* OADownloadMapViewController.mm */,
@@ -10232,6 +10240,7 @@
 				3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */,
 				3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */,
 				DA5A80AA26C563A600F274C7 /* OAMapTileDownloader.h */,
+				D15937000000000000000001 /* OARasterTileCoordinates.h */,
 				DA5A80D826C563A600F274C7 /* OAMapTileDownloader.mm */,
 				DA5A80AB26C563A600F274C7 /* OAMapUtils.h */,
 				DA5A80E126C563A600F274C7 /* OAMapUtils.mm */,
@@ -10427,6 +10436,7 @@
 				D1C584800000000000000002 /* OALocationIconTests.m */,
 				D1C5848A0000000000000002 /* Model3dHelperTests.swift */,
 				D1C586500000000000000002 /* UtilitiesUrlQueryTests.swift */,
+				D15937000000000000000012 /* OARasterTileUpdateTests.mm */,
 				D1C585900000000000000002 /* OAReverseGeocoderStopTests.mm */,
 				E1E5A1100000000000000002 /* OASharedReverseGeocoderTest.mm */,
 				FA7EA4082FD2ACF700509B01 /* Extensions */,
@@ -13072,6 +13082,7 @@
 				32C21CB127DFC18E00DE4266 /* OAAlertBottomSheetViewController.mm in Sources */,
 				27E3429C2FADD420008416B6 /* MyPlacesContainerViewController.swift in Sources */,
 				DA5A834A26C563A800F274C7 /* OAWaypointHeaderCell.m in Sources */,
+				295600000000000000000003 /* OADownloadMapLayerHelper.mm in Sources */,
 				DA5A81A126C563A700F274C7 /* OADownloadMapViewController.mm in Sources */,
 				DA5A846F26C563A900F274C7 /* OABearingWidgetState.m in Sources */,
 				DA5A818326C563A700F274C7 /* OASwitchableAction.m in Sources */,
@@ -13944,6 +13955,7 @@
 				D1C584800000000000000001 /* OALocationIconTests.m in Sources */,
 				D1C5848A0000000000000001 /* Model3dHelperTests.swift in Sources */,
 				D1C586500000000000000001 /* UtilitiesUrlQueryTests.swift in Sources */,
+				D15937000000000000000011 /* OARasterTileUpdateTests.mm in Sources */,
 				D1C585900000000000000001 /* OAReverseGeocoderStopTests.mm in Sources */,
 				E1E5A1100000000000000001 /* OASharedReverseGeocoderTest.mm in Sources */,
 				DA80DAAA251E0C37008E6267 /* OARouteResultPreparationTest.mm in Sources */,

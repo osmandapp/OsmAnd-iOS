@@ -2265,6 +2265,7 @@ extension QuickSearchViewController: AddressViewControllerDelegate {
     func addressDidRequestPostcodeSearch() {
         searchController.searchBar.placeholder = localizedString("type_postcode")
         startPostcodeSearch()
+        setResultCollection(nil)
         updateData([], append: false)
         updateTabsVisibility(false)
         focusSearchField()
@@ -2274,7 +2275,7 @@ extension QuickSearchViewController: AddressViewControllerDelegate {
         let latLon = searchUICore?.getSearchSettings()?.getOriginalLocation()
         guard let coordinatesViewController = OAQuickSearchCoordinatesViewController(lat: latLon?.coordinate.latitude ?? 0, lon: latLon?.coordinate.longitude ?? 0) else { return }
         let navigationController = UINavigationController(rootViewController: coordinatesViewController)
-        navigationController.modalPresentationStyle = .fullScreen
+        navigationController.modalPresentationStyle = .overFullScreen
         presentAfterDeactivatingSearch { [weak self] in
             self?.present(navigationController, animated: true)
         }

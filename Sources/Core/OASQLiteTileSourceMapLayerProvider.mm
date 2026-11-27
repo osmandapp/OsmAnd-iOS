@@ -10,6 +10,7 @@
 #import "OANativeUtilities.h"
 #import "OAWebClient.h"
 #import "OAMapCreatorDbHelper.h"
+#import "OARasterTileCoordinates.h"
 
 #include <SkImageEncoder.h>
 #include <SkStream.h>
@@ -241,8 +242,7 @@ sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAn
     double offsetY = 0;
     if (isEllipsoid())
     {
-        double latitude = OsmAnd::Utilities::getLatitudeFromTile(zoom, tileId.y);
-        auto numberOffset = OsmAnd::Utilities::getTileEllipsoidNumberAndOffsetY(zoom, latitude, _tileSize);
+        const auto numberOffset = OARasterTileCoordinates::rowAndOffset(tileId.y, zoom, _tileSize);
         tileId.y = numberOffset.x;
         offsetY = numberOffset.y;
     }

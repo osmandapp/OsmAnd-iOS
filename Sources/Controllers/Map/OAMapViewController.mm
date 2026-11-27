@@ -2827,7 +2827,6 @@ static char kMapSourceUpdateQueueKey;
     }
     else
     {
-        elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
         elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
     }
 
@@ -3036,7 +3035,6 @@ static char kMapSourceUpdateQueueKey;
     }
     else
     {
-        elevationConfiguration.setSlopeAlgorithm(OsmAnd::ElevationConfiguration::SlopeAlgorithm::None);
         elevationConfiguration.setVisualizationStyle(OsmAnd::ElevationConfiguration::VisualizationStyle::None);
     }
     [_mapView setElevationConfiguration:elevationConfiguration forcedUpdate:YES];

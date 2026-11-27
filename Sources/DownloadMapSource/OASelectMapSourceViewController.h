@@ -8,6 +8,7 @@
 
 #import "OACompoundViewController.h"
 #import "UIKit/UIKit.h"
+#import "OADownloadMapLayerHelper.h"
 
 @protocol OAMapSourceSelectionDelegate <NSObject>
 
@@ -19,7 +20,8 @@
 
 @interface OASelectMapSourceViewController : OACompoundViewController
 
-@property (nonatomic) id<OAMapSourceSelectionDelegate> delegate;
+@property (nonatomic, weak) id<OAMapSourceSelectionDelegate> delegate;
+@property (nonatomic) EOADownloadMapLayer layer;
 
 @end
 

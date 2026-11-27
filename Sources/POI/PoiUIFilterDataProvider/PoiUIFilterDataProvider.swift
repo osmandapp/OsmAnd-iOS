@@ -11,16 +11,16 @@ import CoreLocation
 @objcMembers
 final class PoiUIFilterDataProvider: NSObject {
     
-    private let filter: OAPOIUIFilter
+    private weak var filter: OAPOIUIFilter?
     private let explorePlacesProvider: ExplorePlacesProvider
-    
+
     init(filter: OAPOIUIFilter) {
         self.filter = filter
         self.explorePlacesProvider = ExplorePlacesOnlineProvider()
     }
-    
+
     func dataSourceType() -> DataSourceType {
-        if filter.isTopWikiFilter() {
+        if filter?.isTopWikiFilter() == true {
             return OAAppSettings.sharedManager().wikiDataSourceType.get() == .online ? .online : .offline
         } else {
             return .offline
@@ -35,6 +35,7 @@ final class PoiUIFilterDataProvider: NSObject {
                          rightLongitude: Double,
                          zoom: Int,
                          matcher: OAResultMatcher<OAPOI>? = nil) -> [OAPOI] {
+        guard let filter else { return [] }
         if filter.isTopWikiFilter() && dataSourceType() == .online {
             return searchWikiOnline(
                 lat: lat,
@@ -61,7 +62,7 @@ final class PoiUIFilterDataProvider: NSObject {
 
     @objc(cancelWikiOnlineLoadingExcept:)
     func cancelWikiOnlineLoading(except rect: QuadRect?) {
-        guard filter.isTopWikiFilter(), dataSourceType() == .online else {
+        guard filter?.isTopWikiFilter() == true, dataSourceType() == .online else {
             return
         }
         explorePlacesProvider.cancelLoading(except: rect)

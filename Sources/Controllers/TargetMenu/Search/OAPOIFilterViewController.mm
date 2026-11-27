@@ -30,13 +30,13 @@
 #import "OASearchPhrase.h"
 #import "OAPOI.h"
 #import "QuadRect.h"
+#import "OAPoiUIFilterDataProviderWrapper.h"
 
 #include <OsmAndCore/Utilities.h>
 
 static const int kPlacesCountRadius = 10000;
 static const NSInteger kMaxValuesWithPlaces = 5;
 static NSString * const kOtherCategories = @"poi_filter_other_categories";
-static NSString * const kTopIndexFilterPrefix = @"top_index_";
 static const NSInteger kCountBadgeTag = 0x5C0;
 
 typedef enum
@@ -601,15 +601,20 @@ typedef enum
     double left = OsmAnd::Utilities::get31LongitudeX(rect.left);
     double bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom);
     double right = OsmAnd::Utilities::get31LongitudeX(rect.right);
-    OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithFilter:_filter name:_filter.name filterId:_filter.filterId];
-    BOOL topIndexFilter = [_filter.filterId hasPrefix:kTopIndexFilterPrefix];
-    filter.filterByName = topIndexFilter ? _nameFilterTextOrig : nil;
-    filter.filterByKey = topIndexFilter ? _filter.filterByKey : nil;
-    OAResultMatcher<OAPOI *> *matcher = [filter wrapResultMatcher:nil];
+    OASearchPoiTypeFilter *filter = [_filter typeFilterSnapshot];
+    OATopIndexFilter *additionalFilter = _filter.additionalFilter;
 
     __weak OAPOIFilterViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray<OAPOI *> *amenities = [filter searchAmenities:top left:left bottom:bottom right:right zoom:-1 matcher:matcher filterUnique:YES];
+        NSArray<OAPOI *> *amenities = [OAPoiUIFilterDataProviderWrapper searchAmenities:filter
+                                                                       additionalFilter:additionalFilter
+                                                                            topLatitude:top
+                                                                         bottomLatitude:bottom
+                                                                          leftLongitude:left
+                                                                         rightLongitude:right
+                                                                          includeTravel:NO
+                                                                                matcher:nil
+                                                                                publish:nil];
 
         OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
         NSMapTable<OAPOIType *, OAPOIType *> *textPoiAdditionals = [NSMapTable strongToStrongObjectsMapTable];

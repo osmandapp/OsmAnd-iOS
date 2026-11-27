@@ -32,6 +32,41 @@
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 
+static BOOL OAAcceptPoiType(OAPOIHelper *poiHelper,
+                            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes,
+                            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypesOrigin,
+                            OAPOICategory *type,
+                            NSString *subcategory)
+{
+    if (!type)
+        return YES;
+
+    if (![poiHelper isRegisteredType:type])
+        type = poiHelper.otherPoiCategory;
+
+    if ([[acceptedTypes keyEnumerator].allObjects containsObject:type])
+    {
+        NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypes objectForKey:type];
+        if ([acceptedTypesSet count] == 0 || [acceptedTypesSet containsObject:subcategory])
+            return YES;
+    }
+    if ([[acceptedTypesOrigin keyEnumerator].allObjects containsObject:type])
+    {
+        NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypesOrigin objectForKey:type];
+        if (acceptedTypesSet || [acceptedTypesSet containsObject:subcategory])
+            return YES;
+    }
+    return NO;
+}
+
+static NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *OACopyAcceptedTypes(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types)
+{
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *copy = [NSMapTable strongToStrongObjectsMapTable];
+    for (OAPOICategory *category in types)
+        [copy setObject:[[types objectForKey:category] mutableCopy] forKey:category];
+    return copy;
+}
+
 @implementation OAAmenityNameFilter
 
 -(BOOL)accept:(OAPOI *)a
@@ -193,6 +228,7 @@
         standardIconId = [filter getIconResource];
         filterId = [filter getFilterId];
         name = [filter getName];
+        _additionalFilter = filter;
         if (!accTypes)
         {
             [self initSearchAll];
@@ -1226,25 +1262,22 @@
 
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory
 {
-    if (!type)
-        return YES;
+    return OAAcceptPoiType(poiHelper, acceptedTypes, acceptedTypesOrigin, type, subcategory);
+}
 
-    if (![poiHelper isRegisteredType:type])
-        type = poiHelper.otherPoiCategory;
-
-    if ([[acceptedTypes keyEnumerator].allObjects containsObject:type])
-    {
-        NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypes objectForKey:type];
-        if ([acceptedTypesSet count] == 0 || [acceptedTypesSet containsObject:subcategory])
-            return YES;
-    }
-    if ([[acceptedTypesOrigin keyEnumerator].allObjects containsObject:type])
-    {
-        NSMutableSet<NSString *> *acceptedTypesSet = [acceptedTypesOrigin objectForKey:type];
-        if (acceptedTypesSet || [acceptedTypesSet containsObject:subcategory])
-            return YES;
-    }
-    return NO;
+- (OASearchPoiTypeFilter *)typeFilterSnapshot
+{
+    OAPOIHelper *helper = poiHelper;
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = OACopyAcceptedTypes(acceptedTypes);
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *typesOrigin = OACopyAcceptedTypes(acceptedTypesOrigin);
+    BOOL empty = [self isEmpty];
+    return [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
+        return OAAcceptPoiType(helper, types, typesOrigin, type, subcategory);
+    } emptyFunction:^BOOL{
+        return empty;
+    } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
+        return types;
+    }];
 }
 
 - (BOOL) isEmpty

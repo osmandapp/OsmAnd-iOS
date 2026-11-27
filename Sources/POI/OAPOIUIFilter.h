@@ -53,6 +53,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) NSArray<OAPOI *> *currentSearchResult;
 @property (nonatomic, readonly) OAPOIBaseType *baseType;
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
+@property (nonatomic, readonly, nullable) OATopIndexFilter *additionalFilter;
 
 - (instancetype) initWithBasePoiType:(nullable OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
 - (instancetype) initWithName:(NSString *)nm filterId:(nullable NSString *)fId acceptedTypes:(nullable NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
@@ -112,6 +113,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (BOOL)hasPoiAdditional:(NSString *)key;
 - (NSString *) getIconId;
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
+- (OASearchPoiTypeFilter *)typeFilterSnapshot;
 - (BOOL) isEmpty;
 - (NSArray<OAPOI *> *) searchAmenitiesOnThePath:(NSArray<CLLocation *> *)locs poiSearchDeviationRadius:(int)poiSearchDeviationRadius;
 - (void) removeUnsavedFilterByName;

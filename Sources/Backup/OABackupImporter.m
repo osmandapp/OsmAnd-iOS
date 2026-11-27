@@ -283,6 +283,12 @@
     {
         if (reader)
         {
+            if ([BackupUtils isFileNameTooLong:remoteFile.name])
+            {
+                [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"cloud_file_name_too_long"), remoteFile.name]];
+                NSLog(@"Cloud file name is too long for the device: %@", remoteFile.name);
+                return;
+            }
             NSString *errorStr = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
             BOOL error = errorStr.length > 0;
             if (!error)
@@ -473,7 +479,7 @@
             long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
             if ([self shouldDownloadOnCollecting:remoteFile defValue:readItems]
                 && (uploadTime != remoteFile.updatetimems || delete))
-                remoteInfoFilesMap[[_tmpFilesDir stringByAppendingPathComponent:fileName]] = remoteFile;
+                remoteInfoFilesMap[[self getInfoTempFilePath:remoteFile]] = remoteFile;
             
             NSString *itemFileName = [fileName stringByDeletingPathExtension];
             [remoteInfoNames addObject:itemFileName];
@@ -484,6 +490,15 @@
             remoteItemFilesMap[fileName] = remoteFile;
         }
     }
+}
+
+// the info is only read from its temp file, so a name too long for the device is replaced by its hash
+- (NSString *)getInfoTempFilePath:(OARemoteFile *)remoteFile
+{
+    NSString *fileName = remoteFile.getTypeNamePath;
+    if ([BackupUtils isFileNameTooLong:fileName])
+        fileName = [NSString stringWithFormat:@"%@/%@.%@", remoteFile.type, [HashHelper md5Hex:fileName], OABackupHelper.INFO_EXT];
+    return [_tmpFilesDir stringByAppendingPathComponent:fileName];
 }
 
 - (BOOL)shouldDownloadOnCollecting:(OARemoteFile *)remoteFile defValue:(BOOL)defValue

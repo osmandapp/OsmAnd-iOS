@@ -274,7 +274,7 @@ static NSArray<NSString *> *const HIDING_EXTENSIONS_AMENITY_TAGS = @[
     }
     else
     {
-        BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTES_PREFIX] || [_subType isEqualToString:ROUTE_TRACK];
+        BOOL hasRouteTrackSubtype = [_subType hasPrefix:ROUTES_PREFIX] || [_subType containsString:[@";" stringByAppendingString:ROUTES_PREFIX]] || [_subType isEqualToString:ROUTE_TRACK];
         BOOL hasGeometry = _values && _values[ROUTE_BBOX_RADIUS];
         return hasRouteTrackSubtype && hasGeometry && !NSStringIsEmpty([self getRouteId]);
     }

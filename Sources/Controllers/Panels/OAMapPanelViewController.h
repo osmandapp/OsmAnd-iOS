@@ -220,6 +220,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
              bottomRight:(CLLocationCoordinate2D)bottomRight
+              screenBBox:(CGSize)screenBBox
+             bottomInset:(float)bottomInset
+               leftInset:(float)leftInset
+                topInset:(float)topInset
+    changeElevationAngle:(BOOL)changeElevationAngle
+           shouldDisplay:(BOOL (^ _Nullable)(void))shouldDisplay;
+
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft
+             bottomRight:(CLLocationCoordinate2D)bottomRight
                  maxZoom:(float)maxZoom
               screenBBox:(CGSize)screenBBox
              bottomInset:(float)bottomInset

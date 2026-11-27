@@ -7,6 +7,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     private var window: UIWindow?
     private var isForegroundScene = false
     private var applicationModeChangedObserver: OAAutoObserverProxy?
+    private var isRouteOverviewPending = false
 
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
@@ -14,17 +15,23 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         configureScene()
     }
 
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        updateMapViewport()
+    }
+
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
         NotificationCenter.default.removeObserver(self)
         stopObservingMapViewportSettings()
+        cancelPendingRouteOverview()
         isForegroundScene = false
     }
 
     private func configureScene() {
         NotificationCenter.default.removeObserver(self)
         stopObservingMapViewportSettings()
-        guard window != nil else { return }
+        cancelPendingRouteOverview()
+        guard let window else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
         appDelegate.initialize()
 
@@ -41,10 +48,11 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
             if let mapVC {
                 CarPlayService.shared.configure()
                 dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
-                dashboardVC?.attachMapToWindow()
-                self.window?.rootViewController = dashboardVC
+                window.rootViewController = dashboardVC
                 OARootViewController.instance()?.mapPanel.onCarPlayConnected()
+                dashboardVC?.attachMapToWindow()
                 updateMapViewport()
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded(showRouteOverview: requestRouteOverview)
                 startObservingMapViewportSettings()
             }
         } else {
@@ -86,6 +94,61 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
         }
         return 2.0 - (bottomMargin / (screenHeight / 2.0))
     }
+
+    private func requestRouteOverview() {
+        isRouteOverviewPending = true
+        OARoutingHelper.sharedInstance().add(self)
+        centerMapOnRoute()
+    }
+
+    private func cancelPendingRouteOverview() {
+        guard isRouteOverviewPending else { return }
+        isRouteOverviewPending = false
+        OARoutingHelper.sharedInstance().remove(self)
+    }
+
+    private func centerMapOnRoute() {
+        guard isRouteOverviewPending else { return }
+        let routingHelper = OARoutingHelper.sharedInstance()
+        guard isForegroundScene,
+              mapVC?.parent === dashboardVC,
+              !routingHelper.isFollowingMode() else {
+            cancelPendingRouteOverview()
+            return
+        }
+        guard let dashboardVC,
+              routingHelper.isRouteCalculated(),
+              let mapPanel = OARootViewController.instance()?.mapPanel else { return }
+        let bounds = routingHelper.getBBox()
+        let topLeft = CLLocationCoordinate2D(latitude: bounds.top, longitude: bounds.left)
+        let bottomRight = CLLocationCoordinate2D(latitude: bounds.bottom, longitude: bounds.right)
+        mapPanel.displayArea(onMap: topLeft,
+                             bottomRight: bottomRight,
+                             screenBBox: dashboardVC.view.bounds.size,
+                             bottomInset: 0,
+                             leftInset: 0,
+                             topInset: 0,
+                             changeElevationAngle: true) { [weak self, weak dashboardVC] in
+            guard let self, let dashboardVC,
+                  isRouteOverviewPending,
+                  self.dashboardVC === dashboardVC else { return false }
+            guard isForegroundScene,
+                  mapVC?.parent === dashboardVC,
+                  window?.rootViewController === dashboardVC,
+                  !routingHelper.isFollowingMode() else {
+                cancelPendingRouteOverview()
+                return false
+            }
+            guard routingHelper.isRouteCalculated() else { return false }
+            let currentBounds = routingHelper.getBBox()
+            guard currentBounds.top == bounds.top,
+                  currentBounds.left == bounds.left,
+                  currentBounds.bottom == bounds.bottom,
+                  currentBounds.right == bounds.right else { return false }
+            cancelPendingRouteOverview()
+            return true
+        }
+    }
     
     @objc private func onProfileSettingSet(notification: Notification) {
         let settings: OAAppSettings = OAAppSettings.sharedManager()
@@ -119,14 +182,20 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidConnect(templateApplicationDashboardScene)
         self.window = window
         dashboardController.shortcutButtons = createDashboardButtons(for: templateApplicationDashboardScene)
+        if isForegroundScene {
+            configureScene()
+        }
     }
     
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didDisconnect dashboardController: CPDashboardController, from window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didDisconnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidDisconnect(templateApplicationDashboardScene)
         CarPlayService.shared.disconnectScene(.dashboard)
         stopObservingMapViewportSettings()
+        cancelPendingRouteOverview()
         dashboardVC?.detachFromCarPlayWindow()
         dashboardVC = nil
         mapVC = nil
@@ -161,6 +230,48 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
                         NSLog("[CarPlay] Failed to open URL: \(url)")
                     }
                 }
+            }
+        }
+    }
+}
+
+extension DashboardCarPlaySceneDelegate: OARouteInformationListener {
+    func newRouteIsCalculated(_ newRoute: Bool) {
+        centerMapOnRoute()
+    }
+
+    func routeWasUpdated() {}
+
+    func routeWasCancelled() {
+        if OARoutingHelper.sharedInstance().getFinalLocation() == nil {
+            cancelPendingRouteOverview()
+        }
+    }
+
+    func routeWasFinished() {
+        cancelPendingRouteOverview()
+    }
+    func routeCalculationFailed() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, isRouteOverviewPending else { return }
+            let routingHelper = OARoutingHelper.sharedInstance()
+            guard !routingHelper.isRouteBeingCalculated() else { return }
+            if routingHelper.isRouteCalculated() {
+                centerMapOnRoute()
+                return
+            }
+            cancelPendingRouteOverview()
+            guard let dashboardVC,
+                  isForegroundScene,
+                  mapVC?.parent === dashboardVC,
+                  window?.rootViewController === dashboardVC,
+                  !routingHelper.isFollowingMode(),
+                  let app = OsmAndApp.swiftInstance(),
+                  let locationServices = app.locationServices,
+                  !locationServices.denied else { return }
+            app.mapMode = .positionTrack
+            if locationServices.status == .suspended {
+                locationServices.resume()
             }
         }
     }

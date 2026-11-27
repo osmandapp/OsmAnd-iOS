@@ -220,6 +220,9 @@
                     _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
                     _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
                 }
+                if (newTask.routeCalcError.length > 0 && !newTask.params.resultListener
+                    && !newTask.params.inSnapToRoadMode && !newTask.params.inPublicTransportMode)
+                    [weakSelf.routingHelper routeCalculationFailed];
             }
         }];
         [_tasks addObject:newTask];

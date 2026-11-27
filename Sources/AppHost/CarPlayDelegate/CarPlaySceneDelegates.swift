@@ -16,8 +16,6 @@ final class CarPlaySceneDelegate: UIResponder {
     private var isForegroundScene = false
     /// Starting with iOS 18.5 (CarPlay simulator), a change in behavior was observed: sceneWillEnterForeground is now called before didConnect, whereas previously it was the other way around. To handle this, a variable isWaitingForConfiguration was introduced.
     private var isWaitingForConfiguration = false
-    /// Set on a new CarPlay connection only, so returning to OsmAnd from another CarPlay app keeps the map where the user left it.
-    private var shouldCenterOnMyLocation = false
     
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillEnterForeground")
@@ -67,6 +65,9 @@ final class CarPlaySceneDelegate: UIResponder {
             }
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
             CarPlayService.shared.configure()
+            if OAIAPHelper.sharedInstance().isCarPlayAvailable() {
+                CarPlaySceneLifecycleCoordinator.shared.centerOnMyLocationIfNeeded()
+            }
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
@@ -79,10 +80,6 @@ final class CarPlaySceneDelegate: UIResponder {
             if mapVc == nil {
                 mapVc = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
-            }
-            if shouldCenterOnMyLocation {
-                shouldCenterOnMyLocation = false
-                centerOnMyLocation()
             }
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
@@ -104,13 +101,6 @@ final class CarPlaySceneDelegate: UIResponder {
             }
         }
         addListeners()
-    }
-    
-    /// A drive starts from the car position, not from the last place viewed on the map.
-    /// A calculated route still opens as a route overview: it moves the map and unlinks it again.
-    private func centerOnMyLocation() {
-        guard let app = OsmAndApp.swiftInstance(), app.locationServices?.denied != true else { return }
-        app.mapMode = .positionTrack
     }
     
     private func addListeners() {
@@ -159,11 +149,11 @@ final class CarPlaySceneDelegate: UIResponder {
 extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     func templateApplicationScene(_ templateApplicationScene: CPTemplateApplicationScene, didConnect interfaceController: CPInterfaceController, to window: CPWindow) {
         NSLog("[CarPlay] CarPlaySceneDelegate didConnect")
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidConnect(templateApplicationScene)
         
         windowToAttach = window
         carPlayInterfaceController = interfaceController
         interfaceController.delegate = self
-        shouldCenterOnMyLocation = true
         if isWaitingForConfiguration, isForegroundScene {
             isWaitingForConfiguration = false
             configureScene()
@@ -175,6 +165,7 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         dismissListControllers()
         interfaceController.delegate = nil
         
+        CarPlaySceneLifecycleCoordinator.shared.sceneDidDisconnect(templateApplicationScene)
         CarPlayService.shared.disconnectScene(.app)
         guard let mapPanel = OARootViewController.instance()?.mapPanel else {
             NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")

@@ -363,7 +363,6 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                         _description = description ? description : @"";
                         _icon = icon;
                         _url = url ? url : @"";
-                        _product = nil;
                         _textButtonTitle = textButtonTitle ? textButtonTitle : @"";
                         
                         NSArray<OAProduct *> *inApps = helper.inApps;
@@ -380,7 +379,6 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                         }
                         if ([self isAnyInAppPurchased:purchasedInApps])
                             return;
-                        _product = product;
                         
                         if (AFNetworkReachabilityManager.sharedManager.isReachable)
                         {
@@ -389,6 +387,7 @@ static NSString *FEATURE_NAUTICAL = @"nautical";
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     _conditions = conditions;
                                     _purchasedInApps = purchasedInApps;
+                                    _product = product;
                                     [self showDiscountBanner];
                                 });
                             }];

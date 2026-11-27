@@ -2321,6 +2321,16 @@ typedef enum
 
 - (OAPOI *) getTargetPointPoi
 {
+    OATargetPoint *targetPoint = self.targetMenuView.targetPoint;
+    OATargetMenuViewController *controller = self.targetMenuView.customController;
+    if ((targetPoint.type == OATargetPOI || targetPoint.type == OATargetBaseDetailsObject || targetPoint.type == OATargetRenderedObject)
+        && [controller isKindOfClass:OAPOIViewController.class])
+    {
+        OAPOI *poi = ((OAPOIViewController *) controller).poi;
+        if (poi)
+            return poi;
+    }
+
     OAPOI *poi = nil;
     if ([self.targetMenuView.targetPoint.targetObj isKindOfClass:OAPOI.class])
     {
@@ -2345,10 +2355,10 @@ typedef enum
 
 - (void) targetPointAddFavorite
 {
+    OAPOI *poi = [self getTargetPointPoi];
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller =
     [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                   title:self.targetMenuView.targetPoint.title
@@ -2543,10 +2553,10 @@ typedef enum
                        location:(CLLocationCoordinate2D)location
                           title:(NSString *)title
 {
+    OAPOI *poi = [self getTargetPointPoi];
     [self targetHideContextPinMarker];
     [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     
-    OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
                                                                                         address:self.targetMenuView.targetPoint.titleAddress

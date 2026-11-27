@@ -559,10 +559,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
 - (void) updateSelectedDate:(NSDate *)date forAnimation:(BOOL)forAnimation resetPeriod:(BOOL)resetPeriod
 {
     [_plugin setForecastDate:date forAnimation:forAnimation resetPeriod:resetPeriod];
-    if (date)
-        date = [OAWeatherHelper roundForecastTimeToHour:date];
-    
-    [self checkDateOffset:date];
     
     // TODO: replace to widgetsPanel.setSelectedDate(date);
     [_plugin updateWidgetsInfo];
@@ -570,24 +566,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarAnimationState) {
     
     // TODO: replace to [[OARootViewController instance].mapPanel refreshMap];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherLayers];
-}
-
-- (void) checkDateOffset:(NSDate *)date
-{
-    NSInteger MIN_UTC_HOURS_OFFSET = 24 * 60 * 60;
-    if (date && (([date timeIntervalSince1970] - [_currentDate timeIntervalSince1970])  >= MIN_UTC_HOURS_OFFSET))
-    {
-        NSCalendar *utcCalendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-        utcCalendar.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-        NSDateComponents *dateComponents = [utcCalendar components:NSCalendarUnitHour fromDate:date];
-        NSInteger hours = dateComponents.hour;
-        NSInteger offset = hours % 3;
-        if (offset == 2)
-            [dateComponents setHour:hours + 1];
-        else if (offset == 1)
-            [dateComponents setHour:hours - 1];
-        date = [utcCalendar dateFromComponents:dateComponents];
-    }
 }
 
 #pragma mark - OAWeatherToolbarDelegate

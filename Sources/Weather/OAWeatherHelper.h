@@ -103,6 +103,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)removePreferences:(NSString *)regionId;
 
 + (NSDate *) roundForecastTimeToHour:(NSDate *)date;
+// Rounds to the hour; more than 24 hours ahead, to the 3-hour UTC step the forecast is stored with
++ (NSDate *) roundForecastTimeToDataStep:(NSDate *)date;
 - (BOOL)allLayersAreDisabled;
 
 - (BOOL)isProcessingTiles;

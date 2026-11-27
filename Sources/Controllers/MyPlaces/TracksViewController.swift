@@ -423,7 +423,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
             view.backgroundColor = tableView.backgroundColor
         }
         
-        sortMode = getTracksSortMode()
+        sortMode = tracksSortMode()
         sortModeForSearch = getSearchTracksSortMode()
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
@@ -1046,7 +1046,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         filterButton.configuration = currentConfig
     }
     
-    private func setTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
+    private func updateTracksSortMode(_ sortMode: TracksSortMode, isSortingSubfolders: Bool) {
         var sortModes = settings.getTracksSortModes()
         if isSmartFolder, let smartFolder = smartFolder {
             sortModes[smartFolder.getId()] = sortMode.value
@@ -1068,7 +1068,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         settings.searchTracksSortModes.set(sortMode.value)
     }
     
-    private func getTracksSortMode() -> TracksSortMode {
+    private func tracksSortMode() -> TracksSortMode {
         let sortModes = settings.getTracksSortModes()
         if isSmartFolder, let smartFolder {
             if let sortModeValue = sortModes[smartFolder.getId()] {
@@ -1402,7 +1402,7 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
         } else {
             newMode = TracksSortModeHelper.defaultSortMode(for: smartFolder.getId())
         }
-        setTracksSortMode(newMode, isSortingSubfolders: false)
+        updateTracksSortMode(newMode, isSortingSubfolders: false)
         sortMode = newMode
         updateSortButtonAndMenu()
     }
@@ -2380,31 +2380,13 @@ final class TracksViewController: UITableViewController, OATrackSavingHelperUpda
     }
     
     private func renameSortModeKey(from oldBasePath: String, to newBasePath: String) {
-        let sortModes = settings.getTracksSortModes()
-        var updatedSortModes = [String: String]()
-        for (key, value) in sortModes {
-            if key.hasPrefix(oldBasePath) {
-                let newPathCount = oldBasePath.count
-                let modifiedKey = newBasePath + key.dropFirst(newPathCount)
-                updatedSortModes[modifiedKey] = value
-            } else {
-                updatedSortModes[key] = value
-            }
-        }
-        
-        settings.saveTracksSortModes(updatedSortModes)
+        TracksSortModeHelper.renameFolderSortModes(from: oldBasePath, to: newBasePath, settings: settings)
     }
-    
+
     private func removeSortMode(forFolderPath folderPath: String) {
-        let sortModes = settings.getTracksSortModes()
-        var updatedSortModes = [String: String]()
-        for (key, value) in sortModes where !key.hasPrefix(folderPath) {
-            updatedSortModes[key] = value
-        }
-        
-        settings.saveTracksSortModes(updatedSortModes)
+        TracksSortModeHelper.removeFolderSortModes(for: folderPath, settings: settings)
     }
-   
+
     // Whole path components only: a plain substring test also matched folder names occurring
     // inside a track's own file name, which left those tracks out of "Select all"
     private func isTrack(_ track: GpxDataItem, insideSelectedFolderOf currentFolder: TrackFolder) -> Bool {
@@ -3230,8 +3212,8 @@ extension TracksViewController {
     }
 
     private func applySortModeForGroups(_ mode: TracksSortMode) {
-        setTracksSortMode(mode, isSortingSubfolders: false)
-        sortMode = getTracksSortMode()
+        updateTracksSortMode(mode, isSortingSubfolders: false)
+        sortMode = tracksSortMode()
         updateSortButtonAndMenu()
         updateData()
     }
@@ -3287,8 +3269,8 @@ extension TracksViewController {
                 self.setSearchTracksSortMode(sortType)
                 self.sortModeForSearch = getSearchTracksSortMode()
             } else {
-                self.setTracksSortMode(sortType, isSortingSubfolders: isSortingSubfolders)
-                self.sortMode = getTracksSortMode()
+                self.updateTracksSortMode(sortType, isSortingSubfolders: isSortingSubfolders)
+                self.sortMode = tracksSortMode()
             }
             updateSortButtonAndMenu()
             if !self.isEditFilterActive {

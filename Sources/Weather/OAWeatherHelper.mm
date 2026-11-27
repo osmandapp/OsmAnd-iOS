@@ -847,6 +847,22 @@
     return [NSDate dateWithTimeIntervalSince1970:round(date.timeIntervalSince1970 / hour) * hour];
 }
 
++ (NSDate *) roundForecastTimeToDataStep:(NSDate *)date
+{
+    NSDate *rounded = [self roundForecastTimeToHour:date];
+    if (!rounded || rounded.timeIntervalSinceNow < 24 * 3600)
+        return rounded;
+
+    // After the first hours the forecast has only 00, 03, 06 ... UTC
+    NSInteger hours = (NSInteger) llround(rounded.timeIntervalSince1970 / 3600.0);
+    NSInteger offset = hours % 3;
+    if (offset == 2)
+        hours += 1;
+    else if (offset == 1)
+        hours -= 1;
+    return [NSDate dateWithTimeIntervalSince1970:hours * 3600.0];
+}
+
 - (BOOL)allLayersAreDisabled
 {
     QList<OsmAnd::BandIndex> bands = [self getVisibleBands];

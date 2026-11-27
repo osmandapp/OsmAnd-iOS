@@ -75,7 +75,7 @@
     OsmAnd::PointI fixedPixel = mapCtrl.mapView.fixedPixel;
     OsmAnd::PointI centerPixel = mapCtrl.mapView.getCenterPixel;
     OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
-    NSDate *date = [OAWeatherHelper roundForecastTimeToHour:mapCtrl.mapLayers.weatherDate];
+    NSDate *date = [OAWeatherHelper roundForecastTimeToDataStep:mapCtrl.mapLayers.weatherDate];
     NSString *bandUnit = [_formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:_band] getBandUnit]];
     BOOL needToUpdate = ![_cachedBandUnit isEqualToString:bandUnit];
     CGSize viewFrame = mapCtrl.view.frame.size;

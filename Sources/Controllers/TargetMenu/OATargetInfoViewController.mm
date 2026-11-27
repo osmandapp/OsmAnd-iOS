@@ -781,14 +781,19 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
     OAAmenityInfoRow *row = [[OAAmenityInfoRow alloc] initWithKey:key icon:icon textPrefix:nil text:text textColor:nil isText:YES needLinks:NO order:0 typeName:nil isPhoneNumber:NO isUrl:NO];
     
     NSMutableArray<NSString *> *titles = [NSMutableArray new];
-    for (OAPOI *amenity in amenities)
+    NSMutableArray<NSString *> *distances = [NSMutableArray new];
+    for (OAPOI *member in amenities)
     {
-        NSString * title = [[OAPOILayer getTargetPoint:amenity] title];
-        [titles addObject:title ? title : @""];
+        NSString *name = [[OAPOILayer getTargetPoint:member] title];
+        if (NSStringIsEmpty([name trim]))
+            name = [OAPOIViewController getTypeStrFor:member];
+        [titles addObject:name ?: @""];
+        const auto distance = OsmAnd::Utilities::distance(member.longitude, member.latitude, self.location.longitude, self.location.latitude);
+        [distances addObject:[NSString stringWithFormat:@"(%@)", [OAOsmAndFormatter getFormattedDistance:distance]]];
     }
     
     OACollapsablePoiView *collapsableView = [[OACollapsablePoiView alloc] init];
-    [collapsableView setDataWithTitles:titles amenities:amenities];
+    [collapsableView setDataWithTitles:titles distances:distances amenities:amenities];
     collapsableView.collapsed = YES;
     row.collapsableView = collapsableView;
     row.collapsed = YES;

@@ -49,12 +49,15 @@ final class ClickableWayHelper: NSObject {
         return false
     }
     
-    static func openClickableWayAmenity(amenity: OAPOI, adjustMapPosition: Bool) {
-        if let detailedObject = OAAmenitySearcher.sharedInstance().searchDetailedObject(amenity) {
-            let helper = OAClickableWayHelper()
-            let clickableWay = helper.loadClickableWay(detailedObject.syntheticAmenity)
-            readHeightData(clickableWay, canceller: nil)
-            openAsGpxFile(clickableWay, adjustMapPosition: adjustMapPosition)
-        }
-    }    
+    @discardableResult
+    static func openClickableWayAmenity(amenity: OAPOI, adjustMapPosition: Bool) -> Bool {
+        guard let detailedObject = OAAmenitySearcher.sharedInstance().searchDetailedObject(amenity) else { return false }
+        let helper = OAClickableWayHelper()
+        let clickableWay = helper.loadClickableWay(detailedObject.syntheticAmenity)
+        readHeightData(clickableWay, canceller: nil)
+        let tracks = clickableWay.gpxFile.tracks as? [Track]
+        let segments = tracks?.first?.segments as? [TrkSegment]
+        guard let points = segments?.first?.points, points.count >= 2 else { return false }
+        return openAsGpxFile(clickableWay, adjustMapPosition: adjustMapPosition)
+    }
 }

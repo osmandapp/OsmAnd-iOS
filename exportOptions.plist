@@ -10,6 +10,8 @@
 	<dict>
 		<key>net.osmand.maps</key>
 		<string>Github Build (self hosted)</string>
+		<key>net.osmand.maps.LiveActivities</key>
+		<string>Github Build Live Activities (self hosted)</string>
 	</dict>
 </dict>
 </plist>

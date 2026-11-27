@@ -56,7 +56,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         config.imagePlacement = .leading
         config.baseForegroundColor = .iconColorActive
         let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(UIImage(resource: .icCustomLastModified), for: .normal)
+        button.setImage(currentSortMode.image, for: .normal)
         button.menu = createSortMenu()
         button.showsMenuAsPrimaryAction = true
         button.changesSelectionAsPrimaryAction = true
@@ -66,6 +66,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
 
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
+        sortModeForAllTracks = tracksSortMode(for: TracksSortModeHelper.allTracksSortModeKey)
+        sortModeForVisibleTracks = tracksSortMode(for: TracksSortModeHelper.visibleTracksSortModeKey)
+        currentSortMode = sortModeForVisibleTracks
         importHelper = OAGPXImportUIHelper(hostViewController: self)
         rootVC = OARootViewController.instance()
         routingHelper = OARoutingHelper.sharedInstance()
@@ -718,6 +721,21 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return headerView
     }
     
+    private func tracksSortMode(for tabId: String) -> TracksSortMode {
+        if let sortModeValue = settings?.getTracksSortModes()[tabId] {
+            return TracksSortMode.getByValue(sortModeValue)
+        }
+        // Match Android's initial sort mode for the built-in tracks tabs.
+        return .lastModified
+    }
+
+    private func updateTracksSortMode(_ sortMode: TracksSortMode, for tabId: String) {
+        guard let settings else { return }
+        var sortModes = settings.getTracksSortModes()
+        sortModes[tabId] = sortMode.value
+        settings.saveTracksSortModes(sortModes)
+    }
+    
     private func sortTracks() {
         if isSearchActive {
             filteredGpxList = TracksSortModeHelper.sortTracksWithMode(filteredGpxList, mode: sortModeForSearch)
@@ -774,8 +792,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
-        currentSortMode = .nameAZ
-        sortModeForSearch = .nameAZ
+        sortModeForSearch = TracksSortMode.getByValue(settings?.searchTracksSortModes.get() ?? TracksSortModeHelper.defaultSortMode(for: nil).value)
+        currentSortMode = sortModeForSearch
         filteredGpxList = allGpxList
         sortTracks()
         DispatchQueue.main.async {
@@ -967,10 +985,13 @@ extension MapSettingsGpxViewController {
             guard let self else { return }
             if self.isSearchActive {
                 self.sortModeForSearch = sortType
+                self.settings?.searchTracksSortModes.set(sortType.value)
             } else if self.isShowingVisibleTracks {
                 self.sortModeForVisibleTracks = sortType
+                self.updateTracksSortMode(sortType, for: TracksSortModeHelper.visibleTracksSortModeKey)
             } else {
                 self.sortModeForAllTracks = sortType
+                self.updateTracksSortMode(sortType, for: TracksSortModeHelper.allTracksSortModeKey)
             }
             
             self.currentSortMode = sortType

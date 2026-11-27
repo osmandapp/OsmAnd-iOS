@@ -8235,8 +8235,11 @@ static NSString *kOfflineKey = @"OFFLINE";
 
 - (void)saveTracksSortModes:(NSDictionary<NSString *, NSString *> *)tabsSortModes
 {
+    BOOL modesChanged = ![self.getTracksSortModes isEqualToDictionary:tabsSortModes];
     NSArray<NSString *> *sortModes = [self getPlainSortModesFromDictionary:tabsSortModes];
     [_tracksSortModes set:sortModes];
+    if (modesChanged)
+        [self setLastGlobalModifiedTime:NSDate.date.timeIntervalSince1970];
 }
 
 - (void)saveFavoriteSortModes:(NSDictionary<NSString *, NSString *> *)favoriteSortModes

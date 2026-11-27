@@ -94,6 +94,9 @@ protocol SortableFolder {
 }
 
 @objc final class TracksSortModeHelper: NSObject {
+    static let allTracksSortModeKey = "ALL"
+    static let visibleTracksSortModeKey = "ON_MAP"
+
     private static var footnoteAttributesCache: [NSAttributedString.Key: Any] = [:]
     private static var footnoteAttributesCategory: UIContentSizeCategory?
 
@@ -363,6 +366,34 @@ protocol SortableFolder {
         }
         
         return NSAttributedString(attachment: attachment)
+    }
+    
+    @objc static func renameFolderSortModes(from oldBasePath: String, to newBasePath: String, settings: OAAppSettings) {
+        let sortModes = settings.getTracksSortModes()
+        let movedModes = sortModes.filter { isFolderSortModeKey($0.key, for: oldBasePath) }
+        var updatedSortModes = sortModes
+        for key in movedModes.keys {
+            updatedSortModes.removeValue(forKey: key)
+        }
+        for (key, value) in movedModes {
+            updatedSortModes[newBasePath + key.dropFirst(oldBasePath.count)] = value
+        }
+        settings.saveTracksSortModes(updatedSortModes)
+    }
+
+    @objc static func removeFolderSortModes(for folderPath: String, settings: OAAppSettings) {
+        let sortModes = settings.getTracksSortModes()
+        var updatedSortModes = [String: String]()
+        for (key, value) in sortModes where !TracksSortModeHelper.isFolderSortModeKey(key, for: folderPath) {
+            updatedSortModes[key] = value
+        }
+
+        settings.saveTracksSortModes(updatedSortModes)
+    }
+
+    static func isFolderSortModeKey(_ key: String, for folderPath: String) -> Bool {
+        key == folderPath || key.hasPrefix(folderPath + "/") || key.hasPrefix(folderPath + "::")
+        || key.hasPrefix(OrganizedTracksGroup.companion.getBaseId(parentId: folderPath))
     }
     
     private static func appendFolderInfo(to attributedString: NSMutableAttributedString, track: GpxDataItem, defaultAttributes: [NSAttributedString.Key: Any]) {

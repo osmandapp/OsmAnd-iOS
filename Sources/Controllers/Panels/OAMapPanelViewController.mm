@@ -1298,8 +1298,11 @@ typedef enum
     }
     
     if (!_searchViewController || location || searchQuery)
+    {
+        [_searchViewController hideToolbar];
         _searchViewController = [[QuickSearchViewController alloc] init];
-    
+    }
+
     OsmAnd::LatLon searchLatLon = OsmAnd::Utilities::convert31ToLatLon(searchLocation);
     _searchViewController.searchLocation = CLLocationCoordinate2DMake(searchLatLon.latitude, searchLatLon.longitude);
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;

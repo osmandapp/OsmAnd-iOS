@@ -798,6 +798,7 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 - (void)buildPluginRows:(NSMutableArray<OAAmenityInfoRow *> *)rows
 {
     [self addOsmRowInfoIfNeeded:rows];
+    [self addMapillaryCardsRowInfoIfNeeded:rows];
 }
 
 - (void) calculateRowsHeight:(CGFloat)width
@@ -1474,8 +1475,6 @@ static inline BOOL OARowsContainKey(NSArray<OAAmenityInfoRow *> *rows, NSString 
 
     [self clearContentForRowInfo:_onlinePhotoCardsRowInfo];
     _onlinePhotoCardsRowInfo = nearbyImagesRowInfo;
-
-    [self addMapillaryCardsRowInfoIfNeeded:rows];
 }
 
 - (void)addMapillaryCardsRowInfoIfNeeded:(NSMutableArray<OAAmenityInfoRow *> *)rows

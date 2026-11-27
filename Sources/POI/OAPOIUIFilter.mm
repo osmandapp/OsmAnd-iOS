@@ -808,7 +808,7 @@
         if (osmTag.length < filter.name.length)
         {
             OAPOIType *textFilter = [poiHelper getTextPoiAdditionalByKey:osmTag];
-            if (!textFilter)
+            if (textFilter)
                 [textFilters setObject:textFilter forKey:filter];
         }
     }

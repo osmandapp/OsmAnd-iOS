@@ -78,9 +78,32 @@ final class AmenityCardRowsTests: XCTestCase {
         XCTAssertEqual(rows["test:status"]?.text, "air_conditioning_yes")
     }
 
-    func testCustomFieldMatchingAmenityFilterIsStillNotShown() {
-        let rows = buildRows(["test:route_id": "1234"])
-        XCTAssertNil(rows["test:route_id"])
+    func testImportedWaypointsShowCustomFields() throws {
+        let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "25226_custom-tags",
+                                                           withExtension: "gpx", subdirectory: "test-resources/ui"))
+        let file = GpxUtilities.shared.loadGpxFile(file: KFile(filePath: url.path))
+        XCTAssertNil(file.error)
+        let points = file.getPointsList()
+        let expected = [
+            ("Test", ["test:country": "United States", "test:state": "Virginia", "test:telephone": "(804) 828-0100",
+                      "test:postcode": "23284", "test:start_date": "Thursday, June 8, 2023"]),
+            ("Test all tags", ["my_note": "yes", "test:status": "air_conditioning_yes", "test:color": "red"]),
+            ("Test filtered keys", ["test:route_id": "1234", "test:content": "abc", "test:wikipedia": "en:Richmond, Virginia"])
+        ]
+        XCTAssertEqual(points.count, expected.count)
+        for (name, fields) in expected {
+            let point = try XCTUnwrap(points.first { $0.name == name })
+            let item = OAGpxWptItem.withGpxWpt(point)
+            let poi = OAGPXWptViewController.cardAmenity(forPoint: item, mapAmenity: nil)
+            let rows = buildRows(poi, genericRowKeys(point.getExtensionsToRead()))
+            for (key, value) in fields {
+                XCTAssertEqual(rows[key]?.text, value, key)
+                XCTAssertEqual(rows[key]?.isWiki, false, key)
+            }
+            XCTAssertNil(rows["icon"])
+            XCTAssertNil(rows["background"])
+            XCTAssertNil(rows["color"])
+        }
     }
 
     func testKnownFilterOnlyPoiFieldIsNotShown() {

@@ -265,7 +265,7 @@
                 if (hId > 0)
                     sqlite3_bind_int64(statement, row++, hId);
                 
-                NSString *iconName = item.iconName ?: @"";
+                NSString *iconName = item.iconName.length > 0 ? item.iconName : existingItem.iconName ?: @"";
                 NSString *typeName = metadata.typeName ?: @"";
                 int fromNavigation = item.fromNavigation ? 1 : 0;
                 

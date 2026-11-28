@@ -1549,6 +1549,19 @@ final class QuickSearchViewController: OASuperViewController {
         }
     }
 
+    private func addSelectedHistoryItem(_ item: OAHistoryItem) {
+        guard OAAppSettings.sharedManager().searchHistory.get(), !fromNavigation else { return }
+        let historyItem = OAHistoryItem()
+        historyItem.name = item.name
+        historyItem.latitude = item.latitude
+        historyItem.longitude = item.longitude
+        historyItem.hType = item.hType
+        historyItem.iconName = item.iconName
+        historyItem.date = Date()
+        historyItem.fillMissingMetadata(from: item)
+        OAHistoryHelper.sharedInstance().addPoint(historyItem)
+    }
+
     private func addCategoryHistoryItem(_ searchResult: OASearchResult) {
         guard OAAppSettings.sharedManager().searchHistory.get(),
               let item = OAQuickSearchListItem.categoryHistoryItem(searchResult) else { return }
@@ -2350,6 +2363,7 @@ extension QuickSearchViewController: ExploreViewControllerDelegate {
             return
         }
         if searchType == .REGULAR {
+            addSelectedHistoryItem(item)
             let appSettings = OAAppSettings.sharedManager()
             OAQuickSearchTableController.showHistoryItem(onMap: item,
                                                          lang: appSettings.settingPrefMapLanguage.get(),

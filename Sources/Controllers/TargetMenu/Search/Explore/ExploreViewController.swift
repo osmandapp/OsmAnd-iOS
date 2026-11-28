@@ -314,8 +314,7 @@ final class ExploreViewController: UIViewController {
 
     private func openHistorySettings() {
         guard let controller = OAGlobalSettingsViewController(settingsType: EOAHistory) else { return }
-        navigationController?.presentingViewController?.dismiss(animated: true)
-        OARootViewController.instance()?.navigationController?.pushViewController(controller, animated: true)
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func openAllPopularPlaces() {

@@ -95,6 +95,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
     private var locationReference = SearchLocationReference(searchNearMapCenter: false, searchLocation: kCLLocationCoordinate2DInvalid)
     private var loadGeneration = 0
     private var lastDistanceUpdate: TimeInterval = 0
+    private var chipsBottomConstraint: NSLayoutConstraint?
 
     init() {
         super.init(nibName: "OABaseNavbarViewController", bundle: nil)
@@ -280,11 +281,13 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
         chipsStackView.addArrangedSubview(categoryChipsView)
         chipsHeaderView.preservesSuperviewLayoutMargins = true
         chipsHeaderView.addSubview(chipsStackView)
+        let bottomConstraint = chipsStackView.bottomAnchor.constraint(equalTo: chipsHeaderView.bottomAnchor, constant: -Self.chipsBottomInset)
+        chipsBottomConstraint = bottomConstraint
         NSLayoutConstraint.activate([
             chipsStackView.topAnchor.constraint(equalTo: chipsHeaderView.topAnchor, constant: Self.chipsTopInset),
             chipsStackView.leadingAnchor.constraint(equalTo: chipsHeaderView.layoutMarginsGuide.leadingAnchor),
             chipsStackView.trailingAnchor.constraint(equalTo: chipsHeaderView.layoutMarginsGuide.trailingAnchor),
-            chipsStackView.bottomAnchor.constraint(equalTo: chipsHeaderView.bottomAnchor, constant: -Self.chipsBottomInset)
+            bottomConstraint
         ])
         filterChipsView.reloadData()
         tableView.tableHeaderView = chipsHeaderView
@@ -332,6 +335,7 @@ final class SearchHistoryViewController: OABaseNavbarViewController {
         let filteredRecords = selectedCategoryNames.isEmpty ? matchingRecords : matchingRecords.filter { selectedCategoryNames.contains($0.categoryName) }
         locationReference = makeLocationReference()
         sections = makeSections(for: sortedRecords(filteredRecords))
+        chipsBottomConstraint?.constant = sections.first?.title == nil ? -Self.chipsBottomInset : 0
         filterChipsView.reloadData()
         categoryChipsView.reloadData()
         categoryChipsView.isHidden = categoryNames.isEmpty

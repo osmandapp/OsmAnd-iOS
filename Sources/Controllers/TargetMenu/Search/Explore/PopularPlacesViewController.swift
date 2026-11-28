@@ -34,6 +34,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     private static let sortGroupId = "sort"
     private static let chipIconSize: CGFloat = 20
     private static let chipsTopInset: CGFloat = 8
+    private static let chipsSpacing: CGFloat = 8
     private static let chipsBottomInset: CGFloat = 16
     private static let showOnMapButtonHeight: CGFloat = 44
     private static let showOnMapButtonSideInset: CGFloat = 12
@@ -48,19 +49,31 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     private let places: [PopularPlace]
     private let locationReference: SearchLocationReference
     private let detailsLoader = PopularPlaceDetailsLoader()
+    private let placeTypeNames: [ObjectIdentifier: String]
     private let sortChipsHeaderView = UIView()
+    private let chipsStackView = UIStackView()
     private let sortChipsView = StarMapSearchSortFilterChipsView()
+    private let typeChipsView = StarMapSearchSortFilterChipsView()
     private let showOnMapButton = UIButton(type: .system)
     private let searchController = UISearchController(searchResultsController: nil)
 
     private var sortMode: SortMode = .relevance
     private var searchText = ""
     private var displayedPlaces: [PopularPlace] = []
+    private var typeNames: [String] = []
+    private var selectedTypeNames: Set<String> = []
     private var lastDistanceUpdate: TimeInterval = 0
 
     init(places: [PopularPlace], locationReference: SearchLocationReference) {
         self.places = places
         self.locationReference = locationReference
+        var placeTypeNames: [ObjectIdentifier: String] = [:]
+        for place in places {
+            if let typeName = OAQuickSearchTableController.poiTypeName(forPoi: place.poi), !typeName.isEmpty {
+                placeTypeNames[ObjectIdentifier(place)] = typeName
+            }
+        }
+        self.placeTypeNames = placeTypeNames
         super.init(nibName: "OABaseNavbarViewController", bundle: nil)
         initTableData()
     }
@@ -105,6 +118,7 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
         guard isViewLoaded,
               previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory else { return }
         sortChipsView.reloadData()
+        typeChipsView.reloadData()
         view.setNeedsLayout()
     }
 
@@ -182,14 +196,21 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     private func setupSortChips() {
         sortChipsView.dataSource = self
         sortChipsView.delegate = self
-        sortChipsView.translatesAutoresizingMaskIntoConstraints = false
+        typeChipsView.dataSource = self
+        typeChipsView.delegate = self
+        typeChipsView.isHidden = true
+        chipsStackView.axis = .vertical
+        chipsStackView.spacing = Self.chipsSpacing
+        chipsStackView.translatesAutoresizingMaskIntoConstraints = false
+        chipsStackView.addArrangedSubview(sortChipsView)
+        chipsStackView.addArrangedSubview(typeChipsView)
         sortChipsHeaderView.preservesSuperviewLayoutMargins = true
-        sortChipsHeaderView.addSubview(sortChipsView)
+        sortChipsHeaderView.addSubview(chipsStackView)
         NSLayoutConstraint.activate([
-            sortChipsView.topAnchor.constraint(equalTo: sortChipsHeaderView.topAnchor, constant: Self.chipsTopInset),
-            sortChipsView.leadingAnchor.constraint(equalTo: sortChipsHeaderView.layoutMarginsGuide.leadingAnchor),
-            sortChipsView.trailingAnchor.constraint(equalTo: sortChipsHeaderView.layoutMarginsGuide.trailingAnchor),
-            sortChipsView.bottomAnchor.constraint(equalTo: sortChipsHeaderView.bottomAnchor, constant: -Self.chipsBottomInset)
+            chipsStackView.topAnchor.constraint(equalTo: sortChipsHeaderView.topAnchor, constant: Self.chipsTopInset),
+            chipsStackView.leadingAnchor.constraint(equalTo: sortChipsHeaderView.layoutMarginsGuide.leadingAnchor),
+            chipsStackView.trailingAnchor.constraint(equalTo: sortChipsHeaderView.layoutMarginsGuide.trailingAnchor),
+            chipsStackView.bottomAnchor.constraint(equalTo: sortChipsHeaderView.bottomAnchor, constant: -Self.chipsBottomInset)
         ])
         sortChipsView.reloadData()
         tableView.tableHeaderView = sortChipsHeaderView
@@ -258,9 +279,34 @@ final class PopularPlacesViewController: OABaseNavbarViewController {
     private func updateDisplayedPlaces() {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         let sortedPlaces = sorted(places)
-        displayedPlaces = query.isEmpty ? sortedPlaces : sortedPlaces.filter { $0.matches(query) }
+        let matchingPlaces = query.isEmpty ? sortedPlaces : sortedPlaces.filter { $0.matches(query) }
+        updateTypeNames(for: matchingPlaces)
+        displayedPlaces = selectedTypeNames.isEmpty ? matchingPlaces : matchingPlaces.filter { place in
+            placeTypeNames[ObjectIdentifier(place)].map(selectedTypeNames.contains) ?? false
+        }
+        typeChipsView.reloadData()
+        typeChipsView.isHidden = typeNames.isEmpty
+        view.setNeedsLayout()
         detailsLoader.cancelAll()
         tableView.reloadData()
+    }
+
+    private func updateTypeNames(for places: [PopularPlace]) {
+        var names: [String] = []
+        var counts: [String: Int] = [:]
+        for place in places {
+            guard let name = placeTypeNames[ObjectIdentifier(place)] else { continue }
+            if counts[name] == nil {
+                names.append(name)
+            }
+            counts[name, default: 0] += 1
+        }
+        typeNames = names.indices.sorted { lhs, rhs in
+            let lhsCount = counts[names[lhs], default: 0]
+            let rhsCount = counts[names[rhs], default: 0]
+            return lhsCount != rhsCount ? lhsCount > rhsCount : lhs < rhs
+        }.map { names[$0] }
+        selectedTypeNames.formIntersection(typeNames)
     }
 
     private func sorted(_ places: [PopularPlace]) -> [PopularPlace] {
@@ -332,6 +378,15 @@ extension PopularPlacesViewController: UISearchResultsUpdating {
 
 extension PopularPlacesViewController: StarMapSearchSortFilterChipsDataSource, StarMapSearchSortFilterChipsDelegate {
     func chipGroups(for chipsView: StarMapSearchSortFilterChipsView) -> [SearchSortFilterChipGroup] {
+        guard chipsView !== typeChipsView else {
+            return typeNames.map { name in
+                SearchSortFilterChipGroup(id: name,
+                                          chipTitle: name,
+                                          chipImage: nil,
+                                          selectionMode: .toggle,
+                                          isToggleOn: selectedTypeNames.contains(name))
+            }
+        }
         let options = SortMode.allCases.map { mode in
             StarMapSearchSortFilterChipOption(id: mode.rawValue,
                                               title: mode.title,
@@ -355,5 +410,13 @@ extension PopularPlacesViewController: StarMapSearchSortFilterChipsDataSource, S
     }
 
     func chipsView(_ chipsView: StarMapSearchSortFilterChipsView, didToggleGroup groupId: String, isOn: Bool) {
+        guard chipsView === typeChipsView else { return }
+        if isOn {
+            selectedTypeNames.insert(groupId)
+        } else {
+            selectedTypeNames.remove(groupId)
+        }
+        updateDisplayedPlaces()
+        tableView.setContentOffset(CGPoint(x: 0, y: -tableView.adjustedContentInset.top), animated: false)
     }
 }

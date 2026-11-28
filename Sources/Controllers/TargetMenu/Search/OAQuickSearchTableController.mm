@@ -679,19 +679,7 @@
 {
     id object = searchResult.object;
     if ([object isKindOfClass:OAPOI.class])
-    {
-        OAPOI *poi = (OAPOI *)object;
-        OAPOICategory *category = poi.type.category;
-        if (!category || poi.subType.length == 0)
-            return nil;
-        for (NSString *subType in [poi.subType componentsSeparatedByString:@";"])
-        {
-            OAPOIType *poiType = [category getPoiTypeByKeyName:subType];
-            if (poiType && ![poiType isAdditional])
-                return poiType.nameLocalized;
-        }
-        return nil;
-    }
+        return [self poiTypeNameForPoi:(OAPOI *)object];
     if ([object isKindOfClass:OAPOIType.class])
         return [PoiAdditionalLabels getSearchName:(OAPOIType *)object];
     if ([object isKindOfClass:OACity.class])
@@ -700,6 +688,20 @@
         return OALocalizedString(@"search_address_street");
     if ([object isKindOfClass:OABuilding.class])
         return OALocalizedString(@"search_address_building_option");
+    return nil;
+}
+
++ (NSString *)poiTypeNameForPoi:(OAPOI *)poi
+{
+    OAPOICategory *category = poi.type.category;
+    if (!category || poi.subType.length == 0)
+        return nil;
+    for (NSString *subType in [poi.subType componentsSeparatedByString:@";"])
+    {
+        OAPOIType *poiType = [category getPoiTypeByKeyName:subType];
+        if (poiType && ![poiType isAdditional])
+            return poiType.nameLocalized;
+    }
     return nil;
 }
 

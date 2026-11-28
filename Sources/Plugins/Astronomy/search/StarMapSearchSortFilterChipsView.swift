@@ -256,9 +256,11 @@ final class StarMapSearchSortFilterChipsView: UIView {
 
         let contentFittingWidth = contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
         contentFittingWidth.priority = .defaultLow
+        let minimumHeight = heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.barHeight)
+        minimumHeight.priority = .required - 1
 
         NSLayoutConstraint.activate([
-            heightAnchor.constraint(greaterThanOrEqualToConstant: Layout.barHeight),
+            minimumHeight,
 
             scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),

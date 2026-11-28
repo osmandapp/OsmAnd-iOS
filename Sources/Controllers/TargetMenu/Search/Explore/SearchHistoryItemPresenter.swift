@@ -22,12 +22,6 @@ struct SearchHistoryItemPresenter {
     private static let typeNameSeparator = " • "
     private static let addressObjectTypes = Set(([.city, .village, .boundary, .postcode, .street, .house, .streetIntersection] as [EOAObjectType]).compactMap { OAObjectType.toString($0) })
 
-    private let poiTypesByName: [String: OAPOIType]
-
-    init() {
-        poiTypesByName = OAPOIHelper.sharedInstance().getAllTranslatedNames(false)
-    }
-
     static func icon(for record: SearchHistoryRecord, traitCollection: UITraitCollection) -> UIImage? {
         if let poiType = record.object as? OAPOIBaseType {
             return poiType.icon()
@@ -157,10 +151,15 @@ struct SearchHistoryItemPresenter {
     }
 
     private func categoryName(for item: OAHistoryItem) -> String {
+        if let category = poiCategory(for: item) {
+            return category.name == Self.administrativeCategory ? localizedString("shared_string_address") : category.nameLocalized ?? localizedString("poi")
+        }
+        if let objectType = item.objectType, Self.addressObjectTypes.contains(objectType) {
+            return localizedString("shared_string_address")
+        }
         switch item.hType {
         case .poi:
-            guard let category = poiCategory(for: item) else { return localizedString("poi") }
-            return category.name == Self.administrativeCategory ? localizedString("shared_string_address") : category.nameLocalized ?? localizedString("poi")
+            return localizedString("poi")
         case .address:
             return localizedString("shared_string_address")
         case .favorite:
@@ -183,14 +182,17 @@ struct SearchHistoryItemPresenter {
 
     private func poiCategory(for item: OAHistoryItem) -> OAPOICategory? {
         let poiHelper = OAPOIHelper.sharedInstance()
-        if let key = item.poiCategoryKey, !key.isEmpty, let category = poiHelper.getCategories(true).first(where: { $0.name == key }) {
-            return category
+        if let key = item.poiCategoryKey, !key.isEmpty {
+            return poiHelper.getPoiCategory(byName: key)
         }
-        if let key = item.poiSubtypeKey, !key.isEmpty, let category = poiHelper.getPoiType(byKey: key)?.category {
-            return category
+        if let key = item.poiSubtypeKey, !key.isEmpty {
+            if let category = poiHelper.getAnyPoiType(byKey: key)?.category {
+                return category
+            }
+            if item.objectType == OAObjectType.toString(.poi) {
+                return poiHelper.otherPoiCategory
+            }
         }
-        guard let typeName = item.typeName?.components(separatedBy: Self.typeNameSeparator).first?.trimmingCharacters(in: .whitespaces),
-              !typeName.isEmpty else { return nil }
-        return poiTypesByName[typeName.lowercased()]?.category
+        return nil
     }
 }

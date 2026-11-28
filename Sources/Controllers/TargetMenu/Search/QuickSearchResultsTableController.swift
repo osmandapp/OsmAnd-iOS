@@ -119,7 +119,8 @@ final class QuickSearchResultsTableController: OAQuickSearchTableController {
     }
 
     private func poiConfiguration(for item: OAQuickSearchListItem, result: OASearchResult, poi: OAPOI) -> PoiContentConfiguration {
-        let title = item.getName() ?? ""
+        let name = item.getName() ?? ""
+        let title = name.isEmpty ? poi.getSubTypeStr() : name
         let typeName = poi.getMainSubtypeStr()
         let openingHours = OAPOIHelper.sharedInstance().getShortFormattedOpeningHours(poi)
         var openingHoursColor: UIColor?

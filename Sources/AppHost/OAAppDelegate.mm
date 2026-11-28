@@ -214,6 +214,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
             _appInitDone = YES;
             _appInitializing = NO;
+            [LiveActivityManager.shared refresh];
 
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
@@ -434,6 +435,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         NSLog(@"OAAppDelegate termination did not finish in %.0f s, exiting", kTerminationTimeLimit);
         _exit(0);
     });
+    [LiveActivityManager.shared endNavigationActivityOnTermination];
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];

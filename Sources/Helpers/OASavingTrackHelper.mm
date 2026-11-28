@@ -62,6 +62,16 @@
 #define recordedTrackFolder @"/rec/"
 
 static const NSInteger kDBVersion = 1;
+static NSString * const kCurrentTrackIdentifier = @"current_recording_track_identifier";
+
+@interface OASavingTrackHelper ()
+
+@property (atomic, readwrite) int currentTrackIndex;
+@property (atomic, copy, readwrite) NSString *currentTrackIdentifier;
+@property (atomic) BOOL hasTrackPoints;
+@property (atomic) BOOL hasWaypoints;
+
+@end
 
 @implementation OASavingTrackHelper
 {
@@ -95,6 +105,8 @@ static const NSInteger kDBVersion = 1;
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
     _currentTrack = [[OASGpxFile alloc] initWithAuthor:[OAAppVersion getFullVersionWithAppName]];
+    self.hasTrackPoints = NO;
+    self.hasWaypoints = NO;
     _currentTrack.showCurrentTrack = YES;
     [_currentTrack setWidthWidth:[settings.currentTrackWidth get]];
     [_currentTrack setShowArrowsShowArrows:[settings.currentTrackShowArrows get]];
@@ -122,7 +134,7 @@ static const NSInteger kDBVersion = 1;
     if (self)
     {
         _app = [OsmAndApp instance];
-        currentTrackIndex = 1;
+        self.currentTrackIndex = 1;
         syncQueue = dispatch_queue_create("sth_syncQueue", DISPATCH_QUEUE_SERIAL);
         
         _waypointRowIds = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPointerPersonality
@@ -134,8 +146,21 @@ static const NSInteger kDBVersion = 1;
         
         if (![self saveIfNeeded])
             [self loadGpxFromDatabase];
+
+        NSString *savedIdentifier = [NSUserDefaults.standardUserDefaults stringForKey:kCurrentTrackIdentifier];
+        // Recording can be active before the first point passes the recording filters.
+        if ((self.hasRecordedData || [OAAppSettings sharedManager].mapSettingTrackRecording) && savedIdentifier.length > 0)
+            self.currentTrackIdentifier = savedIdentifier;
+        else
+            [self resetCurrentTrackIdentifier];
     }
     return self;
+}
+
+- (void)resetCurrentTrackIdentifier
+{
+    self.currentTrackIdentifier = NSUUID.UUID.UUIDString;
+    [NSUserDefaults.standardUserDefaults setObject:self.currentTrackIdentifier forKey:kCurrentTrackIdentifier];
 }
 
 - (void)onTrackRecordingChanged
@@ -335,6 +360,11 @@ static const NSInteger kDBVersion = 1;
     return res;
 }
 
+- (BOOL)hasRecordedData
+{
+    return self.hasTrackPoints || self.hasWaypoints;
+}
+
 - (BOOL) hasData
 {
     return points > 0 || distance > 0 || lastPoint.longitude > 0 || lastPoint.latitude > 0;
@@ -391,6 +421,15 @@ static const NSInteger kDBVersion = 1;
 
 - (void)clearData
 {
+    dispatch_sync(syncQueue, ^{
+        [self clearDataOnSyncQueue];
+    });
+}
+
+- (void)clearDataOnSyncQueue
+{
+    dispatch_assert_queue(syncQueue);
+
     dispatch_async(dbQueue, ^{
         [_waypointRowIds removeAllObjects];
         [_unpersistedWaypoints removeAllObjects];
@@ -420,7 +459,7 @@ static const NSInteger kDBVersion = 1;
     
     distance = 0;
     points = 0;
-    currentTrackIndex++;
+    self.currentTrackIndex++;
     
     [_currentTrack clearData];
     
@@ -432,6 +471,8 @@ static const NSInteger kDBVersion = 1;
     _currentTrack.modifiedTime = (long)([[NSDate date] timeIntervalSince1970] * 1000.0);
     
     [self prepareCurrentTrackForRecording];
+    [self resetCurrentTrackIdentifier];
+    [LiveActivityManager.shared refresh];
 }
 
 - (void) saveDataToGpx
@@ -519,7 +560,7 @@ static const NSInteger kDBVersion = 1;
             }
         }
         
-        [self clearData];
+        [self clearDataOnSyncQueue];
         
         if (completionHandler)
             completionHandler();
@@ -955,6 +996,7 @@ static const NSInteger kDBVersion = 1;
         [_currentTrack appendTrackPointToDisplay:pt];
         OASTrkSegment *lt = [track.segments lastObject];
         [lt.points addObject:pt];
+        self.hasTrackPoints = YES;
     }
 
     if (segmentAdded)
@@ -972,6 +1014,7 @@ static const NSInteger kDBVersion = 1;
     _currentTrack.modifiedTime = wpt.time;
     
     points++;
+    self.hasWaypoints = points > 0;
     
     [self doAddPointsLat:wpt.lat
                      lon:wpt.lon
@@ -983,6 +1026,7 @@ static const NSInteger kDBVersion = 1;
                     icon:wpt.getIconName
               background:[wpt getBackgroundType]
                    point:wpt];
+    [LiveActivityManager.shared refresh];
 }
 
 - (void) doUpdateTrackLat:(double)lat
@@ -1246,6 +1290,8 @@ static const NSInteger kDBVersion = 1;
     _currentTrack.modifiedTime = (long)(NSDate.date.timeIntervalSince1970 * 1000.0);
     _currentTrack.pointsModifiedTime = _currentTrack.modifiedTime;
     points = (int)remaining.count;
+    self.hasWaypoints = points > 0;
+    [LiveActivityManager.shared refresh];
     return YES;
 }
 
@@ -1254,8 +1300,10 @@ static const NSInteger kDBVersion = 1;
     [_currentTrack clearPoints];
     
     points = 0;
-    
+    self.hasWaypoints = NO;
+
     [self doDeleteAllPoints];
+    [LiveActivityManager.shared refresh];
 }
 
 - (BOOL)saveWpt:(OASWptPt *)wpt
@@ -1339,6 +1387,8 @@ static const NSInteger kDBVersion = 1;
         OASGpxTrackAnalysis *analysisNew = [_currentTrack getAnalysisFileTimestamp:[[NSDate date] timeIntervalSince1970]];
         distance = analysisNew.totalDistance;
         points = analysisNew.wptPoints;
+        self.hasTrackPoints = [_currentTrack hasTrkPt];
+        self.hasWaypoints = points > 0;
     });
 }
 
@@ -1359,6 +1409,33 @@ static const NSInteger kDBVersion = 1;
     {
         return NO;
     }
+}
+
+- (void)readTrackRecordingSnapshotWithCompletion:(void (^)(TrackRecordingSnapshot *snapshot))completion
+{
+    dispatch_async(syncQueue, ^{
+        NSTimeInterval duration = 0;
+        // Recorded points are chronological. Exclude pauses between segments, as on Android.
+        for (OASTrack *track in self.currentTrack.tracks)
+        {
+            if (track.generalTrack)
+                continue;
+            for (OASTrkSegment *segment in track.segments)
+            {
+                if (segment.generalSegment)
+                    continue;
+                OASWptPt *firstPoint = segment.points.firstObject;
+                OASWptPt *lastPoint = segment.points.lastObject;
+                if (firstPoint.time > 0 && lastPoint.time >= firstPoint.time)
+                    duration += (lastPoint.time - firstPoint.time) / 1000.0;
+            }
+        }
+        TrackRecordingSnapshot *snapshot = [[TrackRecordingSnapshot alloc] initWithTrackIndex:self.currentTrackIndex
+                                                                                     distance:self->distance
+                                                                                     duration:duration
+                                                                              hasRecordedData:self.hasRecordedData];
+        completion(snapshot);
+    });
 }
 
 - (void) runSyncBlock:(void (^)(void))block

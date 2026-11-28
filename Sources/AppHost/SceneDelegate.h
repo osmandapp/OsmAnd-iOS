@@ -20,7 +20,7 @@ FOUNDATION_EXPORT NSNotificationName const OAMainApplicationUIReadyNotification;
 @property (strong, nonatomic, readonly) OARootViewController *rootViewController;
 @property (strong, nonatomic, nullable) NSURL *loadedURL;
 
-- (BOOL)openURL:(NSURL *)url;
+- (BOOL)openURL:(nullable NSURL *)url;
 - (UIInterfaceOrientation)getUIIntefaceOrientation;
 
 @end

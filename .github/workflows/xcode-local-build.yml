@@ -242,6 +242,11 @@ jobs:
           -archivePath OsmAndMaps.xcarchive \
           CURRENT_PROJECT_VERSION="${BUILD_IOS_VERSION}" \
           MARKETING_VERSION="${RELEASE_IOS_VERSION}" \
+          CODE_SIGN_STYLE=Manual \
+          CODE_SIGN_IDENTITY="iPhone Distribution" \
+          PROFILE_OsmAnd_Maps="Github Build (self hosted)" \
+          PROFILE_LiveActivities="Github Build Live Activities (self hosted)" \
+          'PROVISIONING_PROFILE_SPECIFIER=$(PROFILE_$(TARGET_NAME:identifier))' \
           archive | xcpretty
     # - name: Upload iOS archive diagnostics
     #   if: always()

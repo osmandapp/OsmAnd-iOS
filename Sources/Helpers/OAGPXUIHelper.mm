@@ -934,6 +934,15 @@ hostViewControllerDelegate:(id)hostViewControllerDelegate
         {
             if (![gpxDatabase renameCurrentFile:sourceFile newFile:newFile])
                 [[OASGpxDbHelper shared] renameCurrentFile:sourceFile newFile:newFile];
+            dispatch_async(OAGPXCopyQueue(), ^{
+                OASGpxFile *movedGpx = [OASGpxUtilities.shared loadGpxFileFile:newFile];
+                NSString *name = newName.stringByDeletingPathExtension;
+                if (!movedGpx.error && movedGpx.isOsmAndOrigin && ![name isEqualToString:movedGpx.metadata.name])
+                {
+                    [movedGpx updateTrackNameNewName:name];
+                    [OASGpxUtilities.shared writeGpxFileFile:newFile gpxFile:movedGpx];
+                }
+            });
             OASTrackItem *movedItem = [[OASTrackItem alloc] initWithFile:newFile];
             movedItem.dataItem = [gpxDatabase getGPXItem:newStoringFullPath];
             [SharedLibSmartFolderHelper.shared addTrackItemToSmartFolderItem:movedItem];

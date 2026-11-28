@@ -32,7 +32,8 @@ typedef NS_ENUM(NSInteger, EMapSettingsScreen)
     EMapSettingsScreenWeather,
     EMapSettingsScreenNauticalDepth,
     EMapSettingsScreenCoordinatesGrid,
-    EMapSettingsScreenBuildings3DVisibility
+    EMapSettingsScreenBuildings3DVisibility,
+    EMapSettingsScreenRenderingClass
 };
 
 @protocol OAMapSettingsScreen <NSObject, OADashboardScreen, UITableViewDataSource, UITableViewDelegate>

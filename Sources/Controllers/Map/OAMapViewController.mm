@@ -2718,6 +2718,7 @@ static char kMapSourceUpdateQueueKey;
                 if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
                     newSettings[param.name] = param.value;
             }
+            [newSettings addEntriesFromDictionary:[styleSettings getRenderingClassesRendererSettings]];
         }
 
         [newSettings addEntriesFromDictionary:buildings3DRenderSettings];

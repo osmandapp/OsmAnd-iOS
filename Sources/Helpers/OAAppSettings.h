@@ -1142,6 +1142,7 @@ typedef NS_ENUM(NSInteger, EOAWikiDataSourceType)
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 - (OACommonBoolean *)getCustomRenderBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
+- (OACommonBoolean *)getCustomRenderClassProperty:(NSString *)className defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRenderProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
 
 @property (nonatomic) NSArray<NSString *> *appModeBeanPrefsIds;

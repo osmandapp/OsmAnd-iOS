@@ -186,6 +186,10 @@
             if (!self.screenObj)
                 self.screenObj = [[MapSettingsBuildings3DScreen alloc] initWithTable:self.tableView viewController:self];
             break;
+        case EMapSettingsScreenRenderingClass:
+            if (!self.screenObj)
+                self.screenObj = [[MapSettingsRenderingClassScreen alloc] initWithTable:self.tableView viewController:self param:self.customParam];
+            break;
         default:
             break;
     }

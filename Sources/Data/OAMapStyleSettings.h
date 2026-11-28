@@ -102,6 +102,15 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 @end
 
+// A <renderingClass> of the style: a group of map objects (e.g. a route network level) that can be hidden
+@interface OAMapStyleRenderingClass : NSObject
+
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *title;
+@property (nonatomic, readonly) BOOL enabledByDefault;
+
+@end
+
 @interface OAMapStyleSettings : NSObject
 
 - (instancetype) initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName;
@@ -129,6 +138,12 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
                       onComplete:(void(^)(void))onComplete;
 
 - (NSDictionary<NSString *, NSString *> *)get3DBuildingsRendererSettings;
+
+- (OAMapStyleRenderingClass *)getRenderingClass:(NSString *)name;
+- (NSArray<OAMapStyleRenderingClass *> *)getRenderingClassChildren:(NSString *)parentName;
+- (BOOL)isRenderingClassEnabled:(OAMapStyleRenderingClass *)renderingClass;
+- (void)setRenderingClass:(OAMapStyleRenderingClass *)renderingClass enabled:(BOOL)enabled;
+- (NSDictionary<NSString *, NSString *> *)getRenderingClassesRendererSettings;
 
 - (BOOL)isAnyWeatherContourLinesEnabled;
 - (BOOL)isWeatherContourLinesEnabled:(NSString *)attr;

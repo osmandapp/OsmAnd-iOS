@@ -39,6 +39,16 @@
 #include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 #include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Data/BinaryMapObject.h>
+#include <OsmAndCore/IObfsCollection.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Map/MapStyleEvaluator.h>
+#include <OsmAndCore/Map/MapStyleEvaluationResult.h>
+#include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
+
+// the radius the shared route search looks around the tap (TravelObfHelper.ROUTES_ON_LINE_RADIUS)
+static const double kRoutesOnLineRadiusMeters = 25.0;
 
 static int AMENITY_SEARCH_RADIUS = 50;
 static int AMENITY_SEARCH_RADIUS_FOR_RELATION = 500;
@@ -381,10 +391,73 @@ static int TILE_SIZE = 256;
         return;
 
     NSArray<OATravelGpx *> *found = [OATravelObfHelper.shared searchTravelGpxWithLocation:location osmRouteTypeNames:routeTypeNames];
+    NSSet<NSString *> *drawnRouteIds = [self getDrawnRouteIds:location];
     for (OATravelGpx *travelGpx in found)
     {
-        [self collectTravelGpx:result travelGpx:travelGpx location:location];
+        if ([drawnRouteIds containsObject:travelGpx.routeId])
+            [self collectTravelGpx:result travelGpx:travelGpx location:location];
     }
+}
+
+// Only the routes the map draws are listed: the style decides it by route type, network level and color mode
+- (NSSet<NSString *> *)getDrawnRouteIds:(CLLocation *)location
+{
+    OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
+    const auto env = mapVc.mapRendererEnv.mapPresentationEnvironment;
+    if (!env)
+        return [NSSet set];
+    const auto zoom = mapVc.mapView.zoomLevel;
+    const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude));
+    const auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kRoutesOnLineRadiusMeters, point31);
+    const auto dataInterface = [OsmAndApp instance].resourcesManager->obfsCollection->obtainDataInterface(
+        &bbox31, zoom, zoom, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Map));
+
+    QList<std::shared_ptr<const OsmAnd::BinaryMapObject>> mapObjects;
+    dataInterface->loadBinaryMapObjects(&mapObjects, nullptr, env, zoom, &bbox31);
+
+    OsmAnd::MapStyleEvaluator evaluator(env->mapStyle, env->displayDensityFactor * env->mapScaleFactor);
+    env->applyTo(evaluator);
+    evaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MINZOOM, zoom);
+    evaluator.setIntegerValue(env->styleBuiltinValueDefs->id_INPUT_MAXZOOM, zoom);
+
+    OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
+    const auto routeIdTag = QString::fromNSString(ROUTE_ID);
+    NSMutableSet<NSString *> *drawnRouteIds = [NSMutableSet set];
+    for (const auto& mapObject : mapObjects)
+    {
+        // route_id is a text field of the object, not one of its tags
+        const auto routeId = mapObject->getResolvedAttributes().value(routeIdTag);
+        if (!routeId.isEmpty() && isLineDrawn(mapObject, evaluator, evaluationResult, env))
+            [drawnRouteIds addObject:routeId.toNSString()];
+    }
+    return drawnRouteIds;
+}
+
+// The same check as the renderer's polyline: a line rule is found and gives the line a width and a color
+// (without a color the line is transparent, e.g. a route whose network class is switched off)
+static bool isLineDrawn(const std::shared_ptr<const OsmAnd::BinaryMapObject>& mapObject,
+                        OsmAnd::MapStyleEvaluator& evaluator,
+                        OsmAnd::MapStyleEvaluationResult& evaluationResult,
+                        const std::shared_ptr<const OsmAnd::MapPresentationEnvironment>& env)
+{
+    const auto& valueDefs = env->styleBuiltinValueDefs;
+    evaluator.setIntegerValue(valueDefs->id_INPUT_LAYER, static_cast<int>(mapObject->getLayerType()));
+    for (const auto attributeId : mapObject->attributeIds)
+    {
+        const auto& attribute = mapObject->attributeMapping->decodeMap[attributeId];
+        evaluator.setStringValue(valueDefs->id_INPUT_TAG, attribute.tag);
+        evaluator.setStringValue(valueDefs->id_INPUT_VALUE, attribute.value);
+
+        evaluationResult.clear();
+        float strokeWidth = 0.0f;
+        if (evaluator.evaluate(mapObject, OsmAnd::MapStyleRulesetType::Polyline, &evaluationResult)
+            && evaluationResult.contains(valueDefs->id_OUTPUT_COLOR)
+            && evaluationResult.getFloatValue(valueDefs->id_OUTPUT_STROKE_WIDTH, strokeWidth) && strokeWidth > 0.0f)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 - (void)collectTravelGpx:(MapSelectionResult *)result travelGpx:(OATravelGpx *)travelGpx location:(CLLocation *)location

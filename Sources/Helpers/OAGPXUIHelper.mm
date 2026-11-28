@@ -1078,7 +1078,7 @@ updatedTrackItemСallback:(void (^_Nullable)(OASTrackItem *updatedTrackItem))upd
                 metadata.time = time == 0 ? (long) ([[NSDate date] timeIntervalSince1970] * 1000.0) : time;
             }
 
-            if (doc.author && [doc.author containsString:@"OsmAnd"])
+            if (doc.isOsmAndOrigin)
                 [doc updateTrackNameNewName:newName];
 
             BOOL gpxSaved = [OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];

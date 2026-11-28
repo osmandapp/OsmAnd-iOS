@@ -112,7 +112,7 @@ final class TripRecordingMovingTimeWidget: BaseRecordingWidget {
         let tracks = (currentTrack.tracks as? [Track]) ?? []
         let firstIsGeneral = tracks.first?.generalTrack ?? false
         let withoutGaps = !joinSegments && (tracks.isEmpty || firstIsGeneral)
-        let analysis = currentTrack.getAnalysis(fileTimestamp: 0)
+        guard let analysis = getAnalysis() else { return 0 }
         return withoutGaps ? analysis.timeMovingWithoutGaps : analysis.timeMoving
     }
     

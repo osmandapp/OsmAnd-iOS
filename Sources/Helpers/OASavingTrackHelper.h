@@ -11,7 +11,7 @@
 
 #define kTrackNoHeading -1.0
 
-@class OASGpxFile, OASWptPt;
+@class OASGpxFile, OASGpxTrackAnalysis, OASWptPt;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -35,6 +35,7 @@
 - (BOOL) saveIfNeeded;
 - (void) updateLocation:(CLLocation *)location heading:(CLLocationDirection)heading;
 - (BOOL) getIsRecording;
+- (OASGpxTrackAnalysis *)getCurrentTrackAnalysis;
 
 - (void) runSyncBlock:(void (^)(void))block;
 

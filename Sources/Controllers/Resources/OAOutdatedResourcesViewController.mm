@@ -365,8 +365,9 @@ static NSString *kOpenLiveUpdatesSegue = @"openLiveUpdatesSegue";
             NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource inRegion:item.worldRegion
                                                            withRegionName:YES
                                                          withResourceType:YES];
-            [self startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item];
+            [OAResourcesUIHelper startDownloadOf:resourceInRepository resourceName:resourceName resourceItem:item onTaskCreated:nil onTaskResumed:nil];
         }
+        [self updateContent];
     }];
     [alert addAction:cancelAction];
     [alert addAction:updateAllAction];

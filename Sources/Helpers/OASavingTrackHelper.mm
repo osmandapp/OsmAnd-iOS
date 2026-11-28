@@ -76,6 +76,10 @@ static const NSInteger kDBVersion = 1;
     NSHashTable<OASWptPt *> *_unpersistedWaypoints;
     
     CLLocationCoordinate2D lastPoint;
+    
+    OASGpxTrackAnalysis *_currentTrackAnalysis;
+    int _currentTrackAnalysisIndex;
+    int64_t _currentTrackAnalysisModifiedTime;
 }
 
 @synthesize lastTimeUpdated, points, isRecording, distance, currentTrackIndex;
@@ -864,6 +868,24 @@ static const NSInteger kDBVersion = 1;
             return YES;
     }
     return NO;
+}
+
+- (OASGpxTrackAnalysis *)getCurrentTrackAnalysis
+{
+    @synchronized (self)
+    {
+        OASGpxFile *track = _currentTrack;
+        int trackIndex = currentTrackIndex;
+        int64_t modifiedTime = track.modifiedTime;
+        if (!_currentTrackAnalysis || _currentTrackAnalysisIndex != trackIndex || _currentTrackAnalysisModifiedTime != modifiedTime)
+        {
+            _currentTrackAnalysis = [track getAnalysisFileTimestamp:0];
+            _currentTrackAnalysisIndex = trackIndex;
+            _currentTrackAnalysisModifiedTime = modifiedTime;
+        }
+        
+        return _currentTrackAnalysis;
+    }
 }
 
 - (NSString *)getPluginsInfo:(CLLocation *)location
